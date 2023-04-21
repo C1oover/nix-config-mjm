@@ -27,6 +27,7 @@
     pstree
     ripgrep
     tarsnap
+    teleport
     tree
     vault
     wget
