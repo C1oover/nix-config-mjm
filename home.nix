@@ -54,16 +54,14 @@
     # '')
   ];
 
-  # Home Manager is pretty good at managing dotfiles. The primary way to manage
-  # plain files is through 'home.file'.
-  home.file = {
-    ".config/nvim".source = builtins.fetchGit {
+  home.file = {};
+
+  xdg.configFile = {
+    "nvim".source = builtins.fetchGit {
       url = "https://github.com/AstroNvim/AstroNvim.git";
       ref = "refs/tags/v3.10.3";
     };
-  };
 
-  xdg.configFile = {
     "starship.toml".source = ./starship.toml;
   };
 
