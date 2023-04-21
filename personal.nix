@@ -1,5 +1,25 @@
 { config, lib, pkgs, ... }:
 
+let
+  vssh = pkgs.writeShellScriptBin "vssh" ''
+    ${pkgs.vault}/bin/vault ssh \
+      -mode="ca" \
+      -role="homelab-client" \
+      -mount-point="ssh-client-signer" \
+      -public-key-path="${config.home.homeDirectory}/.ssh/yubikey.pub" \
+      -valid-principals="ubuntu,matt" \
+      -no-exec \
+      -field=signed_key \
+      "$1" \
+      >"${config.home.homeDirectory}/.ssh/yubikey-cert.pub"
+
+    ssh -i "${config.home.homeDirectory}/.ssh/yubikey-cert.pub" "$@"
+  '';
+
+  tmssh = pkgs.writeShellScriptBin "tmssh" ''
+    ${vssh}/bin/vssh "$@" -t 'tmux -CC new -A -s tmssh'
+  '';
+in
 {
   imports = [
     ./common.nix
@@ -11,6 +31,9 @@
     nomad
     tarsnap
     vault
+
+    vssh
+    tmssh
   ];
 
   home.sessionVariables = {
