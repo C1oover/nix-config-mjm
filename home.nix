@@ -21,6 +21,7 @@
   # environment.
   home.packages = with pkgs; [
     consul
+    google-cloud-sdk
     httpie
     minio-client
     nomad
