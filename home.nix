@@ -69,6 +69,10 @@
     SSH_AUTH_SOCK = "/Users/matt/.yubikey-agent.sock";
   };
 
+  home.shellAliases = {
+    hm = "home-manager";
+  };
+
   news.display = "silent";
 
   programs.home-manager.enable = true;
