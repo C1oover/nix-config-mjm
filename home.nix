@@ -131,7 +131,7 @@
         default = "simple";
         autoSetupRemote = true;
       };
-      help.autocorrect = true;
+      help.autocorrect = 10;
       pull.rebase = false;
       http."https://gitlab.home.mattmoriarity.com".sslCAInfo = builtins.fetchurl "http://vault.service.consul:8200/v1/pki-homelab/ca/pem";
     };
