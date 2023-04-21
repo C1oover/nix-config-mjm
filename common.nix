@@ -66,6 +66,7 @@
   };
 
   home.shellAliases = {
+    td = "cd $(mktemp -d)";
     hm = "home-manager";
   };
 
