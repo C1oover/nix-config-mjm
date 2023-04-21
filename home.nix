@@ -132,6 +132,7 @@
       };
       help.autocorrect = true;
       pull.rebase = false;
+      http."https://gitlab.home.mattmoriarity.com".sslCAInfo = builtins.fetchurl "http://vault.service.consul:8200/v1/pki-homelab/ca/pem";
     };
     userName = "Matt Moriarity";
     userEmail = "matt@mattmoriarity.com";
