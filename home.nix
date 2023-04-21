@@ -61,6 +61,7 @@
     "nvim".source = builtins.fetchGit {
       url = "https://github.com/AstroNvim/AstroNvim.git";
       ref = "refs/tags/v3.10.3";
+      shallow = true;
     };
 
     "starship.toml".source = ./starship.toml;
