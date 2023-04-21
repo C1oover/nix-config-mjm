@@ -66,7 +66,7 @@
   };
 
   home.sessionVariables = {
-    SSH_AUTH_SOCK = "/Users/matt/.yubikey-agent.sock";
+    SSH_AUTH_SOCK = "${config.home.homeDirectory}/.yubikey-agent.sock";
   };
 
   home.shellAliases = {
@@ -147,10 +147,10 @@
         config = {
           KeepAlive = true;
           Label = "com.mattmoriarity.yubikey-agent";
-          ProgramArguments = ["${pkgs.yubikey-agent}/bin/yubikey-agent" "-l" "/Users/matt/.yubikey-agent.sock"];
+          ProgramArguments = ["${pkgs.yubikey-agent}/bin/yubikey-agent" "-l" "${config.home.homeDirectory}/.yubikey-agent.sock"];
           RunAtLoad = true;
-          StandardErrorPath = "/Users/matt/Library/Logs/yubikey-agent.log";
-          StandardOutPath = "/Users/matt/Library/Logs/yubikey-agent.log";
+          StandardErrorPath = "${config.home.homeDirectory}/Library/Logs/yubikey-agent.log";
+          StandardOutPath = "${config.home.homeDirectory}/Library/Logs/yubikey-agent.log";
         };
       };
     };
