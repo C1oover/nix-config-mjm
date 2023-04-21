@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   imports = [
@@ -18,6 +18,7 @@
     NOMAD_CACERT = "${config.home.homeDirectory}/.config/nomad/ca.crt";
     NOMAD_CLIENT_CERT = "${config.home.homeDirectory}/.config/nomad/cli.crt";
     NOMAD_CLIENT_KEY = "${config.home.homeDirectory}/.config/nomad/cli.key";
+    NOMAD_TOKEN = lib.strings.removeSuffix "\n" (builtins.readFile secrets/nomad-token);
   };
 }
 
