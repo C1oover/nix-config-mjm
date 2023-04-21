@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   nixpkgs.config.allowUnfree = true;
@@ -20,17 +20,10 @@
   # The home.packages option allows you to install Nix packages into your
   # environment.
   home.packages = with pkgs; [
-    consul
-    google-cloud-sdk
     httpie
-    minio-client
-    nomad
     pstree
     ripgrep
-    tarsnap
-    teleport
     tree
-    vault
     wget
     yubikey-agent
 
@@ -130,7 +123,7 @@
       http."https://gitlab.home.mattmoriarity.com".sslCAInfo = builtins.fetchurl "http://vault.service.consul:8200/v1/pki-homelab/ca/pem";
     };
     userName = "Matt Moriarity";
-    userEmail = "matt@mattmoriarity.com";
+    userEmail = lib.mkDefault "matt@mattmoriarity.com";
   };
 
   programs.neovim = {
