@@ -9,6 +9,7 @@
     gh
     google-cloud-sdk
     teleport
+    zoom-us
   ];
 
   programs.git.userEmail = "matt@slab.com";
