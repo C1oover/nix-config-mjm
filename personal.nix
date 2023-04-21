@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   imports = [
@@ -12,5 +12,12 @@
     tarsnap
     vault
   ];
+
+  home.sessionVariables = {
+    NOMAD_ADDR = "https://nomad.service.consul:4646";
+    NOMAD_CACERT = "${config.home.homeDirectory}/.config/nomad/ca.crt";
+    NOMAD_CLIENT_CERT = "${config.home.homeDirectory}/.config/nomad/cli.crt";
+    NOMAD_CLIENT_KEY = "${config.home.homeDirectory}/.config/nomad/cli.key";
+  };
 }
 
