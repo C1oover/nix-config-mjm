@@ -165,4 +165,10 @@
       };
     };
   };
+
+  targets.darwin.defaults = {
+    "com.tinyspeck.slackmacgap" = {
+      SlackNoAutoUpdates = true;
+    };
+  };
 }
