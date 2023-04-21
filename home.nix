@@ -115,9 +115,9 @@
     enable = true;
     aliases = {
       st = "status -sb";
-	    ci = "commit --verbose";
-	    di = "diff";
-	    dc = "diff --cached";
+      ci = "commit --verbose";
+      di = "diff";
+      dc = "diff --cached";
     };
     delta.enable = true;
     extraConfig = {
