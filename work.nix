@@ -6,6 +6,7 @@
   ];
 
   home.packages = with pkgs; [
+    gh
     google-cloud-sdk
     teleport
   ];
