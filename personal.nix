@@ -19,6 +19,8 @@ let
   tmssh = pkgs.writeShellScriptBin "tmssh" ''
     ${vssh}/bin/vssh "$@" -t 'tmux -CC new -A -s tmssh'
   '';
+
+  devenv = (import (fetchTarball https://github.com/cachix/devenv/archive/v0.6.2.tar.gz)).default;
 in
 {
   imports = [
@@ -31,6 +33,7 @@ in
     nomad
     tarsnap
     vault
+    devenv
 
     vssh
     tmssh
