@@ -62,6 +62,7 @@ in
       { path = "/System/Applications/Maps.app/"; }
       { path = "/Applications/Fantastical.app/"; }
       { path = "/System/Applications/System Settings.app/"; }
+      { path = "/Applications/1Password.app/"; }
       { path = "/Applications/Drafts.app/"; }
       { path = "${pkgs.iterm2}/Applications/iTerm2.app/"; }
       { path = "/Applications/Dash.app/"; }
