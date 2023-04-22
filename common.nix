@@ -114,7 +114,7 @@
       di = "diff";
       dc = "diff --cached";
     };
-    delta.enable = true;
+    diff-so-fancy.enable = true;
     extraConfig = {
       push = {
         default = "simple";
