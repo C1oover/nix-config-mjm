@@ -30,7 +30,6 @@ in
   home.packages = with pkgs; [
     consul
     devenv
-    flyctl
     minio-client
     nomad
     tarsnap
