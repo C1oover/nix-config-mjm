@@ -25,6 +25,7 @@ in
 {
   imports = [
     ./common.nix
+    modules/dock.nix
   ];
 
   home.packages = with pkgs; [
@@ -49,6 +50,30 @@ in
     CONSUL_HTTP_ADDR = "10.0.0.2:8500";
 
     VAULT_ADDR = "http://vault.service.consul:8200";
+  };
+
+  home.dock = {
+    enable = true;
+    entries = [
+      { path = "/System/Applications/Mail.app/"; }
+      { path = "/Applications/Firefox.app/"; }
+      { path = "/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app/"; }
+      { path = "/System/Applications/Messages.app/"; }
+      { path = "/System/Applications/Maps.app/"; }
+      { path = "/Applications/Fantastical.app/"; }
+      { path = "/System/Applications/System Settings.app/"; }
+      { path = "/Applications/Drafts.app/"; }
+      { path = "${pkgs.iterm2}/Applications/iTerm2.app/"; }
+      { path = "/Applications/Dash.app/"; }
+      { path = "/Applications/Slab.app/"; }
+      { path = "${pkgs.slack}/Applications/Slack.app/"; }
+      { path = "/Applications/Discord.app"; }
+      {
+        path = "${config.home.homeDirectory}/Downloads/";
+        section = "others";
+        options = "--sort dateadded --view grid --display folder";
+      }
+    ];
   };
 
   programs.ssh = {
