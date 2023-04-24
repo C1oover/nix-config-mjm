@@ -13,6 +13,11 @@
     zoom-us
   ];
 
+  home.shellAliases = {
+    db-stage = "tsh -k no db login --db-user=teleport-rw@slab-stage.iam --db-name=slab slab-sql-stage-pg14";
+    db-prod-replica = "tsh -k no db login --db-user=teleport-ro@slab-prod.iam --db-name=slab slab-sql-prod-replica-pg14-0";
+  };
+
   home.dock = {
     enable = true;
     entries = [
