@@ -3,6 +3,7 @@
 {
   imports = [
     lib/neovim.nix
+    lib/shell.nix
   ];
 
   nixpkgs.config.allowUnfree = true;
@@ -56,10 +57,6 @@
 
   home.file = {};
 
-  xdg.configFile = {
-    "starship.toml".source = ./starship.toml;
-  };
-
   home.sessionVariables = {
     SSH_AUTH_SOCK = "${config.home.homeDirectory}/.yubikey-agent.sock";
   };
@@ -72,38 +69,6 @@
   news.display = "silent";
 
   programs.home-manager.enable = true;
-
-  programs.dircolors = {
-    enable = true;
-    enableZshIntegration = true;
-  };
-
-  programs.zsh = {
-    enable = true;
-    enableAutosuggestions = true;
-    enableCompletion = true;
-    enableSyntaxHighlighting = true;
-    enableVteIntegration = true;
-    defaultKeymap = "emacs";
-    initExtra = ''
-      if [ -f "$HOME/.asdf/asdf.sh" ]; then . "$HOME/.asdf/asdf.sh"; fi
-    '';
-  };
-
-  programs.starship = {
-    enable = true;
-    enableZshIntegration = true;
-  };
-
-  programs.direnv = {
-    enable = true;
-    enableZshIntegration = true;
-  };
-
-  programs.fzf = {
-    enable = true;
-    enableZshIntegration = true;
-  };
 
   programs.git = {
     enable = true;
