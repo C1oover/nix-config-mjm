@@ -1,6 +1,10 @@
 { config, lib, pkgs, ... }:
 
 {
+  imports = [
+    lib/neovim.nix
+  ];
+
   nixpkgs.config.allowUnfree = true;
 
   # Home Manager needs a bit of information about you and the paths it should
@@ -53,12 +57,6 @@
   home.file = {};
 
   xdg.configFile = {
-    "nvim".source = builtins.fetchGit {
-      url = "https://github.com/AstroNvim/AstroNvim.git";
-      ref = "refs/tags/v3.10.3";
-      shallow = true;
-    };
-
     "starship.toml".source = ./starship.toml;
   };
 
@@ -127,14 +125,6 @@
     };
     userName = "Matt Moriarity";
     userEmail = lib.mkDefault "matt@mattmoriarity.com";
-  };
-
-  programs.neovim = {
-    enable = true;
-    viAlias = true;
-    vimAlias = true;
-    vimdiffAlias = true;
-    defaultEditor = true;
   };
 
   programs.jq.enable = true;
