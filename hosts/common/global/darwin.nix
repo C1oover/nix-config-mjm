@@ -5,6 +5,7 @@
     inputs.home-manager.darwinModules.home-manager
     inputs.agenix.darwinModules.default
 
+    ./dock.nix
     ./keyboard.nix
     ./nix.nix
   ];
