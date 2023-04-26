@@ -20,7 +20,10 @@ let
     ${vssh}/bin/vssh "$@" -t 'tmux -CC new -A -s tmssh'
   '';
 
-  devenv = (import (fetchTarball https://github.com/cachix/devenv/archive/v0.6.2.tar.gz)).default;
+  devenv = (import (fetchTarball {
+    url = https://github.com/cachix/devenv/archive/v0.6.2.tar.gz;
+    sha256 = "12dd5g3p9azm2ns9gs9y1fmc7bd0frwwf4cz10wmnvrpvs8d4gcq";
+  }));
 in
 {
   imports = [
@@ -45,7 +48,7 @@ in
     NOMAD_CACERT = "${config.home.homeDirectory}/.config/nomad/ca.crt";
     NOMAD_CLIENT_CERT = "${config.home.homeDirectory}/.config/nomad/cli.crt";
     NOMAD_CLIENT_KEY = "${config.home.homeDirectory}/.config/nomad/cli.key";
-    NOMAD_TOKEN = lib.strings.removeSuffix "\n" (builtins.readFile secrets/nomad-token);
+    NOMAD_TOKEN = "$(cat /run/agenix/nomad-token)";
 
     CONSUL_HTTP_ADDR = "10.0.0.2:8500";
 

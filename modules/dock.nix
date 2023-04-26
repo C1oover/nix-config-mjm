@@ -37,7 +37,7 @@ in
     mkIf (cfg.enable)
       (
         let
-          du = "env PYTHONIOENCODING=utf-8 ${pkgs.dockutil}/bin/dockutil";
+          du = "env PYTHONIOENCODING=utf-8 ${pkgs.dockutil}/bin/dockutil ${config.home.homeDirectory}";
           normalize = path: if hasSuffix ".app" path then path + "/" else path;
           entryURI = path: "file://" + (builtins.replaceStrings
             # TODO: This is entirely too naive and works only with the bundles that I have seen on my system so far:
