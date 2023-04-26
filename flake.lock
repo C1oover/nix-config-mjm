@@ -6,7 +6,7 @@
           "darwin"
         ],
         "nixpkgs": [
-          "nixpkgs-unstable"
+          "nixpkgs"
         ]
       },
       "locked": {
@@ -26,7 +26,7 @@
     "darwin": {
       "inputs": {
         "nixpkgs": [
-          "nixpkgs-unstable"
+          "nixpkgs"
         ]
       },
       "locked": {
@@ -47,7 +47,7 @@
     "home-manager": {
       "inputs": {
         "nixpkgs": [
-          "nixpkgs-unstable"
+          "nixpkgs"
         ]
       },
       "locked": {
@@ -65,22 +65,6 @@
       }
     },
     "nixpkgs": {
-      "locked": {
-        "lastModified": 1682454041,
-        "narHash": "sha256-uUgj0i8QK2h1owoMVgsmkL7xrjSesVsuXRcXS5uHHqo=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "ec6fde6f0a6398f1d1fdd63ac518dce49bf44f3d",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "ref": "nixpkgs-22.11-darwin",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs-unstable": {
       "locked": {
         "lastModified": 1682109806,
         "narHash": "sha256-d9g7RKNShMLboTWwukM+RObDWWpHKaqTYXB48clBWXI=",
@@ -101,8 +85,7 @@
         "agenix": "agenix",
         "darwin": "darwin",
         "home-manager": "home-manager",
-        "nixpkgs": "nixpkgs",
-        "nixpkgs-unstable": "nixpkgs-unstable"
+        "nixpkgs": "nixpkgs"
       }
     }
   },
