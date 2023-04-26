@@ -1,4 +1,4 @@
-{ config, inputs, ... }:
+{ config, inputs, outputs, ... }:
 
 {
   imports = [
@@ -9,6 +9,7 @@
   home-manager = {
     useUserPackages = true;
     useGlobalPkgs = true;
+    extraSpecialArgs = { inherit inputs outputs; };
   };
 
   time.timeZone = "America/Denver";

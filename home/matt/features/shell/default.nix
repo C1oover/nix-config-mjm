@@ -16,7 +16,7 @@
     enableZshIntegration = true;
   };
 
-  xdg.configFile."starship.toml".source = shell/starship.toml;
+  xdg.configFile."starship.toml".source = ./starship.toml;
 
   programs.direnv = {
     enable = true;

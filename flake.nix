@@ -12,27 +12,22 @@
   };
 
   outputs = { self, darwin, nixpkgs, ... }@inputs:
-    {
-      darwinConfigurations.mars = darwin.lib.darwinSystem {
-        system = "x86_64-darwin";
-        inputs = {
-          inherit darwin nixpkgs;
-        };
+    let
+      inherit (self) outputs;
+      mkDarwin = arch: modules: darwin.lib.darwinSystem {
+        inherit modules;
 
-        specialArgs = { inherit inputs; };
-
-        modules = [ ./hosts/mars ];
+        system = "${arch}-darwin";
+        inputs = { inherit darwin nixpkgs; };
+        specialArgs = { inherit inputs outputs; };
       };
+    in
+    {
+      homeManagerModules = import ./modules/home-manager;
 
-      darwinConfigurations.athena = darwin.lib.darwinSystem {
-        system = "aarch64-darwin";
-        inputs = {
-          inherit darwin nixpkgs;
-        };
-
-        specialArgs = { inherit inputs; };
-
-        modules = [ ./hosts/athena ];
+      darwinConfigurations = {
+        mars = mkDarwin "x86_64" [ ./hosts/mars ];
+        athena = mkDarwin "aarch64" [ ./hosts/athena ];
       };
     };
 }
