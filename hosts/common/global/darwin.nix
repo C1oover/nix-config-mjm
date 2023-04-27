@@ -8,7 +8,7 @@
     ./dock.nix
     ./keyboard.nix
     ./nix.nix
-  ];
+  ] ++ (builtins.attrValues outputs.darwinModules);
 
   home-manager = {
     useUserPackages = true;

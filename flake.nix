@@ -24,6 +24,7 @@
     in
     {
       homeManagerModules = import ./modules/home-manager;
+      darwinModules = import ./modules/darwin;
 
       darwinConfigurations = {
         mars = mkDarwin "x86_64" [ ./hosts/mars ];
