@@ -177,6 +177,9 @@ in
       ctrl + alt + cmd - 5 : ${pkgs.yabai}/bin/yabai -m space --focus 5 
       ctrl + alt + cmd - 6 : ${pkgs.yabai}/bin/yabai -m space --focus 6 
 
+      ctrl + alt + cmd - left : ${pkgs.yabai}/bin/yabai -m space --focus prev
+      ctrl + alt + cmd - right : ${pkgs.yabai}/bin/yabai -m space --focus next
+
       ctrl + alt + cmd - t : ${pkgs.yabai}/bin/yabai -m window --toggle zoom-parent
       ctrl + alt + cmd - f : ${pkgs.yabai}/bin/yabai -m window --toggle zoom-fullscreen
     '';
