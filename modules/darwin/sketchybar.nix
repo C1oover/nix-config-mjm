@@ -17,7 +17,7 @@ let
       ""
     ]);
 
-  configFile = mkIf (cfg.config != {} || cfg.extraConfig != "")
+  configFile = mkIf (cfg.config != { } || cfg.extraConfig != "")
     "${pkgs.writeScript "sketchybarrc" (
       (if (cfg.config != {})
        then "${toSketchybarConfig cfg.config}"
@@ -41,7 +41,7 @@ in
 
     services.sketchybar.config = mkOption {
       type = attrs;
-      default = {};
+      default = { };
       example = literalExpression ''
         {
           clock_format     = "%R";
@@ -71,7 +71,7 @@ in
 
     launchd.user.agents.sketchybar = {
       serviceConfig.ProgramArguments = [ "${cfg.package}/bin/sketchybar" ]
-                                       ++ optionals (cfg.config != {} || cfg.extraConfig != "") [ "--config" configFile ];
+        ++ optionals (cfg.config != { } || cfg.extraConfig != "") [ "--config" configFile ];
 
       serviceConfig.KeepAlive = true;
       serviceConfig.RunAtLoad = true;

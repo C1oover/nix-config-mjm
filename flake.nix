@@ -11,9 +11,10 @@
     agenix.inputs.darwin.follows = "darwin";
     devenv.url = "github:cachix/devenv";
     devenv.inputs.nixpkgs.follows = "nixpkgs";
+    flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, darwin, nixpkgs, ... }@inputs:
+  outputs = { self, darwin, nixpkgs, flake-utils, ... }@inputs:
     let
       inherit (self) outputs;
       mkDarwin = arch: modules: darwin.lib.darwinSystem {
@@ -32,5 +33,7 @@
         mars = mkDarwin "x86_64" [ ./hosts/mars ];
         athena = mkDarwin "aarch64" [ ./hosts/athena ];
       };
+
+      formatter = flake-utils.lib.eachDefaultSystemMap (system: nixpkgs.legacyPackages.${system}.nixpkgs-fmt);
     };
 }

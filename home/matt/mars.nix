@@ -81,22 +81,26 @@ in
     extraOptionOverrides = {
       IdentityFile = "~/.ssh/yubikey.pub";
     };
-    matchBlocks = let
-      raspberryPiHosts = ["raspberrypi" "raspberrypi2" "raspberrypi3"];
-      raspberryPiMatches = with builtins; listToAttrs (map (hostname: {
-        name = hostname;
-        value = {
-          host = hostname;
-          user = "ubuntu";
+    matchBlocks =
+      let
+        raspberryPiHosts = [ "raspberrypi" "raspberrypi2" "raspberrypi3" ];
+        raspberryPiMatches = with builtins; listToAttrs (map
+          (hostname: {
+            name = hostname;
+            value = {
+              host = hostname;
+              user = "ubuntu";
+            };
+          })
+          raspberryPiHosts);
+        nasMatch = {
+          "nas" = {
+            host = "nas";
+            identityFile = "~/.ssh/id_ed25519";
+          };
         };
-      }) raspberryPiHosts);
-      nasMatch = {
-        "nas" = {
-          host = "nas";
-          identityFile = "~/.ssh/id_ed25519";
-        };
-      };
-    in raspberryPiMatches // nasMatch;
+      in
+      raspberryPiMatches // nasMatch;
   };
 }
 

@@ -41,8 +41,8 @@ in
           normalize = path: if hasSuffix ".app" path then path + "/" else path;
           entryURI = path: "file://" + (builtins.replaceStrings
             # TODO: This is entirely too naive and works only with the bundles that I have seen on my system so far:
-            [" "   "!"   "\""  "#"   "$"   "%"   "&"   "'"   "("   ")"]
-            ["%20" "%21" "%22" "%23" "%24" "%25" "%26" "%27" "%28" "%29"]
+            [ " " "!" "\"" "#" "$" "%" "&" "'" "(" ")" ]
+            [ "%20" "%21" "%22" "%23" "%24" "%25" "%26" "%27" "%28" "%29" ]
             (normalize path)
           );
           wantURIs = concatMapStrings
@@ -53,7 +53,7 @@ in
             cfg.entries;
         in
         {
-          home.activation.setupDock = hm.dag.entryAfter ["writeBoundary"] ''
+          home.activation.setupDock = hm.dag.entryAfter [ "writeBoundary" ] ''
             echo >&2 "Setting up persistent dock items..."
             haveURIs="$(${du} --list | ${pkgs.coreutils}/bin/cut -f2)"
             if ! diff -wu <(echo -n "$haveURIs") <(echo -n '${wantURIs}') >&2 ; then
