@@ -10,7 +10,7 @@
   networking.hostName = "mars";
 
   age.secrets.nomad-token = {
-    file = secrets/nomad-token.age;
+    file = ../../secrets/nomad-token.age;
     owner = "matt";
   };
 }
