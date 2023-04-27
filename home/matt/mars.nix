@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, inputs, ... }:
 
 let
   vssh = pkgs.writeShellScriptBin "vssh" ''
@@ -20,10 +20,7 @@ let
     ${vssh}/bin/vssh "$@" -t 'tmux -CC new -A -s tmssh'
   '';
 
-  devenv = (import (fetchTarball {
-    url = https://github.com/cachix/devenv/archive/v0.6.2.tar.gz;
-    sha256 = "12dd5g3p9azm2ns9gs9y1fmc7bd0frwwf4cz10wmnvrpvs8d4gcq";
-  }));
+  devenv = inputs.devenv.packages.x86_64-darwin.default;
 in
 {
   imports = [
