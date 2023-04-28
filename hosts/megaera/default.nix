@@ -4,6 +4,8 @@
 
     ../common/global/nixos.nix
     ../common/users/matt
+
+    ../common/optional/consul-server.nix
   ];
 
   networking.hostName = "megaera";
