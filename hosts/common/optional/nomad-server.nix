@@ -14,6 +14,9 @@
         create_from_role = "nomad-cluster";
       };
     };
+
+    # don't need docker on the servers, only clients
+    enableDocker = false;
   };
 
   networking.firewall.allowedTCPPorts = [
