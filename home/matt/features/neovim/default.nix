@@ -16,6 +16,7 @@ in
     defaultEditor = true;
 
     plugins = with pkgs.vimPlugins; [
+      vim-elixir
       (nvim-treesitter.withPlugins (p: [
         p.bash
         p.dockerfile
