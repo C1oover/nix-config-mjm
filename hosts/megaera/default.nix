@@ -6,6 +6,7 @@
     ../common/users/matt
 
     ../common/optional/consul-server.nix
+    ../common/optional/vault-server.nix
   ];
 
   networking.hostName = "megaera";
