@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
 {
-  settings.nomad = {
+  services.nomad = {
     enable = true;
     settings = {
       server = {
