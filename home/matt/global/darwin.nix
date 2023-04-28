@@ -1,8 +1,10 @@
-{ pkgs, lib, outputs, ... }:
-
-{
+{ pkgs
+, lib
+, ...
+}: {
   imports = [
     ../features/yubikey
+    ../features/iterm
   ];
 
   nixpkgs.config.allowUnfree = true;
@@ -13,7 +15,6 @@
   home.packages = with pkgs; [
     dockutil
 
-    iterm2
     slack
   ];
 
@@ -23,5 +24,3 @@
     };
   };
 }
-
-
