@@ -1,4 +1,4 @@
-{
+{ pkgs, ... }: {
   programs.neovim = {
     enable = true;
     viAlias = true;
@@ -13,4 +13,13 @@
     rev = "33b3119d98a9441ff73103cfb705c33122afb632";
     shallow = true;
   };
+
+  xdg.configFile."astronvim/lua/user".source = ./user;
+
+  home.packages = with pkgs; [
+    rnix-lsp
+    alejandra
+    deadnix
+    statix
+  ];
 }
