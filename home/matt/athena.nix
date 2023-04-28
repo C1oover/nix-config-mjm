@@ -1,6 +1,7 @@
-{ pkgs, config, ... }:
-
-{
+{ pkgs
+, config
+, ...
+}: {
   imports = [
     ./global
     ./global/darwin.nix
@@ -16,6 +17,9 @@
   home.shellAliases = {
     db-stage = "tsh -k no db login --db-user=teleport-rw@slab-stage.iam --db-name=slab slab-sql-stage-pg14";
     db-prod-replica = "tsh -k no db login --db-user=teleport-ro@slab-prod.iam --db-name=slab slab-sql-prod-replica-pg14-0";
+    slab-restart = "npm run docker:down && npm run docker:up";
+    slab-up = "npm run docker:up";
+    slab-ssh = "npm run docker:ssh";
   };
 
   home.dock = {
