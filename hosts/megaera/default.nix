@@ -3,6 +3,7 @@
     ./hardware-configuration.nix
 
     ../common/global/nixos.nix
+    ../common/users/matt
   ];
 
   networking.hostName = "megaera";
