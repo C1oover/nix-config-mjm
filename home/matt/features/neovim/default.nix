@@ -40,5 +40,11 @@
     alejandra
     deadnix
     statix
+
+    nodePackages.bash-language-server
+    docker-compose-language-service
+    nodePackages.dockerfile-language-server-nodejs
+    nodePackages.vscode-langservers-extracted
+    nodePackages.yaml-language-server
   ];
 }
