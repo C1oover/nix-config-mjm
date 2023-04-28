@@ -40,6 +40,7 @@
 
       nixosConfigurations = {
         megaera = mkNixos [ ./hosts/megaera ];
+        tisiphone = mkNixos [ ./hosts/tisiphone ];
       };
 
       formatter = flake-utils.lib.eachDefaultSystemMap (system: nixpkgs.legacyPackages.${system}.nixpkgs-fmt);
