@@ -16,6 +16,7 @@
   };
 
   networking.firewall.allowedTCPPorts = [
+    8300
     8301
     8302
     8500
