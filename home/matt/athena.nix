@@ -3,6 +3,7 @@
 {
   imports = [
     ./global
+    ./global/darwin.nix
   ];
 
   home.packages = with pkgs; [

@@ -5,13 +5,7 @@
     ../features/git
     ../features/neovim
     ../features/shell
-    ../features/yubikey
   ] ++ (builtins.attrValues outputs.homeManagerModules);
-
-  nixpkgs.config.allowUnfree = true;
-
-  home.username = lib.mkDefault "matt";
-  home.homeDirectory = lib.mkDefault "/Users/matt";
 
   # This value determines the Home Manager release that your configuration is
   # compatible with. This helps avoid breakage when a new Home Manager release
@@ -24,15 +18,11 @@
 
   home.packages = with pkgs; [
     colima
-    dockutil
     httpie
     pstree
     ripgrep
     tree
     wget
-
-    iterm2
-    slack
   ];
 
   home.shellAliases = {
@@ -45,11 +35,5 @@
   programs.home-manager.enable = true;
 
   programs.jq.enable = true;
-
-  targets.darwin.defaults = {
-    "com.tinyspeck.slackmacgap" = {
-      SlackNoAutoUpdates = true;
-    };
-  };
 }
 

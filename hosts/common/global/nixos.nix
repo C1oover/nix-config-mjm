@@ -1,7 +1,9 @@
-{ lib, pkgs, ... }:
+{ lib, pkgs, inputs, outputs, ... }:
 
 {
   imports = [
+    inputs.home-manager.darwinModules.home-manager
+
     ./ssh.nix
     ./ssl.nix
   ];
@@ -26,4 +28,10 @@
 
   programs.zsh.enable = true;
   programs.tmux.enable = true;
+
+  home-manager = {
+    useUserPackages = true;
+    useGlobalPkgs = true;
+    extraSpecialArgs = { inherit inputs outputs; };
+  };
 }
