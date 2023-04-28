@@ -16,5 +16,13 @@ return {
     -- lazy.nvim disables the built-in package management,
     -- so we need to run it manually here to get plugins from Nix
     vim.cmd([[packloadall]])
+
+    require("nvim-treesitter.configs").setup({
+      highlight = { enable = true },
+      incremental_selection = { enable = true },
+      autotag = { enable = true },
+      context_commentstring = { enable = true, enable_autocmd = false },
+      indent = { enable = true },
+    })
   end,
 }
