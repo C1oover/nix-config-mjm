@@ -10,4 +10,9 @@
       ui = true
     '';
   };
+
+  networking.firewall.allowedTCPPorts = [
+    8200
+    8201
+  ];
 }
