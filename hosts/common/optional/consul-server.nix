@@ -14,4 +14,13 @@
       connect.enabled = true;
     };
   };
+
+  networking.firewall.allowedTCPPorts = [
+    8301
+    8302
+    8500
+    8502
+    8503
+    8600
+  ];
 }
