@@ -24,6 +24,10 @@
         inputs = { inherit darwin nixpkgs; };
         specialArgs = { inherit inputs outputs; };
       };
+      mkNixos = modules: nixpkgs.lib.nixosSystem {
+        inherit modules;
+        specialArgs = { inherit inputs outputs; };
+      };
     in
     {
       homeManagerModules = import ./modules/home-manager;
@@ -32,6 +36,10 @@
       darwinConfigurations = {
         mars = mkDarwin "x86_64" [ ./hosts/mars ];
         athena = mkDarwin "aarch64" [ ./hosts/athena ];
+      };
+
+      nixosConfigurations = {
+        megaera = mkNixos [ ./hosts/megaera ];
       };
 
       formatter = flake-utils.lib.eachDefaultSystemMap (system: nixpkgs.legacyPackages.${system}.nixpkgs-fmt);

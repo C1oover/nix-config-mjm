@@ -1,0 +1,29 @@
+{ lib, pkgs, ... }:
+
+{
+  imports = [
+    ./ssh.nix
+    ./ssl.nix
+  ];
+
+  nix.settings = {
+    experimental-features = [ "flakes" "nix-command" ];
+  };
+
+  time.timeZone = lib.mkDefault "Etc/UTC";
+
+  users.users.matt = {
+    isNormalUser = true;
+    extraGroups = [ "wheel" ];
+    shell = pkgs.zsh;
+  };
+
+  security.sudo.wheelNeedsPassword = false;
+
+  environment.systemPackages = with pkgs; [
+    neovim
+  ];
+
+  programs.zsh.enable = true;
+  programs.tmux.enable = true;
+}
