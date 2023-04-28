@@ -1,4 +1,4 @@
-{
+{ inputs, ... }: {
   programs.zsh = {
     enable = true;
     enableAutosuggestions = true;
@@ -16,7 +16,13 @@
     enableZshIntegration = true;
   };
 
-  xdg.configFile."starship.toml".source = ./starship.toml;
+  xdg.configFile."starship.toml".text = ''
+    format = "$all"
+    palette = "catppuccin_mocha"
+    command_timeout = 2000
+
+    ${builtins.readFile (inputs.catppuccin + /palettes/mocha.toml)}
+  '';
 
   programs.direnv = {
     enable = true;

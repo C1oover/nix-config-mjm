@@ -12,22 +12,32 @@
     devenv.url = "github:cachix/devenv";
     devenv.inputs.nixpkgs.follows = "nixpkgs";
     flake-utils.url = "github:numtide/flake-utils";
+    catppuccin.url = "github:catppuccin/starship";
+    catppuccin.flake = false;
   };
 
-  outputs = { self, darwin, nixpkgs, flake-utils, ... }@inputs:
+  outputs =
+    { self
+    , darwin
+    , nixpkgs
+    , flake-utils
+    , ...
+    } @ inputs:
     let
       inherit (self) outputs;
-      mkDarwin = arch: modules: darwin.lib.darwinSystem {
-        inherit modules;
+      mkDarwin = arch: modules:
+        darwin.lib.darwinSystem {
+          inherit modules;
 
-        system = "${arch}-darwin";
-        inputs = { inherit darwin nixpkgs; };
-        specialArgs = { inherit inputs outputs; };
-      };
-      mkNixos = modules: nixpkgs.lib.nixosSystem {
-        inherit modules;
-        specialArgs = { inherit inputs outputs; };
-      };
+          system = "${arch}-darwin";
+          inputs = { inherit darwin nixpkgs; };
+          specialArgs = { inherit inputs outputs; };
+        };
+      mkNixos = modules:
+        nixpkgs.lib.nixosSystem {
+          inherit modules;
+          specialArgs = { inherit inputs outputs; };
+        };
     in
     {
       homeManagerModules = import ./modules/home-manager;
