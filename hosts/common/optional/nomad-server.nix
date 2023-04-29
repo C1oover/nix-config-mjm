@@ -21,7 +21,7 @@
   };
 
   age.secrets."nomad-vault-config.json" = {
-    file = ../../secrets/${config.networking.hostName}-nomad-vault-config.age;
+    file = ../../../secrets/${config.networking.hostName}-nomad-vault-config.age;
   };
 
   networking.firewall.allowedTCPPorts = [
