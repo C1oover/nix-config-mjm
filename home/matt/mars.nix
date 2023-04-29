@@ -1,5 +1,9 @@
-{ config, lib, pkgs, inputs, ... }:
-
+{ config
+, lib
+, pkgs
+, inputs
+, ...
+}:
 let
   vssh = pkgs.writeShellScriptBin "vssh" ''
     ${pkgs.vault}/bin/vault ssh \
@@ -41,14 +45,13 @@ in
   ];
 
   home.sessionVariables = {
-    NOMAD_ADDR = "https://nomad.service.consul:4646";
-    NOMAD_CACERT = "${config.home.homeDirectory}/.config/nomad/ca.crt";
-    NOMAD_CLIENT_CERT = "${config.home.homeDirectory}/.config/nomad/cli.crt";
-    NOMAD_CLIENT_KEY = "${config.home.homeDirectory}/.config/nomad/cli.key";
-    NOMAD_TOKEN = "$(cat /run/agenix/nomad-token)";
+    NOMAD_ADDR = "http://nomad.service.consul:4646";
+    # NOMAD_CACERT = "${config.home.homeDirectory}/.config/nomad/ca.crt";
+    # NOMAD_CLIENT_CERT = "${config.home.homeDirectory}/.config/nomad/cli.crt";
+    # NOMAD_CLIENT_KEY = "${config.home.homeDirectory}/.config/nomad/cli.key";
+    # NOMAD_TOKEN = "$(cat /run/agenix/nomad-token)";
 
-    CONSUL_HTTP_ADDR = "10.0.0.2:8500";
-
+    CONSUL_HTTP_ADDR = "http://consul.service.consul:8500";
     VAULT_ADDR = "http://vault.service.consul:8200";
   };
 
@@ -85,15 +88,16 @@ in
     matchBlocks =
       let
         raspberryPiHosts = [ "raspberrypi" "raspberrypi2" "raspberrypi3" ];
-        raspberryPiMatches = with builtins; listToAttrs (map
-          (hostname: {
-            name = hostname;
-            value = {
-              host = hostname;
-              user = "ubuntu";
-            };
-          })
-          raspberryPiHosts);
+        raspberryPiMatches = with builtins;
+          listToAttrs (map
+            (hostname: {
+              name = hostname;
+              value = {
+                host = hostname;
+                user = "ubuntu";
+              };
+            })
+            raspberryPiHosts);
         nasMatch = {
           "nas" = {
             host = "nas";
@@ -104,4 +108,3 @@ in
       raspberryPiMatches // nasMatch;
   };
 }
-

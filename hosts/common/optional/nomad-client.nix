@@ -2,15 +2,20 @@
   services.nomad = {
     enable = true;
     dropPrivileges = false;
-    extraPackages = [ pkgs.cni-plugins ];
+    extraPackages = [ pkgs.cni-plugins pkgs.consul ];
     settings = {
       client = {
         enabled = true;
         meta = {
           "connect.sidecar_image" = "envoyproxy/envoy:v1.22.5";
         };
+        cni_path = "${pkgs.cni-plugins}/bin";
       };
-      plugins = [
+      vault = {
+        enabled = true;
+        address = "http://vault.service.consul:8200";
+      };
+      plugin = [
         {
           docker = {
             config = {
