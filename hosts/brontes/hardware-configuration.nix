@@ -9,15 +9,15 @@
   boot.extraModulePackages = [ ];
 
   # without this config setting, envoy can't run
-  boot.kernelPatches = [
-    {
-      name = "pgtables";
-      patch = null;
-      extraConfig = ''
-        PGTABLE_LEVELS 4
-      '';
-    }
-  ];
+  # boot.kernelPatches = [
+  #   {
+  #     name = "pgtables";
+  #     patch = null;
+  #     extraConfig = ''
+  #       PGTABLE_LEVELS 4
+  #     '';
+  #   }
+  # ];
 
   fileSystems."/" = {
     device = "/dev/disk/by-label/NIXOS_SD";

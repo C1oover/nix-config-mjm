@@ -7,7 +7,7 @@
       client = {
         enabled = true;
         meta = {
-          "connect.sidecar_image" = "envoyproxy/envoy:v1.22.5";
+          "connect.sidecar_image" = "thegrandpkizzle/envoy:1.25.2";
         };
         cni_path = "${pkgs.cni-plugins}/bin";
       };
