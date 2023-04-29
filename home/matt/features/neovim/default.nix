@@ -19,6 +19,7 @@
         p.gitcommit
         p.gitignore
         p.graphql
+        p.hcl
         p.heex
         p.json
         p.lua
@@ -26,6 +27,7 @@
         p.nix
         p.proto
         p.starlark
+        p.terraform
         p.toml
         p.yaml
       ]))
