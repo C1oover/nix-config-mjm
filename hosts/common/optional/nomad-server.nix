@@ -1,6 +1,4 @@
-{ pkgs, ... }:
-
-{
+{ config, ... }: {
   services.nomad = {
     enable = true;
     settings = {
@@ -14,9 +12,16 @@
         create_from_role = "nomad-cluster";
       };
     };
+    credentials = {
+      "nomad-vault-config.json" = age.secrets."nomad-vault-config.json".path;
+    };
 
     # don't need docker on the servers, only clients
     enableDocker = false;
+  };
+
+  age.secrets."nomad-vault-config.json" = {
+    file = ../../secrets/${config.networking.hostName}-nomad-vault-config.age;
   };
 
   networking.firewall.allowedTCPPorts = [
