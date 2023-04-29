@@ -4,6 +4,8 @@
 
     ../common/global/nixos.nix
     ../common/users/matt
+
+    ../common/optional/consul-agent.nix
   ];
 
   networking.hostName = "brontes";
@@ -12,6 +14,8 @@
   boot.loader.grub.enable = false;
   # Enables the generation of /boot/extlinux/extlinux.conf
   boot.loader.generic-extlinux-compatible.enable = true;
+
+  services.consul.interface.advertise = "end0";
 
   system.stateVersion = "21.03";
 }
