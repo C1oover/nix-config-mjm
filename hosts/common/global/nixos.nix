@@ -1,8 +1,12 @@
-{ lib, pkgs, inputs, outputs, ... }:
-
-{
+{ lib
+, pkgs
+, inputs
+, outputs
+, ...
+}: {
   imports = [
     inputs.home-manager.nixosModules.home-manager
+    inputs.agenix.nixosModules.default
 
     ./ssh.nix
     ./ssl.nix

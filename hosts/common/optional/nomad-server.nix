@@ -13,7 +13,7 @@
       };
     };
     credentials = {
-      "nomad-vault-config.json" = age.secrets."nomad-vault-config.json".path;
+      "nomad-vault-config.json" = config.age.secrets."nomad-vault-config.json".path;
     };
 
     # don't need docker on the servers, only clients
