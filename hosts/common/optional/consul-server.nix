@@ -24,4 +24,10 @@
     8503
     8600
   ];
+
+  networking.firewall.allowedUDPPorts = [
+    8301
+    8302
+    8600
+  ];
 }
