@@ -61,6 +61,8 @@
         arges = mkNixos [ ./hosts/arges ];
         brontes = mkNixos [ ./hosts/brontes ];
         steropes = mkNixos [ ./hosts/steropes ];
+
+        hypnos = mkNixos [ ./hosts/hypnos ];
       };
 
       formatter = flake-utils.lib.eachDefaultSystemMap (system: nixpkgs.legacyPackages.${system}.nixpkgs-fmt);
