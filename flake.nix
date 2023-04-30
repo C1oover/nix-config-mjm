@@ -63,6 +63,8 @@
         steropes = mkNixos [ ./hosts/steropes ];
 
         hypnos = mkNixos [ ./hosts/hypnos ];
+
+        orion = mkNixos [ ./hosts/orion ];
       };
 
       formatter = flake-utils.lib.eachDefaultSystemMap (system: nixpkgs.legacyPackages.${system}.nixpkgs-fmt);
