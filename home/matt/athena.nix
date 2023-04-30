@@ -38,7 +38,7 @@
       { path = "${pkgs.iterm2}/Applications/iTerm2.app/"; }
       { path = "/Applications/Dash.app/"; }
       { path = "/Applications/Postico 2.app/"; }
-      { path = "/Applications/Discord.app"; }
+      { path = "${pkgs.discord}/Applications/Discord.app/"; }
       {
         path = "${config.home.homeDirectory}/Downloads/";
         section = "others";
