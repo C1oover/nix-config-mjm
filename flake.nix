@@ -14,6 +14,8 @@
     flake-utils.url = "github:numtide/flake-utils";
     catppuccin.url = "github:catppuccin/starship";
     catppuccin.flake = false;
+    catppuccin-zsh.url = "github:catppuccin/zsh-syntax-highlighting";
+    catppuccin-zsh.flake = false;
     astronvim.url = "github:AstroNvim/AstroNvim/nightly";
     astronvim.flake = false;
   };
