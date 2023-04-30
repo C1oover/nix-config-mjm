@@ -55,6 +55,7 @@
         tisiphone = mkNixos [ ./hosts/tisiphone ];
         alecto = mkNixos [ ./hosts/alecto ];
 
+        arges = mkNixos [ ./hosts/arges ];
         brontes = mkNixos [ ./hosts/brontes ];
       };
 
