@@ -187,6 +187,21 @@
         "type": "github"
       }
     },
+    "hardware": {
+      "locked": {
+        "lastModified": 1682836095,
+        "narHash": "sha256-PdzpJhuXBz71AgWNWMMYLbB8GMMce6QguhQY/6HOOcc=",
+        "owner": "NixOS",
+        "repo": "nixos-hardware",
+        "rev": "e4a21ddcb45ee5f5c85a5d9e9698debf77fb98c3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "repo": "nixos-hardware",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -332,6 +347,7 @@
         "darwin": "darwin",
         "devenv": "devenv",
         "flake-utils": "flake-utils_2",
+        "hardware": "hardware",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs"
       }

@@ -1,9 +1,4 @@
-{ lib
-, pkgs
-, ...
-}: {
-  boot.kernelPackages = pkgs.linuxPackages_rpi4;
-  boot.initrd.availableKernelModules = [ "usbhid" ];
+{ lib, ... }: {
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
@@ -15,6 +10,8 @@
   };
 
   swapDevices = [ ];
+
+  hardware.raspberry-pi."4".poe-hat.enable = true;
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";
   nixpkgs.hostPlatform = lib.mkDefault "aarch64-linux";
