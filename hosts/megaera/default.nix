@@ -8,7 +8,6 @@
     ../common/optional/consul-server.nix
     ../common/optional/vault-server.nix
     ../common/optional/nomad-server.nix
-    ../common/optional/node-exporter.nix
   ];
 
   networking.hostName = "megaera";

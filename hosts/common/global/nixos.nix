@@ -10,6 +10,7 @@
 
     ./ssh.nix
     ./ssl.nix
+    ./node-exporter.nix
   ];
 
   nix.settings = {
