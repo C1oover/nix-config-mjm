@@ -1,5 +1,4 @@
 { config
-, lib
 , pkgs
 , inputs
 , ...
@@ -11,7 +10,7 @@ let
       -role="homelab-client" \
       -mount-point="ssh-client-signer" \
       -public-key-path="${config.home.homeDirectory}/.ssh/yubikey.pub" \
-      -valid-principals="ubuntu,matt" \
+      -valid-principals="matt" \
       -no-exec \
       -field=signed_key \
       "$1" \
@@ -46,11 +45,6 @@ in
 
   home.sessionVariables = {
     NOMAD_ADDR = "http://nomad.service.consul:4646";
-    # NOMAD_CACERT = "${config.home.homeDirectory}/.config/nomad/ca.crt";
-    # NOMAD_CLIENT_CERT = "${config.home.homeDirectory}/.config/nomad/cli.crt";
-    # NOMAD_CLIENT_KEY = "${config.home.homeDirectory}/.config/nomad/cli.key";
-    # NOMAD_TOKEN = "$(cat /run/agenix/nomad-token)";
-
     CONSUL_HTTP_ADDR = "http://consul.service.consul:8500";
     VAULT_ADDR = "http://vault.service.consul:8200";
   };
@@ -85,26 +79,11 @@ in
     extraOptionOverrides = {
       IdentityFile = "~/.ssh/yubikey.pub";
     };
-    matchBlocks =
-      let
-        raspberryPiHosts = [ "raspberrypi" "raspberrypi2" "raspberrypi3" ];
-        raspberryPiMatches = with builtins;
-          listToAttrs (map
-            (hostname: {
-              name = hostname;
-              value = {
-                host = hostname;
-                user = "ubuntu";
-              };
-            })
-            raspberryPiHosts);
-        nasMatch = {
-          "nas" = {
-            host = "nas";
-            identityFile = "~/.ssh/id_ed25519";
-          };
-        };
-      in
-      raspberryPiMatches // nasMatch;
+    matchBlocks = {
+      "nas" = {
+        host = "nas";
+        identityFile = "~/.ssh/id_ed25519";
+      };
+    };
   };
 }

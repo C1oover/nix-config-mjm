@@ -1,5 +1,3 @@
-{ pkgs, ... }:
-
 {
   imports = [
     ../common/global/darwin.nix

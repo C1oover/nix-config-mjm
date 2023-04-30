@@ -9,8 +9,6 @@ let
   hypnos = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKn/ufUVxaDdTElgs61xfvsHsHn3RwpL7n6DO5qcBO0K";
 in
 {
-  "nomad-token.age".publicKeys = [ mars ];
-
   "megaera-nomad-vault-config.age".publicKeys = [ matt-mars megaera ];
   "tisiphone-nomad-vault-config.age".publicKeys = [ matt-mars tisiphone ];
   "alecto-nomad-vault-config.age".publicKeys = [ matt-mars alecto ];

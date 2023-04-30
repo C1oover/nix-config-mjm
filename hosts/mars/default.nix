@@ -1,5 +1,3 @@
-{ pkgs, ... }:
-
 {
   imports = [
     ../common/global/darwin.nix
@@ -10,9 +8,4 @@
 
   networking.computerName = "Mars";
   networking.hostName = "mars";
-
-  age.secrets.nomad-token = {
-    file = ../../secrets/nomad-token.age;
-    owner = "matt";
-  };
 }
