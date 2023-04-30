@@ -20,7 +20,7 @@
       checks = [
         {
           name = "node-exporter HTTP";
-          http = "http://localhost:${config.services.prometheus.exporters.node.port}/";
+          http = "http://localhost:${toString config.services.prometheus.exporters.node.port}/";
           interval = "30s";
           timeout = "5s";
         }
