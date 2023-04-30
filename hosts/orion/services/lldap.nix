@@ -26,6 +26,15 @@ in
         name = "lldap";
         id = "lldap:${config.networking.hostName}";
         port = 17170;
+
+        checks = [
+          {
+            name = "lldap HTTP API";
+            http = "http://localhost:17170/health";
+            interval = "30s";
+            timeout = "5s";
+          }
+        ];
       };
     }))
   ];
