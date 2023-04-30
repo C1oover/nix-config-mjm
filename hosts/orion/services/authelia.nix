@@ -105,7 +105,7 @@ in
         host = "redis.service.consul";
         port = 6379;
       };
-      storage.postgresql = {
+      storage.postgres = {
         host = "postgresql.service.consul";
         port = 5432;
         database = "authelia";
