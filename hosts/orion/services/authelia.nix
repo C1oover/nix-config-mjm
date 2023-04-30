@@ -134,7 +134,9 @@ in
     ];
   };
 
-  systemd.tmpfiles.rules = "d '/run/secrets/authelia' 0700 authelia-main authelia-main - -";
+  systemd.tmpfiles.rules = [
+    "d /run/secrets/authelia 0700 authelia-main authelia-main - -"
+  ];
 
   systemd.services.authelia-vault-agent =
     let
