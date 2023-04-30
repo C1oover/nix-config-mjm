@@ -16,8 +16,7 @@
   # Enables the generation of /boot/extlinux/extlinux.conf
   boot.loader.generic-extlinux-compatible.enable = true;
 
-  # no, I don't know why the interface name is different from brontes.
-  services.consul.interface.advertise = "eth0";
+  services.consul.interface.advertise = "end0";
 
   system.stateVersion = "21.03";
 }
