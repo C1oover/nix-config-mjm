@@ -14,6 +14,9 @@ in
         "3890:3890" # ldap
         "17170:17170" # web interface
       ];
+      environment = {
+        LLDAP_LDAP_BASE_DN = "dc=home,dc=mattmoriarity,dc=com";
+      };
     };
   };
 
