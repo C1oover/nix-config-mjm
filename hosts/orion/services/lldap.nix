@@ -19,9 +19,11 @@ in
 
   services.consul.extraConfigFiles = [
     (toString (format.generate "lldap.json" {
-      name = "lldap";
-      id = "lldap:${config.networking.hostName}";
-      port = 17170;
+      service = {
+        name = "lldap";
+        id = "lldap:${config.networking.hostName}";
+        port = 17170;
+      };
     }))
   ];
 }
