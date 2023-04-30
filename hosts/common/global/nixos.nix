@@ -29,6 +29,7 @@
   environment.systemPackages = with pkgs; [
     neovim
     git
+    python310 # for using ansible to update the system
   ];
 
   programs.zsh.enable = true;
