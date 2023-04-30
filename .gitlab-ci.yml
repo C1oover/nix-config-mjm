@@ -1,0 +1,6 @@
+update hosts:
+  variables:
+    UPDATE_NIX: "true"
+  trigger:
+    project: mjm/homelab-infra
+    strategy: depend
