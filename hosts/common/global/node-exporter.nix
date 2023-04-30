@@ -1,4 +1,11 @@
-{ config, ... }: {
+{ config
+, pkgs
+, ...
+}:
+let
+  format = pkgs.formats.json { };
+in
+{
   services.prometheus.exporters.node = {
     enable = true;
     openFirewall = true;
@@ -13,8 +20,8 @@
     ];
   };
 
-  services.consul.extraConfig.services = [
-    {
+  services.consul.extraConfigFiles = [
+    (toString (format.generate "node-exporter.json" {
       name = "node-exporter";
       id = "node-exporter:${config.networking.hostName}";
       port = config.services.prometheus.exporters.node.port;
@@ -30,6 +37,6 @@
           timeout = "5s";
         }
       ];
-    }
+    }))
   ];
 }

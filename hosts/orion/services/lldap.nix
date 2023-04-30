@@ -1,4 +1,11 @@
-{ config, ... }: {
+{ config
+, pkgs
+, ...
+}:
+let
+  format = pkgs.formats.json { };
+in
+{
   virtualisation.oci-containers.containers = {
     lldap = {
       image = "nitnelave/lldap:stable";
@@ -10,11 +17,11 @@
     };
   };
 
-  services.consul.extraConfig.services = [
-    {
+  services.consul.extraConfigFiles = [
+    (toString (format.generate "lldap.json" {
       name = "lldap";
       id = "lldap:${config.networking.hostName}";
       port = 17170;
-    }
+    }))
   ];
 }
