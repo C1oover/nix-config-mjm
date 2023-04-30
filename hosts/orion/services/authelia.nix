@@ -1,0 +1,227 @@
+{ config
+, pkgs
+, ...
+}:
+let
+  oidcClients = [
+    {
+      id = "gitlab";
+      description = "GitLab";
+      secret = "$pbkdf2-sha512$310000$KBrmIfaP43sBTkOZ5tvwlA$y8/qNNGAeeco48h4vsmtqA73thgVubddQOepMfqG3w0zEvnWPf9w/L8kJpuanGwKtwkejAC.g.M4sQ.Q1qY6OQ";
+      public = false;
+      authorization_policy = "two_factor";
+      redirect_uris = [ "https://gitlab.home.mattmoriarity.com/users/auth/openid_connect/callback" ];
+      scopes = [ "openid" "profile" "groups" "email" ];
+      userinfo_signing_algorithm = "none";
+    }
+    {
+      id = "vault";
+      description = "Hashicorp Vault";
+      secret = "$pbkdf2-sha512$310000$GcSGTc2f7qUrSu9cM1cGvQ$IJ.jX/HZx3lVujQbbdCp66vm2qWX8M6MEK1peMeTI1GZxMWaVRlVC59tGkIW08ij6WliBEfTvSTSToKmXYEGTQ";
+      public = false;
+      authorization_policy = "two_factor";
+      redirect_uris = [
+        "https://vault.home.mattmoriarity.com/oidc/callback"
+        "https://vault.home.mattmoriarity.com/ui/vault/auth/oidc/oidc/callback"
+        "http://localhost:8250/oidc/callback"
+      ];
+      scopes = [ "openid" "profile" "groups" "email" ];
+      userinfo_signing_algorithm = "none";
+    }
+    {
+      id = "proxmox";
+      description = "Proxmox Virtual Environment";
+      secret = "$pbkdf2-sha512$310000$jSR5KT8pbsKrYovaP0RYhA$pt40j9SHmF3SfZPgxGfmQZKfS.07Zks7MkmCHuAzJaEOY0Gca1CzvFwczMWhFHiRTd1tOsLzKY1yGAdYb1Q9sA";
+      public = false;
+      authorization_policy = "two_factor";
+      redirect_uris = [
+        "https://10.0.2.10:8006"
+        "https://10.0.2.11:8006"
+        "https://artemis.home.mattmoriarity.com:8006"
+        "https://apollo.home.mattmoriarity.com:8006"
+        "https://proxmox.home.mattmoriarity.com"
+      ];
+      scopes = [ "openid" "profile" "email" ];
+      userinfo_signing_algorithm = "none";
+    }
+    {
+      id = "minio";
+      description = "MinIO";
+      secret = "$pbkdf2-sha512$310000$lIbZcunKd9pcd.e/8.8esw$lJY3Zb7Ng8eSKHXV3xI9BA2THWMy7ZcCPYX/pCjuLw32nxN4stMnnIXb8poFbX8DFxvrWHT5sPeRWFl532RxHg";
+      public = false;
+      authorization_policy = "two_factor";
+      redirect_uris = [ "https://minio-console.home.mattmoriarity.com/oauth_callback" ];
+      scopes = [ "openid" "profile" "groups" "email" ];
+      userinfo_signing_algorithm = "none";
+    }
+  ];
+  format = pkgs.formats.json { };
+in
+{
+  services.authelia.instances.main = {
+    enable = true;
+    settings = {
+      default_redirection_url = "https://homelab.home.mattmoriarity.com/";
+      default_2fa_method = "webauthn";
+      server.host = "0.0.0.0";
+      telemetry.metrics = {
+        enabled = true;
+        address = "tcp://127.0.0.1:9959";
+      };
+      webauthn.display_name = "Homelab";
+      authentication_backend.ldap = {
+        implementation = "custom";
+        url = "ldap://localhost:3890";
+        timeout = "5s";
+        start_tls = false;
+        base_dn = "dc=home,dc=mattmoriarity,dc=com";
+        username_attribute = "uid";
+        additional_users_dn = "ou=people";
+        users_filter = "(&({username_attribute}={input})(objectClass=person))";
+        additional_groups_dn = "ou=groups";
+        groups_filter = "(member={dn})";
+        group_name_attribute = "cn";
+        mail_attribute = "mail";
+        display_name_attribute = "displayName";
+        user = "uid=service,ou=people,dc=home,dc=mattmoriarity,dc=com";
+      };
+      access_control = {
+        default_policy = "two_factor";
+        rules = [
+          {
+            domain = "*.home.mattmoriarity.com";
+            networks = [ "10.0.2.104" ];
+            policy = "bypass";
+          }
+          {
+            domain = "linkding.home.mattmoriarity.com";
+            resources = [ "^/api/.*$" ];
+            policy = "bypass";
+          }
+        ];
+      };
+      session.domain = "home.mattmoriarity.com";
+      session.redis = {
+        host = "redis.service.consul";
+        port = 6379;
+      };
+      storage.postgresql = {
+        host = "postgresql.service.consul";
+        port = 5432;
+        database = "authelia";
+      };
+      notifier.smtp = {
+        host = "smtp.fastmail.com";
+        port = 587;
+        username = "matt@mattmoriarity.com";
+        sender = "Authelia <admin@mattmoriarity.com>";
+      };
+      identity_providers.oidc.clients = oidcClients;
+    };
+    secrets = {
+      jwtSecretFile = config.age.secrets."authelia-jwt-secret".path;
+      oidcHmacSecretFile = config.age.secrets."authelia-hmac-secret".path;
+      oidcIssuerPrivateKeyFile = config.age.secrets."authelia-jwt-private-key".path;
+      sessionSecretFile = config.age.secrets."authelia-session-secret".path;
+      storageEncryptionKeyFile = config.age.secrets."authelia-storage-encryption-key".path;
+    };
+    environmentVariables = {
+      AUTHELIA_AUTHENTICATION_BACKEND_LDAP_PASSWORD_FILE = config.age.secrets."authelia-ldap-password".path;
+      AUTHELIA_NOTIFIER_SMTP_PASSWORD_FILE = config.age.secrets."authelia-smtp-password".path;
+    };
+    settingsFiles = [
+      "/run/secrets/authelia/db-config.yml"
+    ];
+  };
+
+  systemd.tmpfiles.rules = "d '/run/secrets/authelia' 0700 authelia-main authelia-main - -";
+
+  systemd.services.authelia-vault-agent =
+    let
+      roleId = pkgs.writeText "authelia-role-id" "1f94fc98-0934-7027-a34f-ea94f3268def";
+      configFile = format.generate "vault-agent.json" {
+        vault.address = "http://vault.service.consul:8200";
+        auto_auth.method = [
+          {
+            type = "approle";
+            config = {
+              remove_secret_id_file_after_reading = false;
+              role_id_file_path = "${roleId}";
+              secret_id_file_path = config.age.secrets."authelia-approle-secret-id".path;
+            };
+          }
+        ];
+        template = [
+          {
+            contents = ''
+              {{ with secret "database/creds/authelia" }}
+              storage:
+                postgres:
+                  username: {{ .Data.username | toJSON }}
+                  password: {{ .Data.password | toJSON }}
+              {{ end }}
+            '';
+            destination = "/run/secrets/authelia/db-config.yml";
+            command = "systemctl restart authelia-main.service";
+          }
+        ];
+      };
+    in
+    {
+      description = "Vault agent to provide rotating database credentials for Authelia";
+
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
+
+      startLimitIntervalSec = 60;
+      startLimitBurst = 3;
+      serviceConfig = {
+        User = config.services.authelia.instances.main.user;
+        Group = config.services.authelia.instances.main.group;
+        ExecStart = "${pkgs.vault}/bin/vault agent -config=${configFile}";
+        ExecReload = "${pkgs.coreutils}/bin/kill -SIGHUP $MAINPID";
+        PrivateDevices = true;
+        PrivateTmp = true;
+        ProtectHome = "read-only";
+        NoNewPrivileges = true;
+        KillSignal = "SIGINT";
+        TimeoutStopSec = "30s";
+        Restart = "on-failure";
+      };
+    };
+
+  age.secrets = {
+    "authelia-hmac-secret" = {
+      file = ../../../secrets/authelia-hmac-secret.age;
+      owner = config.services.authelia.instances.main.user;
+    };
+    "authelia-jwt-private-key" = {
+      file = ../../../secrets/authelia-jwt-private-key.age;
+      owner = config.services.authelia.instances.main.user;
+    };
+    "authelia-jwt-secret" = {
+      file = ../../../secrets/authelia-jwt-secret.age;
+      owner = config.services.authelia.instances.main.user;
+    };
+    "authelia-ldap-password" = {
+      file = ../../../secrets/authelia-ldap-password.age;
+      owner = config.services.authelia.instances.main.user;
+    };
+    "authelia-session-secret" = {
+      file = ../../../secrets/authelia-session-secret.age;
+      owner = config.services.authelia.instances.main.user;
+    };
+    "authelia-smtp-password" = {
+      file = ../../../secrets/authelia-smtp-password.age;
+      owner = config.services.authelia.instances.main.user;
+    };
+    "authelia-storage-encryption-key" = {
+      file = ../../../secrets/authelia-storage-encryption-key.age;
+      owner = config.services.authelia.instances.main.user;
+    };
+    "authelia-approle-secret-id" = {
+      file = ../../../secrets/authelia-approle-secret-id.age;
+      owner = config.services.authelia.instances.main.user;
+    };
+  };
+}

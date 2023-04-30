@@ -9,6 +9,7 @@
 
     ../common/optional/consul-agent.nix
     ./services/lldap.nix
+    ./services/authelia.nix
   ];
 
   networking.hostName = "orion";

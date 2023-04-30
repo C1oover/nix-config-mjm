@@ -7,6 +7,7 @@ let
   tisiphone = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKqaFj8PGrEhie1P0uEKJ6lbP0fjB+CzuWw5siQGlsin";
   alecto = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINq0z6ClXVPLPyucJEPg5EhqK//2JVexFGO4d9MT+cJY";
   hypnos = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKn/ufUVxaDdTElgs61xfvsHsHn3RwpL7n6DO5qcBO0K";
+  orion = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDFDLe0Oy6quuAu4ARXnZCWNDiYTgfdLjy7kp7MB8n4G";
 in
 {
   "megaera-nomad-vault-config.age".publicKeys = [ matt-mars megaera ];
@@ -14,4 +15,13 @@ in
   "alecto-nomad-vault-config.age".publicKeys = [ matt-mars alecto ];
 
   "gitlab-runner-registration.age".publicKeys = [ matt-mars hypnos ];
+
+  "authelia-jwt-secret.age".publicKeys = [ matt-mars orion ];
+  "authelia-jwt-private-key.age".publicKeys = [ matt-mars orion ];
+  "authelia-storage-encryption-key.age".publicKeys = [ matt-mars orion ];
+  "authelia-session-secret.age".publicKeys = [ matt-mars orion ];
+  "authelia-hmac-secret.age".publicKeys = [ matt-mars orion ];
+  "authelia-smtp-password.age".publicKeys = [ matt-mars orion ];
+  "authelia-ldap-password.age".publicKeys = [ matt-mars orion ];
+  "authelia-approle-secret-id.age".publicKeys = [ matt-mars orion ];
 }
