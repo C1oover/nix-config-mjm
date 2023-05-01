@@ -20,7 +20,5 @@
 
   services.qemuGuest.enable = true;
 
-  services.consul.extraConfig.retry_join = [ "10.0.2.40" "10.0.2.42" ];
-
   system.stateVersion = "22.11";
 }

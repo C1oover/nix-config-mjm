@@ -8,7 +8,7 @@
     extraConfig = {
       server = true;
       bootstrap_expect = 3;
-      # TODO retry_join
+      retry_join = [ "10.0.2.40" "10.0.2.42" "10.0.2.43" ];
       client_addr = "0.0.0.0";
       ports.grpc = 8502;
       connect.enabled = true;
