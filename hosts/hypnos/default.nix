@@ -5,6 +5,7 @@
     ../common/global/nixos.nix
     ../common/users/matt
 
+    ../common/optional/consul-agent.nix
     ../common/optional/gitlab-runner.nix
   ];
 
