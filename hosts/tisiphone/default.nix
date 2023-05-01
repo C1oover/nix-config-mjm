@@ -6,7 +6,8 @@
     ../common/users/matt
 
     ../common/optional/consul-server.nix
-    ../common/optional/vault-server.nix
+    # ../common/optional/vault-server.nix
+    ../common/optional/vault-server-raft.nix
     ../common/optional/nomad-server.nix
   ];
 
