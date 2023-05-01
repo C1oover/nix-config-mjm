@@ -66,7 +66,7 @@ in
       server.host = "0.0.0.0";
       telemetry.metrics = {
         enabled = true;
-        address = "tcp://127.0.0.1:9959";
+        address = "tcp://0.0.0.0:9959";
       };
       webauthn.display_name = "Homelab";
       authentication_backend.ldap = {
