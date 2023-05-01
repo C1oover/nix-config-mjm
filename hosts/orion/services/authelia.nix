@@ -134,6 +134,35 @@ in
     ];
   };
 
+  networking.firewall.allowedTCPPorts = [
+    9091
+    9959
+  ];
+
+  services.consul.extraConfigFiles = [
+    (toString (format.generate "authelia.json" {
+      service = {
+        id = "authelia:${config.networking.hostName}";
+        name = "authelia";
+        port = 9091;
+
+        meta = {
+          metrics_path = "/metrics";
+          metrics_port = "9959";
+        };
+
+        checks = [
+          {
+            name = "authelia is ready";
+            http = "http://localhost:9091/api/health";
+            interval = "30s";
+            timeout = "5s";
+          }
+        ];
+      };
+    }))
+  ];
+
   systemd.tmpfiles.rules = [
     "d /run/secrets/authelia 0700 authelia-main authelia-main - -"
   ];
