@@ -203,6 +203,7 @@ in
 
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
+      path = [ pkgs.glibc ];
 
       startLimitIntervalSec = 60;
       startLimitBurst = 3;
