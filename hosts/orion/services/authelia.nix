@@ -207,8 +207,6 @@ in
       startLimitIntervalSec = 60;
       startLimitBurst = 3;
       serviceConfig = {
-        User = config.services.authelia.instances.main.user;
-        Group = config.services.authelia.instances.main.group;
         ExecStart = "${pkgs.vault}/bin/vault agent -config=${configFile}";
         ExecReload = "${pkgs.coreutils}/bin/kill -SIGHUP $MAINPID";
         PrivateDevices = true;
