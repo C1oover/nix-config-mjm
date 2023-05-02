@@ -9,6 +9,12 @@
     storageBackend = "raft";
     storageConfig = ''
       node_id = "${config.networking.hostName}"
+      retry_join {
+        leader_api_addr = "http://10.0.2.40:8200"
+      }
+      retry_join {
+        leader_api_addr = "http://10.0.2.42:8200"
+      }
     '';
     listenerExtraConfig = ''
       cluster_address = "0.0.0.0:8201"
@@ -27,20 +33,6 @@
       }
     '';
   };
-
-  environment.etc."vault-migrate.hcl".text = ''
-    storage_source "consul" {
-      address = "127.0.0.1:8500"
-      path = "vault"
-    }
-
-    storage_destination "raft" {
-      path = "${config.services.vault.storagePath}"
-      node_id = "${config.networking.hostName}"
-    }
-
-    cluster_addr = "https://{{ GetInterfaceIP \\"ens18\\" }}:8201"
-  '';
 
   networking.firewall.allowedTCPPorts = [
     8200
