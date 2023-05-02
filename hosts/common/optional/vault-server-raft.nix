@@ -31,6 +31,10 @@
       disable_mlock = true
       ui = true
 
+      service_registration "consul" {
+          address = "http://127.0.0.1:8500"
+      }
+
       telemetry {
         disable_hostname = true
       }
