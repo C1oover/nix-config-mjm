@@ -1,7 +1,6 @@
 {
   inputs = {
-    # nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-22.11-darwin";
-    nixpkgs.url = github:NixOS/nixpkgs/nixpkgs-unstable;
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     darwin.url = "github:lnl7/nix-darwin/master";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
@@ -13,10 +12,13 @@
     devenv.url = "github:cachix/devenv";
     devenv.inputs.nixpkgs.follows = "nixpkgs";
     flake-utils.url = "github:numtide/flake-utils";
+
     catppuccin.url = "github:catppuccin/starship";
     catppuccin.flake = false;
     catppuccin-zsh.url = "github:catppuccin/zsh-syntax-highlighting";
     catppuccin-zsh.flake = false;
+    catppuccin-k9s.url = "github:catppuccin/k9s";
+    catppuccin-k9s.flake = false;
     astronvim.url = "github:AstroNvim/AstroNvim/nightly";
     astronvim.flake = false;
   };

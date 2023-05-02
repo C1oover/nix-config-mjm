@@ -1,5 +1,6 @@
 { pkgs
 , config
+, inputs
 , ...
 }: {
   imports = [
@@ -48,4 +49,6 @@
   };
 
   programs.git.userEmail = "matt@slab.com";
+
+  xdg.configFile."k9s/skin.yml".source = inputs.catppuccin-k9s + "/dist/mocha.yml";
 }
