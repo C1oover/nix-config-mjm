@@ -17,8 +17,8 @@
       }
     '';
     extraConfig = ''
-      api_addr = "http://{{ GetInterfaceIP \\"ens18\\" }}:8200"
-      cluster_addr = "https://{{ GetInterfaceIP \\"ens18\\" }}:8201"
+      api_addr = "http://{{ GetInterfaceIP \"ens18\" }}:8200"
+      cluster_addr = "https://{{ GetInterfaceIP \"ens18\" }}:8201"
       disable_mlock = true
       ui = true
 
