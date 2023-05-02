@@ -15,6 +15,9 @@
       retry_join {
         leader_api_addr = "http://10.0.2.42:8200"
       }
+      retry_join {
+        leader_api_addr = "http://10.0.2.43:8200"
+      }
     '';
     listenerExtraConfig = ''
       cluster_address = "0.0.0.0:8201"
