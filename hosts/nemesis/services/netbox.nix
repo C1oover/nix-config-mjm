@@ -63,7 +63,7 @@ in
       serverName = "_";
       default = true;
       locations."/static/" = {
-        alias = config.services.netbox-external.settings.STATIC_ROOT;
+        alias = config.services.netbox-external.settings.STATIC_ROOT + "/";
       };
       locations."/" = {
         proxyPass = "http://netbox";
