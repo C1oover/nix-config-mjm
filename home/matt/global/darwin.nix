@@ -5,6 +5,7 @@
   imports = [
     ../features/yubikey
     ../features/iterm
+    ../features/kitty
   ];
 
   nixpkgs.config.allowUnfree = true;
