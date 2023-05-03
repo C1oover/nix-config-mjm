@@ -61,6 +61,7 @@ in
     };
     virtualHosts."netbox" = {
       serverName = "_";
+      default = true;
       locations."/static/" = {
         alias = config.services.netbox-external.settings.STATIC_ROOT;
       };
@@ -116,8 +117,8 @@ in
                 "NAME": "netbox",
                 "USER": {{ .Data.username | toJSON }},
                 "PASSWORD": {{ .Data.password | toJSON }},
-                "HOST": 'postgresql.service.consul',
-                "CONN_MAX_AGE": 300,
+                "HOST": "postgresql.service.consul",
+                "CONN_MAX_AGE": 300
               }
               {{ end }}
             '';
