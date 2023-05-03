@@ -49,6 +49,7 @@
     {
       homeManagerModules = import ./modules/home-manager;
       darwinModules = import ./modules/darwin;
+      nixosModules = import ./modules/nixos;
 
       darwinConfigurations = {
         mars = mkDarwin "x86_64" [ ./hosts/mars ];
@@ -67,6 +68,7 @@
         hypnos = mkNixos [ ./hosts/hypnos ];
 
         orion = mkNixos [ ./hosts/orion ];
+        nemesis = mkNixos [ ./hosts/nemesis ];
       };
 
       formatter = flake-utils.lib.eachDefaultSystemMap (system: nixpkgs.legacyPackages.${system}.nixpkgs-fmt);

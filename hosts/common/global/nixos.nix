@@ -4,14 +4,16 @@
 , outputs
 , ...
 }: {
-  imports = [
-    inputs.home-manager.nixosModules.home-manager
-    inputs.agenix.nixosModules.default
+  imports =
+    [
+      inputs.home-manager.nixosModules.home-manager
+      inputs.agenix.nixosModules.default
 
-    ./ssh.nix
-    ./ssl.nix
-    ./node-exporter.nix
-  ];
+      ./ssh.nix
+      ./ssl.nix
+      ./node-exporter.nix
+    ]
+    ++ (builtins.attrValues outputs.nixosModules);
 
   nix.settings = {
     experimental-features = [ "flakes" "nix-command" ];

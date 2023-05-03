@@ -1,0 +1,3 @@
+{
+  netbox = import ./netbox.nix;
+}
