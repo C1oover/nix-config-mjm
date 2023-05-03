@@ -72,6 +72,8 @@ in
     };
   };
 
+  users.users.nginx.extraGroups = [ "netbox" ];
+
   networking.firewall.allowedTCPPorts = [
     config.services.nginx.defaultHTTPListenPort
   ];
