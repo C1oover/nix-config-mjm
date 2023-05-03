@@ -10,7 +10,11 @@ in
     enable = true;
     listenAddress = "0.0.0.0";
     settings = {
-      ALLOWED_HOSTS = [ "netbox.home.mattmoriarity.com" "netbox.service.consul" ];
+      ALLOWED_HOSTS = [
+        "netbox.home.mattmoriarity.com"
+        "netbox.service.consul"
+        "10.0.2.45"
+      ];
       REDIS = {
         tasks = {
           HOST = "redis.service.consul";
