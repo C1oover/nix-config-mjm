@@ -4,7 +4,7 @@
 , ...
 }:
 let
-  vssh = pkgs.writeShellScriptBin "vssh" ''
+  updateYubikeyCert = pkgs.writeShellScriptBin "update-yubikey-cert" ''
     ${pkgs.vault}/bin/vault ssh \
       -mode="ca" \
       -role="homelab-client" \
@@ -15,12 +15,20 @@ let
       -field=signed_key \
       "$1" \
       >"${config.home.homeDirectory}/.ssh/yubikey-cert.pub"
+  '';
 
+  vssh = pkgs.writeShellScriptBin "vssh" ''
+    ${updateYubikeyCert}/bin/update-yubikey-cert
     ssh -i "${config.home.homeDirectory}/.ssh/yubikey-cert.pub" "$@"
   '';
 
   tmssh = pkgs.writeShellScriptBin "tmssh" ''
     ${vssh}/bin/vssh "$@" -t 'tmux -CC new -A -s tmssh'
+  '';
+
+  s = pkgs.writeShellScriptBin "s" ''
+    ${updateYubikeyCert}/bin/update-yubikey-cert
+    ${pkgs.kitty}/bin/kitty +kitten ssh -i "${config.home.homeDirectory}/.ssh/yubikey-cert.pub" "$@"
   '';
 
   devenv = inputs.devenv.packages.x86_64-darwin.default;
@@ -39,6 +47,7 @@ in
     tarsnap
     vault
 
+    s
     vssh
     tmssh
   ];
@@ -61,7 +70,7 @@ in
       { path = "/System/Applications/System Settings.app/"; }
       { path = "/Applications/1Password.app/"; }
       { path = "/Applications/Drafts.app/"; }
-      { path = "${pkgs.iterm2}/Applications/iTerm2.app/"; }
+      { path = "${pkgs.kitty}/Applications/kitty.app/"; }
       { path = "/Applications/Dash.app/"; }
       { path = "/Applications/Slab.app/"; }
       { path = "${pkgs.slack}/Applications/Slack.app/"; }

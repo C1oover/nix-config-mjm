@@ -1,5 +1,4 @@
 { pkgs, ... }:
-
 let
   iconMap = pkgs.writeScript "sketchybar-plugin-icon-map" ''
     #!${pkgs.bash}/bin/bash
@@ -87,6 +86,7 @@ in
       setup_space 6 other
 
       yabai -m rule --add app="^iTerm2$" space=^1
+      yabai -m rule --add app="^kitty$" space=^1
       yabai -m rule --add app="^Dash$" space=^1
       yabai -m rule --add app="^Safari$" space=^2
       yabai -m rule --add app="^Firefox$" space=^2
@@ -170,12 +170,12 @@ in
   services.skhd = {
     enable = true;
     skhdConfig = ''
-      ctrl + alt + cmd - 1 : ${pkgs.yabai}/bin/yabai -m space --focus 1 
-      ctrl + alt + cmd - 2 : ${pkgs.yabai}/bin/yabai -m space --focus 2 
-      ctrl + alt + cmd - 3 : ${pkgs.yabai}/bin/yabai -m space --focus 3 
-      ctrl + alt + cmd - 4 : ${pkgs.yabai}/bin/yabai -m space --focus 4 
-      ctrl + alt + cmd - 5 : ${pkgs.yabai}/bin/yabai -m space --focus 5 
-      ctrl + alt + cmd - 6 : ${pkgs.yabai}/bin/yabai -m space --focus 6 
+      ctrl + alt + cmd - 1 : ${pkgs.yabai}/bin/yabai -m space --focus 1
+      ctrl + alt + cmd - 2 : ${pkgs.yabai}/bin/yabai -m space --focus 2
+      ctrl + alt + cmd - 3 : ${pkgs.yabai}/bin/yabai -m space --focus 3
+      ctrl + alt + cmd - 4 : ${pkgs.yabai}/bin/yabai -m space --focus 4
+      ctrl + alt + cmd - 5 : ${pkgs.yabai}/bin/yabai -m space --focus 5
+      ctrl + alt + cmd - 6 : ${pkgs.yabai}/bin/yabai -m space --focus 6
 
       ctrl + alt + cmd - left : ${pkgs.yabai}/bin/yabai -m space --focus prev
       ctrl + alt + cmd - right : ${pkgs.yabai}/bin/yabai -m space --focus next
