@@ -1,6 +1,7 @@
-{ lib, ... }:
-
-{
+{ lib
+, pkgs
+, ...
+}: {
   programs.git = {
     enable = true;
     aliases = {
@@ -25,4 +26,11 @@
     userName = "Matt Moriarity";
     userEmail = lib.mkDefault "matt@mattmoriarity.com";
   };
+
+  programs.zsh.plugins = [
+    {
+      name = "forgit";
+      src = "${pkgs.zsh-forgit}/share/zsh/zsh-forgit";
+    }
+  ];
 }
