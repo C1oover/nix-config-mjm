@@ -9,6 +9,7 @@ let
   hypnos = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKn/ufUVxaDdTElgs61xfvsHsHn3RwpL7n6DO5qcBO0K";
   orion = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDFDLe0Oy6quuAu4ARXnZCWNDiYTgfdLjy7kp7MB8n4G";
   nemesis = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIOBXAwxTy5mDt9jxKg1rhRryyNr5jkIPHnwAdLsQ1yI";
+  aion = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKFrAsGVNyUfMfNvdix1ON28I/eu4MBhU6YdzzgRItQf";
 in
 {
   "megaera-nomad-vault-config.age".publicKeys = [ matt-mars megaera ];
@@ -28,4 +29,6 @@ in
 
   "netbox-secret-key.age".publicKeys = [ matt-mars nemesis ];
   "netbox-approle-secret-id.age".publicKeys = [ matt-mars nemesis ];
+
+  "paperless-approle-secret-id.age".publicKeys = [ matt-mars aion ];
 }

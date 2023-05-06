@@ -8,7 +8,7 @@
     ../common/global/nixos.nix
 
     ../common/optional/consul-agent.nix
-    # ./services/paperless.nix
+    ./services/paperless.nix
   ];
 
   networking.hostName = "aion";
