@@ -79,6 +79,9 @@ in
       };
     in
     {
+      # leave this turned off to avoid creating buttloads of users
+      enable = false;
+
       description = "Vault agent to provide rotating database credentials for Paperless";
 
       wantedBy = [ "multi-user.target" ];
@@ -104,6 +107,7 @@ in
   systemd.services.paperless-task-queue.serviceConfig.EnvironmentFile = "/run/secrets/paperless/paperless.env";
   systemd.services.paperless-consumer.serviceConfig.EnvironmentFile = "/run/secrets/paperless/paperless.env";
   systemd.services.paperless-web.serviceConfig.EnvironmentFile = "/run/secrets/paperless/paperless.env";
+  systemd.services.paperless-download-nltk-data.serviceConfig.ProtectHostname = false;
 
   # TODO: sshd config to accept uploads from scanner
 
