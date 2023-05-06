@@ -69,6 +69,7 @@
 
         orion = mkNixos [ ./hosts/orion ];
         nemesis = mkNixos [ ./hosts/nemesis ];
+        aion = mkNixos [ ./hosts/aion ];
       };
 
       formatter = flake-utils.lib.eachDefaultSystemMap (system: nixpkgs.legacyPackages.${system}.nixpkgs-fmt);
