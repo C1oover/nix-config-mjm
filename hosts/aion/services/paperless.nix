@@ -18,7 +18,7 @@ in
       PAPERLESS_DBNAME = "paperless";
       PAPERLESS_DBSSLMODE = "disable";
       PAPERLESS_URL = "https://paperless.home.mattmoriarity.com";
-      PAPERLESS_ALLOWED_HOSTS = "paperless.service.consul";
+      PAPERLESS_ALLOWED_HOSTS = "paperless.service.consul,localhost";
       PAPERLESS_ENABLE_HTTP_REMOTE_USER = "true";
       PAPERLESS_HTTP_REMOTE_USER_HEADER_NAME = "HTTP_REMOTE_USER";
     };
