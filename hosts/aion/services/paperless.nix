@@ -34,6 +34,15 @@ in
         id = "paperless:${config.networking.hostName}";
         name = "paperless";
         port = config.services.paperless.port;
+
+        checks = [
+          {
+            name = "paperless is up";
+            http = "http://localhost:${toString config.services.paperless.port}/";
+            interval = "30s";
+            timeout = "5s";
+          }
+        ];
       };
     }))
   ];
