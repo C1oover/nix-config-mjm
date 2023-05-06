@@ -99,7 +99,7 @@ in
     in
     {
       systemd.tmpfiles.rules =
-        map (instance: "d ${instance.secretsPath} 0700 ${instance.owner} ${instance.group} - -")
+        map (instance: "d /run/secrets/${instance.name} 0700 ${instance.owner} ${instance.group} - -")
           instances;
 
       systemd.services =
