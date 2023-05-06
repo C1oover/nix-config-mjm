@@ -7,6 +7,8 @@
 
     ../common/global/nixos.nix
 
+    ../common/global/promtail.nix
+
     ../common/optional/consul-agent.nix
     ./services/paperless.nix
   ];
