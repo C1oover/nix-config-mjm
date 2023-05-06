@@ -47,13 +47,8 @@ in
     }))
   ];
 
-  systemd.tmpfiles.rules = [
-    "d /run/secrets/paperless 0700 paperless paperless - -"
-  ];
-
-  systemd.services.paperless-vault-agent =
+  services.vault-agent.instances.paperless =
     let
-      roleId = pkgs.writeText "paperless-role-id" "11a736d8-ef30-f7aa-1d1e-72029ce45fb4";
       restartScript = pkgs.writeShellScript "paperless-restart" ''
         set -e
 
@@ -62,53 +57,26 @@ in
         systemctl restart paperless-consumer.service
         systemctl restart paperless-web.service
       '';
-      configFile = format.generate "vault-agent.json" {
-        vault.address = "http://vault.service.consul:8200";
-        auto_auth.method = [
-          {
-            type = "approle";
-            config = {
-              remove_secret_id_file_after_reading = false;
-              role_id_file_path = "${roleId}";
-              secret_id_file_path = config.age.secrets."paperless-approle-secret-id".path;
-            };
-          }
-        ];
-        template = [
-          {
-            contents = ''
-              {{ with secret "database/creds/paperless" }}
-              PAPERLESS_DBUSER={{ .Data.username }}
-              PAPERLESS_DBPASS={{ .Data.password }}
-              {{ end }}
-              PAPERLESS_SECRET_KEY={{ with secret "kv/paperless" }}{{ .Data.data.secret_key }}{{ end }}
-            '';
-            destination = "/run/secrets/paperless/paperless.env";
-            command = "${restartScript}";
-          }
-        ];
-      };
     in
     {
-      description = "Vault Agent for Paperless";
-
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
-      path = [ pkgs.glibc ];
-
-      startLimitIntervalSec = 60;
-      startLimitBurst = 3;
-      serviceConfig = {
-        ExecStart = "${pkgs.vault}/bin/vault agent -config=${configFile}";
-        ExecReload = "${pkgs.coreutils}/bin/kill -SIGHUP $MAINPID";
-        PrivateDevices = true;
-        PrivateTmp = true;
-        ProtectHome = "read-only";
-        NoNewPrivileges = true;
-        KillSignal = "SIGINT";
-        TimeoutStopSec = "30s";
-        Restart = "on-failure";
-      };
+      enable = true;
+      roleId = "11a736d8-ef30-f7aa-1d1e-72029ce45fb4";
+      secretIdFile = config.age.secrets."paperless-approle-secret-id".path;
+      owner = "paperless";
+      group = "paperless";
+      templates = [
+        {
+          contents = ''
+            {{ with secret "database/creds/paperless" }}
+            PAPERLESS_DBUSER={{ .Data.username }}
+            PAPERLESS_DBPASS={{ .Data.password }}
+            {{ end }}
+            PAPERLESS_SECRET_KEY={{ with secret "kv/paperless" }}{{ .Data.data.secret_key }}{{ end }}
+          '';
+          destination = "/run/secrets/paperless/paperless.env";
+          command = "${restartScript}";
+        }
+      ];
     };
 
   # Fix service configs so things actually are able to run.
