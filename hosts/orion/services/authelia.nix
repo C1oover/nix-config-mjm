@@ -163,62 +163,27 @@ in
     }))
   ];
 
-  systemd.tmpfiles.rules = [
-    "d /run/secrets/authelia 0700 authelia-main authelia-main - -"
-  ];
-
-  systemd.services.authelia-vault-agent =
-    let
-      roleId = pkgs.writeText "authelia-role-id" "1f94fc98-0934-7027-a34f-ea94f3268def";
-      configFile = format.generate "vault-agent.json" {
-        vault.address = "http://vault.service.consul:8200";
-        auto_auth.method = [
-          {
-            type = "approle";
-            config = {
-              remove_secret_id_file_after_reading = false;
-              role_id_file_path = "${roleId}";
-              secret_id_file_path = config.age.secrets."authelia-approle-secret-id".path;
-            };
-          }
-        ];
-        template = [
-          {
-            contents = ''
-              {{ with secret "database/creds/authelia" }}
-              storage:
-                postgres:
-                  username: {{ .Data.username | toJSON }}
-                  password: {{ .Data.password | toJSON }}
-              {{ end }}
-            '';
-            destination = "/run/secrets/authelia/db-config.yml";
-            command = "systemctl restart authelia-main.service";
-          }
-        ];
-      };
-    in
-    {
-      description = "Vault agent to provide rotating database credentials for Authelia";
-
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
-      path = [ pkgs.glibc ];
-
-      startLimitIntervalSec = 60;
-      startLimitBurst = 3;
-      serviceConfig = {
-        ExecStart = "${pkgs.vault}/bin/vault agent -config=${configFile}";
-        ExecReload = "${pkgs.coreutils}/bin/kill -SIGHUP $MAINPID";
-        PrivateDevices = true;
-        PrivateTmp = true;
-        ProtectHome = "read-only";
-        NoNewPrivileges = true;
-        KillSignal = "SIGINT";
-        TimeoutStopSec = "30s";
-        Restart = "on-failure";
-      };
-    };
+  services.vault-agent.instances.authelia = {
+    enable = true;
+    roleId = "1f94fc98-0934-7027-a34f-ea94f3268def";
+    secretIdFile = config.age.secrets."authelia-approle-secret-id".path;
+    owner = config.services.authelia.instances.main.user;
+    group = config.services.authelia.instances.main.group;
+    templates = [
+      {
+        contents = ''
+          {{ with secret "database/creds/authelia" }}
+          storage:
+            postgres:
+              username: {{ .Data.username | toJSON }}
+              password: {{ .Data.password | toJSON }}
+          {{ end }}
+        '';
+        destination = "/run/secrets/authelia/db-config.yml";
+        command = "systemctl restart authelia-main.service";
+      }
+    ];
+  };
 
   age.secrets = {
     "authelia-hmac-secret" = {

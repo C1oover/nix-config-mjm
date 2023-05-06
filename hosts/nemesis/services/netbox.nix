@@ -96,65 +96,30 @@ in
     }))
   ];
 
-  systemd.tmpfiles.rules = [
-    "d /run/secrets/netbox 0700 netbox netbox - -"
-  ];
-
-  systemd.services.netbox-vault-agent =
-    let
-      roleId = pkgs.writeText "netbox-role-id" "e2aed065-6308-cc74-91a5-2613f3f1199a";
-      configFile = format.generate "vault-agent.json" {
-        vault.address = "http://vault.service.consul:8200";
-        auto_auth.method = [
+  services.vault-agent.instances.netbox = {
+    enable = true;
+    roleId = "e2aed065-6308-cc74-91a5-2613f3f1199a";
+    secretIdFile = config.age.secrets."netbox-approle-secret-id".path;
+    owner = "netbox";
+    group = "netbox";
+    templates = [
+      {
+        contents = ''
+          {{ with secret "database/creds/netbox" }}
           {
-            type = "approle";
-            config = {
-              remove_secret_id_file_after_reading = false;
-              role_id_file_path = "${roleId}";
-              secret_id_file_path = config.age.secrets."netbox-approle-secret-id".path;
-            };
+            "NAME": "netbox",
+            "USER": {{ .Data.username | toJSON }},
+            "PASSWORD": {{ .Data.password | toJSON }},
+            "HOST": "postgresql.service.consul",
+            "CONN_MAX_AGE": 300
           }
-        ];
-        template = [
-          {
-            contents = ''
-              {{ with secret "database/creds/netbox" }}
-              {
-                "NAME": "netbox",
-                "USER": {{ .Data.username | toJSON }},
-                "PASSWORD": {{ .Data.password | toJSON }},
-                "HOST": "postgresql.service.consul",
-                "CONN_MAX_AGE": 300
-              }
-              {{ end }}
-            '';
-            destination = "/run/secrets/netbox/db-config.json";
-            command = "systemctl restart netbox.service";
-          }
-        ];
-      };
-    in
-    {
-      description = "Vault agent to provide rotating database credentials for NetBox";
-
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
-      path = [ pkgs.glibc ];
-
-      startLimitIntervalSec = 60;
-      startLimitBurst = 3;
-      serviceConfig = {
-        ExecStart = "${pkgs.vault}/bin/vault agent -config=${configFile}";
-        ExecReload = "${pkgs.coreutils}/bin/kill -SIGHUP $MAINPID";
-        PrivateDevices = true;
-        PrivateTmp = true;
-        ProtectHome = "read-only";
-        NoNewPrivileges = true;
-        KillSignal = "SIGINT";
-        TimeoutStopSec = "30s";
-        Restart = "on-failure";
-      };
-    };
+          {{ end }}
+        '';
+        destination = "/run/secrets/netbox/db-config.json";
+        command = "systemctl restart netbox.service";
+      }
+    ];
+  };
 
   age.secrets = {
     "netbox-secret-key" = {
