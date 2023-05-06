@@ -1,10 +1,13 @@
+# Replace the built-in netbox module in NixOS with this slightly modified version
+# because the built-in one hardcodes running PostgreSQL and Redis on the same host.
+# I run those services separately and would prefer to just connect to them.
 { config
 , lib
 , pkgs
 , ...
 }:
 with lib; let
-  cfg = config.services.netbox-external;
+  cfg = config.services.netbox;
   pythonFmt = pkgs.formats.pythonVars { };
   staticDir = cfg.dataDir + "/static";
 
@@ -35,7 +38,9 @@ with lib; let
   '');
 in
 {
-  options.services.netbox-external = {
+  disabledModules = [ "services/web-apps/netbox.nix" ];
+
+  options.services.netbox = {
     enable = mkOption {
       type = lib.types.bool;
       default = false;
@@ -182,7 +187,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    services.netbox-external = {
+    services.netbox = {
       plugins = mkIf cfg.enableLdap (ps: [ ps.django-auth-ldap ]);
       settings = {
         STATIC_ROOT = staticDir;

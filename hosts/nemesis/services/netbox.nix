@@ -6,7 +6,7 @@ let
   format = pkgs.formats.json { };
 in
 {
-  services.netbox-external = {
+  services.netbox = {
     enable = true;
     listenAddress = "0.0.0.0";
     settings = {
@@ -60,14 +60,14 @@ in
     defaultHTTPListenPort = 8000;
     upstreams = {
       netbox = {
-        servers = { "127.0.0.1:${toString config.services.netbox-external.port}" = { }; };
+        servers = { "127.0.0.1:${toString config.services.netbox.port}" = { }; };
       };
     };
     virtualHosts."netbox" = {
       serverName = "_";
       default = true;
       locations."/static/" = {
-        alias = config.services.netbox-external.settings.STATIC_ROOT + "/";
+        alias = config.services.netbox.settings.STATIC_ROOT + "/";
       };
       locations."/" = {
         proxyPass = "http://netbox";
