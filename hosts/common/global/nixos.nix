@@ -12,6 +12,7 @@
       ./ssh.nix
       ./ssl.nix
       ./node-exporter.nix
+      ./promtail.nix
     ]
     ++ (builtins.attrValues outputs.nixosModules);
 
