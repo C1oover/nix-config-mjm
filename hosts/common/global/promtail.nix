@@ -61,4 +61,9 @@ in
       };
     }))
   ];
-}
+
+  # expose port for metrics
+  networking.firewall.allowedTCPPorts = [
+    3101
+  ]
+    }
