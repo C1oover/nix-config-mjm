@@ -66,6 +66,7 @@
         steropes = mkNixos [ ./hosts/steropes ];
 
         hypnos = mkNixos [ ./hosts/hypnos ];
+        helios = mkNixos [ ./hosts/helios ];
 
         orion = mkNixos [ ./hosts/orion ];
         nemesis = mkNixos [ ./hosts/nemesis ];

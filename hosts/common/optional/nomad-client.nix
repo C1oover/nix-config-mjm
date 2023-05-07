@@ -1,4 +1,7 @@
-{ pkgs, ... }: {
+{ pkgs
+, config
+, ...
+}: {
   services.nomad = {
     enable = true;
     dropPrivileges = false;
@@ -7,7 +10,11 @@
       client = {
         enabled = true;
         meta = {
-          "connect.sidecar_image" = "thegrandpkizzle/envoy:1.25.2";
+          "connect.sidecar_image" =
+            {
+              "x86_64-linux" = "envoyproxy/envoy:1.25.2";
+              "aarch64-linux" = "thegrandpkizzle/envoy:1.25.2";
+            }."${config.nixpkgs.hostPlatform}";
         };
         cni_path = "${pkgs.cni-plugins}/bin";
       };
