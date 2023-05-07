@@ -10,7 +10,7 @@
           "connect.sidecar_image" =
             if pkgs.stdenv.isAarch64
             then "thegrandpkizzle/envoy:1.25.2"
-            else "envoyproxy/envoy:1.25.2";
+            else "envoyproxy/envoy:v1.25.2";
         };
         cni_path = "${pkgs.cni-plugins}/bin";
       };
