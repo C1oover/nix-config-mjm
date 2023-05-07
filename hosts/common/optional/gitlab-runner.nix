@@ -40,6 +40,7 @@
           ${pkgs.nix}/bin/nix-env -i ${concatStringsSep " " (with pkgs; [nix cacert git openssh glibcLocalesUtf8])}
           ${pkgs.nix}/bin/nix-channel --add https://nixos.org/channels/nixos-unstable nixpkgs
           ${pkgs.nix}/bin/nix-channel --update nixpkgs
+          mkdir -p -m 0755 /etc/nix
           echo "experimental-features = flakes nix-command" > /etc/nix/nix.conf
         '';
         environmentVariables = {
