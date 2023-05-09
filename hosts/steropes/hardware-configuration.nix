@@ -11,7 +11,7 @@
 
   swapDevices = [ ];
 
-  hardware.raspberry-pi."4".poe-hat.enable = true;
+  # hardware.raspberry-pi."4".poe-hat.enable = true;
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";
   nixpkgs.hostPlatform = lib.mkDefault "aarch64-linux";
