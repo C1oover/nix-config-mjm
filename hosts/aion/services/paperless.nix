@@ -81,22 +81,36 @@ in
 
   # Fix service configs so things actually are able to run.
   # Not sure if this is needed because this is running inside a container or what.
-  systemd.services.paperless-scheduler.serviceConfig.EnvironmentFile = "/run/secrets/paperless/paperless.env";
-  systemd.services.paperless-scheduler.serviceConfig.ProtectHostname = lib.mkForce false;
-  systemd.services.paperless-scheduler.serviceConfig.PrivateUsers = lib.mkForce false;
-  systemd.services.paperless-scheduler.serviceConfig.PrivateNetwork = lib.mkForce false;
-  systemd.services.paperless-task-queue.serviceConfig.EnvironmentFile = "/run/secrets/paperless/paperless.env";
-  systemd.services.paperless-task-queue.serviceConfig.ProtectHostname = lib.mkForce false;
-  systemd.services.paperless-task-queue.serviceConfig.PrivateUsers = lib.mkForce false;
-  systemd.services.paperless-consumer.serviceConfig.EnvironmentFile = "/run/secrets/paperless/paperless.env";
-  systemd.services.paperless-consumer.serviceConfig.PrivateNetwork = lib.mkForce false;
-  systemd.services.paperless-consumer.serviceConfig.ProtectHostname = lib.mkForce false;
-  systemd.services.paperless-consumer.serviceConfig.PrivateUsers = lib.mkForce false;
-  systemd.services.paperless-web.serviceConfig.EnvironmentFile = "/run/secrets/paperless/paperless.env";
-  systemd.services.paperless-web.serviceConfig.ProtectHostname = lib.mkForce false;
-  systemd.services.paperless-web.serviceConfig.PrivateUsers = lib.mkForce false;
-  systemd.services.paperless-download-nltk-data.serviceConfig.ProtectHostname = lib.mkForce false;
-  systemd.services.paperless-download-nltk-data.serviceConfig.PrivateUsers = lib.mkForce false;
+  systemd.services = {
+    paperless-scheduler.serviceConfig = {
+      EnvironmentFile = "/run/secrets/paperless/paperless.env";
+      ProtectHostname = lib.mkForce false;
+      PrivateUsers = lib.mkForce false;
+      PrivateNetwork = lib.mkForce false;
+      MemoryDenyWriteExecute = lib.mkForce false;
+      SystemCallFilter = lib.mkForce null;
+    };
+    paperless-task-queue.serviceConfig = {
+      EnvironmentFile = "/run/secrets/paperless/paperless.env";
+      ProtectHostname = lib.mkForce false;
+      PrivateUsers = lib.mkForce false;
+    };
+    paperless-consumer.serviceConfig = {
+      EnvironmentFile = "/run/secrets/paperless/paperless.env";
+      PrivateNetwork = lib.mkForce false;
+      ProtectHostname = lib.mkForce false;
+      PrivateUsers = lib.mkForce false;
+    };
+    paperless-web.serviceConfig = {
+      EnvironmentFile = "/run/secrets/paperless/paperless.env";
+      ProtectHostname = lib.mkForce false;
+      PrivateUsers = lib.mkForce false;
+    };
+    paperless-download-nltk-data.serviceConfig = {
+      ProtectHostname = lib.mkForce false;
+      PrivateUsers = lib.mkForce false;
+    };
+  };
 
   users.users.paperless.openssh.authorizedKeys.keys = [ scannerPublicKey ];
 
