@@ -19,6 +19,10 @@
   nix.settings = {
     experimental-features = [ "flakes" "nix-command" ];
   };
+  nix.registry = {
+    nixpkgs.flake = inputs.nixpkgs;
+    home-manager.flake = inputs.home-manager;
+  };
 
   time.timeZone = lib.mkDefault "Etc/UTC";
 
