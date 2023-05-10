@@ -9,6 +9,7 @@
       inputs.home-manager.nixosModules.home-manager
       inputs.agenix.nixosModules.default
 
+      ./auto-upgrade.nix
       ./ssh.nix
       ./ssl.nix
       ./node-exporter.nix
