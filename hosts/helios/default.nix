@@ -17,6 +17,8 @@
     device = "/dev/sda";
   };
 
+  services.consul.interface.advertise = "ens18";
+
   services.qemuGuest.enable = true;
 
   system.stateVersion = "22.11";
