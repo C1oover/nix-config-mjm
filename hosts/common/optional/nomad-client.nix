@@ -29,13 +29,13 @@
         {
           docker = {
             config = {
+              auth.config = config.age.secrets."nomad-docker-auth.json".path;
+
               infra_image = "rancher/pause:3.2";
               allow_privileged = true;
               allow_caps = [ "CHOWN" "DAC_OVERRIDE" "FSETID" "FOWNER" "MKNOD" "NET_RAW" "NET_ADMIN" "SETGID" "SETUID" "SETFCAP" "SETPCAP" "NET_BIND_SERVICE" "SYS_CHROOT" "KILL" "AUDIT_WRITE" ];
 
-              volumes = {
-                enabled = true;
-              };
+              volumes.enabled = true;
             };
           };
         }
@@ -54,4 +54,6 @@
       to = 32000;
     }
   ];
+
+  age.secrets."nomad-docker-auth.json".file = ../../../secrets/nomad-docker-auth.age;
 }
