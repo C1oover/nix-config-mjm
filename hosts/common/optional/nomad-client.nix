@@ -1,4 +1,7 @@
-{ pkgs, ... }: {
+{ pkgs
+, config
+, ...
+}: {
   services.nomad = {
     enable = true;
     dropPrivileges = false;
