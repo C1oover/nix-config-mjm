@@ -1,4 +1,7 @@
-{
+{ config
+, pkgs
+, ...
+}: {
   systemd.services.nixos-upgrade = {
     description = "NixOS Upgrade";
 
