@@ -64,5 +64,9 @@
     };
   };
 
+  networking.firewall.allowedTCPPorts = [
+    config.services.prometheus.port
+  ];
+
   age.secrets."alertmanager.env".file = ../../../../secrets/alertmanager-env.age;
 }
