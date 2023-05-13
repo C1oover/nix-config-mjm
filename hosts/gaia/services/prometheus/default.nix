@@ -68,5 +68,44 @@
     config.services.prometheus.port
   ];
 
+  services.consul.extraConfigFiles = [
+    (toString (format.generate "prometheus.json" {
+      service = {
+        name = "prometheus";
+        id = "prometheus:${config.networking.hostName}";
+        port = config.services.prometheus.port;
+
+        meta.metrics_path = "/metrics";
+
+        checks = [
+          {
+            name = "prometheus is ready";
+            http = "http://localhost:${toString config.services.prometheus.port}/-/ready";
+            interval = "30s";
+            timeout = "5s";
+          }
+        ];
+      };
+    }))
+    (toString (format.generate "alertmanager.json" {
+      service = {
+        name = "alertmanager";
+        id = "alertmanager:${config.networking.hostName}";
+        port = config.services.prometheus.alertmanager.port;
+
+        meta.metrics_path = "/metrics";
+
+        checks = [
+          {
+            name = "alertmanager is ready";
+            http = "http://localhost:${toString config.services.prometheus.alertmanager.port}/-/ready";
+            interval = "30s";
+            timeout = "5s";
+          }
+        ];
+      };
+    }))
+  ];
+
   age.secrets."alertmanager.env".file = ../../../../secrets/alertmanager-env.age;
 }
