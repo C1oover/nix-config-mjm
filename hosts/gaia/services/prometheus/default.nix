@@ -1,4 +1,11 @@
-{ config, ... }: {
+{ config
+, pkgs
+, ...
+}:
+let
+  format = pkgs.formats.json { };
+in
+{
   imports = [
     ./jobs
     ./rules
