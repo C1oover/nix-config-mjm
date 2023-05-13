@@ -19,7 +19,7 @@
         static_configs = [
           {
             targets = [
-              "127.0.0.1:${toString config.services.alertmanager.port}"
+              "127.0.0.1:${toString config.services.prometheus.alertmanager.port}"
             ];
           }
         ];
