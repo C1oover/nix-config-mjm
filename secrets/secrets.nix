@@ -14,6 +14,7 @@ let
   orion = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDFDLe0Oy6quuAu4ARXnZCWNDiYTgfdLjy7kp7MB8n4G";
   nemesis = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIOBXAwxTy5mDt9jxKg1rhRryyNr5jkIPHnwAdLsQ1yI";
   aion = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKFrAsGVNyUfMfNvdix1ON28I/eu4MBhU6YdzzgRItQf";
+  gaia = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPKBvQP0w1opkY5E8xZzVZodNDd/2HWdHYvjulULaK6t";
 
   nomadClients = [ arges brontes steropes helios ];
 in
@@ -39,4 +40,6 @@ in
   "netbox-approle-secret-id.age".publicKeys = [ matt-mars nemesis ];
 
   "paperless-approle-secret-id.age".publicKeys = [ matt-mars aion ];
+
+  "alertmanager-env.age".publicKeys = [ matt-mars gaia ];
 }

@@ -30,6 +30,7 @@
       enable = true;
       openFirewall = true;
       webExternalUrl = "https://alertmanager.home.mattmoriarity.com";
+      environmentFile = config.age.secrets."alertmanager.env".path;
 
       configuration = {
         global.resolve_timeout = "5m";
@@ -62,4 +63,6 @@
       };
     };
   };
+
+  age.secrets."alertmanager.env".file = ../../../../secrets/alertmanager-env.age;
 }
