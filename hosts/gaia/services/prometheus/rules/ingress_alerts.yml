@@ -1,0 +1,12 @@
+groups:
+  - name: ingress_alerts
+    rules:
+      - alert: VhostFailing
+        expr: max_over_time(probe_success{job="homelab-https"}[5m]) < 1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: Virtual host {{ $labels.instance }} is failing requests
+          description: >
+            Requests to this URL have been returning non-200 responses for at least five minutes.
