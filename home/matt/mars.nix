@@ -62,7 +62,7 @@ in
     enable = true;
     entries = [
       { path = "/System/Applications/Mail.app/"; }
-      { path = "/Applications/Firefox.app/"; }
+      { path = "${pkgs.firefox-bin}/Applications/Firefox.app/"; }
       { path = "/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app/"; }
       { path = "/System/Applications/Messages.app/"; }
       { path = "/System/Applications/Maps.app/"; }

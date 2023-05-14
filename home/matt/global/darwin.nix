@@ -17,6 +17,7 @@
     dockutil
 
     discord
+    firefox-bin
     slack
   ];
 

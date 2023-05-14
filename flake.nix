@@ -12,6 +12,7 @@
     devenv.url = "github:cachix/devenv";
     devenv.inputs.nixpkgs.follows = "nixpkgs";
     flake-utils.url = "github:numtide/flake-utils";
+    nixpkgs-firefox-darwin.url = "github:bandithedoge/nixpkgs-firefox-darwin";
 
     catppuccin.url = "github:catppuccin/starship";
     catppuccin.flake = false;
@@ -34,7 +35,11 @@
       inherit (self) outputs;
       mkDarwin = arch: modules:
         darwin.lib.darwinSystem {
-          inherit modules;
+          modules =
+            [
+              { nixpkgs.overlays = [ inputs.nixpkgs-firefox-darwin.overlay ]; }
+            ]
+            ++ modules;
 
           system = "${arch}-darwin";
           inputs = { inherit darwin nixpkgs; };

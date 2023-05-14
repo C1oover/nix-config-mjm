@@ -27,7 +27,7 @@
     enable = true;
     entries = [
       { path = "/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app/"; }
-      { path = "/Applications/Firefox.app/"; }
+      { path = "${pkgs.firefox-bin}/Applications/Firefox.app/"; }
       { path = "/System/Applications/Messages.app/"; }
       { path = "/System/Applications/Mail.app/"; }
       { path = "${pkgs.zoom-us}/Applications/zoom.us.app/"; }
