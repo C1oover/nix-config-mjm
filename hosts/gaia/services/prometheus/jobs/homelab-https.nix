@@ -16,7 +16,6 @@
             "grafana.home.mattmoriarity.com"
             "paperless.home.mattmoriarity.com"
             "homelab.home.mattmoriarity.com"
-            "livebook.home.mattmoriarity.com"
             "adminer.home.mattmoriarity.com"
           ];
         }
