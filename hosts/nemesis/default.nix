@@ -9,6 +9,7 @@
 
     ../common/optional/consul-agent.nix
     ./services/netbox.nix
+    ./services/actual.nix
   ];
 
   networking.hostName = "nemesis";
