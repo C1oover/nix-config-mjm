@@ -6,7 +6,7 @@ let
   format = pkgs.formats.json { };
 in
 {
-  virtualisation.oci-containers.container.actual = {
+  virtualisation.oci-containers.containers.actual = {
     # actual budget 23.5.0
     image = "ghcr.io/actualbudget/actual-server@sha256:68387ec93bbe052feb2c2f9f728d6ea4f4bf697008ef02cc0263ec93a07625fd";
     volumes = [ "actual_data:/data" ];
