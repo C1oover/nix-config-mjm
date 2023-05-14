@@ -205,15 +205,16 @@
     },
     "hardware": {
       "locked": {
-        "lastModified": 1683269598,
-        "narHash": "sha256-KNsb+nBbB1Fmxd07dt4E0KXMT4YeKJB7gQaA6Xfk+mo=",
-        "owner": "NixOS",
+        "lastModified": 1683913651,
+        "narHash": "sha256-+CnakzJbT4wwPuV8QuBIlZFwkxMU/aEGZ46D891NO0g=",
+        "owner": "gador",
         "repo": "nixos-hardware",
-        "rev": "51559e691f1493a26f94f1df1aaf516bb507e78b",
+        "rev": "5febaab6bd0e119a3f6223aa219e614c02593d06",
         "type": "github"
       },
       "original": {
-        "owner": "NixOS",
+        "owner": "gador",
+        "ref": "update-poe-overlay",
         "repo": "nixos-hardware",
         "type": "github"
       }
