@@ -6,6 +6,7 @@
     ];
 
     extraOptions = ''
+      dnssec-validation no;
       include "/run/named/forwarders.conf";
     '';
 
