@@ -96,30 +96,35 @@ in
     }))
   ];
 
-  services.vault-agent.instances.netbox = {
-    enable = true;
-    roleId = "e2aed065-6308-cc74-91a5-2613f3f1199a";
-    secretIdFile = config.age.secrets."netbox-approle-secret-id".path;
-    owner = "netbox";
-    group = "netbox";
-    templates = [
-      {
-        contents = ''
-          {{ with secret "database/creds/netbox" }}
-          {
-            "NAME": "netbox",
-            "USER": {{ .Data.username | toJSON }},
-            "PASSWORD": {{ .Data.password | toJSON }},
-            "HOST": "postgresql.service.consul",
-            "CONN_MAX_AGE": 300
-          }
-          {{ end }}
-        '';
-        destination = "/run/secrets/netbox/db-config.json";
-        command = "systemctl restart netbox.service";
-      }
-    ];
-  };
+  systemd.tmpfiles.rules = ''
+    d /run/secrets/netbox 0700 netbox netbox - -
+  '';
+
+  services.vault-agent.instances.netbox.settings =
+    let
+      va = import ../../../lib/vault-agent.nix { inherit pkgs; };
+    in
+    va.mkConfig {
+      roleId = "e2aed065-6308-cc74-91a5-2613f3f1199a";
+      secretIdFile = config.age.secrets."netbox-approle-secret-id".path;
+      templates = [
+        {
+          contents = ''
+            {{ with secret "database/creds/netbox" }}
+            {
+              "NAME": "netbox",
+              "USER": {{ .Data.username | toJSON }},
+              "PASSWORD": {{ .Data.password | toJSON }},
+              "HOST": "postgresql.service.consul",
+              "CONN_MAX_AGE": 300
+            }
+            {{ end }}
+          '';
+          destination = "/run/secrets/netbox/db-config.json";
+          command = "systemctl restart netbox.service";
+        }
+      ];
+    };
 
   age.secrets = {
     "netbox-secret-key" = {

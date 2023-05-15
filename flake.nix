@@ -63,21 +63,26 @@
       };
 
       nixosConfigurations = {
+        # Hashistack control plane VMs
         megaera = mkNixos [ ./hosts/megaera ];
         tisiphone = mkNixos [ ./hosts/tisiphone ];
         alecto = mkNixos [ ./hosts/alecto ];
 
+        # Raspberry Pis
         arges = mkNixos [ ./hosts/arges ];
         brontes = mkNixos [ ./hosts/brontes ];
         steropes = mkNixos [ ./hosts/steropes ];
 
+        # Other Proxmox VMs
         hypnos = mkNixos [ ./hosts/hypnos ];
         helios = mkNixos [ ./hosts/helios ];
 
+        # Proxmox LXC containers
         orion = mkNixos [ ./hosts/orion ];
         nemesis = mkNixos [ ./hosts/nemesis ];
         aion = mkNixos [ ./hosts/aion ];
         gaia = mkNixos [ ./hosts/gaia ];
+        rhea = mkNixos [ ./hosts/rhea ];
       };
 
       formatter = flake-utils.lib.eachDefaultSystemMap (system: nixpkgs.legacyPackages.${system}.nixpkgs-fmt);

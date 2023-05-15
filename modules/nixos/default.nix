@@ -1,4 +1,4 @@
 {
   netbox = import ./netbox.nix;
-  vault-agent = import ./vault-agent.nix;
+  # vault-agent = import ./vault-agent.nix;
 }

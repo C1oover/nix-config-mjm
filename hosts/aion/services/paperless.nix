@@ -47,7 +47,11 @@ in
     }))
   ];
 
-  services.vault-agent.instances.paperless =
+  systemd.tmpfiles.rules = ''
+    d /run/secrets/paperless 0700 paperless paperless - -
+  '';
+
+  services.vault-agent.instances.paperless.settings =
     let
       restartScript = pkgs.writeShellScript "paperless-restart" ''
         set -e
@@ -57,13 +61,11 @@ in
         systemctl restart paperless-consumer.service
         systemctl restart paperless-web.service
       '';
+      va = import ../../../lib/vault-agent.nix { inherit pkgs; };
     in
-    {
-      enable = true;
+    va.mkConfig {
       roleId = "11a736d8-ef30-f7aa-1d1e-72029ce45fb4";
       secretIdFile = config.age.secrets."paperless-approle-secret-id".path;
-      owner = "paperless";
-      group = "paperless";
       templates = [
         {
           contents = ''

@@ -56,6 +56,9 @@ let
     }
   ];
   format = pkgs.formats.json { };
+
+  user = config.services.authelia.instances.main.user;
+  group = config.services.authelia.instances.main.group;
 in
 {
   services.authelia.instances.main = {
@@ -163,60 +166,65 @@ in
     }))
   ];
 
-  services.vault-agent.instances.authelia = {
-    enable = true;
-    roleId = "1f94fc98-0934-7027-a34f-ea94f3268def";
-    secretIdFile = config.age.secrets."authelia-approle-secret-id".path;
-    owner = config.services.authelia.instances.main.user;
-    group = config.services.authelia.instances.main.group;
-    templates = [
-      {
-        contents = ''
-          {{ with secret "database/creds/authelia" }}
-          storage:
-            postgres:
-              username: {{ .Data.username | toJSON }}
-              password: {{ .Data.password | toJSON }}
-          {{ end }}
-        '';
-        destination = "/run/secrets/authelia/db-config.yml";
-        command = "systemctl restart authelia-main.service";
-      }
-    ];
-  };
+  systemd.tmpfiles.rules = ''
+    d /run/secrets/authelia 0700 ${user} ${group} - -
+  '';
+
+  services.vault-agent.instances.authelia.settings =
+    let
+      va = import ../../../lib/vault-agent.nix { inherit pkgs; };
+    in
+    va.mkConfig {
+      roleId = "1f94fc98-0934-7027-a34f-ea94f3268def";
+      secretIdFile = config.age.secrets."authelia-approle-secret-id".path;
+      templates = [
+        {
+          contents = ''
+            {{ with secret "database/creds/authelia" }}
+            storage:
+              postgres:
+                username: {{ .Data.username | toJSON }}
+                password: {{ .Data.password | toJSON }}
+            {{ end }}
+          '';
+          destination = "/run/secrets/authelia/db-config.yml";
+          command = "systemctl restart authelia-main.service";
+        }
+      ];
+    };
 
   age.secrets = {
     "authelia-hmac-secret" = {
       file = ../../../secrets/authelia-hmac-secret.age;
-      owner = config.services.authelia.instances.main.user;
+      owner = user;
     };
     "authelia-jwt-private-key" = {
       file = ../../../secrets/authelia-jwt-private-key.age;
-      owner = config.services.authelia.instances.main.user;
+      owner = user;
     };
     "authelia-jwt-secret" = {
       file = ../../../secrets/authelia-jwt-secret.age;
-      owner = config.services.authelia.instances.main.user;
+      owner = user;
     };
     "authelia-ldap-password" = {
       file = ../../../secrets/authelia-ldap-password.age;
-      owner = config.services.authelia.instances.main.user;
+      owner = user;
     };
     "authelia-session-secret" = {
       file = ../../../secrets/authelia-session-secret.age;
-      owner = config.services.authelia.instances.main.user;
+      owner = user;
     };
     "authelia-smtp-password" = {
       file = ../../../secrets/authelia-smtp-password.age;
-      owner = config.services.authelia.instances.main.user;
+      owner = user;
     };
     "authelia-storage-encryption-key" = {
       file = ../../../secrets/authelia-storage-encryption-key.age;
-      owner = config.services.authelia.instances.main.user;
+      owner = user;
     };
     "authelia-approle-secret-id" = {
       file = ../../../secrets/authelia-approle-secret-id.age;
-      owner = config.services.authelia.instances.main.user;
+      owner = user;
     };
   };
 }

@@ -1,0 +1,5 @@
+{{ with $vhosts := key "ingress/vhost_names" | parseJSON }}
+{{ range $vhosts }}
+{{ . }}  IN  CNAME ingress-http.service.consul.
+{{ end }}
+{{ end }}
