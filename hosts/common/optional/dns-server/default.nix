@@ -2,6 +2,7 @@
   services.bind = {
     enable = true;
     cacheNetworks = [
+      "127.0.0.0/24"
       "10.0.0.0/8"
     ];
 
