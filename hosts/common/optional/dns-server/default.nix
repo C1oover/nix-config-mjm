@@ -6,7 +6,7 @@
     ];
 
     extraOptions = ''
-      include /run/named/forwarders.conf;
+      include "/run/named/forwarders.conf";
     '';
 
     zones."home.mattmoriarity.com" = {
