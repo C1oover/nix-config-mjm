@@ -9,6 +9,18 @@
       include "/run/named/forwarders.conf";
     '';
 
+    extraConfig = ''
+      zone "consul" {
+          type forward;
+          forward only;
+          forwarders {
+              10.0.2.40 port 8600;
+              10.0.2.42 port 8600;
+              10.0.2.43 port 8600;
+          };
+      };
+    '';
+
     zones."home.mattmoriarity.com" = {
       master = true;
       file = ./home.mattmoriarity.com.zone;
