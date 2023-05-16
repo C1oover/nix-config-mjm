@@ -9,8 +9,6 @@
       roleIdFile = pkgs.writeText "role-id" roleId;
     in
     {
-      inherit templates;
-
       vault.address = "http://vault.service.consul:8200";
       auto_auth.method = [
         {
@@ -22,5 +20,6 @@
           };
         }
       ];
+      template = templates;
     };
 }
