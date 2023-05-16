@@ -47,9 +47,7 @@ in
     }))
   ];
 
-  systemd.tmpfiles.rules = ''
-    d /run/secrets/paperless 0700 paperless paperless - -
-  '';
+  systemd.tmpfiles.rules = [ "d /run/secrets/paperless 0700 paperless paperless - -" ];
 
   services.vault-agent.instances.paperless.settings =
     let

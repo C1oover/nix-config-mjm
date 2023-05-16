@@ -96,9 +96,7 @@ in
     }))
   ];
 
-  systemd.tmpfiles.rules = ''
-    d /run/secrets/netbox 0700 netbox netbox - -
-  '';
+  systemd.tmpfiles.rules = [ "d /run/secrets/netbox 0700 netbox netbox - -" ];
 
   services.vault-agent.instances.netbox.settings =
     let

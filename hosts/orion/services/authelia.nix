@@ -166,9 +166,7 @@ in
     }))
   ];
 
-  systemd.tmpfiles.rules = ''
-    d /run/secrets/authelia 0700 ${user} ${group} - -
-  '';
+  systemd.tmpfiles.rules = [ "d /run/secrets/authelia 0700 ${user} ${group} - -" ];
 
   services.vault-agent.instances.authelia.settings =
     let
