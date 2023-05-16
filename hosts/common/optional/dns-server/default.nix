@@ -29,6 +29,12 @@
     };
   };
 
+  # bind can't start without the files rendered by consul-template
+  systemd.services.bind = {
+    requires = [ "consul-template-bind.service" ];
+    after = [ "consul-template-bind.service" ];
+  };
+
   services.consul-template.instances.bind = {
     settings = {
       template = [
