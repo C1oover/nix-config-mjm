@@ -1,14 +1,20 @@
-{ config, inputs, outputs, ... }:
+{ config
+, inputs
+, outputs
+, ...
+}: {
+  imports =
+    [
+      inputs.home-manager.darwinModules.home-manager
+      inputs.agenix.darwinModules.default
 
-{
-  imports = [
-    inputs.home-manager.darwinModules.home-manager
-    inputs.agenix.darwinModules.default
+      ./dock.nix
+      ./keyboard.nix
+      ./nix.nix
+    ]
+    ++ (builtins.attrValues outputs.darwinModules);
 
-    ./dock.nix
-    ./keyboard.nix
-    ./nix.nix
-  ] ++ (builtins.attrValues outputs.darwinModules);
+  nixpkgs.overlays = [ inputs.nixpkgs-firefox-darwin.overlay ];
 
   home-manager = {
     useUserPackages = true;

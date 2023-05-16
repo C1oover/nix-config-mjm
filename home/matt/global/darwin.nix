@@ -1,6 +1,5 @@
 { pkgs
 , lib
-, inputs
 , ...
 }: {
   imports = [
@@ -9,7 +8,6 @@
     ../features/kitty
   ];
 
-  nixpkgs.overlays = [ inputs.nixpkgs-firefox-darwin.overlay ];
   nixpkgs.config.allowUnfree = true;
 
   home.username = lib.mkDefault "matt";
