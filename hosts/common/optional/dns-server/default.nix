@@ -34,9 +34,10 @@
     requires = [ "consul-template-bind.service" ];
     after = [ "consul-template-bind.service" ];
     startLimitIntervalSec = 60;
-    startLimitBurst = 5;
+    startLimitBurst = 10;
     serviceConfig = {
       Restart = "on-failure";
+      RestartSec = 3;
     };
   };
 
