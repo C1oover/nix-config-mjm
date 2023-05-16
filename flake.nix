@@ -83,6 +83,7 @@
         aion = mkNixos [ ./hosts/aion ];
         gaia = mkNixos [ ./hosts/gaia ];
         rhea = mkNixos [ ./hosts/rhea ];
+        cronus = mkNixos [ ./hosts/cronus ];
       };
 
       formatter = flake-utils.lib.eachDefaultSystemMap (system: nixpkgs.legacyPackages.${system}.nixpkgs-fmt);
