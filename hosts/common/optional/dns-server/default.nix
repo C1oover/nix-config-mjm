@@ -33,6 +33,11 @@
   systemd.services.bind = {
     requires = [ "consul-template-bind.service" ];
     after = [ "consul-template-bind.service" ];
+    startLimitIntervalSec = 60;
+    startLimitBurst = 5;
+    serviceConfig = {
+      Restart = "on-failure";
+    };
   };
 
   services.consul-template.instances.bind = {
