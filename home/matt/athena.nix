@@ -52,24 +52,24 @@
 
   xdg.configFile."k9s/skin.yml".source = inputs.catppuccin-k9s + "/dist/mocha.yml";
 
-  xdg.configFile."kitty/sessions/slab".text = ''
-    # first tab: slab work
-    new_tab slab
-    layout tall:bias=60;full_size=1
-    cd ~/Projects/slab
-    launch zsh -l -i -c nvim
-    launch
-    launch
+  programs.kitty.darwinLaunchOptions =
+    let
+      slabSession = pkgs.writeText "kitty-session-slab" ''
+        # first tab: slab work
+        new_tab slab
+        layout tall:bias=60;full_size=1
+        cd ~/Projects/slab
+        launch zsh -l -i -c nvim
+        launch
+        launch
 
-    # second tab: nix-config
-    new_tab nix-config
-    layout tall:bias=60;full_size=1
-    cd ~/Projects/nix-config
-    launch zsh -l -i -c nvim
-    launch
-  '';
-  programs.kitty.darwinLaunchOptions = [
-    "--session"
-    "${config.home.homeDirectory}/.config/kitty/sessions/slab"
-  ];
+        # second tab: nix-config
+        new_tab nix-config
+        layout tall:bias=60;full_size=1
+        cd ~/Projects/nix-config
+        launch zsh -l -i -c nvim
+        launch
+      '';
+    in
+    [ "--session" "${slabSession}" ];
 }
