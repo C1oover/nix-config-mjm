@@ -36,11 +36,7 @@
       inherit (self) outputs;
       mkDarwin = arch: modules:
         darwin.lib.darwinSystem {
-          modules =
-            [
-              { nixpkgs.overlays = [ inputs.nixpkgs-firefox-darwin.overlay ]; }
-            ]
-            ++ modules;
+          inherit modules;
 
           system = "${arch}-darwin";
           inputs = { inherit darwin nixpkgs; };
