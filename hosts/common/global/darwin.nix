@@ -15,7 +15,10 @@
     ]
     ++ (builtins.attrValues outputs.darwinModules);
 
-  nixpkgs.overlays = [inputs.nixpkgs-firefox-darwin.overlay];
+  nixpkgs.overlays = [
+    inputs.nixpkgs-firefox-darwin.overlay
+    inputs.nur.overlay
+  ];
 
   home-manager = {
     useUserPackages = true;

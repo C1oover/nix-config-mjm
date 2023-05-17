@@ -14,6 +14,7 @@
     devenv.inputs.nixpkgs.follows = "nixpkgs";
     flake-utils.url = "github:numtide/flake-utils";
     nixpkgs-firefox-darwin.url = "github:bandithedoge/nixpkgs-firefox-darwin";
+    nur.url = "github:nix-community/NUR";
 
     catppuccin.url = "github:catppuccin/starship";
     catppuccin.flake = false;

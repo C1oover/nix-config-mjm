@@ -4,9 +4,10 @@
   ...
 }: {
   imports = [
-    ../features/yubikey
+    ../features/firefox
     ../features/iterm
     ../features/kitty
+    ../features/yubikey
   ];
 
   nixpkgs.config.allowUnfree = true;
@@ -18,7 +19,6 @@
     dockutil
 
     discord
-    firefox-bin
     slack
   ];
 
