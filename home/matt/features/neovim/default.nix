@@ -1,6 +1,7 @@
-{ pkgs
-, inputs
-, ...
+{
+  pkgs,
+  inputs,
+  ...
 }: {
   programs.neovim = {
     enable = true;
@@ -38,7 +39,7 @@
   xdg.configFile."astronvim/lua/user".source = ./user;
 
   home.packages = with pkgs; [
-    rnix-lsp
+    nil
     alejandra
     deadnix
     statix

@@ -5,7 +5,7 @@ return {
 			"docker_compose_language_service",
 			"dockerls",
 			"jsonls",
-			"rnix",
+			"nil_ls",
 			"yamlls",
 		},
 	},
