@@ -1,7 +1,8 @@
-{ config
-, inputs
-, outputs
-, ...
+{
+  config,
+  inputs,
+  outputs,
+  ...
 }: {
   imports =
     [
@@ -14,12 +15,12 @@
     ]
     ++ (builtins.attrValues outputs.darwinModules);
 
-  nixpkgs.overlays = [ inputs.nixpkgs-firefox-darwin.overlay ];
+  nixpkgs.overlays = [inputs.nixpkgs-firefox-darwin.overlay];
 
   home-manager = {
     useUserPackages = true;
     useGlobalPkgs = true;
-    extraSpecialArgs = { inherit inputs outputs; };
+    extraSpecialArgs = {inherit inputs outputs;};
   };
 
   time.timeZone = "America/Denver";
@@ -33,5 +34,5 @@
     home = "/Users/matt";
   };
 
-  environment.systemPackages = [ inputs.agenix.packages.${config.nixpkgs.system}.default ];
+  environment.systemPackages = [inputs.agenix.packages.${config.nixpkgs.system}.default];
 }

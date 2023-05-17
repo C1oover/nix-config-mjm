@@ -1,11 +1,16 @@
-{ pkgs, lib, outputs, ... }:
-
 {
-  imports = [
-    ../features/git
-    ../features/neovim
-    ../features/shell
-  ] ++ (builtins.attrValues outputs.homeManagerModules);
+  pkgs,
+  lib,
+  outputs,
+  ...
+}: {
+  imports =
+    [
+      ../features/git
+      ../features/neovim
+      ../features/shell
+    ]
+    ++ (builtins.attrValues outputs.homeManagerModules);
 
   # This value determines the Home Manager release that your configuration is
   # compatible with. This helps avoid breakage when a new Home Manager release
@@ -36,4 +41,3 @@
 
   programs.jq.enable = true;
 }
-

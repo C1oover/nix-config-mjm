@@ -1,11 +1,10 @@
-{ config
-, pkgs
-, ...
-}:
-let
-  format = pkgs.formats.json { };
-in
 {
+  config,
+  pkgs,
+  ...
+}: let
+  format = pkgs.formats.json {};
+in {
   services.netbox = {
     enable = true;
     listenAddress = "0.0.0.0";
@@ -43,8 +42,8 @@ in
       REMOTE_AUTH_GROUP_HEADER = "HTTP_REMOTE_GROUPS";
       REMOTE_AUTH_GROUP_SYNC_ENABLED = true;
       REMOTE_AUTH_GROUP_SEPARATOR = ",";
-      REMOTE_AUTH_SUPERUSER_GROUPS = [ "admins" ];
-      REMOTE_AUTH_STAFF_GROUPS = [ "admins" ];
+      REMOTE_AUTH_SUPERUSER_GROUPS = ["admins"];
+      REMOTE_AUTH_STAFF_GROUPS = ["admins"];
     };
     secretKeyFile = config.age.secrets."netbox-secret-key".path;
     extraConfig = ''
@@ -60,7 +59,7 @@ in
     defaultHTTPListenPort = 8000;
     upstreams = {
       netbox = {
-        servers = { "127.0.0.1:${toString config.services.netbox.port}" = { }; };
+        servers = {"127.0.0.1:${toString config.services.netbox.port}" = {};};
       };
     };
     virtualHosts."netbox" = {
@@ -76,7 +75,7 @@ in
     };
   };
 
-  users.users.nginx.extraGroups = [ "netbox" ];
+  users.users.nginx.extraGroups = ["netbox"];
 
   networking.firewall.allowedTCPPorts = [
     config.services.nginx.defaultHTTPListenPort
@@ -96,12 +95,11 @@ in
     }))
   ];
 
-  systemd.tmpfiles.rules = [ "d /run/secrets/netbox 0700 netbox netbox - -" ];
+  systemd.tmpfiles.rules = ["d /run/secrets/netbox 0700 netbox netbox - -"];
 
-  services.vault-agent.instances.netbox.settings =
-    let
-      va = import ../../../lib/vault-agent.nix { inherit pkgs; };
-    in
+  services.vault-agent.instances.netbox.settings = let
+    va = import ../../../lib/vault-agent.nix {inherit pkgs;};
+  in
     va.mkConfig {
       roleId = "e2aed065-6308-cc74-91a5-2613f3f1199a";
       secretIdFile = config.age.secrets."netbox-approle-secret-id".path;

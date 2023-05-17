@@ -1,14 +1,15 @@
 # Replace the built-in netbox module in NixOS with this slightly modified version
 # because the built-in one hardcodes running PostgreSQL and Redis on the same host.
 # I run those services separately and would prefer to just connect to them.
-{ config
-, lib
-, pkgs
-, ...
+{
+  config,
+  lib,
+  pkgs,
+  ...
 }:
 with lib; let
   cfg = config.services.netbox;
-  pythonFmt = pkgs.formats.pythonVars { };
+  pythonFmt = pkgs.formats.pythonVars {};
   staticDir = cfg.dataDir + "/static";
 
   settingsFile = pythonFmt.generate "netbox-settings.py" cfg.settings;
@@ -16,7 +17,7 @@ with lib; let
     name = "netbox-extraConfig.py";
     text = cfg.extraConfig;
   };
-  configFile = pkgs.concatText "configuration.py" [ settingsFile extraConfigFile ];
+  configFile = pkgs.concatText "configuration.py" [settingsFile extraConfigFile];
 
   pkg =
     (cfg.package.overrideAttrs (old: {
@@ -28,7 +29,8 @@ with lib; let
         + optionalString cfg.enableLdap ''
           ln -s ${cfg.ldapConfigPath} $out/opt/netbox/netbox/netbox/ldap_config.py
         '';
-    })).override {
+    }))
+    .override {
       inherit (cfg) plugins;
     };
   netboxManageScript = with pkgs; (writeScriptBin "netbox-manage" ''
@@ -36,9 +38,8 @@ with lib; let
     export PYTHONPATH=${pkg.pythonPath}
     sudo -u netbox ${pkg}/bin/netbox "$@"
   '');
-in
-{
-  disabledModules = [ "services/web-apps/netbox.nix" ];
+in {
+  disabledModules = ["services/web-apps/netbox.nix"];
 
   options.services.netbox = {
     enable = mkOption {
@@ -58,7 +59,7 @@ in
         See the [documentation](https://docs.netbox.dev/en/stable/configuration/) for more possible options.
       '';
 
-      default = { };
+      default = {};
 
       type = lib.types.submodule {
         freeformType = pythonFmt.type;
@@ -66,7 +67,7 @@ in
         options = {
           ALLOWED_HOSTS = lib.mkOption {
             type = with lib.types; listOf str;
-            default = [ "*" ];
+            default = ["*"];
             description = lib.mdDoc ''
               A list of valid fully-qualified domain names (FQDNs) and/or IP
               addresses that can be used to reach the NetBox service.
@@ -108,7 +109,7 @@ in
 
     plugins = mkOption {
       type = types.functionTo (types.listOf types.package);
-      default = _: [ ];
+      default = _: [];
       defaultText = literalExpression ''
         python3Packages: with python3Packages; [];
       '';
@@ -188,7 +189,7 @@ in
 
   config = mkIf cfg.enable {
     services.netbox = {
-      plugins = mkIf cfg.enableLdap (ps: [ ps.django-auth-ldap ]);
+      plugins = mkIf cfg.enableLdap (ps: [ps.django-auth-ldap]);
       settings = {
         STATIC_ROOT = staticDir;
         MEDIA_ROOT = "${cfg.dataDir}/media";
@@ -210,7 +211,7 @@ in
           # log to console/systemd instead of file
           root = {
             level = "INFO";
-            handlers = [ "console" ];
+            handlers = ["console"];
           };
         };
       };
@@ -221,110 +222,108 @@ in
       '';
     };
 
-    environment.systemPackages = [ netboxManageScript ];
+    environment.systemPackages = [netboxManageScript];
 
     systemd.targets.netbox = {
       description = "Target for all NetBox services";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network-online.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network-online.target"];
     };
 
-    systemd.services =
-      let
-        defaultServiceConfig = {
-          WorkingDirectory = "${cfg.dataDir}";
-          User = "netbox";
-          Group = "netbox";
-          StateDirectory = "netbox";
-          StateDirectoryMode = "0750";
-          Restart = "on-failure";
-        };
-      in
-      {
-        netbox-migration = {
-          description = "NetBox migrations";
-          wantedBy = [ "netbox.target" ];
-
-          environment = {
-            PYTHONPATH = pkg.pythonPath;
-          };
-
-          serviceConfig =
-            defaultServiceConfig
-            // {
-              Type = "oneshot";
-              ExecStart = ''
-                ${pkg}/bin/netbox migrate
-              '';
-            };
-        };
-
-        netbox = {
-          description = "NetBox WSGI Service";
-          wantedBy = [ "netbox.target" ];
-          after = [ "netbox-migration.service" ];
-
-          preStart = ''
-            ${pkg}/bin/netbox trace_paths --no-input
-            ${pkg}/bin/netbox collectstatic --no-input
-            ${pkg}/bin/netbox remove_stale_contenttypes --no-input
-          '';
-
-          environment = {
-            PYTHONPATH = pkg.pythonPath;
-          };
-
-          serviceConfig =
-            defaultServiceConfig
-            // {
-              ExecStart = ''
-                ${pkgs.python3Packages.gunicorn}/bin/gunicorn netbox.wsgi \
-                  --bind ${cfg.listenAddress}:${toString cfg.port} \
-                  --pythonpath ${pkg}/opt/netbox/netbox
-              '';
-            };
-        };
-
-        netbox-rq = {
-          description = "NetBox Request Queue Worker";
-          wantedBy = [ "netbox.target" ];
-          after = [ "netbox.service" ];
-
-          environment = {
-            PYTHONPATH = pkg.pythonPath;
-          };
-
-          serviceConfig =
-            defaultServiceConfig
-            // {
-              ExecStart = ''
-                ${pkg}/bin/netbox rqworker high default low
-              '';
-            };
-        };
-
-        netbox-housekeeping = {
-          description = "NetBox housekeeping job";
-          after = [ "netbox.service" ];
-
-          environment = {
-            PYTHONPATH = pkg.pythonPath;
-          };
-
-          serviceConfig =
-            defaultServiceConfig
-            // {
-              Type = "oneshot";
-              ExecStart = ''
-                ${pkg}/bin/netbox housekeeping
-              '';
-            };
-        };
+    systemd.services = let
+      defaultServiceConfig = {
+        WorkingDirectory = "${cfg.dataDir}";
+        User = "netbox";
+        Group = "netbox";
+        StateDirectory = "netbox";
+        StateDirectoryMode = "0750";
+        Restart = "on-failure";
       };
+    in {
+      netbox-migration = {
+        description = "NetBox migrations";
+        wantedBy = ["netbox.target"];
+
+        environment = {
+          PYTHONPATH = pkg.pythonPath;
+        };
+
+        serviceConfig =
+          defaultServiceConfig
+          // {
+            Type = "oneshot";
+            ExecStart = ''
+              ${pkg}/bin/netbox migrate
+            '';
+          };
+      };
+
+      netbox = {
+        description = "NetBox WSGI Service";
+        wantedBy = ["netbox.target"];
+        after = ["netbox-migration.service"];
+
+        preStart = ''
+          ${pkg}/bin/netbox trace_paths --no-input
+          ${pkg}/bin/netbox collectstatic --no-input
+          ${pkg}/bin/netbox remove_stale_contenttypes --no-input
+        '';
+
+        environment = {
+          PYTHONPATH = pkg.pythonPath;
+        };
+
+        serviceConfig =
+          defaultServiceConfig
+          // {
+            ExecStart = ''
+              ${pkgs.python3Packages.gunicorn}/bin/gunicorn netbox.wsgi \
+                --bind ${cfg.listenAddress}:${toString cfg.port} \
+                --pythonpath ${pkg}/opt/netbox/netbox
+            '';
+          };
+      };
+
+      netbox-rq = {
+        description = "NetBox Request Queue Worker";
+        wantedBy = ["netbox.target"];
+        after = ["netbox.service"];
+
+        environment = {
+          PYTHONPATH = pkg.pythonPath;
+        };
+
+        serviceConfig =
+          defaultServiceConfig
+          // {
+            ExecStart = ''
+              ${pkg}/bin/netbox rqworker high default low
+            '';
+          };
+      };
+
+      netbox-housekeeping = {
+        description = "NetBox housekeeping job";
+        after = ["netbox.service"];
+
+        environment = {
+          PYTHONPATH = pkg.pythonPath;
+        };
+
+        serviceConfig =
+          defaultServiceConfig
+          // {
+            Type = "oneshot";
+            ExecStart = ''
+              ${pkg}/bin/netbox housekeeping
+            '';
+          };
+      };
+    };
 
     systemd.timers.netbox-housekeeping = {
       description = "Run NetBox housekeeping job";
-      wantedBy = [ "timers.target" ];
+      wantedBy = ["timers.target"];
 
       timerConfig = {
         OnCalendar = "daily";
@@ -336,6 +335,6 @@ in
       isSystemUser = true;
       group = "netbox";
     };
-    users.groups.netbox = { };
+    users.groups.netbox = {};
   };
 }

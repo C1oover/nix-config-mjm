@@ -4,7 +4,7 @@
       job_name = "pushgateway";
       consul_sd_configs = [
         {
-          services = [ "pushgateway" ];
+          services = ["pushgateway"];
           server = "127.0.0.1:8500";
         }
       ];

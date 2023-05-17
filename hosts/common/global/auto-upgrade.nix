@@ -1,6 +1,7 @@
-{ config
-, pkgs
-, ...
+{
+  config,
+  pkgs,
+  ...
 }: {
   systemd.services.nixos-upgrade = {
     description = "NixOS Upgrade";
@@ -28,19 +29,17 @@
       config.programs.ssh.package
     ];
 
-    script =
-      let
-        nixos-rebuild = "${config.system.build.nixos-rebuild}/bin/nixos-rebuild";
-      in
-      ''
-        ${pkgs.gitMinimal}/bin/git -C /etc/nixos pull
-        ${nixos-rebuild} switch --flake /etc/nixos
-      '';
+    script = let
+      nixos-rebuild = "${config.system.build.nixos-rebuild}/bin/nixos-rebuild";
+    in ''
+      ${pkgs.gitMinimal}/bin/git -C /etc/nixos pull
+      ${nixos-rebuild} switch --flake /etc/nixos
+    '';
 
     startAt = "*:0,30:*";
 
-    after = [ "network-online.target" ];
-    wants = [ "network-online.target" ];
+    after = ["network-online.target"];
+    wants = ["network-online.target"];
   };
 
   systemd.timers.nixos-upgrade = {

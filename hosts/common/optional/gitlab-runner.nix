@@ -1,7 +1,8 @@
-{ config
-, lib
-, pkgs
-, ...
+{
+  config,
+  lib,
+  pkgs,
+  ...
 }: {
   age.secrets."gitlab-runner-registration.env" = {
     file = ../../../secrets/gitlab-runner-registration.age;
@@ -53,7 +54,7 @@
           NIX_SSL_CERT_FILE = "/nix/var/nix/profiles/default/etc/ssl/certs/ca-bundle.crt";
           LOCALE_ARCHIVE = "/nix/var/nix/profiles/default/lib/locale/locale-archive";
         };
-        tagList = [ "nix" ];
+        tagList = ["nix"];
       };
     };
   };

@@ -1,13 +1,12 @@
-{ config
-, pkgs
-, lib
-, ...
-}:
-let
-  format = pkgs.formats.json { };
-  scannerPublicKey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDVffhmmioPFJxQiP5OlssYk2EjHdeMxpV1OO2T3Qz3AjmMZsJunQdnpWV9wNEeG3uTwGmvDS4ejCoJvVy6kQMypFFjEqBegbK6N4HeMFYubxe2pp2NSZir1HEeHFYZSvrIjOKfN404WLpY/+TgM7UTQ5u5pUNmMPyyxLgZz/YJj9LVCo1IeYcv5hP3WSP1ixsJGBuUTgkVp4S/FouoHNoJ+jVbGSs0IjgBC77IzxH52Af/sXwb2MiRoM3HczEwnWuhiIniICCbjgju5hA0h1qCozRDx5jt6egKxzNxN7+tuW3S9t1D/sq/qn6hqyaTCHVxn9+2cw3KIXcK7LoduhX5 root@BR5CF370B3F03D";
-in
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}: let
+  format = pkgs.formats.json {};
+  scannerPublicKey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDVffhmmioPFJxQiP5OlssYk2EjHdeMxpV1OO2T3Qz3AjmMZsJunQdnpWV9wNEeG3uTwGmvDS4ejCoJvVy6kQMypFFjEqBegbK6N4HeMFYubxe2pp2NSZir1HEeHFYZSvrIjOKfN404WLpY/+TgM7UTQ5u5pUNmMPyyxLgZz/YJj9LVCo1IeYcv5hP3WSP1ixsJGBuUTgkVp4S/FouoHNoJ+jVbGSs0IjgBC77IzxH52Af/sXwb2MiRoM3HczEwnWuhiIniICCbjgju5hA0h1qCozRDx5jt6egKxzNxN7+tuW3S9t1D/sq/qn6hqyaTCHVxn9+2cw3KIXcK7LoduhX5 root@BR5CF370B3F03D";
+in {
   services.paperless = {
     enable = true;
     address = "0.0.0.0";
@@ -47,20 +46,19 @@ in
     }))
   ];
 
-  systemd.tmpfiles.rules = [ "d /run/secrets/paperless 0700 paperless paperless - -" ];
+  systemd.tmpfiles.rules = ["d /run/secrets/paperless 0700 paperless paperless - -"];
 
-  services.vault-agent.instances.paperless.settings =
-    let
-      restartScript = pkgs.writeShellScript "paperless-restart" ''
-        set -e
+  services.vault-agent.instances.paperless.settings = let
+    restartScript = pkgs.writeShellScript "paperless-restart" ''
+      set -e
 
-        systemctl restart paperless-scheduler.service
-        systemctl restart paperless-task-queue.service
-        systemctl restart paperless-consumer.service
-        systemctl restart paperless-web.service
-      '';
-      va = import ../../../lib/vault-agent.nix { inherit pkgs; };
-    in
+      systemctl restart paperless-scheduler.service
+      systemctl restart paperless-task-queue.service
+      systemctl restart paperless-consumer.service
+      systemctl restart paperless-web.service
+    '';
+    va = import ../../../lib/vault-agent.nix {inherit pkgs;};
+  in
     va.mkConfig {
       roleId = "11a736d8-ef30-f7aa-1d1e-72029ce45fb4";
       secretIdFile = config.age.secrets."paperless-approle-secret-id".path;
@@ -112,7 +110,7 @@ in
     };
   };
 
-  users.users.paperless.openssh.authorizedKeys.keys = [ scannerPublicKey ];
+  users.users.paperless.openssh.authorizedKeys.keys = [scannerPublicKey];
 
   services.openssh.settings.KexAlgorithms = [
     "sntrup761x25519-sha512@openssh.com"

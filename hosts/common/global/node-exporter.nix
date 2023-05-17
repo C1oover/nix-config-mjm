@@ -1,11 +1,10 @@
-{ config
-, pkgs
-, ...
-}:
-let
-  format = pkgs.formats.json { };
-in
 {
+  config,
+  pkgs,
+  ...
+}: let
+  format = pkgs.formats.json {};
+in {
   services.prometheus.exporters.node = {
     enable = true;
     openFirewall = true;

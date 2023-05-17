@@ -1,8 +1,8 @@
-{ inputs, ... }: {
+{inputs, ...}: {
   nix.configureBuildUsers = true;
   nix.settings = {
-    trusted-users = [ "@admin" ];
-    experimental-features = [ "nix-command" "flakes" ];
+    trusted-users = ["@admin"];
+    experimental-features = ["nix-command" "flakes"];
   };
 
   nix.registry = {

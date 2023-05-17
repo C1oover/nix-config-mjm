@@ -1,4 +1,4 @@
-{ inputs, ... }: {
+{inputs, ...}: {
   imports = [
     inputs.hardware.nixosModules.common-pc-ssd
     inputs.hardware.nixosModules.raspberry-pi-4

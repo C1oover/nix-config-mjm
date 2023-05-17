@@ -1,11 +1,10 @@
-{ config
-, pkgs
-, ...
-}:
-let
-  format = pkgs.formats.json { };
-in
 {
+  config,
+  pkgs,
+  ...
+}: let
+  format = pkgs.formats.json {};
+in {
   imports = [
     ./jobs
     ./rules
@@ -47,7 +46,7 @@ in
         ];
 
         route = {
-          group_by = [ "alertname" "severity" ];
+          group_by = ["alertname" "severity"];
           group_wait = "10s";
           group_interval = "10s";
           repeat_interval = "1h";
@@ -66,7 +65,7 @@ in
           }
         ];
 
-        inhibit_rules = [ ];
+        inhibit_rules = [];
       };
     };
   };

@@ -1,4 +1,4 @@
-{ config, ... }: {
+{config, ...}: {
   services.nomad = {
     enable = true;
     settings = {

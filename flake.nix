@@ -25,63 +25,61 @@
     astronvim.flake = false;
   };
 
-  outputs =
-    { self
-    , darwin
-    , nixpkgs
-    , flake-utils
-    , ...
-    } @ inputs:
-    let
-      inherit (self) outputs;
-      mkDarwin = arch: modules:
-        darwin.lib.darwinSystem {
-          inherit modules;
+  outputs = {
+    self,
+    darwin,
+    nixpkgs,
+    flake-utils,
+    ...
+  } @ inputs: let
+    inherit (self) outputs;
+    mkDarwin = arch: modules:
+      darwin.lib.darwinSystem {
+        inherit modules;
 
-          system = "${arch}-darwin";
-          inputs = { inherit darwin nixpkgs; };
-          specialArgs = { inherit inputs outputs; };
-        };
-      mkNixos = modules:
-        nixpkgs.lib.nixosSystem {
-          inherit modules;
-          specialArgs = { inherit inputs outputs; };
-        };
-    in
-    {
-      homeManagerModules = import ./modules/home-manager;
-      darwinModules = import ./modules/darwin;
-      nixosModules = import ./modules/nixos;
-
-      darwinConfigurations = {
-        mars = mkDarwin "x86_64" [ ./hosts/mars ];
-        athena = mkDarwin "aarch64" [ ./hosts/athena ];
+        system = "${arch}-darwin";
+        inputs = {inherit darwin nixpkgs;};
+        specialArgs = {inherit inputs outputs;};
       };
-
-      nixosConfigurations = {
-        # Hashistack control plane VMs
-        megaera = mkNixos [ ./hosts/megaera ];
-        tisiphone = mkNixos [ ./hosts/tisiphone ];
-        alecto = mkNixos [ ./hosts/alecto ];
-
-        # Raspberry Pis
-        arges = mkNixos [ ./hosts/arges ];
-        brontes = mkNixos [ ./hosts/brontes ];
-        steropes = mkNixos [ ./hosts/steropes ];
-
-        # Other Proxmox VMs
-        hypnos = mkNixos [ ./hosts/hypnos ];
-        helios = mkNixos [ ./hosts/helios ];
-
-        # Proxmox LXC containers
-        orion = mkNixos [ ./hosts/orion ];
-        nemesis = mkNixos [ ./hosts/nemesis ];
-        aion = mkNixos [ ./hosts/aion ];
-        gaia = mkNixos [ ./hosts/gaia ];
-        rhea = mkNixos [ ./hosts/rhea ];
-        cronus = mkNixos [ ./hosts/cronus ];
+    mkNixos = modules:
+      nixpkgs.lib.nixosSystem {
+        inherit modules;
+        specialArgs = {inherit inputs outputs;};
       };
+  in {
+    homeManagerModules = import ./modules/home-manager;
+    darwinModules = import ./modules/darwin;
+    nixosModules = import ./modules/nixos;
 
-      formatter = flake-utils.lib.eachDefaultSystemMap (system: nixpkgs.legacyPackages.${system}.nixpkgs-fmt);
+    darwinConfigurations = {
+      mars = mkDarwin "x86_64" [./hosts/mars];
+      athena = mkDarwin "aarch64" [./hosts/athena];
     };
+
+    nixosConfigurations = {
+      # Hashistack control plane VMs
+      megaera = mkNixos [./hosts/megaera];
+      tisiphone = mkNixos [./hosts/tisiphone];
+      alecto = mkNixos [./hosts/alecto];
+
+      # Raspberry Pis
+      arges = mkNixos [./hosts/arges];
+      brontes = mkNixos [./hosts/brontes];
+      steropes = mkNixos [./hosts/steropes];
+
+      # Other Proxmox VMs
+      hypnos = mkNixos [./hosts/hypnos];
+      helios = mkNixos [./hosts/helios];
+
+      # Proxmox LXC containers
+      orion = mkNixos [./hosts/orion];
+      nemesis = mkNixos [./hosts/nemesis];
+      aion = mkNixos [./hosts/aion];
+      gaia = mkNixos [./hosts/gaia];
+      rhea = mkNixos [./hosts/rhea];
+      cronus = mkNixos [./hosts/cronus];
+    };
+
+    formatter = flake-utils.lib.eachDefaultSystemMap (system: nixpkgs.legacyPackages.${system}.alejandra);
+  };
 }

@@ -3,7 +3,7 @@
     {
       job_name = "homelab-https";
       metrics_path = "/probe";
-      params.module = [ "https_homelab" ];
+      params.module = ["https_homelab"];
       static_configs = [
         {
           targets = [
@@ -22,11 +22,11 @@
       ];
       relabel_configs = [
         {
-          source_labels = [ "__address__" ];
+          source_labels = ["__address__"];
           target_label = "__param_target";
         }
         {
-          source_labels = [ "__param_target" ];
+          source_labels = ["__param_target"];
           target_label = "instance";
         }
         {

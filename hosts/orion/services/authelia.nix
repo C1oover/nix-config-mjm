@@ -1,8 +1,8 @@
-{ config
-, pkgs
-, ...
-}:
-let
+{
+  config,
+  pkgs,
+  ...
+}: let
   oidcClients = [
     {
       id = "gitlab";
@@ -10,8 +10,8 @@ let
       secret = "$pbkdf2-sha512$310000$KBrmIfaP43sBTkOZ5tvwlA$y8/qNNGAeeco48h4vsmtqA73thgVubddQOepMfqG3w0zEvnWPf9w/L8kJpuanGwKtwkejAC.g.M4sQ.Q1qY6OQ";
       public = false;
       authorization_policy = "two_factor";
-      redirect_uris = [ "https://gitlab.home.mattmoriarity.com/users/auth/openid_connect/callback" ];
-      scopes = [ "openid" "profile" "groups" "email" ];
+      redirect_uris = ["https://gitlab.home.mattmoriarity.com/users/auth/openid_connect/callback"];
+      scopes = ["openid" "profile" "groups" "email"];
       userinfo_signing_algorithm = "none";
     }
     {
@@ -25,7 +25,7 @@ let
         "https://vault.home.mattmoriarity.com/ui/vault/auth/oidc/oidc/callback"
         "http://localhost:8250/oidc/callback"
       ];
-      scopes = [ "openid" "profile" "groups" "email" ];
+      scopes = ["openid" "profile" "groups" "email"];
       userinfo_signing_algorithm = "none";
     }
     {
@@ -41,7 +41,7 @@ let
         "https://apollo.home.mattmoriarity.com:8006"
         "https://proxmox.home.mattmoriarity.com"
       ];
-      scopes = [ "openid" "profile" "email" ];
+      scopes = ["openid" "profile" "email"];
       userinfo_signing_algorithm = "none";
     }
     {
@@ -50,17 +50,16 @@ let
       secret = "$pbkdf2-sha512$310000$lIbZcunKd9pcd.e/8.8esw$lJY3Zb7Ng8eSKHXV3xI9BA2THWMy7ZcCPYX/pCjuLw32nxN4stMnnIXb8poFbX8DFxvrWHT5sPeRWFl532RxHg";
       public = false;
       authorization_policy = "two_factor";
-      redirect_uris = [ "https://minio-console.home.mattmoriarity.com/oauth_callback" ];
-      scopes = [ "openid" "profile" "groups" "email" ];
+      redirect_uris = ["https://minio-console.home.mattmoriarity.com/oauth_callback"];
+      scopes = ["openid" "profile" "groups" "email"];
       userinfo_signing_algorithm = "none";
     }
   ];
-  format = pkgs.formats.json { };
+  format = pkgs.formats.json {};
 
   user = config.services.authelia.instances.main.user;
   group = config.services.authelia.instances.main.group;
-in
-{
+in {
   services.authelia.instances.main = {
     enable = true;
     settings = {
@@ -93,12 +92,12 @@ in
         rules = [
           {
             domain = "*.home.mattmoriarity.com";
-            networks = [ "10.0.2.104" ];
+            networks = ["10.0.2.104"];
             policy = "bypass";
           }
           {
             domain = "linkding.home.mattmoriarity.com";
-            resources = [ "^/api/.*$" ];
+            resources = ["^/api/.*$"];
             policy = "bypass";
           }
         ];
@@ -166,12 +165,11 @@ in
     }))
   ];
 
-  systemd.tmpfiles.rules = [ "d /run/secrets/authelia 0700 ${user} ${group} - -" ];
+  systemd.tmpfiles.rules = ["d /run/secrets/authelia 0700 ${user} ${group} - -"];
 
-  services.vault-agent.instances.authelia.settings =
-    let
-      va = import ../../../lib/vault-agent.nix { inherit pkgs; };
-    in
+  services.vault-agent.instances.authelia.settings = let
+    va = import ../../../lib/vault-agent.nix {inherit pkgs;};
+  in
     va.mkConfig {
       roleId = "1f94fc98-0934-7027-a34f-ea94f3268def";
       secretIdFile = config.age.secrets."authelia-approle-secret-id".path;

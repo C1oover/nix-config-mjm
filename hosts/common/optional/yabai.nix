@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-let
+{pkgs, ...}: let
   iconMap = pkgs.writeScript "sketchybar-plugin-icon-map" ''
     #!${pkgs.bash}/bin/bash
     ${builtins.readFile sketchybar/plugins/icon_map.sh}
@@ -28,8 +27,7 @@ let
     JQ=${pkgs.jq}/bin/jq
     ${builtins.readFile sketchybar/plugins/yabai.sh}
   '';
-in
-{
+in {
   services.yabai = {
     enable = true;
     extraConfig = ''

@@ -1,4 +1,4 @@
-{ pkgs, ... }: {
+{pkgs, ...}: {
   programs.kitty = {
     enable = true;
     theme = "Catppuccin-Mocha";
@@ -17,6 +17,6 @@
       "kitty_mod+enter" = "launch --cwd=current";
       "cmd+shift+enter" = "launch --cwd=current --type=tab";
     };
-    darwinLaunchOptions = [ "--listen-on=unix:kitty.sock" ];
+    darwinLaunchOptions = ["--listen-on=unix:kitty.sock"];
   };
 }

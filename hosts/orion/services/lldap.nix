@@ -1,15 +1,14 @@
-{ config
-, pkgs
-, ...
-}:
-let
-  format = pkgs.formats.json { };
-in
 {
+  config,
+  pkgs,
+  ...
+}: let
+  format = pkgs.formats.json {};
+in {
   virtualisation.oci-containers.containers = {
     lldap = {
       image = "nitnelave/lldap:stable";
-      volumes = [ "lldap_data:/data" ];
+      volumes = ["lldap_data:/data"];
       ports = [
         "3890:3890" # ldap
         "17170:17170" # web interface

@@ -1,11 +1,12 @@
-{ pkgs
-, config
-, ...
+{
+  pkgs,
+  config,
+  ...
 }: {
   services.nomad = {
     enable = true;
     dropPrivileges = false;
-    extraPackages = [ pkgs.cni-plugins pkgs.consul ];
+    extraPackages = [pkgs.cni-plugins pkgs.consul];
     settings = {
       client = {
         enabled = true;
@@ -36,7 +37,7 @@
 
               infra_image = "rancher/pause:3.2";
               allow_privileged = true;
-              allow_caps = [ "CHOWN" "DAC_OVERRIDE" "FSETID" "FOWNER" "MKNOD" "NET_RAW" "NET_ADMIN" "SETGID" "SETUID" "SETFCAP" "SETPCAP" "NET_BIND_SERVICE" "SYS_CHROOT" "KILL" "AUDIT_WRITE" ];
+              allow_caps = ["CHOWN" "DAC_OVERRIDE" "FSETID" "FOWNER" "MKNOD" "NET_RAW" "NET_ADMIN" "SETGID" "SETUID" "SETFCAP" "SETPCAP" "NET_BIND_SERVICE" "SYS_CHROOT" "KILL" "AUDIT_WRITE"];
 
               volumes.enabled = true;
             };

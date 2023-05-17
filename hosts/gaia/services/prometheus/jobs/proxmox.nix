@@ -6,17 +6,17 @@
       consul_sd_configs = [
         {
           server = "127.0.0.1:8500";
-          services = [ "proxmox" ];
+          services = ["proxmox"];
         }
       ];
       relabel_configs = [
         {
-          source_labels = [ "__address__" ];
+          source_labels = ["__address__"];
           regex = "(.+):\\d+";
           target_label = "__param_target";
         }
         {
-          source_labels = [ "__param_target" ];
+          source_labels = ["__param_target"];
           target_label = "instance";
         }
         {

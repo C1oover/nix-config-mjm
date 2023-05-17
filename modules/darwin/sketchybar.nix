@@ -1,31 +1,37 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
   cfg = config.services.sketchybar;
 
   toSketchybarConfig = opts:
     concatStringsSep "\n" ([
-      "#!${pkgs.bash}/bin/bash"
-      ""
-      "generated_cfg=("
-    ] ++ (mapAttrsToList (p: v: "  ${p}=${toString v}") opts) ++ [
-      ")"
-      ""
-      ("sketchybar --bar \"$" + "{generated_cfg[@]}\"")
-      ""
-    ]);
+        "#!${pkgs.bash}/bin/bash"
+        ""
+        "generated_cfg=("
+      ]
+      ++ (mapAttrsToList (p: v: "  ${p}=${toString v}") opts)
+      ++ [
+        ")"
+        ""
+        ("sketchybar --bar \"$" + "{generated_cfg[@]}\"")
+        ""
+      ]);
 
-  configFile = mkIf (cfg.config != { } || cfg.extraConfig != "")
+  configFile =
+    mkIf (cfg.config != {} || cfg.extraConfig != "")
     "${pkgs.writeScript "sketchybarrc" (
-      (if (cfg.config != {})
-       then "${toSketchybarConfig cfg.config}"
-       else "")
-      + optionalString (cfg.extraConfig != "") cfg.extraConfig)}";
-in
-
-{
+      (
+        if (cfg.config != {})
+        then "${toSketchybarConfig cfg.config}"
+        else ""
+      )
+      + optionalString (cfg.extraConfig != "") cfg.extraConfig
+    )}";
+in {
   options = with types; {
     services.sketchybar.enable = mkOption {
       type = bool;
@@ -41,7 +47,7 @@ in
 
     services.sketchybar.config = mkOption {
       type = attrs;
-      default = { };
+      default = {};
       example = literalExpression ''
         {
           clock_format     = "%R";
@@ -67,11 +73,12 @@ in
   };
 
   config = mkIf (cfg.enable) {
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [cfg.package];
 
     launchd.user.agents.sketchybar = {
-      serviceConfig.ProgramArguments = [ "${cfg.package}/bin/sketchybar" ]
-        ++ optionals (cfg.config != { } || cfg.extraConfig != "") [ "--config" configFile ];
+      serviceConfig.ProgramArguments =
+        ["${cfg.package}/bin/sketchybar"]
+        ++ optionals (cfg.config != {} || cfg.extraConfig != "") ["--config" configFile];
 
       serviceConfig.KeepAlive = true;
       serviceConfig.RunAtLoad = true;

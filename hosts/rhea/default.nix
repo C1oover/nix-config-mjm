@@ -1,6 +1,7 @@
-{ modulesPath
-, lib
-, ...
+{
+  modulesPath,
+  lib,
+  ...
 }: {
   imports = [
     (modulesPath + "/virtualisation/lxc-container.nix")
@@ -23,8 +24,8 @@
   services.consul.interface.advertise = "eth0";
 
   # the network interface systemd service doesn't load in a container
-  systemd.services.consul.after = lib.mkForce [ "network.target" ];
-  systemd.services.consul.bindsTo = lib.mkForce [ ];
+  systemd.services.consul.after = lib.mkForce ["network.target"];
+  systemd.services.consul.bindsTo = lib.mkForce [];
 
   nixpkgs.hostPlatform = "x86_64-linux";
   system.stateVersion = "23.05";

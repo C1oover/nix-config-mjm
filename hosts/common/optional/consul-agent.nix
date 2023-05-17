@@ -1,10 +1,10 @@
-{ lib, ... }: {
+{lib, ...}: {
   services.consul = {
     enable = true;
     webUi = true;
 
     extraConfig = {
-      retry_join = lib.mkDefault [ "10.0.2.40" "10.0.2.42" "10.0.2.43" ];
+      retry_join = lib.mkDefault ["10.0.2.40" "10.0.2.42" "10.0.2.43"];
       client_addr = "0.0.0.0";
       ports.grpc = 8502;
       connect.enabled = true;

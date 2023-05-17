@@ -3,7 +3,7 @@
     {
       job_name = "blackbox-dns-ad-blocking";
       metrics_path = "/probe";
-      params.module = [ "dns_ad_blocking" ];
+      params.module = ["dns_ad_blocking"];
       static_configs = [
         {
           targets = [
@@ -18,11 +18,11 @@
       ];
       relabel_configs = [
         {
-          source_labels = [ "__address__" ];
+          source_labels = ["__address__"];
           target_label = "__param_target";
         }
         {
-          source_labels = [ "__param_target" ];
+          source_labels = ["__param_target"];
           target_label = "instance";
         }
         {

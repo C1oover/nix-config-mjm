@@ -31,8 +31,8 @@
 
   # bind can't start without the files rendered by consul-template
   systemd.services.bind = {
-    requires = [ "consul-template-bind.service" ];
-    after = [ "consul-template-bind.service" ];
+    requires = ["consul-template-bind.service"];
+    after = ["consul-template-bind.service"];
     startLimitIntervalSec = 60;
     startLimitBurst = 10;
     serviceConfig = {

@@ -1,9 +1,9 @@
-{ config
-, pkgs
-, inputs
-, ...
-}:
-let
+{
+  config,
+  pkgs,
+  inputs,
+  ...
+}: let
   updateYubikeyCert = pkgs.writeShellScriptBin "update-yubikey-cert" ''
     ${pkgs.vault}/bin/vault ssh \
       -mode="ca" \
@@ -32,8 +32,7 @@ let
   '';
 
   devenv = inputs.devenv.packages.x86_64-darwin.default;
-in
-{
+in {
   imports = [
     ./global
     ./global/darwin.nix
@@ -61,20 +60,20 @@ in
   home.dock = {
     enable = true;
     entries = [
-      { path = "/System/Applications/Mail.app/"; }
-      { path = "${pkgs.firefox-bin}/Applications/Firefox.app/"; }
-      { path = "/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app/"; }
-      { path = "/System/Applications/Messages.app/"; }
-      { path = "/System/Applications/Maps.app/"; }
-      { path = "/Applications/Fantastical.app/"; }
-      { path = "/System/Applications/System Settings.app/"; }
-      { path = "/Applications/1Password.app/"; }
-      { path = "/Applications/Drafts.app/"; }
-      { path = "${pkgs.kitty}/Applications/kitty.app/"; }
-      { path = "/Applications/Dash.app/"; }
-      { path = "/Applications/Slab.app/"; }
-      { path = "${pkgs.slack}/Applications/Slack.app/"; }
-      { path = "${pkgs.discord}/Applications/Discord.app/"; }
+      {path = "/System/Applications/Mail.app/";}
+      {path = "${pkgs.firefox-bin}/Applications/Firefox.app/";}
+      {path = "/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app/";}
+      {path = "/System/Applications/Messages.app/";}
+      {path = "/System/Applications/Maps.app/";}
+      {path = "/Applications/Fantastical.app/";}
+      {path = "/System/Applications/System Settings.app/";}
+      {path = "/Applications/1Password.app/";}
+      {path = "/Applications/Drafts.app/";}
+      {path = "${pkgs.kitty}/Applications/kitty.app/";}
+      {path = "/Applications/Dash.app/";}
+      {path = "/Applications/Slab.app/";}
+      {path = "${pkgs.slack}/Applications/Slack.app/";}
+      {path = "${pkgs.discord}/Applications/Discord.app/";}
       {
         path = "${config.home.homeDirectory}/Downloads/";
         section = "others";

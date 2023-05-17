@@ -1,17 +1,16 @@
-{ config
-, pkgs
-, ...
-}:
-let
-  format = pkgs.formats.json { };
-in
 {
+  config,
+  pkgs,
+  ...
+}: let
+  format = pkgs.formats.json {};
+in {
   services.promtail = {
     enable = true;
     configuration = {
       server.http_listen_port = 3101;
       clients = [
-        { url = "http://loki.service.consul:3100/loki/api/v1/push"; }
+        {url = "http://loki.service.consul:3100/loki/api/v1/push";}
       ];
 
       scrape_configs = [
@@ -23,15 +22,15 @@ in
           };
           relabel_configs = [
             {
-              source_labels = [ "__journal__systemd_unit" ];
+              source_labels = ["__journal__systemd_unit"];
               target_label = "systemd_unit";
             }
             {
-              source_labels = [ "__journal__hostname" ];
+              source_labels = ["__journal__hostname"];
               target_label = "hostname";
             }
             {
-              source_labels = [ "__journal_syslog_identifier" ];
+              source_labels = ["__journal_syslog_identifier"];
               target_label = "syslog_identifier";
             }
           ];

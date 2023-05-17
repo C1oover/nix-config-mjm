@@ -16,30 +16,29 @@ let
   aion = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKFrAsGVNyUfMfNvdix1ON28I/eu4MBhU6YdzzgRItQf";
   gaia = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPKBvQP0w1opkY5E8xZzVZodNDd/2HWdHYvjulULaK6t";
 
-  nomadClients = [ arges brontes steropes helios ];
-in
-{
-  "megaera-nomad-vault-config.age".publicKeys = [ matt-mars megaera ];
-  "tisiphone-nomad-vault-config.age".publicKeys = [ matt-mars tisiphone ];
-  "alecto-nomad-vault-config.age".publicKeys = [ matt-mars alecto ];
+  nomadClients = [arges brontes steropes helios];
+in {
+  "megaera-nomad-vault-config.age".publicKeys = [matt-mars megaera];
+  "tisiphone-nomad-vault-config.age".publicKeys = [matt-mars tisiphone];
+  "alecto-nomad-vault-config.age".publicKeys = [matt-mars alecto];
 
-  "nomad-docker-auth.age".publicKeys = [ matt-mars ] ++ nomadClients;
+  "nomad-docker-auth.age".publicKeys = [matt-mars] ++ nomadClients;
 
-  "gitlab-runner-registration.age".publicKeys = [ matt-mars hypnos ];
+  "gitlab-runner-registration.age".publicKeys = [matt-mars hypnos];
 
-  "authelia-jwt-secret.age".publicKeys = [ matt-mars orion ];
-  "authelia-jwt-private-key.age".publicKeys = [ matt-mars orion ];
-  "authelia-storage-encryption-key.age".publicKeys = [ matt-mars orion ];
-  "authelia-session-secret.age".publicKeys = [ matt-mars orion ];
-  "authelia-hmac-secret.age".publicKeys = [ matt-mars orion ];
-  "authelia-smtp-password.age".publicKeys = [ matt-mars orion ];
-  "authelia-ldap-password.age".publicKeys = [ matt-mars orion ];
-  "authelia-approle-secret-id.age".publicKeys = [ matt-mars orion ];
+  "authelia-jwt-secret.age".publicKeys = [matt-mars orion];
+  "authelia-jwt-private-key.age".publicKeys = [matt-mars orion];
+  "authelia-storage-encryption-key.age".publicKeys = [matt-mars orion];
+  "authelia-session-secret.age".publicKeys = [matt-mars orion];
+  "authelia-hmac-secret.age".publicKeys = [matt-mars orion];
+  "authelia-smtp-password.age".publicKeys = [matt-mars orion];
+  "authelia-ldap-password.age".publicKeys = [matt-mars orion];
+  "authelia-approle-secret-id.age".publicKeys = [matt-mars orion];
 
-  "netbox-secret-key.age".publicKeys = [ matt-mars nemesis ];
-  "netbox-approle-secret-id.age".publicKeys = [ matt-mars nemesis ];
+  "netbox-secret-key.age".publicKeys = [matt-mars nemesis];
+  "netbox-approle-secret-id.age".publicKeys = [matt-mars nemesis];
 
-  "paperless-approle-secret-id.age".publicKeys = [ matt-mars aion ];
+  "paperless-approle-secret-id.age".publicKeys = [matt-mars aion];
 
-  "alertmanager-env.age".publicKeys = [ matt-mars gaia ];
+  "alertmanager-env.age".publicKeys = [matt-mars gaia];
 }

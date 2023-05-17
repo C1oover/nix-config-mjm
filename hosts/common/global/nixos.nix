@@ -1,8 +1,9 @@
-{ lib
-, pkgs
-, inputs
-, outputs
-, ...
+{
+  lib,
+  pkgs,
+  inputs,
+  outputs,
+  ...
 }: {
   imports =
     [
@@ -18,7 +19,7 @@
     ++ (builtins.attrValues outputs.nixosModules);
 
   nix.settings = {
-    experimental-features = [ "flakes" "nix-command" ];
+    experimental-features = ["flakes" "nix-command"];
   };
   nix.registry = {
     nixpkgs.flake = inputs.nixpkgs;
@@ -29,7 +30,7 @@
 
   users.users.matt = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ];
+    extraGroups = ["wheel"];
     shell = pkgs.zsh;
   };
 
@@ -47,6 +48,6 @@
   home-manager = {
     useUserPackages = true;
     useGlobalPkgs = true;
-    extraSpecialArgs = { inherit inputs outputs; };
+    extraSpecialArgs = {inherit inputs outputs;};
   };
 }
