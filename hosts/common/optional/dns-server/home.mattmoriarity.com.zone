@@ -10,6 +10,7 @@ $TTL  1m
 arges                 IN  A  10.0.0.2
 brontes               IN  A  10.0.0.3
 steropes              IN  A  10.0.0.4
+unifi                 IN  A  10.0.0.5
 nas                   IN  A  10.0.0.10
 artemis               IN  A  10.0.2.10
 apollo                IN  A  10.0.2.11
