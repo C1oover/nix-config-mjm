@@ -3,7 +3,6 @@
   lib,
   outputs,
   inputs,
-  osConfig,
   ...
 }: {
   imports =
@@ -31,7 +30,7 @@
     tree
     wget
 
-    inputs.home-manager.packages.${osConfig.nixpkgs.system}.home-manager
+    inputs.home-manager.packages.${pkgs.stdenv.hostPlatform.system}.home-manager
   ];
 
   home.shellAliases = {
