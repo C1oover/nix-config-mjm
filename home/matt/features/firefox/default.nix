@@ -10,9 +10,22 @@ in {
     package = pkgs.firefox-bin;
     profiles.matt = {
       settings = {
+        "app.update.auto" = false;
+        "browser.discovery.enabled" = false;
+        "browser.formfill.enable" = false;
+        "browser.onboarding.enabled" = false;
+        "browser.shell.checkDefaultBrowser" = false;
         "browser.startup.homepage" = "https://homelab.home.mattmoriarity.com/";
         "extensions.activeThemeID" = "{c827c446-3d00-4160-a992-3ebcbe6d81a6}";
+        "extensions.getAddons.cache.enabled" = false;
+        "extensions.getAddons.showPane" = false;
+        "extensions.pocket.enabled" = false;
+        "extensions.update.autoUpdateDefault" = false;
+        "extensions.update.enabled" = false;
         "security.enterprise_roots.enabled" = true;
+        "signon.autofillForms" = false;
+        "signon.rememberSignons" = false;
+        "trailhead.firstrun.didSeeAboutWelcome" = true;
       };
       extensions = with pkgs.nur.repos; [
         rycee.firefox-addons.onepassword-password-manager
@@ -24,6 +37,54 @@ in {
         addons.linkding-injector
         addons.catppuccin-latte-mauve
       ];
+      search.engines = {
+        "Nix Packages" = {
+          urls = [
+            {
+              template = "https://search.nixos.org/packages";
+              params = [
+                {
+                  name = "type";
+                  value = "packages";
+                }
+                {
+                  name = "channel";
+                  value = "unstable";
+                }
+                {
+                  name = "query";
+                  value = "{searchTerms}";
+                }
+              ];
+            }
+          ];
+
+          icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
+          definedAliases = ["@np"];
+        };
+        "Nix Options" = {
+          urls = [
+            {
+              template = "https://search.nixos.org/options";
+              params = [
+                {
+                  name = "channel";
+                  value = "unstable";
+                }
+                {
+                  name = "query";
+                  value = "{searchTerms}";
+                }
+              ];
+            }
+          ];
+
+          icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
+          definedAliases = ["@no"];
+        };
+        "Bing".metadata.hidden = true;
+        "Google".metadata.alias = "@g";
+      };
     };
   };
 }
