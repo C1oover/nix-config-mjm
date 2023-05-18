@@ -2,6 +2,8 @@
   pkgs,
   lib,
   outputs,
+  inputs,
+  osConfig,
   ...
 }: {
   imports =
@@ -28,6 +30,8 @@
     ripgrep
     tree
     wget
+
+    inputs.home-manager.packages.${osConfig.nixpkgs.system}.home-manager
   ];
 
   home.shellAliases = {
