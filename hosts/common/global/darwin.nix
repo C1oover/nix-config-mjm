@@ -24,6 +24,7 @@
     useUserPackages = true;
     useGlobalPkgs = true;
     extraSpecialArgs = {inherit inputs outputs;};
+    backupFileExtension = "bak";
   };
 
   time.timeZone = "America/Denver";

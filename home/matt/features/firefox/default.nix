@@ -37,6 +37,7 @@ in {
         addons.linkding-injector
         addons.catppuccin-latte-mauve
       ];
+      search.force = true;
       search.engines = {
         "Nix Packages" = {
           urls = [
