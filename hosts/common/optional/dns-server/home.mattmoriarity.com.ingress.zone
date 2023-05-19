@@ -1,5 +1,20 @@
-{{ with $vhosts := key "ingress/vhost_names" | parseJSON }}
-{{ range $vhosts }}
-{{ . }}  IN  CNAME ingress-http.service.consul.
-{{ end }}
-{{ end }}
+actual  IN  CNAME ingress-http.service.consul.
+adminer  IN  CNAME ingress-http.service.consul.
+alertmanager  IN  CNAME ingress-http.service.consul.
+authelia  IN  CNAME ingress-http.service.consul.
+consul  IN  CNAME ingress-http.service.consul.
+containers  IN  CNAME ingress-http.service.consul.
+gitlab  IN  CNAME ingress-http.service.consul.
+grafana  IN  CNAME ingress-http.service.consul.
+guacamole  IN  CNAME ingress-http.service.consul.
+homelab  IN  CNAME ingress-http.service.consul.
+ldap  IN  CNAME ingress-http.service.consul.
+linkding  IN  CNAME ingress-http.service.consul.
+minio  IN  CNAME ingress-http.service.consul.
+minio-console  IN  CNAME ingress-http.service.consul.
+netbox  IN  CNAME ingress-http.service.consul.
+nomad  IN  CNAME ingress-http.service.consul.
+paperless  IN  CNAME ingress-http.service.consul.
+prometheus  IN  CNAME ingress-http.service.consul.
+proxmox  IN  CNAME ingress-http.service.consul.
+vault  IN  CNAME ingress-http.service.consul.
