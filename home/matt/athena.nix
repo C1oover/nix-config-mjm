@@ -12,6 +12,7 @@
   home.packages = with pkgs; [
     gh
     google-cloud-sdk
+    ngrok
     teams
     teleport
     zoom-us
