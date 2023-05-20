@@ -1,9 +1,4 @@
-{
-  pkgs,
-  config,
-  ...
-}: let
-  format = pkgs.formats.json {};
+let
   upstreams = [
     "8.8.8.8"
     "8.8.4.4"
@@ -38,26 +33,18 @@ in {
     4000
   ];
 
-  services.consul.extraConfigFiles = [
-    (toString (format.generate "blocky.json" {
-      service = {
-        id = "blocky:${config.networking.hostName}";
-        name = "blocky";
-        tags = ["http"];
-        port = 4000;
+  services.consul.services.blocky = {
+    tags = ["http"];
+    port = 4000;
 
-        meta = {
-          metrics_path = "/metrics";
-        };
+    meta.metrics_path = "/metrics";
 
-        checks = [
-          {
-            http = "http://localhost:4000/";
-            interval = "30s";
-            timeout = "5s";
-          }
-        ];
-      };
-    }))
-  ];
+    checks = [
+      {
+        http = "http://localhost:4000/";
+        interval = "30s";
+        timeout = "5s";
+      }
+    ];
+  };
 }

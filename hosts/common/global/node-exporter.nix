@@ -1,10 +1,4 @@
-{
-  config,
-  pkgs,
-  ...
-}: let
-  format = pkgs.formats.json {};
-in {
+{config, ...}: {
   services.prometheus.exporters.node = {
     enable = true;
     openFirewall = true;
@@ -19,25 +13,19 @@ in {
     ];
   };
 
-  services.consul.extraConfigFiles = [
-    (toString (format.generate "node-exporter.json" {
-      service = {
-        name = "node-exporter";
-        id = "node-exporter:${config.networking.hostName}";
-        port = config.services.prometheus.exporters.node.port;
-        meta = {
-          metrics_path = "/metrics";
-        };
+  services.consul.services.node-exporter = let
+    inherit (config.services.prometheus.exporters.node) port;
+  in {
+    inherit port;
+    meta.metrics_path = "/metrics";
 
-        checks = [
-          {
-            name = "node-exporter HTTP";
-            http = "http://localhost:${toString config.services.prometheus.exporters.node.port}/";
-            interval = "30s";
-            timeout = "5s";
-          }
-        ];
-      };
-    }))
-  ];
+    checks = [
+      {
+        name = "node-exporter HTTP";
+        http = "http://localhost:${toString port}/";
+        interval = "30s";
+        timeout = "5s";
+      }
+    ];
+  };
 }

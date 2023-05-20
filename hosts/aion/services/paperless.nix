@@ -4,7 +4,6 @@
   lib,
   ...
 }: let
-  format = pkgs.formats.json {};
   scannerPublicKey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDVffhmmioPFJxQiP5OlssYk2EjHdeMxpV1OO2T3Qz3AjmMZsJunQdnpWV9wNEeG3uTwGmvDS4ejCoJvVy6kQMypFFjEqBegbK6N4HeMFYubxe2pp2NSZir1HEeHFYZSvrIjOKfN404WLpY/+TgM7UTQ5u5pUNmMPyyxLgZz/YJj9LVCo1IeYcv5hP3WSP1ixsJGBuUTgkVp4S/FouoHNoJ+jVbGSs0IjgBC77IzxH52Af/sXwb2MiRoM3HczEwnWuhiIniICCbjgju5hA0h1qCozRDx5jt6egKxzNxN7+tuW3S9t1D/sq/qn6hqyaTCHVxn9+2cw3KIXcK7LoduhX5 root@BR5CF370B3F03D";
 in {
   services.paperless = {
@@ -27,24 +26,20 @@ in {
     config.services.paperless.port
   ];
 
-  services.consul.extraConfigFiles = [
-    (toString (format.generate "paperless.json" {
-      service = {
-        id = "paperless:${config.networking.hostName}";
-        name = "paperless";
-        port = config.services.paperless.port;
+  services.consul.services.paperless = let
+    inherit (config.services.paperless) port;
+  in {
+    inherit port;
 
-        checks = [
-          {
-            name = "paperless is up";
-            http = "http://localhost:${toString config.services.paperless.port}/";
-            interval = "30s";
-            timeout = "5s";
-          }
-        ];
-      };
-    }))
-  ];
+    checks = [
+      {
+        name = "paperless is up";
+        http = "http://localhost:${toString port}/";
+        interval = "30s";
+        timeout = "5s";
+      }
+    ];
+  };
 
   systemd.tmpfiles.rules = ["d /run/secrets/paperless 0700 paperless paperless - -"];
 

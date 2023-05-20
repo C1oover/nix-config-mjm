@@ -39,27 +39,19 @@ in {
     };
   };
 
-  services.consul.extraConfigFiles = [
-    (toString (format.generate "promtail.json" {
-      service = {
-        name = "promtail";
-        id = "promtail:${config.networking.hostName}";
-        port = 3101;
-        meta = {
-          metrics_path = "/metrics";
-        };
+  services.consul.services.promtail = {
+    port = 3101;
+    meta.metrics_path = "/metrics";
 
-        checks = [
-          {
-            name = "promtail is ready";
-            http = "http://localhost:3101/";
-            interval = "30s";
-            timeout = "5s";
-          }
-        ];
-      };
-    }))
-  ];
+    checks = [
+      {
+        name = "promtail is ready";
+        http = "http://localhost:3101/";
+        interval = "30s";
+        timeout = "5s";
+      }
+    ];
+  };
 
   # expose port for metrics
   networking.firewall.allowedTCPPorts = [

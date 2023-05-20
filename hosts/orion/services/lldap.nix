@@ -1,10 +1,4 @@
 {
-  config,
-  pkgs,
-  ...
-}: let
-  format = pkgs.formats.json {};
-in {
   virtualisation.oci-containers.containers = {
     lldap = {
       image = "nitnelave/lldap:stable";
@@ -19,22 +13,16 @@ in {
     };
   };
 
-  services.consul.extraConfigFiles = [
-    (toString (format.generate "lldap.json" {
-      service = {
-        name = "lldap";
-        id = "lldap:${config.networking.hostName}";
-        port = 17170;
+  services.consul.services.lldap = {
+    port = 17170;
 
-        checks = [
-          {
-            name = "lldap HTTP API";
-            http = "http://localhost:17170/health";
-            interval = "30s";
-            timeout = "5s";
-          }
-        ];
-      };
-    }))
-  ];
+    checks = [
+      {
+        name = "lldap HTTP API";
+        http = "http://localhost:17170/health";
+        interval = "30s";
+        timeout = "5s";
+      }
+    ];
+  };
 }

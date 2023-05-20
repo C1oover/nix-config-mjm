@@ -66,25 +66,18 @@ in {
     openFirewall = true;
   };
 
-  services.consul.extraConfigFiles = [
-    (toString (format.generate "bind-exporter.json" {
-      service = {
-        id = "bind-exporter:${config.networking.hostName}";
-        name = "bind-exporter";
-        port = config.services.prometheus.exporters.bind.port;
+  services.consul.services.bind-exporter = let
+    inherit (config.services.prometheus.exporters.bind) port;
+  in {
+    inherit port;
+    meta.metrics_path = "/metrics";
 
-        meta = {
-          metrics_path = "/metrics";
-        };
-
-        checks = [
-          {
-            http = "http://localhost:${toString config.services.prometheus.exporters.bind.port}/";
-            interval = "30s";
-            timeout = "5s";
-          }
-        ];
-      };
-    }))
-  ];
+    checks = [
+      {
+        http = "http://localhost:${toString port}/";
+        interval = "30s";
+        timeout = "5s";
+      }
+    ];
+  };
 }
