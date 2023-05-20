@@ -1,13 +1,16 @@
-{
+let
+  upstreams = [
+    "8.8.8.8"
+    "8.8.4.4"
+    "1.1.1.1"
+    "1.0.0.1"
+  ];
+in {
   services.blocky = {
     enable = true;
     settings = {
-      upstream.default = [
-        "8.8.8.8"
-        "8.8.4.4"
-        "1.1.1.1"
-        "1.0.0.1"
-      ];
+      bootstrapDns = map (ip: {upstream = ip;}) upstreams;
+      upstream.default = upstreams;
       blocking = {
         blackLists.ads = [
           "https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt"
