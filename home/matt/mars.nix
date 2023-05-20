@@ -99,4 +99,24 @@ in {
     hide_window_decorations = "titlebar-only";
     focus_follows_mouse = "yes";
   };
+
+  programs.mr = {
+    settings = {
+      "Projects/bastille-templates" = {
+        checkout = "git clone https://gitlab.home.mattmoriarity.com/mjm/bastille-templates.git";
+      };
+      "Projects/dark_vader" = {
+        checkout = "git clone https://gitlab.home.mattmoriarity.com/mjm/dark-vader.git";
+      };
+      "Projects/homelab" = {
+        checkout = "git clone https://gitlab.home.mattmoriarity.com/mjm/homelab.git";
+      };
+      "Projects/homelab-infra" = {
+        checkout = "git clone https://gitlab.home.mattmoriarity.com/mjm/homelab-infra.git";
+      };
+      "Projects/nix-config" = {
+        checkout = "git clone https://gitlab.home.mattmoriarity.com/mjm/nix-config.git";
+      };
+    };
+  };
 }

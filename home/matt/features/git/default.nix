@@ -34,4 +34,8 @@
       src = "${pkgs.zsh-forgit}/share/zsh/zsh-forgit";
     }
   ];
+
+  programs.mr = {
+    enable = true;
+  };
 }
