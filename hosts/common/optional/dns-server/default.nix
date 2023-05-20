@@ -2,7 +2,9 @@
   pkgs,
   config,
   ...
-}: {
+}: let
+  format = pkgs.formats.json {};
+in {
   imports = [./blocky.nix];
 
   services.bind = {
@@ -19,7 +21,7 @@
 
     extraConfig = ''
       statistics-channels {
-          inet 127.0.0.1 port 8053 allow { 127.0.0.1; };
+        inet 127.0.0.1 port 8053 allow { 127.0.0.1; };
       };
 
       zone "consul" {
@@ -63,4 +65,26 @@
     enable = true;
     openFirewall = true;
   };
+
+  services.consul.extraConfigFiles = [
+    (toString (format.generate "bind-exporter.json" {
+      service = {
+        id = "bind-exporter:${config.networking.hostName}";
+        name = "bind-exporter";
+        port = config.services.prometheus.exporters.bind.port;
+
+        meta = {
+          metrics_path = "/metrics";
+        };
+
+        checks = [
+          {
+            http = "http://localhost:${toString config.services.prometheus.exporters.bind.port}/";
+            interval = "30s";
+            timeout = "5s";
+          }
+        ];
+      };
+    }))
+  ];
 }
