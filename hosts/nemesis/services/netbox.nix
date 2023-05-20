@@ -81,19 +81,10 @@ in {
     config.services.nginx.defaultHTTPListenPort
   ];
 
-  services.consul.extraConfigFiles = [
-    (toString (format.generate "netbox.json" {
-      service = {
-        id = "netbox:${config.networking.hostName}";
-        name = "netbox";
-        port = config.services.nginx.defaultHTTPListenPort;
-
-        meta = {
-          metrics_path = "/metrics";
-        };
-      };
-    }))
-  ];
+  services.consul.services.netbox = {
+    port = config.services.nginx.defaultHTTPListenPort;
+    meta.metrics_path = "/metrics";
+  };
 
   systemd.tmpfiles.rules = ["d /run/secrets/netbox 0700 netbox netbox - -"];
 
