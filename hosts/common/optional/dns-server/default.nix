@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  config,
+  ...
+}: {
   imports = [./blocky.nix];
 
   services.bind = {
@@ -14,6 +18,10 @@
     '';
 
     extraConfig = ''
+      statistics-channels {
+          inet 127.0.0.1 port 8053 allow { 127.0.0.1; };
+      };
+
       zone "consul" {
         type forward;
         forward only;
@@ -50,4 +58,9 @@
   networking.firewall.allowedUDPPorts = [
     53
   ];
+
+  services.prometheus.exporters.bind = {
+    enable = true;
+    openFirewall = true;
+  };
 }
