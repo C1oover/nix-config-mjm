@@ -1,14 +1,16 @@
 {pkgs, ...}: {
+  imports = [./blocky.nix];
+
   services.bind = {
     enable = true;
     cacheNetworks = [
       "127.0.0.0/24"
       "10.0.0.0/8"
     ];
+    forwarders = ["127.0.0.1 port 1053"];
 
     extraOptions = ''
       dnssec-validation no;
-      include "/run/named/forwarders.conf";
     '';
 
     extraConfig = ''
@@ -40,39 +42,4 @@
       '';
     };
   };
-
-  # bind can't start without the files rendered by consul-template
-  systemd.services.bind = {
-    requires = ["consul-template-bind.service"];
-    after = ["consul-template-bind.service"];
-    startLimitIntervalSec = 60;
-    startLimitBurst = 10;
-    serviceConfig = {
-      Restart = "on-failure";
-      RestartSec = 3;
-    };
-  };
-
-  services.consul-template.instances.bind = {
-    settings = {
-      template = [
-        {
-          source = ./forwarders.conf;
-          destination = "/run/named/forwarders.conf";
-          command = "systemctl reload bind";
-          error_on_missing_key = true;
-          user = "named";
-          group = "named";
-        }
-      ];
-    };
-  };
-
-  networking.firewall.allowedTCPPorts = [
-    53
-  ];
-
-  networking.firewall.allowedUDPPorts = [
-    53
-  ];
 }
