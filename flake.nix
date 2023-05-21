@@ -15,6 +15,7 @@
     devenv.inputs.nixpkgs.follows = "nixpkgs";
     nixpkgs-firefox-darwin.url = "github:bandithedoge/nixpkgs-firefox-darwin";
     nur.url = "github:nix-community/NUR";
+    pre-commit-hooks-nix.url = "github:cachix/pre-commit-hooks.nix";
 
     catppuccin.url = "github:catppuccin/starship";
     catppuccin.flake = false;
@@ -50,6 +51,10 @@
             specialArgs = {inherit inputs outputs;};
           };
       in {
+        imports = [
+          inputs.pre-commit-hooks-nix.flakeModule
+        ];
+
         flake = {
           homeManagerModules = import ./modules/home-manager;
           darwinModules = import ./modules/darwin;
@@ -87,8 +92,26 @@
 
         systems = ["x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin"];
 
-        perSystem = {pkgs, ...}: {
+        perSystem = {
+          pkgs,
+          config,
+          ...
+        }: {
+          # need to run `nix develop .#pre-commit` after changing these
+          pre-commit.settings = {
+            hooks = {
+              alejandra.enable = true;
+              deadnix.enable = true;
+            };
+
+            excludes = [
+              "home/matt/features/firefox/addons/addons.nix"
+            ];
+          };
+
           formatter = pkgs.alejandra;
+          devShells.pre-commit = config.pre-commit.devShell;
+          packages.pre-commit = config.pre-commit.settings.run;
         };
       }
     );

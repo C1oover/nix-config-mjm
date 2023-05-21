@@ -1,10 +1,4 @@
 {
-  config,
-  pkgs,
-  ...
-}: let
-  format = pkgs.formats.json {};
-in {
   services.promtail = {
     enable = true;
     configuration = {

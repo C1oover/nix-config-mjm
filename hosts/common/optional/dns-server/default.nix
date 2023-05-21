@@ -2,9 +2,7 @@
   pkgs,
   config,
   ...
-}: let
-  format = pkgs.formats.json {};
-in {
+}: {
   imports = [./blocky.nix];
 
   services.bind = {

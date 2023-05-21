@@ -2,9 +2,7 @@
   config,
   pkgs,
   ...
-}: let
-  format = pkgs.formats.json {};
-in {
+}: {
   services.netbox = {
     enable = true;
     listenAddress = "0.0.0.0";

@@ -55,7 +55,6 @@
       userinfo_signing_algorithm = "none";
     }
   ];
-  format = pkgs.formats.json {};
 
   user = config.services.authelia.instances.main.user;
   group = config.services.authelia.instances.main.group;
