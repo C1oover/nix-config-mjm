@@ -10,9 +10,9 @@
     agenix.inputs.nixpkgs.follows = "nixpkgs";
     agenix.inputs.darwin.follows = "darwin";
     agenix.inputs.home-manager.follows = "home-manager";
+    flake-parts.url = "github:hercules-ci/flake-parts";
     devenv.url = "github:cachix/devenv";
     devenv.inputs.nixpkgs.follows = "nixpkgs";
-    flake-utils.url = "github:numtide/flake-utils";
     nixpkgs-firefox-darwin.url = "github:bandithedoge/nixpkgs-firefox-darwin";
     nur.url = "github:nix-community/NUR";
 
@@ -30,57 +30,66 @@
     self,
     darwin,
     nixpkgs,
-    flake-utils,
+    flake-parts,
     ...
-  } @ inputs: let
-    inherit (self) outputs;
-    mkDarwin = arch: modules:
-      darwin.lib.darwinSystem {
-        inherit modules;
+  } @ inputs:
+    flake-parts.lib.mkFlake {inherit inputs;} (
+      let
+        inherit (self) outputs;
+        mkDarwin = arch: modules:
+          darwin.lib.darwinSystem {
+            inherit modules;
 
-        system = "${arch}-darwin";
-        inputs = {inherit darwin nixpkgs;};
-        specialArgs = {inherit inputs outputs;};
-      };
-    mkNixos = modules:
-      nixpkgs.lib.nixosSystem {
-        inherit modules;
-        specialArgs = {inherit inputs outputs;};
-      };
-  in {
-    homeManagerModules = import ./modules/home-manager;
-    darwinModules = import ./modules/darwin;
-    nixosModules = import ./modules/nixos;
+            system = "${arch}-darwin";
+            inputs = {inherit darwin nixpkgs;};
+            specialArgs = {inherit inputs outputs;};
+          };
+        mkNixos = modules:
+          nixpkgs.lib.nixosSystem {
+            inherit modules;
+            specialArgs = {inherit inputs outputs;};
+          };
+      in {
+        flake = {
+          homeManagerModules = import ./modules/home-manager;
+          darwinModules = import ./modules/darwin;
+          nixosModules = import ./modules/nixos;
 
-    darwinConfigurations = {
-      mars = mkDarwin "x86_64" [./hosts/mars];
-      athena = mkDarwin "aarch64" [./hosts/athena];
-    };
+          darwinConfigurations = {
+            mars = mkDarwin "x86_64" [./hosts/mars];
+            athena = mkDarwin "aarch64" [./hosts/athena];
+          };
 
-    nixosConfigurations = {
-      # Hashistack control plane VMs
-      megaera = mkNixos [./hosts/megaera];
-      tisiphone = mkNixos [./hosts/tisiphone];
-      alecto = mkNixos [./hosts/alecto];
+          nixosConfigurations = {
+            # Hashistack control plane VMs
+            megaera = mkNixos [./hosts/megaera];
+            tisiphone = mkNixos [./hosts/tisiphone];
+            alecto = mkNixos [./hosts/alecto];
 
-      # Raspberry Pis
-      arges = mkNixos [./hosts/arges];
-      brontes = mkNixos [./hosts/brontes];
-      steropes = mkNixos [./hosts/steropes];
+            # Raspberry Pis
+            arges = mkNixos [./hosts/arges];
+            brontes = mkNixos [./hosts/brontes];
+            steropes = mkNixos [./hosts/steropes];
 
-      # Other Proxmox VMs
-      hypnos = mkNixos [./hosts/hypnos];
-      helios = mkNixos [./hosts/helios];
+            # Other Proxmox VMs
+            hypnos = mkNixos [./hosts/hypnos];
+            helios = mkNixos [./hosts/helios];
 
-      # Proxmox LXC containers
-      orion = mkNixos [./hosts/orion];
-      nemesis = mkNixos [./hosts/nemesis];
-      aion = mkNixos [./hosts/aion];
-      gaia = mkNixos [./hosts/gaia];
-      rhea = mkNixos [./hosts/rhea];
-      cronus = mkNixos [./hosts/cronus];
-    };
+            # Proxmox LXC containers
+            orion = mkNixos [./hosts/orion];
+            nemesis = mkNixos [./hosts/nemesis];
+            aion = mkNixos [./hosts/aion];
+            gaia = mkNixos [./hosts/gaia];
+            rhea = mkNixos [./hosts/rhea];
+            cronus = mkNixos [./hosts/cronus];
+          };
+        };
 
-    formatter = flake-utils.lib.eachDefaultSystemMap (system: nixpkgs.legacyPackages.${system}.alejandra);
-  };
+        systems = ["x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin"];
+
+        perSystem = {pkgs, ...}: {
+          formatter = pkgs.alejandra;
+        };
+      }
+    );
 }
