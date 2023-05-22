@@ -54,6 +54,23 @@
 
   programs.git.userEmail = "matt@slab.com";
 
+  programs.mr = {
+    settings = {
+      "Projects/slab" = {
+        checkout = "git clone https://github.com/slab/slab.git";
+      };
+      "Projects/scripts" = {
+        checkout = "git clone https://github.com/slab/scripts.git";
+      };
+      "Projects/delta-elixir" = {
+        checkout = "git clone https://github.com/slab/delta-elixir.git";
+      };
+      "Projects/nix-config" = {
+        checkout = "git clone https://gitlab.home.mattmoriarity.com/mjm/nix-config.git";
+      };
+    };
+  };
+
   xdg.configFile."k9s/skin.yml".source = inputs.catppuccin-k9s + "/dist/mocha.yml";
 
   programs.kitty.darwinLaunchOptions = let
