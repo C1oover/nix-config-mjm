@@ -20,32 +20,32 @@
 in {
   flake = {
     darwinConfigurations = {
-      mars = mkDarwin "x86_64" [./hosts/mars];
-      athena = mkDarwin "aarch64" [./hosts/athena];
+      mars = mkDarwin "x86_64" [./mars];
+      athena = mkDarwin "aarch64" [./athena];
     };
 
     nixosConfigurations = {
       # Hashistack control plane VMs
-      megaera = mkNixos [./hosts/megaera];
-      tisiphone = mkNixos [./hosts/tisiphone];
-      alecto = mkNixos [./hosts/alecto];
+      megaera = mkNixos [./megaera];
+      tisiphone = mkNixos [./tisiphone];
+      alecto = mkNixos [./alecto];
 
       # Raspberry Pis
-      arges = mkNixos [./hosts/arges];
-      brontes = mkNixos [./hosts/brontes];
-      steropes = mkNixos [./hosts/steropes];
+      arges = mkNixos [./arges];
+      brontes = mkNixos [./brontes];
+      steropes = mkNixos [./steropes];
 
       # Other Proxmox VMs
-      hypnos = mkNixos [./hosts/hypnos];
-      helios = mkNixos [./hosts/helios];
+      hypnos = mkNixos [./hypnos];
+      helios = mkNixos [./helios];
 
       # Proxmox LXC containers
-      orion = mkNixos [./hosts/orion];
-      nemesis = mkNixos [./hosts/nemesis];
-      aion = mkNixos [./hosts/aion];
-      gaia = mkNixos [./hosts/gaia];
-      rhea = mkNixos [./hosts/rhea];
-      cronus = mkNixos [./hosts/cronus];
+      orion = mkNixos [./orion];
+      nemesis = mkNixos [./nemesis];
+      aion = mkNixos [./aion];
+      gaia = mkNixos [./gaia];
+      rhea = mkNixos [./rhea];
+      cronus = mkNixos [./cronus];
     };
   };
 }
