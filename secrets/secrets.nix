@@ -1,6 +1,8 @@
 let
   # mars = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPbkn+JHPdLiUO/M1U+ArBKSYm7BYqnC+G3q4S8L5EBK";
+  athena = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDRdADDECsuvTNVQAODyHrQ8HoKXa4Q1S9yBkcybnUCR";
   matt-mars = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM2L1UcEeHu537h8i3omMgYbGxf3/mp1yzZUat2jWY5n";
+  matt-athena = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINi3SELPy05ZcWXQw0DH9IiOtuBXDnhy/cx2LSgj09CZ";
 
   megaera = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFjL++8eZk0Ydrti+7EcyEvZp5AHCKz+R8IQ9ohs/KT7";
   tisiphone = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKqaFj8PGrEhie1P0uEKJ6lbP0fjB+CzuWw5siQGlsin";
@@ -40,4 +42,6 @@ in {
   "paperless-approle-secret-id.age".publicKeys = [matt-mars aion];
 
   "alertmanager-env.age".publicKeys = [matt-mars gaia];
+
+  "ngrok.age".publicKeys = [matt-athena athena];
 }

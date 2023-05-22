@@ -7,6 +7,8 @@
 }: {
   imports =
     [
+      inputs.agenix.homeManagerModules.default
+
       ../features/git
       ../features/neovim
       ../features/shell
