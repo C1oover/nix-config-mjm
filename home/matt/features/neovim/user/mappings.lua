@@ -1,8 +1,17 @@
+local mix_cmd
+if vim.fs.basename(vim.loop.cwd()) == "slab" then
+	mix_cmd = "docker compose exec slab_1 mix"
+else
+	mix_cmd = "mix"
+end
+
 local run_last_test = function()
 	os.execute(
 		"kitty @ --to="
 		.. os.getenv("KITTY_LISTEN_ON")
-		.. " launch --type=overlay --cwd=current zsh -l -i -c 'docker compose exec slab_1 mix "
+		.. " launch --type=overlay --cwd=current zsh -l -i -c '"
+		.. mix_cmd
+		.. " "
 		.. vim.g.my_last_test
 		.. "; read'"
 	)
