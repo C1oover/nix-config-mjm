@@ -3,6 +3,12 @@
   pkgs,
   ...
 }: {
+  nix.gc = {
+    automatic = true;
+    randomizedDelaySec = "30min";
+    options = "--delete-older-than 3d";
+  };
+
   systemd.services.nixos-upgrade = {
     description = "NixOS Upgrade";
 
