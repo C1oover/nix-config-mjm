@@ -99,6 +99,11 @@ in {
             resources = ["^/api/.*$"];
             policy = "bypass";
           }
+          {
+            domain = "miniflux.home.mattmoriarity.com";
+            resources = ["^/v1/.*$"];
+            policy = "bypass";
+          }
         ];
       };
       session.domain = "home.mattmoriarity.com";
