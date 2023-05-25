@@ -10,6 +10,7 @@ guacamole  IN  CNAME ingress-http.service.consul.
 homelab  IN  CNAME ingress-http.service.consul.
 ldap  IN  CNAME ingress-http.service.consul.
 linkding  IN  CNAME ingress-http.service.consul.
+miniflux  IN  CNAME ingress-http.service.consul.
 minio  IN  CNAME ingress-http.service.consul.
 minio-console  IN  CNAME ingress-http.service.consul.
 netbox  IN  CNAME ingress-http.service.consul.
