@@ -1,49 +1,34 @@
-{pkgs, ...}: let
-  githubProjects = [
-    "hashicorp/consul"
-    "hashicorp/vault"
-    "hashicorp/nomad"
-    "grafana/grafana"
-    "grafana/loki"
-    "sissbruecker/linkding"
-    "prometheus-pve/prometheus-pve-exporter"
-    "0xERR0R/blocky"
-    "prometheus/consul_exporter"
-    "prometheus/pushgateway"
-    "prometheus/blackbox_exporter"
-    "lldap/lldap"
-    "actualbudget/actual"
-    "vrana/adminer"
-  ];
-
-  githubUrls =
-    map (prj: {
-      title = "${prj} releases";
-      url = "https://github.com/${prj}/releases.atom";
-      tags = ["release"];
-    })
-    githubProjects;
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}: let
+  ca = builtins.fetchurl {
+    url = "http://vault.service.consul:8200/v1/pki-homelab/ca/pem";
+    sha256 = "184c68h0kkzkfbw2q80ggpwxvk0gh01bnsv6l7afvbv08s6jhk7c";
+  };
 in {
+  home.shellAliases.nb = "env CURL_CA_BUNDLE=${ca} ${pkgs.newsboat}/bin/newsboat";
+
   programs.newsboat = {
     enable = true;
     autoReload = true;
     browser = "\"/usr/bin/open -a ${pkgs.firefox-bin}/Applications/Firefox.app -u %u\"";
-    urls =
-      [
-        {
-          title = "Chris Siebenmann";
-          url = "https://utcc.utoronto.ca/~cks/space/blog/?atom";
-          tags = ["blog"];
-        }
-        {
-          title = "Xe Iaso";
-          url = "https://xeiaso.net/blog.rss";
-          tags = ["blog"];
-        }
-      ]
-      ++ githubUrls;
     extraConfig = ''
       text-width 100
+      urls-source "miniflux"
+      miniflux-url "https://miniflux.home.mattmoriarity.com/"
+      miniflux-tokenfile ${config.home.homeDirectory}/.config/newsboat/miniflux-token
     '';
   };
+
+  home.activation.link-miniflux-token = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    # need to be able to use getconf
+    export PATH=$PATH:/usr/bin
+    mkdir -p ${config.home.homeDirectory}/.config/newsboat
+    ln -sf ${config.age.secrets."miniflux-token".path} ${config.home.homeDirectory}/.config/newsboat/miniflux-token
+  '';
+
+  age.secrets."miniflux-token".file = ../../../../secrets/newsboat-miniflux-token.age;
 }

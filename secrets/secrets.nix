@@ -44,4 +44,6 @@ in {
   "alertmanager-env.age".publicKeys = [matt-mars gaia];
 
   "ngrok.age".publicKeys = [matt-athena athena];
+
+  "newsboat-miniflux-token.age".publicKeys = [matt-mars matt-athena];
 }
