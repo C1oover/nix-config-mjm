@@ -7,8 +7,8 @@
       static_configs = [
         {
           targets = [
-            "10.0.2.101"
-            "10.0.2.100"
+            "10.0.2.47"
+            "10.0.2.48"
           ];
           labels = {
             probe_type = "dns";
