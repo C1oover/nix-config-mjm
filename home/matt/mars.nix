@@ -45,6 +45,7 @@ in {
     nomad
     tarsnap
     vault
+    wander
 
     s
     vssh
