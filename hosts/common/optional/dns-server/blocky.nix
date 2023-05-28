@@ -18,6 +18,8 @@ in {
           "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts"
         ];
         clientGroupsBlock.default = ["ads"];
+        downloadAttempts = 120;
+        downloadCooldown = "30s";
       };
       ports.dns = "127.0.0.1:1053";
       ports.http = 4000;
