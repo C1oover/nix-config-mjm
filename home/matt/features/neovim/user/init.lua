@@ -27,7 +27,7 @@ return {
 			incremental_selection = { enable = true },
 			autotag = { enable = true },
 			context_commentstring = { enable = true, enable_autocmd = false },
-			indent = { enable = true },
+			indent = { enable = true, disable = { "elixir" } },
 		})
 	end,
 }
