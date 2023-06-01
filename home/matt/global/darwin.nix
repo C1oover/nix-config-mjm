@@ -20,6 +20,7 @@
     dockutil
 
     discord
+    shortcat
     slack
   ];
 
