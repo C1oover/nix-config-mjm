@@ -75,6 +75,22 @@
         "type": "github"
       }
     },
+    "catppuccin-newsboat": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1666070943,
+        "narHash": "sha256-czvR3bVZ0NfBmuu0JixalS7B1vf1uEGSTSUVVTclKxI=",
+        "owner": "catppuccin",
+        "repo": "newsboat",
+        "rev": "be3d0ee1ba0fc26baf7a47c2aa7032b7541deb0f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "catppuccin",
+        "repo": "newsboat",
+        "type": "github"
+      }
+    },
     "catppuccin-zsh": {
       "flake": false,
       "locked": {
@@ -539,6 +555,7 @@
         "astronvim": "astronvim",
         "catppuccin": "catppuccin",
         "catppuccin-k9s": "catppuccin-k9s",
+        "catppuccin-newsboat": "catppuccin-newsboat",
         "catppuccin-zsh": "catppuccin-zsh",
         "darwin": "darwin",
         "devenv": "devenv",

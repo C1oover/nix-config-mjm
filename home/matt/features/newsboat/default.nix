@@ -2,6 +2,7 @@
   pkgs,
   config,
   lib,
+  inputs,
   ...
 }: let
   ca = builtins.fetchurl {
@@ -20,6 +21,7 @@ in {
       urls-source "miniflux"
       miniflux-url "https://miniflux.home.mattmoriarity.com/"
       miniflux-tokenfile ${config.home.homeDirectory}/.config/newsboat/miniflux-token
+      include ${inputs.catppuccin-newsboat}/themes/dark
     '';
   };
 

@@ -23,6 +23,8 @@
     catppuccin-zsh.flake = false;
     catppuccin-k9s.url = "github:catppuccin/k9s";
     catppuccin-k9s.flake = false;
+    catppuccin-newsboat.url = "github:catppuccin/newsboat";
+    catppuccin-newsboat.flake = false;
     astronvim.url = "github:AstroNvim/AstroNvim/nightly";
     astronvim.flake = false;
   };
