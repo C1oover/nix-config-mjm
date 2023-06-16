@@ -11,6 +11,7 @@
 
       ../features/git
       ../features/neovim
+      ../features/nushell
       ../features/shell
     ]
     ++ (builtins.attrValues outputs.homeManagerModules);

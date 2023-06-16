@@ -11,6 +11,7 @@
   };
 in {
   home.shellAliases.nb = "env CURL_CA_BUNDLE=${ca} ${pkgs.newsboat}/bin/newsboat";
+  programs.nushell.shellAliases.nb = "with-env { CURL_CA_BUNDLE: ${ca} } { ${pkgs.newsboat}/bin/newsboat }";
 
   programs.newsboat = {
     enable = true;
