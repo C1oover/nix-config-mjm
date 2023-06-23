@@ -11,6 +11,12 @@
     ../features/yubikey
   ];
 
+  manual = {
+    html.enable = false;
+    json.enable = false;
+    manpages.enable = false;
+  };
+
   nixpkgs.config.allowUnfree = true;
 
   home.username = lib.mkDefault "matt";

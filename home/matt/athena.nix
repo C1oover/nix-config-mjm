@@ -111,4 +111,9 @@
   '';
 
   age.secrets."ngrok.yml".file = ../../secrets/ngrok.age;
+
+  programs.nushell.extraConfig = ''
+    let-env ASDF_NU_DIR = '${config.home.homeDirectory}/.asdf'
+    source '${config.home.homeDirectory}/.asdf/asdf.nu'
+  '';
 }

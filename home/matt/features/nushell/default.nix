@@ -2,11 +2,6 @@
   programs.nushell = {
     enable = true;
     extraConfig = ''
-      let-env ASDF_NU_DIR = '${config.home.homeDirectory}/.asdf'
-      if ($env.ASDF_NU_DIR | path exists) {
-        source '${config.home.homeDirectory}/.asdf/asdf.nu'
-      }
-
       let-env PATH = ($env.PATH | split row (char esep) |
         prepend '/usr/local/bin' |
         prepend '/nix/var/nix/profiles/default/bin' |
