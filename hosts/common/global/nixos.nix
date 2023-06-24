@@ -25,6 +25,11 @@
     nixpkgs.flake = inputs.nixpkgs;
     home-manager.flake = inputs.home-manager;
   };
+  nixpkgs.config = {
+    # the vscode-langservers-extracted package pulls them out of VSCode,
+    # which is unfree
+    allowUnfree = true;
+  };
 
   time.timeZone = lib.mkDefault "Etc/UTC";
 
