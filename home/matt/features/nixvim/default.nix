@@ -3,15 +3,19 @@
     ./catppuccin.nix
     ./cmp.nix
     ./comment-nvim.nix
+    ./lua_ls.nix
     ./lualine.nix
     ./neotree.nix
     ./nil_ls.nix
+    ./null_ls.nix
     ./telescope.nix
     ./treesitter.nix
   ];
 
   programs.nixvim = {
     enable = true;
+    viAlias = true;
+    vimAlias = true;
     globals = {
       mapleader = " ";
     };
@@ -73,6 +77,7 @@
     extraPlugins = with pkgs.vimPlugins; [
       nvim-web-devicons
       guess-indent-nvim
+      vim-elixir
     ];
     colorschemes.catppuccin = {
       integrations.barbar = true;
@@ -87,6 +92,10 @@
     };
     plugins.lsp = {
       enable = true;
+      servers.bashls.enable = true;
+      servers.elixirls.enable = true;
+      servers.jsonls.enable = true;
+      servers.yamlls.enable = true;
     };
     plugins.lsp-format = {
       enable = true;
