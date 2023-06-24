@@ -92,6 +92,7 @@ in {
       yabai -m rule --add app="^Slack$" space=4
       yabai -m rule --add app="^Discord$" space=4
       yabai -m rule --add app="^Messages$" space=5
+      yabai -m rule --add app="^Beeper$" space=5
 
       yabai -m signal --add event=window_focused action="sketchybar --trigger window_focus"
       yabai -m signal --add event=window_created action="sketchybar --trigger windows_on_spaces"

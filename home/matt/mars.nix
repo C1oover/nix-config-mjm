@@ -66,7 +66,7 @@ in {
       {path = "/System/Applications/Mail.app/";}
       {path = "${pkgs.firefox-bin}/Applications/Firefox.app/";}
       {path = "/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app/";}
-      {path = "/System/Applications/Messages.app/";}
+      {path = "/Applications/Beeper.app/";}
       {path = "/System/Applications/Maps.app/";}
       {path = "/Applications/Fantastical.app/";}
       {path = "/System/Applications/System Settings.app/";}
