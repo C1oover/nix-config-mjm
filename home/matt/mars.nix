@@ -36,6 +36,8 @@ in {
   imports = [
     ./global
     ./global/darwin.nix
+
+    ./features/nixvim
   ];
 
   home.packages = with pkgs; [

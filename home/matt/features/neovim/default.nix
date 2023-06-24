@@ -1,10 +1,14 @@
 {
   pkgs,
   inputs,
+  config,
+  lib,
   ...
-}: {
+}: let
+  enableNeovim = !config.programs.nixvim.enable;
+in {
   programs.neovim = {
-    enable = true;
+    enable = enableNeovim;
     viAlias = true;
     vimAlias = true;
     vimdiffAlias = true;
@@ -35,19 +39,22 @@
     ];
   };
 
-  xdg.configFile."nvim".source = inputs.astronvim;
-  xdg.configFile."astronvim/lua/user".source = ./user;
+  xdg.configFile = lib.mkIf enableNeovim {
+    "nvim".source = inputs.astronvim;
+    "astronvim/lua/user".source = ./user;
+  };
 
-  home.packages = with pkgs; [
-    nil
-    alejandra
-    deadnix
-    statix
+  home.packages = with pkgs;
+    lib.mkIf enableNeovim [
+      nil
+      alejandra
+      deadnix
+      statix
 
-    nodePackages.bash-language-server
-    docker-compose-language-service
-    nodePackages.dockerfile-language-server-nodejs
-    nodePackages.vscode-langservers-extracted
-    nodePackages.yaml-language-server
-  ];
+      nodePackages.bash-language-server
+      docker-compose-language-service
+      nodePackages.dockerfile-language-server-nodejs
+      nodePackages.vscode-langservers-extracted
+      nodePackages.yaml-language-server
+    ];
 }

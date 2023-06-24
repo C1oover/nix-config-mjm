@@ -1,0 +1,38 @@
+{
+  programs.nixvim = {
+    plugins.telescope = {
+      enable = true;
+      keymaps = {
+        "<leader>ff" = "find_files";
+        "<leader>fw" = "live_grep";
+      };
+      defaults = {
+        layout_config = {
+          horizontal = {
+            prompt_position = "top";
+            preview_width = 0.55;
+          };
+          vertical = {
+            mirror = false;
+          };
+          width = 0.87;
+          height = 0.80;
+          preview_cutoff = 120;
+        };
+        mappings = {
+          i = {
+            "<C-n>" = {__raw = "require('telescope.actions').cycle_history_next";};
+            "<C-p>" = {__raw = "require('telescope.actions').cycle_history_prev";};
+            "<C-j>" = {__raw = "require('telescope.actions').move_selection_next";};
+            "<C-k>" = {__raw = "require('telescope.actions').move_selection_previous";};
+          };
+          n = {
+            "q" = {__raw = "require('telescope.actions').close";};
+          };
+        };
+      };
+    };
+
+    colorschemes.catppuccin.integrations.telescope = true;
+  };
+}
