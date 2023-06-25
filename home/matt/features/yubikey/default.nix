@@ -2,11 +2,15 @@
   config,
   pkgs,
   ...
-}: {
+}: let
+  sshAuthSock = "${config.home.homeDirectory}/.yubikey-agent.sock";
+  logFile = "${config.home.homeDirectory}/Library/Logs/yubikey-agent.log";
+in {
   # package in the environment is needed to set up the key
   home.packages = [pkgs.yubikey-agent];
 
-  home.sessionVariables.SSH_AUTH_SOCK = "${config.home.homeDirectory}/.yubikey-agent.sock";
+  home.sessionVariables.SSH_AUTH_SOCK = sshAuthSock;
+  programs.nushell.environmentVariables.SSH_AUTH_SOCK = sshAuthSock;
 
   launchd = {
     enable = true;
@@ -16,10 +20,10 @@
       config = {
         KeepAlive = true;
         Label = "com.mattmoriarity.yubikey-agent";
-        ProgramArguments = ["${pkgs.yubikey-agent}/bin/yubikey-agent" "-l" "${config.home.homeDirectory}/.yubikey-agent.sock"];
+        ProgramArguments = ["${pkgs.yubikey-agent}/bin/yubikey-agent" "-l" sshAuthSock];
         RunAtLoad = true;
-        StandardErrorPath = "${config.home.homeDirectory}/Library/Logs/yubikey-agent.log";
-        StandardOutPath = "${config.home.homeDirectory}/Library/Logs/yubikey-agent.log";
+        StandardErrorPath = logFile;
+        StandardOutPath = logFile;
       };
     };
   };

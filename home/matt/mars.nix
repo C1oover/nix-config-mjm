@@ -32,6 +32,12 @@
   '';
 
   devenv = inputs.devenv.packages.x86_64-darwin.default;
+
+  envVars = {
+    NOMAD_ADDR = "http://nomad.service.consul:4646";
+    CONSUL_HTTP_ADDR = "http://consul.service.consul:8500";
+    VAULT_ADDR = "http://vault.service.consul:8200";
+  };
 in {
   imports = [
     ./global
@@ -54,11 +60,8 @@ in {
     tmssh
   ];
 
-  home.sessionVariables = {
-    NOMAD_ADDR = "http://nomad.service.consul:4646";
-    CONSUL_HTTP_ADDR = "http://consul.service.consul:8500";
-    VAULT_ADDR = "http://vault.service.consul:8200";
-  };
+  home.sessionVariables = envVars;
+  programs.nushell.environmentVariables = envVars;
 
   home.dock = {
     enable = true;
