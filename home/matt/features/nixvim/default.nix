@@ -73,6 +73,22 @@
         action = "<cmd>split<cr>";
         desc = "Horizontal Split";
       };
+      "<leader>c" = {
+        action = "<cmd>BufferClose<cr>";
+        desc = "Close buffer";
+      };
+      "<leader>bc" = {
+        action = "<cmd>BufferCloseAllButCurrentOrPinned<cr>";
+        desc = "Close all buffers except current";
+      };
+      "]b" = {
+        action = "<cmd>BufferNext<cr>";
+        desc = "Next buffer";
+      };
+      "[b" = {
+        action = "<cmd>BufferPrevious<cr>";
+        desc = "Previous buffer";
+      };
     };
     extraPlugins = with pkgs.vimPlugins; [
       nvim-web-devicons

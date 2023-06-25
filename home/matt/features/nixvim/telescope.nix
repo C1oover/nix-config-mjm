@@ -3,7 +3,11 @@
     plugins.telescope = {
       enable = true;
       keymaps = {
+        "<leader>f<cr>" = "resume";
+        "<leader>fb" = "buffers";
         "<leader>ff" = "find_files";
+        "<leader>fg" = "git_files";
+        "<leader>fr" = "registers";
         "<leader>fw" = "live_grep";
       };
       defaults = {
