@@ -11,6 +11,7 @@
         "<leader>fw" = "live_grep";
       };
       defaults = {
+        sorting_strategy = "ascending";
         layout_config = {
           horizontal = {
             prompt_position = "top";
@@ -35,6 +36,7 @@
           };
         };
       };
+      extensions.fzf-native.enable = true;
     };
 
     colorschemes.catppuccin.integrations.telescope = true;

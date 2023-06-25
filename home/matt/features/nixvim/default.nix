@@ -116,6 +116,9 @@
     plugins.lsp-format = {
       enable = true;
     };
+    plugins.nix = {
+      enable = true;
+    };
     plugins.which-key = {
       enable = true;
     };
