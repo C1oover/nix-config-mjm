@@ -4,6 +4,7 @@
     extraConfig = ''
       let-env PATH = ($env.PATH | split row (char esep) |
         prepend '/usr/local/bin' |
+        prepend '/opt/homebrew/bin' |
         prepend '/nix/var/nix/profiles/default/bin' |
         prepend '/run/current-system/sw/bin' |
         prepend '/etc/profiles/per-user/${config.home.username}/bin' |

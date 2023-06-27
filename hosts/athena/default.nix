@@ -6,4 +6,18 @@
 
   networking.computerName = "Athena";
   networking.hostName = "athena";
+
+  homebrew.casks = [
+    "cleanshot"
+    "github"
+    "loom"
+    "postico"
+    "slab"
+  ];
+
+  # openssl is needed for building erlang with asdf
+  homebrew.brews = [
+    "openssl@1.1"
+    "openssl@3"
+  ];
 }

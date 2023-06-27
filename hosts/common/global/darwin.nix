@@ -10,6 +10,7 @@
       inputs.agenix.darwinModules.default
 
       ./dock.nix
+      ./homebrew.nix
       ./keyboard.nix
       ./nix.nix
     ]
