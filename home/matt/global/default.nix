@@ -28,6 +28,7 @@
 
   home.packages = with pkgs; [
     colima
+    gh
     httpie
     pstree
     ripgrep
