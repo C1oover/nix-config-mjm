@@ -3,6 +3,7 @@
     ./catppuccin.nix
     ./cmp.nix
     ./comment-nvim.nix
+    ./lsp.nix
     ./lua_ls.nix
     ./lualine.nix
     ./neotree.nix
@@ -104,16 +105,6 @@
       enable = true;
     };
     plugins.gitsigns = {
-      enable = true;
-    };
-    plugins.lsp = {
-      enable = true;
-      servers.bashls.enable = true;
-      servers.elixirls.enable = true;
-      servers.jsonls.enable = true;
-      servers.yamlls.enable = true;
-    };
-    plugins.lsp-format = {
       enable = true;
     };
     plugins.nix = {
