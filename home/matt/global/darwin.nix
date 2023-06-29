@@ -23,6 +23,7 @@
   home.homeDirectory = lib.mkDefault "/Users/matt";
 
   home.packages = with pkgs; [
+    colima
     dockutil
 
     discord

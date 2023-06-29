@@ -27,7 +27,6 @@
   home.stateVersion = lib.mkDefault "22.11"; # Please read the comment before changing.
 
   home.packages = with pkgs; [
-    colima
     gh
     httpie
     pstree
