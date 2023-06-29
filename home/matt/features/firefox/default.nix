@@ -39,6 +39,22 @@ in {
       ];
       search.force = true;
       search.engines = {
+        "MyNixOS" = {
+          urls = [
+            {
+              template = "https://mynixos.com/search";
+              params = [
+                {
+                  name = "q";
+                  value = "{searchTerms}";
+                }
+              ];
+            }
+          ];
+
+          icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
+          definedAliases = ["@n"];
+        };
         "Nix Packages" = {
           urls = [
             {
