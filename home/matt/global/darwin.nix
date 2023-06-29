@@ -5,7 +5,6 @@
 }: {
   imports = [
     ../features/firefox
-    ../features/iterm
     ../features/kitty
     ../features/newsboat
     ../features/yubikey
