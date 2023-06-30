@@ -16,5 +16,19 @@ in {
     ln -sf ${sshConfig} /root/.ssh/config
   '';
 
+  nix.distributedBuilds = true;
+
+  nix.buildMachines = [
+    {
+      hostName = "hypnos";
+      system = "x86_64-linux";
+      protocol = "ssh-ng";
+      maxJobs = 4;
+      supportedFeatures = ["nixos-test" "benchmark" "big-parallel" "kvm"];
+      mandatoryFeatures = [];
+      publicHostKey = "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSUtuL3VmVVZ4YURkVEVsZ3M2MXhmdnNIc0huM1J3cEw3bjZETzVxY0JPMEsgcm9vdEBoeXBub3MK";
+    }
+  ];
+
   age.secrets.id_nixremote.file = ../../../secrets/nixremote-key.age;
 }
