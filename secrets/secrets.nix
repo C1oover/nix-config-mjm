@@ -18,6 +18,20 @@ let
   gaia = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPKBvQP0w1opkY5E8xZzVZodNDd/2HWdHYvjulULaK6t";
 
   nomadClients = [arges brontes steropes helios];
+  allNixOS = [
+    megaera
+    tisiphone
+    alecto
+    arges
+    brontes
+    steropes
+    hypnos
+    helios
+    orion
+    nemesis
+    aion
+    gaia
+  ];
 in {
   "megaera-nomad-vault-config.age".publicKeys = [matt-mars megaera];
   "tisiphone-nomad-vault-config.age".publicKeys = [matt-mars tisiphone];
@@ -46,4 +60,6 @@ in {
   "ngrok.age".publicKeys = [matt-athena athena];
 
   "newsboat-miniflux-token.age".publicKeys = [matt-mars matt-athena];
+
+  "nixremote-key.age".publicKeys = [matt-mars] ++ allNixOS;
 }

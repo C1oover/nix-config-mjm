@@ -7,6 +7,7 @@
 
     ../common/optional/consul-agent.nix
     ../common/optional/gitlab-runner.nix
+    ../common/optional/nix-builder.nix
   ];
 
   networking.hostName = "hypnos";
