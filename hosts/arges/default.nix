@@ -9,6 +9,7 @@
 
     ../common/optional/consul-agent.nix
     ../common/optional/nomad-client.nix
+    ../common/optional/nix-builder.nix
   ];
 
   networking.hostName = "arges";

@@ -9,6 +9,7 @@
 
     ../common/optional/consul-agent.nix
     ../common/optional/nomad-client.nix
+    ../common/optional/nix-remote.nix
   ];
 
   networking.hostName = "brontes";
