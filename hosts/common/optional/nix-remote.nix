@@ -21,7 +21,7 @@
       publicHostKey = "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSUtuL3VmVVZ4YURkVEVsZ3M2MXhmdnNIc0huM1J3cEw3bjZETzVxY0JPMEsgcm9vdEBoeXBub3MK";
     }
     {
-      hostname = "arges";
+      hostName = "arges";
       system = "aarch64-linux";
       protocol = "ssh-ng";
       maxJobs = 3;
