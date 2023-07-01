@@ -9,6 +9,7 @@
     ../common/global/nixos.nix
 
     ../common/optional/consul-agent.nix
+    ../common/optional/nix-remote.nix
     ./services/lldap.nix
     ./services/authelia.nix
   ];
