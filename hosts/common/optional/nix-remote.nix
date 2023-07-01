@@ -31,5 +31,8 @@ in {
     }
   ];
 
+  # force all builds to go to the remote builder
+  nix.settings.max-jobs = 0;
+
   age.secrets.id_nixremote.file = ../../../secrets/nixremote-key.age;
 }
