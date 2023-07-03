@@ -95,27 +95,22 @@
       nvim-web-devicons
       guess-indent-nvim
       vim-elixir
+      flit-nvim
     ];
     colorschemes.catppuccin = {
       integrations.barbar = true;
       integrations.gitsigns = true;
       integrations.which_key = true;
     };
-    plugins.barbar = {
-      enable = true;
-    };
-    plugins.gitsigns = {
-      enable = true;
-    };
-    plugins.nix = {
-      enable = true;
-    };
-    plugins.which-key = {
-      enable = true;
-    };
+    plugins.barbar.enable = true;
+    plugins.leap.enable = true;
+    plugins.gitsigns.enable = true;
+    plugins.nix.enable = true;
+    plugins.which-key.enable = true;
 
     extraConfigLua = ''
       require('guess-indent').setup {}
+      require('flit').setup {}
     '';
   };
 }
