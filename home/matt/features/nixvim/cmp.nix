@@ -35,33 +35,33 @@
         "<CR>" = "cmp.mapping.confirm { select = false }";
         "<Tab>" = {
           action = ''
-                 function(fallback)
-            local luasnip = require("luasnip")
-                        if cmp.visible() then
-                          cmp.select_next_item()
-                        elseif luasnip.expand_or_jumpable() then
-                          luasnip.expand_or_jump()
-                        elseif has_words_before() then
-                          cmp.complete()
-                        else
-                          fallback()
-                        end
-                      end
+            function(fallback)
+              local luasnip = require("luasnip")
+              if cmp.visible() then
+                cmp.select_next_item()
+              elseif luasnip.expand_or_jumpable() then
+                luasnip.expand_or_jump()
+              elseif has_words_before() then
+                cmp.complete()
+              else
+                fallback()
+              end
+            end
           '';
           modes = ["i" "s"];
         };
         "<S-Tab>" = {
           action = ''
-                 function(fallback)
-            local luasnip = require("luasnip")
-                          if cmp.visible() then
-                            cmp.select_prev_item()
-                          elseif luasnip.jumpable(-1) then
-                            luasnip.jump(-1)
-                          else
-                            fallback()
-                          end
-                        end
+            function(fallback)
+              local luasnip = require("luasnip")
+              if cmp.visible() then
+                cmp.select_prev_item()
+              elseif luasnip.jumpable(-1) then
+                luasnip.jump(-1)
+              else
+                fallback()
+              end
+            end
           '';
           modes = ["i" "s"];
         };
