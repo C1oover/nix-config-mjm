@@ -1,4 +1,4 @@
-{
+{pkgs, ...}: {
   programs.nixvim = {
     extraConfigLuaPre = ''
       local function has_words_before()
@@ -90,6 +90,11 @@
     plugins.cmp-nvim-lsp.enable = true;
     plugins.cmp-path.enable = true;
     plugins.luasnip.enable = true;
+
+    extraPlugins = with pkgs.vimPlugins; [friendly-snippets];
+    extraConfigLuaPost = ''
+      require("luasnip.loaders.from_vscode").lazy_load()
+    '';
 
     colorschemes.catppuccin.integrations.cmp = true;
   };
