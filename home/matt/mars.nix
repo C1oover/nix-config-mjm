@@ -50,7 +50,8 @@ in {
     consul
     devenv
     minio-client
-    nomad
+    # nomad (1.5) isn't building correctly on macOS rn
+    nomad_1_4
     tarsnap
     vault
     wander
