@@ -3,6 +3,7 @@
     ./catppuccin.nix
     ./cmp.nix
     ./comment-nvim.nix
+    ./ide.nix
     ./lsp.nix
     ./lua_ls.nix
     ./lualine.nix
@@ -94,7 +95,6 @@
     extraPlugins = with pkgs.vimPlugins; [
       nvim-web-devicons
       guess-indent-nvim
-      vim-elixir
       flit-nvim
     ];
     colorschemes.catppuccin = {

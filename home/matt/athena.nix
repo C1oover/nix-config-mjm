@@ -8,9 +8,9 @@
   imports = [
     ./global
     ./global/darwin.nix
-
-    ./features/nixvim
   ];
+
+  x.nixvim.enableIde = true;
 
   home.packages = with pkgs; [
     google-cloud-sdk

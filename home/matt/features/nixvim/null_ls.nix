@@ -1,5 +1,11 @@
 {
-  programs.nixvim = {
+  lib,
+  config,
+  ...
+}: let
+  cfg = config.x.nixvim;
+in {
+  programs.nixvim = lib.mkIf cfg.enableIde {
     plugins.null-ls = {
       enable = true;
 

@@ -11,7 +11,7 @@
       inputs.nixvim.homeManagerModules.nixvim
 
       ../features/git
-      ../features/neovim
+      ../features/nixvim
       ../features/nushell
       ../features/shell
     ]
@@ -29,6 +29,7 @@
   home.packages = with pkgs; [
     gh
     httpie
+    nix-tree
     pstree
     ripgrep
     tree

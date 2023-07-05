@@ -1,5 +1,12 @@
-{pkgs, ...}: {
-  programs.nixvim = {
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}: let
+  cfg = config.x.nixvim;
+in {
+  programs.nixvim = lib.mkIf cfg.enableIde {
     extraConfigLuaPre = ''
       local function has_words_before()
         local line, col = unpack(vim.api.nvim_win_get_cursor(0))
