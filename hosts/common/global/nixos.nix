@@ -9,10 +9,12 @@
     [
       inputs.home-manager.nixosModules.home-manager
       inputs.agenix.nixosModules.default
+      inputs.nixvim.nixosModules.nixvim
 
       ./auto-upgrade.nix
       ./ssh.nix
       ./ssl.nix
+      ./nixvim
       ./node-exporter.nix
       ./promtail.nix
     ]
@@ -42,7 +44,6 @@
   security.sudo.wheelNeedsPassword = false;
 
   environment.systemPackages = with pkgs; [
-    neovim
     git
     python310 # for using ansible to update the system
   ];

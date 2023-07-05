@@ -7,7 +7,6 @@
     ../features/firefox
     ../features/kitty
     ../features/newsboat
-    ../features/nixvim
     ../features/yubikey
   ];
 

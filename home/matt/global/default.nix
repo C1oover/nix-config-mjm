@@ -8,10 +8,8 @@
   imports =
     [
       inputs.agenix.homeManagerModules.default
-      inputs.nixvim.homeManagerModules.nixvim
 
       ../features/git
-      ../features/nixvim
       ../features/nushell
       ../features/shell
     ]

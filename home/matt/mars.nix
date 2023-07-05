@@ -44,8 +44,6 @@ in {
     ./global/darwin.nix
   ];
 
-  x.nixvim.enableIde = true;
-
   home.packages = with pkgs; [
     consul
     devenv

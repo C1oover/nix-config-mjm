@@ -8,4 +8,6 @@
 
   networking.computerName = "Mars";
   networking.hostName = "mars";
+
+  x.nixvim.enableIde = true;
 }

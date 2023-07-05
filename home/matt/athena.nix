@@ -10,8 +10,6 @@
     ./global/darwin.nix
   ];
 
-  x.nixvim.enableIde = true;
-
   home.packages = with pkgs; [
     google-cloud-sdk
     ngrok

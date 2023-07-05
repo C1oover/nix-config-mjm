@@ -8,11 +8,13 @@
     [
       inputs.home-manager.darwinModules.home-manager
       inputs.agenix.darwinModules.default
+      inputs.nixvim.nixDarwinModules.nixvim
 
       ./dock.nix
       ./homebrew.nix
       ./keyboard.nix
       ./nix.nix
+      ./nixvim
     ]
     ++ (builtins.attrValues outputs.darwinModules);
 
