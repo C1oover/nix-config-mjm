@@ -29,7 +29,8 @@
   programs.nushell.shellAliases = {
     db-stage = "tsh -k no db login --db-user=teleport-rw@slab-stage.iam --db-name=slab slab-sql-stage-pg14";
     db-prod-replica = "tsh -k no db login --db-user=teleport-ro@slab-prod.iam --db-name=slab slab-sql-prod-replica-pg14-0";
-    slab-restart = "nu -c 'npm run docker:down; npm run docker:up'";
+    k9s = "do { cd ~/Projects/slab; hide-env SSH_AUTH_SOCK; hide k9s; k9s }";
+    slab-restart = "do { npm run docker:down; npm run docker:up }";
     slab-up = "npm run docker:up";
     slab-ssh = "npm run docker:ssh";
   };
