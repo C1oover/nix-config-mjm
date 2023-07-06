@@ -22,6 +22,15 @@
       NIX_PROFILES = "\"/nix/var/nix/profiles/default /run/current-system/sw /etc/profiles/per-user/${config.home.username} ${config.home.homeDirectory}/.nix-profile\"";
       NIX_REMOTE = "daemon";
     };
+
+    shellAliases = {
+      exa = "exa --icons --git";
+      l = "exa";
+      ll = "exa -l";
+      la = "exa -a";
+      lt = "exa --tree";
+      lla = "exa -la";
+    };
   };
 
   programs.starship = {
@@ -38,4 +47,6 @@
     enable = true;
     enableNushellIntegration = true;
   };
+
+  programs.exa.enable = true;
 }
