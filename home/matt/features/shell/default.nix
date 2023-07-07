@@ -69,4 +69,10 @@
     git = true;
     icons = true;
   };
+
+  programs.bat = {
+    enable = true;
+    themes.Catppuccin-mocha = builtins.readFile "${inputs.catppuccin-bat}/Catppuccin-mocha.tmTheme";
+    config.theme = "Catppuccin-mocha";
+  };
 }

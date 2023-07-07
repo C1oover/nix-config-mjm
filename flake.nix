@@ -20,6 +20,8 @@
 
     catppuccin.url = "github:catppuccin/starship";
     catppuccin.flake = false;
+    catppuccin-bat.url = "github:catppuccin/bat";
+    catppuccin-bat.flake = false;
     catppuccin-zsh.url = "github:catppuccin/zsh-syntax-highlighting";
     catppuccin-zsh.flake = false;
     catppuccin-k9s.url = "github:catppuccin/k9s";
