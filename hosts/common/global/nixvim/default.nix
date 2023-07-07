@@ -11,6 +11,7 @@
     ./nil_ls.nix
     ./null_ls.nix
     ./telescope.nix
+    ./testing.nix
     ./treesitter.nix
   ];
 
