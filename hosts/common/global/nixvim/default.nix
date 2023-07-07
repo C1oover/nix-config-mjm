@@ -97,6 +97,7 @@
       nvim-web-devicons
       guess-indent-nvim
       flit-nvim
+      vim-smoothie
     ];
     colorschemes.catppuccin = {
       integrations.barbar = true;
