@@ -24,6 +24,7 @@
     slab-restart = "npm run docker:down && npm run docker:up";
     slab-up = "npm run docker:up";
     slab-ssh = "npm run docker:ssh";
+    piex = "slab-ssh bin/phx-iex";
   };
 
   programs.nushell.shellAliases = {
