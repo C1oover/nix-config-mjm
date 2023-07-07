@@ -4,6 +4,7 @@
       enable = true;
       grammarPackages = with pkgs.vimPlugins.nvim-treesitter.builtGrammars; [
         bash
+        css
         dockerfile
         eex
         elixir
@@ -12,14 +13,18 @@
         graphql
         hcl
         heex
+        html
+        javascript
         json
         lua
         markdown
         nix
         proto
+        sql
         starlark
         terraform
         toml
+        typescript
         yaml
       ];
 

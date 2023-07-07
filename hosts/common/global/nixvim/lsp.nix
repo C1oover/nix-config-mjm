@@ -9,8 +9,10 @@ in {
     plugins.lsp = {
       enable = true;
       servers.bashls.enable = true;
+      servers.cssls.enable = true;
       servers.elixirls.enable = true;
       servers.jsonls.enable = true;
+      servers.tsserver.enable = true;
       servers.yamlls.enable = true;
     };
     plugins.lsp-format = {
