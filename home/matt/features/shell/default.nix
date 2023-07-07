@@ -1,4 +1,6 @@
 {inputs, ...}: {
+  home.sessionVariables.EDITOR = "nvim";
+
   programs.zsh = {
     enable = true;
     enableAutosuggestions = true;
@@ -29,6 +31,7 @@
   programs.direnv = {
     enable = true;
     enableZshIntegration = true;
+    nix-direnv.enable = true;
   };
 
   programs.fzf = {
@@ -53,5 +56,17 @@
   programs.dircolors = {
     enable = true;
     enableZshIntegration = true;
+  };
+
+  programs.zoxide = {
+    enable = true;
+    enableZshIntegration = true;
+  };
+
+  programs.exa = {
+    enable = true;
+    enableAliases = true;
+    git = true;
+    icons = true;
   };
 }

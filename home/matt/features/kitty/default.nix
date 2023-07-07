@@ -5,7 +5,7 @@
     font.name = "PragmataPro Mono";
     font.size = 16;
     settings = {
-      shell = "${pkgs.nushell}/bin/nu --login --interactive";
+      shell = "${pkgs.zsh}/bin/zsh --login --interactive";
       shell_integration = "enabled";
       tab_bar_style = "powerline";
       macos_option_as_alt = "both";
