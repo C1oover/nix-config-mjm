@@ -27,7 +27,6 @@
 
     discord
     shortcat
-    slack
   ];
 
   targets.darwin.defaults = {

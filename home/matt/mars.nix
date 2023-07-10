@@ -77,7 +77,6 @@ in {
       {path = "${pkgs.kitty}/Applications/kitty.app/";}
       {path = "/Applications/Dash.app/";}
       {path = "/Applications/Slab.app/";}
-      {path = "${pkgs.slack}/Applications/Slack.app/";}
       {path = "${pkgs.discord}/Applications/Discord.app/";}
       {
         path = "${config.home.homeDirectory}/Downloads/";
