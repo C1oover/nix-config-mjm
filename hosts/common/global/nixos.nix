@@ -11,12 +11,9 @@
       inputs.agenix.nixosModules.default
       inputs.nixvim.nixosModules.nixvim
 
-      ./auto-upgrade.nix
       ./ssh.nix
       ./ssl.nix
       ./nixvim
-      ./node-exporter.nix
-      ./promtail.nix
     ]
     ++ (builtins.attrValues outputs.nixosModules);
 

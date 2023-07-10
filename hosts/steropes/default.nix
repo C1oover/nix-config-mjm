@@ -7,6 +7,7 @@
     ../common/global/nixos.nix
     ../common/users/matt
 
+    ../common/optional/server
     ../common/optional/consul-agent.nix
     ../common/optional/nomad-client.nix
     ../common/optional/nix-remote.nix

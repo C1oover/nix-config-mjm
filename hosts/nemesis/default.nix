@@ -8,6 +8,7 @@
 
     ../common/global/nixos.nix
 
+    ../common/optional/server
     ../common/optional/consul-agent.nix
     ../common/optional/nix-remote.nix
     ./services/netbox.nix
