@@ -28,6 +28,8 @@
     catppuccin-k9s.flake = false;
     catppuccin-newsboat.url = "github:catppuccin/newsboat";
     catppuccin-newsboat.flake = false;
+    catppuccin-i3.url = "github:catppuccin/i3";
+    catppuccin-i3.flake = false;
     astronvim.url = "github:AstroNvim/AstroNvim/nightly";
     astronvim.flake = false;
   };

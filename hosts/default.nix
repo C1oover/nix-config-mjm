@@ -25,6 +25,8 @@ in {
     };
 
     nixosConfigurations = {
+      persephone = mkNixos [./persephone];
+
       # Hashistack control plane VMs
       megaera = mkNixos [./megaera];
       tisiphone = mkNixos [./tisiphone];

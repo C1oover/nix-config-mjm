@@ -31,9 +31,11 @@
     pstree
     ripgrep
     tree
+    unzip
     wget
 
     inputs.home-manager.packages.${pkgs.stdenv.hostPlatform.system}.home-manager
+    inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 
   home.shellAliases = {

@@ -1,9 +1,14 @@
-{pkgs, ...}: {
+{pkgs, ...}: let
+  fontSize =
+    if pkgs.stdenv.isLinux
+    then 10
+    else 16;
+in {
   programs.kitty = {
     enable = true;
     theme = "Catppuccin-Mocha";
     font.name = "PragmataPro Mono";
-    font.size = 16;
+    font.size = fontSize;
     settings = {
       shell = "${pkgs.zsh}/bin/zsh --login --interactive";
       shell_integration = "enabled";

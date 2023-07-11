@@ -98,6 +98,22 @@
         "type": "github"
       }
     },
+    "catppuccin-i3": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1677157164,
+        "narHash": "sha256-6Cvsmdl3OILz1vZovyBIuuSpm207I3W0dmUGowR9Ugk=",
+        "owner": "catppuccin",
+        "repo": "i3",
+        "rev": "c89098fc3517b64f0422aaaccb98dcab6ae9348f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "catppuccin",
+        "repo": "i3",
+        "type": "github"
+      }
+    },
     "catppuccin-k9s": {
       "flake": false,
       "locked": {
@@ -776,6 +792,7 @@
         "astronvim": "astronvim",
         "catppuccin": "catppuccin",
         "catppuccin-bat": "catppuccin-bat",
+        "catppuccin-i3": "catppuccin-i3",
         "catppuccin-k9s": "catppuccin-k9s",
         "catppuccin-newsboat": "catppuccin-newsboat",
         "catppuccin-zsh": "catppuccin-zsh",

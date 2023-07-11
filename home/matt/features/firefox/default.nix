@@ -1,5 +1,6 @@
 {pkgs, ...}: let
   addons = pkgs.callPackage ./addons {};
+  firefox = if pkgs.stdenv.isLinux then pkgs.firefox else pkgs.firefox-bin;
 in {
   home.packages = with pkgs; [
     nur.repos.rycee.mozilla-addons-to-nix
@@ -7,7 +8,7 @@ in {
 
   programs.firefox = {
     enable = true;
-    package = pkgs.firefox-bin;
+    package = firefox;
     profiles.matt = {
       settings = {
         "app.update.auto" = false;

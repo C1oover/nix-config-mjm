@@ -16,6 +16,8 @@ let
   nemesis = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIOBXAwxTy5mDt9jxKg1rhRryyNr5jkIPHnwAdLsQ1yI";
   aion = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKFrAsGVNyUfMfNvdix1ON28I/eu4MBhU6YdzzgRItQf";
   gaia = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPKBvQP0w1opkY5E8xZzVZodNDd/2HWdHYvjulULaK6t";
+  persephone = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHNcGvd0FkGDH7rm02jm8fan2xqKoEr/Wx+3wAgfDR7A";
+  matt-persephone = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK/65Yq1UkZie8WgsO2HUGq9bq++Y6o+FJd8wWvWhdLx";
 
   nomadClients = [arges brontes steropes helios];
   allNixOS = [
@@ -31,6 +33,7 @@ let
     nemesis
     aion
     gaia
+    persephone
   ];
 in {
   "megaera-nomad-vault-config.age".publicKeys = [matt-mars megaera];
@@ -62,4 +65,6 @@ in {
   "newsboat-miniflux-token.age".publicKeys = [matt-mars matt-athena];
 
   "nixremote-key.age".publicKeys = [matt-mars] ++ allNixOS;
+
+  "wpa-supplicant-env.age".publicKeys = [matt-mars matt-persephone persephone];
 }

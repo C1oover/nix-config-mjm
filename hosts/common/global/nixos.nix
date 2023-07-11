@@ -29,6 +29,9 @@
     # which is unfree
     allowUnfree = true;
   };
+  nixpkgs.overlays = [
+    inputs.nur.overlay
+  ];
 
   time.timeZone = lib.mkDefault "Etc/UTC";
 
