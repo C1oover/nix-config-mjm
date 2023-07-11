@@ -54,6 +54,17 @@
         "2" = [{app_id = "firefox";}];
         "4" = [{app_id = "discord";}];
       };
+
+      startup = [
+        {
+          command = ''
+            swayidle -w \
+            timeout 600 '${pkgs.swaylock}/bin/swaylock' \
+            timeout 1800 'systemctl suspend' \
+            before-sleep '${pkgs.swaylock}/bin/swaylock'
+          '';
+        }
+      ];
     };
   };
 
