@@ -52,6 +52,23 @@
     "ssh/ssh_host_ed25519_key.pub".source = "/persist/etc/ssh/ssh_host_ed25519_key.pub";
     "ssh/ssh_host_rsa_key".source = "/persist/etc/ssh/ssh_host_rsa_key";
     "ssh/ssh_host_rsa_key.pub".source = "/persist/etc/ssh/ssh_host_rsa_key.pub";
+
+    "greetd/environments".text = ''
+      sway
+      zsh
+    '';
+    "greetd/sway-config".text = ''
+      # `-l` activates layer-shell mode. Notice that `swaymsg exit` will run after gtkgreet.
+      exec "${pkgs.greetd.gtkgreet}/bin/gtkgreet -l; swaymsg exit"
+
+      bindsym Mod4+shift+e exec swaynag \
+        -t warning \
+        -m 'What do you want to do?' \
+        -b 'Poweroff' 'systemctl poweroff' \
+        -b 'Reboot' 'systemctl reboot'
+
+      include /etc/sway/config.d/*
+    '';
   };
 
   security.sudo.extraConfig = ''
@@ -93,8 +110,7 @@
     enable = true;
     settings = {
       default_session = {
-        command = "sway";
-        user = "matt";
+        command = "sway --config /etc/greetd/sway-config";
       };
     };
   };
