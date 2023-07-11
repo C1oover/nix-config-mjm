@@ -40,6 +40,7 @@
         inputs.pre-commit-hooks-nix.flakeModule
         ./hosts
         ./modules
+        ./packages
       ];
 
       systems = ["x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin"];

@@ -2,6 +2,7 @@
   pkgs,
   lib,
   inputs,
+  outputs,
   ...
 }: {
   imports = [
@@ -13,6 +14,7 @@
 
   home.packages = with pkgs; [
     discord
+    outputs.packages.x86_64-linux.beeper
   ];
 
   wayland.windowManager.sway = {
@@ -53,6 +55,7 @@
         "1" = [{app_id = "kitty";}];
         "2" = [{app_id = "firefox";}];
         "4" = [{app_id = "discord";}];
+        "5" = [{app_id = "Beeper";}];
       };
 
       startup = [
