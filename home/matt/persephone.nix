@@ -43,6 +43,12 @@
         xkb_options = "caps:ctrl_modifier";
       };
 
+      input."type:touchpad" = {
+        click_method = "clickfinger";
+        middle_emulation = "disabled";
+        natural_scroll = "enabled";
+      };
+
       assigns = {
         "1" = [{app_id = "kitty";}];
         "2" = [{app_id = "firefox";}];
