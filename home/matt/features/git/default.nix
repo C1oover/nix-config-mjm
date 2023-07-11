@@ -3,6 +3,10 @@
   pkgs,
   ...
 }: {
+  home.packages = lib.mkIf pkgs.stdenv.isLinux [
+    pkgs.git-credential-manager
+  ];
+
   programs.git = {
     enable = true;
     aliases = {
@@ -22,6 +26,10 @@
       http."https://gitlab.home.mattmoriarity.com".sslCAInfo = builtins.fetchurl {
         url = "http://vault.service.consul:8200/v1/pki-homelab/ca/pem";
         sha256 = "184c68h0kkzkfbw2q80ggpwxvk0gh01bnsv6l7afvbv08s6jhk7c";
+      };
+      credential = lib.mkIf pkgs.stdenv.isLinux {
+        helper = "manager";
+        credentialStore = "secretservice";
       };
     };
     userName = "Matt Moriarity";
