@@ -3,6 +3,10 @@
     ./sway.nix
   ];
 
+  home.packages = with pkgs; [
+    xdg-utils
+  ];
+
   home.pointerCursor = {
     name = "Catppuccin-Latte-Light-Cursors";
     package = pkgs.catppuccin-cursors.latteLight;
