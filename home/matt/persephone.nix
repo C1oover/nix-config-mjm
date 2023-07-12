@@ -8,6 +8,7 @@
   imports = [
     ./global
 
+    ./features/email
     ./features/firefox
     ./features/kitty
   ];
