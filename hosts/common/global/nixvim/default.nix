@@ -25,7 +25,6 @@
     };
     options = {
       breakindent = true;
-      clipboard = "unnamedplus";
       cmdheight = 0;
       completeopt = ["menu" "menuone" "noselect"];
       copyindent = true;
@@ -100,6 +99,7 @@
       flit-nvim
       vim-smoothie
     ];
+    clipboard.register = "unnamedplus";
     colorschemes.catppuccin = {
       integrations.barbar = true;
       integrations.gitsigns = true;
