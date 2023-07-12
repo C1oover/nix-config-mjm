@@ -49,11 +49,10 @@
 
   programs.nixvim.clipboard.providers.wl-copy.enable = true;
 
-  # console = {
-  #   font = "Lat2-Terminus16";
-  #   keyMap = "us";
-  #   useXkbConfig = true; # use xkbOptions in tty.
-  # };
+  console = {
+    font = "${pkgs.terminus_font}/share/consolefonts/ter-u32n.psf.gz";
+    keyMap = "us";
+  };
   users.mutableUsers = false;
   users.users.matt = {
     isNormalUser = true;
