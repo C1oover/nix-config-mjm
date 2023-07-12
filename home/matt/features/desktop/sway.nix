@@ -133,4 +133,12 @@
       border-color=#fe640b
     '';
   };
+
+  programs.swaylock = {
+    enable = true;
+    settings = {
+      color = "1e1e2e";
+      font = "sans-serif";
+    };
+  };
 }
