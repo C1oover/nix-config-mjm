@@ -130,6 +130,23 @@
     };
   };
 
+  services.mako = {
+    enable = true;
+    font = "sans-serif 9";
+    anchor = "bottom-right";
+    padding = "10";
+    borderRadius = 5;
+    backgroundColor = "#eff1f5";
+    textColor = "#4c4f69";
+    borderColor = "#1e66f5";
+    progressColor = "over #ccd0da";
+
+    extraConfig = ''
+      [urgency=high]
+      border-color=#fe640b
+    '';
+  };
+
   home.pointerCursor = {
     name = "Catppuccin-Latte-Light-Cursors";
     package = pkgs.catppuccin-cursors.latteLight;
