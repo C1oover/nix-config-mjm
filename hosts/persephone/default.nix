@@ -44,6 +44,8 @@
     polkitPolicyOwners = ["matt"];
   };
 
+  programs.steam.enable = true;
+
   services.fwupd.enable = true;
   services.fprintd.enable = true;
 
