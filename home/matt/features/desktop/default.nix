@@ -17,4 +17,8 @@
     };
     gtk.enable = true;
   };
+
+  programs.mpv = {
+    enable = true;
+  };
 }

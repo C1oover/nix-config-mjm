@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{
+  lib,
+  pkgs,
+  ...
+}: {
   programs.sway = {
     enable = true;
     extraSessionCommands = ''
@@ -50,4 +54,10 @@
     pulse.enable = true;
   };
   services.udisks2.enable = true;
+
+  services.gvfs = {
+    enable = true;
+    package = lib.mkForce pkgs.gnome3.gvfs;
+  };
+  programs.thunar.enable = true;
 }
