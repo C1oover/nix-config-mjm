@@ -9,6 +9,7 @@
     ./features/desktop
     ./features/email
     ./features/firefox
+    ./features/homelab
     ./features/kitty
     ./features/newsboat
   ];

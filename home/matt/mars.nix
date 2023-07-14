@@ -1,7 +1,6 @@
 {
   config,
   pkgs,
-  inputs,
   ...
 }: let
   updateYubikeyCert = pkgs.writeShellScriptBin "update-yubikey-cert" ''
@@ -30,37 +29,19 @@
     ${updateYubikeyCert}/bin/update-yubikey-cert
     ${pkgs.kitty}/bin/kitty +kitten ssh -i "${config.home.homeDirectory}/.ssh/yubikey-cert.pub" "$@"
   '';
-
-  devenv = inputs.devenv.packages.x86_64-darwin.default;
-
-  envVars = {
-    NOMAD_ADDR = "http://nomad.service.consul:4646";
-    CONSUL_HTTP_ADDR = "http://consul.service.consul:8500";
-    VAULT_ADDR = "http://vault.service.consul:8200";
-  };
 in {
   imports = [
     ./global
     ./global/darwin.nix
+
+    ./features/homelab
   ];
 
-  home.packages = with pkgs; [
-    consul
-    devenv
-    minio-client
-    # nomad (1.5) isn't building correctly on macOS rn
-    nomad_1_4
-    tarsnap
-    vault
-    wander
-
+  home.packages = [
     s
     vssh
     tmssh
   ];
-
-  home.sessionVariables = envVars;
-  programs.nushell.environmentVariables = envVars;
 
   home.dock = {
     enable = true;
