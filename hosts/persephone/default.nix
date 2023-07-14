@@ -51,6 +51,8 @@
 
   programs.nixvim.clipboard.providers.wl-copy.enable = true;
 
+  services.yubikey-agent.enable = true;
+
   console = {
     font = "${pkgs.terminus_font}/share/consolefonts/ter-u32n.psf.gz";
     keyMap = "us";

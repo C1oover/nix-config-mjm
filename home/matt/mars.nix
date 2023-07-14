@@ -2,45 +2,12 @@
   config,
   pkgs,
   ...
-}: let
-  updateYubikeyCert = pkgs.writeShellScriptBin "update-yubikey-cert" ''
-    ${pkgs.vault}/bin/vault ssh \
-      -mode="ca" \
-      -role="homelab-client" \
-      -mount-point="ssh-client-signer" \
-      -public-key-path="${config.home.homeDirectory}/.ssh/yubikey.pub" \
-      -valid-principals="matt" \
-      -no-exec \
-      -field=signed_key \
-      "$1" \
-      >"${config.home.homeDirectory}/.ssh/yubikey-cert.pub"
-  '';
-
-  vssh = pkgs.writeShellScriptBin "vssh" ''
-    ${updateYubikeyCert}/bin/update-yubikey-cert
-    ssh -i "${config.home.homeDirectory}/.ssh/yubikey-cert.pub" "$@"
-  '';
-
-  tmssh = pkgs.writeShellScriptBin "tmssh" ''
-    ${vssh}/bin/vssh "$@" -t 'tmux -CC new -A -s tmssh'
-  '';
-
-  s = pkgs.writeShellScriptBin "s" ''
-    ${updateYubikeyCert}/bin/update-yubikey-cert
-    ${pkgs.kitty}/bin/kitty +kitten ssh -i "${config.home.homeDirectory}/.ssh/yubikey-cert.pub" "$@"
-  '';
-in {
+}: {
   imports = [
     ./global
     ./global/darwin.nix
 
     ./features/homelab
-  ];
-
-  home.packages = [
-    s
-    vssh
-    tmssh
   ];
 
   home.dock = {
@@ -69,9 +36,6 @@ in {
 
   programs.ssh = {
     enable = true;
-    extraOptionOverrides = {
-      IdentityFile = "~/.ssh/yubikey.pub";
-    };
     matchBlocks = {
       "nas" = {
         host = "nas";
