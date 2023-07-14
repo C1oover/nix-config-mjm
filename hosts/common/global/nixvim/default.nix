@@ -10,6 +10,7 @@
     ./neotree.nix
     ./nil_ls.nix
     ./null_ls.nix
+    ./spider.nix
     ./telescope.nix
     ./testing.nix
     ./treesitter.nix
@@ -106,8 +107,8 @@
       integrations.which_key = true;
     };
     plugins.barbar.enable = true;
-    plugins.leap.enable = true;
     plugins.gitsigns.enable = true;
+    plugins.leap.enable = true;
     plugins.nix.enable = true;
     plugins.which-key.enable = true;
 
