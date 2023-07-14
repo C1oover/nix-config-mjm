@@ -2,7 +2,7 @@
   age.identityPaths = ["/persist/etc/ssh/ssh_host_ed25519_key"];
 
   environment.etc = {
-    nixos.source = "/persist/nix-config";
+    nixos.source = "/home/matt/src/nix-config";
     NIXOS.source = "/persist/etc/NIXOS";
     machine-id.source = "/persist/etc/machine-id";
     "ssh/ssh_host_ed25519_key".source = "/persist/etc/ssh/ssh_host_ed25519_key";
