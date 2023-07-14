@@ -46,7 +46,6 @@
 
   programs.kitty.settings = {
     hide_window_decorations = "titlebar-only";
-    focus_follows_mouse = "yes";
   };
 
   programs.mr = {
