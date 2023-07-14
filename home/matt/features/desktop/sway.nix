@@ -41,21 +41,43 @@
       assigns = {
         "1" = [{app_id = "kitty";}];
         "2" = [{app_id = "firefox";}];
+        "3" = [{app_id = "thunderbird";}];
         "4" = [{app_id = "discord";}];
         "5" = [{app_id = "Beeper";}];
       };
 
       startup = [
-        {
-          command = ''
-            swayidle -w \
-            timeout 600 '${pkgs.swaylock}/bin/swaylock' \
-            timeout 1800 'systemctl suspend' \
-            before-sleep '${pkgs.swaylock}/bin/swaylock'
-          '';
-        }
+        {command = "${pkgs.kitty}/bin/kitty";}
+        {command = "firefox";}
+        {command = "thunderbird";}
+        {command = "discord";}
+        {command = "beeper";}
       ];
     };
+  };
+
+  services.swayidle = {
+    enable = true;
+    timeouts = [
+      {
+        timeout = 600;
+        command = "${pkgs.swaylock}/bin/swaylock";
+      }
+      {
+        timeout = 1800;
+        command = "systemctl suspend";
+      }
+    ];
+    events = [
+      {
+        event = "before-sleep";
+        command = "${pkgs.swaylock}/bin/swaylock -f";
+      }
+      {
+        event = "lock";
+        command = "${pkgs.swaylock}/bin/swaylock -f";
+      }
+    ];
   };
 
   programs.i3status = {
