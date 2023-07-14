@@ -1,7 +1,7 @@
 {pkgs, ...}: let
   fontSize =
     if pkgs.stdenv.isLinux
-    then 10
+    then 9
     else 16;
 in {
   programs.kitty = {
