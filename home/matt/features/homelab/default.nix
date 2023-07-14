@@ -38,13 +38,18 @@
     CONSUL_HTTP_ADDR = "http://consul.service.consul:8500";
     VAULT_ADDR = "http://vault.service.consul:8200";
   };
+
+  # nomad 1.5 isn't building correctly on macOS rn
+  nomad =
+    if pkgs.stdenv.hostPlatform.isLinux
+    then pkgs.nomad
+    else pkgs.nomad_1_4;
 in {
   home.packages = with pkgs; [
     consul
     devenv
     minio-client
-    # nomad (1.5) isn't building correctly on macOS rn
-    nomad_1_4
+    nomad
     tarsnap
     vault
     wander
