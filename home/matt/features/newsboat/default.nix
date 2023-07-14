@@ -16,7 +16,10 @@ in {
   programs.newsboat = {
     enable = true;
     autoReload = true;
-    browser = "\"/usr/bin/open -a ${pkgs.firefox-bin}/Applications/Firefox.app -u %u\"";
+    browser =
+      if pkgs.stdenv.hostPlatform.isLinux
+      then "\"xdg-open %u\""
+      else "\"/usr/bin/open -a ${pkgs.firefox-bin}/Applications/Firefox.app -u %u\"";
     extraConfig = ''
       text-width 100
       urls-source "miniflux"

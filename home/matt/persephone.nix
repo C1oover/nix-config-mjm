@@ -10,6 +10,7 @@
     ./features/email
     ./features/firefox
     ./features/kitty
+    ./features/newsboat
   ];
 
   home.packages = with pkgs; [
