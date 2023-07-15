@@ -23,10 +23,7 @@
       };
       help.autocorrect = 10;
       pull.rebase = false;
-      http."https://gitlab.home.mattmoriarity.com".sslCAInfo = builtins.fetchurl {
-        url = "http://vault.service.consul:8200/v1/pki-homelab/ca/pem";
-        sha256 = "184c68h0kkzkfbw2q80ggpwxvk0gh01bnsv6l7afvbv08s6jhk7c";
-      };
+      http."https://gitlab.home.mattmoriarity.com".sslCAInfo = import ../../../../lib/vault/ca.nix;
       credential = lib.mkIf pkgs.stdenv.isLinux {
         helper = "manager";
         credentialStore = "secretservice";
