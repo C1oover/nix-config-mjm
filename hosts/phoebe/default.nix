@@ -11,6 +11,8 @@
     ../common/optional/server
     ../common/optional/consul-agent.nix
     ../common/optional/nix-remote.nix
+
+    ./services/minio.nix
   ];
 
   networking.hostName = "phoebe";
