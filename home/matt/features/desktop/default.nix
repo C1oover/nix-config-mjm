@@ -18,6 +18,24 @@
     gtk.enable = true;
   };
 
+  gtk = {
+    enable = true;
+    theme = {
+      name = "Catppuccin-Latte-Standard-Mauve-light";
+      package = pkgs.catppuccin-gtk.override {
+        accents = ["mauve"];
+        variant = "latte";
+      };
+    };
+    iconTheme = {
+      name = "Papirus";
+      package = pkgs.catppuccin-papirus-folders.override {
+        accent = "mauve";
+        flavor = "latte";
+      };
+    };
+  };
+
   programs.mpv = {
     enable = true;
   };
