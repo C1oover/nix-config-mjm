@@ -29,12 +29,29 @@ in {
     '';
   };
 
-  home.activation.link-miniflux-token = lib.hm.dag.entryAfter ["writeBoundary"] ''
+  # use this instead of an activation script because, on boot, the home-manager service
+  # does not have the $XDG_RUNTIME_DIR variable defined.
+  systemd.user.services.miniflux-token = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
+    Unit.Description = "link miniflux-token secret";
+    Service = {
+      Type = "oneshot";
+      ExecStart = lib.getExe (pkgs.writeShellApplication {
+        name = "link-miniflux-token";
+        text = ''
+          mkdir -p ${config.home.homeDirectory}/.config/newsboat
+          ln -sf "${config.age.secrets."miniflux-token".path}" ${config.home.homeDirectory}/.config/newsboat/miniflux-token
+        '';
+      });
+    };
+    Install.WantedBy = ["default.target"];
+  };
+
+  home.activation.link-miniflux-token = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin (lib.hm.dag.entryAfter ["writeBoundary"] ''
     # need to be able to use getconf
     export PATH=$PATH:/usr/bin
     mkdir -p ${config.home.homeDirectory}/.config/newsboat
     ln -sf ${config.age.secrets."miniflux-token".path} ${config.home.homeDirectory}/.config/newsboat/miniflux-token
-  '';
+  '');
 
   age.secrets."miniflux-token".file = ../../../../secrets/newsboat-miniflux-token.age;
 }
