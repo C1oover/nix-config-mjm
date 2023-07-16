@@ -1,6 +1,12 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  inputs,
+  ...
+}: {
   imports = [
-    # Include the results of the hardware scan.
+    inputs.hardware.nixosModules.common-cpu-intel
+    inputs.hardware.nixosModules.common-pc-laptop
+    inputs.hardware.nixosModules.common-pc-laptop-ssd
     ./hardware-configuration.nix
     ./impermanence.nix
 
@@ -21,6 +27,8 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   boot.kernelParams = [
+    "mem_sleep_default=deep"
+    "nvme.noacpi=1"
     # catppuccin mocha
     "vt.default_red=30,243,166,249,137,245,148,186,88,243,166,249,137,245,148,166"
     "vt.default_grn=30,139,227,226,180,194,226,194,91,139,227,226,180,194,226,173"
