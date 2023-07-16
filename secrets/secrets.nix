@@ -17,6 +17,7 @@ let
   aion = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKFrAsGVNyUfMfNvdix1ON28I/eu4MBhU6YdzzgRItQf";
   gaia = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPKBvQP0w1opkY5E8xZzVZodNDd/2HWdHYvjulULaK6t";
   phoebe = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF3F9IyWUYEHVqhq4gc1wtyvOqgNTZsF+LJjhknuvG3E";
+  themis = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL+W3nQy3t3HePyqVHTL5W0zOl5fgDQYvIt6TuxPA51g";
   persephone = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHNcGvd0FkGDH7rm02jm8fan2xqKoEr/Wx+3wAgfDR7A";
   matt-persephone = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK/65Yq1UkZie8WgsO2HUGq9bq++Y6o+FJd8wWvWhdLx";
 
@@ -35,6 +36,7 @@ let
     aion
     gaia
     phoebe
+    themis
     persephone
   ];
   personalKeys = [matt-mars matt-persephone];

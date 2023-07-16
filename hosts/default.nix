@@ -49,6 +49,7 @@ in {
       rhea = mkNixos [./rhea];
       cronus = mkNixos [./cronus];
       phoebe = mkNixos [./phoebe];
+      themis = mkNixos [./themis];
     };
   };
 }
