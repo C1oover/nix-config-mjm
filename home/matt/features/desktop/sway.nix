@@ -2,6 +2,7 @@
   pkgs,
   lib,
   inputs,
+  config,
   ...
 }: {
   wayland.windowManager.sway = {
@@ -60,12 +61,12 @@
     enable = true;
     timeouts = [
       {
-        timeout = 600;
-        command = "${pkgs.swaylock}/bin/swaylock";
+        timeout = 300;
+        command = "${pkgs.swaylock}/bin/swaylock -f";
       }
       {
-        timeout = 1800;
-        command = "systemctl suspend";
+        timeout = 600;
+        command = "${config.systemd.user.systemctlPath} suspend";
       }
     ];
     events = [
