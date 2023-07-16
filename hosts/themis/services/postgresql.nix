@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  config,
+  ...
+}: {
   services.postgresql = {
     enable = true;
     package = pkgs.postgresql_15;
@@ -17,5 +21,16 @@
     '';
   };
 
-  networking.firewall.allowedTCPPorts = [5432];
+  networking.firewall.allowedTCPPorts = [config.services.postgresql.port];
+
+  services.consul.services.postgresql = {
+    inherit (config.services.postgresql) port;
+
+    checks = [
+      {
+        name = "postgresql TCP check";
+        tcp = "localhost:5432";
+      }
+    ];
+  };
 }
