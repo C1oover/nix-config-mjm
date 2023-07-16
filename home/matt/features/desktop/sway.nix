@@ -53,6 +53,7 @@
         {command = "thunderbird";}
         {command = "discord";}
         {command = "beeper";}
+        {command = "1password";}
       ];
     };
   };
