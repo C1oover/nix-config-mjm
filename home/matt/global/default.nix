@@ -3,6 +3,7 @@
   lib,
   outputs,
   inputs,
+  config,
   ...
 }: {
   imports =
@@ -41,6 +42,10 @@
   home.shellAliases = {
     td = "cd $(mktemp -d)";
     hm = "home-manager";
+    rebuild =
+      if pkgs.stdenv.hostPlatform.isLinux
+      then "nixos-rebuild switch --use-remote-sudo"
+      else "darwin-rebuild switch --flake ${config.home.homeDirectory}/Projects/nix-config";
   };
 
   news.display = "silent";
