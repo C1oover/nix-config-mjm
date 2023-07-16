@@ -26,6 +26,8 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  boot.plymouth.enable = true;
+
   boot.kernelParams = [
     "mem_sleep_default=deep"
     "nvme.noacpi=1"
