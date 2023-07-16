@@ -30,6 +30,8 @@
       {
         name = "postgresql TCP check";
         tcp = "localhost:5432";
+        interval = "15s";
+        timeout = "5s";
       }
     ];
   };
