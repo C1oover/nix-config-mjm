@@ -39,6 +39,12 @@
         natural_scroll = "enabled";
       };
 
+      bars = [
+        {
+          command = "${pkgs.waybar}/bin/waybar";
+        }
+      ];
+
       assigns = {
         "1" = [{app_id = "kitty";}];
         "2" = [{app_id = "firefox";}];
@@ -56,6 +62,69 @@
         {command = "1password";}
       ];
     };
+  };
+
+  programs.waybar = {
+    enable = true;
+    settings = {
+      main = {
+        height = 24;
+        modules-left = ["sway/workspaces" "sway/mode"];
+        modules-center = ["sway/window"];
+        modules-right = ["pulseaudio" "network" "cpu" "memory" "battery" "tray" "clock"];
+        "sway/workspaces" = {
+          disable-scroll = true;
+          all-outputs = false;
+        };
+        "sway/window" = {
+          rewrite = {
+            "(.*) — Mozilla Firefox" = "󰈹 $1";
+            "(.*) - Mozilla Thunderbird" = "󰇯 $1";
+            "(.*) - Discord" = "󰙯 $1";
+          };
+        };
+        clock = {
+          format = "{:%I:%M %p}";
+        };
+        network = {
+          format-wifi = "";
+          tooltip-format-wifi = "{essid} ({signalStrength}%)";
+        };
+        cpu = {
+          format = "{usage}% ";
+        };
+        memory = {
+          format = "{}% ";
+        };
+        battery = {
+          states = {
+            warning = 30;
+            critical = 15;
+          };
+          format = "{capacity}% {icon}";
+          format-icons = ["" "" "" "" ""];
+        };
+        pulseaudio = {
+          format = "{volume}% {icon}";
+          format-bluetooth = "{volume}% {icon}";
+          format-muted = "";
+          format-icons = {
+            headphones = "";
+            handsfree = "";
+            headset = "";
+            phone = "";
+            portable = "";
+            car = "";
+            default = ["" ""];
+          };
+          on-click = "pavucontrol";
+        };
+        tray = {
+          spacing = 10;
+        };
+      };
+    };
+    style = ./waybar.css;
   };
 
   services.swayidle = {
@@ -80,65 +149,6 @@
         command = "${pkgs.swaylock}/bin/swaylock -f";
       }
     ];
-  };
-
-  programs.i3status = {
-    enable = true;
-
-    general = {
-      output_format = "i3bar";
-      colors = true;
-      color_good = "#a6e3a1";
-      color_degraded = "#fab387";
-      color_bad = "#f38ba8";
-    };
-
-    modules = {
-      load = {
-        position = 0;
-        settings.format = "load: %1min %5min %15min";
-      };
-      "disk /" = {
-        position = 1;
-        settings.format = "󰆼 %percentage_used (%free free)";
-        settings.low_threshold = "10";
-      };
-      "volume master" = {
-        position = 3;
-        settings.device = "pulse";
-      };
-      "ethernet _first_".enable = false;
-      "wireless _first_" = {
-        position = 4;
-        settings = {
-          format_up = "󰖩 %quality %essid %ip";
-          format_down = "󰖪 ";
-          format_quality = "%d%s";
-        };
-      };
-      "battery all" = {
-        position = 6;
-        settings = {
-          format = "%status %percentage %remaining %emptytime";
-          format_down = "No battery";
-          status_chr = "⚡ CHR";
-          status_bat = "🔋 BAT";
-          status_unk = "? UNK";
-          status_full = "☻ FULL";
-          path = "/sys/class/power_supply/BAT%d/uevent";
-          low_threshold = 10;
-          last_full_capacity = true;
-          hide_seconds = true;
-          integer_battery_capacity = true;
-        };
-      };
-      "tztime local" = {
-        position = 7;
-        settings.format = "%a %d %b %H:%M";
-      };
-      ipv6.enable = false;
-      memory.enable = false;
-    };
   };
 
   services.mako = {

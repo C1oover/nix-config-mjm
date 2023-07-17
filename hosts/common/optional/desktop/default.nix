@@ -34,6 +34,7 @@
       noto-fonts
       noto-fonts-emoji
       (nerdfonts.override {fonts = ["NerdFontsSymbolsOnly"];})
+      font-awesome
     ];
 
     fontconfig = {
