@@ -5,6 +5,10 @@
   config,
   ...
 }: {
+  home.packages = with pkgs; [
+    swaybg
+  ];
+
   wayland.windowManager.sway = {
     enable = true;
     package = null;
@@ -174,5 +178,18 @@
       color = "1e1e2e";
       font = "sans-serif";
     };
+  };
+
+  systemd.user.services.swaybg = {
+    Unit = {
+      Description = "swaybg background service";
+      Documentation = "man:swaybg(1)";
+      PartOf = ["graphical-session.target"];
+    };
+    Service = {
+      ExecStart = "${pkgs.swaybg}/bin/swaybg -i ${./botw.png} -m fit -c #000000";
+      Type = "simple";
+    };
+    Install.WantedBy = ["sway-session.target"];
   };
 }
