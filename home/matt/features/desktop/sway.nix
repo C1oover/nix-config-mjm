@@ -6,6 +6,7 @@
   ...
 }: {
   home.packages = with pkgs; [
+    bemenu
     swaybg
   ];
 
@@ -20,7 +21,8 @@
     config = let
       mod = "Mod4";
       terminal = "${pkgs.kitty}/bin/kitty";
-      menu = ''${pkgs.bemenu}/bin/bemenu-run -i -l 20 --fb "#1e1e2e" --ff "#94e2d5" --nb "#1e1e2e" --nf "#f5e0dc" --tb "#1e1e2e" --hb "#1e1e2e" --tf "#cba6f7" --hf "#89b4fa" --nf "#f5e0dc" --af "#f5e0dc" --ab "#1e1e2e"'';
+      bemenuArgs = ''--fb "#1e1e2e" --ff "#94e2d5" --nb "#1e1e2e" --nf "#f5e0dc" --tb "#1e1e2e" --hb "#1e1e2e" --tf "#cba6f7" --hf "#89b4fa" --nf "#f5e0dc" --af "#f5e0dc" --ab "#1e1e2e"'';
+      menu = "${pkgs.bemenu}/bin/bemenu-run -i -l 20 -p run ${bemenuArgs}";
     in {
       inherit terminal menu;
       modifier = mod;
@@ -31,6 +33,8 @@
         "XF86AudioRaiseVolume" = "exec ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ +4%";
         "XF86AudioLowerVolume" = "exec ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ -4%";
         "XF86AudioMute" = "exec ${pkgs.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ toggle";
+
+        "${mod}+c" = "exec ${pkgs.clipman}/bin/clipman pick -t bemenu -T'${bemenuArgs}'";
       };
 
       input."type:keyboard" = {
@@ -192,4 +196,6 @@
     };
     Install.WantedBy = ["sway-session.target"];
   };
+
+  services.clipman.enable = true;
 }
