@@ -27,6 +27,39 @@
       inherit terminal menu;
       modifier = mod;
 
+      colors = {
+        focused = {
+          border = "$mauve";
+          background = "$base";
+          text = "$text";
+          indicator = "$rosewater";
+          childBorder = "$mauve";
+        };
+        focusedInactive = {
+          border = "$lavender";
+          background = "$base";
+          text = "$text";
+          indicator = "$rosewater";
+          childBorder = "$lavender";
+        };
+        unfocused = {
+          border = "$lavender";
+          background = "$base";
+          text = "$text";
+          indicator = "$rosewater";
+          childBorder = "$lavender";
+        };
+        urgent = {
+          border = "$peach";
+          background = "$base";
+          text = "$peach";
+          indicator = "$overlay0";
+          childBorder = "$peach";
+        };
+      };
+
+      gaps.inner = 4;
+
       keybindings = lib.mkOptionDefault {
         "XF86MonBrightnessDown" = "exec light -U 5";
         "XF86MonBrightnessUp" = "exec light -A 5";
@@ -48,9 +81,7 @@
       };
 
       bars = [
-        {
-          command = "${pkgs.waybar}/bin/waybar";
-        }
+        {command = "${pkgs.waybar}/bin/waybar";}
       ];
 
       assigns = {
