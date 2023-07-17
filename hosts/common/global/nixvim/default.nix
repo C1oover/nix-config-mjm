@@ -107,7 +107,6 @@
       integrations.which_key = true;
     };
     plugins.barbar.enable = true;
-    plugins.endwise.enable = true;
     plugins.gitsigns.enable = true;
     plugins.leap.enable = true;
     plugins.nix.enable = true;

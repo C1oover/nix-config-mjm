@@ -36,6 +36,7 @@
           enable = true;
           disable = ["elixir"];
         };
+        endwise.enable = true;
       };
     };
 
@@ -44,6 +45,10 @@
       checkTs = true;
       tsConfig = {java = false;};
     };
+
+    extraPlugins = with pkgs.vimPlugins; [
+      nvim-treesitter-endwise
+    ];
 
     colorschemes.catppuccin.integrations.treesitter = true;
   };
