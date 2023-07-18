@@ -54,6 +54,12 @@
     options = ["subvol=libvirt" "compress=zstd" "noatime"];
   };
 
+  fileSystems."/var/lib/fprint" = {
+    device = "/dev/disk/by-uuid/a5f6fd18-f9e4-4fe3-9e62-62f054ee80ee";
+    fsType = "btrfs";
+    options = ["subvol=fprint" "compress=zstd" "noatime"];
+  };
+
   fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/8BE6-FB8E";
     fsType = "vfat";
