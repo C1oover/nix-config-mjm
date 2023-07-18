@@ -26,7 +26,15 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  boot.plymouth.enable = true;
+  boot.plymouth = {
+    enable = true;
+    themePackages = [
+      (pkgs.catppuccin-plymouth.override {
+        variant = "mocha";
+      })
+    ];
+    theme = "catppuccin-mocha";
+  };
 
   boot.kernelParams = [
     "mem_sleep_default=deep"
