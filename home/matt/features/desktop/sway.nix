@@ -126,8 +126,14 @@
           format = "{:%I:%M %p}";
         };
         network = {
-          format-wifi = "";
-          tooltip-format-wifi = "{essid} ({signalStrength}%)";
+          format = "{icon}";
+          tooltip-format-wifi = "{essid} ({signalStrength}%)\n{ipaddr}";
+          format-icons = {
+            wifi = ["󰤟" "󰤢" "󰤥" "󰤨"];
+            disconnected = "󰖪";
+            disabled = "󰖪";
+            linked = "󰖪";
+          };
         };
         cpu = {
           format = "{usage}% ";
