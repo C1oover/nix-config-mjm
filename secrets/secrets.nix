@@ -39,7 +39,7 @@ let
     themis
     persephone
   ];
-  personalKeys = [matt-mars matt-persephone];
+  personalKeys = [matt-athena matt-mars matt-persephone];
 in {
   "megaera-nomad-vault-config.age".publicKeys = personalKeys ++ [megaera];
   "tisiphone-nomad-vault-config.age".publicKeys = personalKeys ++ [tisiphone];
