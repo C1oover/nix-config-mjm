@@ -30,6 +30,7 @@
 
   fonts = {
     fonts = with pkgs; [
+      public-sans
       open-sans
       noto-fonts
       noto-fonts-emoji
@@ -40,7 +41,7 @@
     fontconfig = {
       defaultFonts = {
         monospace = ["PragmataPro Mono" "Noto Sans Mono"];
-        sansSerif = ["Open Sans" "Noto Sans"];
+        sansSerif = ["Public Sans" "Open Sans" "Noto Sans"];
         serif = ["Noto Serif"];
       };
     };
