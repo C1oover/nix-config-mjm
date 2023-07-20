@@ -45,10 +45,35 @@ groups:
         expr: node_systemd_unit_state{state="failed"} > 0
         for: 5m
         labels:
-          severity: warning
+          severity: notice
         annotations:
           summary: "{{ $labels.name }} unit has failed"
           description: >
-            One or more systemd has entered a failed state.
+            One or more systemd units has entered a failed state.
 
             Check the logs at https://grafana.home.mattmoriarity.com/explore?orgId=1&left=%7B%22datasource%22:%222CbHLa0Mk%22,%22queries%22:%5B%7B%22refId%22:%22A%22,%22expr%22:%22%7Bsystemd_unit%3D%5C%22{{ $labels.name }}%5C%22%7D%20%7C%3D%20%60%60%22,%22queryType%22:%22range%22,%22datasource%22:%7B%22type%22:%22loki%22,%22uid%22:%222CbHLa0Mk%22%7D,%22editorMode%22:%22builder%22%7D%5D,%22range%22:%7B%22from%22:%22now-1h%22,%22to%22:%22now%22%7D%7D
+
+      - alert: SystemdUnitStayedFailed
+        expr: node_systemd_unit_state{state="failed"} > 0
+        for: 1h
+        labels:
+          severity: warning
+        annotations:
+          summary: "{{ $labels.name }} unit has been failed for an hour"
+          description: >
+            One or more systemd units has entered a failed state and stayed failed for at least an hour.
+
+            Check the logs at https://grafana.home.mattmoriarity.com/explore?orgId=1&left=%7B%22datasource%22:%222CbHLa0Mk%22,%22queries%22:%5B%7B%22refId%22:%22A%22,%22expr%22:%22%7Bsystemd_unit%3D%5C%22{{ $labels.name }}%5C%22%7D%20%7C%3D%20%60%60%22,%22queryType%22:%22range%22,%22datasource%22:%7B%22type%22:%22loki%22,%22uid%22:%222CbHLa0Mk%22%7D,%22editorMode%22:%22builder%22%7D%5D,%22range%22:%7B%22from%22:%22now-1h%22,%22to%22:%22now%22%7D%7D
+
+      - alert: SystemdUnitFailedManyHosts
+        expr: sum by (name) (node_systemd_unit_state{state="failed"}) > 4
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "{{ $labels.name }} unit has failed on many hosts"
+          description: >
+            One or more systemd units has entered a failed state across many different hosts.
+
+            Check the logs at https://grafana.home.mattmoriarity.com/explore?orgId=1&left=%7B%22datasource%22:%222CbHLa0Mk%22,%22queries%22:%5B%7B%22refId%22:%22A%22,%22expr%22:%22%7Bsystemd_unit%3D%5C%22{{ $labels.name }}%5C%22%7D%20%7C%3D%20%60%60%22,%22queryType%22:%22range%22,%22datasource%22:%7B%22type%22:%22loki%22,%22uid%22:%222CbHLa0Mk%22%7D,%22editorMode%22:%22builder%22%7D%5D,%22range%22:%7B%22from%22:%22now-1h%22,%22to%22:%22now%22%7D%7D
+
