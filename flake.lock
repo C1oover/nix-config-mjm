@@ -26,23 +26,6 @@
         "type": "github"
       }
     },
-    "astronvim": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1689947670,
-        "narHash": "sha256-XESanEDTZNfWIp4sIgL4Q7F4qKznb8fkkwa01rGWX0Y=",
-        "owner": "AstroNvim",
-        "repo": "AstroNvim",
-        "rev": "879c00158b36b06039e5261b6ea953b29266e2e3",
-        "type": "github"
-      },
-      "original": {
-        "owner": "AstroNvim",
-        "ref": "nightly",
-        "repo": "AstroNvim",
-        "type": "github"
-      }
-    },
     "beautysh": {
       "inputs": {
         "nixpkgs": [
@@ -789,7 +772,6 @@
     "root": {
       "inputs": {
         "agenix": "agenix",
-        "astronvim": "astronvim",
         "catppuccin": "catppuccin",
         "catppuccin-bat": "catppuccin-bat",
         "catppuccin-i3": "catppuccin-i3",

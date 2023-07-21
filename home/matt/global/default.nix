@@ -11,7 +11,6 @@
       inputs.agenix.homeManagerModules.default
 
       ../features/git
-      ../features/nushell
       ../features/shell
     ]
     ++ (builtins.attrValues outputs.homeManagerModules);
