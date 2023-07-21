@@ -17,5 +17,7 @@
 
   services.consul.interface.advertise = "end0";
 
+  services.tailscale.enable = true;
+
   system.stateVersion = "21.03";
 }
