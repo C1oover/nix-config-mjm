@@ -16,13 +16,13 @@
   boot.initrd.kernelModules = ["nvme"];
 
   fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/CC2E-AEC0";
+    device = "/dev/disk/by-uuid/2C55-D0AF";
     fsType = "vfat";
   };
 
   fileSystems."/" = {
-    device = "/dev/mapper/ocivolume-root";
-    fsType = "xfs";
+    device = "/dev/sda1";
+    fsType = "ext4";
   };
 
   nixpkgs.hostPlatform = lib.mkDefault "aarch64-linux";
