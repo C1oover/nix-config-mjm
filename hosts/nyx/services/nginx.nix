@@ -12,6 +12,7 @@
     recommendedProxySettings = true;
     virtualHosts = {
       "auth.mattmoriarity.com" = {
+        http2 = false;
         forceSSL = true;
         enableACME = true;
         locations."/" = {
