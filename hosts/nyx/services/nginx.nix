@@ -49,5 +49,5 @@ in {
     };
   };
 
-  systemd.services.consul-template-nginx.before = ["nginx.service"];
+  systemd.services.nginx.wants = ["consul-template-nginx.service"];
 }
