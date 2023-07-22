@@ -6,8 +6,8 @@
     enable = true;
     upstreams.ingress.servers = {
       # hardcoded for now, will need to be templated from consul
-      "100.113.14.91" = {};
-      "100.103.187.51" = {};
+      "100.113.14.91:80" = {};
+      "100.103.187.51:80" = {};
     };
     recommendedProxySettings = true;
     virtualHosts = {
