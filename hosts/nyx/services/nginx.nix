@@ -10,9 +10,6 @@
       "100.103.187.51" = {};
     };
     recommendedProxySettings = true;
-    appendHttpConfig = ''
-      proxy_http_version 1.1;
-    '';
     virtualHosts = {
       "auth.mattmoriarity.com" = {
         forceSSL = true;
