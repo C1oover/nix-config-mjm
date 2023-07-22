@@ -170,7 +170,18 @@ in {
       };
       access_control = {
         default_policy = "two_factor";
-        rules = [];
+        rules = [
+          {
+            domain = "linkding.mattmoriarity.com";
+            resources = ["^/api/.*$"];
+            policy = "bypass";
+          }
+          {
+            domain = "miniflux.mattmoriarity.com";
+            resources = ["^/v1/.*$"];
+            policy = "bypass";
+          }
+        ];
       };
       session.domain = "mattmoriarity.com";
       session.redis = {

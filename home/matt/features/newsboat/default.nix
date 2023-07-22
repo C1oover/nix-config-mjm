@@ -4,11 +4,8 @@
   lib,
   inputs,
   ...
-}: let
-  ca = import ../../../../lib/vault/ca.nix;
-in {
-  home.shellAliases.nb = "env CURL_CA_BUNDLE=${ca} ${pkgs.newsboat}/bin/newsboat";
-  programs.nushell.shellAliases.nb = "with-env { CURL_CA_BUNDLE: ${ca} } { ${pkgs.newsboat}/bin/newsboat }";
+}: {
+  home.shellAliases.nb = "${pkgs.newsboat}/bin/newsboat";
 
   programs.newsboat = {
     enable = true;
@@ -20,7 +17,7 @@ in {
     extraConfig = ''
       text-width 100
       urls-source "miniflux"
-      miniflux-url "https://miniflux.home.mattmoriarity.com/"
+      miniflux-url "https://miniflux.mattmoriarity.com/"
       miniflux-tokenfile ${config.home.homeDirectory}/.config/newsboat/miniflux-token
       include ${inputs.catppuccin-newsboat}/themes/dark
     '';
