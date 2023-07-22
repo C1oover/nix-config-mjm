@@ -1,4 +1,18 @@
-{
+let
+  baseVhost = {
+    http2 = false;
+    forceSSL = true;
+    enableACME = true;
+    locations."/" = {
+      proxyPass = "http://ingress";
+      extraConfig = ''
+        proxy_set_header X-Original-URL $scheme://$http_host$request_uri;
+        proxy_set_header X-Forwarded-Ssl on;
+        proxy_set_header X-Forwarded-Uri $request_uri;
+      '';
+    };
+  };
+in {
   security.acme.acceptTerms = true;
   security.acme.defaults.email = "acme@matt.mattmoriarity.com";
 
@@ -11,19 +25,8 @@
     };
     recommendedProxySettings = true;
     virtualHosts = {
-      "auth.mattmoriarity.com" = {
-        http2 = false;
-        forceSSL = true;
-        enableACME = true;
-        locations."/" = {
-          proxyPass = "http://ingress";
-          extraConfig = ''
-            proxy_set_header X-Original-URL $scheme://$http_host$request_uri;
-            proxy_set_header X-Forwarded-Ssl on;
-            proxy_set_header X-Forwarded-Uri $request_uri;
-          '';
-        };
-      };
+      "auth.mattmoriarity.com" = baseVhost;
+      "miniflux.mattmoriarity.com" = baseVhost;
     };
   };
 
