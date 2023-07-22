@@ -16,6 +16,7 @@
   networking.hostName = "steropes";
 
   services.consul.interface.advertise = "end0";
+  services.consul.extraConfig.node_meta.tailscale_ip = "100.103.187.51";
 
   services.tailscale.enable = true;
 

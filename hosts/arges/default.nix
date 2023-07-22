@@ -16,6 +16,7 @@
   networking.hostName = "arges";
 
   services.consul.interface.advertise = "end0";
+  services.consul.extraConfig.node_meta.tailscale_ip = "100.89.174.9";
 
   services.tailscale.enable = true;
 
