@@ -37,16 +37,16 @@ in {
       # need to pick one of the raspberry pis tailscale address to use
       # unless i wanna bring the cloud into consul
       consul.address = "100.89.174.9:8500";
+      template = [
+        {
+          source = ./upsteams.conf.tpl;
+          destination = "/run/nginx-include/upstreams.conf";
+          user = "nginx";
+          group = "nginx";
+          exec.command = ["systemctl" "reload" "nginx.service"];
+        }
+      ];
     };
-    template = [
-      {
-        source = ./upsteams.conf.tpl;
-        destination = "/run/nginx-include/upstreams.conf";
-        user = "nginx";
-        group = "nginx";
-        exec.command = ["systemctl" "reload" "nginx.service"];
-      }
-    ];
   };
 
   systemd.services.consul-template-nginx.before = ["nginx.service"];
