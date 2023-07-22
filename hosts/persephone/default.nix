@@ -95,6 +95,8 @@
 
   services.yubikey-agent.enable = true;
 
+  virtualisation.podman.enable = true;
+
   console = {
     font = "${pkgs.terminus_font}/share/consolefonts/ter-u32n.psf.gz";
     keyMap = "us";
