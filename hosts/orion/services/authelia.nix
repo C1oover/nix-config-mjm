@@ -209,7 +209,9 @@ in {
 
   networking.firewall.allowedTCPPorts = [
     9091
+    9092
     9959
+    9960
   ];
 
   services.consul.services.authelia = {
