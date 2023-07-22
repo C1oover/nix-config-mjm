@@ -18,11 +18,9 @@ in {
 
   services.nginx = {
     enable = true;
-    upstreams.ingress.servers = {
-      # hardcoded for now, will need to be templated from consul
-      # "100.113.14.91:80" = {};
-      "100.103.187.51:8080" = {};
-    };
+    appendHttpConfig = ''
+      include /run/nginx-include/upstreams.conf;
+    '';
     recommendedProxySettings = true;
     virtualHosts = {
       "auth.mattmoriarity.com" = baseVhost;
@@ -32,4 +30,24 @@ in {
   };
 
   networking.firewall.allowedTCPPorts = [80 443];
+
+  services.consul-template.instances.nginx = {
+    enable = true;
+    settings = {
+      # need to pick one of the raspberry pis tailscale address to use
+      # unless i wanna bring the cloud into consul
+      consul.address = "100.89.174.9:8500";
+    };
+    template = [
+      {
+        source = ./upsteams.conf.tpl;
+        destination = "/run/nginx-include/upstreams.conf";
+        user = "nginx";
+        group = "nginx";
+        exec.command = ["systemctl" "reload" "nginx.service"];
+      }
+    ];
+  };
+
+  systemd.services.consul-template-nginx.before = ["nginx.service"];
 }
