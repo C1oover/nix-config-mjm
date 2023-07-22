@@ -20,6 +20,7 @@
           extraConfig = ''
             proxy_set_header X-Original-URL $scheme://$http_host$request_uri;
             proxy_set_header X-Forwarded-Ssl on;
+            proxy_set_header X-Forwarded-Uri $request_uri;
           '';
         };
       };
