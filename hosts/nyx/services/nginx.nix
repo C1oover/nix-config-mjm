@@ -9,6 +9,7 @@
       "100.113.14.91" = {};
       "100.103.187.51" = {};
     };
+    recommendedProxySettings = true;
     virtualHosts = {
       "auth.mattmoriarity.com" = {
         forceSSL = true;
