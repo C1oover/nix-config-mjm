@@ -50,6 +50,9 @@
   networking.firewall.allowedTCPPorts = [
     4646
     4647
+
+    # temporary debugging
+    8080
   ];
 
   networking.firewall.allowedTCPPortRanges = [
