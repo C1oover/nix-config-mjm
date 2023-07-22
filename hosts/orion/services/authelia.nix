@@ -10,7 +10,10 @@
       secret = "$pbkdf2-sha512$310000$KBrmIfaP43sBTkOZ5tvwlA$y8/qNNGAeeco48h4vsmtqA73thgVubddQOepMfqG3w0zEvnWPf9w/L8kJpuanGwKtwkejAC.g.M4sQ.Q1qY6OQ";
       public = false;
       authorization_policy = "two_factor";
-      redirect_uris = ["https://gitlab.home.mattmoriarity.com/users/auth/openid_connect/callback"];
+      redirect_uris = [
+        "https://gitlab.home.mattmoriarity.com/users/auth/openid_connect/callback"
+        "https://git.mattmoriarity.com/users/auth/openid_connect/callback"
+      ];
       scopes = ["openid" "profile" "groups" "email"];
       userinfo_signing_algorithm = "none";
     }

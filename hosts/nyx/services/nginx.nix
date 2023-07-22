@@ -26,6 +26,7 @@ in {
       "auth.mattmoriarity.com" = baseVhost;
       "miniflux.mattmoriarity.com" = baseVhost;
       "linkding.mattmoriarity.com" = baseVhost;
+      "git.mattmoriarity.com" = baseVhost;
     };
   };
 
