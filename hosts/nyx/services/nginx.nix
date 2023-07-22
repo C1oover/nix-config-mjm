@@ -39,7 +39,7 @@ in {
       consul.address = "100.89.174.9:8500";
       template = [
         {
-          source = ./upsteams.conf.tpl;
+          source = ./upstreams.conf.tpl;
           destination = "/run/nginx-include/upstreams.conf";
           user = "nginx";
           group = "nginx";
