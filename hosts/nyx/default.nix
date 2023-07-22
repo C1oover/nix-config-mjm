@@ -6,6 +6,7 @@
   imports = [
     ./hardware-configuration.nix
 
+    inputs.nixvim.nixosModules.nixvim
     ../common/global/nixvim
 
     ./services/nginx.nix
