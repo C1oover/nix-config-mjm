@@ -1,4 +1,8 @@
-{modulesPath, ...}: {
+{
+  modulesPath,
+  lib,
+  ...
+}: {
   imports = [
     (modulesPath + "/profiles/qemu-guest.nix")
   ];
@@ -20,4 +24,6 @@
     device = "/dev/mapper/ocivolume-root";
     fsType = "xfs";
   };
+
+  nixpkgs.hostPlatform = lib.mkDefault "aarch64-linux";
 }
