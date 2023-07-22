@@ -27,6 +27,7 @@ in {
     virtualHosts = {
       "auth.mattmoriarity.com" = baseVhost;
       "miniflux.mattmoriarity.com" = baseVhost;
+      "linkding.mattmoriarity.com" = baseVhost;
     };
   };
 
