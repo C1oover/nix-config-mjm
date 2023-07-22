@@ -12,7 +12,7 @@
     ./services/nginx.nix
   ];
 
-  boot.cleanTmpDir = true;
+  boot.tmp.cleanOnBoot = true;
   zramSwap.enable = true;
 
   networking.hostName = "nyx";
@@ -31,4 +31,6 @@
   };
 
   environment.systemPackages = with pkgs; [git];
+
+  system.stateVersion = "23.11";
 }
