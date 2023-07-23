@@ -3,6 +3,10 @@
     enable = true;
     openFirewall = true;
     bind = null;
+
+    settings = {
+      protected-mode = false;
+    };
   };
 
   services.consul.services.redis = {
