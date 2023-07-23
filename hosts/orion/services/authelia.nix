@@ -96,16 +96,6 @@ in {
             networks = ["10.0.2.104"];
             policy = "bypass";
           }
-          {
-            domain = "linkding.home.mattmoriarity.com";
-            resources = ["^/api/.*$"];
-            policy = "bypass";
-          }
-          {
-            domain = "miniflux.home.mattmoriarity.com";
-            resources = ["^/v1/.*$"];
-            policy = "bypass";
-          }
         ];
       };
       session.domain = "home.mattmoriarity.com";
@@ -181,7 +171,11 @@ in {
           }
           {
             domain = "miniflux.mattmoriarity.com";
-            resources = ["^/v1/.*$"];
+            resources = [
+              "^/v1/.*$"
+              "^/accounts/ClientLogin$"
+              "^/reader/api/0/.*$"
+            ];
             policy = "bypass";
           }
         ];
