@@ -1,6 +1,9 @@
 {pkgs, ...}: let
   addons = pkgs.callPackage ./addons {};
-  firefox = if pkgs.stdenv.isLinux then pkgs.firefox else pkgs.firefox-bin;
+  firefox =
+    if pkgs.stdenv.isLinux
+    then pkgs.firefox
+    else pkgs.firefox-bin;
 in {
   home.packages = with pkgs; [
     nur.repos.rycee.mozilla-addons-to-nix
@@ -30,6 +33,7 @@ in {
       };
       extensions = with pkgs.nur.repos; [
         rycee.firefox-addons.onepassword-password-manager
+        rycee.firefox-addons.stylus
         bandithedoge.firefoxAddons.tree-style-tab
         bandithedoge.firefoxAddons.ublock-origin
         addons.minimaltwitter
