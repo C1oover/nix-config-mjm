@@ -5,7 +5,7 @@
     bind = null;
   };
 
-  # services.consul.services.redis = {
-  #   inherit (config.services.redis.servers."") port;
-  # };
+  services.consul.services.redis = {
+    inherit (config.services.redis.servers."") port;
+  };
 }
