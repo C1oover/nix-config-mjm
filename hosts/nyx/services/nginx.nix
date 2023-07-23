@@ -1,4 +1,4 @@
-let
+{lib, ...}: let
   baseVhost = {
     http2 = false;
     forceSSL = true;
@@ -27,7 +27,9 @@ in {
       "miniflux.mattmoriarity.com" = baseVhost;
       "linkding.mattmoriarity.com" = baseVhost;
       "git.mattmoriarity.com" = baseVhost;
-      "paperless.mattmoriarity.com" = baseVhost;
+      "paperless.mattmoriarity.com" = lib.recursiveUpdate baseVhost {
+        locations."/".proxyWebsockets = true;
+      };
     };
   };
 
