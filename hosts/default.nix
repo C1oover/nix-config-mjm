@@ -51,6 +51,7 @@ in {
       cronus = mkNixos [./cronus];
       phoebe = mkNixos [./phoebe];
       themis = mkNixos [./themis];
+      thanatos = mkNixos [./thanatos];
     };
   };
 }
