@@ -14,7 +14,6 @@
             "prometheus.home.mattmoriarity.com"
             "alertmanager.home.mattmoriarity.com"
             "grafana.home.mattmoriarity.com"
-            "paperless.home.mattmoriarity.com"
             "homelab.home.mattmoriarity.com"
             "adminer.home.mattmoriarity.com"
           ];
