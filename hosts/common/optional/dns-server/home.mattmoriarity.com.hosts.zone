@@ -23,6 +23,7 @@ rhea                  IN  A  10.0.2.47
 cronus                IN  A  10.0.2.48
 phoebe                IN  A  10.0.2.49
 themis                IN  A  10.0.2.50
+thanatos              IN  A  10.0.2.51
 dns2                  IN  A  10.0.2.100
 dns1                  IN  A  10.0.2.101
 db1                   IN  A  10.0.2.102
