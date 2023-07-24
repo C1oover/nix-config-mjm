@@ -1,37 +1,59 @@
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    darwin.url = "github:lnl7/nix-darwin/master";
-    darwin.inputs.nixpkgs.follows = "nixpkgs";
-    home-manager.url = "github:nix-community/home-manager";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    darwin = {
+      url = "github:lnl7/nix-darwin/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     hardware.url = "github:NixOS/nixos-hardware";
-    agenix.url = "github:ryantm/agenix";
-    agenix.inputs.nixpkgs.follows = "nixpkgs";
-    agenix.inputs.darwin.follows = "darwin";
-    agenix.inputs.home-manager.follows = "home-manager";
+    agenix = {
+      url = "github:ryantm/agenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.darwin.follows = "darwin";
+      inputs.home-manager.follows = "home-manager";
+    };
     flake-parts.url = "github:hercules-ci/flake-parts";
-    devenv.url = "github:cachix/devenv";
-    devenv.inputs.nixpkgs.follows = "nixpkgs";
+    devenv = {
+      url = "github:cachix/devenv";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nixpkgs-firefox-darwin.url = "github:bandithedoge/nixpkgs-firefox-darwin";
     nur.url = "github:nix-community/NUR";
     pre-commit-hooks-nix.url = "github:cachix/pre-commit-hooks.nix";
     nixvim.url = "github:pta2002/nixvim";
-    terranix.url = "github:terranix/terranix";
-    terranix.inputs.nixpkgs.follows = "nixpkgs";
+    terranix = {
+      url = "github:terranix/terranix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
-    catppuccin.url = "github:catppuccin/starship";
-    catppuccin.flake = false;
-    catppuccin-bat.url = "github:catppuccin/bat";
-    catppuccin-bat.flake = false;
-    catppuccin-zsh.url = "github:catppuccin/zsh-syntax-highlighting";
-    catppuccin-zsh.flake = false;
-    catppuccin-k9s.url = "github:catppuccin/k9s";
-    catppuccin-k9s.flake = false;
-    catppuccin-newsboat.url = "github:catppuccin/newsboat";
-    catppuccin-newsboat.flake = false;
-    catppuccin-i3.url = "github:catppuccin/i3";
-    catppuccin-i3.flake = false;
+    catppuccin = {
+      url = "github:catppuccin/starship";
+      flake = false;
+    };
+    catppuccin-bat = {
+      url = "github:catppuccin/bat";
+      flake = false;
+    };
+    catppuccin-zsh = {
+      url = "github:catppuccin/zsh-syntax-highlighting";
+      flake = false;
+    };
+    catppuccin-k9s = {
+      url = "github:catppuccin/k9s";
+      flake = false;
+    };
+    catppuccin-newsboat = {
+      url = "github:catppuccin/newsboat";
+      flake = false;
+    };
+    catppuccin-i3 = {
+      url = "github:catppuccin/i3";
+      flake = false;
+    };
   };
 
   outputs = {flake-parts, ...} @ inputs:
