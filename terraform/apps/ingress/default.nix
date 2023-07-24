@@ -1,0 +1,3 @@
+{
+  ingress.enable = true;
+}

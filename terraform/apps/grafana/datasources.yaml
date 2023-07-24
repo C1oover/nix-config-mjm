@@ -1,0 +1,30 @@
+apiVersion: 1
+
+datasources:
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    url: {{ with service "prometheus" }}{{ with index . 0 }}http://{{ .Address }}:{{ .Port }}{{ end }}{{ end }}
+    isDefault: true
+    version: 1
+    editable: false
+    uid: prom_homelab
+  - name: Prometheus (Courier)
+    type: prometheus
+    access: proxy
+    url: https://api.fly.io/prometheus/courier-527/
+    version: 1
+    editable: false
+    uid: prom_courier
+    jsonData:
+      httpHeaderName1: Authorization
+    secureJsonData:
+      httpHeaderValue1: "Bearer {{ with secret "kv/grafana" }}{{ .Data.data.fly_auth_token }}{{ end }}"
+  - name: Loki
+    type: loki
+    access: proxy
+    url: http://127.0.0.1:3100
+    version: 1
+    editable: false
+    jsonData:
+      maxLines: 1000

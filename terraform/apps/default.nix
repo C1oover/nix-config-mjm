@@ -1,0 +1,30 @@
+{
+  imports = [
+    ./actual
+    ./adminer
+    ./authelia
+    ./blackbox-exporter
+    ./consul
+    ./consul-exporter
+    ./gitlab
+    ./grafana
+    ./guacamole
+    ./homelab
+    ./ingress
+    ./linkding
+    ./loki
+    ./miniflux
+    ./minio
+    ./netbox
+    ./nomad
+    ./nut
+    ./otel
+    ./paperless
+    ./prometheus
+    ./proxmox
+    ./pushgateway
+    ./pve-exporter
+    ./teamcity.nix
+    ./vault
+  ];
+}

@@ -1,0 +1,33 @@
+.snippets:
+  setup_devenv:
+    - . "$HOME/.nix-profile/etc/profile.d/nix.sh"
+stages:
+  - deploy
+variables:
+  CONSUL_HTTP_ADDR: "consul.service.consul:8500"
+  NOMAD_ADDR: "http://nomad.service.consul:4646"
+  VAULT_ADDR: "http://vault.service.consul:8200"
+apply terranix changes:
+  tags: [nix]
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      changes:
+        - .gitlab-ci.yml
+        - terraform/**/*
+        - flake.nix
+        - flake.lock
+  stage: deploy
+  needs: []
+  environment:
+    name: production
+  resource_group: production/nomad
+  variables:
+    TF_PLUGIN_CACHE_MAY_BREAK_DEPENDENCY_LOCK_FILE: "yes"
+  id_tokens:
+    VAULT_ID_TOKEN:
+      aud: http://vault.service.consul:8200
+  before_script:
+    !reference [ .snippets, setup_devenv ]
+  script:
+    - nix run .#ci-terraform-apply
+

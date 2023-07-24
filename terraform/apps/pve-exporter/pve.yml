@@ -1,0 +1,5 @@
+default:
+  user: prometheus@pam
+  token_name: metrics
+  token_value: {{ with secret "kv/proxmox" }}{{ .Data.data.metrics_token | toJSON }}{{ end }}
+  verify_ssl: false

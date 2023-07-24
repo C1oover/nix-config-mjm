@@ -17,6 +17,8 @@
     nur.url = "github:nix-community/NUR";
     pre-commit-hooks-nix.url = "github:cachix/pre-commit-hooks.nix";
     nixvim.url = "github:pta2002/nixvim";
+    terranix.url = "github:terranix/terranix";
+    terranix.inputs.nixpkgs.follows = "nixpkgs";
 
     catppuccin.url = "github:catppuccin/starship";
     catppuccin.flake = false;
@@ -35,34 +37,31 @@
   outputs = {flake-parts, ...} @ inputs:
     flake-parts.lib.mkFlake {inherit inputs;} {
       imports = [
+        inputs.devenv.flakeModule
         inputs.pre-commit-hooks-nix.flakeModule
         ./hosts
         ./modules
         ./packages
+        ./terraform
       ];
 
       systems = ["x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin"];
 
-      perSystem = {
-        pkgs,
-        config,
-        ...
-      }: {
-        # need to run `nix develop .#pre-commit` after changing these
-        pre-commit.settings = {
-          hooks = {
-            alejandra.enable = true;
-            deadnix.enable = true;
-          };
+      perSystem = {pkgs, ...}: {
+        devenv.shells.default = {
+          pre-commit = {
+            hooks = {
+              alejandra.enable = true;
+              deadnix.enable = true;
+            };
 
-          excludes = [
-            "home/matt/features/firefox/addons/addons.nix"
-          ];
+            excludes = [
+              "home/matt/features/firefox/addons/addons.nix"
+            ];
+          };
         };
 
         formatter = pkgs.alejandra;
-        devShells.pre-commit = config.pre-commit.devShell;
-        packages.pre-commit = config.pre-commit.settings.run;
       };
     };
 }

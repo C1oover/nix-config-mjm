@@ -1,0 +1,35 @@
+{
+  resource.vault_jwt_auth_backend.gitlab = {
+    path = "gitlab";
+    bound_issuer = "https://git.mattmoriarity.com";
+    jwks_url = "https://git.mattmoriarity.com/-/jwks";
+
+    tune = [
+      {
+        default_lease_ttl = "30m";
+        max_lease_ttl = "2h";
+        token_type = "default-service";
+
+        # defaults
+        allowed_response_headers = [];
+        audit_non_hmac_request_keys = [];
+        audit_non_hmac_response_keys = [];
+        listing_visibility = "hidden";
+        passthrough_request_headers = [];
+      }
+    ];
+  };
+
+  resource.vault_jwt_auth_backend_role.homelab_infra = {
+    backend = "\${vault_jwt_auth_backend.gitlab.path}";
+    role_name = "homelab-infra";
+    role_type = "jwt";
+    token_policies = ["\${vault_policy.gitlab.name}"];
+    user_claim = "user_email";
+    bound_claims = {
+      project_id = "3";
+      ref = "main";
+      ref_type = "branch";
+    };
+  };
+}
