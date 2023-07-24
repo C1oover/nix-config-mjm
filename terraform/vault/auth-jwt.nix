@@ -27,7 +27,7 @@
     token_policies = ["\${vault_policy.gitlab.name}"];
     user_claim = "user_email";
     bound_claims = {
-      project_id = "3";
+      project_id = "30";
       ref = "main";
       ref_type = "branch";
     };
