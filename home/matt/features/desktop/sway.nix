@@ -101,6 +101,11 @@
         {command = "1password";}
       ];
     };
+
+    extraConfig = ''
+      for_window [instance="dolphin-emu" title="OpenGL"] \
+        inhibit_idle visible
+    '';
   };
 
   programs.waybar = {
