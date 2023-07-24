@@ -31,7 +31,7 @@
     ${pkgs.kitty}/bin/kitty +kitten ssh -i "${config.home.homeDirectory}/.ssh/yubikey-cert.pub" "$@"
   '';
 
-  devenv = inputs.devenv.packages.${pkgs.stdenv.hostPlatform.system}.default;
+  devenv = inputs.devenv.packages.${pkgs.system}.default;
 
   envVars = {
     NOMAD_ADDR = "http://nomad.service.consul:4646";
@@ -41,7 +41,7 @@
 
   # nomad 1.5 isn't building correctly on macOS rn
   nomad =
-    if pkgs.stdenv.hostPlatform.isLinux
+    if pkgs.stdenv.isLinux
     then pkgs.nomad
     else pkgs.nomad_1_4;
 in {

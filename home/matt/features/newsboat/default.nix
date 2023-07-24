@@ -11,7 +11,7 @@
     enable = true;
     autoReload = true;
     browser =
-      if pkgs.stdenv.hostPlatform.isLinux
+      if pkgs.stdenv.isLinux
       then "\"xdg-open %u\""
       else "\"/usr/bin/open -a ${pkgs.firefox-bin}/Applications/Firefox.app -u %u\"";
     extraConfig = ''
@@ -25,7 +25,7 @@
 
   # use this instead of an activation script because, on boot, the home-manager service
   # does not have the $XDG_RUNTIME_DIR variable defined.
-  systemd.user.services.miniflux-token = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
+  systemd.user.services.miniflux-token = lib.mkIf pkgs.stdenv.isLinux {
     Unit.Description = "link miniflux-token secret";
     Service = {
       Type = "oneshot";
@@ -40,7 +40,7 @@
     Install.WantedBy = ["default.target"];
   };
 
-  home.activation.link-miniflux-token = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin (lib.hm.dag.entryAfter ["writeBoundary"] ''
+  home.activation.link-miniflux-token = lib.mkIf pkgs.stdenv.isDarwin (lib.hm.dag.entryAfter ["writeBoundary"] ''
     # need to be able to use getconf
     export PATH=$PATH:/usr/bin
     mkdir -p ${config.home.homeDirectory}/.config/newsboat

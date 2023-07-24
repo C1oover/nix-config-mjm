@@ -34,15 +34,15 @@
     unzip
     wget
 
-    inputs.home-manager.packages.${pkgs.stdenv.hostPlatform.system}.home-manager
-    inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.default
+    inputs.home-manager.packages.${pkgs.system}.home-manager
+    inputs.agenix.packages.${pkgs.system}.default
   ];
 
   home.shellAliases = {
     td = "cd $(mktemp -d)";
     hm = "home-manager";
     rebuild =
-      if pkgs.stdenv.hostPlatform.isLinux
+      if pkgs.stdenv.isLinux
       then "nixos-rebuild switch --use-remote-sudo"
       else "darwin-rebuild switch --flake ${config.home.homeDirectory}/Projects/nix-config";
   };
