@@ -21,8 +21,8 @@ appimageTools.wrapType2 rec {
   extraInstallCommands = ''
     source ${makeWrapper}/nix-support/setup-hook
     mv $out/bin/${pname}-${version} $out/bin/${pname}
-    wrapProgram $out/bin/beeper \
-      --add-flags '--enable-features=UseOzonePlatform --ozone-platform=wayland'
+    wrapProgram $out/bin/${pname} \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland}}"
   '';
 
   passthru = {
