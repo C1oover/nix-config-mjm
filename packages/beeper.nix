@@ -2,37 +2,43 @@
   appimageTools,
   lib,
   fetchurl,
-  symlinkJoin,
   makeWrapper,
-}: let
-  beeper = appimageTools.wrapType2 rec {
-    pname = "beeper";
-    version = "3.65.19";
+  writeShellScript,
+  curl,
+  gnugrep,
+  pcre,
+  common-updater-scripts,
+}:
+appimageTools.wrapType2 rec {
+  pname = "beeper";
+  version = "3.65.19";
 
-    src = fetchurl {
-      url = "https://download.beeper.com/linux/appImage/x64";
-      sha256 = "1hyrsjrvv985pqii6s11wvdmsdv8iqmz94835ls7rqg8ap96kyrq";
-    };
-
-    extraInstallCommands = ''
-      mv $out/bin/${pname}-${version} $out/bin/${pname}
-    '';
-
-    meta = with lib; {
-      description = "All your chats in one app.";
-      homepage = "https://beeper.com";
-      license = licenses.unfree;
-      maintainers = [];
-      platforms = ["x86_64-linux"];
-    };
+  src = fetchurl {
+    url = "https://download.beeper.com/linux/appImage/x64";
+    sha256 = "OPtp0lXo4Xw0LQOR9CuOaDdd2+YhaBMjvgWlvbPU2cM=";
   };
-in
-  symlinkJoin {
-    name = "beeper";
-    paths = [beeper];
-    buildInputs = [makeWrapper];
-    postBuild = ''
-      wrapProgram $out/bin/beeper \
-        --add-flags '--enable-features=UseOzonePlatform --ozone-platform=wayland'
+
+  extraInstallCommands = ''
+    source ${makeWrapper}/nix-support/setup-hook
+    mv $out/bin/${pname}-${version} $out/bin/${pname}
+    wrapProgram $out/bin/beeper \
+      --add-flags '--enable-features=UseOzonePlatform --ozone-platform=wayland'
+  '';
+
+  passthru = {
+    updateScript = writeShellScript "update-beeper" ''
+      set -o errexit
+      export PATH="${lib.makeBinPath [curl gnugrep pcre common-updater-scripts]}"
+      version="$(curl -sI -X GET https://download.beeper.com/linux/appImage/x64 | grep -Fi 'content-disposition:' | pcregrep -o1 '(([0-9]\.?)+[0-9])')"
+      update-source-version beeper "$version"
     '';
-  }
+  };
+
+  meta = with lib; {
+    description = "All your chats in one app.";
+    homepage = "https://beeper.com";
+    license = licenses.unfree;
+    maintainers = [];
+    platforms = ["x86_64-linux"];
+  };
+}

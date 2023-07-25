@@ -54,6 +54,10 @@
       url = "github:catppuccin/i3";
       flake = false;
     };
+    flake-compat = {
+      url = "github:edolstra/flake-compat";
+      flake = false;
+    };
   };
 
   outputs = {flake-parts, ...} @ inputs:
