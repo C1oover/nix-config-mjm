@@ -16,6 +16,7 @@
 
     extraConfigEarly = ''
       include ${inputs.catppuccin-i3}/themes/catppuccin-mocha
+      set $WOBSOCK $XDG_RUNTIME_DIR/wob.sock
     '';
 
     config = let
@@ -23,6 +24,7 @@
       terminal = "${pkgs.kitty}/bin/kitty";
       bemenuArgs = ''--fb "#1e1e2e" --ff "#94e2d5" --nb "#1e1e2e" --nf "#f5e0dc" --tb "#1e1e2e" --hb "#1e1e2e" --tf "#cba6f7" --hf "#89b4fa" --nf "#f5e0dc" --af "#f5e0dc" --ab "#1e1e2e"'';
       menu = "${pkgs.bemenu}/bin/bemenu-run -i -l 20 -p run ${bemenuArgs}";
+      pactl = "${pkgs.pulseaudio}/bin/pactl";
     in {
       inherit terminal menu;
       modifier = mod;
@@ -61,11 +63,11 @@
       gaps.inner = 4;
 
       keybindings = lib.mkOptionDefault {
-        "XF86MonBrightnessDown" = "exec light -U 5";
-        "XF86MonBrightnessUp" = "exec light -A 5";
-        "XF86AudioRaiseVolume" = "exec ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ +4%";
-        "XF86AudioLowerVolume" = "exec ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ -4%";
-        "XF86AudioMute" = "exec ${pkgs.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ toggle";
+        "XF86MonBrightnessDown" = "exec light -U 5 && light -G | cut -d'.' -f1 > $WOBSOCK";
+        "XF86MonBrightnessUp" = "exec light -A 5 && light -G | cut -d'.' -f1 > $WOBSOCK";
+        "XF86AudioRaiseVolume" = "exec ${pactl} set-sink-volume @DEFAULT_SINK@ +4% && ${pactl} get-sink-volume @DEFAULT_SINK@ | head -n1 | awk '{print substr($5, 1, length($5) - 1)}' > $WOBSOCK";
+        "XF86AudioLowerVolume" = "exec ${pactl} set-sink-volume @DEFAULT_SINK@ -4% && ${pactl} get-sink-volume @DEFAULT_SINK@ | head -n1 | awk '{print substr($5, 1, length($5) - 1)}' > $WOBSOCK";
+        "XF86AudioMute" = "exec ${pactl} set-sink-mute @DEFAULT_SINK@ toggle && ${pactl} get-sink-volume @DEFAULT_SINK@ | head -n1 | awk '{print substr($5, 1, length($5) - 1)}' > $WOBSOCK";
 
         "${mod}+c" = "exec ${pkgs.clipman}/bin/clipman pick -t bemenu -T'${bemenuArgs}'";
       };
@@ -99,6 +101,7 @@
         {command = "discord";}
         {command = "beeper";}
         {command = "1password";}
+        {command = "${pkgs.coreutils}/bin/rm -f $WOBSOCK && ${pkgs.coreutils}/bin/mkfifo $WOBSOCK && ${pkgs.coreutils}/bin/tail -f $WOBSOCK | ${pkgs.wob}/bin/wob";}
       ];
     };
 
