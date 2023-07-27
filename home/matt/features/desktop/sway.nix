@@ -102,6 +102,7 @@
         {command = "beeper";}
         {command = "1password";}
         {command = "${pkgs.coreutils}/bin/rm -f $WOBSOCK && ${pkgs.coreutils}/bin/mkfifo $WOBSOCK && ${pkgs.coreutils}/bin/tail -f $WOBSOCK | ${pkgs.wob}/bin/wob";}
+        {command = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";}
       ];
     };
 
