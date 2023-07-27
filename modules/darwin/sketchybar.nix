@@ -32,6 +32,8 @@ with lib; let
       + optionalString (cfg.extraConfig != "") cfg.extraConfig
     )}";
 in {
+  disabledModules = ["services/sketchybar"];
+
   options = with types; {
     services.sketchybar.enable = mkOption {
       type = bool;
