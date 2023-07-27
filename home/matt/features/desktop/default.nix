@@ -4,6 +4,7 @@
   ];
 
   home.packages = with pkgs; [
+    libsForQt5.kmahjongg
     xdg-utils
   ];
 
