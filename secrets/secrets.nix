@@ -65,7 +65,7 @@ in {
 
   "paperless-approle-secret-id.age".publicKeys = personalKeys ++ [aion];
 
-  "pagerduty-routing-key.age".publicKeys = personalKeys ++ [gaia];
+  "alertmanager-env.age".publicKeys = personalKeys ++ [gaia];
 
   "ngrok.age".publicKeys = [matt-athena athena];
 

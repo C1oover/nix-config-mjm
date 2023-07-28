@@ -30,6 +30,7 @@
       enable = true;
       openFirewall = true;
       webExternalUrl = "https://alertmanager.home.mattmoriarity.com";
+      environmentFile = config.age.secrets."alertmanager.env".path;
 
       configuration = {
         global.resolve_timeout = "5m";
@@ -51,7 +52,7 @@
             name = "pagerduty";
             pagerduty_configs = [
               {
-                routing_key_file = config.age.secrets."pagerduty-routing-key".path;
+                routing_key = "$PAGERDUTY_ROUTING_KEY";
                 severity = "{{ template \"pagerduty.severity\" . }}";
               }
             ];
@@ -101,5 +102,5 @@
     };
   };
 
-  age.secrets."pagerduty-routing-key".file = ../../../../secrets/pagerduty-routing-key.age;
+  age.secrets."alertmanager.env".file = ../../../../secrets/alertmanager-env.age;
 }
