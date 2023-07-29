@@ -71,6 +71,7 @@ in {
         aion = mkNode "aion" {};
         arges = mkNode "arges" {};
         brontes = mkNode "brontes" {};
+        helios = mkNode "helios" {};
         nyx = mkNode "nyx" {
           hostname = "129.146.64.18";
           sshUser = "root";
