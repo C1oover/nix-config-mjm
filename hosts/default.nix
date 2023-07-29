@@ -79,9 +79,7 @@ in {
         megaera = mkNode "megaera" {};
         nemesis = mkNode "nemesis" {};
         nyx = mkNode "nyx" {
-          hostname = "129.146.64.18";
-          sshUser = "root";
-          sshOpts = [];
+          hostname = "nyx.mattmoriarity.com";
         };
         orion = mkNode "orion" {};
         phoebe = mkNode "phoebe" {};
@@ -94,9 +92,33 @@ in {
     };
   };
 
-  perSystem = {system, ...}: {
+  perSystem = {
+    pkgs,
+    system,
+    ...
+  }: let
+    deploy-rs = inputs.deploy-rs.packages.${system}.default;
+  in {
     devenv.shells.default = {
-      packages = [inputs.deploy-rs.packages.${system}.default];
+      packages = [deploy-rs];
     };
+
+    apps.deploy.program = toString (pkgs.writeShellScript "deploy" ''
+      tmp=$(${pkgs.coreutils}/bin/mktemp -d)
+      keypath="$tmp/id_ed25519"
+      ${pkgs.openssh}/bin/ssh-keygen -t ed25519 -f "$keypath" -N ""
+      ${pkgs.vault}/bin/vault write \
+        -field=signed_key \
+        ssh-client-signer/sign/homelab-client \
+        "public_key=@$keypath.pub" \
+        valid_principals=matt \
+        >"$keypath-cert.pub"
+      function finish {
+        rm -rf "$tmp"
+      }
+      trap finish EXIT
+
+      ${deploy-rs}/bin/deploy --skip-checks --ssh-opts="-i $keypath" "$@"
+    '');
   };
 }
