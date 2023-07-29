@@ -19,6 +19,7 @@
 
   nix.settings = {
     experimental-features = ["flakes" "nix-command"];
+    trusted-users = ["root" "matt"];
   };
   nix.registry = {
     nixpkgs.flake = inputs.nixpkgs;
