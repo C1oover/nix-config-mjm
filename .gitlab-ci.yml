@@ -7,6 +7,33 @@ variables:
   CONSUL_HTTP_ADDR: "consul.service.consul:8500"
   NOMAD_ADDR: "http://nomad.service.consul:4646"
   VAULT_ADDR: "http://vault.service.consul:8200"
+deploy nixos hosts:
+  tags: [nix]
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      changes:
+        - .gitlab-ci.yml
+        - flake.nix
+        - flake.lock
+        - home/**/*
+        - hosts/**/*
+        - lib/**/*
+        - modules/**/*
+        - packages/**/*
+        - secrets/**/*
+  stage: deploy
+  needs: []
+  environment:
+    name: production
+  resource_group: production/nixos
+  id_tokens:
+    VAULT_ID_TOKEN:
+      aud: http://vault.service.consul:8200
+  before_script:
+    !reference [ .snippets, setup_devenv ]
+  script:
+    # deploy to the x86_64 hosts
+    - nix run .#ci-deploy -- .#aion .#alecto .#cronus .#gaia .#helios .#hypnos .#megaera .#nemesis .#orion .#phoebe .#rhea .#thanatos .#themis .#tisiphone
 apply terranix changes:
   tags: [nix]
   rules:
