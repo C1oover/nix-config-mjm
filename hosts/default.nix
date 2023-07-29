@@ -76,6 +76,7 @@ in {
           sshUser = "root";
           sshOpts = [];
         };
+        steropes = mkNode "steropes" {};
       };
     };
   };
