@@ -69,15 +69,27 @@ in {
           // cfg;
       in {
         aion = mkNode "aion" {};
+        alecto = mkNode "alecto" {};
         arges = mkNode "arges" {};
         brontes = mkNode "brontes" {};
+        cronus = mkNode "cronus" {};
+        gaia = mkNode "gaia" {};
         helios = mkNode "helios" {};
+        hypnos = mkNode "hypnos" {};
+        megaera = mkNode "megaera" {};
+        nemesis = mkNode "nemesis" {};
         nyx = mkNode "nyx" {
           hostname = "129.146.64.18";
           sshUser = "root";
           sshOpts = [];
         };
+        orion = mkNode "orion" {};
+        phoebe = mkNode "phoebe" {};
+        rhea = mkNode "rhea" {};
         steropes = mkNode "steropes" {};
+        thanatos = mkNode "thanatos" {};
+        themis = mkNode "themis" {};
+        tisiphone = mkNode "tisiphone" {};
       };
     };
   };
