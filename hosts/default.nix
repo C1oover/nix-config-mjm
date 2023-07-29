@@ -59,20 +59,20 @@ in {
       sshUser = "matt";
       sshOpts = ["-i" "/home/matt/.ssh/yubikey-cert.pub"];
       nodes = let
-        activate-x86_64 = inputs.deploy-rs.lib.x86_64-linux.activate.nixos;
-        activate-aarch64 = inputs.deploy-rs.lib.aarch64-linux.activate.nixos;
+        mkNode = name: cfg: let
+          nixos = outputs.nixosConfigurations.${name};
+        in
+          {
+            hostname = "${nixos.config.networking.hostName}.home.mattmoriarity.com";
+            profiles.system.path = inputs.deploy-rs.lib.${nixos.config.nixpkgs.hostPlatform.system}.activate.nixos nixos;
+          }
+          // cfg;
       in {
-        aion = {
-          hostname = "aion.home.mattmoriarity.com";
-          profiles.system.path = activate-x86_64 outputs.nixosConfigurations.aion;
-        };
-        arges = {
-          hostname = "arges.home.mattmoriarity.com";
-          profiles.system.path = activate-aarch64 outputs.nixosConfigurations.arges;
-        };
-        nyx = {
+        aion = mkNode "aion" {};
+        arges = mkNode "arges" {};
+        brontes = mkNode "brontes" {};
+        nyx = mkNode "nyx" {
           hostname = "129.146.64.18";
-          profiles.system.path = activate-aarch64 outputs.nixosConfigurations.nyx;
           sshUser = "root";
           sshOpts = [];
         };
