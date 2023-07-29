@@ -66,6 +66,10 @@ in {
           hostname = "aion.home.mattmoriarity.com";
           profiles.system.path = activate-x86_64 outputs.nixosConfigurations.aion;
         };
+        arges = {
+          hostname = "arges.home.mattmoriarity.com";
+          profiles.system.path = activate-aarch64 outputs.nixosConfigurations.arges;
+        };
         nyx = {
           hostname = "129.146.64.18";
           profiles.system.path = activate-aarch64 outputs.nixosConfigurations.nyx;
