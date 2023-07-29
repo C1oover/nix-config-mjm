@@ -20,6 +20,8 @@
 
   x.nixvim.enableIde = true;
 
+  boot.binfmt.emulatedSystems = ["aarch64-linux"];
+
   boot.kernelPackages = pkgs.linuxPackages_6_3;
   boot.supportedFilesystems = ["btrfs"];
 

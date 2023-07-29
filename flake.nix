@@ -29,6 +29,7 @@
       url = "github:terranix/terranix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    deploy-rs.url = "github:serokell/deploy-rs";
 
     catppuccin = {
       url = "github:catppuccin/starship";
