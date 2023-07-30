@@ -28,7 +28,7 @@ deploy nixos hosts:
   parallel:
     matrix:
       - ARCH: x86_64
-      - ARCH: aarch64
+      - ARCH: arm64
   resource_group: production/nixos/${ARCH}
   id_tokens:
     VAULT_ID_TOKEN:

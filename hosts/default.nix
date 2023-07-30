@@ -133,7 +133,7 @@ in {
 
       if [ "$ARCH" = "x86_64" ]; then
         targets=".#aion .#alecto .#cronus .#gaia .#helios .#megaera .#nemesis .#orion .#phoebe .#rhea .#thanatos .#themis .#tisiphone"
-      elif [ "$ARCH" = "aarch64" ]; then
+      elif [ "$ARCH" = "arm64" ]; then
         targets=".#brontes .#nyx .#steropes"
       fi
       ${deploy-rs}/bin/deploy --skip-checks --ssh-opts="-o StrictHostKeyChecking=no -i /tmp/id_ed25519" --targets $targets
