@@ -29,7 +29,7 @@
   security.pam.services.greetd.enableGnomeKeyring = true;
 
   fonts = {
-    fonts = with pkgs; [
+    packages = with pkgs; [
       public-sans
       open-sans
       noto-fonts
