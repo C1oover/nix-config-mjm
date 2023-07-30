@@ -1,7 +1,7 @@
 {
   virtualisation.oci-containers.containers.actual = {
-    # actual budget 23.5.0
-    image = "ghcr.io/actualbudget/actual-server@sha256:68387ec93bbe052feb2c2f9f728d6ea4f4bf697008ef02cc0263ec93a07625fd";
+    # actual budget 23.7.2
+    image = "ghcr.io/actualbudget/actual-server@sha256:fff7256ec79c860e44552965abd5a8a49dae1217e3cfa547e72c432d9edc4bee";
     volumes = ["actual_data:/data"];
     ports = ["5006:5006"];
   };
