@@ -33,7 +33,7 @@ deploy nixos hosts:
     !reference [ .snippets, setup_devenv ]
   script:
     # deploy to the x86_64 hosts
-    - nix run .#ci-deploy -- --targets .#aion .#alecto .#cronus .#gaia .#helios .#hypnos .#megaera .#nemesis .#orion .#phoebe .#rhea .#thanatos .#themis .#tisiphone
+    - nix run .#ci-deploy -- --targets .#aion .#alecto .#cronus .#gaia .#helios .#megaera .#nemesis .#orion .#phoebe .#rhea .#thanatos .#themis .#tisiphone
 apply terranix changes:
   tags: [nix]
   rules:
