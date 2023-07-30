@@ -46,7 +46,6 @@
 
   environment.systemPackages = with pkgs; [
     git
-    python310 # for using ansible to update the system
   ];
 
   programs.zsh.enable = true;
