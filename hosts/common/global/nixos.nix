@@ -46,6 +46,7 @@
 
   environment.systemPackages = with pkgs; [
     git
+    nvd
   ];
 
   programs.zsh.enable = true;

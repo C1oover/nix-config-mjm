@@ -1,4 +1,5 @@
 {
+  pkgs,
   config,
   inputs,
   outputs,
@@ -41,5 +42,8 @@
     home = "/Users/matt";
   };
 
-  environment.systemPackages = [inputs.agenix.packages.${config.nixpkgs.system}.default];
+  environment.systemPackages = with pkgs; [
+    nvd
+    inputs.agenix.packages.${config.nixpkgs.system}.default
+  ];
 }

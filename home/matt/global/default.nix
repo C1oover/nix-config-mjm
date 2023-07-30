@@ -3,7 +3,6 @@
   lib,
   outputs,
   inputs,
-  config,
   ...
 }: {
   imports =
@@ -43,8 +42,12 @@
     hm = "home-manager";
     rebuild =
       if pkgs.stdenv.isLinux
+      then "nixos-rebuild build && nvd diff /run/current-system result"
+      else "darwin-rebuild build --flake . && nvd diff /run/current-system result";
+    switch =
+      if pkgs.stdenv.isLinux
       then "nixos-rebuild switch --use-remote-sudo"
-      else "darwin-rebuild switch --flake ${config.home.homeDirectory}/Projects/nix-config";
+      else "darwin-rebuild switch --flake .";
   };
 
   news.display = "silent";
