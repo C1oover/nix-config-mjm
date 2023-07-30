@@ -72,4 +72,19 @@
     "/run/docker.sock"
     "127.0.0.1:2375"
   ];
+
+  services.openssh.knownHosts = let
+    keys = import ../../../secrets/keys.nix;
+  in
+    builtins.mapAttrs (name: publicKey: {
+      inherit publicKey;
+      extraHostNames = [
+        (
+          if name == "nyx"
+          then "${name}.mattmoriarity.com"
+          else "${name}.home.mattmoriarity.com"
+        )
+      ];
+    })
+    keys.servers;
 }

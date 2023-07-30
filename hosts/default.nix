@@ -136,7 +136,7 @@ in {
       elif [ "$ARCH" = "arm64" ]; then
         targets=".#brontes .#nyx .#steropes .#arges"
       fi
-      ${deploy-rs}/bin/deploy --skip-checks --ssh-opts="-o StrictHostKeyChecking=no -i /tmp/id_ed25519" --targets $targets
+      ${deploy-rs}/bin/deploy --skip-checks --ssh-opts="-i /tmp/id_ed25519" --targets $targets
     '');
   };
 }
