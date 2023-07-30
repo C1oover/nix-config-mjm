@@ -18,6 +18,8 @@
     services = {
       nix = with lib; {
         registrationConfigFile = config.age.secrets."gitlab-runner-registration.env".path;
+        # temporary: remove when invalid host issue is fixed
+        registrationFlags = ["--docker-host tcp://127.0.0.1:2375"];
         dockerImage = "alpine";
         dockerVolumes = [
           "/nix/store:/nix/store:ro"
@@ -58,4 +60,10 @@
       };
     };
   };
+
+  # temporary: remove when invalid host issue is fixed
+  virtualisation.docker.listenOptions = [
+    "/run/docker.sock"
+    "127.0.0.1:2375"
+  ];
 }
