@@ -49,7 +49,7 @@ in {
 
   "nomad-docker-auth.age".publicKeys = personalKeys ++ nomadClients;
 
-  "gitlab-runner-registration.age".publicKeys = personalKeys ++ [hypnos];
+  "gitlab-runner-registration.age".publicKeys = personalKeys ++ [hypnos arges];
 
   "authelia-jwt-secret.age".publicKeys = personalKeys ++ [orion];
   "authelia-jwt-private-key.age".publicKeys = personalKeys ++ [orion];

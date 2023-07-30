@@ -10,6 +10,7 @@
     ../common/optional/server
     ../common/optional/consul-agent.nix
     ../common/optional/nomad-client.nix
+    ../common/optional/gitlab-runner.nix
     ../common/optional/nix-builder.nix
   ];
 
