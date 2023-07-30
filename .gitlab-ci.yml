@@ -8,7 +8,7 @@ variables:
   NOMAD_ADDR: "http://nomad.service.consul:4646"
   VAULT_ADDR: "http://vault.service.consul:8200"
 deploy nixos hosts:
-  tags: [nix, "${ARCH}"]
+  tags: [nix-shell, "${ARCH}"]
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
       changes:
@@ -33,8 +33,6 @@ deploy nixos hosts:
   id_tokens:
     VAULT_ID_TOKEN:
       aud: http://vault.service.consul:8200
-  before_script:
-    !reference [ .snippets, setup_devenv ]
   script:
     - nix run .#ci-deploy
 apply terranix changes:
