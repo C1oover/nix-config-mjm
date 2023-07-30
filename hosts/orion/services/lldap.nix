@@ -1,4 +1,7 @@
 {
+  # I suspect issues with podman's ability to clean up external containers
+  virtualisation.oci-containers.backend = "docker";
+
   virtualisation.oci-containers.containers = {
     lldap = {
       image = "nitnelave/lldap:stable";
