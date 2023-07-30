@@ -132,9 +132,9 @@ in {
         >/tmp/id_ed25519-cert.pub
 
       if [ "$ARCH" = "x86_64" ]; then
-        targets=".#aion .#alecto .#cronus .#gaia .#helios .#megaera .#nemesis .#orion .#phoebe .#rhea .#thanatos .#themis .#tisiphone"
+        targets=".#aion .#alecto .#cronus .#gaia .#helios .#megaera .#nemesis .#orion .#phoebe .#rhea .#thanatos .#themis .#tisiphone .#hypnos"
       elif [ "$ARCH" = "arm64" ]; then
-        targets=".#brontes .#nyx .#steropes"
+        targets=".#brontes .#nyx .#steropes .#arges"
       fi
       ${deploy-rs}/bin/deploy --skip-checks --ssh-opts="-o StrictHostKeyChecking=no -i /tmp/id_ed25519" --targets $targets
     '');
