@@ -123,14 +123,20 @@ in {
 
     apps.ci-deploy.program = toString (pkgs.writeShellScript "ci-deploy" ''
       export VAULT_TOKEN=$(${pkgs.vault}/bin/vault write -field=token auth/gitlab/login role=homelab-infra jwt=$VAULT_ID_TOKEN)
-      ${pkgs.openssh}/bin/ssh-keygen -t rsa -f /tmp/id_rsa
+      ${pkgs.openssh}/bin/ssh-keygen -t ed25519 -f /tmp/id_ed25519 -N ""
       ${pkgs.vault}/bin/vault write \
         -field=signed_key \
         ssh-client-signer/sign/homelab-client \
-        public_key=@/tmp/id_rsa.pub \
+        public_key=@/tmp/id_ed25519.pub \
         valid_principals=matt \
         >/tmp/id_rsa-cert.pub
-      ${deploy-rs}/bin/deploy --skip-checks --ssh-opts="-o StrictHostKeyChecking=no -i /tmp/id_rsa" "$@"
+
+      if [ "$ARCH" = "x86_64" ]; then
+        targets=".#aion .#alecto .#cronus .#gaia .#helios .#megaera .#nemesis .#orion .#phoebe .#rhea .#thanatos .#themis .#tisiphone"
+      elif [ "$ARCH" = "aarch64" ]; then
+        targets=".#brontes .#nyx .#steropes"
+      fi
+      ${deploy-rs}/bin/deploy --skip-checks --ssh-opts="-o StrictHostKeyChecking=no -i /tmp/id_ed25519" --targets $targets
     '');
   };
 }

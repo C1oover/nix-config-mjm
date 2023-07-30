@@ -8,7 +8,7 @@ variables:
   NOMAD_ADDR: "http://nomad.service.consul:4646"
   VAULT_ADDR: "http://vault.service.consul:8200"
 deploy nixos hosts:
-  tags: [nix, x86_64]
+  tags: [nix, "${ARCH}"]
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
       changes:
@@ -25,15 +25,18 @@ deploy nixos hosts:
   needs: []
   environment:
     name: production
-  resource_group: production/nixos
+  parallel:
+    matrix:
+      - ARCH: x86_64
+      - ARCH: aarch64
+  resource_group: production/nixos/${ARCH}
   id_tokens:
     VAULT_ID_TOKEN:
       aud: http://vault.service.consul:8200
   before_script:
     !reference [ .snippets, setup_devenv ]
   script:
-    # deploy to the x86_64 hosts
-    - nix run .#ci-deploy -- --targets .#aion .#alecto .#cronus .#gaia .#helios .#megaera .#nemesis .#orion .#phoebe .#rhea .#thanatos .#themis .#tisiphone
+    - nix run .#ci-deploy
 apply terranix changes:
   tags: [nix]
   rules:
