@@ -129,7 +129,7 @@ in {
         ssh-client-signer/sign/homelab-client \
         public_key=@/tmp/id_ed25519.pub \
         valid_principals=matt \
-        >/tmp/id_rsa-cert.pub
+        >/tmp/id_ed25519-cert.pub
 
       if [ "$ARCH" = "x86_64" ]; then
         targets=".#aion .#alecto .#cronus .#gaia .#helios .#megaera .#nemesis .#orion .#phoebe .#rhea .#thanatos .#themis .#tisiphone"
