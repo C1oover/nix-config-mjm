@@ -58,6 +58,12 @@
         };
         tagList = ["nix" pkgs.stdenv.hostPlatform.linuxArch];
       };
+      nix-shell = {
+        registrationConfigFile = config.age.secrets."gitlab-runner-registration.env".path;
+        executor = "shell";
+        tagList = ["nix-shell" pkgs.stdenv.hostPlatform.linuxArch];
+        protected = true;
+      };
     };
   };
 
