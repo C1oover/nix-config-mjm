@@ -1,4 +1,8 @@
-{inputs, ...}: {
+{
+  pkgs,
+  inputs,
+  ...
+}: {
   home.sessionVariables.EDITOR = "nvim";
 
   programs.zsh = {
@@ -20,10 +24,23 @@
     enableZshIntegration = true;
   };
 
-  xdg.configFile."starship.toml".text = ''
+  xdg.configFile."starship.toml".text = let
+    nerdFontSymbols = pkgs.runCommand "starship-nerd-font-symbols" {} ''
+      mkdir $out
+      ${pkgs.starship}/bin/starship preset nerd-font-symbols > $out/nerd-font-symbols.toml
+    '';
+  in ''
     format = "$all"
     palette = "catppuccin_mocha"
     command_timeout = 2000
+
+    [os]
+    disabled = false
+
+    ${builtins.readFile (nerdFontSymbols + /nerd-font-symbols.toml)}
+
+    [gcloud]
+    symbol = "󰅟 "
 
     ${builtins.readFile (inputs.catppuccin + /palettes/mocha.toml)}
   '';
