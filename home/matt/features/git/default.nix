@@ -60,6 +60,7 @@
     settings = {
       user.name = config.programs.git.userName;
       user.email = config.programs.git.userEmail;
+      ui.default-command = "log";
     };
     enableZshIntegration = true;
   };
