@@ -23,6 +23,9 @@
       enable = true;
       autoCleanAfterSessionRestore = true;
       closeIfLastWindow = true;
+      extraOptions = {
+        filesystem.follow_current_file.enabled = true;
+      };
       defaultComponentConfigs = {
         indent.padding = 0;
         icon = {
@@ -48,7 +51,6 @@
         };
       };
       filesystem = {
-        followCurrentFile = true;
         hijackNetrwBehavior = "open_current";
         useLibuvFileWatcher = true;
       };
