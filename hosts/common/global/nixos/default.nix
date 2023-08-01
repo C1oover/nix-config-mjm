@@ -11,10 +11,11 @@
       inputs.agenix.nixosModules.default
       inputs.nixvim.nixosModules.nixvim
 
+      ../home-manager.nix
       ../nix.nix
+      ../nixvim
       ./ssh.nix
       ./ssl.nix
-      ../nixvim
     ]
     ++ (builtins.attrValues outputs.nixosModules);
 
@@ -37,11 +38,4 @@
 
   programs.zsh.enable = true;
   programs.tmux.enable = true;
-
-  home-manager = {
-    useUserPackages = true;
-    useGlobalPkgs = true;
-    extraSpecialArgs = {inherit inputs outputs;};
-    backupFileExtension = "bak";
-  };
 }

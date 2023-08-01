@@ -14,6 +14,7 @@
       ./dock.nix
       ./homebrew.nix
       ./keyboard.nix
+      ../home-manager.nix
       ../nix.nix
       ../nixvim
     ]
@@ -26,13 +27,6 @@
   nix.configureBuildUsers = true;
   nix.settings.trusted-users = ["@admin"];
   services.nix-daemon.enable = true;
-
-  home-manager = {
-    useUserPackages = true;
-    useGlobalPkgs = true;
-    extraSpecialArgs = {inherit inputs outputs;};
-    backupFileExtension = "bak";
-  };
 
   time.timeZone = "America/Denver";
 
