@@ -11,7 +11,7 @@
     ./impermanence.nix
     ./virtualization.nix
 
-    ../common/global/nixos.nix
+    ../common/global/nixos
     ../common/users/matt
 
     ../common/optional/desktop

@@ -6,7 +6,7 @@
   imports = [
     (modulesPath + "/virtualisation/lxc-container.nix")
 
-    ../common/global/nixos.nix
+    ../common/global/nixos
 
     ../common/optional/server
     ../common/optional/consul-agent.nix

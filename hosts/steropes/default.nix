@@ -4,7 +4,7 @@
     inputs.hardware.nixosModules.raspberry-pi-4
     ./hardware-configuration.nix
 
-    ../common/global/nixos.nix
+    ../common/global/nixos
     ../common/users/matt
 
     ../common/optional/server

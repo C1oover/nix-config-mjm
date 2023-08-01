@@ -2,7 +2,7 @@
   imports = [
     ./hardware-configuration.nix
 
-    ../common/global/nixos.nix
+    ../common/global/nixos
 
     ./services/nginx.nix
   ];

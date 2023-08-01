@@ -11,10 +11,10 @@
       inputs.agenix.nixosModules.default
       inputs.nixvim.nixosModules.nixvim
 
-      ./nix.nix
+      ../nix.nix
       ./ssh.nix
       ./ssl.nix
-      ./nixvim
+      ../nixvim
     ]
     ++ (builtins.attrValues outputs.nixosModules);
 
