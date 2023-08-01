@@ -11,28 +11,14 @@
       inputs.agenix.nixosModules.default
       inputs.nixvim.nixosModules.nixvim
 
+      ./nix.nix
       ./ssh.nix
       ./ssl.nix
       ./nixvim
     ]
     ++ (builtins.attrValues outputs.nixosModules);
 
-  nix.settings = {
-    experimental-features = ["flakes" "nix-command"];
-    trusted-users = ["root" "matt"];
-  };
-  nix.registry = {
-    nixpkgs.flake = inputs.nixpkgs;
-    home-manager.flake = inputs.home-manager;
-  };
-  nixpkgs.config = {
-    # the vscode-langservers-extracted package pulls them out of VSCode,
-    # which is unfree
-    allowUnfree = true;
-  };
-  nixpkgs.overlays = [
-    inputs.nur.overlay
-  ];
+  nix.settings.trusted-users = ["root" "matt"];
 
   time.timeZone = lib.mkDefault "Etc/UTC";
 

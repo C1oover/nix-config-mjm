@@ -14,15 +14,18 @@
       ./dock.nix
       ./homebrew.nix
       ./keyboard.nix
-      ./nix.nix
-      ./nixvim
+      ../nix.nix
+      ../nixvim
     ]
     ++ (builtins.attrValues outputs.darwinModules);
 
   nixpkgs.overlays = [
     inputs.nixpkgs-firefox-darwin.overlay
-    inputs.nur.overlay
   ];
+
+  nix.configureBuildUsers = true;
+  nix.settings.trusted-users = ["@admin"];
+  services.nix-daemon.enable = true;
 
   home-manager = {
     useUserPackages = true;

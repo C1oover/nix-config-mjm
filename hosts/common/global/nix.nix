@@ -1,18 +1,15 @@
 {inputs, ...}: {
-  nix.configureBuildUsers = true;
-  nix.settings = {
-    trusted-users = ["@admin"];
-    experimental-features = ["nix-command" "flakes"];
-  };
+  nix.settings.experimental-features = ["nix-command" "flakes"];
 
   nix.registry = {
     nixpkgs.flake = inputs.nixpkgs;
     home-manager.flake = inputs.home-manager;
   };
 
-  nixpkgs.config = {
-    allowUnfree = true;
+  nixpkgs = {
+    config.allowUnfree = true;
+    overlays = [
+      inputs.nur.overlay
+    ];
   };
-
-  services.nix-daemon.enable = true;
 }
