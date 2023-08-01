@@ -5,7 +5,7 @@
   };
 
   provider.gitlab = {
-    base_url = "https://git.mattmoriarity.com/api/v4/";
+    base_url = "https://git.midna.dev/api/v4/";
   };
 
   minio.buckets = {

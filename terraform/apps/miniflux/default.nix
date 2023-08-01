@@ -30,7 +30,7 @@ in {
       tasks.miniflux = {
         docker = {inherit image;};
         env = {
-          BASE_URL = "https://miniflux.mattmoriarity.com/";
+          BASE_URL = "https://feeds.midna.dev/";
           METRICS_COLLECTOR = "1";
           RUN_MIGRATIONS = "1";
           AUTH_PROXY_HEADER = "Remote-User";
@@ -65,7 +65,7 @@ in {
     }
   '';
 
-  ingress.virtualHosts.miniflux = {
+  ingress.virtualHosts.feeds = {
     upstream.service = {
       inherit name;
       connectPort = 8080;

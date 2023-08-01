@@ -31,8 +31,8 @@ in {
           LD_SUPERUSER_NAME = "mjm";
           LD_ENABLE_AUTH_PROXY = "True";
           LD_AUTH_PROXY_USERNAME_HEADER = "HTTP_REMOTE_USER";
-          LD_AUTH_PROXY_LOGOUT_URL = "https://auth.mattmoriarity.com/logout";
-          LD_CSRF_TRUSTED_ORIGINS = "https://linkding.mattmoriarity.com";
+          LD_AUTH_PROXY_LOGOUT_URL = "https://auth.midna.dev/logout";
+          LD_CSRF_TRUSTED_ORIGINS = "https://links.midna.dev";
           LD_DB_ENGINE = "postgres";
           LD_DB_DATABASE = "linkding";
           LD_DB_HOST = "postgresql.service.consul";
@@ -66,7 +66,7 @@ in {
     }
   '';
 
-  ingress.virtualHosts.linkding = {
+  ingress.virtualHosts.links = {
     upstream.service = {
       inherit name;
       connectPort = 9090;

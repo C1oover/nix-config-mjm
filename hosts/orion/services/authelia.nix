@@ -13,6 +13,7 @@
       redirect_uris = [
         "https://gitlab.home.mattmoriarity.com/users/auth/openid_connect/callback"
         "https://git.mattmoriarity.com/users/auth/openid_connect/callback"
+        "https://git.midna.dev/users/auth/openid_connect/callback"
       ];
       scopes = ["openid" "profile" "groups" "email"];
       userinfo_signing_algorithm = "none";
@@ -136,7 +137,7 @@ in {
     inherit user group;
     enable = true;
     settings = {
-      default_redirection_url = "https://auth.mattmoriarity.com/";
+      default_redirection_url = "https://git.midna.dev/";
       default_2fa_method = "webauthn";
       server.host = "0.0.0.0";
       server.port = 9092;
@@ -165,12 +166,12 @@ in {
         default_policy = "two_factor";
         rules = [
           {
-            domain = "linkding.mattmoriarity.com";
+            domain = "links.midna.dev";
             resources = ["^/api/.*$"];
             policy = "bypass";
           }
           {
-            domain = "miniflux.mattmoriarity.com";
+            domain = "feeds.midna.dev";
             resources = [
               "^/v1/.*$"
               "^/accounts/ClientLogin$"
@@ -180,7 +181,7 @@ in {
           }
         ];
       };
-      session.domain = "mattmoriarity.com";
+      session.domain = "midna.dev";
       session.redis = {
         host = "redis.service.consul";
         port = 6379;

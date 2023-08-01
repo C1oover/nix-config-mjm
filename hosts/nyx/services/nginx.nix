@@ -23,11 +23,11 @@ in {
     '';
     recommendedProxySettings = true;
     virtualHosts = {
-      "auth.mattmoriarity.com" = baseVhost;
-      "miniflux.mattmoriarity.com" = baseVhost;
-      "linkding.mattmoriarity.com" = baseVhost;
-      "git.mattmoriarity.com" = baseVhost;
-      "paperless.mattmoriarity.com" = lib.recursiveUpdate baseVhost {
+      "auth.midna.dev" = baseVhost;
+      "feeds.midna.dev" = baseVhost;
+      "links.midna.dev" = baseVhost;
+      "git.midna.dev" = baseVhost;
+      "paper.midna.dev" = lib.recursiveUpdate baseVhost {
         locations."/".proxyWebsockets = true;
       };
     };

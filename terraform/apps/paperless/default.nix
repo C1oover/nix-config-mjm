@@ -17,7 +17,7 @@
     }
   '';
 
-  ingress.virtualHosts.paperless = {
+  ingress.virtualHosts.paper = {
     upstream.service.name = "paperless";
 
     external = true;

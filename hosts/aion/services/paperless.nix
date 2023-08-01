@@ -15,7 +15,7 @@ in {
       PAPERLESS_DBPORT = "5432";
       PAPERLESS_DBNAME = "paperless";
       PAPERLESS_DBSSLMODE = "disable";
-      PAPERLESS_URL = "https://paperless.mattmoriarity.com";
+      PAPERLESS_URL = "https://paper.midna.dev";
       PAPERLESS_ALLOWED_HOSTS = "paperless.service.consul,localhost";
       PAPERLESS_ENABLE_HTTP_REMOTE_USER = "true";
       PAPERLESS_HTTP_REMOTE_USER_HEADER_NAME = "HTTP_REMOTE_USER";

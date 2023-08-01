@@ -140,7 +140,7 @@ in {
                 if vhost.external
                 then ''
                   listen 80;
-                  server_name ${name}.mattmoriarity.com;
+                  server_name ${name}.midna.dev;
                 ''
                 else ''
                   listen 443 ssl;

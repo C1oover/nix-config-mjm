@@ -1,8 +1,8 @@
 {
   resource.vault_jwt_auth_backend.gitlab = {
     path = "gitlab";
-    bound_issuer = "https://git.mattmoriarity.com";
-    jwks_url = "https://git.mattmoriarity.com/-/jwks";
+    bound_issuer = "https://git.midna.dev";
+    jwks_url = "https://git.midna.dev/-/jwks";
 
     tune = [
       {
