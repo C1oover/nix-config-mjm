@@ -26,6 +26,7 @@
   home.packages = with pkgs; [
     gh
     httpie
+    nix-output-monitor
     nix-tree
     pstree
     ripgrep
@@ -42,8 +43,8 @@
     hm = "home-manager";
     rebuild =
       if pkgs.stdenv.isLinux
-      then "nixos-rebuild build && nvd diff /run/current-system result"
-      else "darwin-rebuild build --flake . && nvd diff /run/current-system result";
+      then "${pkgs.nix-output-monitor}/bin/nom build .#nixosConfigurations.$(hostname).config.system.build.toplevel && ${pkgs.nvd}/bin/nvd diff /run/current-system result"
+      else "darwin-rebuild build --flake . && ${pkgs.nvd}/bin/nvd diff /run/current-system result";
     switch =
       if pkgs.stdenv.isLinux
       then "nixos-rebuild switch --use-remote-sudo"
