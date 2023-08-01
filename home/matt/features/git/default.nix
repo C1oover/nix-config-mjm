@@ -1,6 +1,7 @@
 {
   lib,
   pkgs,
+  config,
   ...
 }: {
   home.packages = lib.mkIf pkgs.stdenv.isLinux [
@@ -52,5 +53,14 @@
 
   programs.mr = {
     enable = true;
+  };
+
+  programs.jujutsu = {
+    enable = true;
+    settings = {
+      user.name = config.programs.git.userName;
+      user.email = config.programs.git.userEmail;
+    };
+    enableZshIntegration = true;
   };
 }
