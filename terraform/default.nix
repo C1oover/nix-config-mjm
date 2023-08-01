@@ -44,20 +44,20 @@
       languages.terraform.package = terraform;
 
       scripts.tf.exec = ''
-        cd "$(git rev-parse --show-toplevel)/terraform" || exit
+        cd terraform
         ${terraform}/bin/terraform "$@"
       '';
     };
 
     apps.tf-plan.program = toString (pkgs.writeShellScript "tf-plan" ''
-      cd "$(git rev-parse --show-toplevel)/terraform" || exit
+      cd terraform
       ln -sf ${terraformConfiguration} config.tf.json
       ${terraform}/bin/terraform init && \
         ${terraform}/bin/terraform plan "$@"
     '');
 
     apps.tf-apply.program = toString (pkgs.writeShellScript "tf-apply" ''
-      cd "$(git rev-parse --show-toplevel)/terraform" || exit
+      cd terraform
       ln -sf ${terraformConfiguration} config.tf.json
       ${terraform}/bin/terraform init && \
         ${terraform}/bin/terraform apply "$@"
@@ -68,7 +68,7 @@
 
       export VAULT_TOKEN=$(${pkgs.vault}/bin/vault write -field=token auth/gitlab/login role=homelab-infra jwt=$VAULT_ID_TOKEN)
 
-      cd "$(git rev-parse --show-toplevel)/terraform" || exit
+      cd terraform
       ln -sf ${terraformConfiguration} config.tf.json
       ${terraform}/bin/terraform init && \
         ${terraform}/bin/terraform apply -auto-approve
