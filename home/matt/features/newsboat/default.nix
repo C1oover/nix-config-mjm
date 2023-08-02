@@ -17,7 +17,7 @@
     extraConfig = ''
       text-width 100
       urls-source "miniflux"
-      miniflux-url "https://miniflux.mattmoriarity.com/"
+      miniflux-url "https://feeds.midna.dev/"
       miniflux-tokenfile ${config.home.homeDirectory}/.config/newsboat/miniflux-token
       include ${inputs.catppuccin-newsboat}/themes/dark
     '';
