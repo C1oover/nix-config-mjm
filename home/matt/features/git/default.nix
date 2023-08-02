@@ -72,4 +72,9 @@
     source <(${pkgs.jujutsu}/bin/jj util completion --zsh)
     compdef _jj ${pkgs.jujutsu}/bin/jj
   '';
+
+  home.shellAliases = {
+    jj-push = "jj branch set main -r @- && jj git push";
+    jj-pull = "jj git fetch && jj co main";
+  };
 }
