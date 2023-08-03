@@ -12,6 +12,7 @@
       inputs.nixvim.nixDarwinModules.nixvim
 
       ./dock.nix
+      ./fonts.nix
       ./homebrew.nix
       ./keyboard.nix
       ../home-manager.nix
