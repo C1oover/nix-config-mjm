@@ -118,4 +118,8 @@
     let-env ASDF_NU_DIR = '${config.home.homeDirectory}/.asdf'
     source '${config.home.homeDirectory}/.asdf/asdf.nu'
   '';
+
+  programs.jujutsu.settings = {
+    aliases.mine = ["log" "-r" "@ | main | branches(\"mjm-\")"];
+  };
 }
