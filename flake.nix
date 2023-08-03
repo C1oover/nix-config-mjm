@@ -86,6 +86,7 @@
               "home/matt/features/firefox/addons/addons.nix"
             ];
           };
+          dotenv.disableHint = true;
         };
 
         formatter = pkgs.alejandra;
