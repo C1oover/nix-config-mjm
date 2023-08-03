@@ -6,5 +6,6 @@
     };
   in {
     packages.beeper = pkgs.callPackage ./beeper.nix {};
+    packages.pragmata-pro = pkgs.callPackage ./pragmata-pro.nix {};
   };
 }

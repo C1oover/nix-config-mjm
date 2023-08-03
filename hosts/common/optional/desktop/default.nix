@@ -1,6 +1,7 @@
 {
   lib,
   pkgs,
+  outputs,
   ...
 }: {
   programs.sway = {
@@ -36,6 +37,7 @@
       noto-fonts-emoji
       (nerdfonts.override {fonts = ["NerdFontsSymbolsOnly"];})
       font-awesome
+      outputs.packages.${pkgs.system}.pragmata-pro
     ];
 
     fontconfig = {
