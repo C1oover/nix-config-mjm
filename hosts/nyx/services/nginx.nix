@@ -12,6 +12,12 @@
       '';
     };
   };
+  mkRedirect = name: {
+    http2 = false;
+    forceSSL = true;
+    enableACME = true;
+    globalRedirect = "${name}.midna.dev";
+  };
 in {
   security.acme.acceptTerms = true;
   security.acme.defaults.email = "acme@matt.mattmoriarity.com";
@@ -30,6 +36,12 @@ in {
       "paper.midna.dev" = lib.recursiveUpdate baseVhost {
         locations."/".proxyWebsockets = true;
       };
+
+      "auth.mattmatt.dev" = mkRedirect "auth";
+      "feeds.mattmatt.dev" = mkRedirect "feeds";
+      "links.mattmatt.dev" = mkRedirect "links";
+      "git.mattmatt.dev" = mkRedirect "git";
+      "paper.mattmatt.dev" = mkRedirect "paper";
     };
   };
 
