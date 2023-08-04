@@ -44,7 +44,7 @@
     rebuild =
       if pkgs.stdenv.isLinux
       then "${pkgs.nix-output-monitor}/bin/nom build .#nixosConfigurations.$(hostname).config.system.build.toplevel && ${pkgs.nvd}/bin/nvd diff /run/current-system result"
-      else "darwin-rebuild build --flake . && ${pkgs.nvd}/bin/nvd diff /run/current-system result";
+      else "${pkgs.nix-output-monitor}/bin/nom build .#darwinConfigurations.$(hostname).config.system.build.toplevel && ${pkgs.nvd}/bin/nvd diff /run/current-system result";
     switch =
       if pkgs.stdenv.isLinux
       then "nixos-rebuild switch --use-remote-sudo"
