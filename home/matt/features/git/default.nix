@@ -62,16 +62,7 @@
       user.email = config.programs.git.userEmail;
       ui.default-command = "log";
     };
-    enableZshIntegration = false;
   };
-
-  # the zsh integration in home-manager chops off the last line, which closes an if statement.
-  # perhaps there used to be an erroneous line in the output that needed to be removed, but there isn't now.
-  # so we'll just do this ourselves for the time being.
-  programs.zsh.initExtra = ''
-    source <(${pkgs.jujutsu}/bin/jj util completion --zsh)
-    compdef _jj ${pkgs.jujutsu}/bin/jj
-  '';
 
   home.shellAliases = {
     jj-push = "jj branch set main -r @- && jj git push";
