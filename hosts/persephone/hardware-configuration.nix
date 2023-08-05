@@ -5,7 +5,15 @@
   lib,
   modulesPath,
   ...
-}: {
+}: let
+  mkSubvol = name: opts:
+    {
+      device = "/dev/disk/by-uuid/a5f6fd18-f9e4-4fe3-9e62-62f054ee80ee";
+      fsType = "btrfs";
+      options = ["subvol=${name}" "compress=zstd" "noatime"];
+    }
+    // opts;
+in {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
@@ -15,50 +23,15 @@
   boot.kernelModules = ["kvm-intel"];
   boot.extraModulePackages = [];
 
-  fileSystems."/" = {
-    device = "/dev/disk/by-uuid/a5f6fd18-f9e4-4fe3-9e62-62f054ee80ee";
-    fsType = "btrfs";
-    options = ["subvol=root" "compress=zstd" "noatime"];
-  };
-
-  fileSystems."/home" = {
-    device = "/dev/disk/by-uuid/a5f6fd18-f9e4-4fe3-9e62-62f054ee80ee";
-    fsType = "btrfs";
-    options = ["subvol=home" "compress=zstd" "noatime"];
-  };
-
-  fileSystems."/nix" = {
-    device = "/dev/disk/by-uuid/a5f6fd18-f9e4-4fe3-9e62-62f054ee80ee";
-    fsType = "btrfs";
-    options = ["subvol=nix" "compress=zstd" "noatime"];
-    neededForBoot = true;
-  };
-
-  fileSystems."/persist" = {
-    device = "/dev/disk/by-uuid/a5f6fd18-f9e4-4fe3-9e62-62f054ee80ee";
-    fsType = "btrfs";
-    options = ["subvol=persist" "compress=zstd" "noatime"];
-    neededForBoot = true;
-  };
-
-  fileSystems."/var/log" = {
-    device = "/dev/disk/by-uuid/a5f6fd18-f9e4-4fe3-9e62-62f054ee80ee";
-    fsType = "btrfs";
-    options = ["subvol=log" "compress=zstd" "noatime"];
-    neededForBoot = true;
-  };
-
-  fileSystems."/var/lib/libvirt" = {
-    device = "/dev/disk/by-uuid/a5f6fd18-f9e4-4fe3-9e62-62f054ee80ee";
-    fsType = "btrfs";
-    options = ["subvol=libvirt" "compress=zstd" "noatime"];
-  };
-
-  fileSystems."/var/lib/fprint" = {
-    device = "/dev/disk/by-uuid/a5f6fd18-f9e4-4fe3-9e62-62f054ee80ee";
-    fsType = "btrfs";
-    options = ["subvol=fprint" "compress=zstd" "noatime"];
-  };
+  fileSystems."/" = mkSubvol "root" {};
+  fileSystems."/home" = mkSubvol "home" {};
+  fileSystems."/nix" = mkSubvol "nix" {neededForBoot = true;};
+  fileSystems."/persist" = mkSubvol "persist" {neededForBoot = true;};
+  fileSystems."/var/log" = mkSubvol "log" {neededForBoot = true;};
+  fileSystems."/var/lib/libvirt" = mkSubvol "libvirt" {};
+  fileSystems."/var/lib/fprint" = mkSubvol "fprint" {};
+  fileSystems."/var/lib/NetworkManager" = mkSubvol "networkmanager" {};
+  fileSystems."/var/lib/iwd" = mkSubvol "iwd" {};
 
   fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/B0EC-18F2";
