@@ -9,6 +9,7 @@
     "ssh/ssh_host_ed25519_key.pub".source = "/persist/etc/ssh/ssh_host_ed25519_key.pub";
     "ssh/ssh_host_rsa_key".source = "/persist/etc/ssh/ssh_host_rsa_key";
     "ssh/ssh_host_rsa_key.pub".source = "/persist/etc/ssh/ssh_host_rsa_key.pub";
+    "NetworkManager/system-connections".source = "/persist/etc/NetworkManager/system-connections";
   };
 
   security.sudo.extraConfig = ''

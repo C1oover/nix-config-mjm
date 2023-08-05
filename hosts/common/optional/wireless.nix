@@ -1,15 +1,6 @@
-{config, ...}: {
-  networking.wireless = {
+{
+  networking.networkmanager = {
     enable = true;
-    userControlled.enable = true;
-    environmentFile = config.age.secrets."wpa-supplicant.env".path;
-
-    networks = {
-      "Shrimp Heaven Now" = {
-        psk = "@PSK_SHN@";
-      };
-    };
+    wifi.backend = "iwd";
   };
-
-  age.secrets."wpa-supplicant.env".file = ../../../secrets/wpa-supplicant-env.age;
 }
