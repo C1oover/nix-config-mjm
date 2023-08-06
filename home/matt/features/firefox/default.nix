@@ -104,6 +104,20 @@ in {
           icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
           definedAliases = ["@no"];
         };
+        "Links" = {
+          urls = [
+            {
+              template = "https://links.midna.dev/bookmarks";
+              params = [
+                {
+                  name = "q";
+                  value = "{searchTerms}";
+                }
+              ];
+            }
+          ];
+          definedAliases = ["@l"];
+        };
         "Bing".metadata.hidden = true;
         "Google".metadata.alias = "@g";
       };
