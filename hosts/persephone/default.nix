@@ -81,6 +81,7 @@
   };
 
   networking.hostName = "persephone";
+  services.resolved.enable = true;
 
   # Set your time zone.
   time.timeZone = "America/Denver";
