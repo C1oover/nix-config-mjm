@@ -9,6 +9,7 @@
     inputs.hardware.nixosModules.common-pc-laptop-ssd
     ./hardware-configuration.nix
     ./impermanence.nix
+    ./snapshots.nix
     ./virtualization.nix
 
     ../common/global/nixos
