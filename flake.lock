@@ -426,6 +426,26 @@
         "type": "github"
       }
     },
+    "git-branchless": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1691024781,
+        "narHash": "sha256-xh7abYFJuCgRJfMn+9WBUR7p1FkHOSvVlTmOHLWPJOo=",
+        "owner": "arxanas",
+        "repo": "git-branchless",
+        "rev": "949009171623336ca9da06a518c43a536afa6546",
+        "type": "github"
+      },
+      "original": {
+        "owner": "arxanas",
+        "repo": "git-branchless",
+        "type": "github"
+      }
+    },
     "gitignore": {
       "inputs": {
         "nixpkgs": [
@@ -898,6 +918,7 @@
         "devenv": "devenv",
         "flake-compat": "flake-compat_3",
         "flake-parts": "flake-parts",
+        "git-branchless": "git-branchless",
         "hardware": "hardware",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs_2",
