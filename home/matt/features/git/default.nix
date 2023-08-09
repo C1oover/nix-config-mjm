@@ -65,6 +65,10 @@
       ui.diff-editor = let
         scm-diff-editor = inputs.git-branchless.packages.${pkgs.system}.scm-diff-editor;
       in ["${scm-diff-editor}/bin/scm-diff-editor" "--dir-diff" "$left" "$right"];
+
+      aliases = {
+        unpushed = ["log" "-r" "branches() & ~(main | remote_branches())"];
+      };
     };
   };
 
