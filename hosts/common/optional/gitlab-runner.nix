@@ -67,6 +67,10 @@
     };
   };
 
+  # If Docker changes, we don't want it to restart during a deploy, because that will cause the deploy
+  # to fail, and then we'll just be stuck in that state.
+  systemd.services.docker.restartIfChanged = false;
+
   # temporary: remove when invalid host issue is fixed
   virtualisation.docker.listenOptions = [
     "/run/docker.sock"
