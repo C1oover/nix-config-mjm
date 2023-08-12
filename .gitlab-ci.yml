@@ -2,6 +2,7 @@
   setup_devenv:
     - . "$HOME/.nix-profile/etc/profile.d/nix.sh"
 stages:
+  - check
   - deploy
 variables:
   CONSUL_HTTP_ADDR: "consul.service.consul:8500"
