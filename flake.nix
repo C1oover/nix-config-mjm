@@ -94,6 +94,25 @@
         };
 
         formatter = pkgs.alejandra;
+
+        apps.ci-flake-update.program = toString (let
+          nix = "${pkgs.nix}/bin/nix";
+          git = "${pkgs.git}/bin/git";
+        in
+          pkgs.writeShellScript "ci-flake-update" ''
+            ${nix} flake update
+            if [[ -z $(${git} status -s) ]]; then
+              echo "no updates: all done"
+              exit 0
+            fi
+
+            ${git} config user.email "gitlab@matt.mattmoriarity.com"
+            ${git} config user.name "GitLab Automation"
+            ${git} add flake.lock
+            ${git} commit -m "nix flake update"
+            ${git} remote add gitlab https://ci:$FLAKE_UPDATE_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git
+            ${git} push gitlab HEAD:main
+          '');
       };
     };
 }
