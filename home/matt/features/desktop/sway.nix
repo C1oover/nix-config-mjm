@@ -70,6 +70,9 @@
         "XF86AudioMute" = "exec ${pactl} set-sink-mute @DEFAULT_SINK@ toggle && ${pactl} get-sink-volume @DEFAULT_SINK@ | head -n1 | awk '{print substr($5, 1, length($5) - 1)}' > $WOBSOCK";
 
         "${mod}+c" = "exec ${pkgs.clipman}/bin/clipman pick -t bemenu -T'${bemenuArgs}'";
+
+        "Print" = "exec ${pkgs.grim}/bin/grim";
+        "Shift+Print" = "exec ${pkgs.grim}/bin/grim -g \"$(${pkgs.slurp}/bin/slurp)\"";
       };
 
       input."type:keyboard" = {
