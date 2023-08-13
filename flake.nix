@@ -78,7 +78,11 @@
 
       systems = ["x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin"];
 
-      perSystem = {pkgs, ...}: {
+      perSystem = {
+        pkgs,
+        lib,
+        ...
+      }: {
         devenv.shells.default = {
           pre-commit = {
             hooks = {
@@ -96,16 +100,28 @@
         formatter = pkgs.alejandra;
 
         apps.ci-flake-update.program = toString (let
-          nix = "${pkgs.nix}/bin/nix";
-          git = "${pkgs.git}/bin/git";
+          curl = lib.getExe pkgs.curl;
+          jq = lib.getExe pkgs.jq;
+          nix = lib.getExe pkgs.nix;
+          git = lib.getExe pkgs.git;
         in
           pkgs.writeShellScript "ci-flake-update" ''
-            ${nix} flake update
-            if [[ -z $(${git} status -s) ]]; then
+            function latest_nixpkgs() {
+              ${curl} -s 'https://monitoring.nixos.org/prometheus/api/v1/query?query=channel_revision%7Bchannel%3D%22nixpkgs-unstable%22%7D' \
+                | ${jq} -r '.data.result[0].metric.revision'
+            }
+
+            function my_nixpkgs() {
+              ${nix} flake metadata nixpkgs --json | ${jq} -r '.locked.rev'
+            }
+
+            if [ "$(my_nixpkgs)" = "$(latest_nixpkgs)" ]; then
               echo "no updates: all done"
               exit 0
             fi
 
+            echo "latest nixpkgs doesn't match my version. updating..."
+            ${nix} flake update
             ${git} config user.email "gitlab@matt.mattmoriarity.com"
             ${git} config user.name "GitLab Automation"
             ${git} add flake.lock
