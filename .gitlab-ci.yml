@@ -9,7 +9,7 @@ variables:
   NOMAD_ADDR: "http://nomad.service.consul:4646"
   VAULT_ADDR: "http://vault.service.consul:8200"
 deploy nixos hosts:
-  tags: [nix-shell, "${ARCH}"]
+  tags: [nix, "${ARCH}"]
   rules:
     - if: $CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"
       changes:
