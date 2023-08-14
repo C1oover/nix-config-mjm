@@ -112,7 +112,8 @@
             }
 
             function my_nixpkgs() {
-              ${nix} flake metadata nixpkgs --json | ${jq} -r '.locked.rev'
+              nixpkgs_name="$(${nix} flake metadata . --json | ${jq} -r '.locks.nodes.root.inputs.nixpkgs')"
+              ${nix} flake metadata . --json | ${jq} -r ".locks.nodes.$nixpkgs_name.locked.rev"
             }
 
             latest="$(latest_nixpkgs)"
