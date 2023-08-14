@@ -115,7 +115,13 @@
               ${nix} flake metadata nixpkgs --json | ${jq} -r '.locked.rev'
             }
 
-            if [ "$(my_nixpkgs)" = "$(latest_nixpkgs)" ]; then
+            latest="$(latest_nixpkgs)"
+            mine="$(my_nixpkgs)"
+
+            echo "latest: $latest"
+            echo "mine: $mine"
+
+            if [ "$latest" = "$mine" ]; then
               echo "no updates: all done"
               exit 0
             fi
