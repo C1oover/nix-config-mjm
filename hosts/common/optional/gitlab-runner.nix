@@ -26,7 +26,7 @@
           "/nix/var/nix/db:/nix/var/nix/db:ro"
           "/nix/var/nix/daemon-socket:/nix/var/nix/daemon-socket:ro"
           "/etc/ssl/certs/ca-certificates.crt:/etc/ssl/certs/ca-certificates.crt:ro"
-          "/var/cache/bazel:/var/cache/bazel:rw"
+          "/etc/ssh/ssh_known_hosts:/etc/ssh/ssh_known_hosts:ro"
         ];
         dockerDisableCache = true;
         preBuildScript = pkgs.writeScript "setup-container" ''
