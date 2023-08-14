@@ -34,6 +34,8 @@ deploy nixos hosts:
   id_tokens:
     VAULT_ID_TOKEN:
       aud: http://vault.service.consul:8200
+  before_script:
+    !reference [ .snippets, setup_devenv ]
   script:
     - nix run .#ci-deploy
 apply terranix changes:
