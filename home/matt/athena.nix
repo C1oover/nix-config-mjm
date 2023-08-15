@@ -10,14 +10,21 @@
     ./global/darwin.nix
   ];
 
-  home.packages = with pkgs; [
-    google-cloud-sdk
-    ngrok
-    slack
-    teams
-    teleport
-    zoom-us
-  ];
+  home.packages = let
+    jj-pr = pkgs.writeShellScriptBin "jj-pr" ''
+      gh pr create --repo slab/$(basename $PWD) --head "$1" --web
+    '';
+  in
+    with pkgs; [
+      google-cloud-sdk
+      ngrok
+      slack
+      teams
+      teleport
+      zoom-us
+
+      jj-pr
+    ];
 
   home.shellAliases = {
     db-stage = "tsh -k no db login --db-user=teleport-rw@slab-stage.iam --db-name=slab slab-sql-stage-pg14";
