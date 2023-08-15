@@ -87,6 +87,7 @@ in {
       EnvironmentFile = "/run/secrets/paperless/paperless.env";
       ProtectHostname = lib.mkForce false;
       PrivateUsers = lib.mkForce false;
+      BindReadOnlyPaths = ["/etc/ssl/certs"];
     };
     paperless-consumer.serviceConfig = {
       EnvironmentFile = "/run/secrets/paperless/paperless.env";
