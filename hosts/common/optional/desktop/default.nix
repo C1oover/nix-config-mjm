@@ -64,4 +64,6 @@
     package = lib.mkForce pkgs.gnome3.gvfs;
   };
   programs.thunar.enable = true;
+
+  programs.kdeconnect.enable = true;
 }
