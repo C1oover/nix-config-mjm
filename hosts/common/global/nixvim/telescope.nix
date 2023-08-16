@@ -40,7 +40,11 @@
           };
         };
       };
-      extraOptions.pickers.find_files.find_command = ["${lib.getExe pkgs.fd}" "--type" "f" "--no-require-git"];
+      extraOptions.pickers = {
+        find_files.find_command = ["${lib.getExe pkgs.fd}" "--type" "f" "--no-require-git"];
+        live_grep.additional_args = ["--no-require-git"];
+      };
+
       extensions.fzf-native.enable = true;
     };
 
