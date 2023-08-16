@@ -1,4 +1,8 @@
 {
+  lib,
+  pkgs,
+  ...
+}: {
   programs.nixvim = {
     plugins.telescope = {
       enable = true;
@@ -36,6 +40,7 @@
           };
         };
       };
+      extraOptions.pickers.find_files.find_command = ["${lib.getExe pkgs.fd}" "--type" "f" "--no-require-git"];
       extensions.fzf-native.enable = true;
     };
 
