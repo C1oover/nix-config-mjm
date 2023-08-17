@@ -11,6 +11,7 @@
 
       ../features/git
       ../features/shell
+      ../features/xdg
     ]
     ++ (builtins.attrValues outputs.homeManagerModules);
 
