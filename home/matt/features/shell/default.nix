@@ -70,6 +70,10 @@
     };
   };
 
+  programs.atuin = {
+    enable = true;
+  };
+
   programs.dircolors = {
     enable = true;
     enableZshIntegration = true;
