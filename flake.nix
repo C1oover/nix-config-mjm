@@ -34,6 +34,7 @@
       url = "github:arxanas/git-branchless";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    helix.url = "github:helix-editor/helix";
 
     catppuccin = {
       url = "github:catppuccin/starship";
