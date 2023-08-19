@@ -69,6 +69,10 @@ with lib; let
           type = types.bool;
           default = true;
         };
+        serverAliases = mkOption {
+          type = types.listOf types.str;
+          default = [];
+        };
         extraServerConfig = mkOption {
           type = types.lines;
           default = "";
@@ -140,11 +144,11 @@ in {
                 if vhost.external
                 then ''
                   listen 80;
-                  server_name ${name}.midna.dev;
+                  server_name ${name}.midna.dev ${builtins.concatStringsSep " " vhost.serverAliases};
                 ''
                 else ''
                   listen 443 ssl;
-                  server_name ${name}.home.mattmoriarity.com;
+                  server_name ${name}.home.mattmoriarity.com ${builtins.concatStringsSep " " vhost.serverAliases};
                   ssl_certificate /etc/nginx/ssl/wildcard.pem;
                   ssl_certificate_key /etc/nginx/ssl/wildcard.pem;
                 ''

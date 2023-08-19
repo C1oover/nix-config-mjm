@@ -37,6 +37,8 @@ in {
         locations."/".proxyWebsockets = true;
       };
 
+      "mjm.pages.midna.dev" = baseVhost;
+
       "auth.mattmatt.dev" = mkRedirect "auth";
       "feeds.mattmatt.dev" = mkRedirect "feeds";
       "links.mattmatt.dev" = mkRedirect "links";

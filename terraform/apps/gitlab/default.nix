@@ -165,5 +165,14 @@
         proxy_redirect off;
       '';
     };
+
+    pages = {
+      upstream.addresses = ["10.0.2.32:1080"];
+
+      external = true;
+      serverAliases = ["*.pages.midna.dev"];
+
+      enableAuthProxy = false;
+    };
   };
 }
