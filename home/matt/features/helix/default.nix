@@ -4,6 +4,8 @@
   inputs,
   ...
 }: {
+  home.sessionVariables.EDITOR = lib.mkForce "hx";
+
   programs.helix = {
     enable = true;
     package = inputs.helix.packages.${pkgs.system}.default;
@@ -34,6 +36,9 @@
         elixir-ls = {
           command = lib.getExe pkgs.elixir-ls;
         };
+        typescript-language-server = {
+          command = lib.getExe pkgs.nodePackages.typescript-language-server;
+        };
       };
       language = [
         {
@@ -43,6 +48,14 @@
         {
           name = "nix";
           auto-format = true;
+        }
+        {
+          name = "javascript";
+          auto-format = true;
+          formatter = {
+            command = lib.getExe pkgs.nodePackages.prettier;
+            args = ["--parser" "typescript"];
+          };
         }
       ];
     };
