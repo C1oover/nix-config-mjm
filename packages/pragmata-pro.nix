@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation rec {
   version = "0.829";
 
   src = requireFile {
-    name = "pragmata-pro.zip";
+    name = "PragmataPro0.829-ptikme.zip";
     url = "https://fsd.it/shop/fonts/pragmatapro/";
     hash = "sha256-/DgsOMHi/bAE55SDgf5f59q81yvuVERSn/K5Y+D3Pyw=";
   };
@@ -19,6 +19,7 @@ stdenvNoCC.mkDerivation rec {
   nativeBuildInputs = [unzip];
 
   installPhase = ''
+
     runHook preInstall
 
     install -Dm644 */*.otf -t $out/share/fonts/opentype
