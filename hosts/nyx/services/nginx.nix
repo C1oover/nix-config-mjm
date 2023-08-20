@@ -38,6 +38,7 @@ in {
       };
 
       "mjm.pages.midna.dev" = baseVhost;
+      "www.midna.dev" = baseVhost;
 
       "auth.mattmatt.dev" = mkRedirect "auth";
       "feeds.mattmatt.dev" = mkRedirect "feeds";

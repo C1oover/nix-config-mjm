@@ -167,10 +167,10 @@
     };
 
     pages = {
-      upstream.addresses = ["10.0.2.32:1080"];
+      upstream.addresses = ["10.0.2.33"];
 
       external = true;
-      serverAliases = ["*.pages.midna.dev"];
+      serverAliases = ["*.pages.midna.dev" "www.midna.dev" "midna.dev"];
 
       enableAuthProxy = false;
     };
