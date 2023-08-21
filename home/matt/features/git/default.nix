@@ -5,8 +5,9 @@
   inputs,
   ...
 }: {
-  home.packages = [
-    pkgs.git-credential-manager
+  home.packages = with pkgs; [
+    git-credential-manager
+    watchman
   ];
 
   programs.git = {
@@ -65,6 +66,7 @@
       ui.diff-editor = let
         scm-diff-editor = inputs.git-branchless.packages.${pkgs.system}.scm-diff-editor;
       in ["${scm-diff-editor}/bin/scm-diff-editor" "--dir-diff" "$left" "$right"];
+      core.fsmonitor = "watchman";
 
       aliases = {
         unpushed = ["log" "-r" "branches() & ~(main | remote_branches())"];
