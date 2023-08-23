@@ -1,7 +1,7 @@
 let
   name = "linkding";
   # linkding 1.20.1
-  image = "sissbruecker/linkding@sha256:174c3614cb054c1b8f09f9699aaffe5f2a5fdd69168cd46000ea18be7328a47d";
+  image = "sissbruecker/linkding@sha256:a629f7fa6171a64253294a6e93d539a34ad5eec4b5748bee0bb1729d7d92e25e";
 in {
   nomad.jobs.linkding = {
     priority = 60;
