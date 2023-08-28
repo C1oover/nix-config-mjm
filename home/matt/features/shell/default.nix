@@ -24,12 +24,7 @@
     enableZshIntegration = true;
   };
 
-  xdg.configFile."starship.toml".text = let
-    nerdFontSymbols = pkgs.runCommand "starship-nerd-font-symbols" {} ''
-      mkdir $out
-      ${pkgs.starship}/bin/starship preset nerd-font-symbols > $out/nerd-font-symbols.toml
-    '';
-  in ''
+  xdg.configFile."starship.toml".text = ''
     format = "$all"
     palette = "catppuccin_mocha"
     command_timeout = 2000
@@ -37,11 +32,13 @@
     [os]
     disabled = false
 
-    ${builtins.readFile (nerdFontSymbols + /nerd-font-symbols.toml)}
-
     [gcloud]
-    symbol = "󰅟 "
+    disabled = true
 
+    [docker_context]
+    disabled = true
+
+    ${builtins.readFile ./nerd-font-symbols.toml}
     ${builtins.readFile (inputs.catppuccin + /palettes/mocha.toml)}
   '';
 
