@@ -6,7 +6,7 @@
 
     tune = [
       {
-        default_lease_ttl = "30m";
+        default_lease_ttl = "2h";
         max_lease_ttl = "2h";
         token_type = "default-service";
 

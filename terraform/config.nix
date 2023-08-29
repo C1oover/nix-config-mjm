@@ -8,6 +8,7 @@
     ./vault/auth-github.nix
     ./vault/pki-homelab.nix
     ./vault/kv.nix
+    ./vault/ssh-homelab-client.nix
 
     ./apps
   ];
