@@ -10,7 +10,19 @@
     swaybg
   ];
 
-  wayland.windowManager.sway = {
+  wayland.windowManager.sway = let
+    displayLG = "LG Electronics LG Ultra HD 0x0000ADE2";
+    displayDell = "Dell Inc. DELL U2715H H7YCC79M07JS";
+    displayInternal = "eDP-1";
+
+    fixDisplayState = pkgs.writeShellScript "fix-display-state" ''
+      if ${lib.getExe pkgs.gnugrep} -q /proc/acpi/button/lid/LID0/state; then
+        ${pkgs.sway}/bin/swaymsg output ${displayInternal} enable
+      else
+        ${pkgs.sway}/bin/swaymsg output ${displayInternal} disable
+      fi
+    '';
+  in {
     enable = true;
     package = null;
 
@@ -85,6 +97,16 @@
         natural_scroll = "enabled";
       };
 
+      output.${displayDell} = {
+        position = "0 0";
+        transform = "90";
+      };
+
+      output.${displayLG} = {
+        position = "1440 0";
+        scale = "2";
+      };
+
       bars = [
         {command = "${pkgs.waybar}/bin/waybar";}
       ];
@@ -104,14 +126,22 @@
         {command = "discord";}
         {command = "beeper";}
         {command = "1password";}
+
         {command = "${pkgs.coreutils}/bin/rm -f $WOBSOCK && ${pkgs.coreutils}/bin/mkfifo $WOBSOCK && ${pkgs.coreutils}/bin/tail -f $WOBSOCK | ${pkgs.wob}/bin/wob";}
         {command = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";}
+        {
+          command = "${fixDisplayState}";
+          always = true;
+        }
       ];
     };
 
     extraConfig = ''
       for_window [instance="dolphin-emu" title="OpenGL"] \
         inhibit_idle visible
+
+      bindswitch --reload --locked lid:on output ${displayInternal} disable
+      bindswitch --reload --locked lid:off output ${displayInternal} enable
     '';
   };
 
