@@ -96,7 +96,7 @@
       new_tab slab
       layout tall:bias=60;full_size=1
       cd ~/Projects/slab
-      launch zsh -l -i -c nvim
+      launch
       launch
       launch
 
@@ -104,7 +104,7 @@
       new_tab nix-config
       layout tall:bias=60;full_size=1
       cd ~/Projects/nix-config
-      launch zsh -l -i -c nvim
+      launch
       launch
     '';
   in ["--session" "${slabSession}"];
