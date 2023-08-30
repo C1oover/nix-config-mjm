@@ -11,6 +11,7 @@
     ttl = 2 * 60 * 60;
     default_user = "matt";
     default_extensions.permit-pty = "";
+    allowed_extensions = "permit-agent-forwarding,permit-port-forwarding,permit-pty,permit-user-rc,permit-X11-forwarding";
     allow_user_certificates = true;
     allowed_users = "*";
   };
