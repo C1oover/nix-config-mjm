@@ -26,6 +26,10 @@
           display-inlay-hints = true;
         };
       };
+      keys.normal = {
+        "]".b = ":buffer-next";
+        "[".b = ":buffer-previous";
+      };
     };
     languages = {
       language-server = {
