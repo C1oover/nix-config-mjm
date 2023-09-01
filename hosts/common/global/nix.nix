@@ -12,4 +12,6 @@
       inputs.nur.overlay
     ];
   };
+
+  programs.nix-index.enable = true;
 }

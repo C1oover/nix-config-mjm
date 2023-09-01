@@ -21,6 +21,9 @@
 
   nix.settings.trusted-users = ["root" "matt"];
 
+  # use nix-index/nix-locate instead
+  programs.command-not-found.enable = false;
+
   time.timeZone = lib.mkDefault "Etc/UTC";
 
   users.users.matt = {

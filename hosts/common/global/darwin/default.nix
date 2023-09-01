@@ -32,7 +32,6 @@
   time.timeZone = "America/Denver";
 
   programs.zsh.enable = true;
-  programs.nix-index.enable = true;
 
   security.pam.enableSudoTouchIdAuth = true;
 
