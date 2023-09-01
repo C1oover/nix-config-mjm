@@ -90,6 +90,6 @@ in {
 
   home.shellAliases = {
     jj-push = "jj branch set main -r @- && jj git push";
-    jj-pull = "jj git fetch && jj co main";
+    jj-pull = "jj git fetch && jj rebase -d main";
   };
 }
