@@ -112,12 +112,20 @@
       ];
 
       assigns = {
-        "1" = [{app_id = "kitty";}];
-        "2" = [{app_id = "firefox";}];
-        "3" = [{app_id = "thunderbird";}];
-        "4" = [{app_id = "discord";}];
-        "5" = [{app_id = "Beeper";}];
+        "1" = [{app_id = "kitty";} {app_id = "firefox";}];
+        "2" = [{app_id = "thunderbird";} {app_id = "discord";} {app_id = "Beeper";}];
       };
+
+      workspaceOutputAssign = [
+        {
+          workspace = "1";
+          output = [displayLG displayInternal];
+        }
+        {
+          workspace = "2";
+          output = [displayDell displayInternal];
+        }
+      ];
 
       startup = [
         {command = "${pkgs.kitty}/bin/kitty";}
