@@ -4,10 +4,24 @@
   config,
   inputs,
   ...
-}: {
+}: let
+  jj = lib.getExe pkgs.jujutsu;
+
+  jjfind = pkgs.writeShellScriptBin "jjfind" ''
+    ${jj} log --no-graph --color never -T 'change_id ++ " " ++ description.first_line() ++ "\n"' "$@" \
+    | fzf --with-nth 2.. \
+    | cut -d' ' -f1
+  '';
+
+  jco = pkgs.writeShellScriptBin "jco" ''
+    ${jj} new $(${lib.getExe jjfind} "$@")
+  '';
+in {
   home.packages = with pkgs; [
     git-credential-manager
     watchman
+    jjfind
+    jco
   ];
 
   programs.git = {
