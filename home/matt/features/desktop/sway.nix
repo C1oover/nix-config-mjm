@@ -41,6 +41,12 @@
       inherit terminal menu;
       modifier = mod;
 
+      fonts = {
+        names = ["Public Sans"];
+        size = 9.0;
+        style = "SemiBold";
+      };
+
       colors = {
         focused = {
           border = "$mauve";
@@ -73,6 +79,8 @@
       };
 
       gaps.inner = 4;
+      gaps.smartGaps = true;
+      window.hideEdgeBorders = "smart";
 
       keybindings = lib.mkOptionDefault {
         "XF86MonBrightnessDown" = "exec light -U 5 && light -G | cut -d'.' -f1 > $WOBSOCK";
