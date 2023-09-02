@@ -25,6 +25,7 @@
           display-messages = true;
           display-inlay-hints = true;
         };
+        true-color = true;
       };
       keys.normal = {
         "]".b = ":buffer-next";
