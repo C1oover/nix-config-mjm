@@ -4,32 +4,48 @@
   config,
   ...
 }: let
-  updateYubikeyCert = pkgs.writeShellScriptBin "update-yubikey-cert" ''
-    ${pkgs.vault}/bin/vault ssh \
-      -mode="ca" \
-      -role="homelab-client" \
-      -mount-point="ssh-client-signer" \
-      -public-key-path="${config.home.homeDirectory}/.ssh/yubikey.pub" \
-      -valid-principals="matt" \
-      -no-exec \
-      -field=signed_key \
-      "$1" \
-      >"${config.home.homeDirectory}/.ssh/yubikey-cert.pub"
-  '';
+  updateYubikeyCert = pkgs.writeShellApplication {
+    name = "update-yubikey-cert";
+    runtimeInputs = [pkgs.vault];
+    text = ''
+      vault ssh \
+        -mode="ca" \
+        -role="homelab-client" \
+        -mount-point="ssh-client-signer" \
+        -public-key-path="${config.home.homeDirectory}/.ssh/yubikey.pub" \
+        -valid-principals="matt" \
+        -no-exec \
+        -field=signed_key \
+        "$1" \
+        >"${config.home.homeDirectory}/.ssh/yubikey-cert.pub"
+    '';
+  };
 
-  vssh = pkgs.writeShellScriptBin "vssh" ''
-    ${updateYubikeyCert}/bin/update-yubikey-cert
-    ssh -i "${config.home.homeDirectory}/.ssh/yubikey-cert.pub" "$@"
-  '';
+  vssh = pkgs.writeShellApplication {
+    name = "vssh";
+    runtimeInputs = [pkgs.openssh updateYubikeyCert];
+    text = ''
+      update-yubikey-cert
+      ssh -i "${config.home.homeDirectory}/.ssh/yubikey-cert.pub" "$@"
+    '';
+  };
 
-  tmssh = pkgs.writeShellScriptBin "tmssh" ''
-    ${vssh}/bin/vssh "$@" -t 'tmux -CC new -A -s tmssh'
-  '';
+  tmssh = pkgs.writeShellApplication {
+    name = "tmssh";
+    runtimeInputs = [vssh];
+    text = ''
+      vssh "$@" -t 'tmux -CC new -A -s tmssh'
+    '';
+  };
 
-  s = pkgs.writeShellScriptBin "s" ''
-    ${updateYubikeyCert}/bin/update-yubikey-cert
-    ${pkgs.kitty}/bin/kitty +kitten ssh -i "${config.home.homeDirectory}/.ssh/yubikey-cert.pub" "$@"
-  '';
+  s = pkgs.writeShellApplication {
+    name = "s";
+    runtimeInputs = [updateYubikeyCert pkgs.kitty];
+    text = ''
+      update-yubikey-cert
+      kitty +kitten ssh -i "${config.home.homeDirectory}/.ssh/yubikey-cert.pub" "$@"
+    '';
+  };
 
   devenv = inputs.devenv.packages.${pkgs.system}.default;
 
