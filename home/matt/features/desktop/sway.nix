@@ -230,26 +230,40 @@
     style = ./waybar.css;
   };
 
-  services.swayidle = {
+  services.swayidle = let
+    lockNow = "${pkgs.swaylock}/bin/swaylock -f";
+    suspendNow = "${config.systemd.user.systemctlPath} suspend";
+    isOnBattery = pkgs.writeShellScript "is-on-battery" ''
+      [ $(cat /sys/class/power_supply/ACAD/online) = "0" ] || exit 1
+    '';
+  in {
     enable = true;
     timeouts = [
       {
-        timeout = 300;
-        command = "${pkgs.swaylock}/bin/swaylock -f";
+        timeout = 5 * 60;
+        command = "${isOnBattery} && ${lockNow}";
       }
       {
-        timeout = 600;
-        command = "${config.systemd.user.systemctlPath} suspend";
+        timeout = 10 * 60;
+        command = "${isOnBattery} && ${suspendNow}";
+      }
+      {
+        timeout = 15 * 60;
+        command = "${lockNow}";
+      }
+      {
+        timeout = 30 * 60;
+        command = "${suspendNow}";
       }
     ];
     events = [
       {
         event = "before-sleep";
-        command = "${pkgs.swaylock}/bin/swaylock -f";
+        command = "${lockNow}";
       }
       {
         event = "lock";
-        command = "${pkgs.swaylock}/bin/swaylock -f";
+        command = "${lockNow}";
       }
     ];
   };
