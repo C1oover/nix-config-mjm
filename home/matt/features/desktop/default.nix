@@ -9,6 +9,7 @@
     grim
     slurp
     imv
+    pavucontrol
   ];
 
   home.pointerCursor = {
