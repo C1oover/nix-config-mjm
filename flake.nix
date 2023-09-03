@@ -104,21 +104,18 @@
 
         formatter = pkgs.alejandra;
 
-        apps.ci-flake-update.program = toString (let
-          curl = lib.getExe pkgs.curl;
-          jq = lib.getExe pkgs.jq;
-          nix = lib.getExe pkgs.nix;
-          git = lib.getExe pkgs.git;
-        in
-          pkgs.writeShellScript "ci-flake-update" ''
+        apps.ci-flake-update.program = lib.getExe (pkgs.writeShellApplication {
+          name = "ci-flake-update";
+          runtimeInputs = with pkgs; [curl jq nix git];
+          text = ''
             function latest_nixpkgs() {
-              ${curl} -s 'https://monitoring.nixos.org/prometheus/api/v1/query?query=channel_revision%7Bchannel%3D%22nixpkgs-unstable%22%7D' \
-                | ${jq} -r '.data.result[0].metric.revision'
+              curl -s 'https://monitoring.nixos.org/prometheus/api/v1/query?query=channel_revision%7Bchannel%3D%22nixpkgs-unstable%22%7D' \
+                | jq -r '.data.result[0].metric.revision'
             }
 
             function my_nixpkgs() {
-              nixpkgs_name="$(${nix} flake metadata . --json | ${jq} -r '.locks.nodes.root.inputs.nixpkgs')"
-              ${nix} flake metadata . --json | ${jq} -r ".locks.nodes.$nixpkgs_name.locked.rev"
+              nixpkgs_name="$(nix flake metadata . --json | jq -r '.locks.nodes.root.inputs.nixpkgs')"
+              nix flake metadata . --json | jq -r ".locks.nodes.$nixpkgs_name.locked.rev"
             }
 
             latest="$(latest_nixpkgs)"
@@ -133,14 +130,15 @@
             fi
 
             echo "latest nixpkgs doesn't match my version. updating..."
-            ${nix} flake update
-            ${git} config user.email "gitlab@matt.mattmoriarity.com"
-            ${git} config user.name "GitLab Automation"
-            ${git} add flake.lock
-            ${git} commit -m "nix flake update"
-            ${git} remote add gitlab https://ci:$FLAKE_UPDATE_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git
-            ${git} push gitlab HEAD:main
-          '');
+            nix flake update
+            git config user.email "gitlab@matt.mattmoriarity.com"
+            git config user.name "GitLab Automation"
+            git add flake.lock
+            git commit -m "nix flake update"
+            git remote add gitlab "https://ci:$FLAKE_UPDATE_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git"
+            git push gitlab HEAD:main
+          '';
+        });
       };
     };
 }

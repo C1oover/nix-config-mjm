@@ -1,6 +1,7 @@
 {inputs, ...}: {
   perSystem = {
     pkgs,
+    lib,
     system,
     ...
   }: let
@@ -49,29 +50,37 @@
       '';
     };
 
-    apps.tf-plan.program = toString (pkgs.writeShellScript "tf-plan" ''
-      cd terraform
-      ln -sf ${terraformConfiguration} config.tf.json
-      ${terraform}/bin/terraform init && \
-        ${terraform}/bin/terraform plan "$@"
-    '');
+    apps.tf-plan.program = lib.getExe (pkgs.writeShellApplication {
+      name = "tf-plan";
+      runtimeInputs = [terraform];
+      text = ''
+        cd terraform
+        ln -sf ${terraformConfiguration} config.tf.json
+        terraform init && terraform plan "$@"
+      '';
+    });
 
-    apps.tf-apply.program = toString (pkgs.writeShellScript "tf-apply" ''
-      cd terraform
-      ln -sf ${terraformConfiguration} config.tf.json
-      ${terraform}/bin/terraform init && \
-        ${terraform}/bin/terraform apply "$@"
-    '');
+    apps.tf-apply.program = lib.getExe (pkgs.writeShellApplication {
+      name = "tf-apply";
+      runtimeInputs = [terraform];
+      text = ''
+        cd terraform
+        ln -sf ${terraformConfiguration} config.tf.json
+        terraform init && terraform apply "$@"
+      '';
+    });
 
-    apps.ci-terraform-apply.program = toString (pkgs.writeShellScript "ci-terraform-apply" ''
-      set -e
+    apps.ci-terraform-apply.program = lib.getExe (pkgs.writeShellApplication {
+      name = "ci-terraform-apply";
+      runtimeInputs = [terraform pkgs.vault];
+      text = ''
+        VAULT_TOKEN=$(vault write -field=token auth/gitlab/login role=homelab-infra "jwt=$VAULT_ID_TOKEN")
+        export VAULT_TOKEN
 
-      export VAULT_TOKEN=$(${pkgs.vault}/bin/vault write -field=token auth/gitlab/login role=homelab-infra jwt=$VAULT_ID_TOKEN)
-
-      cd terraform
-      ln -sf ${terraformConfiguration} config.tf.json
-      ${terraform}/bin/terraform init && \
-        ${terraform}/bin/terraform apply -auto-approve
-    '');
+        cd terraform
+        ln -sf ${terraformConfiguration} config.tf.json
+        terraform init && terraform apply -auto-approve
+      '';
+    });
   };
 }

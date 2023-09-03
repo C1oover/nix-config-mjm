@@ -95,6 +95,7 @@ in {
 
   perSystem = {
     pkgs,
+    lib,
     system,
     ...
   }: let
@@ -104,40 +105,50 @@ in {
       packages = [deploy-rs];
     };
 
-    apps.deploy.program = toString (pkgs.writeShellScript "deploy" ''
-      tmp=$(${pkgs.coreutils}/bin/mktemp -d)
-      keypath="$tmp/id_ed25519"
-      ${pkgs.openssh}/bin/ssh-keygen -t ed25519 -f "$keypath" -N ""
-      ${pkgs.vault}/bin/vault write \
-        -field=signed_key \
-        ssh-client-signer/sign/homelab-client \
-        "public_key=@$keypath.pub" \
-        valid_principals=matt \
-        >"$keypath-cert.pub"
-      function finish {
-        rm -rf "$tmp"
-      }
-      trap finish EXIT
+    apps.deploy.program = lib.getExe (pkgs.writeShellApplication {
+      name = "deploy";
+      runtimeInputs = [pkgs.coreutils pkgs.openssh pkgs.vault deploy-rs];
+      text = ''
+        tmp=$(mktemp -d)
+        keypath="$tmp/id_ed25519"
+        ssh-keygen -t ed25519 -f "$keypath" -N ""
+        vault write \
+          -field=signed_key \
+          ssh-client-signer/sign/homelab-client \
+          "public_key=@$keypath.pub" \
+          valid_principals=matt \
+          >"$keypath-cert.pub"
+        function finish {
+          rm -rf "$tmp"
+        }
+        trap finish EXIT
 
-      ${deploy-rs}/bin/deploy --skip-checks --ssh-opts="-i $keypath" "$@"
-    '');
+        deploy --skip-checks --ssh-opts="-i $keypath" "$@"
+      '';
+    });
 
-    apps.ci-deploy.program = toString (pkgs.writeShellScript "ci-deploy" ''
-      export VAULT_TOKEN=$(${pkgs.vault}/bin/vault write -field=token auth/gitlab/login role=homelab-infra jwt=$VAULT_ID_TOKEN)
-      ${pkgs.openssh}/bin/ssh-keygen -t ed25519 -f /tmp/id_ed25519 -N ""
-      ${pkgs.vault}/bin/vault write \
-        -field=signed_key \
-        ssh-client-signer/sign/homelab-client \
-        public_key=@/tmp/id_ed25519.pub \
-        valid_principals=matt \
-        >/tmp/id_ed25519-cert.pub
+    apps.ci-deploy.program = lib.getExe (pkgs.writeShellApplication {
+      name = "ci-deploy";
+      runtimeInputs = [pkgs.coreutils pkgs.openssh pkgs.vault deploy-rs];
+      text = ''
+        VAULT_TOKEN=$(vault write -field=token auth/gitlab/login role=homelab-infra "jwt=$VAULT_ID_TOKEN")
+        export VAULT_TOKEN
 
-      if [ "$ARCH" = "x86_64" ]; then
-        targets=".#aion .#alecto .#cronus .#gaia .#helios .#megaera .#nemesis .#orion .#phoebe .#rhea .#thanatos .#themis .#tisiphone .#hypnos"
-      elif [ "$ARCH" = "arm64" ]; then
-        targets=".#brontes .#nyx .#steropes .#arges"
-      fi
-      ${deploy-rs}/bin/deploy --skip-checks --ssh-opts="-i /tmp/id_ed25519" --targets $targets
-    '');
+        ssh-keygen -t ed25519 -f /tmp/id_ed25519 -N ""
+        vault write \
+          -field=signed_key \
+          ssh-client-signer/sign/homelab-client \
+          public_key=@/tmp/id_ed25519.pub \
+          valid_principals=matt \
+          >/tmp/id_ed25519-cert.pub
+
+        if [ "$ARCH" = "x86_64" ]; then
+          targets=(.#aion .#alecto .#cronus .#gaia .#helios .#megaera .#nemesis .#orion .#phoebe .#rhea .#thanatos .#themis .#tisiphone .#hypnos)
+        elif [ "$ARCH" = "arm64" ]; then
+          targets=(.#brontes .#nyx .#steropes .#arges)
+        fi
+        deploy --skip-checks --ssh-opts="-i /tmp/id_ed25519" --targets "''${targets[@]}"
+      '';
+    });
   };
 }
