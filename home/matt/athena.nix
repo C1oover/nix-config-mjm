@@ -11,9 +11,13 @@
   ];
 
   home.packages = let
-    jj-pr = pkgs.writeShellScriptBin "jj-pr" ''
-      gh pr create --repo slab/$(basename $PWD) --head "$1" --web
-    '';
+    jj-pr = pkgs.writeShellApplication {
+      name = "jj-pr";
+      runtimeInputs = with pkgs; [gh coreutils];
+      text = ''
+        gh pr create --repo "slab/$(basename "$PWD")" --head "$1" --web
+      '';
+    };
   in
     with pkgs; [
       google-cloud-sdk

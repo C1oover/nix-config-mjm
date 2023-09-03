@@ -5,17 +5,23 @@
   inputs,
   ...
 }: let
-  jj = lib.getExe pkgs.jujutsu;
+  jjfind = pkgs.writeShellApplication {
+    name = "jjfind";
+    runtimeInputs = with pkgs; [jujutsu fzf coreutils];
+    text = ''
+      jj log --no-graph --color never -T 'change_id ++ " " ++ description.first_line() ++ "\n"' "$@" \
+      | fzf --with-nth 2.. \
+      | cut -d' ' -f1
+    '';
+  };
 
-  jjfind = pkgs.writeShellScriptBin "jjfind" ''
-    ${jj} log --no-graph --color never -T 'change_id ++ " " ++ description.first_line() ++ "\n"' "$@" \
-    | fzf --with-nth 2.. \
-    | cut -d' ' -f1
-  '';
-
-  jco = pkgs.writeShellScriptBin "jco" ''
-    ${jj} new $(${lib.getExe jjfind} "$@")
-  '';
+  jco = pkgs.writeShellApplication {
+    name = "jco";
+    runtimeInputs = [pkgs.jujutsu jjfind];
+    text = ''
+      jj new "$(jjfind "$@")"
+    '';
+  };
 in {
   home.packages = with pkgs; [
     git-credential-manager
