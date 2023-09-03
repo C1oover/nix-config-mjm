@@ -15,13 +15,17 @@
     displayDell = "Dell Inc. DELL U2715H H7YCC79M07JS";
     displayInternal = "eDP-1";
 
-    fixDisplayState = pkgs.writeShellScript "fix-display-state" ''
-      if ${lib.getExe pkgs.gnugrep} -q /proc/acpi/button/lid/LID0/state; then
-        ${pkgs.sway}/bin/swaymsg output ${displayInternal} enable
-      else
-        ${pkgs.sway}/bin/swaymsg output ${displayInternal} disable
-      fi
-    '';
+    fixDisplayState = lib.getExe (pkgs.writeShellApplication {
+      name = "fix-display-state";
+      runtimeInputs = with pkgs; [gnugrep sway];
+      text = ''
+        if grep -q /proc/acpi/button/lid/LID0/state; then
+          swaymsg output ${displayInternal} enable
+        else
+          swaymsg output ${displayInternal} disable
+        fi
+      '';
+    });
   in {
     enable = true;
     package = null;
