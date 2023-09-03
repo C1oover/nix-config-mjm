@@ -11,8 +11,6 @@
       public = false;
       authorization_policy = "two_factor";
       redirect_uris = [
-        "https://gitlab.home.mattmoriarity.com/users/auth/openid_connect/callback"
-        "https://git.mattmoriarity.com/users/auth/openid_connect/callback"
         "https://git.midna.dev/users/auth/openid_connect/callback"
       ];
       scopes = ["openid" "profile" "groups" "email"];
