@@ -2,31 +2,40 @@
   pkgs,
   inputs,
   config,
+  osConfig,
   ...
 }: let
-  updateYubikeyCert = pkgs.writeShellApplication {
-    name = "update-yubikey-cert";
+  useYubikey =
+    if pkgs.stdenv.isLinux
+    then osConfig.services.yubikey-agent.enable
+    else true;
+
+  sshPublicKeyName =
+    if useYubikey
+    then "yubikey.pub"
+    else "id_ed25519.pub";
+  sshPublicKeyPath = "${config.home.homeDirectory}/.ssh/${sshPublicKeyName}";
+  sshCertPath = builtins.replaceStrings [".pub"] ["-cert.pub"] sshPublicKeyPath;
+
+  updateSshCert = pkgs.writeShellApplication {
+    name = "update-ssh-cert";
     runtimeInputs = [pkgs.vault];
     text = ''
-      vault ssh \
-        -mode="ca" \
-        -role="homelab-client" \
-        -mount-point="ssh-client-signer" \
-        -public-key-path="${config.home.homeDirectory}/.ssh/yubikey.pub" \
-        -valid-principals="matt" \
-        -no-exec \
+      vault write \
         -field=signed_key \
-        "$1" \
-        >"${config.home.homeDirectory}/.ssh/yubikey-cert.pub"
+        ssh-client-signer/sign/homelab-client \
+        public_key=@${sshPublicKeyPath} \
+        valid_principals=matt \
+        >"${sshCertPath}"
     '';
   };
 
   vssh = pkgs.writeShellApplication {
     name = "vssh";
-    runtimeInputs = [pkgs.openssh updateYubikeyCert];
+    runtimeInputs = [pkgs.openssh updateSshCert];
     text = ''
-      update-yubikey-cert
-      ssh -i "${config.home.homeDirectory}/.ssh/yubikey-cert.pub" "$@"
+      update-ssh-cert
+      ssh -i "${sshCertPath}" "$@"
     '';
   };
 
@@ -40,10 +49,10 @@
 
   s = pkgs.writeShellApplication {
     name = "s";
-    runtimeInputs = [updateYubikeyCert pkgs.kitty];
+    runtimeInputs = [updateSshCert pkgs.kitty];
     text = ''
-      update-yubikey-cert
-      kitty +kitten ssh -i "${config.home.homeDirectory}/.ssh/yubikey-cert.pub" "$@"
+      update-ssh-cert
+      kitty +kitten ssh -i "${sshCertPath}" "$@"
     '';
   };
 
@@ -80,7 +89,10 @@ in {
   programs.ssh = {
     enable = true;
     extraOptionOverrides = {
-      IdentityFile = "~/.ssh/yubikey.pub";
+      IdentityFile =
+        if useYubikey
+        then sshPublicKeyPath
+        else builtins.replaceStrings [".pub"] [""] sshPublicKeyPath;
     };
   };
 }
