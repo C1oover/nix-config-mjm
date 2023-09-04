@@ -312,13 +312,6 @@ in {
         }
       '';
 
-      resource.consul_keys.vhost_names.key = [
-        {
-          path = "ingress/vhost_names";
-          value = builtins.toJSON (builtins.attrNames vhosts);
-        }
-      ];
-
       resource.gitlab_repository_file.ingress_dns = {
         project = "30"; # mjm/nix-config
         file_path = "hosts/common/optional/dns-server/home.mattmoriarity.com.ingress.zone";
