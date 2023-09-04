@@ -3,10 +3,6 @@ let
   # loki 2.8.2
   image = "grafana/loki@sha256:b1da1d23037eb1b344cccfc5b587e30aed60ab4cad33b42890ff850aa3c4755d";
 in {
-  imports = [
-    ./promtail.nix
-  ];
-
   nomad.jobs.loki = {
     priority = 80;
 
