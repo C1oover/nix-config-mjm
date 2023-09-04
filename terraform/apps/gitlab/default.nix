@@ -122,27 +122,6 @@
       '';
     };
 
-    gitlab = {
-      upstream.addresses = ["10.0.2.32"];
-
-      enableAuthProxy = false;
-
-      extraServerConfig = ''
-        # To allow special characters in headers
-        ignore_invalid_headers off;
-        # Allow any size file to be uploaded.
-        proxy_request_buffering off;
-        proxy_connect_timeout       300;
-        proxy_send_timeout          300;
-        proxy_read_timeout          300;
-        send_timeout                300;
-      '';
-
-      extraLocationConfig = ''
-        proxy_redirect off;
-      '';
-    };
-
     git = {
       upstream.addresses = ["10.0.2.32"];
 
