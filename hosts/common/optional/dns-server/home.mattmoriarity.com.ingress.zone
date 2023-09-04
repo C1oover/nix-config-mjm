@@ -4,7 +4,6 @@ alertmanager  IN  CNAME ingress-http.service.consul.
 authelia  IN  CNAME ingress-http.service.consul.
 consul  IN  CNAME ingress-http.service.consul.
 containers  IN  CNAME ingress-http.service.consul.
-gitlab  IN  CNAME ingress-http.service.consul.
 grafana  IN  CNAME ingress-http.service.consul.
 guacamole  IN  CNAME ingress-http.service.consul.
 homelab  IN  CNAME ingress-http.service.consul.
