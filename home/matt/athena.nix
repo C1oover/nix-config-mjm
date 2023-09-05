@@ -18,6 +18,36 @@
         gh pr create --repo "slab/$(basename "$PWD")" --head "$1" --web
       '';
     };
+
+    db = pkgs.writeShellApplication {
+      name = "db";
+      runtimeInputs = with pkgs; [teleport];
+      text = ''
+        preset="$1"
+
+        case "$preset" in
+        *-replica)
+          user=teleport-ro
+          name="slab-sql-$preset-pg14-0"
+          ;;
+        *)
+          user=teleport-rw
+          name="slab-sql-$preset-pg14"
+          ;;
+        esac
+
+        case "$preset" in
+        prod*)
+          iam_host=slab-prod.iam
+          ;;
+        stage*)
+          iam_host=slab-stage.iam
+          ;;
+        esac
+
+        tsh -k no proxy db "--db-user=$user@$iam_host" --db-name=slab --tunnel --port 5432 "$name"
+      '';
+    };
   in
     with pkgs; [
       google-cloud-sdk
@@ -28,11 +58,10 @@
       zoom-us
 
       jj-pr
+      db
     ];
 
   home.shellAliases = {
-    db-stage = "tsh -k no db login --db-user=teleport-rw@slab-stage.iam --db-name=slab slab-sql-stage-pg14";
-    db-prod-replica = "tsh -k no db login --db-user=teleport-ro@slab-prod.iam --db-name=slab slab-sql-prod-replica-pg14-0";
     slab-restart = "npm run docker:down && npm run docker:up";
     slab-up = "npm run docker:up";
     slab-ssh = "npm run docker:ssh";
