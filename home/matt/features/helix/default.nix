@@ -26,6 +26,7 @@
           display-inlay-hints = true;
         };
         true-color = true;
+        whitespace.render.newline = "all";
       };
       keys.normal = {
         "]".b = ":buffer-next";
