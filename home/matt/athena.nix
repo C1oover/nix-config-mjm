@@ -4,7 +4,9 @@
   config,
   inputs,
   ...
-}: {
+}: let
+  tomlFormat = pkgs.formats.toml {};
+in {
   imports = [
     ./global
     ./global/darwin.nix
@@ -161,5 +163,15 @@
 
   programs.jujutsu.settings = {
     aliases.mine = ["log" "-r" "@ | main | branches(\"mjm-\")"];
+  };
+
+  # manually link this into ~/Projects/slab/.helix/languages.toml
+  xdg.configFile."helix/slab/languages.toml".source = tomlFormat.generate "slab-languages.toml" {
+    language-server.elixir-ls.command = let
+      erlangPkgs = pkgs.beam.packages.erlang_24;
+      elixir = erlangPkgs.elixir_1_15;
+      elixir-ls = erlangPkgs.elixir-ls.override {inherit elixir;};
+    in
+      lib.getExe elixir-ls;
   };
 }
