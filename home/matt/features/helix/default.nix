@@ -41,6 +41,7 @@
         };
         elixir-ls = {
           command = lib.getExe pkgs.elixir-ls;
+          config.elixirLs.dialyzerEnabled = true;
         };
         typescript-language-server = {
           command = lib.getExe pkgs.nodePackages.typescript-language-server;
