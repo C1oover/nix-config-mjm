@@ -16,6 +16,9 @@ in {
           "https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt"
           "https://s3.amazonaws.com/lists.disconnect.me/simple_tracking.txt"
           "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts"
+          ''
+            /\.tumblr-live\.com$/
+          ''
         ];
         clientGroupsBlock.default = ["ads"];
         downloadAttempts = 120;
