@@ -17,7 +17,7 @@
   ];
 
   programs.nixvim = {
-    enable = true;
+    enable = false;
     wrapRc = true;
     viAlias = true;
     vimAlias = true;
