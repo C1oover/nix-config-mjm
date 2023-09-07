@@ -38,7 +38,7 @@
     config = let
       mod = "Mod4";
       terminal = "${pkgs.kitty}/bin/kitty";
-      bemenuArgs = ''--fb "#1e1e2e" --ff "#94e2d5" --nb "#1e1e2e" --nf "#f5e0dc" --tb "#1e1e2e" --hb "#1e1e2e" --tf "#cba6f7" --hf "#89b4fa" --nf "#f5e0dc" --af "#f5e0dc" --ab "#1e1e2e"'';
+      bemenuArgs = ''--fn "sans-serif 10" --fb "#1e1e2e" --ff "#94e2d5" --nb "#1e1e2e" --nf "#f5e0dc" --tb "#1e1e2e" --hb "#1e1e2e" --tf "#cba6f7" --hf "#89b4fa" --nf "#f5e0dc" --af "#f5e0dc" --ab "#1e1e2e"'';
       menu = "${pkgs.bemenu}/bin/bemenu-run -i -l 20 -p run ${bemenuArgs}";
       pactl = "${pkgs.pulseaudio}/bin/pactl";
     in {
