@@ -54,7 +54,7 @@
       colors = {
         focused = {
           border = "$mauve";
-          background = "$base";
+          background = "$surface0";
           text = "$text";
           indicator = "$rosewater";
           childBorder = "$mauve";
