@@ -237,9 +237,13 @@
   services.swayidle = let
     lockNow = "${pkgs.swaylock}/bin/swaylock -f";
     suspendNow = "${config.systemd.user.systemctlPath} suspend";
-    isOnBattery = pkgs.writeShellScript "is-on-battery" ''
-      [ $(cat /sys/class/power_supply/ACAD/online) = "0" ] || exit 1
-    '';
+    isOnBattery = lib.getExe (pkgs.writeShellApplication {
+      name = "is-on-battery";
+      runtimeInputs = with pkgs; [coreutils];
+      text = ''
+        [ "$(cat /sys/class/power_supply/ACAD/online)" = "0" ] || exit 1
+      '';
+    });
   in {
     enable = true;
     timeouts = [
