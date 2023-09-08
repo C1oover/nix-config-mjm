@@ -705,12 +705,28 @@
         "type": "github"
       }
     },
+    "nixos": {
+      "locked": {
+        "lastModified": 1694422566,
+        "narHash": "sha256-lHJ+A9esOz9vln/3CJG23FV6Wd2OoOFbDeEs4cMGMqc=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "3a2786eea085f040a66ecde1bc3ddc7099f6dbeb",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixos-wsl": {
       "inputs": {
         "flake-compat": "flake-compat_5",
         "flake-utils": "flake-utils_3",
         "nixpkgs": [
-          "nixpkgs"
+          "nixos"
         ]
       },
       "locked": {
@@ -1079,6 +1095,7 @@
         "hardware": "hardware",
         "helix": "helix",
         "home-manager": "home-manager",
+        "nixos": "nixos",
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs_3",
         "nixpkgs-firefox-darwin": "nixpkgs-firefox-darwin",

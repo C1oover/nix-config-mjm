@@ -13,7 +13,7 @@
       specialArgs = {inherit inputs outputs;};
     };
   mkNixos = modules:
-    inputs.nixpkgs.lib.nixosSystem {
+    inputs.nixos.lib.nixosSystem {
       inherit modules;
       specialArgs = {inherit inputs outputs;};
     };

@@ -1,13 +1,14 @@
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nixos.url = "github:NixOS/nixpkgs/nixos-unstable";
     darwin = {
       url = "github:lnl7/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-wsl = {
       url = "github:nix-community/NixOS-WSL";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixos";
     };
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -84,10 +85,16 @@
       systems = ["x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin"];
 
       perSystem = {
+        system,
         pkgs,
         lib,
         ...
       }: {
+        _module.args.pkgs =
+          if system == "x86_64-linux" || system == "aarch64-linux"
+          then inputs.nixos.legacyPackages.${system}
+          else inputs.nixpkgs.legacyPackages.${system};
+
         devenv.shells.default = {
           pre-commit = {
             hooks = {
