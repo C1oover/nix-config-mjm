@@ -17,7 +17,8 @@ in {
       name = "jj-pr";
       runtimeInputs = with pkgs; [gh coreutils];
       text = ''
-        gh pr create --repo "slab/$(basename "$PWD")" --head "$1" --web
+        export GIT_DIR="$PWD/.jj/repo/store/git"
+        gh pr create --head "$1" --web
       '';
     };
 
