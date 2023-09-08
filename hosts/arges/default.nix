@@ -12,6 +12,8 @@
     ../common/optional/nomad-client.nix
     ../common/optional/gitlab-runner.nix
     ../common/optional/nix-builder.nix
+
+    ./services/nut-server.nix
   ];
 
   networking.hostName = "arges";
