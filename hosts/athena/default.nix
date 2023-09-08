@@ -11,7 +11,6 @@
 
   homebrew.casks = [
     "cleanshot"
-    "github"
     "loom"
     "postico"
     "slab"
