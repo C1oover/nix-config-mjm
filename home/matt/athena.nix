@@ -168,10 +168,14 @@ in {
   # manually link this into ~/Projects/slab/.helix/languages.toml
   xdg.configFile."helix/slab/languages.toml".source = tomlFormat.generate "slab-languages.toml" {
     language-server.elixir-ls.command = let
-      erlangPkgs = pkgs.beam.packages.erlang_24;
-      elixir = erlangPkgs.elixir_1_15;
-      elixir-ls = erlangPkgs.elixir-ls.override {inherit elixir;};
-    in
-      lib.getExe elixir-ls;
+      # use an official elixir-ls release so that it just runs with whatever elixir version
+      # is in the environment. since we use asdf for the version, we can't ensure the elixir
+      # version in nixpkgs matches.
+      elixir-ls = pkgs.fetchzip {
+        url = "https://github.com/elixir-lsp/elixir-ls/releases/download/v0.16.0/elixir-ls-v0.16.0.zip";
+        sha256 = "ZweXGgTJ08APEwqduRo0NlwAGbq6Qg3vkzuEMgwi47E=";
+        stripRoot = false;
+      };
+    in "${elixir-ls}/language_server.sh";
   };
 }
