@@ -43,7 +43,7 @@ in {
         docker = {
           inherit image;
           args = [
-            "--nut.server=10.0.0.10"
+            "--nut.server=10.0.0.2"
             "--nut.vars_enable=${builtins.concatStringsSep "," enabledVariables}"
           ];
         };
