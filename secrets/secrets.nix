@@ -33,4 +33,7 @@ in
     "nixremote-key.age".publicKeys = personalKeys ++ allNixOS;
 
     "wpa-supplicant-env.age".publicKeys = personalKeys ++ [persephone];
+
+    "nut-server-upsmon-conf.age".publicKeys = personalKeys ++ [arges];
+    "nut-server-upsd-users.age".publicKeys = personalKeys ++ [arges];
   }
