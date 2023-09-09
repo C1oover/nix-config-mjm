@@ -12,12 +12,12 @@
     };
   };
 
-  environment.etc."nut/uspd.conf".text = ''
+  environment.etc."nut/upsd.conf".text = ''
     LISTEN 10.0.0.2
   '';
 
   environment.etc."nut/upsmon.conf".text = ''
-    MONITOR tripplite@localhost 1 upsmon password primary
+    MONITOR tripplite@10.0.0.2 1 upsmon password primary
     SHUTDOWNCMD ${pkgs.systemd}/bin/shutdown -h +0
   '';
 
@@ -28,4 +28,6 @@
   '';
 
   systemd.tmpfiles.rules = ["d /var/lib/nut 0700 root wheel - -"];
+
+  networking.firewall.allowedTCPPorts = [3493];
 }
