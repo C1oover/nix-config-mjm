@@ -36,4 +36,5 @@ in
 
     "nut-server-upsmon-conf.age".publicKeys = personalKeys ++ [arges];
     "nut-server-upsd-users.age".publicKeys = personalKeys ++ [arges];
+    "nut-client-upsmon-conf.age".publicKeys = personalKeys ++ allNixOS;
   }
