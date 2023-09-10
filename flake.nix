@@ -39,10 +39,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     helix.url = "github:helix-editor/helix";
-    jujutsu = {
-      url = "github:martinvonz/jj/v0.9.0";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
 
     catppuccin = {
       url = "github:catppuccin/starship";
