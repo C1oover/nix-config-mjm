@@ -73,6 +73,9 @@
 
   programs.atuin = {
     enable = true;
+    settings = {
+      sync_address = "https://atuin.home.mattmoriarity.com";
+    };
   };
 
   programs.dircolors = {
