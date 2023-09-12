@@ -25,6 +25,8 @@
     ensureUsers = [
       {
         name = "atuin";
+        # the atuin user also needs to be the owner of the atuin DB, which isn't possible
+        # to set up from this module.
         ensurePermissions = {
           "DATABASE atuin" = "ALL PRIVILEGES";
         };
