@@ -61,5 +61,7 @@ in {
       inherit name;
       connectPort = 8888;
     };
+
+    enableAuthProxy = false;
   };
 }
