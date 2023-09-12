@@ -1,6 +1,7 @@
 actual  IN  CNAME ingress-http.service.consul.
 adminer  IN  CNAME ingress-http.service.consul.
 alertmanager  IN  CNAME ingress-http.service.consul.
+atuin  IN  CNAME ingress-http.service.consul.
 authelia  IN  CNAME ingress-http.service.consul.
 consul  IN  CNAME ingress-http.service.consul.
 containers  IN  CNAME ingress-http.service.consul.
