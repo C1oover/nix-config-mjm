@@ -19,6 +19,20 @@
       host	all		consul		10.0.2.10/32		trust
       host	all		all		10.0.0.0/8		scram-sha-256
     '';
+    ensureDatabases = [
+      "atuin"
+    ];
+    ensureUsers = [
+      {
+        name = "atuin";
+        ensurePermissions = {
+          "DATABASE atuin" = "ALL PRIVILEGES";
+        };
+        ensureClauses = {
+          login = false;
+        };
+      }
+    ];
   };
 
   networking.firewall.allowedTCPPorts = [config.services.postgresql.port];
