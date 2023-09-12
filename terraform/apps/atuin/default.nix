@@ -20,6 +20,9 @@ in {
         docker = {
           inherit image;
           args = ["server" "start"];
+          volumes = [
+            "local:/config"
+          ];
         };
         env = {
           ATUIN_HOST = "0.0.0.0";
