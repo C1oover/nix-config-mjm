@@ -47,6 +47,7 @@
       noto-fonts-emoji
       (nerdfonts.override {fonts = ["NerdFontsSymbolsOnly"];})
       font-awesome
+      cascadia-code
       outputs.packages.${pkgs.system}.pragmata-pro
     ];
 
