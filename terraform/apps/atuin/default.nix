@@ -1,5 +1,7 @@
 {
-  vault.databases.roles.atuin = {};
+  vault.databases.roles.atuin = {
+    ttl = "short";
+  };
 
   vault.policies.atuin.text = ''
     path "database/creds/atuin" {
