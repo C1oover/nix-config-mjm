@@ -51,6 +51,7 @@
   ];
 
   boot.blacklistedKernelModules = ["hid-sensor-hub"];
+  boot.swraid.enable = false;
 
   # Further tweak to ensure the brightness and airplane mode keys work
   # https://community.frame.work/t/responded-12th-gen-not-sending-xf86monbrightnessup-down/20605/67
