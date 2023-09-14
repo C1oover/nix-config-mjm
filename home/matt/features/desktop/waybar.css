@@ -71,6 +71,11 @@ window#waybar {
     border-top: 2px solid @mauve;
 }
 
+#workspaces button.active {
+    color: @mauve;
+    border-top: 2px solid @mauve;
+}
+
 #mode {
     background: #64727D;
     border-bottom: 3px solid white;

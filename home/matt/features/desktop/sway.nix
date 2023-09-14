@@ -170,14 +170,28 @@
     settings = {
       main = {
         height = 24;
-        modules-left = ["sway/workspaces" "sway/mode"];
-        modules-center = ["sway/window"];
+        layer = "top";
+        # modules-left = ["sway/workspaces" "sway/mode"];
+        modules-left = ["hyprland/workspaces"];
+        # modules-center = ["sway/window"];
+        modules-center = ["hyprland/window"];
         modules-right = ["pulseaudio" "network" "cpu" "memory" "battery" "tray" "clock"];
         "sway/workspaces" = {
           disable-scroll = true;
           all-outputs = false;
         };
+        "hyprland/workspaces" = {
+          disable-scroll = true;
+          all-outputs = false;
+        };
         "sway/window" = {
+          rewrite = {
+            "(.*) — Mozilla Firefox" = "󰈹 $1";
+            "(.*) - Mozilla Thunderbird" = "󰇯 $1";
+            "(.*) - Discord" = "󰙯 $1";
+          };
+        };
+        "hyprland/window" = {
           rewrite = {
             "(.*) — Mozilla Firefox" = "󰈹 $1";
             "(.*) - Mozilla Thunderbird" = "󰇯 $1";

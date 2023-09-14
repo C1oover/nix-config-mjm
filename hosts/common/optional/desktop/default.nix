@@ -16,11 +16,13 @@
     wrapperFeatures.gtk = true;
   };
 
+  programs.hyprland.enable = true;
+
   services.greetd = {
     enable = true;
     settings = {
       default_session = {
-        command = "sway";
+        command = "Hyprland";
         user = "matt";
       };
     };
