@@ -4,6 +4,10 @@
   config,
   ...
 }: {
+  home.packages = with pkgs; [
+    wl-clipboard
+  ];
+
   programs.swaylock = {
     enable = true;
     settings = {
