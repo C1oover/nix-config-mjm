@@ -2,6 +2,7 @@
   imports = [
     ./hyprland.nix
     ./sway.nix
+    ./waybar.nix
     ./wayland-common.nix
   ];
 
