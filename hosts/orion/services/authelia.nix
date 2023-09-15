@@ -214,8 +214,8 @@ in {
     ];
   };
 
-  system.services.authelia-main.after = ["docker-lldap.service"];
-  system.services.authelia-external.after = ["docker-lldap.service"];
+  systemd.services.authelia-main.after = ["docker-lldap.service"];
+  systemd.services.authelia-external.after = ["docker-lldap.service"];
 
   networking.firewall.allowedTCPPorts = [
     9091
