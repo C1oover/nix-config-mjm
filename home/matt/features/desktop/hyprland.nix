@@ -5,8 +5,26 @@
   lib,
   ...
 }: let
+  hyprland = inputs.hyprland.packages.${pkgs.system}.hyprland;
   pointer = config.home.pointerCursor;
   bemenuArgs = builtins.replaceStrings ["#"] ["##"] ''--fn "sans-serif 10" --fb "#1e1e2e" --ff "#94e2d5" --nb "#1e1e2e" --nf "#f5e0dc" --tb "#1e1e2e" --hb "#1e1e2e" --tf "#cba6f7" --hf "#89b4fa" --nf "#f5e0dc" --af "#f5e0dc" --ab "#1e1e2e"'';
+
+  handleEvents = pkgs.writeShellApplication {
+    name = "handle-hyprland-events";
+    runtimeInputs = [hyprland pkgs.socat];
+    text = ''
+      handle() {
+        case "$1" in monitoradded*)
+          hyprctl dispatch moveworkspacetomonitor "1 DP-1"
+          hyprctl dispatch moveworkspacetomonitor "2 DP-2"
+          ;;
+        esac
+      }
+
+      socat - "UNIX-CONNECT:/tmp/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock" | \
+        while read -r line; do handle "$line"; done
+    '';
+  };
 in {
   home.packages = with pkgs; [
     pulseaudio
@@ -16,7 +34,7 @@ in {
 
   wayland.windowManager.hyprland = {
     enable = true;
-    package = inputs.hyprland.packages.${pkgs.system}.hyprland;
+    package = hyprland;
 
     settings = {
       "$mod" = "SUPER";
@@ -101,6 +119,7 @@ in {
         "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
         "rm -f $wob_socket && mkfifo $wob_socket && tail -f $wob_socket | wob"
         "swaybg -i ${./botw.png} -m fit -c ##000000"
+        "${handleEvents}"
 
         "[workspace 1 silent] kitty"
         "[workspace 1 silent] firefox"
@@ -182,6 +201,17 @@ in {
             ]
           )
           10));
+
+      bindl = [
+        ",switch:off:Lid Switch,exec,hyprctl keyword monitor eDP-1,preferred,auto,auto"
+        ",switch:on:Lid Switch,exec,hyprctl keyword monitor eDP-1,disable"
+      ];
+
+      monitor = [
+        "DP-1,preferred,1440x0,2"
+        "DP-2,preferred,0x0,1,transform,3"
+        ",preferred,auto,auto"
+      ];
     };
   };
 
