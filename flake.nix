@@ -40,6 +40,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     helix.url = "github:helix-editor/helix";
+    hyprland.url = "github:hyprwm/Hyprland";
 
     catppuccin = {
       url = "github:catppuccin/starship";

@@ -1,9 +1,14 @@
 {
   lib,
   pkgs,
+  inputs,
   outputs,
   ...
 }: {
+  imports = [
+    ./cachix.nix
+  ];
+
   programs.sway = {
     enable = true;
     extraSessionCommands = ''
@@ -16,7 +21,10 @@
     wrapperFeatures.gtk = true;
   };
 
-  programs.hyprland.enable = true;
+  programs.hyprland = {
+    enable = true;
+    package = inputs.hyprland.packages.${pkgs.system}.hyprland;
+  };
 
   services.greetd = {
     enable = true;

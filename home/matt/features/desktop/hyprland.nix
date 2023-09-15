@@ -1,6 +1,7 @@
 {
   pkgs,
   config,
+  inputs,
   lib,
   ...
 }: let
@@ -14,6 +15,8 @@ in {
 
   wayland.windowManager.hyprland = {
     enable = true;
+    package = inputs.hyprland.packages.${pkgs.system}.hyprland;
+
     settings = {
       "$mod" = "SUPER";
 
@@ -150,10 +153,10 @@ in {
           "$mod,right,movefocus,r"
           "$mod,up,movefocus,u"
           "$mod,down,movefocus,d"
-          "$mod SHIFT,left,moveintogroup,l"
-          "$mod SHIFT,right,moveintogroup,r"
-          "$mod SHIFT,up,moveintogroup,u"
-          "$mod SHIFT,down,moveintogroup,d"
+          "$mod SHIFT,left,movewindoworgroup,l"
+          "$mod SHIFT,right,movewindoworgroup,r"
+          "$mod SHIFT,up,movewindoworgroup,u"
+          "$mod SHIFT,down,movewindoworgroup,d"
           "ALT,Tab,cyclenext"
           "$mod,Tab,changegroupactive,f"
           "$mod,Return,exec,kitty"
