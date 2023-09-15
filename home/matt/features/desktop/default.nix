@@ -2,6 +2,7 @@
   imports = [
     ./hyprland.nix
     ./sway.nix
+    ./wayland-common.nix
   ];
 
   home.packages = with pkgs; [
