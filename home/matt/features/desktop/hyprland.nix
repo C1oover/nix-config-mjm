@@ -183,6 +183,8 @@ in {
           "$mod,Tab,changegroupactive,f"
           "$mod,Minus,splitratio,-0.1"
           "$mod,Equal,splitratio,+0.1"
+          "$mod,s,togglespecialworkspace"
+          "$mod SHIFT,s,movetoworkspacesilent,special"
           "$mod,Return,exec,kitty"
           "$mod,c,exec,clipman pick -t bemenu"
           "$mod,d,exec,bemenu-run -i -l 20 -p run"
