@@ -22,10 +22,7 @@
       inputs.home-manager.follows = "home-manager";
     };
     flake-parts.url = "github:hercules-ci/flake-parts";
-    devenv = {
-      url = "github:cachix/devenv";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    devenv.url = "github:cachix/devenv";
     nixpkgs-firefox-darwin.url = "github:bandithedoge/nixpkgs-firefox-darwin";
     nur.url = "github:nix-community/NUR";
     pre-commit-hooks-nix.url = "github:cachix/pre-commit-hooks.nix";
