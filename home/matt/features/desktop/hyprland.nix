@@ -7,7 +7,6 @@
 }: let
   hyprland = inputs.hyprland.packages.${pkgs.system}.hyprland;
   pointer = config.home.pointerCursor;
-  bemenuArgs = builtins.replaceStrings ["#"] ["##"] ''--fn "sans-serif 10" --fb "#1e1e2e" --ff "#94e2d5" --nb "#1e1e2e" --nf "#f5e0dc" --tb "#1e1e2e" --hb "#1e1e2e" --tf "#cba6f7" --hf "#89b4fa" --nf "#f5e0dc" --af "#f5e0dc" --ab "#1e1e2e"'';
 
   handleEvents = pkgs.writeShellApplication {
     name = "handle-hyprland-events";
@@ -110,7 +109,6 @@ in {
         "_JAVA_AWT_WM_NONREPARENTING,1"
         "MOZ_DBUS_REMOTE,1"
         "NIXOS_OZONE_WL,1"
-        "BEMENU_OPTS,${bemenuArgs}"
       ];
 
       exec-once = [
@@ -186,8 +184,8 @@ in {
           "$mod,s,togglespecialworkspace"
           "$mod SHIFT,s,movetoworkspacesilent,special"
           "$mod,Return,exec,kitty"
-          "$mod,c,exec,clipman pick -t bemenu"
-          "$mod,d,exec,bemenu-run -i -l 20 -p run"
+          "$mod,c,exec,clipman pick -t CUSTOM --tool-args='rofi -dmenu -p clip'"
+          "$mod,d,exec,rofi -modes drun,run -show drun"
           ",XF86AudioRaiseVolume,exec,pactl set-sink-volume @DEFAULT_SINK@ +4% && $sink_volume > $wob_socket"
           ",XF86AudioLowerVolume,exec,pactl set-sink-volume @DEFAULT_SINK@ -4% && $sink_volume > $wob_socket"
           ",XF86AudioMute,exec,pactl set-sink-mute @DEFAULT_SINK@ toggle && $sink_volume_mute > $wob_socket"
