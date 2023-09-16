@@ -161,6 +161,22 @@
         "type": "github"
       }
     },
+    "catppuccin-rofi": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1672491652,
+        "narHash": "sha256-DNorfyl3C4RBclF2KDgwvQQwixpTwSRu7fIvihPN8JY=",
+        "owner": "catppuccin",
+        "repo": "rofi",
+        "rev": "5350da41a11814f950c3354f090b90d4674a95ce",
+        "type": "github"
+      },
+      "original": {
+        "owner": "catppuccin",
+        "repo": "rofi",
+        "type": "github"
+      }
+    },
     "catppuccin-zsh": {
       "flake": false,
       "locked": {
@@ -1162,6 +1178,7 @@
         "catppuccin-i3": "catppuccin-i3",
         "catppuccin-k9s": "catppuccin-k9s",
         "catppuccin-newsboat": "catppuccin-newsboat",
+        "catppuccin-rofi": "catppuccin-rofi",
         "catppuccin-zsh": "catppuccin-zsh",
         "darwin": "darwin",
         "deploy-rs": "deploy-rs",

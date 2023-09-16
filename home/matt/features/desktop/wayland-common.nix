@@ -8,13 +8,6 @@
     wl-clipboard
   ];
 
-  programs.rofi = {
-    enable = true;
-    package = pkgs.rofi-wayland;
-    font = "sans-serif 9";
-    terminal = lib.getExe pkgs.kitty;
-  };
-
   programs.swaylock = {
     enable = true;
     settings = {

@@ -185,7 +185,7 @@ in {
           "$mod SHIFT,s,movetoworkspacesilent,special"
           "$mod,Return,exec,kitty"
           "$mod,c,exec,clipman pick -t CUSTOM --tool-args='rofi -dmenu -p clip'"
-          "$mod,d,exec,rofi -modes drun,run -show drun"
+          "$mod,d,exec,rofi-launcher"
           ",XF86AudioRaiseVolume,exec,pactl set-sink-volume @DEFAULT_SINK@ +4% && $sink_volume > $wob_socket"
           ",XF86AudioLowerVolume,exec,pactl set-sink-volume @DEFAULT_SINK@ -4% && $sink_volume > $wob_socket"
           ",XF86AudioMute,exec,pactl set-sink-mute @DEFAULT_SINK@ toggle && $sink_volume_mute > $wob_socket"
