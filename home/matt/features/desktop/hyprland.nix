@@ -146,6 +146,7 @@ in {
         gaps_out = 8;
         "col.group_border" = "$lavender";
         "col.group_border_active" = "$mauve";
+        resize_on_border = true;
       };
 
       decoration = {
