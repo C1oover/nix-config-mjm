@@ -23,6 +23,7 @@ rec {
   nyx = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID2pPaX+7EoXMTzgmfoBJ7AeiXwfqq/LqKdbj8kcOa1P";
   persephone = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHNcGvd0FkGDH7rm02jm8fan2xqKoEr/Wx+3wAgfDR7A";
   matt-persephone = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK/65Yq1UkZie8WgsO2HUGq9bq++Y6o+FJd8wWvWhdLx";
+  matt-uranus = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGE0Qt7yq/SacEhYZ1lM5CXGfkuCjYXZyJ9On9KaCM8e";
 
   servers = {
     inherit
@@ -49,5 +50,5 @@ rec {
 
   nomadClients = [arges brontes steropes helios];
   allNixOS = [persephone] ++ (builtins.attrValues servers);
-  personalKeys = [matt-athena matt-mars matt-persephone];
+  personalKeys = [matt-athena matt-mars matt-persephone matt-uranus];
 }
