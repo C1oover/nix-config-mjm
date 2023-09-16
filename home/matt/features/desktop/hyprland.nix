@@ -205,10 +205,13 @@ in {
           )
           10));
 
-      bindl = [
-        ",switch:off:Lid Switch,exec,hyprctl keyword monitor eDP-1,preferred,auto,auto"
-        ",switch:on:Lid Switch,exec,hyprctl keyword monitor eDP-1,disable"
-      ];
+      # these seem to cause hyprland to crash when other displays are not connected
+      # maybe there's a better way to do this, like only doing it if there are other displays?
+      #
+      # bindl = [
+      #   ",switch:off:Lid Switch,exec,hyprctl keyword monitor eDP-1,preferred,auto,auto"
+      #   ",switch:on:Lid Switch,exec,hyprctl keyword monitor eDP-1,disable"
+      # ];
 
       monitor = [
         "DP-1,preferred,1440x0,2"
