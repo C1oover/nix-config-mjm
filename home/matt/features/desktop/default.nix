@@ -9,6 +9,7 @@
 
   home.packages = with pkgs; [
     libsForQt5.kmahjongg
+    gnome.gnome-mahjongg
     xdg-utils
     grim
     slurp
