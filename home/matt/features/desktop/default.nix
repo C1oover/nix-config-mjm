@@ -1,4 +1,14 @@
-{pkgs, ...}: {
+{pkgs, ...}: let
+  # set brightness and volume for night
+  nightMode = pkgs.writeShellApplication {
+    name = "night-mode";
+    runtimeInputs = with pkgs; [light pulseaudio];
+    text = ''
+      pactl set-sink-volume @DEFAULT_SINK@ 30%
+      light -S 1
+    '';
+  };
+in {
   imports = [
     ./hyprland.nix
     ./rofi.nix
@@ -15,6 +25,8 @@
     slurp
     imv
     pavucontrol
+
+    nightMode
   ];
 
   home.pointerCursor = {
