@@ -10,14 +10,19 @@
 
   programs.swaylock = {
     enable = true;
+    package = pkgs.swaylock-effects;
     settings = {
-      color = "1e1e2e";
       font = "sans-serif";
+      screenshots = true;
+      clock = true;
+      fade-in = 0.2;
+      effect-blur = "7x5";
+      indicator = true;
     };
   };
 
   services.swayidle = let
-    lockNow = "${pkgs.swaylock}/bin/swaylock -f";
+    lockNow = "${lib.getExe config.programs.swaylock.package} -f";
     suspendNow = "${config.systemd.user.systemctlPath} suspend";
     isOnBattery = lib.getExe (pkgs.writeShellApplication {
       name = "is-on-battery";
