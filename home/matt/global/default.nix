@@ -26,6 +26,7 @@
   home.stateVersion = lib.mkDefault "22.11"; # Please read the comment before changing.
 
   home.packages = with pkgs; [
+    fx
     gh
     httpie
     nix-output-monitor
