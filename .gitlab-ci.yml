@@ -34,8 +34,7 @@ deploy nixos hosts:
   id_tokens:
     VAULT_ID_TOKEN:
       aud: http://vault.service.consul:8200
-  before_script:
-    !reference [ .snippets, setup_devenv ]
+  before_script: !reference [.snippets, setup_devenv]
   script:
     - nix run .#ci-deploy
 apply terranix changes:
@@ -57,8 +56,7 @@ apply terranix changes:
   id_tokens:
     VAULT_ID_TOKEN:
       aud: http://vault.service.consul:8200
-  before_script:
-    !reference [ .snippets, setup_devenv ]
+  before_script: !reference [.snippets, setup_devenv]
   script:
     - nix run .#ci-terraform-apply
 check for flake updates:
@@ -66,8 +64,6 @@ check for flake updates:
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
   stage: check
-  before_script:
-    !reference [ .snippets, setup_devenv ]
+  before_script: !reference [.snippets, setup_devenv]
   script:
     - nix run .#ci-flake-update
-

@@ -6,6 +6,20 @@
 }: {
   home.sessionVariables.EDITOR = lib.mkForce "hx";
 
+  home.packages = with pkgs; [
+    alejandra
+    elixir-ls
+    marksman
+    nil
+    shellcheck
+    shfmt
+    vscode-langservers-extracted
+    nodePackages.bash-language-server
+    nodePackages.prettier
+    nodePackages.typescript-language-server
+    nodePackages.yaml-language-server
+  ];
+
   programs.helix = {
     enable = true;
     package = inputs.helix.packages.${pkgs.system}.default;
@@ -35,33 +49,57 @@
     };
     languages = {
       language-server = {
+        bash-language-server = {
+          config.bashIde.backgroundAnalysisMaxFiles = 0;
+        };
         nil = {
-          command = lib.getExe pkgs.nil;
-          config.nil.formatting.command = [(lib.getExe pkgs.alejandra) "-q"];
+          config.nil.formatting.command = ["alejandra" "-q"];
         };
         elixir-ls = {
-          command = lib.getExe pkgs.elixir-ls;
           config.elixirLs.dialyzerEnabled = true;
         };
-        typescript-language-server = {
-          command = lib.getExe pkgs.nodePackages.typescript-language-server;
+        yaml-language-server = {
+          config.yaml = {
+            format.enable = true;
+            customTags = ["!reference sequence"];
+          };
         };
       };
       language = [
         {
-          name = "elixir";
+          name = "bash";
+          indent = {
+            tab-width = 2;
+            unit = "  ";
+          };
           auto-format = true;
+          formatter = {
+            command = "shfmt";
+            args = ["-i" "2"];
+          };
         }
         {
-          name = "nix";
+          name = "elixir";
           auto-format = true;
         }
         {
           name = "javascript";
           auto-format = true;
           formatter = {
-            command = lib.getExe pkgs.nodePackages.prettier;
+            command = "prettier";
             args = ["--parser" "typescript"];
+          };
+        }
+        {
+          name = "nix";
+          auto-format = true;
+        }
+        {
+          name = "yaml";
+          auto-format = true;
+          formatter = {
+            command = "prettier";
+            args = ["--parser" "yaml"];
           };
         }
       ];
