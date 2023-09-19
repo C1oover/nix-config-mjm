@@ -4,6 +4,11 @@
 
     ../common/global/nixos
 
+    # normally this would get imported with the rest of optional/server,
+    # but that would also pull in promtail and node-exporter, which are
+    # not wanted on nyx since it's not running inside the homelab.
+    ../common/optional/server/gc.nix
+
     ./services/nginx.nix
   ];
 
