@@ -22,6 +22,7 @@ storage_config:
     {{ with secret "kv/loki" }}
     s3: http://loki:{{ .Data.data.minio_password }}@minio.service.consul:9000
     {{ end }}
+    region: us-east-1
     bucketnames: logs
     insecure: true
     s3forcepathstyle: true
