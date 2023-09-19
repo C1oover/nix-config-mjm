@@ -16,6 +16,8 @@
     home-manager.flake = inputs.home-manager;
   };
 
+  nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
+
   nixpkgs = {
     config.allowUnfree = true;
     overlays = [
