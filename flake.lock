@@ -285,6 +285,22 @@
         "type": "github"
       }
     },
+    "firefox-csshacks": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1694318131,
+        "narHash": "sha256-KmkiSpxzlsPBWoX51o27l+X1IEh/Uv8RMkihGRxg98o=",
+        "owner": "MrOtherGuy",
+        "repo": "firefox-csshacks",
+        "rev": "1ff9383984632fe91b8466730679e019de13c745",
+        "type": "github"
+      },
+      "original": {
+        "owner": "MrOtherGuy",
+        "repo": "firefox-csshacks",
+        "type": "github"
+      }
+    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -1183,6 +1199,7 @@
         "darwin": "darwin",
         "deploy-rs": "deploy-rs",
         "devenv": "devenv",
+        "firefox-csshacks": "firefox-csshacks",
         "flake-compat": "flake-compat_3",
         "flake-parts": "flake-parts",
         "git-branchless": "git-branchless",

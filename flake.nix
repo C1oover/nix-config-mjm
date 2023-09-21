@@ -71,6 +71,10 @@
       url = "github:edolstra/flake-compat";
       flake = false;
     };
+    firefox-csshacks = {
+      url = "github:MrOtherGuy/firefox-csshacks";
+      flake = false;
+    };
   };
 
   outputs = {flake-parts, ...} @ inputs:

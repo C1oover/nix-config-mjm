@@ -1,4 +1,9 @@
-{pkgs, ...}: let
+{
+  pkgs,
+  lib,
+  inputs,
+  ...
+}: let
   addons = pkgs.callPackage ./addons {};
   firefox =
     if pkgs.stdenv.isLinux
@@ -29,6 +34,7 @@ in {
         "security.enterprise_roots.enabled" = true;
         "signon.autofillForms" = false;
         "signon.rememberSignons" = false;
+        "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
         "trailhead.firstrun.didSeeAboutWelcome" = true;
       };
       extensions = with pkgs.nur.repos; [
@@ -43,6 +49,10 @@ in {
         addons.linkding-injector
         addons.catppuccin-latte-mauve
       ];
+      userChrome = ''
+        ${builtins.readFile (inputs.firefox-csshacks + /chrome/window_control_placeholder_support.css)}
+        ${lib.optionalString pkgs.stdenv.isDarwin (builtins.readFile (inputs.firefox-csshacks + /chrome/hide_tabs_toolbar_osx.css))}
+      '';
       search.force = true;
       search.engines = {
         "MyNixOS" = {
