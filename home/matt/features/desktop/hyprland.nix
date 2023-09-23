@@ -9,6 +9,15 @@
   pointer = config.home.pointerCursor;
   colors = import ./hyprland-colors.nix;
 
+  outputs = {
+    # lg = "LG Electronics LG Ultra HD 0x0000ADE2";
+    # dell = "Dell Inc. DELL U2715H H7YCC79M07JS";
+    # internal = "BOE 0x0BCA";
+    lg = "DP-1";
+    dell = "DP-2";
+    internal = "eDP-1";
+  };
+
   handleEvents = pkgs.writeShellApplication {
     name = "handle-hyprland-events";
     runtimeInputs = [hyprland pkgs.socat];
@@ -27,6 +36,7 @@
   };
 in {
   home.packages = with pkgs; [
+    kanshi
     pulseaudio
     swaybg
     wob
@@ -150,24 +160,115 @@ in {
             )
             10));
 
-        bindl = let
-          monitorctl = lib.getExe (pkgs.writeShellApplication {
-            name = "monitorctl";
-            runtimeInputs = [pkgs.jq hyprland];
-            text = builtins.readFile ./monitorctl.sh;
-          });
-        in [
-          ",switch:off:Lid Switch,exec,${monitorctl} on"
-          ",switch:on:Lid Switch,exec,${monitorctl} off"
-        ];
+        # bindl = let
+        #   monitorctl = lib.getExe (pkgs.writeShellApplication {
+        #     name = "monitorctl";
+        #     runtimeInputs = [pkgs.jq hyprland];
+        #     text = builtins.readFile ./monitorctl.sh;
+        #   });
+        # in [
+        #   ",switch:off:Lid Switch,exec,${monitorctl} on"
+        #   ",switch:on:Lid Switch,exec,${monitorctl} off"
+        # ];
 
-        monitor = [
-          "DP-1,preferred,1440x0,2"
-          "DP-2,preferred,0x0,1,transform,3"
-          ",preferred,auto,auto"
-        ];
+        # monitor = [
+        #   "DP-1,preferred,1440x0,2"
+        #   "DP-2,preferred,0x0,1,transform,3"
+        #   ",preferred,auto,auto"
+        # ];
       };
   };
 
   systemd.user.services.swayidle.Install.WantedBy = lib.mkForce ["hyprland-session.target"];
+
+  services.kanshi = {
+    enable = true;
+    systemdTarget = "hyprland-session.target";
+    profiles = {
+      none = {
+        exec = [
+          "${hyprland}/bin/hyprctl keyword monitor ${outputs.internal},preferred,auto,auto"
+        ];
+      };
+      anything = {
+        outputs = [
+          {
+            criteria = "*";
+          }
+        ];
+        exec = [
+          "${hyprland}/bin/hyprctl keyword monitor ${outputs.internal},preferred,auto,auto"
+        ];
+      };
+      laptop = {
+        outputs = [
+          {
+            criteria = outputs.internal;
+          }
+        ];
+      };
+      lg = {
+        outputs = [
+          {
+            criteria = outputs.lg;
+            scale = 2.0;
+          }
+        ];
+        exec = [
+          "${hyprland}/bin/hyprctl keyword monitor ${outputs.internal},preferred,auto,auto"
+        ];
+      };
+      dell = {
+        outputs = [
+          {
+            criteria = outputs.dell;
+            transform = "270";
+          }
+        ];
+        exec = [
+          "${hyprland}/bin/hyprctl keyword monitor ${outputs.internal},preferred,auto,auto"
+        ];
+      };
+      desk = {
+        outputs = [
+          {
+            criteria = outputs.lg;
+            scale = 2.0;
+            position = "1440,0";
+          }
+          {
+            criteria = outputs.dell;
+            position = "0,0";
+            transform = "270";
+          }
+          {
+            criteria = outputs.internal;
+            status = "disable";
+          }
+        ];
+        exec = [
+          "${hyprland}/bin/hyprctl dispatch moveworkspacetomonitor '1 ${outputs.lg}'"
+          "${hyprland}/bin/hyprctl dispatch moveworkspacetomonitor '2 ${outputs.dell}'"
+        ];
+      };
+      desk2 = {
+        outputs = [
+          {
+            criteria = outputs.lg;
+            scale = 2.0;
+            position = "1440,0";
+          }
+          {
+            criteria = outputs.dell;
+            position = "0,0";
+            transform = "270";
+          }
+        ];
+        exec = [
+          "${hyprland}/bin/hyprctl dispatch moveworkspacetomonitor '1 ${outputs.lg}'"
+          "${hyprland}/bin/hyprctl dispatch moveworkspacetomonitor '2 ${outputs.dell}'"
+        ];
+      };
+    };
+  };
 }

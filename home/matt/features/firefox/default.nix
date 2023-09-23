@@ -34,6 +34,7 @@ in {
       extensions = with pkgs.nur.repos; [
         rycee.firefox-addons.onepassword-password-manager
         rycee.firefox-addons.stylus
+        rycee.firefox-addons.sidebery
         bandithedoge.firefoxAddons.tree-style-tab
         bandithedoge.firefoxAddons.ublock-origin
         addons.minimaltwitter
