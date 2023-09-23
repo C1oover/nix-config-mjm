@@ -14,6 +14,7 @@
     ./features/homelab
     ./features/kitty
     ./features/newsboat
+    ./features/taskwarrior
   ];
 
   home.packages = with pkgs; [
