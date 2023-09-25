@@ -10,6 +10,8 @@ in {
   imports = [
     ./global
     ./global/darwin.nix
+
+    ./features/taskwarrior
   ];
 
   home.packages = let
