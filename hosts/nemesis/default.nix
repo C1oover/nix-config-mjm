@@ -13,6 +13,7 @@
     ../common/optional/nix-remote.nix
     ./services/netbox.nix
     ./services/actual.nix
+    ./services/taskserver.nix
   ];
 
   networking.hostName = "nemesis";
