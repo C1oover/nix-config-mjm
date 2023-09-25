@@ -52,6 +52,9 @@ in {
       userChrome = ''
         ${builtins.readFile (inputs.firefox-csshacks + /chrome/window_control_placeholder_support.css)}
         ${lib.optionalString pkgs.stdenv.isDarwin (builtins.readFile (inputs.firefox-csshacks + /chrome/hide_tabs_toolbar_osx.css))}
+        ${lib.optionalString pkgs.stdenv.isLinux ''
+          #TabsToolbar{ visibility: collapse !important }
+        ''}
       '';
       search.force = true;
       search.engines = {
