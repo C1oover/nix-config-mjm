@@ -95,6 +95,7 @@ in {
       {path = "/Applications/1Password.app/";}
       {path = "/Applications/Slab.app/";}
       {path = "${pkgs.kitty}/Applications/kitty.app/";}
+      {path = "${pkgs.wezterm}/Applications/WezTerm.app/";}
       {path = "/Applications/Dash.app/";}
       {path = "/Applications/Postico 2.app/";}
       {path = "${pkgs.discord}/Applications/Discord.app/";}

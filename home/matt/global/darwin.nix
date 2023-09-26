@@ -7,6 +7,7 @@
     ../features/firefox
     ../features/kitty
     ../features/newsboat
+    ../features/wezterm
     ../features/yubikey
   ];
 
