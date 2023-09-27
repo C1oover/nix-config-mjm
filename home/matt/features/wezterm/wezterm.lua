@@ -9,6 +9,7 @@ config.check_for_updates = false
 config.color_scheme = 'Catppuccin Mocha'
 config.font = wezterm.font 'Cascadia Code'
 config.font_size = vars.font_size
+config.window_decorations = "INTEGRATED_BUTTONS | RESIZE"
 
 config.window_frame = {
   font_size = vars.font_size,
