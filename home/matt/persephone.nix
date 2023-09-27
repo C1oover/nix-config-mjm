@@ -15,6 +15,7 @@
     ./features/kitty
     ./features/newsboat
     ./features/taskwarrior
+    ./features/wezterm
   ];
 
   home.packages = with pkgs; [
