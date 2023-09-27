@@ -1,5 +1,6 @@
 {
   pkgs,
+  config,
   inputs,
   ...
 }: {
@@ -26,7 +27,7 @@
 
   xdg.configFile."starship.toml".text = ''
     format = "$all"
-    palette = "catppuccin_mocha"
+    palette = "nix_colors"
     command_timeout = 2000
 
     [os]
@@ -39,7 +40,16 @@
     disabled = true
 
     ${builtins.readFile ./nerd-font-symbols.toml}
-    ${builtins.readFile (inputs.catppuccin + /palettes/mocha.toml)}
+
+    [palettes.nix_colors]
+    black = "#${config.colorScheme.colors.base00}"
+    white = "#${config.colorScheme.colors.base05}"
+    red = "#${config.colorScheme.colors.base08}"
+    yellow = "#${config.colorScheme.colors.base0A}"
+    green = "#${config.colorScheme.colors.base0B}"
+    cyan = "#${config.colorScheme.colors.base0C}"
+    blue = "#${config.colorScheme.colors.base0D}"
+    purple = "#${config.colorScheme.colors.base0E}"
   '';
 
   programs.direnv = {

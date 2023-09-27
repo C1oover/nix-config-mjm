@@ -40,10 +40,6 @@
     hyprland.url = "github:hyprwm/Hyprland";
     nix-colors.url = "github:misterio77/nix-colors";
 
-    catppuccin = {
-      url = "github:catppuccin/starship";
-      flake = false;
-    };
     catppuccin-bat = {
       url = "github:catppuccin/bat";
       flake = false;
