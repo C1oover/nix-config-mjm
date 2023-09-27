@@ -28,6 +28,9 @@ in {
       server = "nemesis.home.mattmoriarity.com:53589";
       credentials = "home/mjm/158e73c7-9492-44cb-b340-508633b860f2";
     };
+    extraConfig = ''
+      include ${pkgs.taskwarrior}/share/doc/task/rc/dark-gray-blue-256.theme
+    '';
   };
 
   home.activation.link-taskwarrior-key = lib.mkIf pkgs.stdenv.isDarwin (lib.hm.dag.entryAfter ["writeBoundary"] ''
