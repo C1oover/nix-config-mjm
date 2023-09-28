@@ -37,7 +37,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     helix.url = "github:helix-editor/helix";
-    hyprland.url = "github:hyprwm/Hyprland";
+    hyprland = {
+      url = "github:hyprwm/Hyprland";
+      inputs.nixpkgs.follows = "nixos";
+    };
     nix-colors.url = "github:misterio77/nix-colors";
     jujutsu.url = "github:martinvonz/jj";
 
