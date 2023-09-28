@@ -41,4 +41,9 @@ in {
   '');
 
   age.secrets."taskserver.key".file = ../../../../secrets/taskwarrior-key.age;
+
+  home.file."${config.programs.taskwarrior.dataLocation}/hooks/on-exit-sync".source = lib.getExe (pkgs.writeShellApplication {
+    name = "tw-on-exit-sync";
+    text = builtins.readFile ./on-exit-sync.sh;
+  });
 }
