@@ -22,6 +22,7 @@
     config.allowUnfree = true;
     overlays = [
       inputs.nur.overlay
+      inputs.jujutsu.overlays.default
     ];
   };
 
