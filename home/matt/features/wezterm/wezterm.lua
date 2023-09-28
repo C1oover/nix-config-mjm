@@ -13,8 +13,18 @@ config.window_decorations = "INTEGRATED_BUTTONS | RESIZE"
 
 config.window_frame = {
   font_size = vars.font_size,
-  inactive_titlebar_bg = vars.colors.base01,
-  active_titlebar_bg = vars.colors.base00,
+  inactive_titlebar_bg = '#11111b',
+  active_titlebar_bg = '#11111b',
+}
+-- These are present in the color_scheme, but don't seem to apply to the fancy tab bar from there
+config.colors = {
+  tab_bar = {
+    active_tab = { bg_color = vars.colors.base0E, fg_color = '#11111b', },
+    inactive_tab = { bg_color = vars.colors.base01, fg_color = vars.colors.base05, },
+    inactive_tab_hover = { bg_color = vars.colors.base00, fg_color = vars.colors.base05, },
+    new_tab = { bg_color = vars.colors.base02, fg_color = vars.colors.base05, },
+    new_tab_hover = { bg_color = vars.colors.base03, fg_color = vars.colors.base05, },
+  },
 }
 
 config.command_palette_bg_color = vars.colors.base01
