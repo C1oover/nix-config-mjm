@@ -203,6 +203,10 @@ with lib; let
           type = types.nullOr (types.enum ["arm64" "amd64"]);
           default = null;
         };
+        nodes = mkOption {
+          type = types.nullOr (types.listOf types.str);
+          default = null;
+        };
         ports = mkOption {
           type = types.attrsOf (types.submodule portType);
           default = {};
@@ -431,11 +435,17 @@ in {
     mkTaskGroupConfig = tg: {
       Name = tg.name;
       Count = tg.count;
-      Constraints = lib.lists.optional (tg.architecture != null) {
-        LTarget = "$\${attr.cpu.arch}";
-        Operand = "=";
-        RTarget = tg.architecture;
-      };
+      Constraints =
+        lib.lists.optional (tg.architecture != null) {
+          LTarget = "$\${attr.cpu.arch}";
+          Operand = "=";
+          RTarget = tg.architecture;
+        }
+        ++ lib.lists.optional (tg.nodes != null) {
+          LTarget = "$\${node.unique.name}";
+          Operand = "regexp";
+          RTarget = "^(${builtins.concatStringsSep "|" tg.nodes})$";
+        };
       Networks = mkNetworksConfig tg;
       Services = lib.lists.imap0 mkServiceConfig tg.services;
       Tasks = map mkTaskConfig (builtins.attrValues tg.tasks);

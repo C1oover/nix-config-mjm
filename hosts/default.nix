@@ -145,7 +145,10 @@ in {
         if [ "$ARCH" = "x86_64" ]; then
           targets=(.#aion .#alecto .#cronus .#gaia .#helios .#megaera .#nemesis .#orion .#phoebe .#rhea .#thanatos .#themis .#tisiphone .#hypnos)
         elif [ "$ARCH" = "arm64" ]; then
-          targets=(.#brontes .#nyx .#steropes .#arges)
+          # deploy to arges first, because it may need to reload the gitlab-runner, which fails if
+          # the ingress is unavailable, which might temporarily happen when deploying to the other
+          # hosts.
+          targets=(.#arges .#nyx .#brontes .#steropes)
         fi
         deploy --skip-checks --ssh-opts="-i /tmp/id_ed25519" --targets "''${targets[@]}"
       '';

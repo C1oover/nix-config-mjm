@@ -233,6 +233,7 @@ in {
         taskGroups.ingress = {
           count = 2;
           architecture = "arm64";
+          nodes = ["brontes" "steropes"];
 
           ports.http.static = 80;
           ports.https.static = 443;
