@@ -19,8 +19,8 @@ in {
   programs.taskwarrior = {
     enable = true;
     config.taskd = {
-      ca = ./ca.crt;
-      certificate = ./cert.crt;
+      ca = "${./ca.crt}";
+      certificate = "${./cert.crt}";
       key =
         if pkgs.stdenv.isDarwin
         then "${config.home.homeDirectory}/.config/task/taskserver.key"
