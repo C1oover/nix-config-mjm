@@ -19,9 +19,9 @@
   ];
 
   home.packages = with pkgs; [
+    controku
     discord
     outputs.packages.x86_64-linux.beeper
-    outputs.packages.x86_64-linux.controku
   ];
 
   home.file."${config.xdg.cacheHome}/controku/devices.json".text = builtins.toJSON [
