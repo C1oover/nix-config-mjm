@@ -82,6 +82,9 @@ in {
       aliases = {
         unpushed = ["log" "-r" "branches() & ~(main | remote_branches())"];
       };
+      revsets = {
+        log = "@ | trunk() | ancestors(trunk()..(visible_heads() & mine() & ~tags()), 2)";
+      };
     };
   };
 
