@@ -77,9 +77,6 @@ in {
       user.name = config.programs.git.userName;
       user.email = config.programs.git.userEmail;
       ui.default-command = "log";
-      ui.diff-editor = let
-        scm-diff-editor = inputs.git-branchless.packages.${pkgs.system}.scm-diff-editor;
-      in ["${scm-diff-editor}/bin/scm-diff-editor" "--dir-diff" "$left" "$right"];
       core.fsmonitor = "watchman";
 
       aliases = {

@@ -32,10 +32,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     deploy-rs.url = "github:serokell/deploy-rs";
-    git-branchless = {
-      url = "github:arxanas/git-branchless";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     helix.url = "github:helix-editor/helix";
     hyprland = {
       url = "github:hyprwm/Hyprland";
