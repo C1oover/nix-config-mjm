@@ -58,16 +58,11 @@ in {
 
     checks = let
       mkDeployCheck = system: nodes:
-        withSystem system ({pkgs, ...}:
-          pkgs.symlinkJoin {
-            name = "deploy-x86_64";
-            paths = map (name:
-              pkgs.runCommand "deploy-${name}" {} ''
-                mkdir $out
-                ln -s ${outputs.deploy.nodes.${name}.profiles.system.path} $out/deploy-${name}
-              '')
-            nodes;
-          });
+        withSystem system (
+          {pkgs, ...}:
+            pkgs.linkFarm "deploy-${system}"
+            (pkgs.lib.genAttrs nodes (name: outputs.deploy.nodes.${name}.profiles.system.path))
+        );
     in {
       x86_64-linux.deploy-1 = mkDeployCheck "x86_64-linux" ["aion" "cronus" "gaia" "nemesis" "orion"];
       x86_64-linux.deploy-2 = mkDeployCheck "x86_64-linux" ["phoebe" "rhea" "thanatos" "themis"];
