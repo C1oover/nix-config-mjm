@@ -1,12 +1,12 @@
 {
   pkgs,
   outputs,
-  config,
   ...
 }: {
   imports = [
     ./global
 
+    ./features/controku
     ./features/desktop
     ./features/email
     ./features/firefox
@@ -19,15 +19,7 @@
   ];
 
   home.packages = with pkgs; [
-    controku
     discord
     outputs.packages.x86_64-linux.beeper
-  ];
-
-  home.file."${config.xdg.cacheHome}/controku/devices.json".text = builtins.toJSON [
-    {
-      name = "55\" TCL Roku TV";
-      ip = "10.0.1.111";
-    }
   ];
 }

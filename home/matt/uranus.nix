@@ -2,6 +2,7 @@
   imports = [
     ./global
 
+    ./features/controku
     ./features/homelab
   ];
 
