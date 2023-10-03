@@ -12,6 +12,8 @@
     };
   };
 
+  systemd.tmpfiles.rules = ["d /mnt 0755 root root - -"];
+
   systemd.services.btrbk-btrbk = {
     preStart = ''
       sudo mount /dev/lvm/root /mnt
