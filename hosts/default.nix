@@ -1,6 +1,7 @@
 {
   self,
   inputs,
+  withSystem,
   ...
 }: let
   inherit (self) outputs;
@@ -55,6 +56,25 @@ in {
       thanatos = mkNixos [./thanatos];
     };
 
+    checks = let
+      mkDeployCheck = system:
+        withSystem system ({pkgs, ...}: let
+          inherit (pkgs) lib;
+          nodes = lib.filterAttrs (name: value: value.profiles.system.path.system == system) outputs.deploy.nodes;
+        in
+          pkgs.symlinkJoin {
+            name = "deploy-x86_64";
+            paths = map (name:
+              pkgs.runCommand "deploy-${name}" {} ''
+                mkdir $out
+                ln -s ${nodes.${name}.profiles.system.path} $out/deploy-${name}
+              '') (builtins.attrNames nodes);
+          });
+    in {
+      x86_64-linux.deploy = mkDeployCheck "x86_64-linux";
+      aarch64-linux.deploy = mkDeployCheck "aarch64-linux";
+    };
+
     deploy = {
       user = "root";
       sshUser = "matt";
@@ -97,12 +117,28 @@ in {
     pkgs,
     lib,
     system,
+    inputs',
     ...
   }: let
-    deploy-rs = inputs.deploy-rs.packages.${system}.default;
+    deploy-rs = inputs'.deploy-rs.packages.default;
   in {
     devenv.shells.default = {
       packages = [deploy-rs];
+    };
+
+    packages.deploy-prebuild = pkgs.writeShellApplication {
+      name = "deploy-prebuild";
+      runtimeInputs = [inputs'.nix-fast-build.packages.default];
+      text = ''
+        if [ "$1" = "arm64" ]; then
+          arch="aarch64"
+        else
+          arch="$1"
+        fi
+        shift
+
+        nix-fast-build -f ".#checks.$arch-linux.deploy" "$@"
+      '';
     };
 
     apps.deploy.program = lib.getExe (pkgs.writeShellApplication {

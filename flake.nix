@@ -39,6 +39,7 @@
     };
     nix-colors.url = "github:misterio77/nix-colors";
     jujutsu.url = "github:martinvonz/jj";
+    nix-fast-build.url = "github:Mic92/nix-fast-build";
 
     catppuccin-bat = {
       url = "github:catppuccin/bat";
