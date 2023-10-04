@@ -25,6 +25,10 @@ in {
     slurp
     imv
     pavucontrol
+    (catppuccin-kvantum.override {
+      accent = "Mauve";
+      variant = "Latte";
+    })
 
     nightMode
   ];
@@ -57,6 +61,16 @@ in {
       };
     };
   };
+
+  qt = {
+    enable = true;
+    platformTheme = "qtct";
+    style.name = "kvantum";
+  };
+
+  xdg.configFile."Kvantum/kvantum.config".text = ''
+    theme=Catppuccin-Latte-Mauve
+  '';
 
   programs.mpv = {
     enable = true;

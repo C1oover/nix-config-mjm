@@ -26,6 +26,8 @@
     package = inputs.hyprland.packages.${pkgs.system}.hyprland;
   };
 
+  environment.pathsToLink = ["/share/Kvantum"];
+
   services.greetd = {
     enable = true;
     settings = {

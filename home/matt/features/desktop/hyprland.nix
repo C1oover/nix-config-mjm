@@ -53,7 +53,9 @@ in {
       "$sink_volume_mute" = "pactl get-sink-mute @DEFAULT_SINK@ | sed -En \"/no/ s/.*/$($sink_volume)/p; /yes/ s/.*/0/p\"";
 
       env = [
-        "QT_OPA_PLATFORM,wayland"
+        "QT_QPA_PLATFORM,wayland"
+        "QT_QPA_PLATFORMTHEME,qt5ct"
+        "QT_STYLE_OVERRIDE,kvantum"
         "_JAVA_AWT_WM_NONREPARENTING,1"
         "MOZ_DBUS_REMOTE,1"
         "NIXOS_OZONE_WL,1"
