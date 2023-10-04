@@ -9,7 +9,6 @@
     [
       inputs.home-manager.darwinModules.home-manager
       inputs.agenix.darwinModules.default
-      inputs.nixvim.nixDarwinModules.nixvim
 
       ./dock.nix
       ./fonts.nix
@@ -17,7 +16,6 @@
       ./keyboard.nix
       ../home-manager.nix
       ../nix.nix
-      ../nixvim
     ]
     ++ (builtins.attrValues outputs.darwinModules);
 

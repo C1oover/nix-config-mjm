@@ -7,8 +7,6 @@
   networking.computerName = "Athena";
   networking.hostName = "athena";
 
-  x.nixvim.enableIde = true;
-
   homebrew.casks = [
     "cleanshot"
     "loom"

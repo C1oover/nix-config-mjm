@@ -26,7 +26,6 @@
     nixpkgs-firefox-darwin.url = "github:bandithedoge/nixpkgs-firefox-darwin";
     nur.url = "github:nix-community/NUR";
     pre-commit-hooks-nix.url = "github:cachix/pre-commit-hooks.nix";
-    nixvim.url = "github:pta2002/nixvim";
     terranix = {
       url = "github:terranix/terranix";
       inputs.nixpkgs.follows = "nixpkgs";
