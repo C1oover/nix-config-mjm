@@ -13,7 +13,6 @@
   ];
 
   boot.tmp.cleanOnBoot = true;
-  zramSwap.enable = true;
 
   networking.hostName = "nyx";
   networking.domain = "mattmoriarity.com";

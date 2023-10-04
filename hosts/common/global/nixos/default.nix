@@ -21,6 +21,8 @@
 
   nix.settings.trusted-users = ["root" "matt"];
 
+  zramSwap.enable = true;
+
   # use nix-index/nix-locate instead
   programs.command-not-found.enable = false;
 

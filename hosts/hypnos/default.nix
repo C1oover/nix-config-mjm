@@ -22,7 +22,5 @@
 
   services.consul.interface.advertise = "ens18";
 
-  zramSwap.enable = true;
-
   system.stateVersion = "22.11";
 }
