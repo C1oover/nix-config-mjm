@@ -11,12 +11,17 @@
 }:
 appimageTools.wrapType2 rec {
   pname = "beeper";
-  version = "3.78.23";
+  version = "3.79.17";
 
   src = fetchurl {
     url = "https://download.beeper.com/linux/appImage/x64";
-    sha256 = "8aeiFxQzY1EubTbwuNrdmhcmBedfbh1DtTiaQeWjJwo=";
+    sha256 = "lBw+IlBdSI7gELbCL0nY74inZF8iL3fBtOJzZaD8t9Y=";
   };
+
+  extraPkgs = pkgs:
+    with pkgs; [
+      libsecret
+    ];
 
   extraInstallCommands = let
     contents = appimageTools.extractType2 {inherit pname version src;};
@@ -35,8 +40,9 @@ appimageTools.wrapType2 rec {
   passthru = {
     updateScript = writeShellScript "update-beeper" ''
       set -o errexit
+      set -x
       export PATH="${lib.makeBinPath [curl gnugrep pcre common-updater-scripts]}"
-      version="$(curl -sI -X GET https://download.beeper.com/linux/appImage/x64 | grep -Fi 'content-disposition:' | pcregrep -o1 '(([0-9]\.?)+[0-9])')"
+      version="$(curl -sI -X GET https://download.beeper.com/linux/appImage/x64 | grep -Fi 'content-disposition:' | pcregrep -o1 'beeper-(([0-9]\.?)+[0-9])')"
       update-source-version beeper "$version"
     '';
   };
