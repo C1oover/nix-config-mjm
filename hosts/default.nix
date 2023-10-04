@@ -137,7 +137,7 @@ in {
         fi
         shift
 
-        nix-fast-build -f ".#checks.$arch-linux.deploy" "$@"
+        nix-fast-build -f ".#checks.$arch-linux.deploy" --eval-max-memory-size 2048 --eval-workers 4 "$@"
       '';
     };
 
