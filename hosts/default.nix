@@ -69,8 +69,9 @@ in {
             nodes;
           });
     in {
-      x86_64-linux.deploy-1 = mkDeployCheck "x86_64-linux" ["aion" "cronus" "gaia" "nemesis" "orion" "phoebe" "rhea" "thanatos" "themis"];
-      x86_64-linux.deploy-2 = mkDeployCheck "x86_64-linux" ["alecto" "helios" "hypnos" "megaera" "tisiphone"];
+      x86_64-linux.deploy-1 = mkDeployCheck "x86_64-linux" ["aion" "cronus" "gaia" "nemesis" "orion"];
+      x86_64-linux.deploy-2 = mkDeployCheck "x86_64-linux" ["phoebe" "rhea" "thanatos" "themis"];
+      x86_64-linux.deploy-3 = mkDeployCheck "x86_64-linux" ["alecto" "helios" "hypnos" "megaera" "tisiphone"];
       aarch64-linux.deploy = mkDeployCheck "aarch64-linux" ["arges" "brontes" "nyx" "steropes"];
     };
 
@@ -136,6 +137,7 @@ in {
           shift
           nix-fast-build -f ".#checks.x86_64-linux.deploy-1" --eval-max-memory-size 2048 --eval-workers 4 "$@"
           nix-fast-build -f ".#checks.x86_64-linux.deploy-2" --eval-max-memory-size 2048 --eval-workers 4 "$@"
+          nix-fast-build -f ".#checks.x86_64-linux.deploy-3" --eval-max-memory-size 2048 --eval-workers 4 "$@"
         fi
       '';
     };
