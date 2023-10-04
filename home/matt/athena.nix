@@ -11,6 +11,7 @@ in {
     ./global
     ./global/darwin.nix
 
+    ./features/helix
     ./features/taskwarrior
   ];
 

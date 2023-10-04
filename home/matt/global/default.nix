@@ -11,7 +11,6 @@
       inputs.nix-colors.homeManagerModules.default
 
       ../features/git
-      ../features/helix
       ../features/shell
       ../features/xdg
     ]

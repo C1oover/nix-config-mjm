@@ -3,6 +3,7 @@
     ./global
 
     ./features/controku
+    ./features/helix
     ./features/homelab
     ./features/taskwarrior
   ];

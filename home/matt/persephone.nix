@@ -7,6 +7,7 @@
     ./features/email
     ./features/firefox
     ./features/games
+    ./features/helix
     ./features/homelab
     ./features/kitty
     ./features/newsboat
