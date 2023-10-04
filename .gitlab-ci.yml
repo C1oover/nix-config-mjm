@@ -9,7 +9,7 @@ variables:
   NOMAD_ADDR: "http://nomad.service.consul:4646"
   VAULT_ADDR: "http://vault.service.consul:8200"
 deploy nixos hosts:
-  tags: [nix, "${ARCH}"]
+  tags: [nix-shell, "${ARCH}"]
   rules:
     - if: $CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"
       changes:
@@ -34,7 +34,7 @@ deploy nixos hosts:
   id_tokens:
     VAULT_ID_TOKEN:
       aud: http://vault.service.consul:8200
-  before_script: !reference [.snippets, setup_devenv]
+  # before_script: !reference [.snippets, setup_devenv]
   script:
     - nix run .#deploy-prebuild -- $ARCH --no-nom
     - nix run .#ci-deploy
