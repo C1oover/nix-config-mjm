@@ -171,13 +171,19 @@ in {
         VAULT_TOKEN=$(vault write -field=token auth/gitlab/login role=homelab-infra "jwt=$VAULT_ID_TOKEN")
         export VAULT_TOKEN
 
-        ssh-keygen -t ed25519 -f /tmp/id_ed25519 -N ""
+        tmp=$(mktemp -d)
+        keypath="$tmp/id_ed25519"
+        ssh-keygen -t ed25519 -f "$keypath" -N ""
         vault write \
           -field=signed_key \
           ssh-client-signer/sign/homelab-client \
-          public_key=@/tmp/id_ed25519.pub \
+          "public_key=@$keypath.pub" \
           valid_principals=matt \
-          >/tmp/id_ed25519-cert.pub
+          >"$keypath-cert.pub"
+        function finish {
+          rm -rf "$tmp"
+        }
+        trap finish EXIT
 
         if [ "$ARCH" = "x86_64" ]; then
           targets=(.#aion .#alecto .#cronus .#gaia .#helios .#megaera .#nemesis .#orion .#phoebe .#rhea .#thanatos .#themis .#tisiphone .#hypnos)
@@ -187,7 +193,7 @@ in {
           # hosts.
           targets=(.#arges .#nyx .#brontes .#steropes)
         fi
-        deploy --skip-checks --ssh-opts="-i /tmp/id_ed25519" --targets "''${targets[@]}"
+        deploy --skip-checks --ssh-opts="-i $keypath" --targets "''${targets[@]}"
       '';
     });
   };
