@@ -4,6 +4,7 @@
 
     ./features/controku
     ./features/homelab
+    ./features/taskwarrior
   ];
 
   programs.git.extraConfig = {
