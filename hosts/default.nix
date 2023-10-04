@@ -57,22 +57,21 @@ in {
     };
 
     checks = let
-      mkDeployCheck = system:
-        withSystem system ({pkgs, ...}: let
-          inherit (pkgs) lib;
-          nodes = lib.filterAttrs (name: value: value.profiles.system.path.system == system) outputs.deploy.nodes;
-        in
+      mkDeployCheck = system: nodes:
+        withSystem system ({pkgs, ...}:
           pkgs.symlinkJoin {
             name = "deploy-x86_64";
             paths = map (name:
               pkgs.runCommand "deploy-${name}" {} ''
                 mkdir $out
-                ln -s ${nodes.${name}.profiles.system.path} $out/deploy-${name}
-              '') (builtins.attrNames nodes);
+                ln -s ${outputs.deploy.nodes.${name}.profiles.system.path} $out/deploy-${name}
+              '')
+            nodes;
           });
     in {
-      x86_64-linux.deploy = mkDeployCheck "x86_64-linux";
-      aarch64-linux.deploy = mkDeployCheck "aarch64-linux";
+      x86_64-linux.deploy-1 = mkDeployCheck "x86_64-linux" ["aion" "cronus" "gaia" "nemesis" "orion" "phoebe" "rhea" "thanatos" "themis"];
+      x86_64-linux.deploy-2 = mkDeployCheck "x86_64-linux" ["alecto" "helios" "hypnos" "megaera" "tisiphone"];
+      aarch64-linux.deploy = mkDeployCheck "aarch64-linux" ["arges" "brontes" "nyx" "steropes"];
     };
 
     deploy = {
@@ -131,13 +130,13 @@ in {
       runtimeInputs = [inputs'.nix-fast-build.packages.default];
       text = ''
         if [ "$1" = "arm64" ]; then
-          arch="aarch64"
+          shift
+          nix-fast-build -f ".#checks.aarch64-linux.deploy" --eval-max-memory-size 2048 --eval-workers 4 "$@"
         else
-          arch="$1"
+          shift
+          nix-fast-build -f ".#checks.x86_64-linux.deploy-1" --eval-max-memory-size 2048 --eval-workers 4 "$@"
+          nix-fast-build -f ".#checks.x86_64-linux.deploy-2" --eval-max-memory-size 2048 --eval-workers 4 "$@"
         fi
-        shift
-
-        nix-fast-build -f ".#checks.$arch-linux.deploy" --eval-max-memory-size 2048 --eval-workers 4 "$@"
       '';
     };
 
