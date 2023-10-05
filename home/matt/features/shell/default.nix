@@ -107,7 +107,10 @@
 
   programs.bat = {
     enable = true;
-    themes.Catppuccin-mocha = builtins.readFile "${inputs.catppuccin-bat}/Catppuccin-mocha.tmTheme";
+    themes.Catppuccin-mocha = {
+      src = inputs.catppuccin-bat;
+      file = "Catppuccin-mocha.tmTheme";
+    };
     config.theme = "Catppuccin-mocha";
   };
 }
