@@ -93,10 +93,17 @@
         lib,
         ...
       }: {
-        _module.args.pkgs =
-          if system == "x86_64-linux" || system == "aarch64-linux"
-          then inputs.nixos.legacyPackages.${system}
-          else inputs.nixpkgs.legacyPackages.${system};
+        _module.args.pkgs = let
+          source =
+            if system == "x86_64-linux" || system == "aarch64-linux"
+            then inputs.nixos
+            else inputs.nixpkgs;
+        in
+          import source {
+            inherit system;
+            # terraform is now under an unfree license
+            config.allowUnfree = true;
+          };
 
         devenv.shells.default = {
           pre-commit = {
