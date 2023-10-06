@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{
   accounts.email.accounts.fastmail = {
     primary = true;
     flavor = "fastmail.com";
@@ -10,7 +10,6 @@
 
   programs.thunderbird = {
     enable = true;
-    package = pkgs.thunderbird-wayland;
 
     profiles.matt = {
       isDefault = true;
