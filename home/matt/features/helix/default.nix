@@ -34,6 +34,7 @@
           normal = "block";
           select = "underline";
         };
+        idle-timeout = 100;
         indent-guides.render = true;
         lsp = {
           display-messages = true;
