@@ -116,6 +116,7 @@ in {
           "$mod SHIFT,E,exec,pkill Hyprland"
           "$mod,Q,killactive"
           "$mod,F,fullscreen"
+          "$mod SHIFT,F,togglefloating"
           "$mod,G,togglegroup"
           "$mod,N,changegroupactive,f"
           "$mod,P,changegroupactive,b"
