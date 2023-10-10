@@ -21,6 +21,7 @@ in {
       allow_remote_control = "yes";
       enabled_layouts = "tall:bias=65;full_size=1,fat:bias=70;full_size=1,stack";
       focus_follows_mouse = "yes";
+      scrollback_lines = 100000;
     };
     keybindings = {
       "cmd+enter" = "launch --cwd=current";
