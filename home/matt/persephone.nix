@@ -1,8 +1,4 @@
-{
-  pkgs,
-  outputs,
-  ...
-}: {
+{pkgs, ...}: {
   imports = [
     ./global
 
@@ -19,7 +15,7 @@
   ];
 
   home.packages = with pkgs; [
+    beeper
     discord
-    outputs.packages.x86_64-linux.beeper
   ];
 }

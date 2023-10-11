@@ -778,6 +778,22 @@
         "type": "github"
       }
     },
+    "nixos-beeper": {
+      "locked": {
+        "lastModified": 1697042942,
+        "narHash": "sha256-uRNFeh24qf0EDrIQomWSJZNP/v5KKtEW6H7q8vQer98=",
+        "owner": "mjm",
+        "repo": "nixpkgs",
+        "rev": "0675832b5c539712f31b46299c40ccc076ec26ad",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mjm",
+        "ref": "beeper-fix-wrapper",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixos-wsl": {
       "inputs": {
         "flake-compat": "flake-compat_5",
@@ -1131,6 +1147,7 @@
         "nix-colors": "nix-colors",
         "nix-fast-build": "nix-fast-build",
         "nixos": "nixos",
+        "nixos-beeper": "nixos-beeper",
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs_6",
         "nixpkgs-firefox-darwin": "nixpkgs-firefox-darwin",

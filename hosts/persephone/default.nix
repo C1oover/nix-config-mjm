@@ -19,6 +19,18 @@
     ../common/optional/wireless.nix
   ];
 
+  # remove once beeper fixes land
+  nixpkgs.overlays = [
+    (final: prev: let
+      pkgs-beeper = import inputs.nixos-beeper {
+        inherit (pkgs) system;
+        config.allowUnfree = true;
+      };
+    in {
+      inherit (pkgs-beeper) beeper;
+    })
+  ];
+
   boot.binfmt.emulatedSystems = ["aarch64-linux"];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
