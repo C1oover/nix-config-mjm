@@ -84,6 +84,10 @@
           auto-format = true;
         }
         {
+          name = "heex";
+          auto-format = true;
+        }
+        {
           name = "javascript";
           auto-format = true;
           formatter = {
