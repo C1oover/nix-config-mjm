@@ -176,6 +176,10 @@ in {
       #   "DP-2,preferred,0x0,1,transform,3"
       #   ",preferred,auto,auto"
       # ];
+
+      windowrulev2 = [
+        "float,class:(controku)"
+      ];
     };
   };
 
