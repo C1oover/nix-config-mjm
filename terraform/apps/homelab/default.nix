@@ -28,6 +28,7 @@ in {
         docker = {inherit image;};
         env.OTEL_SERVICE_NAME = "homelab";
         env.OTEL_EXPORTER_OTLP_ENDPOINT = "http://$\${attr.unique.network.ip-address}:4318";
+        env.TASKRC = "$\${NOMAD_TASK_DIR}/taskrc";
         cpu = 200;
         memory = 300;
         loggingTag = name;
@@ -49,6 +50,34 @@ in {
           '';
           changeMode = "restart";
           envVars = true;
+        };
+
+        templates."secrets/task.key" = {
+          text = ''
+            {{ with secret "kv/taskwarrior" }}{{ .Data.data.private_key }}{{ end }}
+          '';
+          changeMode = "noop";
+        };
+
+        templates."local/task.crt" = {
+          source = ../../../home/matt/features/taskwarrior/cert.crt;
+          changeMode = "noop";
+        };
+        templates."local/task.ca" = {
+          source = ../../../home/matt/features/taskwarrior/ca.crt;
+          changeMode = "noop";
+        };
+
+        templates."local/taskrc" = {
+          text = ''
+            data.location={{ env "NOMAD_TASK_DIR" }}
+            taskd.ca={{ env "NOMAD_TASK_DIR" }}/task.ca
+            taskd.certificate={{ env "NOMAD_TASK_DIR" }}/task.crt
+            taskd.credentials=home/mjm/158e73c7-9492-44cb-b340-508633b860f2
+            taskd.key={{ env "NOMAD_SECRETS_DIR" }}/task.key
+            taskd.server=nemesis.home.mattmoriarity.com:53589
+          '';
+          changeMode = "noop";
         };
       };
     };
@@ -81,6 +110,10 @@ in {
     }
 
     path "kv/data/tarsnap" {
+      capabilities = ["read"]
+    }
+
+    path "kv/data/taskwarrior" {
       capabilities = ["read"]
     }
   '';
