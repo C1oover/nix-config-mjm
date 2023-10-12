@@ -92,8 +92,6 @@ in {
       general = {
         gaps_in = 4;
         gaps_out = 8;
-        "col.group_border" = "0xff${config.colorScheme.colors.base07}";
-        "col.group_border_active" = "0xff${config.colorScheme.colors.base0E}";
         resize_on_border = true;
       };
 
@@ -101,9 +99,16 @@ in {
         rounding = 8;
       };
 
-      misc = {
-        groupbar_titles_font_size = 16;
-        groupbar_gradients = false;
+      group = {
+        "col.border_inactive" = "0xff${config.colorScheme.colors.base07}";
+        "col.border_active" = "0xff${config.colorScheme.colors.base0E}";
+        groupbar = {
+          font_size = 16;
+          gradients = false;
+          text_color = "0xff${config.colorScheme.colors.base05}";
+          "col.inactive" = "0xff${config.colorScheme.colors.base07}";
+          "col.active" = "0xff${config.colorScheme.colors.base0E}";
+        };
       };
 
       bindm = [
