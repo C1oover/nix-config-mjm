@@ -14,6 +14,7 @@
     ./services/netbox.nix
     ./services/actual.nix
     ./services/taskserver.nix
+    ./services/attic.nix
   ];
 
   networking.hostName = "nemesis";

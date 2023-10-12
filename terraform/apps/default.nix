@@ -2,6 +2,7 @@
   imports = [
     ./actual
     ./adminer
+    ./attic
     ./atuin
     ./authelia
     ./blackbox-exporter
