@@ -20,6 +20,7 @@
       host	all		all		10.0.0.0/8		scram-sha-256
     '';
     ensureDatabases = [
+      "attic"
       "atuin"
     ];
     ensureUsers = [
@@ -29,6 +30,17 @@
         # to set up from this module.
         ensurePermissions = {
           "DATABASE atuin" = "ALL PRIVILEGES";
+        };
+        ensureClauses = {
+          login = false;
+        };
+      }
+      {
+        name = "attic";
+        # the attic user also needs to be the owner of the attic DB, which isn't possible
+        # to set up from this module.
+        ensurePermissions = {
+          "DATABASE attic" = "ALL PRIVILEGES";
         };
         ensureClauses = {
           login = false;
