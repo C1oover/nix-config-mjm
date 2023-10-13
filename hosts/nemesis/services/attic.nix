@@ -11,7 +11,7 @@
   services.atticd = {
     enable = true;
     settings = {
-      listen = "0.0.0.0:8001";
+      listen = "0.0.0.0:8100";
       storage = {
         type = "s3";
         region = "us-east-1";
@@ -29,6 +29,8 @@
     };
     credentialsFile = "/run/secrets/attic/attic.env";
   };
+
+  networking.firewall.allowedTCPPorts = [8100];
 
   systemd.tmpfiles.rules = ["d /run/secrets/attic 0700 root root - -"];
 
