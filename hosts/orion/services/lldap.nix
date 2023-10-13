@@ -1,20 +1,18 @@
 {
-  # I suspect issues with podman's ability to clean up external containers
-  virtualisation.oci-containers.backend = "docker";
-
-  virtualisation.oci-containers.containers = {
-    lldap = {
-      image = "nitnelave/lldap:stable";
-      volumes = ["lldap_data:/data"];
-      ports = [
-        "3890:3890" # ldap
-        "17170:17170" # web interface
-      ];
-      environment = {
-        LLDAP_LDAP_BASE_DN = "dc=home,dc=mattmoriarity,dc=com";
-      };
+  services.lldap = {
+    enable = true;
+    settings = {
+      http_host = "0.0.0.0";
+      ldap_host = "0.0.0.0";
+      http_url = "https://ldap.home.mattmoriarity.com";
+      ldap_base_dn = "dc=home,dc=mattmoriarity,dc=com";
     };
   };
+
+  networking.firewall.allowedTCPPorts = [
+    3890
+    17170
+  ];
 
   services.consul.services.lldap = {
     port = 17170;
