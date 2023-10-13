@@ -32,6 +32,19 @@
 
   networking.firewall.allowedTCPPorts = [8100];
 
+  services.consul.services.attic = {
+    port = 8100;
+
+    checks = [
+      {
+        name = "attic is ready";
+        http = "http://localhost:8100/";
+        interval = "15s";
+        timeout = "10s";
+      }
+    ];
+  };
+
   systemd.tmpfiles.rules = ["d /run/secrets/attic 0700 root root - -"];
 
   services.vault-agent.instances.atticd.settings = let
