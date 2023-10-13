@@ -116,23 +116,40 @@ in {
     ...
   }: let
     deploy-rs = inputs'.deploy-rs.packages.default;
+    attic = inputs'.attic.packages.default;
   in {
     devenv.shells.default = {
       packages = [deploy-rs];
     };
 
+    apps.ci-attic-login.program = lib.getExe (pkgs.writeShellApplication {
+      name = "ci-attic-login";
+      runtimeInputs = [pkgs.vault attic];
+      text = ''
+        VAULT_TOKEN=$(vault write -field=token auth/gitlab/login role=homelab-infra "jwt=$VAULT_ID_TOKEN")
+        export VAULT_TOKEN
+
+        ATTIC_TOKEN=$(vault kv get -field=token kv/attic/client)
+        attic login --set-default homelab https://attic.home.mattmoriarity.com "$ATTIC_TOKEN"
+      '';
+    });
+
     packages.deploy-prebuild = pkgs.writeShellApplication {
       name = "deploy-prebuild";
-      runtimeInputs = [inputs'.nix-fast-build.packages.default];
+      runtimeInputs = [inputs'.nix-fast-build.packages.default attic];
       text = ''
         if [ "$1" = "arm64" ]; then
           shift
           nix-fast-build -f ".#checks.aarch64-linux.deploy" --eval-max-memory-size 2048 --eval-workers 4 "$@"
+          attic push homelab ./result
         else
           shift
           nix-fast-build -f ".#checks.x86_64-linux.deploy-1" --eval-max-memory-size 2048 --eval-workers 4 "$@"
+          attic push homelab ./result
           nix-fast-build -f ".#checks.x86_64-linux.deploy-2" --eval-max-memory-size 2048 --eval-workers 4 "$@"
+          attic push homelab ./result
           nix-fast-build -f ".#checks.x86_64-linux.deploy-3" --eval-max-memory-size 2048 --eval-workers 4 "$@"
+          attic push homelab ./result
         fi
       '';
     };
