@@ -863,11 +863,11 @@
     },
     "nixos-beeper": {
       "locked": {
-        "lastModified": 1697121425,
-        "narHash": "sha256-J1Tcr5Zbvf2CHqBGDw30PlraXgRULX2jGc65Mc2y+OE=",
+        "lastModified": 1697310553,
+        "narHash": "sha256-fixHiaDyNeHQAJ+acfRVKWwNYUhxxL7aKv6zU4ZrT9Y=",
         "owner": "mjm",
         "repo": "nixpkgs",
-        "rev": "f0f1d4ea3af389dd58d2d78b3f3d23501be4e0e4",
+        "rev": "cc5eb1d4d2701e5aaaf2ce52bc84a7bb5f82d8b3",
         "type": "github"
       },
       "original": {
