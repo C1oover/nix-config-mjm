@@ -18,6 +18,14 @@
         bucket = "attic-caches";
         endpoint = "http://minio.service.consul:9000";
       };
+      chunking = {
+        nar-size-threshold = 65536;
+        min-size = 16384;
+        avg-size = 65536;
+        max-size = 262144;
+      };
+      compression.type = "zstd";
+      garbage-collection.default-retention-period = "3 months";
     };
     credentialsFile = "/run/secrets/attic/attic.env";
   };
