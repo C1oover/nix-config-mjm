@@ -21,6 +21,7 @@ in
 
     "netbox-secret-key.age".publicKeys = personalKeys ++ [nemesis];
     "netbox-approle-secret-id.age".publicKeys = personalKeys ++ [nemesis];
+    "attic-approle-secret-id.age".publicKeys = personalKeys ++ [nemesis];
 
     "paperless-approle-secret-id.age".publicKeys = personalKeys ++ [aion];
 
