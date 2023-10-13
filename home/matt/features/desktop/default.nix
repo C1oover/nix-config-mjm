@@ -29,6 +29,7 @@ in {
       accent = "Mauve";
       variant = "Latte";
     })
+    zeal
 
     nightMode
   ];
