@@ -20,6 +20,7 @@
   home.stateVersion = lib.mkDefault "22.11";
 
   home.packages = with pkgs; [
+    attic
     fx
     gh
     httpie
