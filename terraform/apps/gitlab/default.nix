@@ -45,6 +45,11 @@
       capabilities = ["read"]
     }
 
+    # Allow reading Attic push token
+    path "kv/data/attic/client" {
+      capabilities = ["read"]
+    }
+
     # Allow updating Vault policies for apps
     path "sys/policies/acl/*" {
       capabilities = ["create", "read", "update", "delete", "list", "sudo"]
