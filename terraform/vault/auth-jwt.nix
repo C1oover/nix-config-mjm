@@ -32,4 +32,17 @@
       ref_type = "branch";
     };
   };
+
+  resource.vault_jwt_auth_backend_role.homelab = {
+    backend = "\${vault_jwt_auth_backend.gitlab.path}";
+    role_name = "homelab";
+    role_type = "jwt";
+    token_policies = ["\${vault_policy.gitlab-homelab.name}"];
+    user_claim = "user_email";
+    bound_claims = {
+      project_id = "2";
+      ref = "main";
+      ref_type = "branch";
+    };
+  };
 }

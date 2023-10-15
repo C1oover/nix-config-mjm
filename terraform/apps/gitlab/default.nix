@@ -105,6 +105,13 @@
     }
   '';
 
+  vault.policies.gitlab-homelab.text = ''
+    # Allow reading Attic push token
+    path "kv/data/attic/client" {
+      capabilities = ["read"]
+    }
+  '';
+
   ingress.virtualHosts = {
     containers = {
       upstream.addresses = ["10.0.2.32:5050"];
