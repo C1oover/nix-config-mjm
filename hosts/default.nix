@@ -131,6 +131,9 @@ in {
 
         ATTIC_TOKEN=$(vault kv get -field=token kv/attic/client)
         attic login --set-default homelab https://attic.home.mattmoriarity.com "$ATTIC_TOKEN"
+
+        # ensure attic itself gets cached, since it's expensive to build
+        attic push homelab ${attic}
       '';
     });
 
