@@ -107,6 +107,8 @@
 
   programs.steam.enable = true;
 
+  services.power-profiles-daemon.enable = true;
+
   services.fwupd.enable = true;
   services.fprintd.enable = true;
   services.hardware.bolt.enable = true;
