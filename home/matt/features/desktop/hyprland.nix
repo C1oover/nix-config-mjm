@@ -66,8 +66,8 @@ in {
         "waybar"
         "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
         "rm -f $wob_socket && mkfifo $wob_socket && tail -f $wob_socket | wob"
-        "swaybg -i ${./botw.png} -m fit -c ##000000"
-        "${handleEvents}"
+        "swaybg -i ${./botw.png} -m fit -c '##000000'"
+        "${lib.getExe handleEvents}"
 
         "[workspace 1 silent] kitty"
         "[workspace 1 silent] firefox"
@@ -113,6 +113,11 @@ in {
           "col.inactive" = "0xff${config.colorScheme.colors.base07}";
           "col.active" = "0xff${config.colorScheme.colors.base0E}";
         };
+      };
+
+      misc = {
+        disable_hyprland_logo = true;
+        disable_splash_rendering = true;
       };
 
       bindm = [
