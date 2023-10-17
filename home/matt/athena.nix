@@ -176,8 +176,8 @@ in {
       # is in the environment. since we use asdf for the version, we can't ensure the elixir
       # version in nixpkgs matches.
       elixir-ls = pkgs.fetchzip {
-        url = "https://github.com/elixir-lsp/elixir-ls/releases/download/v0.16.0/elixir-ls-v0.16.0.zip";
-        sha256 = "ZweXGgTJ08APEwqduRo0NlwAGbq6Qg3vkzuEMgwi47E=";
+        url = "https://github.com/elixir-lsp/elixir-ls/releases/download/v0.17.1/elixir-ls-v0.17.1.zip";
+        hash = "sha256-KdQDDZfj6Je78dPlw2YZgcSL5pdehq+CV/L5lVrRthM=";
         stripRoot = false;
       };
     in "${elixir-ls}/language_server.sh";
