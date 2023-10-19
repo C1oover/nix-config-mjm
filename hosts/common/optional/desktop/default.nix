@@ -3,6 +3,7 @@
   pkgs,
   inputs,
   outputs,
+  config,
   ...
 }: {
   imports = [
@@ -40,6 +41,10 @@
 
   services.gnome.gnome-keyring.enable = true;
   security.pam.services.greetd.enableGnomeKeyring = true;
+
+  # move fprintd after unix auth so that it's possible to unlock swaylock
+  # by either entering a password or with fingerprint
+  security.pam.services.swaylock.rules.auth.fprintd.order = config.security.pam.services.swaylock.rules.auth.unix.order + 5;
 
   fonts = {
     packages = with pkgs; [
