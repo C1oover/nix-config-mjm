@@ -1,4 +1,4 @@
-{
+{inputs, ...}: {
   imports = [
     ../common/global/darwin
     ../common/users/matt
@@ -19,4 +19,6 @@
     "openssl@1.1"
     "openssl@3"
   ];
+
+  nixpkgs.overlays = [inputs.jujutsu.overlays.default];
 }
