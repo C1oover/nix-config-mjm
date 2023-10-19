@@ -76,6 +76,11 @@ in {
             taskd.credentials=home/mjm/158e73c7-9492-44cb-b340-508633b860f2
             taskd.key={{ env "NOMAD_SECRETS_DIR" }}/task.key
             taskd.server=nemesis.home.mattmoriarity.com:53589
+
+            uda.reminder_id.type=string
+            uda.reminder_id.label=Reminder
+            uda.next_notification.type=date
+            uda.next_notification.label=Notify
           '';
           changeMode = "noop";
         };
