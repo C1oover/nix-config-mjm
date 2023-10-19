@@ -37,7 +37,7 @@ in {
   home.pointerCursor = {
     name = "Catppuccin-Latte-Light-Cursors";
     package = pkgs.catppuccin-cursors.latteLight;
-    size = 48;
+    size = 32;
     x11 = {
       enable = true;
       defaultCursor = "Catppuccin-Latte-Light-Cursors";
