@@ -19,19 +19,7 @@
     ../common/optional/wireless.nix
   ];
 
-  nixpkgs.overlays = [
-    # remove once beeper fixes land
-    (final: prev: let
-      pkgs-beeper = import inputs.nixos-beeper {
-        inherit (pkgs) system;
-        config.allowUnfree = true;
-      };
-    in {
-      inherit (pkgs-beeper) beeper;
-    })
-
-    inputs.jujutsu.overlays.default
-  ];
+  nixpkgs.overlays = [inputs.jujutsu.overlays.default];
 
   boot.binfmt.emulatedSystems = ["aarch64-linux"];
 
