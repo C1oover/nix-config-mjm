@@ -56,6 +56,9 @@ in {
     };
   in
     with pkgs; [
+      # cmake is needed to build some elixir deps
+      # if it's not in the path, elixir-ls might just not work
+      cmake
       google-cloud-sdk
       ngrok
       slack
