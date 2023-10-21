@@ -38,7 +38,6 @@ in {
     kanshi
     pulseaudio
     swaybg
-    wob
   ];
 
   wayland.windowManager.hyprland = {
@@ -48,7 +47,6 @@ in {
     settings = {
       "$mod" = "SUPER";
 
-      "$wob_socket" = "$XDG_RUNTIME_DIR/wob.sock";
       "$sink_volume" = "pactl get-sink-volume @DEFAULT_SINK@ | grep '^Volume:' | cut -d / -f 2 | tr -d ' ' | sed 's/%//'";
       "$sink_volume_mute" = "pactl get-sink-mute @DEFAULT_SINK@ | sed -En \"/no/ s/.*/$($sink_volume)/p; /yes/ s/.*/0/p\"";
 
@@ -65,7 +63,6 @@ in {
         "hyprctl setcursor ${pointer.name} ${toString pointer.size}"
         "waybar"
         "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
-        "rm -f $wob_socket && mkfifo $wob_socket && tail -f $wob_socket | wob"
         "swaybg -i ${./botw.png} -m fit -c '##000000'"
         "${lib.getExe handleEvents}"
 
@@ -155,11 +152,11 @@ in {
           "$mod,Return,exec,kitty"
           "$mod,c,exec,clipman pick -t CUSTOM --tool-args='rofi -dmenu -p clip'"
           "$mod,d,exec,rofi-launcher"
-          ",XF86AudioRaiseVolume,exec,pactl set-sink-volume @DEFAULT_SINK@ +4% && $sink_volume > $wob_socket"
-          ",XF86AudioLowerVolume,exec,pactl set-sink-volume @DEFAULT_SINK@ -4% && $sink_volume > $wob_socket"
-          ",XF86AudioMute,exec,pactl set-sink-mute @DEFAULT_SINK@ toggle && $sink_volume_mute > $wob_socket"
-          ",XF86MonBrightnessDown,exec,light -U 5 && light -G | cut -d'.' -f1 > $wob_socket"
-          ",XF86MonBrightnessUp,exec,light -A 5 && light -G | cut -d'.' -f1 > $wob_socket"
+          ",XF86AudioRaiseVolume,exec,swayosd-client --output-volume=raise"
+          ",XF86AudioLowerVolume,exec,swayosd-client --output-volume=lower"
+          ",XF86AudioMute,exec,swayosd-client --output-volume=mute-toggle"
+          ",XF86MonBrightnessDown,exec,swayosd-client --brightness=lower"
+          ",XF86MonBrightnessUp,exec,swayosd-client --brightness=raise"
           ",Print,exec,grim"
           "SHIFT,Print,exec,grim -g \"$(slurp)\""
         ]
@@ -198,6 +195,26 @@ in {
   };
 
   systemd.user.services.swayidle.Install.WantedBy = lib.mkForce ["hyprland-session.target"];
+
+  services.swayosd = {
+    enable = true;
+    # TODO remove when merged
+    package = inputs.nixos-swayosd.legacyPackages.${pkgs.system}.swayosd;
+  };
+
+  systemd.user.services.swayosd.Service.ExecStart = lib.mkForce "${config.services.swayosd.package}/bin/swayosd-server";
+
+  xdg.configFile."swayosd/style.css".text = ''
+    image, label {
+      color: #${config.colorScheme.colors.base05};
+    }
+    progress {
+      background: #${config.colorScheme.colors.base05};
+    }
+    trough {
+      background: alpha(#${config.colorScheme.colors.base05}, 0.5);
+    }
+  '';
 
   services.kanshi = {
     enable = true;
