@@ -19,6 +19,7 @@ in {
       PAPERLESS_ALLOWED_HOSTS = "paperless.service.consul,localhost";
       PAPERLESS_ENABLE_HTTP_REMOTE_USER = "true";
       PAPERLESS_HTTP_REMOTE_USER_HEADER_NAME = "HTTP_REMOTE_USER";
+      PAPERLESS_OCR_USER_ARGS = "{\"invalidate_digital_signatures\":true}";
     };
   };
 
