@@ -1,1 +1,1 @@
-containers.home.mattmoriarity.com/mjm/homelab@sha256:2aa98e22b68d5ae1b04595a0f3e46944e97f9c8bbfb18d8785415e294cc3c715
+containers.home.mattmoriarity.com/mjm/homelab@sha256:8180dfcbb913d06284c045cec99dca491754573b6468c95b516e478f6aad42f7
