@@ -1,90 +1,16 @@
 {
   pkgs,
-  lib,
   config,
-  inputs,
   ...
-}: let
-  tomlFormat = pkgs.formats.toml {};
-in {
+}: {
   imports = [
     ./global
     ./global/darwin.nix
 
     ./features/helix
     ./features/taskwarrior
+    ./features/work
   ];
-
-  home.packages = let
-    jj-pr = pkgs.writeShellApplication {
-      name = "jj-pr";
-      runtimeInputs = with pkgs; [gh coreutils];
-      text = ''
-        export GIT_DIR="$PWD/.jj/repo/store/git"
-        gh pr create --head "$1" --web
-      '';
-    };
-
-    db = pkgs.writeShellApplication {
-      name = "db";
-      runtimeInputs = with pkgs; [teleport];
-      text = ''
-        preset="$1"
-
-        case "$preset" in
-        *-replica)
-          user=teleport-ro
-          name="slab-sql-$preset-pg14-0"
-          ;;
-        *)
-          user=teleport-rw
-          name="slab-sql-$preset-pg14"
-          ;;
-        esac
-
-        case "$preset" in
-        prod*)
-          iam_host=slab-prod.iam
-          ;;
-        stage*)
-          iam_host=slab-stage.iam
-          ;;
-        esac
-
-        tsh -k no proxy db "--db-user=$user@$iam_host" --db-name=slab --tunnel --port 5432 "$name"
-      '';
-    };
-  in
-    with pkgs; [
-      # cmake is needed to build some elixir deps
-      # if it's not in the path, elixir-ls might just not work
-      cmake
-      google-cloud-sdk
-      ngrok
-      slack
-      teams
-      teleport
-      zoom-us
-
-      jj-pr
-      db
-    ];
-
-  home.shellAliases = {
-    slab-restart = "npm run docker:down && npm run docker:up";
-    slab-up = "npm run docker:up";
-    slab-ssh = "npm run docker:ssh";
-    piex = "slab-ssh bin/phx-iex";
-  };
-
-  programs.nushell.shellAliases = {
-    db-stage = "tsh -k no db login --db-user=teleport-rw@slab-stage.iam --db-name=slab slab-sql-stage-pg14";
-    db-prod-replica = "tsh -k no db login --db-user=teleport-ro@slab-prod.iam --db-name=slab slab-sql-prod-replica-pg14-0";
-    k9s = "do { cd ~/Projects/slab; hide-env SSH_AUTH_SOCK; hide k9s; k9s }";
-    slab-restart = "do { npm run docker:down; npm run docker:up }";
-    slab-up = "npm run docker:up";
-    slab-ssh = "npm run docker:ssh";
-  };
 
   home.dock = {
     enable = true;
@@ -99,7 +25,6 @@ in {
       {path = "/Applications/1Password.app/";}
       {path = "/Applications/Slab.app/";}
       {path = "${pkgs.kitty}/Applications/kitty.app/";}
-      {path = "${pkgs.wezterm}/Applications/WezTerm.app/";}
       {path = "/Applications/Dash.app/";}
       {path = "/Applications/Postico 2.app/";}
       {path = "${pkgs.discord}/Applications/Discord.app/";}
@@ -109,81 +34,5 @@ in {
         options = "--sort dateadded --view grid --display folder";
       }
     ];
-  };
-
-  programs.git.userEmail = "matt@slab.com";
-
-  programs.mr = {
-    settings = {
-      "Projects/slab" = {
-        checkout = "git clone https://github.com/slab/slab.git";
-      };
-      "Projects/scripts" = {
-        checkout = "git clone https://github.com/slab/scripts.git";
-      };
-      "Projects/delta-elixir" = {
-        checkout = "git clone https://github.com/slab/delta-elixir.git";
-      };
-      "Projects/nix-config" = {
-        checkout = "git clone https://gitlab.home.mattmoriarity.com/mjm/nix-config.git";
-      };
-    };
-  };
-
-  xdg.configFile."k9s/skin.yml".source = inputs.catppuccin-k9s + "/dist/mocha.yml";
-
-  programs.kitty.darwinLaunchOptions = let
-    slabSession = pkgs.writeText "kitty-session-slab" ''
-      # first tab: slab work
-      new_tab slab
-      layout tall:bias=60;full_size=1
-      cd ~/Projects/slab
-      launch
-      launch
-      launch
-
-      # second tab: nix-config
-      new_tab nix-config
-      layout tall:bias=60;full_size=1
-      cd ~/Projects/nix-config
-      launch
-      launch
-    '';
-  in ["--session" "${slabSession}"];
-
-  # this doesn't work
-  # home.file.".ngrok2/ngrok.yml".source = config.age.secrets."ngrok.yml".path;
-
-  home.activation.write-ngrok-config = lib.hm.dag.entryAfter ["writeBoundary"] ''
-    # need to be able to use getconf
-    export PATH=$PATH:/usr/bin
-    mkdir -p ${config.home.homeDirectory}/.ngrok2
-    ln -sf ${config.age.secrets."ngrok.yml".path} ${config.home.homeDirectory}/.ngrok2/ngrok.yml
-  '';
-
-  age.secrets."ngrok.yml".file = ../../secrets/ngrok.age;
-
-  programs.nushell.extraConfig = ''
-    let-env ASDF_NU_DIR = '${config.home.homeDirectory}/.asdf'
-    source '${config.home.homeDirectory}/.asdf/asdf.nu'
-  '';
-
-  programs.jujutsu.settings = {
-    aliases.mine = ["log" "-r" "@ | main | branches(\"mjm-\")"];
-  };
-
-  # manually link this into ~/Projects/slab/.helix/languages.toml
-  xdg.configFile."helix/slab/languages.toml".source = tomlFormat.generate "slab-languages.toml" {
-    language-server.elixir-ls.command = let
-      # use an official elixir-ls release so that it just runs with whatever elixir version
-      # is in the environment. since we use asdf for the version, we can't ensure the elixir
-      # version in nixpkgs matches.
-      version = "0.17.3";
-      elixir-ls = pkgs.fetchzip {
-        url = "https://github.com/elixir-lsp/elixir-ls/releases/download/v${version}/elixir-ls-v${version}.zip";
-        hash = "sha256-X5PABhG+tIgBN6cCb3D/0T+qgycuhV+tdAq19VLZJFk=";
-        stripRoot = false;
-      };
-    in "${elixir-ls}/language_server.sh";
   };
 }

@@ -1,0 +1,14 @@
+# first tab: slab work
+new_tab slab
+layout tall:bias=60;full_size=1
+cd ~/Projects/slab
+launch
+launch
+launch
+
+# second tab: nix-config
+new_tab nix-config
+layout tall:bias=60;full_size=1
+cd ~/Projects/nix-config
+launch
+launch
