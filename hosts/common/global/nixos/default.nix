@@ -12,6 +12,7 @@
 
       ../home-manager.nix
       ../nix.nix
+      ./attic.nix
       ./ssh.nix
       ./ssl.nix
     ]
