@@ -24,5 +24,7 @@
 
   services.tailscale.enable = true;
 
+  services.fail2ban.enable = true;
+
   system.stateVersion = "23.11";
 }
