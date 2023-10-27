@@ -152,6 +152,7 @@ in {
           "$mod,Return,exec,kitty"
           "$mod,c,exec,clipman pick -t CUSTOM --tool-args='rofi -dmenu -p clip'"
           "$mod,d,exec,rofi-launcher"
+          "$mod SHIFT,r,exec,controku 10.0.1.111"
           ",XF86AudioRaiseVolume,exec,swayosd-client --output-volume=raise"
           ",XF86AudioLowerVolume,exec,swayosd-client --output-volume=lower"
           ",XF86AudioMute,exec,swayosd-client --output-volume=mute-toggle"
