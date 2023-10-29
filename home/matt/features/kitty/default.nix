@@ -30,4 +30,14 @@ in {
     };
     darwinLaunchOptions = ["--listen-on=unix:kitty.sock"];
   };
+
+  home.packages = with pkgs; [
+    (writeShellApplication {
+      name = "tt";
+      runtimeInputs = [kitty];
+      text = ''
+        kitty @ set-tab-title "$(basename "$PWD")"
+      '';
+    })
+  ];
 }
