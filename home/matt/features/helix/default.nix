@@ -56,9 +56,6 @@
         nil = {
           config.nil.formatting.command = ["alejandra" "-q"];
         };
-        elixir-ls = {
-          config.elixirLs.dialyzerEnabled = true;
-        };
         yaml-language-server = {
           config.yaml = {
             format.enable = true;
