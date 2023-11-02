@@ -6,23 +6,22 @@
 }: {
   home.sessionVariables.EDITOR = lib.mkForce "hx";
 
-  home.packages = with pkgs; [
-    alejandra
-    elixir-ls
-    marksman
-    nil
-    shellcheck
-    shfmt
-    vscode-langservers-extracted
-    nodePackages.bash-language-server
-    nodePackages.prettier
-    nodePackages.typescript-language-server
-    nodePackages.yaml-language-server
-  ];
-
   programs.helix = {
     enable = true;
     package = inputs.helix.packages.${pkgs.system}.default;
+    extraPackages = with pkgs; [
+      alejandra
+      elixir-ls
+      marksman
+      nil
+      shellcheck
+      shfmt
+      vscode-langservers-extracted
+      nodePackages.bash-language-server
+      nodePackages.prettier
+      nodePackages.typescript-language-server
+      nodePackages.yaml-language-server
+    ];
     settings = {
       theme = "catppuccin_mocha";
       editor = {
