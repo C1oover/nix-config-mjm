@@ -40,7 +40,7 @@ deploy nixos hosts:
     - nix run .#deploy-prebuild -- $ARCH --no-nom
     - nix run .#ci-deploy
 apply terranix changes:
-  tags: [nix]
+  tags: [nix, x86_64]
   rules:
     - if: $CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"
       changes:
