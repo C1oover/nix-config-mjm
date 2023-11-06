@@ -11,6 +11,7 @@
     "cleanshot"
     "loom"
     "postico"
+    "rectangle-pro"
     "slab"
   ];
 
