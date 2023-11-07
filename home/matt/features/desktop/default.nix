@@ -9,73 +9,17 @@
     '';
   };
 in {
-  imports = [
-    ./hyprland.nix
-    ./rofi.nix
-    ./sway.nix
-    ./waybar.nix
-    ./wayland-common.nix
-  ];
-
   home.packages = with pkgs; [
-    libsForQt5.kmahjongg
-    gnome.gnome-mahjongg
+    plasma5Packages.kmahjongg
     xdg-utils
-    grim
-    slurp
     imv
-    pavucontrol
-    (catppuccin-kvantum.override {
-      accent = "Mauve";
-      variant = "Latte";
-    })
+    wl-clipboard
     zeal
 
     nightMode
   ];
 
-  home.pointerCursor = {
-    name = "Catppuccin-Latte-Light-Cursors";
-    package = pkgs.catppuccin-cursors.latteLight;
-    size = 32;
-    x11 = {
-      enable = true;
-      defaultCursor = "Catppuccin-Latte-Light-Cursors";
-    };
-    gtk.enable = true;
-  };
-
-  gtk = {
-    enable = true;
-    theme = {
-      name = "Catppuccin-Latte-Standard-Mauve-light";
-      package = pkgs.catppuccin-gtk.override {
-        accents = ["mauve"];
-        variant = "latte";
-      };
-    };
-    iconTheme = {
-      name = "Papirus";
-      package = pkgs.catppuccin-papirus-folders.override {
-        accent = "mauve";
-        flavor = "latte";
-      };
-    };
-  };
-
-  qt = {
-    enable = true;
-    platformTheme = "qtct";
-    style.name = "kvantum";
-  };
-
-  xdg.configFile."Kvantum/kvantum.config".text = ''
-    theme=Catppuccin-Latte-Mauve
-  '';
-
-  programs.mpv = {
-    enable = true;
-  };
+  programs.mpv.enable = true;
 
   services.kdeconnect.enable = true;
 }

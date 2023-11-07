@@ -1,50 +1,23 @@
 {
-  lib,
   pkgs,
-  inputs,
   outputs,
   config,
   ...
 }: {
-  imports = [
-    ./cachix.nix
-  ];
-
-  programs.sway = {
+  services.xserver = {
     enable = true;
-    extraSessionCommands = ''
-      export QT_QPA_PLATFORM=wayland
-      export _JAVA_AWT_WM_NONREPARENTING=1
-      export MOZ_DBUS_REMOTE=1
-      export NIXOS_OZONE_WL=1
-    '';
-    extraPackages = with pkgs; [swaylock swayidle xwayland qt5.qtwayland];
-    wrapperFeatures.gtk = true;
-  };
-
-  programs.hyprland = {
-    enable = true;
-    package = inputs.hyprland.packages.${pkgs.system}.hyprland;
-  };
-
-  environment.pathsToLink = ["/share/Kvantum"];
-
-  services.greetd = {
-    enable = true;
-    settings = {
-      default_session = {
-        command = "Hyprland";
-        user = "matt";
-      };
+    displayManager.defaultSession = "plasmawayland";
+    displayManager.sddm = {
+      enable = true;
+      wayland.enable = true;
     };
+    desktopManager.plasma5.enable = true;
   };
 
-  services.gnome.gnome-keyring.enable = true;
-  security.pam.services.greetd.enableGnomeKeyring = true;
-
-  # move fprintd after unix auth so that it's possible to unlock swaylock
+  # move fprintd after unix auth so that it's possible to unlock
   # by either entering a password or with fingerprint
-  security.pam.services.swaylock.rules.auth.fprintd.order = config.security.pam.services.swaylock.rules.auth.unix.order + 5;
+  security.pam.services.polkit-1.rules.auth.fprintd.order = config.security.pam.services.polkit-1.rules.auth.unix.order + 5;
+  security.pam.services.login.rules.auth.fprintd.order = config.security.pam.services.login.rules.auth.unix-early.order + 5;
 
   fonts = {
     packages = with pkgs; [
@@ -76,12 +49,6 @@
     pulse.enable = true;
   };
   services.udisks2.enable = true;
-
-  services.gvfs = {
-    enable = true;
-    package = lib.mkForce pkgs.gnome3.gvfs;
-  };
-  programs.thunar.enable = true;
 
   programs.kdeconnect.enable = true;
 }

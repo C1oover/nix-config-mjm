@@ -2,7 +2,6 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     nixos.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixos-swayosd.url = "github:mjm/nixpkgs/swayosd-unstable-2023-09-26";
     darwin = {
       url = "github:lnl7/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -33,10 +32,6 @@
     };
     deploy-rs.url = "github:serokell/deploy-rs";
     helix.url = "github:helix-editor/helix";
-    hyprland = {
-      url = "github:hyprwm/Hyprland";
-      inputs.nixpkgs.follows = "nixos";
-    };
     nix-colors.url = "github:misterio77/nix-colors";
     jujutsu.url = "github:martinvonz/jj";
     nix-fast-build.url = "github:Mic92/nix-fast-build";
