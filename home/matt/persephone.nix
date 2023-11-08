@@ -18,5 +18,6 @@
   home.packages = with pkgs; [
     beeper
     discord
+    krita
   ];
 }
