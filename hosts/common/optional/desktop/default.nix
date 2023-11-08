@@ -52,7 +52,6 @@
     alsa.support32Bit = true;
     pulse.enable = true;
   };
-  services.udisks2.enable = true;
 
   programs.kdeconnect.enable = true;
 }
