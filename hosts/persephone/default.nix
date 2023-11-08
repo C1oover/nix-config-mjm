@@ -26,7 +26,6 @@
   boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.supportedFilesystems = ["btrfs"];
 
-  # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
@@ -85,7 +84,6 @@
   networking.hostName = "persephone";
   services.resolved.enable = true;
 
-  # Set your time zone.
   time.timeZone = "America/Denver";
 
   programs._1password-gui = {
