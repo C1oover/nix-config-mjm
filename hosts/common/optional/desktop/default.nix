@@ -11,7 +11,10 @@
       enable = true;
       wayland.enable = true;
     };
-    desktopManager.plasma5.enable = true;
+    desktopManager.plasma5 = {
+      enable = true;
+      useQtScaling = true;
+    };
   };
 
   # move fprintd after unix auth so that it's possible to unlock
