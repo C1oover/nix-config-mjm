@@ -13,9 +13,6 @@
 
     profiles.matt = {
       isDefault = true;
-      settings = {
-        "layout.css.devPixelsPerPx" = "1.5";
-      };
     };
   };
 }
