@@ -7,13 +7,9 @@ in {
   programs.kitty = {
     enable = true;
     theme = "Catppuccin-Mocha";
-    font.name = "Cascadia Code Light";
+    font.name = "Cascadia Code";
     font.size = fontSize;
     settings = {
-      bold_font = "Cascadia Code";
-      italic_font = "Cascadia Code Light Italic";
-      bold_italic_font = "Cascadia Code Italic";
-
       shell = "${pkgs.zsh}/bin/zsh --login --interactive";
       shell_integration = "enabled";
       tab_bar_style = "powerline";
