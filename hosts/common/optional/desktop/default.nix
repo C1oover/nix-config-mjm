@@ -32,6 +32,8 @@
       (nerdfonts.override {fonts = ["NerdFontsSymbolsOnly"];})
       font-awesome
       cascadia-code
+      ibm-plex
+      iosevka
       outputs.packages.${pkgs.system}.pragmata-pro
     ];
 
