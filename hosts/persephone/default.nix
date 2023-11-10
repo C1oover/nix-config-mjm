@@ -75,6 +75,12 @@
     '';
   };
 
+  # Allow desktop mouse and keyboard to wake the system
+  services.udev.extraRules = ''
+    ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="046d", ATTRS{idProduct}=="c24a", ATTR{power/wakeup}="enabled"
+    ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="3496", ATTRS{idProduct}=="0006", ATTR{power/wakeup}="enabled"
+  '';
+
   boot.initrd.systemd.enable = true;
   boot.initrd.luks.devices.cryptroot = {
     device = "/dev/disk/by-uuid/a8431292-fbf8-4a33-8c5b-b93aae5fe8a7";
