@@ -181,7 +181,7 @@ in {
 
     apps.ci-deploy.program = lib.getExe (pkgs.writeShellApplication {
       name = "ci-deploy";
-      runtimeInputs = [pkgs.coreutils pkgs.openssh pkgs.vault deploy-rs];
+      runtimeInputs = [pkgs.coreutils pkgs.openssh pkgs.vault deploy-rs attic];
       text = ''
         VAULT_TOKEN=$(vault write -field=token auth/gitlab/login role=homelab-infra "jwt=$VAULT_ID_TOKEN")
         export VAULT_TOKEN
@@ -208,7 +208,9 @@ in {
           # hosts.
           targets=(.#arges .#nyx .#brontes .#steropes)
         fi
-        deploy --skip-checks --ssh-opts="-i $keypath" --targets "''${targets[@]}"
+
+        deploy --skip-checks --ssh-opts="-i $keypath" --keep-result -r ./result --targets "''${targets[@]}"
+        attic push homelab result/*/system
       '';
     });
   };
