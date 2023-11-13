@@ -9,6 +9,8 @@
       (nerdfonts.override {fonts = ["NerdFontsSymbolsOnly"];})
       outputs.packages.${pkgs.system}.pragmata-pro
       cascadia-code
+      ibm-plex
+      iosevka
     ];
   };
 }
