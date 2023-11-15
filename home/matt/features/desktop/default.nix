@@ -1,4 +1,8 @@
-{pkgs, ...}: let
+{
+  pkgs,
+  inputs,
+  ...
+}: let
   # set brightness and volume for night
   nightMode = pkgs.writeShellApplication {
     name = "night-mode";
@@ -9,15 +13,16 @@
     '';
   };
 in {
-  home.packages = with pkgs; [
-    plasma5Packages.kmahjongg
-    xdg-utils
-    imv
-    wl-clipboard
-    zeal
-
-    nightMode
+  imports = [
+    ./rc.nix
   ];
+
+  home.packages = builtins.attrValues {
+    inherit nightMode;
+    inherit (pkgs) imv wl-clipboard xdg-utils zeal;
+    inherit (pkgs.plasma5Packages) kmahjongg;
+    inherit (inputs.plasma-manager.packages.${pkgs.system}) rc2nix;
+  };
 
   programs.mpv.enable = true;
 

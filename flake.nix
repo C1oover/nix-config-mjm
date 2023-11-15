@@ -36,6 +36,11 @@
     jujutsu.url = "github:martinvonz/jj";
     nix-fast-build.url = "github:Mic92/nix-fast-build";
     attic.url = "github:zhaofengli/attic";
+    plasma-manager = {
+      url = "github:pjones/plasma-manager";
+      inputs.nixpkgs.follows = "nixos";
+      inputs.home-manager.follows = "home-manager";
+    };
 
     catppuccin-bat = {
       url = "github:catppuccin/bat";
