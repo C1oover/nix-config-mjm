@@ -38,6 +38,7 @@ in {
         "trailhead.firstrun.didSeeAboutWelcome" = true;
       };
       extensions = with pkgs.nur.repos; [
+        rycee.firefox-addons.betterttv
         rycee.firefox-addons.onepassword-password-manager
         rycee.firefox-addons.stylus
         rycee.firefox-addons.sidebery
