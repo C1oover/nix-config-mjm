@@ -20,7 +20,7 @@ in {
   home.packages = builtins.attrValues {
     inherit nightMode;
     inherit (pkgs) imv wl-clipboard xdg-utils zeal;
-    inherit (pkgs.plasma5Packages) kmahjongg;
+    inherit (pkgs.plasma5Packages) kbreakout kmahjongg kmines palapeli;
     inherit (inputs.plasma-manager.packages.${pkgs.system}) rc2nix;
   };
 
