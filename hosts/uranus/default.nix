@@ -1,5 +1,5 @@
 {
-  pkgs,
+  lib,
   inputs,
   ...
 }: {
@@ -11,6 +11,7 @@
   ];
 
   networking.hostName = "uranus";
+  systemd.network.enable = lib.mkForce false;
 
   wsl = {
     enable = true;
