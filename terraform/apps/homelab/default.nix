@@ -29,8 +29,8 @@ in {
         env.OTEL_SERVICE_NAME = "homelab";
         env.OTEL_EXPORTER_OTLP_ENDPOINT = "http://$\${attr.unique.network.ip-address}:4318";
         env.TASKRC = "$\${NOMAD_TASK_DIR}/taskrc";
-        cpu = 300;
-        memory = 500;
+        cpu = 500;
+        memory = 1000;
         loggingTag = name;
         vault.policies = [name];
 
