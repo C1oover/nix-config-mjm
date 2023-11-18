@@ -30,7 +30,7 @@ in {
         env.OTEL_EXPORTER_OTLP_ENDPOINT = "http://$\${attr.unique.network.ip-address}:4318";
         env.TASKRC = "$\${NOMAD_TASK_DIR}/taskrc";
         cpu = 500;
-        memory = 1000;
+        memory = 2000;
         loggingTag = name;
         vault.policies = [name];
 
