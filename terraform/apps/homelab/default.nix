@@ -29,8 +29,11 @@ in {
         env.OTEL_SERVICE_NAME = "homelab";
         env.OTEL_EXPORTER_OTLP_ENDPOINT = "http://$\${attr.unique.network.ip-address}:4318";
         env.TASKRC = "$\${NOMAD_TASK_DIR}/taskrc";
+        # letting this get set automatically breaks on Docker 24:
+        # https://elixirforum.com/t/elixir-erlang-docker-containers-ram-usage-on-different-oss-kernels/57251/18
+        env.ERL_MAX_PORTS = "65536";
         cpu = 500;
-        memory = 2000;
+        memory = 500;
         loggingTag = name;
         vault.policies = [name];
 
