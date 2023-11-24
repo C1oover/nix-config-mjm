@@ -25,12 +25,15 @@ in {
         "browser.onboarding.enabled" = false;
         "browser.shell.checkDefaultBrowser" = false;
         "browser.startup.homepage" = "https://homelab.home.mattmoriarity.com/";
+        "cookiebanners.service.mode" = 2;
         "extensions.activeThemeID" = "{c827c446-3d00-4160-a992-3ebcbe6d81a6}";
         "extensions.getAddons.cache.enabled" = false;
         "extensions.getAddons.showPane" = false;
         "extensions.pocket.enabled" = false;
         "extensions.update.autoUpdateDefault" = false;
         "extensions.update.enabled" = false;
+        "privacy.donottrackheader.enabled" = true;
+        "privacy.globalprivacycontrol.enabled" = true;
         "security.enterprise_roots.enabled" = true;
         "signon.autofillForms" = false;
         "signon.rememberSignons" = false;
