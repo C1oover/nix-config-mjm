@@ -1,20 +1,21 @@
 {
   pkgs,
+  inputs,
   outputs,
   config,
   ...
 }: {
+  imports = [
+    inputs.kde2nix.nixosModules.plasma6
+  ];
+
   services.xserver = {
     enable = true;
-    displayManager.defaultSession = "plasmawayland";
     displayManager.sddm = {
       enable = true;
       wayland.enable = true;
     };
-    desktopManager.plasma5 = {
-      enable = true;
-      useQtScaling = true;
-    };
+    desktopManager.plasma6.enable = true;
   };
 
   # move fprintd after unix auth so that it's possible to unlock

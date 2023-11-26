@@ -41,6 +41,7 @@
       inputs.nixpkgs.follows = "nixos";
       inputs.home-manager.follows = "home-manager";
     };
+    kde2nix.url = "github:nix-community/kde2nix";
 
     catppuccin-bat = {
       url = "github:catppuccin/bat";
