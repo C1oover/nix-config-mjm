@@ -1,7 +1,7 @@
 {pkgs, ...}: {
   home.packages = [
     (pkgs.writeShellApplication {
-      name = "jj-pr";
+      name = ",jpr";
       runtimeInputs = with pkgs; [gh coreutils];
       text = ''
         gh pr create --head "$1" --web

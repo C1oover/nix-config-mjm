@@ -2,11 +2,10 @@
   lib,
   pkgs,
   config,
-  inputs,
   ...
 }: let
-  jjfind = pkgs.writeShellApplication {
-    name = "jjfind";
+  jf = pkgs.writeShellApplication {
+    name = ",jf";
     runtimeInputs = with pkgs; [jujutsu fzf coreutils];
     text = ''
       jj log --no-graph --color never -T 'change_id ++ " " ++ description.first_line() ++ "\n"' "$@" \
@@ -16,19 +15,17 @@
   };
 
   jco = pkgs.writeShellApplication {
-    name = "jco";
-    runtimeInputs = [pkgs.jujutsu jjfind];
+    name = ",jco";
+    runtimeInputs = [pkgs.jujutsu jf];
     text = ''
-      jj new "$(jjfind "$@")"
+      jj new "$(,jf "$@")"
     '';
   };
 in {
-  home.packages = with pkgs; [
-    git-credential-manager
-    watchman
-    jjfind
-    jco
-  ];
+  home.packages = builtins.attrValues {
+    inherit jf jco;
+    inherit (pkgs) git-credential-manager watchman;
+  };
 
   programs.git = {
     enable = true;
@@ -89,7 +86,10 @@ in {
   };
 
   home.shellAliases = {
-    jj-push = "jj branch set main -r @- && jj git push";
-    jj-pull = "jj git fetch && jj rebase -d main";
+    ",jp" = "jj git push";
+    ",jpc" = "jj git push --change @-";
+    ",jpm" = "jj branch set main -r @- && jj git push";
+    ",jum" = "jj git fetch && jj rebase -d main";
+    ",jrm" = "jj rebase -d main";
   };
 }
