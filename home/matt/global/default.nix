@@ -18,22 +18,23 @@
 
   home.stateVersion = lib.mkDefault "22.11";
 
-  home.packages = with pkgs; [
-    attic
-    fx
-    gh
-    httpie
-    nix-output-monitor
-    nix-tree
-    pstree
-    ripgrep
-    tree
-    unzip
-    wget
+  home.packages = with pkgs;
+    [
+      fx
+      gh
+      httpie
+      nix-output-monitor
+      nix-tree
+      pstree
+      ripgrep
+      tree
+      unzip
+      wget
 
-    inputs.home-manager.packages.${pkgs.system}.home-manager
-    inputs.agenix.packages.${pkgs.system}.default
-  ];
+      inputs.home-manager.packages.${pkgs.system}.home-manager
+      inputs.agenix.packages.${pkgs.system}.default
+    ]
+    ++ lib.optional pkgs.stdenv.isLinux pkgs.attic;
 
   home.shellAliases = {
     td = "cd $(mktemp -d)";
