@@ -4,7 +4,7 @@
   lib,
   ...
 }: let
-  scannerPublicKey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDVffhmmioPFJxQiP5OlssYk2EjHdeMxpV1OO2T3Qz3AjmMZsJunQdnpWV9wNEeG3uTwGmvDS4ejCoJvVy6kQMypFFjEqBegbK6N4HeMFYubxe2pp2NSZir1HEeHFYZSvrIjOKfN404WLpY/+TgM7UTQ5u5pUNmMPyyxLgZz/YJj9LVCo1IeYcv5hP3WSP1ixsJGBuUTgkVp4S/FouoHNoJ+jVbGSs0IjgBC77IzxH52Af/sXwb2MiRoM3HczEwnWuhiIniICCbjgju5hA0h1qCozRDx5jt6egKxzNxN7+tuW3S9t1D/sq/qn6hqyaTCHVxn9+2cw3KIXcK7LoduhX5 root@BR5CF370B3F03D";
+  scannerPublicKey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC1NXtzg50EbpzudswkjUkxllahH+F54h6MnDoXarftqlHc26M46M5IPQeRpn5F4BLGWs94UNFyod4d7KNhRYXxh2G+gsJcDTREdUR7eKu5CfaFnB2sge8VJM8KwxbURXHlxNF2xha0lIg8HdfSIznogAGqcUYahTJAUdKB1A4UJ9DzHp1Mrlrk3o04TvokRmS18kPM39nstneqHRVC1TPf83QV3tAYBz2iayifH714KTcItflUe5IqDUhBfNURhOnhG0szfK2qtykdg+7/wu0Ah3HOlbfLybx2eAA048kyBiFpllFIGqoO0hN8w7wmMuQ6okxs3tssz7W+dGi5HDob root@BR5CF370C29B2A";
 in {
   services.paperless = {
     enable = true;
