@@ -31,6 +31,37 @@
       unzip
       wget
 
+      (pkgs.writeShellApplication {
+        name = ",rb";
+        runtimeInputs = with pkgs; [nix nix-output-monitor nvd];
+        text =
+          if pkgs.stdenv.isLinux
+          then ''
+            echo TODO
+          ''
+          else ''
+            nom build ".#darwinConfigurations.$(scutil --get LocalHostName).system"
+            nvd diff /run/current-system ./result
+          '';
+      })
+
+      (pkgs.writeShellApplication {
+        name = ",sw";
+        runtimeInputs = with pkgs; [nix];
+        text = let
+          profile = "/nix/var/nix/profiles/system";
+        in
+          if pkgs.stdenv.isLinux
+          then ''
+            echo TODO
+          ''
+          else ''
+            sudo -H --preserve-env=PATH env nix-env -p "${profile}" --set "$(readlink -f result)"
+            ./result/activate-user
+            sudo -H --preserve-env=PATH ./result/activate
+          '';
+      })
+
       inputs.home-manager.packages.${pkgs.system}.home-manager
       inputs.agenix.packages.${pkgs.system}.default
     ]
