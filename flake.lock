@@ -543,11 +543,11 @@
         "systems": "systems_4"
       },
       "locked": {
-        "lastModified": 1694529238,
-        "narHash": "sha256-zsNZZGTGnMOf9YpHKJqMSsa0dXbfmxeoJ7xHlrt+xmY=",
+        "lastModified": 1701680307,
+        "narHash": "sha256-kAuep2h5ajznlPMD9rnQyffWG8EM/C73lejGofXvdM8=",
         "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "ff7b65b44d01cf9ba6a71320833626af21126384",
+        "rev": "4022d587cbbfd70fe950c1e2083a02621806a725",
         "type": "github"
       },
       "original": {
@@ -755,11 +755,11 @@
         "pre-commit-hooks": "pre-commit-hooks_2"
       },
       "locked": {
-        "lastModified": 1701883378,
-        "narHash": "sha256-WmR9XqGsSPdJdtAZcoVgUXVmzMvdjGGHUq9ll/oE/WA=",
+        "lastModified": 1701946111,
+        "narHash": "sha256-xWv/xPn/r+yiaMDgy2WMYLg56ORzqDkw6ZyK6kCwy4k=",
         "owner": "nix-community",
         "repo": "kde2nix",
-        "rev": "a23954372a9584a6399d1875bb9d3f4055d16f44",
+        "rev": "086b3920642217324e97bb9f1b9c6c8ab087a80e",
         "type": "github"
       },
       "original": {
@@ -1130,11 +1130,11 @@
     },
     "nixpkgs_6": {
       "locked": {
-        "lastModified": 1701604840,
-        "narHash": "sha256-Hibzr8Dsf+JcPlfLN+1iy3N9jPyJXLBUrsWyVRPTvic=",
+        "lastModified": 1701946047,
+        "narHash": "sha256-UTyFsdKz9jUa6XQFS1Cux72V/p38zM6+CRTdrlYWkwI=",
         "owner": "K900",
         "repo": "nixpkgs",
-        "rev": "4c0948c0246acae4f7e744c0d69f3ae1575189d9",
+        "rev": "dcac452b4a8504d0f1f061bdd800129ca4dbe822",
         "type": "github"
       },
       "original": {
