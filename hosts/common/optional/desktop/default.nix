@@ -22,6 +22,9 @@
     desktopManager.plasma6.enable = true;
   };
 
+  # this is needed for now because the gnupg module doesn't know about plasma6
+  programs.gnupg.agent.pinentryFlavor = "qt";
+
   # move fprintd after unix auth so that it's possible to unlock
   # by either entering a password or with fingerprint
   security.pam.services.polkit-1.rules.auth.fprintd.order = config.security.pam.services.polkit-1.rules.auth.unix.order + 5;
