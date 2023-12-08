@@ -42,4 +42,8 @@
 
   programs.zsh.enable = true;
   programs.tmux.enable = true;
+
+  networking.dhcpcd.extraConfig = ''
+    slaac private
+  '';
 }
