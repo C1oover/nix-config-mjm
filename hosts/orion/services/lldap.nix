@@ -1,6 +1,12 @@
 {
+  pkgs,
+  inputs,
+  ...
+}: {
   services.lldap = {
     enable = true;
+    # hold back to an old commit that actually builds
+    package = inputs.nixos-lldap.legacyPackages.${pkgs.system}.lldap;
     settings = {
       http_host = "0.0.0.0";
       ldap_host = "0.0.0.0";
