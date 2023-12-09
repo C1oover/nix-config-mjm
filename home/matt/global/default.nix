@@ -37,7 +37,8 @@
         text =
           if pkgs.stdenv.isLinux
           then ''
-            echo TODO
+            nom build ".#nixosConfigurations.$(hostname).config.system.build.toplevel"
+            nvd diff /run/current-system ./result
           ''
           else ''
             nom build ".#darwinConfigurations.$(scutil --get LocalHostName).system"
@@ -53,7 +54,19 @@
         in
           if pkgs.stdenv.isLinux
           then ''
-            echo TODO
+            sudo nix-env -p "${profile}" --set "$(readlink -f result)"
+            sudo systemd-run \
+              -E LOCALE_ARCHIVE \
+              --collect \
+              --no-ask-password \
+              --pty \
+              --quiet \
+              --same-dir \
+              --service-type=exec \
+              --unit=nixos-rebuild-switch-to-configuration \
+              --wait \
+              ./result/bin/switch-to-configuration \
+              switch
           ''
           else ''
             sudo -H --preserve-env=PATH env nix-env -p "${profile}" --set "$(readlink -f result)"
