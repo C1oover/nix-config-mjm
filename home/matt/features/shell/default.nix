@@ -113,4 +113,8 @@
     };
     config.theme = "Catppuccin-mocha";
   };
+
+  programs.yazi = {
+    enable = true;
+  };
 }
