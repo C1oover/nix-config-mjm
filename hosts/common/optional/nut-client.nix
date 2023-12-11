@@ -2,13 +2,13 @@
   power.ups = {
     enable = true;
     mode = "netclient";
+    upsmon.monitor.tripplite = {
+      system = "tripplite@10.0.0.2";
+      user = "upsmon_secondary";
+      type = "secondary";
+      passwordFile = config.age.secrets."nut-secondary-password".path;
+    };
   };
 
-  # don't need these in netclient mode but the module isn't smart enough to disable them.
-  systemd.services.upsd.enable = false;
-  systemd.services.upsdrv.enable = false;
-
-  environment.etc."nut/upsmon.conf".source = config.age.secrets."upsmon.conf".path;
-
-  age.secrets."upsmon.conf".file = ../../../secrets/nut-client-upsmon-conf.age;
+  age.secrets."nut-secondary-password".file = ../../../secrets/nut-secondary-password.age;
 }

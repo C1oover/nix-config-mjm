@@ -27,7 +27,7 @@ in
 
     "alertmanager-env.age".publicKeys = personalKeys ++ [gaia];
 
-    # "ngrok.age".publicKeys = [matt-athena athena];
+    "ngrok.age".publicKeys = [matt-athena athena];
 
     "newsboat-miniflux-token.age".publicKeys = personalKeys;
 
@@ -38,6 +38,8 @@ in
     "nut-server-upsmon-conf.age".publicKeys = personalKeys ++ [arges];
     "nut-server-upsd-users.age".publicKeys = personalKeys ++ [arges];
     "nut-client-upsmon-conf.age".publicKeys = personalKeys ++ allNixOS;
+    "nut-primary-password.age".publicKeys = personalKeys ++ [arges];
+    "nut-secondary-password.age".publicKeys = personalKeys ++ allNixOS;
 
     "taskwarrior-key.age".publicKeys = personalKeys;
   }

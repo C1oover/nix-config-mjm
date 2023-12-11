@@ -2,6 +2,7 @@
   power.ups = {
     enable = true;
     mode = "netserver";
+    openFirewall = true;
     ups.tripplite = {
       driver = "usbhid-ups";
       port = "auto";
@@ -10,21 +11,28 @@
         ''productid = "3024"''
       ];
     };
+    users = {
+      upsmon = {
+        upsmon = "primary";
+        passwordFile = config.age.secrets."nut-primary-password".path;
+      };
+      upsmon_secondary = {
+        upsmon = "secondary";
+        passwordFile = config.age.secrets."nut-secondary-password".path;
+      };
+    };
+    upsd = {
+      listen = [{address = "10.0.0.2";}];
+    };
+    upsmon.monitor.tripplite = {
+      system = "tripplite@10.0.0.2";
+      user = "upsmon";
+      type = "primary";
+    };
   };
 
-  environment.etc."nut/upsd.conf".text = ''
-    LISTEN 10.0.0.2
-  '';
-
-  environment.etc."nut/upsmon.conf".source = config.age.secrets."upsmon.conf".path;
-  environment.etc."nut/upsd.users".source = config.age.secrets."upsd.users".path;
-
-  systemd.tmpfiles.rules = ["d /var/lib/nut 0700 root wheel - -"];
-
-  networking.firewall.allowedTCPPorts = [3493];
-
   age.secrets = {
-    "upsmon.conf".file = ../../../secrets/nut-server-upsmon-conf.age;
-    "upsd.users".file = ../../../secrets/nut-server-upsd-users.age;
+    "nut-primary-password".file = ../../../secrets/nut-primary-password.age;
+    "nut-secondary-password".file = ../../../secrets/nut-secondary-password.age;
   };
 }
