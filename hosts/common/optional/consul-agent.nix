@@ -3,6 +3,8 @@
     enable = true;
     webUi = true;
 
+    forceAddrFamily = "ipv4";
+
     extraConfig = {
       retry_join = lib.mkDefault ["10.0.2.40" "10.0.2.42" "10.0.2.43"];
       client_addr = "0.0.0.0";
