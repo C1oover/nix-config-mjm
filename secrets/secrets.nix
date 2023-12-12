@@ -35,9 +35,6 @@ in
 
     "wpa-supplicant-env.age".publicKeys = personalKeys ++ [persephone];
 
-    "nut-server-upsmon-conf.age".publicKeys = personalKeys ++ [arges];
-    "nut-server-upsd-users.age".publicKeys = personalKeys ++ [arges];
-    "nut-client-upsmon-conf.age".publicKeys = personalKeys ++ allNixOS;
     "nut-primary-password.age".publicKeys = personalKeys ++ [arges];
     "nut-secondary-password.age".publicKeys = personalKeys ++ allNixOS;
 
