@@ -20,6 +20,7 @@
 
   home.packages = with pkgs;
     [
+      btop
       fx
       gh
       httpie
