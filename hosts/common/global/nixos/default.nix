@@ -13,6 +13,7 @@
       ../home-manager.nix
       ../nix.nix
       ./attic.nix
+      ./networkd.nix
       ./ssh.nix
       ./ssl.nix
     ]
@@ -42,8 +43,4 @@
 
   programs.zsh.enable = true;
   programs.tmux.enable = true;
-
-  networking.dhcpcd.extraConfig = ''
-    slaac private
-  '';
 }
