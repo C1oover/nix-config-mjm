@@ -22,30 +22,55 @@
     ensureDatabases = [
       "attic"
       "atuin"
+      "authelia"
+      "authelia_external"
+      "grafana"
+      "homelab"
+      "linkding"
+      "miniflux"
+      "netbox"
+      "paperless"
     ];
     ensureUsers = [
       {
         name = "atuin";
-        # the atuin user also needs to be the owner of the atuin DB, which isn't possible
-        # to set up from this module.
-        ensurePermissions = {
-          "DATABASE atuin" = "ALL PRIVILEGES";
-        };
-        ensureClauses = {
-          login = false;
-        };
+        ensureDBOwnership = true;
+        ensureClauses.login = false;
       }
       {
         name = "attic";
-        # the attic user also needs to be the owner of the attic DB, which isn't possible
-        # to set up from this module.
-        ensurePermissions = {
-          "DATABASE attic" = "ALL PRIVILEGES";
-        };
-        ensureClauses = {
-          login = false;
-        };
+        ensureDBOwnership = true;
+        ensureClauses.login = false;
       }
+      {
+        name = "authelia";
+        ensureDBOwnership = true;
+        # this user should also be made owner of the authelia_external db, but
+        # this module can't do that
+        ensureClauses.login = false;
+      }
+      # grafana uses the grafana_user role, so it can't use this
+      {
+        name = "homelab";
+        ensureDBOwnership = true;
+        ensureClauses.login = false;
+      }
+      {
+        name = "linkding";
+        ensureDBOwnership = true;
+        ensureClauses.login = false;
+      }
+      {
+        name = "miniflux";
+        ensureDBOwnership = true;
+        ensureClauses.login = false;
+      }
+      {
+        name = "netbox";
+        ensureDBOwnership = true;
+        ensureClauses.login = false;
+      }
+      # paperless uses the paperless_user role, so it can't use this
     ];
   };
 
