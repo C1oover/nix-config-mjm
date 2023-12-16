@@ -44,6 +44,7 @@
       inputs.home-manager.follows = "home-manager";
     };
     kde2nix.url = "github:nix-community/kde2nix";
+    impermanence.url = "github:nix-community/impermanence";
 
     catppuccin-bat = {
       url = "github:catppuccin/bat";

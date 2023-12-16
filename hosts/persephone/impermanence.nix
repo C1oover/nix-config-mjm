@@ -1,15 +1,26 @@
-{
+{inputs, ...}: {
+  imports = [
+    inputs.impermanence.nixosModules.impermanence
+  ];
+
   age.identityPaths = ["/persist/etc/ssh/ssh_host_ed25519_key"];
 
-  environment.etc = {
-    nixos.source = "/home/matt/src/nix-config";
-    NIXOS.source = "/persist/etc/NIXOS";
-    machine-id.source = "/persist/etc/machine-id";
-    "ssh/ssh_host_ed25519_key".source = "/persist/etc/ssh/ssh_host_ed25519_key";
-    "ssh/ssh_host_ed25519_key.pub".source = "/persist/etc/ssh/ssh_host_ed25519_key.pub";
-    "ssh/ssh_host_rsa_key".source = "/persist/etc/ssh/ssh_host_rsa_key";
-    "ssh/ssh_host_rsa_key.pub".source = "/persist/etc/ssh/ssh_host_rsa_key.pub";
-    "NetworkManager/system-connections".source = "/persist/etc/NetworkManager/system-connections";
+  environment.persistence."/persist" = {
+    hideMounts = true;
+    directories = [
+      "/etc/NetworkManager/system-connections"
+      "/var/lib/libvirt"
+      "/var/lib/fprint"
+      "/var/lib/NetworkManager"
+      "/var/lib/iwd"
+    ];
+    files = [
+      "/etc/machine-id"
+      "/etc/ssh/ssh_host_ed25519_key"
+      "/etc/ssh/ssh_host_ed25519_key.pub"
+      "/etc/ssh/ssh_host_rsa_key"
+      "/etc/ssh/ssh_host_rsa_key.pub"
+    ];
   };
 
   security.sudo.extraConfig = ''

@@ -28,10 +28,6 @@ in {
   fileSystems."/nix" = mkSubvol "nix" {neededForBoot = true;};
   fileSystems."/persist" = mkSubvol "persist" {neededForBoot = true;};
   fileSystems."/var/log" = mkSubvol "log" {neededForBoot = true;};
-  fileSystems."/var/lib/libvirt" = mkSubvol "libvirt" {};
-  fileSystems."/var/lib/fprint" = mkSubvol "fprint" {};
-  fileSystems."/var/lib/NetworkManager" = mkSubvol "networkmanager" {};
-  fileSystems."/var/lib/iwd" = mkSubvol "iwd" {};
 
   fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/B0EC-18F2";
