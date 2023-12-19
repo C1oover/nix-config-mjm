@@ -83,11 +83,8 @@
     font = "${pkgs.terminus_font}/share/consolefonts/ter-u32n.psf.gz";
     keyMap = "us";
   };
-  users.mutableUsers = false;
   users.users.matt = {
-    isNormalUser = true;
-    extraGroups = ["wheel" "video"];
-    hashedPassword = "$6$JhSUuIask83mtadB$iV5I3SmQE13rVV08RpCN4Ho09VvpmCm6xouZ2o7/1rhR63YFh/WtLAdM1f2P4hgJrxi.ss2zh53xpbSqx/zy9/";
+    extraGroups = ["video"];
   };
 
   environment.systemPackages = with pkgs; [

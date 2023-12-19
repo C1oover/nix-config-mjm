@@ -28,10 +28,12 @@
 
   time.timeZone = lib.mkDefault "Etc/UTC";
 
+  users.mutableUsers = false;
   users.users.matt = {
     isNormalUser = true;
     extraGroups = ["wheel"];
     shell = pkgs.zsh;
+    hashedPassword = "$6$JhSUuIask83mtadB$iV5I3SmQE13rVV08RpCN4Ho09VvpmCm6xouZ2o7/1rhR63YFh/WtLAdM1f2P4hgJrxi.ss2zh53xpbSqx/zy9/";
   };
 
   security.sudo.wheelNeedsPassword = false;
