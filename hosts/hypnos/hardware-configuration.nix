@@ -28,7 +28,6 @@
   fileSystems."/boot" = {
     device = "/nix/boot";
     options = ["bind" "X-fstrim.notrim"];
-    depends = ["/nix/boot"];
   };
 
   swapDevices = [

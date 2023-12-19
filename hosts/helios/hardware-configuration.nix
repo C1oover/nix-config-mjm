@@ -14,11 +14,28 @@
   boot.extraModulePackages = [];
 
   fileSystems."/" = {
-    device = "/dev/disk/by-label/nixos";
-    fsType = "ext4";
+    device = "none";
+    fsType = "tmpfs";
+    options = ["defaults" "mode=755" "size=8G"];
   };
 
-  swapDevices = [];
+  fileSystems."/nix" = {
+    device = "/dev/disk/by-label/nixos";
+    fsType = "ext4";
+    neededForBoot = true;
+  };
+
+  fileSystems."/boot" = {
+    device = "/nix/boot";
+    options = ["bind" "X-fstrim.notrim"];
+  };
+
+  swapDevices = [
+    {
+      device = "/nix/swap";
+      size = 8 * 1024;
+    }
+  ];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;

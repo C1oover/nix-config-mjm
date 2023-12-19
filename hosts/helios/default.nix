@@ -1,6 +1,7 @@
 {
   imports = [
     ./hardware-configuration.nix
+    ./impermanence.nix
 
     ../common/global/nixos
     ../common/users/matt
