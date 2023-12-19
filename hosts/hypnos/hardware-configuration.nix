@@ -16,13 +16,19 @@
   fileSystems."/" = {
     device = "none";
     fsType = "tmpfs";
-    options = ["defaults" "size=25%" "mode=755"];
+    options = ["defaults" "mode=755"];
   };
 
   fileSystems."/nix" = {
     device = "/dev/disk/by-label/nixos";
     fsType = "ext4";
     neededForBoot = true;
+  };
+
+  fileSystems."/boot" = {
+    device = "/nix/boot";
+    options = ["bind" "X-fstrim.notrim"];
+    depends = ["/nix/boot"];
   };
 
   swapDevices = [
