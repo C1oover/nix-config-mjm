@@ -1,4 +1,9 @@
 {
+  terraform.required_providers.vault = {
+    source = "registry.terraform.io/hashicorp/vault";
+    version = ">= 3.0.0";
+  };
+
   provider.vault = {};
 
   resource.vault_identity_group.admins = {

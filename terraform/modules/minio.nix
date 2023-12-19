@@ -51,7 +51,7 @@ in {
 
   config = mkIf cfg.enable {
     terraform.required_providers.minio = {
-      source = "aminueza/minio";
+      source = "registry.terraform.io/aminueza/minio";
       version = ">= 1.0.0";
     };
     provider.minio.minio_server = cfg.server;

@@ -6,7 +6,7 @@
     ...
   }: let
     inherit (inputs) terranix;
-    terraform = pkgs.terraform.withPlugins (p: [
+    terraform = pkgs.opentofu.withPlugins (p: [
       p.consul
       p.gitlab
       p.minio
@@ -46,7 +46,7 @@
 
       scripts.tf.exec = ''
         cd terraform
-        ${terraform}/bin/terraform "$@"
+        ${lib.getExe terraform} "$@"
       '';
     };
 
@@ -56,7 +56,7 @@
       text = ''
         cd terraform
         ln -sf ${terraformConfiguration} config.tf.json
-        terraform init && terraform plan "$@"
+        tofu init && tofu plan "$@"
       '';
     });
 
@@ -66,7 +66,7 @@
       text = ''
         cd terraform
         ln -sf ${terraformConfiguration} config.tf.json
-        terraform init && terraform apply "$@"
+        tofu init && tofu apply "$@"
       '';
     });
 
@@ -79,7 +79,7 @@
 
         cd terraform
         ln -sf ${terraformConfiguration} config.tf.json
-        terraform init && terraform apply -auto-approve
+        tofu init && tofu apply -auto-approve
       '';
     });
   };

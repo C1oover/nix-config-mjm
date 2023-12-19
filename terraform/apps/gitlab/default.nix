@@ -1,6 +1,6 @@
 {
   terraform.required_providers.gitlab = {
-    source = "gitlabhq/gitlab";
+    source = "registry.terraform.io/gitlabhq/gitlab";
     version = ">= 1.0.0";
   };
 
