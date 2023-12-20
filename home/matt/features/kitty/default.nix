@@ -7,7 +7,7 @@ in {
   programs.kitty = {
     enable = true;
     theme = "Catppuccin-Mocha";
-    font.name = "IBM Plex Mono";
+    font.name = "Agave";
     font.size = fontSize;
     settings = {
       shell = "${pkgs.zsh}/bin/zsh --login --interactive";

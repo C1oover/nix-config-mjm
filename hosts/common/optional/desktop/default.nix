@@ -42,6 +42,7 @@
       cascadia-code
       ibm-plex
       iosevka
+      agave
       outputs.packages.${pkgs.system}.pragmata-pro
     ];
 

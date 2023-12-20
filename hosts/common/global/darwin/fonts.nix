@@ -11,6 +11,7 @@
       cascadia-code
       ibm-plex
       iosevka
+      agave
     ];
   };
 }
