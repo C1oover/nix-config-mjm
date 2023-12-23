@@ -22,7 +22,5 @@
 
   services.qemuGuest.enable = true;
 
-  services.consul.interface.advertise = "ens18";
-
   system.stateVersion = "22.11";
 }

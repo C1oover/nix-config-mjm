@@ -16,7 +16,6 @@
 
   networking.hostName = "brontes";
 
-  services.consul.interface.advertise = "end0";
   services.consul.extraConfig.node_meta.tailscale_ip = "100.113.14.91";
 
   services.tailscale.enable = true;
