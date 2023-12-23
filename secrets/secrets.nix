@@ -33,7 +33,7 @@ in
 
     "nixremote-key.age".publicKeys = personalKeys ++ allNixOS;
 
-    "wpa-supplicant-env.age".publicKeys = personalKeys ++ [persephone];
+    "smb-creds.age".publicKeys = personalKeys ++ [persephone];
 
     "nut-primary-password.age".publicKeys = personalKeys ++ [arges];
     "nut-secondary-password.age".publicKeys = personalKeys ++ allNixOS;
