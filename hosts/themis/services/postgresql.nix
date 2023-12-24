@@ -15,9 +15,11 @@
       # IPv6 local connections:
       host    all             all             ::1/128                 trust
 
-      # allow connections from the local network
       host	all		consul		10.0.2.10/32		trust
+
+      # allow connections from the local network
       host	all		all		10.0.0.0/8		scram-sha-256
+      host  all   all   2601:282:167f:3eec::/64  scram-sha-256
     '';
     ensureDatabases = [
       "attic"
