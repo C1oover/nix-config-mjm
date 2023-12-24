@@ -3,15 +3,20 @@
     enable = true;
     webUi = true;
 
-    interface.advertise = "ens18";
-
     extraConfig = {
       server = true;
       bootstrap_expect = 3;
       retry_join = ["10.0.2.40" "10.0.2.42" "10.0.2.43"];
+
       client_addr = "0.0.0.0";
+      bind_addr = "[::]";
+      advertise_addr = "{{ GetDefaultInterfaces | include \"type\" \"ipv6\" | exclude \"RFC\" \"6890\" | attr \"address\" }}";
+      advertise_addr_ipv4 = "{{ GetDefaultInterfaces | include \"type\" \"ipv4\" | attr \"address\" }}";
+      advertise_addr_ipv6 = "{{ GetDefaultInterfaces | include \"type\" \"ipv6\" | exclude \"RFC\" \"6890\" | attr \"address\" }}";
+
       ports.grpc = 8502;
       connect.enabled = true;
+
       telemetry = {
         prometheus_retention_time = "1h";
         disable_hostname = true;
