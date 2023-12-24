@@ -8,6 +8,7 @@
 
       client_addr = "0.0.0.0";
       bind_addr = "[::]";
+      advertise_addr = "{{ GetDefaultInterfaces | include \"type\" \"ipv6\" | exclude \"RFC\" \"6890\" | attr \"address\" }}";
       advertise_addr_ipv4 = "{{ GetDefaultInterfaces | include \"type\" \"ipv4\" | attr \"address\" }}";
       advertise_addr_ipv6 = "{{ GetDefaultInterfaces | include \"type\" \"ipv6\" | exclude \"RFC\" \"6890\" | attr \"address\" }}";
 
