@@ -117,7 +117,7 @@ in {
                 then lib.strings.concatMapStringsSep "\n" (a: "server ${a};") u.addresses
                 else ''
                   {{ range service "${u.service.name}" }}
-                  server {{ .Address }}:${
+                  server {{ if sprig_contains ":" .Address }}{{ .NodeTaggedAddresses.lan_ipv4 }}{{ else }}{{ .Address }}{{ end }}:${
                     if u.service.port != null
                     then toString u.service.port
                     else "{{ .Port }}"
