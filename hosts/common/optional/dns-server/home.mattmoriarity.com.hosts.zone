@@ -34,4 +34,5 @@ pkg1                  IN  A     10.0.2.107
 redis1                IN  A     10.0.2.109
 guacamole1            IN  A     10.0.2.116
 apollo                IN  AAAA  2601:282:167f:3eec:4a4d:7eff:fef8:c186
+rhea                  IN  AAAA  2601:282:167f:3eec:b0c5:55ff:fe20:9218
 helios                IN  AAAA  2601:282:167f:3eec:bcf8:67ff:fecc:c859
