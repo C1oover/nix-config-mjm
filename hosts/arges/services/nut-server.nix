@@ -22,7 +22,7 @@
       };
     };
     upsd = {
-      listen = [{address = "10.0.0.2";}];
+      listen = [{address = "0.0.0.0";}];
     };
     upsmon.monitor.tripplite = {
       system = "tripplite@10.0.0.2";
