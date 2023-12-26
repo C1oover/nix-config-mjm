@@ -15,7 +15,6 @@
     ./services/actual.nix
     ./services/taskserver.nix
     ./services/attic.nix
-    ./services/jellyfin.nix
   ];
 
   networking.hostName = "nemesis";
