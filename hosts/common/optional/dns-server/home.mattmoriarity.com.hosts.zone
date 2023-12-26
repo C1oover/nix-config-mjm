@@ -8,6 +8,7 @@ apollo                IN  A     10.0.2.11
 hades                 IN  A     10.0.2.12
 hermes                IN  A     10.0.2.30
 daedalus              IN  A     10.0.2.31
+chaos                 IN  A     10.0.2.31
 atlas                 IN  A     10.0.2.32
 aion                  IN  A     10.0.2.34
 helios                IN  A     10.0.2.35
