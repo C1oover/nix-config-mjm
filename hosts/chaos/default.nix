@@ -8,6 +8,8 @@
 
     ../common/optional/server
     ../common/optional/consul-agent.nix
+
+    ./services/jellyfin.nix
   ];
 
   networking.hostName = "chaos";

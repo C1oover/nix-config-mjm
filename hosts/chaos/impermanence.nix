@@ -9,7 +9,9 @@
   age.identityPaths = ["/nix/persist/etc/ssh/ssh_host_ed25519_key"];
 
   environment.persistence."/nix/persist" = {
-    directories = [];
+    directories = [
+      "/var/lib/jellyfin"
+    ];
     files = [
       "/etc/machine-id"
       "/etc/ssh/ssh_host_ed25519_key"
