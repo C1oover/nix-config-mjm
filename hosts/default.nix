@@ -43,6 +43,7 @@ in {
       # Other Proxmox VMs
       hypnos = mkNixos [./hypnos];
       helios = mkNixos [./helios];
+      chaos = mkNixos [./chaos];
 
       # Proxmox LXC containers
       orion = mkNixos [./orion];
@@ -88,6 +89,7 @@ in {
         alecto = mkNode "alecto" {};
         arges = mkNode "arges" {};
         brontes = mkNode "brontes" {};
+        chaos = mkNode "chaos" {};
         cronus = mkNode "cronus" {};
         gaia = mkNode "gaia" {};
         helios = mkNode "helios" {};
