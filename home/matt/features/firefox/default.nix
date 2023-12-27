@@ -58,6 +58,7 @@ in {
         addons.linkding-extension
         addons.linkding-injector
         addons.catppuccin-latte-mauve
+        addons.sixindicator
       ];
       userChrome = ''
         ${builtins.readFile (inputs.firefox-csshacks + /chrome/window_control_placeholder_support.css)}
