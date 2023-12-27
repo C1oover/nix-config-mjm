@@ -16,6 +16,11 @@
         user = "sabnzbd";
         group = "sabnzbd";
       }
+      {
+        directory = "/var/lib/sonarr";
+        user = "sonarr";
+        group = "sonarr";
+      }
     ];
     files = [
       "/etc/machine-id"

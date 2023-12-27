@@ -11,6 +11,7 @@
 
     ./services/jellyfin.nix
     ./services/sabnzbd.nix
+    ./services/arr.nix
   ];
 
   networking.hostName = "chaos";
