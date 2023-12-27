@@ -11,6 +11,11 @@
   environment.persistence."/nix/persist" = {
     directories = [
       "/var/lib/jellyfin"
+      {
+        directory = "/var/lib/sabnzbd";
+        user = "sabnzbd";
+        group = "sabnzbd";
+      }
     ];
     files = [
       "/etc/machine-id"
