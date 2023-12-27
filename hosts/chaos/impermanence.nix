@@ -17,7 +17,7 @@
         group = "sabnzbd";
       }
       {
-        directory = "/var/lib/sonarr";
+        directory = "/var/lib/sonarr/.config/NzbDrone";
         user = "sonarr";
         group = "sonarr";
       }

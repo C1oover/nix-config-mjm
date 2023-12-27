@@ -14,6 +14,8 @@
         http = "http://localhost:8080/";
         interval = "15s";
         timeout = "10s";
+        failures_before_warning = 2;
+        failures_before_critical = 6;
       }
     ];
   };
