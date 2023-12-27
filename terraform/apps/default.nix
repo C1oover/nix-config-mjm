@@ -15,6 +15,7 @@
     ./ingress
     ./linkding
     ./loki
+    ./mediaserver
     ./miniflux
     ./minio
     ./netbox
