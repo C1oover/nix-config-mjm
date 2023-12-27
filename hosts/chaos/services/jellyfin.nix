@@ -22,8 +22,8 @@
       "x-systemd.device-timeout=5s"
       "x-systemd.mount-timeout=5s"
       "credentials=${config.age.secrets."smb-creds".path}"
-      "uid=jellyfin"
-      "gid=jellyfin"
+      "noperm"
+      "nounix"
     ];
   };
 
