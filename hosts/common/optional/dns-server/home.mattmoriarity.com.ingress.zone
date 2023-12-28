@@ -6,6 +6,7 @@ atuin  IN  CNAME ingress-http.service.consul.
 authelia  IN  CNAME ingress-http.service.consul.
 consul  IN  CNAME ingress-http.service.consul.
 containers  IN  CNAME ingress-http.service.consul.
+downloads  IN  CNAME ingress-http.service.consul.
 grafana  IN  CNAME ingress-http.service.consul.
 guacamole  IN  CNAME ingress-http.service.consul.
 homelab  IN  CNAME ingress-http.service.consul.
@@ -16,4 +17,5 @@ netbox  IN  CNAME ingress-http.service.consul.
 nomad  IN  CNAME ingress-http.service.consul.
 prometheus  IN  CNAME ingress-http.service.consul.
 proxmox  IN  CNAME ingress-http.service.consul.
+tv  IN  CNAME ingress-http.service.consul.
 vault  IN  CNAME ingress-http.service.consul.
