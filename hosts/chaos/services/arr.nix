@@ -38,6 +38,6 @@
           failures_before_critical = 6;
         }
       ];
-    }
+    };
   };
 }
