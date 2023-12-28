@@ -24,6 +24,7 @@
       "credentials=${config.age.secrets."smb-creds".path}"
       "noperm"
       "nounix"
+      "nobrl"
     ];
   };
 
