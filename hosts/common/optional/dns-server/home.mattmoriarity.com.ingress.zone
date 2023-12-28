@@ -14,6 +14,7 @@ ldap  IN  CNAME ingress-http.service.consul.
 media  IN  CNAME ingress-http.service.consul.
 minio  IN  CNAME ingress-http.service.consul.
 minio-console  IN  CNAME ingress-http.service.consul.
+movies  IN  CNAME ingress-http.service.consul.
 netbox  IN  CNAME ingress-http.service.consul.
 nomad  IN  CNAME ingress-http.service.consul.
 prometheus  IN  CNAME ingress-http.service.consul.
