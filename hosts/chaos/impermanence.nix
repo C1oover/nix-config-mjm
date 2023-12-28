@@ -21,6 +21,11 @@
         user = "sonarr";
         group = "sonarr";
       }
+      {
+        directory = "/var/lib/radarr/.config/Radarr";
+        user = "radarr";
+        group = "radarr";
+      }
     ];
     files = [
       "/etc/machine-id"

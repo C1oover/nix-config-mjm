@@ -10,5 +10,8 @@
     tv = {
       upstream.service.name = "sonarr";
     };
+    movies = {
+      upstream.service.name = "radarr";
+    }
   };
 }
