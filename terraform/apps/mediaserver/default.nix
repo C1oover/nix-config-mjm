@@ -12,6 +12,6 @@
     };
     movies = {
       upstream.service.name = "radarr";
-    }
+    };
   };
 }
