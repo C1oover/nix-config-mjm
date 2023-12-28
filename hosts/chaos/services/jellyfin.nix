@@ -28,4 +28,19 @@
   };
 
   age.secrets."smb-creds".file = ../../../secrets/smb-creds-server.age;
+
+  services.consul.services.jellyfin = {
+    port = 8096;
+
+    checks = [
+      {
+        name = "jellyfin is ready";
+        http = "http://localhost:8096/health";
+        interval = "15s";
+        timeout = "10s";
+        failures_before_warning = 2;
+        failures_before_critical = 6;
+      }
+    ];
+  };
 }

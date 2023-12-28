@@ -1,5 +1,9 @@
 {
   ingress.virtualHosts = {
+    media = {
+      upstream.service.name = "jellyfin";
+      enableAuthProxy = false;
+    };
     downloads = {
       upstream.service.name = "sabnzbd";
     };
