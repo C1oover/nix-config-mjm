@@ -22,7 +22,7 @@
 
     meta = {
       metrics_path = "/metrics";
-      metrics_port = config.services.prometheus.exporters.sabnzbd.port;
+      metrics_port = toString config.services.prometheus.exporters.sabnzbd.port;
     };
 
     checks = [
