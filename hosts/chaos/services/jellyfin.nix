@@ -13,7 +13,7 @@
   systemd.tmpfiles.rules = ["d /videos"];
 
   fileSystems."/videos" = {
-    device = "//selene.home.mattmoriarity.com/videos";
+    device = "//selene.home.mattmoriarity.com/media";
     fsType = "cifs";
     options = [
       "x-systemd.automount"
