@@ -1,21 +1,12 @@
 {
+  imports = [./consul-agent.nix];
+
   services.consul = {
-    enable = true;
     webUi = true;
 
     extraConfig = {
       server = true;
       bootstrap_expect = 3;
-      retry_join = ["10.0.2.40" "10.0.2.42" "10.0.2.43"];
-
-      client_addr = "0.0.0.0";
-      bind_addr = "[::]";
-      advertise_addr = "{{ GetDefaultInterfaces | include \"type\" \"ipv6\" | exclude \"RFC\" \"6890\" | attr \"address\" }}";
-      advertise_addr_ipv4 = "{{ GetDefaultInterfaces | include \"type\" \"ipv4\" | attr \"address\" }}";
-      advertise_addr_ipv6 = "{{ GetDefaultInterfaces | include \"type\" \"ipv6\" | exclude \"RFC\" \"6890\" | attr \"address\" }}";
-
-      ports.grpc = 8502;
-      connect.enabled = true;
 
       telemetry = {
         prometheus_retention_time = "1h";
@@ -24,19 +15,5 @@
     };
   };
 
-  networking.firewall.allowedTCPPorts = [
-    8300
-    8301
-    8302
-    8500
-    8502
-    8503
-    8600
-  ];
-
-  networking.firewall.allowedUDPPorts = [
-    8301
-    8302
-    8600
-  ];
+  networking.firewall.allowedUDPPorts = [8302];
 }

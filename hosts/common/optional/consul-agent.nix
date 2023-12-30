@@ -1,21 +1,52 @@
 {lib, ...}: {
   services.consul = {
     enable = true;
-    webUi = true;
 
     extraConfig = {
       retry_join = lib.mkDefault ["10.0.2.40" "10.0.2.42" "10.0.2.43"];
 
       client_addr = "0.0.0.0";
       bind_addr = "[::]";
-      advertise_addr = "{{ GetDefaultInterfaces | include \"type\" \"ipv6\" | exclude \"RFC\" \"6890\" | attr \"address\" }}";
       advertise_addr_ipv4 = "{{ GetDefaultInterfaces | include \"type\" \"ipv4\" | attr \"address\" }}";
-      advertise_addr_ipv6 = "{{ GetDefaultInterfaces | include \"type\" \"ipv6\" | exclude \"RFC\" \"6890\" | attr \"address\" }}";
 
       ports.grpc = 8502;
       connect.enabled = true;
     };
   };
+
+  systemd.services.consul.preStart = lib.mkForce (''
+      mkdir -m 0700 -p /var/lib/consul
+      chown -R consul /var/lib/consul
+
+      # Determine interface addresses
+      getAddrOnce () {
+        ip -6 addr show scope global primary \
+          | awk -F '[ /\t]*' '/inet/ {print $3}' | head -n 1
+      }
+      getAddr () {
+        ADDR="$(getAddrOnce $1)"
+        LEFT=60 # Die after 1 minute
+        while [ -z "$ADDR" ]; do
+          sleep 1
+          LEFT=$(expr $LEFT - 1)
+          if [ "$LEFT" -eq "0" ]; then
+            echo "Address lookup timed out"
+            exit 1
+          fi
+          ADDR="$(getAddrOnce)"
+        done
+        echo "$ADDR"
+      }
+      echo "{" > /etc/consul-addrs.json
+      delim=" "
+    ''
+    + lib.concatStrings (lib.flip map ["advertise_addr" "advertise_addr_ipv6"] (key: ''
+      echo "$delim \"${key}\": \"$(getAddr)\"" >> /etc/consul-addrs.json
+      delim=","
+    ''))
+    + ''
+      echo "}" >> /etc/consul-addrs.json
+    '');
 
   networking.firewall.allowedTCPPorts = [
     8300
