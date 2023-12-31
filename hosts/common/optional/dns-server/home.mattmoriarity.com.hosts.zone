@@ -36,6 +36,7 @@ guacamole1            IN  A     10.0.2.116
 cronus                IN  AAAA  2601:282:167f:3eec:1097:8cff:fe6a:b260
 megaera               IN  AAAA  2601:282:167f:3eec:140b:14ff:fe41:31e1
 atlas                 IN  AAAA  2601:282:167f:3eec:1490:acff:fec0:6cb7
+nemesis               IN  AAAA  2601:282:167f:3eec:2cef:6fff:fee3:5381
 apollo                IN  AAAA  2601:282:167f:3eec:4a4d:7eff:fef8:c186
 alecto                IN  AAAA  2601:282:167f:3eec:4cf1:b1ff:fe14:7141
 hypnos                IN  AAAA  2601:282:167f:3eec:6042:3ff:fef5:f1e3
