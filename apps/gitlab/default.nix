@@ -1,10 +1,10 @@
 {
-  terraform.required_providers.gitlab = {
+  terraform.terraform.required_providers.gitlab = {
     source = "registry.terraform.io/gitlabhq/gitlab";
     version = ">= 1.0.0";
   };
 
-  provider.gitlab = {
+  terraform.provider.gitlab = {
     base_url = "https://git.midna.dev/api/v4/";
   };
 

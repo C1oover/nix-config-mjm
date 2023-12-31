@@ -9,7 +9,17 @@
   };
 
   boot.kernel.sysctl."net.ipv4.ip_forward" = true;
-  virtualisation.docker.enable = true;
+
+  virtualisation.docker = {
+    enable = true;
+    daemon.settings = {
+      ipv6 = true;
+      fixed-cidr-v6 = "fd00::/80";
+      experimental = true;
+      ip6tables = true; # requires experimental
+    };
+  };
+
   services.gitlab-runner = {
     enable = true;
     settings = {

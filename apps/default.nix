@@ -1,5 +1,7 @@
 {
   imports = [
+    ../modules/apps
+
     ./actual
     ./adminer
     ./attic

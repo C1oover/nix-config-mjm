@@ -467,11 +467,11 @@ in {
       detach = false;
     };
   in {
-    terraform.required_providers.nomad = {
+    terraform.terraform.required_providers.nomad = {
       source = "registry.terraform.io/hashicorp/nomad";
       version = ">= 1.0.0";
     };
 
-    resource.nomad_job = builtins.mapAttrs (_name: mkJobResource) cfg.jobs;
+    terraform.resource.nomad_job = builtins.mapAttrs (_name: mkJobResource) cfg.jobs;
   };
 }

@@ -14,7 +14,7 @@
       # The default Origin header will be the proxy address, which
       # will be rejected by Nomad. It must be rewritten to be the
       # host address instead.
-      proxy_set_header Origin "$''${scheme}://$''${proxy_host}";
+      proxy_set_header Origin "''${scheme}://''${proxy_host}";
     '';
   };
 }

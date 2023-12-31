@@ -12,6 +12,7 @@
     ../common/optional/nomad-client.nix
     ../common/optional/nix-remote.nix
     ../common/optional/nut-client.nix
+    ../common/optional/ingress
   ];
 
   networking.hostName = "steropes";

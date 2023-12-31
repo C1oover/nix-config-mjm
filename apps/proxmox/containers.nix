@@ -30,7 +30,7 @@ let
     tags = "nixos";
   };
 in {
-  resource.proxmox_lxc = {
+  terraform.resource.proxmox_lxc = {
     rhea =
       defaultLxc
       // {

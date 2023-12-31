@@ -112,12 +112,12 @@ in {
       };
 
     databases = mkIf cfg.databases.enable {
-      resource.vault_mount.database = {
+      terraform.resource.vault_mount.database = {
         path = "database";
         type = "database";
       };
 
-      resource.vault_database_secret_backend_role =
+      terraform.resource.vault_database_secret_backend_role =
         builtins.mapAttrs
         (name: {
           roleName,
@@ -137,11 +137,11 @@ in {
     };
 
     approles = mkIf cfg.approles.enable {
-      resource.vault_auth_backend.approle = {
+      terraform.resource.vault_auth_backend.approle = {
         type = "approle";
       };
 
-      resource.vault_approle_auth_backend_role =
+      terraform.resource.vault_approle_auth_backend_role =
         builtins.mapAttrs
         (name: {tokenPolicies, ...}: {
           backend = "\${vault_auth_backend.approle.id}";
@@ -152,7 +152,7 @@ in {
     };
 
     policies = {
-      resource.vault_policy =
+      terraform.resource.vault_policy =
         builtins.mapAttrs
         (name: {
           text,

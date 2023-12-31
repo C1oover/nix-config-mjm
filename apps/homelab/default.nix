@@ -63,11 +63,11 @@ in {
         };
 
         templates."local/task.crt" = {
-          source = ../../../home/matt/features/taskwarrior/cert.crt;
+          source = ../../home/matt/features/taskwarrior/cert.crt;
           changeMode = "noop";
         };
         templates."local/task.ca" = {
-          source = ../../../home/matt/features/taskwarrior/ca.crt;
+          source = ../../home/matt/features/taskwarrior/ca.crt;
           changeMode = "noop";
         };
 

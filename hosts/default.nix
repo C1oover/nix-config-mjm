@@ -55,6 +55,8 @@ in {
       phoebe = mkNixos [./phoebe];
       themis = mkNixos [./themis];
       thanatos = mkNixos [./thanatos];
+
+      ingresstest = mkNixos [./ingresstest];
     };
 
     checks = let

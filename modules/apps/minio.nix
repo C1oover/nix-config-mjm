@@ -50,13 +50,13 @@ in {
   };
 
   config = mkIf cfg.enable {
-    terraform.required_providers.minio = {
+    terraform.terraform.required_providers.minio = {
       source = "registry.terraform.io/aminueza/minio";
       version = ">= 1.0.0";
     };
-    provider.minio.minio_server = cfg.server;
+    terraform.provider.minio.minio_server = cfg.server;
 
-    resource.minio_s3_bucket =
+    terraform.resource.minio_s3_bucket =
       lib.attrsets.mapAttrs'
       (name: value: {
         name = builtins.replaceStrings ["-"] ["_"] name;
@@ -66,12 +66,12 @@ in {
       })
       cfg.buckets;
 
-    data.minio_iam_policy_document =
+    terraform.data.minio_iam_policy_document =
       builtins.mapAttrs
       (_name: value: value.document)
       cfg.iamPolicies;
 
-    resource.minio_iam_policy =
+    terraform.resource.minio_iam_policy =
       builtins.mapAttrs
       (name: _value: {
         inherit name;
@@ -79,7 +79,7 @@ in {
       })
       cfg.iamPolicies;
 
-    resource.minio_iam_user_policy_attachment = let
+    terraform.resource.minio_iam_user_policy_attachment = let
       pairs =
         builtins.concatMap
         (policy:

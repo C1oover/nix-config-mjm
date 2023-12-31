@@ -5,13 +5,13 @@
     system,
     ...
   }: let
-    inherit (inputs) terranix;
     terraform = pkgs.opentofu.withPlugins (p: [
       p.consul
       p.gitlab
       p.minio
       p.nomad
       p.vault
+      p.cloudflare
       (p.mkProvider {
         owner = "Telmate";
         repo = "terraform-provider-proxmox";
@@ -22,10 +22,18 @@
         homepage = "https://registry.terraform.io/providers/Telmate/proxmox";
       })
     ]);
-    terraformConfiguration = terranix.lib.terranixConfiguration {
-      inherit system;
-      modules = [./config.nix];
-    };
+    terraformConfiguration =
+      (lib.evalModules {
+        modules = [
+          {_module.args.pkgs = pkgs;}
+          ../apps
+          {terraform = ./config.nix;}
+        ];
+        specialArgs = {inherit inputs;};
+      })
+      .config
+      .terraformConfig
+      .json;
   in {
     packages.terraform = terraform;
 

@@ -3,11 +3,11 @@
     ./containers.nix
   ];
 
-  terraform.required_providers.proxmox = {
+  terraform.terraform.required_providers.proxmox = {
     source = "registry.terraform.io/Telmate/proxmox";
     version = ">= 1.0.0";
   };
-  provider.proxmox = {
+  terraform.provider.proxmox = {
     pm_api_url = "https://proxmox.home.mattmoriarity.com/api2/json";
     pm_tls_insecure = true;
     pm_api_token_id = "terraform-prov@pam!terraform-prov";

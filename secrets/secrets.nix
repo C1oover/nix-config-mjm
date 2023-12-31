@@ -41,4 +41,6 @@ in
     "nut-secondary-password.age".publicKeys = personalKeys ++ allNixOS;
 
     "taskwarrior-key.age".publicKeys = personalKeys;
+
+    "cloudflare-api-token.age".publicKeys = personalKeys ++ [brontes steropes];
   }
