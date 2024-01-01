@@ -1,4 +1,4 @@
-{
+{pkgs, ...}: {
   services.sonarr = {
     enable = true;
     openFirewall = true;
@@ -40,4 +40,7 @@
       ];
     };
   };
+
+  # ffprobe
+  systemd.services.radarr.path = [pkgs.ffmpeg];
 }
