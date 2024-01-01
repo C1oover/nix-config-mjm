@@ -65,10 +65,10 @@ apply terranix changes:
   script:
     - nix run .#ci-terraform-apply
 check for flake updates:
-  tags: [nix]
+  tags: [nix-shell]
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
   stage: check
-  before_script: !reference [.snippets, setup_devenv]
+  # before_script: !reference [.snippets, setup_devenv]
   script:
     - nix run .#ci-flake-update
