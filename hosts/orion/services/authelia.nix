@@ -95,6 +95,27 @@ in {
             networks = ["10.0.2.104"];
             policy = "bypass";
           }
+          {
+            domain = "downloads.home.mattmoriarity.com";
+            resources = [
+              "^/api.*$"
+            ];
+            policy = "bypass";
+          }
+          {
+            domain = "tv.home.mattmoriarity.com";
+            resources = [
+              "^/api/.*$"
+            ];
+            policy = "bypass";
+          }
+          {
+            domain = "movies.home.mattmoriarity.com";
+            resources = [
+              "^/api/.*$"
+            ];
+            policy = "bypass";
+          }
         ];
       };
       session.domain = "home.mattmoriarity.com";
