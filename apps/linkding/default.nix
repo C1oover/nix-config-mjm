@@ -26,7 +26,15 @@ in {
       ];
 
       tasks.linkding = {
-        docker = {inherit image;};
+        docker = {
+          inherit image;
+          ulimit = [
+            {
+              nproc = "65535";
+              nofile = "20000:40000";
+            }
+          ];
+        };
         env = {
           LD_SUPERUSER_NAME = "mjm";
           LD_ENABLE_AUTH_PROXY = "True";

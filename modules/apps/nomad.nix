@@ -60,6 +60,10 @@ with lib; let
             type = types.nullOr (types.listOf types.str);
             default = null;
           };
+          ulimit = mkOption {
+            type = types.nullOr types.raw;
+            default = null;
+          };
         };
         ports = mkOption {
           type = types.nullOr (types.listOf types.str);
