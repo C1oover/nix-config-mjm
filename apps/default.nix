@@ -7,7 +7,6 @@
     ./attic
     ./atuin
     ./authelia
-    ./blackbox-exporter
     ./consul
     ./consul-exporter
     ./gitlab

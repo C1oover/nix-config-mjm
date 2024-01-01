@@ -27,7 +27,7 @@
         }
         {
           target_label = "__address__";
-          replacement = "blackbox-exporter.service.consul:9115";
+          replacement = "127.0.0.1:9115";
         }
       ];
     }

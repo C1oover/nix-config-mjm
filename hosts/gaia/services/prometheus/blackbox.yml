@@ -1,5 +1,4 @@
 modules:
-
   dns_public:
     prober: dns
     timeout: 5s
@@ -52,7 +51,4 @@ modules:
     prober: http
     http:
       method: GET
-      preferred_ip_protocol: ip4
-      tls_config:
-        ca_file: "{{ env "NOMAD_TASK_DIR" }}/ca.pem"
-
+      preferred_ip_protocol: ip6

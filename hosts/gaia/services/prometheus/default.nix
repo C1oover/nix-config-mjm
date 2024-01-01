@@ -1,5 +1,6 @@
 {config, ...}: {
   imports = [
+    ./blackbox.nix
     ./jobs
     ./rules
   ];
