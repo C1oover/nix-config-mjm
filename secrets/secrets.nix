@@ -43,4 +43,6 @@ in
     "taskwarrior-key.age".publicKeys = personalKeys;
 
     "cloudflare-api-token.age".publicKeys = personalKeys ++ [brontes steropes];
+
+    "minio-root-credentials.age".publicKeys = personalKeys ++ [phoebe];
   }

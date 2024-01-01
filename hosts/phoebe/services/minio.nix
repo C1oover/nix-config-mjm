@@ -1,6 +1,7 @@
-{
+{config, ...}: {
   services.minio = {
     enable = true;
+    rootCredentialsFile = config.age.secrets."minio-root-credentials".path;
   };
 
   systemd.services.minio.environment = {
@@ -9,6 +10,8 @@
     MINIO_PROMETHEUS_JOB_ID = "consul-services";
     MINIO_BROWSER_REDIRECT_URL = "https://minio-console.home.mattmoriarity.com";
   };
+
+  age.secrets."minio-root-credentials".file = ../../../secrets/minio-root-credentials.age;
 
   networking.firewall.allowedTCPPorts = [
     9000
