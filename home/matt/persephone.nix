@@ -19,5 +19,6 @@
     beeper
     discord
     krita
+    yt-dlp
   ];
 }
