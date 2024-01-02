@@ -3,6 +3,8 @@
     enable = true;
   };
 
+  users.users.sabnzbd.extraGroups = ["media"];
+
   services.prometheus.exporters.sabnzbd = {
     enable = true;
     openFirewall = true;

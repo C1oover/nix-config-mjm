@@ -12,6 +12,8 @@
 
   systemd.tmpfiles.rules = ["d /videos"];
 
+  users.groups.media = {};
+
   fileSystems."/videos" = {
     device = "//selene.home.mattmoriarity.com/media";
     fsType = "cifs";
@@ -22,6 +24,10 @@
       "x-systemd.device-timeout=5s"
       "x-systemd.mount-timeout=5s"
       "credentials=${config.age.secrets."smb-creds".path}"
+      "gid=media"
+      "forcegid"
+      "file_mode=0664"
+      "dir_mode=0775"
       "noperm"
       "nounix"
       "nobrl"

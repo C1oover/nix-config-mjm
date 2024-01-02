@@ -3,11 +3,13 @@
     enable = true;
     openFirewall = true;
   };
+  users.users.sonarr.extraGroups = ["media"];
 
   services.radarr = {
     enable = true;
     openFirewall = true;
   };
+  users.users.radarr.extraGroups = ["media"];
 
   services.consul.services = {
     sonarr = {
