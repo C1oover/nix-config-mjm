@@ -1,7 +1,6 @@
 {lib, ...}: let
   name = "grafana";
-  # grafana 9.5.1
-  image = "grafana/grafana-oss@sha256:00a4d2889c2b32f86c50673b1a82cb5b45349f1c24b0a882d11a53518e2ecae4";
+  image = "grafana/grafana-oss:10.2.3";
 in {
   nomad.jobs.grafana = {
     priority = 70;
