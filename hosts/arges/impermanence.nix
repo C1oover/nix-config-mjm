@@ -6,9 +6,9 @@
   # TODO remove later
   boot.initrd.preFailCommands = "allowShell=1";
 
-  age.identityPaths = ["/nix/persist/etc/ssh/ssh_host_ed25519_key"];
+  age.identityPaths = ["/persist/etc/ssh/ssh_host_ed25519_key"];
 
-  environment.persistence."/nix/persist" = {
+  environment.persistence."/persist" = {
     directories = [
       # TODO remove this later by setting up nix config to join tailscale automatically
       "/var/lib/tailscale"
