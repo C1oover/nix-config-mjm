@@ -31,7 +31,10 @@
   };
 
   swapDevices = [
-    {device = "/persist/swap";}
+    {
+      device = "/persist/swap";
+      size = 8 * 1024;
+    }
   ];
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";
