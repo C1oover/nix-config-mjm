@@ -20,16 +20,6 @@
     neededForBoot = true;
   };
 
-  fileSystems."/boot" = {
-    device = "/persist/boot";
-    options = ["bind" "X-fstrim.notrim"];
-  };
-
-  fileSystems."/nix" = {
-    device = "/persist/nix";
-    options = ["bind" "X-fstrim.notrim"];
-  };
-
   swapDevices = [
     {
       device = "/persist/swap";

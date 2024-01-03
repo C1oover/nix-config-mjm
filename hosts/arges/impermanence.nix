@@ -10,6 +10,8 @@
 
   environment.persistence."/persist" = {
     directories = [
+      "/nix"
+      "/boot"
       # TODO remove this later by setting up nix config to join tailscale automatically
       "/var/lib/tailscale"
     ];
