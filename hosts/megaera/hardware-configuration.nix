@@ -14,8 +14,15 @@
   boot.extraModulePackages = [];
 
   fileSystems."/" = {
+    device = "none";
+    fsType = "tmpfs";
+    options = ["defaults" "mode=755"];
+  };
+
+  fileSystems."/persist" = {
     device = "/dev/disk/by-label/nixos";
     fsType = "ext4";
+    neededForBoot = true;
   };
 
   swapDevices = [];
