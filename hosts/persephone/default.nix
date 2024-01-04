@@ -69,6 +69,7 @@
     enable = true;
     polkitPolicyOwners = ["matt"];
   };
+  programs._1password.enable = true;
 
   programs.steam.enable = true;
 
