@@ -1,6 +1,7 @@
 {
   imports = [
     ./hardware-configuration.nix
+    ./impermanence.nix
 
     ../common/global/nixos
     ../common/users/matt
@@ -17,6 +18,7 @@
   boot.loader.grub = {
     enable = true;
     device = "/dev/sda";
+    storePath = "/persist/nix/store";
   };
 
   services.qemuGuest.enable = true;
