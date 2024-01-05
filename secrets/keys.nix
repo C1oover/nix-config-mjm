@@ -12,6 +12,7 @@ rec {
   hypnos = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKn/ufUVxaDdTElgs61xfvsHsHn3RwpL7n6DO5qcBO0K";
   helios = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHUqz5VSSneEjQXfTrFiK8dfbclhClA9faM1gobRaqJy";
   chaos = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIO304X73466BZXsreuqu+9IWjIZExH6uw55Qia1+Nmhc";
+  leto = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJozGY8MtncB4AF+0k7l6jSxWJwQgLl5/YCpeXgCtKDH";
   orion = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDFDLe0Oy6quuAu4ARXnZCWNDiYTgfdLjy7kp7MB8n4G";
   nemesis = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIOBXAwxTy5mDt9jxKg1rhRryyNr5jkIPHnwAdLsQ1yI";
   aion = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKFrAsGVNyUfMfNvdix1ON28I/eu4MBhU6YdzzgRItQf";
@@ -37,6 +38,7 @@ rec {
       hypnos
       helios
       chaos
+      leto
       orion
       nemesis
       aion

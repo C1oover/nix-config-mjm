@@ -19,9 +19,9 @@ in
     "authelia-ldap-password.age".publicKeys = personalKeys ++ [orion];
     "authelia-approle-secret-id.age".publicKeys = personalKeys ++ [orion];
 
-    "netbox-secret-key.age".publicKeys = personalKeys ++ [nemesis];
-    "netbox-approle-secret-id.age".publicKeys = personalKeys ++ [nemesis];
-    "attic-approle-secret-id.age".publicKeys = personalKeys ++ [nemesis];
+    "netbox-secret-key.age".publicKeys = personalKeys ++ [nemesis leto];
+    "netbox-approle-secret-id.age".publicKeys = personalKeys ++ [nemesis leto];
+    "attic-approle-secret-id.age".publicKeys = personalKeys ++ [nemesis leto];
 
     "paperless-approle-secret-id.age".publicKeys = personalKeys ++ [aion];
 
