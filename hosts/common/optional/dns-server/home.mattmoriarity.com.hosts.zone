@@ -15,6 +15,7 @@ helios                IN  A     10.0.2.35
 selene                IN  A     10.0.2.36
 hypnos                IN  A     10.0.2.38
 megaera               IN  A     10.0.2.40
+leto                  IN  A     10.0.2.41
 tisiphone             IN  A     10.0.2.42
 alecto                IN  A     10.0.2.43
 orion                 IN  A     10.0.2.44
@@ -45,6 +46,7 @@ thanatos              IN  AAAA  2601:282:167f:3eec:68d1:38ff:fec3:4895
 orion                 IN  AAAA  2601:282:167f:3eec:8474:6eff:fe53:d6c4
 selene                IN  AAAA  2601:282:167f:3eec:8491:1bff:fe35:d9c1
 tisiphone             IN  AAAA  2601:282:167f:3eec:8c8d:b9ff:fe40:fcd
+leto                  IN  AAAA  2601:282:167f:3eec:acf4:f0ff:feb0:3126
 rhea                  IN  AAAA  2601:282:167f:3eec:b0c5:55ff:fe20:9218
 helios                IN  AAAA  2601:282:167f:3eec:bcf8:67ff:fecc:c859
 chaos                 IN  AAAA  2601:282:167f:3eec:be24:11ff:fee8:9f09
