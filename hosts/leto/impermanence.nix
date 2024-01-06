@@ -14,6 +14,11 @@
         group = "netbox";
       }
       "/var/lib/docker/volumes"
+      {
+        directory = "/var/lib/paperless";
+        user = "paperless";
+        group = "paperless";
+      }
     ];
     files = [
       "/etc/machine-id"

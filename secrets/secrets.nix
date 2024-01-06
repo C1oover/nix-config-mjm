@@ -23,7 +23,7 @@ in
     "netbox-approle-secret-id.age".publicKeys = personalKeys ++ [nemesis leto];
     "attic-approle-secret-id.age".publicKeys = personalKeys ++ [nemesis leto];
 
-    "paperless-approle-secret-id.age".publicKeys = personalKeys ++ [aion];
+    "paperless-approle-secret-id.age".publicKeys = personalKeys ++ [aion leto];
 
     "alertmanager-env.age".publicKeys = personalKeys ++ [gaia];
 

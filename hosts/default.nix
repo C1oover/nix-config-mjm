@@ -221,7 +221,7 @@ in {
         trap finish EXIT
 
         if [ "$ARCH" = "x86_64" ]; then
-          targets=(.#aion .#alecto .#cronus .#chaos .#gaia .#helios .#leto .#megaera .#nemesis .#orion .#phoebe .#rhea .#thanatos .#themis .#tisiphone .#hypnos)
+          targets=(.#alecto .#cronus .#chaos .#gaia .#helios .#leto .#megaera .#nemesis .#orion .#phoebe .#rhea .#thanatos .#themis .#tisiphone .#hypnos)
         elif [ "$ARCH" = "arm64" ]; then
           # deploy to arges first, because it may need to reload the gitlab-runner, which fails if
           # the ingress is unavailable, which might temporarily happen when deploying to the other

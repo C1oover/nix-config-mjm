@@ -12,6 +12,7 @@
     ./services/actual.nix
     ./services/attic.nix
     ./services/netbox.nix
+    ./services/paperless.nix
   ];
 
   networking.hostName = "leto";
