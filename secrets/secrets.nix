@@ -10,14 +10,16 @@ in
 
     "gitlab-runner-registration.age".publicKeys = personalKeys ++ [hypnos arges];
 
-    "authelia-jwt-secret.age".publicKeys = personalKeys ++ [orion];
-    "authelia-jwt-private-key.age".publicKeys = personalKeys ++ [orion];
-    "authelia-storage-encryption-key.age".publicKeys = personalKeys ++ [orion];
-    "authelia-session-secret.age".publicKeys = personalKeys ++ [orion];
-    "authelia-hmac-secret.age".publicKeys = personalKeys ++ [orion];
-    "authelia-smtp-password.age".publicKeys = personalKeys ++ [orion];
-    "authelia-ldap-password.age".publicKeys = personalKeys ++ [orion];
-    "authelia-approle-secret-id.age".publicKeys = personalKeys ++ [orion];
+    "lldap-approle-secret-id.age".publicKeys = personalKeys ++ [leto];
+
+    "authelia-jwt-secret.age".publicKeys = personalKeys ++ [orion leto];
+    "authelia-jwt-private-key.age".publicKeys = personalKeys ++ [orion leto];
+    "authelia-storage-encryption-key.age".publicKeys = personalKeys ++ [orion leto];
+    "authelia-session-secret.age".publicKeys = personalKeys ++ [orion leto];
+    "authelia-hmac-secret.age".publicKeys = personalKeys ++ [orion leto];
+    "authelia-smtp-password.age".publicKeys = personalKeys ++ [orion leto];
+    "authelia-ldap-password.age".publicKeys = personalKeys ++ [orion leto];
+    "authelia-approle-secret-id.age".publicKeys = personalKeys ++ [orion leto];
 
     "netbox-secret-key.age".publicKeys = personalKeys ++ [nemesis leto];
     "netbox-approle-secret-id.age".publicKeys = personalKeys ++ [nemesis leto];

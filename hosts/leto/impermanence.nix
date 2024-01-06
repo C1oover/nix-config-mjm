@@ -19,6 +19,7 @@
         user = "paperless";
         group = "paperless";
       }
+      "/var/lib/private/lldap"
     ];
     files = [
       "/etc/machine-id"

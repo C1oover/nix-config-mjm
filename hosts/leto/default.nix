@@ -11,6 +11,8 @@
 
     ./services/actual.nix
     ./services/attic.nix
+    ./services/authelia.nix
+    ./services/lldap.nix
     ./services/netbox.nix
     ./services/paperless.nix
   ];
