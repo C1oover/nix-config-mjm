@@ -27,6 +27,7 @@
       "grafana"
       "homelab"
       "linkding"
+      "lldap"
       "miniflux"
       "netbox"
       "paperless"
@@ -57,6 +58,11 @@
       }
       {
         name = "linkding";
+        ensureDBOwnership = true;
+        ensureClauses.login = false;
+      }
+      {
+        name = "lldap";
         ensureDBOwnership = true;
         ensureClauses.login = false;
       }

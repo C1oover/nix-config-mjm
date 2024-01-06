@@ -1,4 +1,15 @@
 {
+  vault.databases.roles.lldap = {
+    ttl = "long";
+  };
+  vault.approles.roles.lldap = {};
+
+  vault.policies.lldap.text = ''
+    path "database/creds/lldap" {
+      capabilities = ["read"]
+    }
+  '';
+
   vault.databases.roles.authelia = {
     ttl = "long";
   };
