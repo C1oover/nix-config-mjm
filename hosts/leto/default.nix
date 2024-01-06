@@ -15,6 +15,7 @@
     ./services/lldap.nix
     ./services/netbox.nix
     ./services/paperless.nix
+    ./services/prometheus
   ];
 
   networking.hostName = "leto";

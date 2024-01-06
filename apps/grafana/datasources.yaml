@@ -4,9 +4,9 @@ datasources:
   - name: Prometheus
     type: prometheus
     access: proxy
-    url: http://10.0.2.46:9090
+    url: http://10.0.2.41:9090
     isDefault: true
-    version: 1
+    version: 2
     editable: false
     uid: prom_homelab
   - name: Loki
@@ -20,7 +20,7 @@ datasources:
   - name: Alertmanager
     type: alertmanager
     access: proxy
-    url: http://10.0.2.46:9093
+    url: http://10.0.2.41:9093
     jsonData:
       implementation: prometheus
       handleGrafanaManagedAlerts: true

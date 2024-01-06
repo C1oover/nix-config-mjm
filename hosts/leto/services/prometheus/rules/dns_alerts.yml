@@ -1,0 +1,52 @@
+groups:
+  - name: dns_alerts
+    rules:
+      - alert: ExternalDNSFailing
+        expr: probe_success{probe_type="dns",instance!~"10.0.2.4\\d"} < 0.5
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: External DNS queries are failing
+          description: >
+            One or more external DNS servers are unable to look up Google's home page. This might mean your internet is down, though I'm not sure how you're getting this alert in that case.
+
+      - alert: DNSFailingExternalSite
+        expr: (min(probe_success{probe_type="dns",instance!~"10.0.2.4\\d"}) > 0.5) and (min(probe_success{probe_type="dns",probe_scope="public",instance="10.0.2.101"}) < 0.5)
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: DNS queries for external sites are failing
+          description: >
+            Internal DNS is unable to look up Google's home page, but external DNS is able to look it up without issue. Something is probably wrong with PiHole's configuration.
+
+      - alert: DNSFailingInternalNode
+        expr: probe_success{probe_type="dns",probe_scope="private"} < 0.5
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: DNS queries for internal hosts are failing
+          description: >
+            A DNS server is unable to look up the address for megaera, or it's not giving the expected IP address.
+
+      - alert: DNSFailingInternalSite
+        expr: probe_success{probe_type="dns",probe_scope="private-cname"} < 0.5
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: DNS queries for internal sites are failing
+          description: >
+            A DNS server is unable to look up the address for the Homelab app, or it's not returning a CNAME to a Raspberry Pi node.
+
+      - alert: NoAdBlocking
+        expr: probe_success{probe_type="dns",probe_scope="ad-blocking"} < 0.5
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: Ads are not being blocked by DNS
+          description: >
+            DNS queries for ads are not being blocked as expected. It may be that Blocky is down or not registered in Consul, so DNS is falling back to using Google DNS directly.

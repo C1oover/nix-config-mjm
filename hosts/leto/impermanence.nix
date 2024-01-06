@@ -8,18 +8,23 @@
   environment.persistence."/persist" = {
     directories = [
       "/nix"
+      "/var/lib/docker/volumes"
+      "/var/lib/private/lldap"
       {
         directory = "/var/lib/netbox";
         user = "netbox";
         group = "netbox";
       }
-      "/var/lib/docker/volumes"
       {
         directory = "/var/lib/paperless";
         user = "paperless";
         group = "paperless";
       }
-      "/var/lib/private/lldap"
+      {
+        directory = "/var/lib/prometheus2";
+        user = "prometheus";
+        group = "prometheus";
+      }
     ];
     files = [
       "/etc/machine-id"
