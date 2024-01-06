@@ -9,6 +9,7 @@
     ../common/optional/server
     ../common/optional/consul-agent.nix
 
+    ./services/actual.nix
     ./services/attic.nix
     ./services/netbox.nix
   ];

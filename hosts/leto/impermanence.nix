@@ -13,6 +13,7 @@
         user = "netbox";
         group = "netbox";
       }
+      "/var/lib/docker/volumes"
     ];
     files = [
       "/etc/machine-id"
