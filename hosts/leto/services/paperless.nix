@@ -44,39 +44,26 @@ in {
 
   systemd.tmpfiles.rules = ["d /run/secrets/paperless 0700 paperless paperless - -"];
 
-  services.vault-agent.instances.paperless.settings = let
-    restartScript = lib.getExe (pkgs.writeShellApplication {
-      name = "paperless-restart";
-      runtimeInputs = [pkgs.systemd];
-      text = ''
-        systemctl restart paperless-scheduler.service
-        systemctl restart paperless-task-queue.service
-        systemctl restart paperless-consumer.service
-        systemctl restart paperless-web.service
-      '';
-    });
-    va = import ../../../lib/vault-agent.nix {inherit pkgs;};
-  in
-    va.mkConfig {
-      roleId = "11a736d8-ef30-f7aa-1d1e-72029ce45fb4";
-      secretIdFile = config.age.secrets."paperless-approle-secret-id".path;
-      templates = [
-        {
-          contents = ''
-            {{ with secret "database/creds/paperless" }}
-            PAPERLESS_DBUSER={{ .Data.username }}
-            PAPERLESS_DBPASS={{ .Data.password }}
-            {{ end }}
-            PAPERLESS_SECRET_KEY={{ with secret "kv/paperless" }}{{ .Data.data.secret_key }}{{ end }}
-          '';
-          destination = "/run/secrets/paperless/paperless.env";
-          exec = {
-            command = restartScript;
-            timeout = "5m";
-          };
-        }
-      ];
-    };
+  services.vault-agent.instances.paperless = {
+    roleId = "11a736d8-ef30-f7aa-1d1e-72029ce45fb4";
+    secretIdFile = config.age.secrets."paperless-approle-secret-id".path;
+    templates = [
+      {
+        contents = ''
+          {{ with secret "database/creds/paperless" }}
+          PAPERLESS_DBUSER={{ .Data.username }}
+          PAPERLESS_DBPASS={{ .Data.password }}
+          {{ end }}
+          PAPERLESS_SECRET_KEY={{ with secret "kv/paperless" }}{{ .Data.data.secret_key }}{{ end }}
+        '';
+        destination = "/run/secrets/paperless/paperless.env";
+        exec = {
+          command = "systemctl restart paperless-scheduler.service paperless-task-queue.service paperless-consumer.service paperless-web.service";
+          timeout = "5m";
+        };
+      }
+    ];
+  };
 
   # Provide DB credentials where needed, and open network access to be able to talk
   # to the PostgreSQL server.

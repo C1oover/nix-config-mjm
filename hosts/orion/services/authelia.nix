@@ -283,27 +283,24 @@ in {
 
   systemd.tmpfiles.rules = ["d /run/secrets/authelia 0700 ${user} ${group} - -"];
 
-  services.vault-agent.instances.authelia.settings = let
-    va = import ../../../lib/vault-agent.nix {inherit pkgs;};
-  in
-    va.mkConfig {
-      roleId = "1f94fc98-0934-7027-a34f-ea94f3268def";
-      secretIdFile = config.age.secrets."authelia-approle-secret-id".path;
-      templates = [
-        {
-          contents = ''
-            {{ with secret "database/creds/authelia" }}
-            storage:
-              postgres:
-                username: {{ .Data.username | toJSON }}
-                password: {{ .Data.password | toJSON }}
-            {{ end }}
-          '';
-          destination = "/run/secrets/authelia/db-config.yml";
-          command = "systemctl restart authelia-main.service authelia-external.service";
-        }
-      ];
-    };
+  services.vault-agent.instances.authelia = {
+    roleId = "1f94fc98-0934-7027-a34f-ea94f3268def";
+    secretIdFile = config.age.secrets."authelia-approle-secret-id".path;
+    templates = [
+      {
+        contents = ''
+          {{ with secret "database/creds/authelia" }}
+          storage:
+            postgres:
+              username: {{ .Data.username | toJSON }}
+              password: {{ .Data.password | toJSON }}
+          {{ end }}
+        '';
+        destination = "/run/secrets/authelia/db-config.yml";
+        command = "systemctl restart authelia-main.service authelia-external.service";
+      }
+    ];
+  };
 
   age.secrets = {
     "authelia-hmac-secret" = {
