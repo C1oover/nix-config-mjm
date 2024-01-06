@@ -11,7 +11,6 @@
     ../common/optional/server
     ../common/optional/consul-agent.nix
     ../common/optional/nix-remote.nix
-    ./services/netbox.nix
     ./services/actual.nix
     ./services/taskserver.nix
   ];

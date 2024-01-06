@@ -1,18 +1,25 @@
 {
   config,
+  lib,
   pkgs,
   ...
 }: {
+  # The NetBox module only really supports running these locally, but I don't want to do that.
+  services.redis.servers.netbox.enable = lib.mkForce false;
+  services.postgresql.enable = lib.mkForce false;
+
   services.netbox = {
     enable = true;
-    listenAddress = "0.0.0.0";
+    package = pkgs.netbox_3_6;
+    listenAddress = "[::]";
     settings = {
       ALLOWED_HOSTS = [
         "netbox.home.mattmoriarity.com"
         "netbox.service.consul"
-        "10.0.2.45"
+        "10.0.2.41"
       ];
-      REDIS = {
+      DATABASE = lib.mkForce {};
+      REDIS = lib.mkForce {
         tasks = {
           HOST = "redis.service.consul";
           PORT = 6379;
@@ -106,7 +113,10 @@
             {{ end }}
           '';
           destination = "/run/secrets/netbox/db-config.json";
-          command = "systemctl restart netbox.service";
+          exec = {
+            command = "systemctl restart netbox.service";
+            timeout = "5m";
+          };
         }
       ];
     };

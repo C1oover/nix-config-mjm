@@ -10,6 +10,7 @@
     ../common/optional/consul-agent.nix
 
     ./services/attic.nix
+    ./services/netbox.nix
   ];
 
   networking.hostName = "leto";

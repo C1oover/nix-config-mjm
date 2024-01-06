@@ -6,7 +6,14 @@
   age.identityPaths = ["/persist/etc/ssh/ssh_host_ed25519_key"];
 
   environment.persistence."/persist" = {
-    directories = ["/nix"];
+    directories = [
+      "/nix"
+      {
+        directory = "/var/lib/netbox";
+        user = "netbox";
+        group = "netbox";
+      }
+    ];
     files = [
       "/etc/machine-id"
       "/etc/ssh/ssh_host_ed25519_key"
