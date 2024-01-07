@@ -11,7 +11,6 @@
     ./consul-exporter
     ./gitlab
     ./grafana
-    ./guacamole
     ./homelab
     ./ingress
     ./linkding
