@@ -21,7 +21,6 @@
     ./minio
     ./netbox
     ./nomad
-    ./nut
     ./otel
     ./paperless
     ./prometheus

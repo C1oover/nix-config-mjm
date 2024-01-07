@@ -31,6 +31,41 @@
     };
   };
 
+  services.prometheus.exporters.nut = let
+    enabledVariables = [
+      "battery.charge"
+      "battery.runtime"
+      "battery.voltage"
+      "battery.voltage.nominal"
+      "input.voltage"
+      "input.voltage.nominal"
+      "ups.load"
+      "ups.status"
+    ];
+  in {
+    enable = true;
+    openFirewall = true;
+    extraFlags = [
+      "--nut.vars_enable=${builtins.concatStringsSep "," enabledVariables}"
+    ];
+  };
+
+  services.consul.services.nut-exporter = let
+    inherit (config.services.prometheus.exporters.nut) port;
+  in {
+    inherit port;
+    meta.metrics_path = "/ups_metrics";
+
+    checks = [
+      {
+        name = "nut-exporter is ready";
+        http = "http://localhost:${toString port}/";
+        interval = "15s";
+        timeout = "10s";
+      }
+    ];
+  };
+
   age.secrets = {
     "nut-primary-password".file = ../../../secrets/nut-primary-password.age;
     "nut-secondary-password".file = ../../../secrets/nut-secondary-password.age;
