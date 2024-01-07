@@ -24,7 +24,6 @@
     ./paperless
     ./prometheus
     ./proxmox
-    ./teamcity.nix
     ./vault
   ];
 }
