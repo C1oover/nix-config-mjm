@@ -48,7 +48,6 @@ in {
 
       # Proxmox LXC containers
       nemesis = mkNixos [./nemesis];
-      aion = mkNixos [./aion];
       gaia = mkNixos [./gaia];
       rhea = mkNixos [./rhea];
       cronus = mkNixos [./cronus];
@@ -87,7 +86,6 @@ in {
           }
           // cfg;
       in {
-        aion = mkNode "aion" {};
         alecto = mkNode "alecto" {};
         arges = mkNode "arges" {};
         brontes = mkNode "brontes" {};
