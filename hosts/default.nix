@@ -47,7 +47,6 @@ in {
       leto = mkNixos [./leto];
 
       # Proxmox LXC containers
-      orion = mkNixos [./orion];
       nemesis = mkNixos [./nemesis];
       aion = mkNixos [./aion];
       gaia = mkNixos [./gaia];
@@ -103,7 +102,6 @@ in {
         nyx = mkNode "nyx" {
           hostname = "nyx.mattmoriarity.com";
         };
-        orion = mkNode "orion" {};
         phoebe = mkNode "phoebe" {};
         rhea = mkNode "rhea" {};
         steropes = mkNode "steropes" {};
