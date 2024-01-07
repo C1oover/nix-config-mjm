@@ -3,6 +3,7 @@
     ttl = "short";
   };
   vault.approles.roles.paperless = {};
+  vault.approles.roles.leto.tokenPolicies = ["paperless"];
 
   vault.policies.paperless.text = ''
     # Allow paperless jail to read credentials for accessing paperless database

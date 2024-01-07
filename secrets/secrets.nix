@@ -10,7 +10,7 @@ in
 
     "gitlab-runner-registration.age".publicKeys = personalKeys ++ [hypnos arges];
 
-    "lldap-approle-secret-id.age".publicKeys = personalKeys ++ [leto];
+    "leto-approle-secret-id.age".publicKeys = personalKeys ++ [leto];
     "authelia-jwt-secret.age".publicKeys = personalKeys ++ [orion leto];
     "authelia-jwt-private-key.age".publicKeys = personalKeys ++ [orion leto];
     "authelia-storage-encryption-key.age".publicKeys = personalKeys ++ [orion leto];
@@ -18,11 +18,7 @@ in
     "authelia-hmac-secret.age".publicKeys = personalKeys ++ [orion leto];
     "authelia-smtp-password.age".publicKeys = personalKeys ++ [orion leto];
     "authelia-ldap-password.age".publicKeys = personalKeys ++ [orion leto];
-    "authelia-approle-secret-id.age".publicKeys = personalKeys ++ [orion leto];
     "netbox-secret-key.age".publicKeys = personalKeys ++ [nemesis leto];
-    "netbox-approle-secret-id.age".publicKeys = personalKeys ++ [nemesis leto];
-    "attic-approle-secret-id.age".publicKeys = personalKeys ++ [nemesis leto];
-    "paperless-approle-secret-id.age".publicKeys = personalKeys ++ [aion leto];
     "alertmanager-env.age".publicKeys = personalKeys ++ [gaia leto];
     "pve-exporter-config.age".publicKeys = personalKeys ++ [leto];
 

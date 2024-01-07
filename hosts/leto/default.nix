@@ -16,6 +16,7 @@
     ./services/netbox.nix
     ./services/paperless.nix
     ./services/prometheus
+    ./services/vault-agent.nix
   ];
 
   networking.hostName = "leto";

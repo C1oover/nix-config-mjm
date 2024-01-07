@@ -25,6 +25,8 @@
     }
   '';
 
+  vault.approles.roles.leto.tokenPolicies = ["lldap" "authelia"];
+
   ingress.virtualHosts = {
     authelia = {
       upstream.service.name = "authelia";

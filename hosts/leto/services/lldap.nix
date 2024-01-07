@@ -35,21 +35,15 @@
 
   systemd.tmpfiles.rules = ["d /run/secrets/lldap 0700"];
 
-  services.vault-agent.instances.lldap = {
-    roleId = "e3b3822d-dd2d-61f3-8d15-25ff21f394b7";
-    secretIdFile = config.age.secrets."lldap-approle-secret-id".path;
-    templates = [
-      {
-        contents = ''
-          {{ with secret "database/creds/lldap" }}
-          LLDAP_DATABASE_URL=postgres://{{ .Data.username }}:{{ .Data.password }}@postgresql.service.consul/lldap
-          {{ end }}
-        '';
-        destination = "/run/secrets/lldap/db.env";
-        command = "systemctl restart lldap.service";
-      }
-    ];
-  };
-
-  age.secrets."lldap-approle-secret-id".file = ../../../secrets/lldap-approle-secret-id.age;
+  services.vault-agent.instances.main.templates = [
+    {
+      contents = ''
+        {{ with secret "database/creds/lldap" }}
+        LLDAP_DATABASE_URL=postgres://{{ .Data.username }}:{{ .Data.password }}@postgresql.service.consul/lldap
+        {{ end }}
+      '';
+      destination = "/run/secrets/lldap/db.env";
+      command = "systemctl restart lldap.service";
+    }
+  ];
 }
