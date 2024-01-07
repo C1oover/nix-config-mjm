@@ -8,7 +8,6 @@ consul  IN  CNAME ingress-http.service.consul.
 containers  IN  CNAME ingress-http.service.consul.
 downloads  IN  CNAME ingress-http.service.consul.
 grafana  IN  CNAME ingress-http.service.consul.
-guacamole  IN  CNAME ingress-http.service.consul.
 homelab  IN  CNAME ingress-http.service.consul.
 ldap  IN  CNAME ingress-http.service.consul.
 media  IN  CNAME ingress-http.service.consul.
