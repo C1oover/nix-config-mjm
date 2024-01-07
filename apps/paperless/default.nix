@@ -2,7 +2,6 @@
   vault.databases.roles.paperless = {
     ttl = "short";
   };
-  vault.approles.roles.paperless = {};
   vault.approles.roles.leto.tokenPolicies = ["paperless"];
 
   vault.policies.paperless.text = ''

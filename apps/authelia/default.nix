@@ -2,7 +2,6 @@
   vault.databases.roles.lldap = {
     ttl = "long";
   };
-  vault.approles.roles.lldap = {};
 
   vault.policies.lldap.text = ''
     path "database/creds/lldap" {
@@ -13,7 +12,6 @@
   vault.databases.roles.authelia = {
     ttl = "long";
   };
-  vault.approles.roles.authelia = {};
 
   vault.policies.authelia.text = ''
     path "kv/data/authelia" {
