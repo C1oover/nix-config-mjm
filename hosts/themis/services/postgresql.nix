@@ -50,7 +50,11 @@
         # this module can't do that
         ensureClauses.login = false;
       }
-      # grafana uses the grafana_user role, so it can't use this
+      {
+        name = "grafana";
+        ensureDBOwnership = true;
+        ensureClauses.login = false;
+      }
       {
         name = "homelab";
         ensureDBOwnership = true;
@@ -76,7 +80,11 @@
         ensureDBOwnership = true;
         ensureClauses.login = false;
       }
-      # paperless uses the paperless_user role, so it can't use this
+      {
+        name = "paperless";
+        ensureDBOwnership = true;
+        ensureClauses.login = false;
+      }
     ];
   };
 

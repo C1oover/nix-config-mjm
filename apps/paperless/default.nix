@@ -1,6 +1,5 @@
 {
   vault.databases.roles.paperless = {
-    roleName = "paperless_user";
     ttl = "short";
   };
   vault.approles.roles.paperless = {};

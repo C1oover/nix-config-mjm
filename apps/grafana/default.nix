@@ -67,7 +67,6 @@ in {
   };
 
   vault.databases.roles.grafana = {
-    roleName = "grafana_user";
     ttl = "short";
   };
 
