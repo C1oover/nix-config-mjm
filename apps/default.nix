@@ -27,7 +27,6 @@
     ./prometheus
     ./proxmox
     ./pushgateway
-    ./pve-exporter
     ./teamcity.nix
     ./vault
   ];

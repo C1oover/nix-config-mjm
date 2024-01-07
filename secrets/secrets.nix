@@ -24,6 +24,7 @@ in
     "attic-approle-secret-id.age".publicKeys = personalKeys ++ [nemesis leto];
     "paperless-approle-secret-id.age".publicKeys = personalKeys ++ [aion leto];
     "alertmanager-env.age".publicKeys = personalKeys ++ [gaia leto];
+    "pve-exporter-config.age".publicKeys = personalKeys ++ [leto];
 
     "ngrok.age".publicKeys = [matt-athena athena];
 

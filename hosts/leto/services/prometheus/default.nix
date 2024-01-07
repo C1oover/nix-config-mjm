@@ -1,6 +1,7 @@
 {config, ...}: {
   imports = [
     ./blackbox.nix
+    ./pve-exporter.nix
     ./jobs
     ./rules
   ];
