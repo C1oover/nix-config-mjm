@@ -25,7 +25,6 @@
     ./paperless
     ./prometheus
     ./proxmox
-    ./pushgateway
     ./teamcity.nix
     ./vault
   ];
