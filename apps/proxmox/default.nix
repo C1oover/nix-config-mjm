@@ -8,7 +8,7 @@
     version = ">= 1.0.0";
   };
   terraform.provider.proxmox = {
-    pm_api_url = "https://proxmox.home.mattmoriarity.com/api2/json";
+    pm_api_url = "https://proxmox.midna.dev/api2/json";
     pm_tls_insecure = true;
     pm_api_token_id = "terraform-prov@pam!terraform-prov";
     pm_debug = true;
