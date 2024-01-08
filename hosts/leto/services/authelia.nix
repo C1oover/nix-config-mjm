@@ -89,6 +89,7 @@ in {
         display_name_attribute = "displayName";
         user = "uid=service,ou=people,dc=home,dc=mattmoriarity,dc=com";
       };
+      access_control.default_policy = "two_factor";
       session.domain = "home.mattmoriarity.com";
       session.redis = {
         host = "redis.service.consul";
