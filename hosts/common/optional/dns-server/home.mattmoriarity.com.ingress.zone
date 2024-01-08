@@ -1,6 +1,5 @@
 actual  IN  CNAME ingress-http.service.consul.
 adminer  IN  CNAME ingress-http.service.consul.
-alertmanager  IN  CNAME ingress-http.service.consul.
 attic  IN  CNAME ingress-http.service.consul.
 atuin  IN  CNAME ingress-http.service.consul.
 authelia  IN  CNAME ingress-http.service.consul.
@@ -9,4 +8,3 @@ grafana  IN  CNAME ingress-http.service.consul.
 homelab  IN  CNAME ingress-http.service.consul.
 ldap  IN  CNAME ingress-http.service.consul.
 media  IN  CNAME ingress-http.service.consul.
-prometheus  IN  CNAME ingress-http.service.consul.
