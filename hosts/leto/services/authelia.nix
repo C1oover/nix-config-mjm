@@ -94,27 +94,6 @@ in {
             networks = ["10.0.2.104"];
             policy = "bypass";
           }
-          {
-            domain = "downloads.home.mattmoriarity.com";
-            resources = [
-              "^/api.*$"
-            ];
-            policy = "bypass";
-          }
-          {
-            domain = "tv.home.mattmoriarity.com";
-            resources = [
-              "^/api/.*$"
-            ];
-            policy = "bypass";
-          }
-          {
-            domain = "movies.home.mattmoriarity.com";
-            resources = [
-              "^/api/.*$"
-            ];
-            policy = "bypass";
-          }
         ];
       };
       session.domain = "home.mattmoriarity.com";
@@ -194,6 +173,27 @@ in {
               "^/v1/.*$"
               "^/accounts/ClientLogin$"
               "^/reader/api/0/.*$"
+            ];
+            policy = "bypass";
+          }
+          {
+            domain = "downloads.midna.dev";
+            resources = [
+              "^/api.*$"
+            ];
+            policy = "bypass";
+          }
+          {
+            domain = "tv.midna.dev";
+            resources = [
+              "^/api/.*$"
+            ];
+            policy = "bypass";
+          }
+          {
+            domain = "movies.midna.dev";
+            resources = [
+              "^/api/.*$"
             ];
             policy = "bypass";
           }
