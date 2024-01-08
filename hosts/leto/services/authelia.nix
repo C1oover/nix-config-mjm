@@ -86,16 +86,6 @@ in {
         display_name_attribute = "displayName";
         user = "uid=service,ou=people,dc=home,dc=mattmoriarity,dc=com";
       };
-      access_control = {
-        default_policy = "two_factor";
-        rules = [
-          {
-            domain = "*.home.mattmoriarity.com";
-            networks = ["10.0.2.104"];
-            policy = "bypass";
-          }
-        ];
-      };
       session.domain = "home.mattmoriarity.com";
       session.redis = {
         host = "redis.service.consul";
