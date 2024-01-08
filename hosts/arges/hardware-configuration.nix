@@ -10,7 +10,7 @@
   fileSystems."/" = {
     device = "none";
     fsType = "tmpfs";
-    options = ["defaults" "mode=755"];
+    options = ["defaults" "mode=755" "size=20G"];
   };
 
   fileSystems."/persist" = {
@@ -23,7 +23,7 @@
   swapDevices = [
     {
       device = "/persist/swap";
-      size = 8 * 1024;
+      size = 20 * 1024;
     }
   ];
 

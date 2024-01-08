@@ -16,7 +16,7 @@
   fileSystems."/" = {
     device = "none";
     fsType = "tmpfs";
-    options = ["defaults" "mode=755"];
+    options = ["defaults" "mode=755" "size=24G"];
   };
 
   fileSystems."/nix" = {
@@ -32,6 +32,7 @@
 
   swapDevices = [
     {device = "/dev/disk/by-label/swap";}
+    {device = "/dev/disk/by-label/swap2";}
   ];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
