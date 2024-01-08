@@ -9,7 +9,7 @@ in {
   services.paperless = {
     enable = true;
     address = "[::]";
-    extraConfig = {
+    settings = {
       PAPERLESS_REDIS = "redis://redis.service.consul:6379";
       PAPERLESS_DBHOST = "postgresql.service.consul";
       PAPERLESS_DBPORT = "5432";
@@ -17,9 +17,11 @@ in {
       PAPERLESS_DBSSLMODE = "disable";
       PAPERLESS_URL = "https://paper.midna.dev";
       PAPERLESS_ALLOWED_HOSTS = "paperless.service.consul,localhost";
-      PAPERLESS_ENABLE_HTTP_REMOTE_USER = "true";
+      PAPERLESS_ENABLE_HTTP_REMOTE_USER = true;
       PAPERLESS_HTTP_REMOTE_USER_HEADER_NAME = "HTTP_REMOTE_USER";
-      PAPERLESS_OCR_USER_ARGS = "{\"invalidate_digital_signatures\":true}";
+      PAPERLESS_OCR_USER_ARGS = {
+        invalidate_digital_signatures = true;
+      };
     };
   };
 
