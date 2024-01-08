@@ -21,12 +21,7 @@
       ipHash = true;
     };
 
+    external = true;
     enableAuthProxy = false;
-
-    extraLocationConfig = ''
-      proxy_ssl_trusted_certificate /etc/nginx/ssl/proxmox.ca.crt;
-    '';
   };
-
-  ingress.extraTemplates."secrets/proxmox.ca.crt".source = ./proxmox.ca.crt;
 }

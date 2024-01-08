@@ -38,6 +38,7 @@
         "https://artemis.home.mattmoriarity.com:8006"
         "https://apollo.home.mattmoriarity.com:8006"
         "https://proxmox.home.mattmoriarity.com"
+        "https://proxmox.midna.dev"
       ];
       scopes = ["openid" "profile" "email"];
       userinfo_signing_algorithm = "none";
