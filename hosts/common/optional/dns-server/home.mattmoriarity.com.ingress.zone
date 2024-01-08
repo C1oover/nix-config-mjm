@@ -14,5 +14,4 @@ minio  IN  CNAME ingress-http.service.consul.
 minio-console  IN  CNAME ingress-http.service.consul.
 nomad  IN  CNAME ingress-http.service.consul.
 prometheus  IN  CNAME ingress-http.service.consul.
-proxmox  IN  CNAME ingress-http.service.consul.
 vault  IN  CNAME ingress-http.service.consul.
