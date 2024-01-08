@@ -5,6 +5,8 @@
       ipHash = true;
     };
 
+    external = true;
+
     extraLocationConfig = ''
       # Nomad blocking queries will remain open for a default of 5 minutes.
       # Increase the proxy timeout to accommodate this timeout with an
