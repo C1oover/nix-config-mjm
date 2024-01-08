@@ -4,7 +4,6 @@ alertmanager  IN  CNAME ingress-http.service.consul.
 attic  IN  CNAME ingress-http.service.consul.
 atuin  IN  CNAME ingress-http.service.consul.
 authelia  IN  CNAME ingress-http.service.consul.
-consul  IN  CNAME ingress-http.service.consul.
 containers  IN  CNAME ingress-http.service.consul.
 grafana  IN  CNAME ingress-http.service.consul.
 homelab  IN  CNAME ingress-http.service.consul.
@@ -12,6 +11,4 @@ ldap  IN  CNAME ingress-http.service.consul.
 media  IN  CNAME ingress-http.service.consul.
 minio  IN  CNAME ingress-http.service.consul.
 minio-console  IN  CNAME ingress-http.service.consul.
-nomad  IN  CNAME ingress-http.service.consul.
 prometheus  IN  CNAME ingress-http.service.consul.
-vault  IN  CNAME ingress-http.service.consul.
