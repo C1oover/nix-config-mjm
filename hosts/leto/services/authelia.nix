@@ -21,6 +21,8 @@
       redirect_uris = [
         "https://vault.home.mattmoriarity.com/oidc/callback"
         "https://vault.home.mattmoriarity.com/ui/vault/auth/oidc/oidc/callback"
+        "https://vault.midna.dev/oidc/callback"
+        "https://vault.midna.dev/ui/vault/auth/oidc/oidc/callback"
         "http://localhost:8250/oidc/callback"
       ];
       scopes = ["openid" "profile" "groups" "email"];
