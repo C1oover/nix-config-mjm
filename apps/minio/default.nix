@@ -8,6 +8,7 @@
     minio = {
       upstream.service.name = "minio";
 
+      external = true;
       enableAuthProxy = false;
       proxyWebsockets = false;
 
@@ -26,6 +27,7 @@
     minio-console = {
       upstream.service.name = "minio-console";
 
+      external = true;
       enableAuthProxy = false;
 
       extraServerConfig = ''

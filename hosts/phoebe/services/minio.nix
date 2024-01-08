@@ -8,7 +8,7 @@
     MINIO_PROMETHEUS_AUTH_TYPE = "public";
     MINIO_PROMETHEUS_URL = "http://prometheus.service.consul:9090";
     MINIO_PROMETHEUS_JOB_ID = "consul-services";
-    MINIO_BROWSER_REDIRECT_URL = "https://minio-console.home.mattmoriarity.com";
+    MINIO_BROWSER_REDIRECT_URL = "https://minio-console.midna.dev";
   };
 
   age.secrets."minio-root-credentials".file = ../../../secrets/minio-root-credentials.age;
