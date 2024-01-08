@@ -13,6 +13,7 @@
     "postico"
     "rectangle-pro"
     "slab"
+    "teleport-connect"
   ];
 
   # openssl is needed for building erlang with asdf
