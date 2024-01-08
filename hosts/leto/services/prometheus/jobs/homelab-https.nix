@@ -7,13 +7,13 @@
       static_configs = [
         {
           targets = [
+            "alerts.midna.dev"
             "auth.midna.dev"
             "consul.midna.dev"
+            "metrics.midna.dev"
             "nomad.midna.dev"
             "vault.midna.dev"
             "authelia.home.mattmoriarity.com"
-            "prometheus.home.mattmoriarity.com"
-            "alertmanager.home.mattmoriarity.com"
             "grafana.home.mattmoriarity.com"
             "homelab.home.mattmoriarity.com"
             "adminer.home.mattmoriarity.com"

@@ -1,11 +1,13 @@
 {
   ingress.virtualHosts = {
-    alertmanager = {
+    alerts = {
       upstream.service.name = "alertmanager";
+      external = true;
     };
 
-    prometheus = {
+    metrics = {
       upstream.service.name = "prometheus";
+      external = true;
     };
   };
 }
