@@ -94,7 +94,6 @@ in {
   vault.databases.roles.homelab = {
     ttl = "long";
   };
-  vault.approles.roles.homelab = {};
 
   vault.policies.homelab.text = ''
     path "kv/data/homebase-bot" {
