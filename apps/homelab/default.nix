@@ -125,10 +125,11 @@ in {
     }
   '';
 
-  ingress.virtualHosts.homelab = {
+  ingress.virtualHosts.home = {
     upstream.service = {
       inherit name;
       connectPort = 4000;
     };
+    external = true;
   };
 }
