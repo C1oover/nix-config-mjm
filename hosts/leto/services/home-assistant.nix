@@ -12,6 +12,9 @@
       "esphome"
       "met"
       "radio_browser"
+
+      "hue"
+      "jellyfin"
     ];
     config = {
       default_config = {};
@@ -33,7 +36,6 @@
           "2601:282:167f:3eec:dea6:32ff:fe96:bc05"
         ];
       };
-      hue = {};
       lifx = {};
     };
   };
