@@ -25,6 +25,11 @@
         user = "prometheus";
         group = "prometheus";
       }
+      {
+        directory = "/var/lib/hass";
+        user = "hass";
+        group = "hass";
+      }
     ];
     files = [
       "/etc/machine-id"
