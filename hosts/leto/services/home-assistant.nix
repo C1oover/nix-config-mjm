@@ -25,9 +25,8 @@
       default_config = {};
       homeassistant = {
         unit_system = "imperial"; # i'm sorry
-        # extremely approximate, you can't trick me into doxxing myself home assistant
-        latitude = "39.75";
-        longitude = "-105";
+        latitude = "!secret latitude_home";
+        longitude = "!secret longitude_home";
         country = "US";
         currency = "USD";
         external_url = "https://home.midna.dev";
