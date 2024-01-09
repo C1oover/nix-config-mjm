@@ -82,10 +82,11 @@ in {
     }
   '';
 
-  ingress.virtualHosts.grafana = {
+  ingress.virtualHosts.graphs = {
     upstream.service = {
       inherit name;
       connectPort = 3000;
     };
+    external = true;
   };
 }
