@@ -125,7 +125,7 @@ in {
     }
   '';
 
-  ingress.virtualHosts.home = {
+  ingress.virtualHosts.homelab = {
     upstream.service = {
       inherit name;
       connectPort = 4000;
