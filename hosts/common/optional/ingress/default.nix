@@ -8,11 +8,6 @@
   vhosts = cfg.virtualHosts;
   upstreams = builtins.mapAttrs (_name: vhost: vhost.upstream) vhosts;
   connectUpstreams = lib.filterAttrs (_name: u: u.service.connectPort != null) upstreams;
-
-  autheliaRequest = ./authelia-request.conf;
-  autheliaRequestExternal = ./authelia-request-external.conf;
-  autheliaLocation = ./authelia-location.conf;
-  autheliaLocationExternal = ./authelia-location-external.conf;
 in {
   imports = [
     ../../../../apps
@@ -77,11 +72,7 @@ in {
             ''}
             ${vhost.extraServerConfig}
             ${lib.optionalString vhost.enableAuthProxy ''
-              include ${
-                if vhost.external
-                then autheliaLocationExternal
-                else autheliaLocation
-              };
+              include ${./authelia-location.conf};
             ''}
           '';
 
@@ -95,11 +86,7 @@ in {
             }://${vhost.upstream.name}${vhost.upstream.path}";
             extraConfig = ''
               ${lib.optionalString vhost.enableAuthProxy ''
-                include ${
-                  if vhost.external
-                  then autheliaRequestExternal
-                  else autheliaRequest
-                };
+                include ${./authelia-request.conf};
               ''}
               ${vhost.extraLocationConfig}
             '';
