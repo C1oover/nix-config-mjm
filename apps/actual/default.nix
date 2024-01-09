@@ -1,5 +1,6 @@
 {
-  ingress.virtualHosts.actual = {
+  ingress.virtualHosts.budget = {
     upstream.service.name = "actual";
+    external = true;
   };
 }
