@@ -15,6 +15,8 @@
 
       "hue"
       "jellyfin"
+      "homekit"
+      "homekit_controller"
     ];
     config = {
       default_config = {};
