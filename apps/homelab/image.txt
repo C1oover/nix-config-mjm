@@ -1,1 +1,1 @@
-containers.midna.dev/mjm/homelab@sha256:24ca41f6e8951c143be49d414fbc006c9741c5b2390ebe0dd03487b30910520c
+containers.midna.dev/mjm/homelab@sha256:a345fa4033704ee4a00f7dc9e64657413e48ab826169d17bf0b3be615fad74a7
