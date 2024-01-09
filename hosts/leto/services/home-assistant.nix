@@ -19,6 +19,7 @@
       "hue"
       "icloud"
       "roku"
+      "unifi"
     ];
     config = {
       default_config = {};
