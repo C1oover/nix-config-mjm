@@ -35,7 +35,7 @@
 
       extraServerConfig = ''
         location /api/verify {
-          proxy_pass http://authelia;
+          proxy_pass http://auth;
         }
       '';
 
