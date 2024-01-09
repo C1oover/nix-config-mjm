@@ -57,10 +57,7 @@ in {
 
     virtualHosts =
       lib.mapAttrs' (name: vhost: {
-        name =
-          if vhost.external
-          then "${name}.midna.dev"
-          else "${name}.home.mattmoriarity.com";
+        name = "${name}.midna.dev";
         value = {
           serverAliases = vhost.serverAliases;
           forceSSL = true;
