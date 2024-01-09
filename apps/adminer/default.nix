@@ -45,10 +45,11 @@ in {
     }
   '';
 
-  ingress.virtualHosts.adminer = {
+  ingress.virtualHosts.sql = {
     upstream.service = {
       inherit name;
       connectPort = 10000;
     };
+    external = true;
   };
 }
