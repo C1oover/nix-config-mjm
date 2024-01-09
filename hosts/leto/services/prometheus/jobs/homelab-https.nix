@@ -11,11 +11,11 @@
             "auth.midna.dev"
             "consul.midna.dev"
             "graphs.midna.dev"
+            "home.midna.dev"
             "metrics.midna.dev"
             "nomad.midna.dev"
             "sql.midna.dev"
             "vault.midna.dev"
-            "homelab.home.mattmoriarity.com"
           ];
         }
       ];
