@@ -136,8 +136,9 @@
       '';
     };
 
-    ldap = {
+    users = {
       upstream.service.name = "lldap";
+      external = true;
       enableAuthProxy = false;
     };
   };
