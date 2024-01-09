@@ -46,7 +46,6 @@
         @   IN  NS  localhost.
 
         $INCLUDE ${./home.mattmoriarity.com.hosts.zone}
-        $INCLUDE ${./home.mattmoriarity.com.ingress.zone}
       '';
     };
   };
