@@ -12,6 +12,7 @@
     ./gitlab
     ./grafana
     ./homelab
+    ./home-assistant
     ./ingress
     ./linkding
     ./loki
