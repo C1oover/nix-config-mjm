@@ -33,6 +33,7 @@
 
   ingress.virtualHosts.attic = {
     upstream.service.name = "attic";
+    external = true;
     enableAuthProxy = false;
   };
 }
