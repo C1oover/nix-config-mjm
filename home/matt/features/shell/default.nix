@@ -84,7 +84,7 @@
   programs.atuin = {
     enable = true;
     settings = {
-      sync_address = "https://atuin.home.mattmoriarity.com";
+      sync_address = "https://atuin.midna.dev";
     };
   };
 

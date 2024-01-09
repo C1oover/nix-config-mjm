@@ -62,6 +62,7 @@ in {
       connectPort = 8888;
     };
 
+    external = true;
     enableAuthProxy = false;
   };
 }
