@@ -10,13 +10,12 @@
             "alerts.midna.dev"
             "auth.midna.dev"
             "consul.midna.dev"
+            "graphs.midna.dev"
             "metrics.midna.dev"
             "nomad.midna.dev"
+            "sql.midna.dev"
             "vault.midna.dev"
-            "authelia.home.mattmoriarity.com"
-            "grafana.home.mattmoriarity.com"
             "homelab.home.mattmoriarity.com"
-            "adminer.home.mattmoriarity.com"
           ];
         }
       ];

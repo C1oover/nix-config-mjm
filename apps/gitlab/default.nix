@@ -116,6 +116,7 @@
     containers = {
       upstream.addresses = ["10.0.2.32:5050"];
 
+      external = true;
       enableAuthProxy = false;
 
       extraServerConfig = ''
