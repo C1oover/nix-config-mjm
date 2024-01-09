@@ -16,6 +16,5 @@
 
   ingress.virtualHosts.netbox = {
     upstream.service.name = "netbox";
-    external = true;
   };
 }

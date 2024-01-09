@@ -4,6 +4,5 @@
       name = "consul";
       port = 8500;
     };
-    external = true;
   };
 }

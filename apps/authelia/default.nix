@@ -29,7 +29,6 @@
     auth = {
       upstream.service.name = "authelia";
 
-      external = true;
       enableAuthProxy = false;
       recommendedProxySettings = false;
 
@@ -82,7 +81,6 @@
 
     users = {
       upstream.service.name = "lldap";
-      external = true;
       enableAuthProxy = false;
     };
   };

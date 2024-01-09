@@ -50,6 +50,5 @@ in {
       inherit name;
       connectPort = 10000;
     };
-    external = true;
   };
 }

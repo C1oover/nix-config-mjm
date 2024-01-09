@@ -21,7 +21,6 @@
       ipHash = true;
     };
 
-    external = true;
     enableAuthProxy = false;
   };
 }

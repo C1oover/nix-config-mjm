@@ -116,7 +116,6 @@
     containers = {
       upstream.addresses = ["10.0.2.32:5050"];
 
-      external = true;
       enableAuthProxy = false;
 
       extraServerConfig = ''
@@ -138,8 +137,6 @@
     git = {
       upstream.addresses = ["10.0.2.32"];
 
-      external = true;
-
       enableAuthProxy = false;
 
       extraServerConfig = ''
@@ -160,10 +157,7 @@
 
     pages = {
       upstream.addresses = ["10.0.2.33"];
-
-      external = true;
       serverAliases = ["*.pages.midna.dev" "www.midna.dev" "midna.dev"];
-
       enableAuthProxy = false;
     };
   };

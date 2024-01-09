@@ -24,7 +24,6 @@
   ingress.virtualHosts.vault = {
     upstream.service.name = "vault";
 
-    external = true;
     enableAuthProxy = false;
   };
 }

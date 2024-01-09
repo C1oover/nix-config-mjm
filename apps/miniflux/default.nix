@@ -70,7 +70,5 @@ in {
       inherit name;
       connectPort = 8080;
     };
-
-    external = true;
   };
 }

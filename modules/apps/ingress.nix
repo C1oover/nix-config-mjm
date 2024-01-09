@@ -50,10 +50,6 @@ with lib; let
             };
           };
         };
-        external = mkOption {
-          type = types.bool;
-          default = false;
-        };
         enableAuthProxy = mkOption {
           type = types.bool;
           default = true;

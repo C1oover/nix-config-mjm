@@ -19,8 +19,6 @@
   ingress.virtualHosts.paper = {
     upstream.service.name = "paperless";
 
-    external = true;
-
     extraLocationConfig = ''
       proxy_redirect off;
     '';
