@@ -1,6 +1,3 @@
-adminer  IN  CNAME ingress-http.service.consul.
 attic  IN  CNAME ingress-http.service.consul.
-atuin  IN  CNAME ingress-http.service.consul.
 authelia  IN  CNAME ingress-http.service.consul.
-containers  IN  CNAME ingress-http.service.consul.
 homelab  IN  CNAME ingress-http.service.consul.
