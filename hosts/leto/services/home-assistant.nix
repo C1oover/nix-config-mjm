@@ -13,10 +13,11 @@
       "met"
       "radio_browser"
 
-      "hue"
       "jellyfin"
       "homekit"
       "homekit_controller"
+      "hue"
+      "icloud"
     ];
     config = {
       default_config = {};
