@@ -6,7 +6,7 @@ in {
     priority = 70;
 
     taskGroups.grafana = {
-      count = 3;
+      count = 2;
       architecture = "arm64";
 
       services = [
