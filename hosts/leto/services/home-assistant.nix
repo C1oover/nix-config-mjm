@@ -18,6 +18,7 @@
       "homekit_controller"
       "hue"
       "icloud"
+      "roku"
     ];
     config = {
       default_config = {};
