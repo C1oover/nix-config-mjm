@@ -23,18 +23,6 @@ modules:
         fail_if_not_matches_regexp:
           - "megaera\\.home\\.mattmoriarity\\.com\\.\t.*\tIN\tA\t10\\.0\\.2\\.40"
 
-  dns_private_cname:
-    prober: dns
-    timeout: 5s
-    dns:
-      query_name: "homelab.home.mattmoriarity.com"
-      query_type: "CNAME"
-      valid_rcodes:
-        - NOERROR
-      validate_answer_rrs:
-        fail_if_not_matches_regexp:
-          - "homelab\\.home\\.mattmoriarity\\.com\\.\t.*\tIN\tCNAME\tingress-http\\.service\\.consul\\."
-
   dns_ad_blocking:
     prober: dns
     timeout: 5s
