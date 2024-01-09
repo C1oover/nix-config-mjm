@@ -14,6 +14,7 @@
       "radio_browser"
     ];
     config = {
+      default_config = {};
       homeassistant = {
         unit_system = "imperial"; # i'm sorry
         # extremely approximate, you can't trick me into doxxing myself home assistant
@@ -23,7 +24,15 @@
         currency = "USD";
         external_url = "https://home.midna.dev";
       };
-      default_config = {};
+      http = {
+        use_x_forwarded_for = true;
+        trusted_proxies = [
+          "10.0.0.3"
+          "10.0.0.4"
+          "2601:282:167f:3eec:dea6:32ff:fed5:d840"
+          "2601:282:167f:3eec:dea6:32ff:fe96:bc05"
+        ];
+      };
     };
   };
 
