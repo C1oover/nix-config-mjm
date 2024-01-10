@@ -88,4 +88,6 @@
       }
     ];
   };
+
+  services.avahi.enable = true;
 }

@@ -62,6 +62,7 @@
 
   networking.hostName = "persephone";
   services.resolved.enable = true;
+  services.avahi.enable = true;
 
   time.timeZone = "America/Denver";
 
