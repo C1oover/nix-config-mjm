@@ -1,4 +1,9 @@
-{config, ...}: {
+{
+  pkgs,
+  config,
+  outputs,
+  ...
+}: {
   # ugh
   nixpkgs.config.permittedInsecurePackages = [
     "openssl-1.1.1w"
@@ -42,9 +47,15 @@
           "2601:282:167f:3eec:dea6:32ff:fe96:bc05"
         ];
       };
+      auth_header = {
+        username_header = "Remote-User";
+      };
       automation = "!include automations.yaml";
       scene = "!include scenes.yaml";
     };
+    customComponents = [
+      outputs.packages.${pkgs.system}.hass-auth-header
+    ];
   };
 
   services.consul.services.home-assistant = let
