@@ -47,7 +47,18 @@
     };
   };
 
-  services.consul.services.home-assistant = {
+  services.consul.services.home-assistant = let
     port = config.services.home-assistant.config.http.server_port;
+  in {
+    inherit port;
+
+    checks = [
+      {
+        name = "home-assistant is ready";
+        http = "http://localhost:${toString port}/manifest.json";
+        interval = "15s";
+        timeout = "10s";
+      }
+    ];
   };
 }
