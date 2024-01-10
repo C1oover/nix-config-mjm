@@ -52,9 +52,25 @@
       };
       automation = "!include automations.yaml";
       scene = "!include scenes.yaml";
+      waste_collection_schedule = {
+        sources = [
+          {
+            name = "ics";
+            args.url = "webcal://recollect.a.ssl.fastly.net/api/places/1E9C397C-F80F-11E5-A7DD-59088AA306B9/services/248/events.en-US.ics?client_id=C2621F6A-AF57-11EE-813D-617B0978AF8E";
+            calendar_title = "Garbage collection";
+          }
+        ];
+      };
+      sensor = [
+        {
+          platform = "waste_collection_schedule";
+          name = "Garbage collection";
+        }
+      ];
     };
-    customComponents = [
+    customComponents = with pkgs.home-assistant-custom-components; [
       outputs.packages.${pkgs.system}.hass-auth-header
+      waste_collection_schedule
     ];
   };
 
