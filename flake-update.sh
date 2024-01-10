@@ -36,5 +36,5 @@ git config user.email "gitlab@matt.mattmoriarity.com"
 git config user.name "GitLab Automation"
 git add flake.lock
 git commit -m "nix flake update"
-git remote add gitlab "https://ci:$FLAKE_UPDATE_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git"
+git remote add gitlab "https://ci:$FLAKE_UPDATE_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git" || true
 git push gitlab HEAD:main
