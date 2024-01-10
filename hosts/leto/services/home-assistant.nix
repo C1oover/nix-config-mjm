@@ -13,6 +13,7 @@
       "met"
       "radio_browser"
 
+      "apple_tv"
       "jellyfin"
       "homekit"
       "homekit_controller"
