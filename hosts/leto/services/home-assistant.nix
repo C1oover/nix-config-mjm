@@ -29,6 +29,7 @@
         longitude = "!secret longitude_home";
         country = "US";
         currency = "USD";
+        time_zone = "America/Denver";
         external_url = "https://home.midna.dev";
       };
       http = {
