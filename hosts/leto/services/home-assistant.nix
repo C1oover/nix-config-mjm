@@ -41,6 +41,7 @@
           "2601:282:167f:3eec:dea6:32ff:fe96:bc05"
         ];
       };
+      automation = "!include automations.yaml";
       scene = "!include scenes.yaml";
     };
   };
