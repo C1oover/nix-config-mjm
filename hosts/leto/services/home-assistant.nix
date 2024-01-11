@@ -20,7 +20,6 @@
 
       "apple_tv"
       "jellyfin"
-      "homekit"
       "homekit_controller"
       "hue"
       "icloud"
@@ -67,12 +66,28 @@
           name = "Garbage collection";
         }
       ];
+      homekit = {
+        filter = {
+          exclude_domains = ["automation" "person"];
+          exclude_entity_globs = [
+            "light.desk_overhead_light_*"
+            "media_player.firefox*"
+            "media_player.*_homepod"
+            "media_player.iphone"
+            "remote.*_homepod"
+            "binary_sensor.55_tcl_roku_tv*"
+          ];
+        };
+      };
     };
     customComponents = with pkgs.home-assistant-custom-components; [
       outputs.packages.${pkgs.system}.hass-auth-header
       waste_collection_schedule
     ];
   };
+
+  # homekit bridge
+  networking.firewall.allowedTCPPorts = [21063];
 
   services.consul.services.home-assistant = let
     port = config.services.home-assistant.config.http.server_port;
