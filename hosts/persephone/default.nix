@@ -8,7 +8,6 @@
     ./hardware-configuration.nix
     ./impermanence.nix
     ./samba.nix
-    ./snapshots.nix
     ./virtualization.nix
 
     ../common/global/nixos
@@ -23,7 +22,7 @@
   boot.binfmt.emulatedSystems = ["aarch64-linux"];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.supportedFilesystems = ["btrfs"];
+  boot.supportedFilesystems = ["btrfs" "bcachefs"];
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -55,10 +54,6 @@
   '';
 
   boot.initrd.systemd.enable = true;
-  boot.initrd.luks.devices.cryptroot = {
-    device = "/dev/disk/by-uuid/a8431292-fbf8-4a33-8c5b-b93aae5fe8a7";
-    preLVM = true;
-  };
 
   networking.hostName = "persephone";
   services.resolved.enable = true;

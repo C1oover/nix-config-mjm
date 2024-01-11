@@ -5,15 +5,7 @@
   lib,
   modulesPath,
   ...
-}: let
-  mkSubvol = name: opts:
-    {
-      device = "/dev/disk/by-uuid/a5f6fd18-f9e4-4fe3-9e62-62f054ee80ee";
-      fsType = "btrfs";
-      options = ["subvol=${name}" "compress=zstd" "noatime"];
-    }
-    // opts;
-in {
+}: {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
@@ -23,11 +15,17 @@ in {
   boot.kernelModules = ["kvm-intel"];
   boot.extraModulePackages = [];
 
-  fileSystems."/" = mkSubvol "root" {};
-  fileSystems."/home" = mkSubvol "home" {};
-  fileSystems."/nix" = mkSubvol "nix" {neededForBoot = true;};
-  fileSystems."/persist" = mkSubvol "persist" {neededForBoot = true;};
-  fileSystems."/var/log" = mkSubvol "log" {neededForBoot = true;};
+  fileSystems."/" = {
+    device = "none";
+    fsType = "tmpfs";
+    options = ["defaults" "mode=755" "size=32G"];
+  };
+
+  fileSystems."/persist" = {
+    device = "/dev/disk/by-label/persist";
+    fsType = "bcachefs";
+    neededForBoot = true;
+  };
 
   fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/B0EC-18F2";
@@ -35,7 +33,6 @@ in {
   };
 
   swapDevices = [
-    {device = "/dev/disk/by-uuid/79dd84d8-e448-41fe-a638-91e898382be5";}
   ];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";

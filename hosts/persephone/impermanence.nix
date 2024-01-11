@@ -8,11 +8,14 @@
   environment.persistence."/persist" = {
     hideMounts = true;
     directories = [
-      "/etc/NetworkManager/system-connections"
+      "/home"
+      "/nix"
+      "/var/log"
       "/var/lib/libvirt"
       "/var/lib/fprint"
       "/var/lib/NetworkManager"
       "/var/lib/iwd"
+      "/etc/NetworkManager/system-connections"
     ];
     files = [
       "/etc/machine-id"
@@ -26,33 +29,4 @@
   security.sudo.extraConfig = ''
     Defaults lecture = never
   '';
-
-  boot.initrd.supportedFilesystems = ["btrfs"];
-  boot.initrd.systemd.services.rollback-root = {
-    description = "Rollback root subvolume to a pristine state";
-    wantedBy = ["initrd.target"];
-    after = ["dev-lvm-root.device"];
-    requires = ["dev-lvm-root.device"];
-    before = ["sysroot.mount"];
-    unitConfig.DefaultDependencies = "no";
-    serviceConfig.Type = "oneshot";
-    script = ''
-      mkdir -p /mnt
-      mount -t btrfs -o subvol=/ /dev/lvm/root /mnt
-
-      btrfs subvolume list -o /mnt/root |
-      cut -f9 -d' ' |
-      while read subvolume; do
-        echo "deleting /$subvolume subvolume..."
-        btrfs subvolume delete "/mnt/$subvolume"
-      done &&
-      echo "deleting /root subvolume..." &&
-      btrfs subvolume delete /mnt/root
-
-      echo "restoring blank /root subvolume..."
-      btrfs subvolume snapshot /mnt/root-blank /mnt/root
-
-      umount /mnt
-    '';
-  };
 }
