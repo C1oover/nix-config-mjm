@@ -8,7 +8,9 @@
 
   programs.helix = {
     enable = true;
-    package = inputs.helix.packages.${pkgs.system}.default;
+    package = inputs.helix.packages.${pkgs.system}.default.override {
+      includeGrammarIf = {source, ...}: !(lib.hasPrefix "https://git.sr.ht/" source.git);
+    };
     extraPackages = with pkgs; [
       alejandra
       elixir-ls
