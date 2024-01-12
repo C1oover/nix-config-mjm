@@ -17,6 +17,7 @@
     ./services/netbox.nix
     ./services/paperless.nix
     ./services/prometheus
+    ./services/taskserver.nix
     ./services/vault-agent.nix
   ];
 

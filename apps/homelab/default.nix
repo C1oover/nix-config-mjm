@@ -76,9 +76,9 @@ in {
             data.location={{ env "NOMAD_TASK_DIR" }}
             taskd.ca={{ env "NOMAD_TASK_DIR" }}/task.ca
             taskd.certificate={{ env "NOMAD_TASK_DIR" }}/task.crt
-            taskd.credentials=home/mjm/158e73c7-9492-44cb-b340-508633b860f2
+            taskd.credentials=home/mjm/335503bd-9888-481a-b3e9-7d0c54e0b8bc
             taskd.key={{ env "NOMAD_SECRETS_DIR" }}/task.key
-            taskd.server=nemesis.home.mattmoriarity.com:53589
+            taskd.server=tasks.midna.dev:53589
 
             uda.reminder_id.type=string
             uda.reminder_id.label=Reminder

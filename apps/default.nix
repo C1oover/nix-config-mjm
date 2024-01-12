@@ -25,6 +25,7 @@
     ./paperless
     ./prometheus
     ./proxmox
+    ./taskserver
     ./vault
   ];
 }

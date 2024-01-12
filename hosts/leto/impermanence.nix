@@ -30,6 +30,11 @@
         user = "hass";
         group = "hass";
       }
+      {
+        directory = "/var/lib/taskserver";
+        user = "taskd";
+        group = "taskd";
+      }
     ];
     files = [
       "/etc/machine-id"

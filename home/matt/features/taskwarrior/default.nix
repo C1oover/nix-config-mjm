@@ -26,8 +26,8 @@ in {
           if pkgs.stdenv.isDarwin
           then "${config.home.homeDirectory}/.config/task/taskserver.key"
           else "$XDG_RUNTIME_DIR/agenix/taskserver.key";
-        server = "nemesis.home.mattmoriarity.com:53589";
-        credentials = "home/mjm/158e73c7-9492-44cb-b340-508633b860f2";
+        server = "tasks.midna.dev:53589";
+        credentials = "home/mjm/335503bd-9888-481a-b3e9-7d0c54e0b8bc";
       };
       uda.reminder_id.type = "string";
       uda.reminder_id.label = "Reminder";
