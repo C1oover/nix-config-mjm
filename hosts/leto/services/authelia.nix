@@ -123,6 +123,13 @@ in {
             ];
             policy = "bypass";
           }
+          {
+            domain = "home.midna.dev";
+            resources = [
+              "^/api/.*$"
+            ];
+            policy = "bypass";
+          }
         ];
       };
       session.domain = "midna.dev";
