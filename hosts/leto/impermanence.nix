@@ -10,6 +10,7 @@
       "/nix"
       "/var/lib/docker/volumes"
       "/var/lib/private/lldap"
+      "/var/lib/private/garage/meta"
       {
         directory = "/var/lib/netbox";
         user = "netbox";

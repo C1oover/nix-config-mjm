@@ -22,6 +22,8 @@ in
     "alertmanager-env.age".publicKeys = personalKeys ++ [gaia leto];
     "pve-exporter-config.age".publicKeys = personalKeys ++ [leto];
 
+    "garage-env.age".publicKeys = personalKeys ++ [leto chaos helios];
+
     "ngrok.age".publicKeys = [matt-athena athena];
 
     "newsboat-miniflux-token.age".publicKeys = personalKeys;

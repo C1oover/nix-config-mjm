@@ -8,6 +8,7 @@
 
     ../common/optional/server
     ../common/optional/consul-agent.nix
+    ../common/optional/garage.nix
 
     ./services/actual.nix
     ./services/attic.nix
@@ -22,6 +23,8 @@
   ];
 
   networking.hostName = "leto";
+
+  boot.supportedFilesystems = ["xfs"];
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;

@@ -30,6 +30,11 @@
     fsType = "vfat";
   };
 
+  fileSystems."/var/lib/private/garage/data" = {
+    device = "/dev/disk/by-label/garage";
+    fsType = "xfs";
+  };
+
   swapDevices = [
     {device = "/dev/disk/by-label/swap";}
   ];
