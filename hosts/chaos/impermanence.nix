@@ -11,6 +11,7 @@
   environment.persistence."/nix/persist" = {
     directories = [
       "/var/lib/jellyfin"
+      "/var/lib/private/garage/meta"
       {
         directory = "/var/lib/sabnzbd";
         user = "sabnzbd";

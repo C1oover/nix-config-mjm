@@ -8,6 +8,7 @@
 
     ../common/optional/server
     ../common/optional/consul-agent.nix
+    ../common/optional/garage.nix
 
     ./services/jellyfin.nix
     ./services/sabnzbd.nix
@@ -15,6 +16,8 @@
   ];
 
   networking.hostName = "chaos";
+
+  boot.supportedFilesystems = ["xfs"];
 
   boot.loader.grub = {
     enable = true;

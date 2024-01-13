@@ -30,6 +30,11 @@
     options = ["bind" "X-fstrim.notrim"];
   };
 
+  fileSystems."/var/lib/private/garage/data" = {
+    device = "/dev/disk/by-label/garage";
+    fsType = "xfs";
+  };
+
   swapDevices = [
     {
       device = "/nix/swap";
