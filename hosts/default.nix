@@ -2,7 +2,6 @@
   self,
   lib,
   inputs,
-  withSystem,
   ...
 }: let
   inherit (self) outputs;
@@ -54,20 +53,6 @@ in {
       thanatos = mkNixos [./thanatos];
 
       ingresstest = mkNixos [./ingresstest];
-    };
-
-    checks = let
-      mkDeployCheck = system: nodes:
-        withSystem system (
-          {pkgs, ...}:
-            pkgs.linkFarm "deploy-${system}"
-            (pkgs.lib.genAttrs nodes (name: outputs.deploy.nodes.${name}.profiles.system.path))
-        );
-    in {
-      x86_64-linux.deploy-1 = mkDeployCheck "x86_64-linux" ["aion" "cronus" "gaia" "nemesis" "orion"];
-      x86_64-linux.deploy-2 = mkDeployCheck "x86_64-linux" ["phoebe" "rhea" "thanatos" "themis"];
-      x86_64-linux.deploy-3 = mkDeployCheck "x86_64-linux" ["alecto" "helios" "hypnos" "megaera" "tisiphone"];
-      aarch64-linux.deploy = mkDeployCheck "aarch64-linux" ["arges" "brontes" "nyx" "steropes"];
     };
 
     colmena = {
@@ -222,26 +207,6 @@ in {
         attic push homelab ${attic}
       '';
     });
-
-    packages.deploy-prebuild = pkgs.writeShellApplication {
-      name = "deploy-prebuild";
-      runtimeInputs = [inputs'.nix-fast-build.packages.default attic];
-      text = ''
-        if [ "$1" = "arm64" ]; then
-          shift
-          nix-fast-build -f ".#checks.aarch64-linux.deploy" --eval-max-memory-size 2048 --eval-workers 4 "$@"
-          attic push homelab ./result
-        else
-          shift
-          nix-fast-build -f ".#checks.x86_64-linux.deploy-1" --eval-max-memory-size 2048 --eval-workers 4 "$@"
-          attic push homelab ./result
-          nix-fast-build -f ".#checks.x86_64-linux.deploy-2" --eval-max-memory-size 2048 --eval-workers 4 "$@"
-          attic push homelab ./result
-          nix-fast-build -f ".#checks.x86_64-linux.deploy-3" --eval-max-memory-size 2048 --eval-workers 4 "$@"
-          attic push homelab ./result
-        fi
-      '';
-    };
 
     apps.deploy.program = lib.getExe (pkgs.writeShellApplication {
       name = "deploy";
