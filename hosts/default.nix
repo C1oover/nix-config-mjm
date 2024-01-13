@@ -51,8 +51,6 @@ in {
       cronus = mkNixos [./cronus];
       themis = mkNixos [./themis];
       thanatos = mkNixos [./thanatos];
-
-      ingresstest = mkNixos [./ingresstest];
     };
 
     colmena = {
