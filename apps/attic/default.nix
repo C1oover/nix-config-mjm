@@ -14,22 +14,22 @@
     }
   '';
 
-  minio.buckets.attic-caches = {};
+  # minio.buckets.attic-caches = {};
 
-  minio.iamPolicies.attic = {
-    users = ["attic"];
-    document = {
-      statement = [
-        {
-          actions = ["s3:*"];
-          resources = [
-            "arn:aws:s3:::attic-caches"
-            "arn:aws:s3:::attic-caches/*"
-          ];
-        }
-      ];
-    };
-  };
+  # minio.iamPolicies.attic = {
+  #   users = ["attic"];
+  #   document = {
+  #     statement = [
+  #       {
+  #         actions = ["s3:*"];
+  #         resources = [
+  #           "arn:aws:s3:::attic-caches"
+  #           "arn:aws:s3:::attic-caches/*"
+  #         ];
+  #       }
+  #     ];
+  #   };
+  # };
 
   ingress.virtualHosts.attic = {
     upstream.service.name = "attic";

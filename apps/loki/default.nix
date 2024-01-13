@@ -64,22 +64,22 @@ in {
   #   write = true;
   # };
 
-  minio.buckets.logs = {};
+  # minio.buckets.logs = {};
 
-  minio.iamPolicies.loki = {
-    users = ["loki"];
-    document = {
-      statement = [
-        {
-          actions = ["s3:*"];
-          resources = [
-            "arn:aws:s3:::logs"
-            "arn:aws:s3:::logs/*"
-          ];
-        }
-      ];
-    };
-  };
+  # minio.iamPolicies.loki = {
+  #   users = ["loki"];
+  #   document = {
+  #     statement = [
+  #       {
+  #         actions = ["s3:*"];
+  #         resources = [
+  #           "arn:aws:s3:::logs"
+  #           "arn:aws:s3:::logs/*"
+  #         ];
+  #       }
+  #     ];
+  #   };
+  # };
 
   vault.policies.loki.text = ''
     # Allow Loki to read its password for storing logs in Minio
