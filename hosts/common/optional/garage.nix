@@ -21,11 +21,13 @@
         api = "agent";
         service_name = "garage";
       };
+
+      admin.api_bind_addr = "[::]:3903";
     };
     environmentFile = config.age.secrets."garage.env".path;
   };
 
-  networking.firewall.allowedTCPPorts = [3901 3902];
+  networking.firewall.allowedTCPPorts = [3901 3902 3903];
 
   age.secrets."garage.env".file = ../../../secrets/garage-env.age;
 }
