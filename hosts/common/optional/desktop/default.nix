@@ -9,9 +9,9 @@
     inputs.kde2nix.nixosModules.plasma6
   ];
 
-  environment.sessionVariables = {
-    NIXOS_OZONE_WL = "1";
-  };
+  # environment.sessionVariables = {
+  #   NIXOS_OZONE_WL = "1";
+  # };
 
   services.xserver = {
     enable = true;
