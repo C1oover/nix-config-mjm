@@ -33,6 +33,7 @@ in
     "smb-creds.age".publicKeys = personalKeys ++ [persephone];
     "smb-creds-server.age".publicKeys = personalKeys ++ [chaos];
     "sabnzbd-apikey.age".publicKeys = personalKeys ++ [chaos];
+    "sonarr-apikey.age".publicKeys = personalKeys ++ [chaos];
 
     "nut-primary-password.age".publicKeys = personalKeys ++ [arges];
     "nut-secondary-password.age".publicKeys = personalKeys ++ allNixOS;
