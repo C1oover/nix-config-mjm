@@ -1,5 +1,6 @@
 {
   self,
+  lib,
   inputs,
   withSystem,
   ...
@@ -69,6 +70,81 @@ in {
       aarch64-linux.deploy = mkDeployCheck "aarch64-linux" ["arges" "brontes" "nyx" "steropes"];
     };
 
+    colmena = {
+      meta = {
+        nixpkgs = inputs.nixos.legacyPackages.x86_64-linux;
+        nodeNixpkgs = lib.genAttrs ["arges" "brontes" "steropes"] (_node: inputs.nixos.legacyPackages.aarch64-linux);
+        specialArgs = {inherit inputs outputs;};
+      };
+
+      defaults = {config, ...}: {
+        deployment = {
+          targetHost = "${config.networking.hostName}.home.mattmoriarity.com";
+          targetUser = "matt";
+        };
+      };
+
+      arges = {
+        deployment.tags = ["builder"];
+        imports = [./arges];
+      };
+      brontes = {
+        deployment.tags = ["arm64" "nomad" "ingress"];
+        imports = [./brontes];
+      };
+      steropes = {
+        deployment.tags = ["arm64" "nomad" "ingress"];
+        imports = [./steropes];
+      };
+
+      alecto = {
+        deployment.tags = ["x86_64" "hashistack"];
+        imports = [./alecto];
+      };
+      megaera = {
+        deployment.tags = ["x86_64" "hashistack"];
+        imports = [./megaera];
+      };
+      tisiphone = {
+        deployment.tags = ["x86_64" "hashistack"];
+        imports = [./tisiphone];
+      };
+
+      chaos = {
+        deployment.tags = ["x86_64" "garage"];
+        imports = [./chaos];
+      };
+      helios = {
+        deployment.tags = ["x86_64" "garage" "nomad"];
+        imports = [./helios];
+      };
+      hypnos = {
+        deployment.tags = ["builder"];
+        imports = [./hypnos];
+      };
+      leto = {
+        deployment.tags = ["x86_64" "garage"];
+        imports = [./leto];
+      };
+
+      rhea = {
+        deployment.tags = ["x86_64" "dns"];
+        imports = [./rhea];
+      };
+      cronus = {
+        deployment.tags = ["x86_64" "dns"];
+        imports = [./cronus];
+      };
+      themis = {
+        deployment.tags = ["x86_64"];
+        imports = [./themis];
+      };
+      thanatos = {
+        deployment.tags = ["x86_64"];
+        imports = [./thanatos];
+      };
+    };
+
     deploy = {
       user = "root";
       sshUser = "matt";
@@ -115,7 +191,7 @@ in {
     attic = inputs'.attic.packages.default;
   in {
     devenv.shells.default = {
-      packages = [deploy-rs];
+      packages = [pkgs.colmena deploy-rs];
     };
 
     apps.unseal.program = lib.getExe (pkgs.writeShellApplication {
@@ -189,6 +265,36 @@ in {
       '';
     });
 
+    apps.deploy-colmena.program = lib.getExe (pkgs.writeShellApplication {
+      name = "deploy-colmena";
+      runtimeInputs = [pkgs.coreutils pkgs.colmena pkgs.openssh pkgs.vault];
+      text = ''
+        tmp=$(mktemp -d)
+        keypath="$tmp/id_ed25519"
+        ssh-keygen -t ed25519 -f "$keypath" -N ""
+        vault write \
+          -field=signed_key \
+          ssh-client-signer/sign/homelab-client \
+          "public_key=@$keypath.pub" \
+          valid_principals=matt \
+          >"$keypath-cert.pub"
+        function finish {
+          rm -rf "$tmp"
+        }
+        trap finish EXIT
+
+        config_file="$tmp/ssh_config"
+        cat >"$config_file" <<EOF
+        IdentityFile $keypath
+        Host *
+          UserKnownHostsFile ~/.ssh/known_hosts
+        EOF
+
+        export SSH_CONFIG_FILE="$config_file"
+        colmena apply "$@"
+      '';
+    });
+
     apps.ci-deploy.program = lib.getExe (pkgs.writeShellApplication {
       name = "ci-deploy";
       runtimeInputs = [pkgs.coreutils pkgs.openssh pkgs.vault deploy-rs attic];
@@ -221,6 +327,49 @@ in {
 
         deploy --skip-checks --ssh-opts="-i $keypath" --keep-result -r ./result --targets "''${targets[@]}"
         attic push homelab result/*/system
+      '';
+    });
+
+    apps.ci-deploy-colmena.program = lib.getExe (pkgs.writeShellApplication {
+      name = "ci-deploy-colmena";
+      runtimeInputs = [pkgs.coreutils pkgs.openssh pkgs.vault pkgs.colmena attic];
+      text = ''
+        VAULT_TOKEN=$(vault write -field=token auth/gitlab/login role=homelab-infra "jwt=$VAULT_ID_TOKEN")
+        export VAULT_TOKEN
+
+        tmp=$(mktemp -d)
+        keypath="$tmp/id_ed25519"
+        ssh-keygen -t ed25519 -f "$keypath" -N ""
+        vault write \
+          -field=signed_key \
+          ssh-client-signer/sign/homelab-client \
+          "public_key=@$keypath.pub" \
+          valid_principals=matt \
+          >"$keypath-cert.pub"
+        function finish {
+          rm -rf "$tmp"
+        }
+        trap finish EXIT
+
+        config_file="$tmp/ssh_config"
+        cat >"$config_file" <<EOF
+        IdentityFile $keypath
+        EOF
+
+        if [ "$ARCH" = "arm64" ]; then
+          # deploy to arges first, because it may need to reload the gitlab-runner, which fails if
+          # the ingress is unavailable, which might temporarily happen when deploying to the other
+          # hosts.
+          colmena apply --on arges --keep-result
+        fi
+
+        colmena apply --on "@$ARCH" --keep-result
+
+        if [ "$ARCH" = "x86_64" ]; then
+          colmena apply --on hypnos --keep-result
+        fi
+
+        attic push homelab .gcroots/node-*
       '';
     });
   };

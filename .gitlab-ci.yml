@@ -39,7 +39,7 @@ deploy nixos hosts:
   script:
     - nix run .#ci-attic-login
     # - nix run .#deploy-prebuild -- $ARCH --no-nom
-    - nix run .#ci-deploy
+    - nix run .#ci-deploy-colmena
 apply terranix changes:
   tags: [nix, x86_64]
   rules:
