@@ -60,6 +60,7 @@ in {
           MinIO
         '';
         rootfs = mkRootFs "64G";
+        onboot = false;
       };
 
     themis =
