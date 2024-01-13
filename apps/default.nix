@@ -9,6 +9,7 @@
     ./authelia
     ./consul
     ./consul-exporter
+    ./garage
     ./gitlab
     ./grafana
     ./homelab

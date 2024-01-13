@@ -52,10 +52,10 @@ ruler:
 storage_config:
   aws:
     {{ with secret "kv/loki" }}
-    s3: http://loki:{{ .Data.data.minio_password }}@minio.service.consul:9000
+    s3: "http://{{ .Data.data.garage_key_id }}:{{ .Data.data.garage_secret_key }}@garage.service.consul:3902"
     {{ end }}
-    region: us-east-1
-    bucketnames: logs
+    region: home
+    bucketnames: loki-logs
     insecure: true
     s3forcepathstyle: true
   boltdb_shipper:

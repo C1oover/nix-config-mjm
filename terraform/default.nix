@@ -12,14 +12,15 @@
       p.nomad
       p.vault
       p.cloudflare
+      p.proxmox
       (p.mkProvider {
-        owner = "Telmate";
-        repo = "terraform-provider-proxmox";
-        rev = "v2.9.14";
-        spdx = "MIT";
-        hash = "sha256-ikXLLNoAjrnGGGI3fHTKFXm8YwqNazE/U39JTjOBsW4=";
-        vendorHash = "sha256-um4iOwYO6ASv9wpu5Jua9anUZBKly4yVgI224Fk2dOM=";
-        homepage = "https://registry.terraform.io/providers/Telmate/proxmox";
+        owner = "prologin";
+        repo = "terraform-provider-garage";
+        rev = "v0.0.1";
+        spdx = "AGPL-3.0-only";
+        hash = "sha256-JNeTJ5nt8IvYk9M8fUEiGTLUDd9QHS6PeBwWDjRzx4g=";
+        vendorHash = "sha256-6PXFDwQRPJU6+X1pUuzIaTiQNVPJjOUDMsnDXBivO5A=";
+        homepage = "https://registry.terraform.io/providers/prologin/garage";
       })
     ]);
     terraformConfiguration =
