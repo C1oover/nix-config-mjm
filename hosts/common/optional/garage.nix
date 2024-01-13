@@ -48,5 +48,25 @@
 
   networking.firewall.allowedTCPPorts = [3901 3902 3903];
 
+  services.consul.services.garage = {
+    port = 3902;
+
+    tags = ["s3"];
+
+    meta = {
+      metrics_path = "/metrics";
+      metrics_port = "3903";
+    };
+
+    checks = [
+      {
+        name = "garage is ready";
+        http = "http://localhost:3903/health";
+        interval = "15s";
+        timeout = "10s";
+      }
+    ];
+  };
+
   age.secrets."garage.env".file = ../../../secrets/garage-env.age;
 }
