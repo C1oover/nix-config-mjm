@@ -49,7 +49,6 @@ in {
       # Proxmox LXC containers
       rhea = mkNixos [./rhea];
       cronus = mkNixos [./cronus];
-      phoebe = mkNixos [./phoebe];
       themis = mkNixos [./themis];
       thanatos = mkNixos [./thanatos];
 
@@ -96,7 +95,6 @@ in {
         nyx = mkNode "nyx" {
           hostname = "nyx.mattmoriarity.com";
         };
-        phoebe = mkNode "phoebe" {};
         rhea = mkNode "rhea" {};
         steropes = mkNode "steropes" {};
         thanatos = mkNode "thanatos" {};
@@ -213,7 +211,7 @@ in {
         trap finish EXIT
 
         if [ "$ARCH" = "x86_64" ]; then
-          targets=(.#alecto .#cronus .#chaos .#helios .#leto .#megaera .#phoebe .#rhea .#thanatos .#themis .#tisiphone .#hypnos)
+          targets=(.#alecto .#cronus .#chaos .#helios .#leto .#megaera .#rhea .#thanatos .#themis .#tisiphone .#hypnos)
         elif [ "$ARCH" = "arm64" ]; then
           # deploy to arges first, because it may need to reload the gitlab-runner, which fails if
           # the ingress is unavailable, which might temporarily happen when deploying to the other
