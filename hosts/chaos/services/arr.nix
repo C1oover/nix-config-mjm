@@ -22,6 +22,13 @@
       apiKeyFile = config.age.secrets."sonarr-apikey".path;
       url = "http://127.0.0.1:8989";
     };
+    exportarr-radarr = {
+      enable = true;
+      port = 9707;
+      openFirewall = true;
+      apiKeyFile = config.age.secrets."radarr-apikey".path;
+      url = "http://127.0.0.1:7878";
+    };
   };
 
   services.consul.services = {
@@ -48,6 +55,11 @@
     radarr = {
       port = 7878;
 
+      meta = {
+        metrics_path = "/metrics";
+        metrics_port = toString config.services.prometheus.exporters.exportarr-radarr.port;
+      };
+
       checks = [
         {
           name = "radarr is ready";
@@ -66,5 +78,6 @@
 
   age.secrets = {
     "sonarr-apikey".file = ../../../secrets/sonarr-apikey.age;
+    "radarr-apikey".file = ../../../secrets/radarr-apikey.age;
   };
 }
