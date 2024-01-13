@@ -355,6 +355,7 @@ in {
         cat >"$config_file" <<EOF
         IdentityFile $keypath
         EOF
+        export SSH_CONFIG_FILE="$config_file"
 
         if [ "$ARCH" = "arm64" ]; then
           # deploy to arges first, because it may need to reload the gitlab-runner, which fails if
