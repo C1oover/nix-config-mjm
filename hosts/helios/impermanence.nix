@@ -9,7 +9,9 @@
   age.identityPaths = ["/nix/persist/etc/ssh/ssh_host_ed25519_key"];
 
   environment.persistence."/nix/persist" = {
-    directories = [];
+    directories = [
+      "/var/lib/private/garage/meta"
+    ];
     files = [
       "/etc/machine-id"
       "/etc/ssh/ssh_host_ed25519_key"

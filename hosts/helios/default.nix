@@ -10,9 +10,12 @@
     ../common/optional/consul-agent.nix
     ../common/optional/nomad-client.nix
     ../common/optional/nix-remote.nix
+    ../common/optional/garage.nix
   ];
 
   networking.hostName = "helios";
+
+  boot.supportedFilesystems = ["xfs"];
 
   boot.loader.grub = {
     enable = true;
