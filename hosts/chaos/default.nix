@@ -15,6 +15,14 @@
     ./services/arr.nix
   ];
 
+  nixpkgs.overlays = [
+    (final: prev: {
+      jellyfin-ffmpeg = prev.jellyfin-ffmpeg.overrideAttrs (old: {
+        configureFlags = builtins.filter (f: f != "--enable-libaribcaption") old.configureFlags;
+      });
+    })
+  ];
+
   networking.hostName = "chaos";
 
   boot.supportedFilesystems = ["xfs"];
