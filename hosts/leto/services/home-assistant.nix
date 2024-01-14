@@ -79,10 +79,12 @@
           ];
         };
       };
+      adaptive_lighting = {};
     };
     customComponents = with pkgs.home-assistant-custom-components; [
       outputs.packages.${pkgs.system}.hass-auth-header
       waste_collection_schedule
+      adaptive_lighting
     ];
   };
 
