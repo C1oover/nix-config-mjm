@@ -13,7 +13,7 @@
       inputs.nixpkgs.follows = "nixos";
     };
     home-manager = {
-      url = "github:nix-community/home-manager";
+      url = "github:nix-community/home-manager/93e804e7f8a1eb88bde6117cd5046501e66aa4bd";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     hardware.url = "github:NixOS/nixos-hardware";
