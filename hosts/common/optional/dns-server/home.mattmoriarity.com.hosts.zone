@@ -26,14 +26,6 @@ cronus                IN  A     10.0.2.48
 phoebe                IN  A     10.0.2.49
 themis                IN  A     10.0.2.50
 thanatos              IN  A     10.0.2.51
-dns2                  IN  A     10.0.2.100
-dns1                  IN  A     10.0.2.101
-db1                   IN  A     10.0.2.102
-minio1                IN  A     10.0.2.103
-log1                  IN  A     10.0.2.105
-pkg1                  IN  A     10.0.2.107
-redis1                IN  A     10.0.2.109
-guacamole1            IN  A     10.0.2.116
 cronus                IN  AAAA  2601:282:167f:3eec:1097:8cff:fe6a:b260
 megaera               IN  AAAA  2601:282:167f:3eec:140b:14ff:fe41:31e1
 atlas                 IN  AAAA  2601:282:167f:3eec:1490:acff:fec0:6cb7
