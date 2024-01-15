@@ -133,10 +133,7 @@ in {
         ];
       };
       session.domain = "midna.dev";
-      session.redis = {
-        host = "redis.service.consul";
-        port = 6379;
-      };
+      session.redis.host = "${config.services.redis.servers.authelia.unixSocket}";
       storage.postgres = {
         host = "postgresql.service.consul";
         port = 5432;
@@ -166,7 +163,12 @@ in {
     ];
   };
 
-  systemd.services.authelia-main.after = ["lldap.service"];
+  systemd.services.authelia-main = {
+    after = ["lldap.service" "redis-authelia.service"];
+    serviceConfig.SupplementaryGroups = [config.services.redis.servers.authelia.user];
+  };
+
+  services.redis.servers.authelia.enable = true;
 
   networking.firewall.allowedTCPPorts = [
     9091
