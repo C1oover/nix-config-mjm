@@ -24,7 +24,7 @@ in {
         "browser.formfill.enable" = false;
         "browser.onboarding.enabled" = false;
         "browser.shell.checkDefaultBrowser" = false;
-        "browser.startup.homepage" = "https://homelab.home.mattmoriarity.com/";
+        "browser.startup.homepage" = "https://homelab.midna.dev/";
         "cookiebanners.service.mode" = 2;
         "extensions.activeThemeID" = "{c827c446-3d00-4160-a992-3ebcbe6d81a6}";
         "extensions.getAddons.cache.enabled" = false;
