@@ -4,8 +4,7 @@
   pkgs,
   ...
 }: {
-  # The NetBox module only really supports running these locally, but I don't want to do that.
-  services.redis.servers.netbox.enable = lib.mkForce false;
+  # The NetBox module only really supports running this locally, but I don't want to do that.
   services.postgresql.enable = lib.mkForce false;
 
   services.netbox = {
@@ -20,18 +19,6 @@
         "10.0.2.41"
       ];
       DATABASE = lib.mkForce {};
-      REDIS = lib.mkForce {
-        tasks = {
-          HOST = "redis.service.consul";
-          PORT = 6379;
-          DATABASE = 1;
-        };
-        caching = {
-          HOST = "redis.service.consul";
-          PORT = 6379;
-          DATABASE = 2;
-        };
-      };
       CORS_ORIGIN_ALLOW_ALL = false;
       CORS_ORIGIN_WHITELIST = [
         "https://netbox.midna.dev"
