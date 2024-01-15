@@ -1,13 +1,6 @@
 {
-  pkgs,
-  inputs,
-  config,
-  ...
-}: {
   services.lldap = {
     enable = true;
-    # hold back to an old commit that actually builds
-    package = inputs.nixos-lldap.legacyPackages.${pkgs.system}.lldap;
     settings = {
       http_url = "https://ldap.home.mattmoriarity.com";
       ldap_base_dn = "dc=home,dc=mattmoriarity,dc=com";

@@ -2,8 +2,6 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     nixos.url = "github:NixOS/nixpkgs/nixos-unstable";
-    # hold lldap back until #271494 makes it to unstable
-    nixos-lldap.url = "github:NixOS/nixpkgs/91050ea1e57e50388fa87a3302ba12d188ef723a";
     darwin = {
       url = "github:lnl7/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
