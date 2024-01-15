@@ -1,6 +1,5 @@
 {
   config,
-  pkgs,
   lib,
   ...
 }: let
@@ -10,7 +9,6 @@ in {
     enable = true;
     address = "[::]";
     settings = {
-      PAPERLESS_REDIS = "redis://redis.service.consul:6379";
       PAPERLESS_DBHOST = "postgresql.service.consul";
       PAPERLESS_DBPORT = "5432";
       PAPERLESS_DBNAME = "paperless";
