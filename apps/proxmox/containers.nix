@@ -81,6 +81,7 @@ in {
         description = ''
           Redis
         '';
+        onboot = false;
       };
   };
 }
