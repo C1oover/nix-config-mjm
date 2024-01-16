@@ -77,6 +77,11 @@
 
   virtualisation.podman.enable = true;
 
+  systemd.oomd = {
+    enableRootSlice = true;
+    enableUserSlices = true;
+  };
+
   console = {
     font = "${pkgs.terminus_font}/share/consolefonts/ter-u32n.psf.gz";
     keyMap = "us";
