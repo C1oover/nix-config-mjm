@@ -4,23 +4,33 @@
   config,
   ...
 }: let
-  jf = pkgs.writeShellApplication {
-    name = ",jf";
-    runtimeInputs = with pkgs; [jujutsu fzf coreutils];
-    text = ''
+  inherit (pkgs) resholve;
+  interpreter = lib.getExe pkgs.bash;
+  jf = with pkgs;
+    resholve.writeScriptBin ",jf" {
+      inherit interpreter;
+      inputs = [jujutsu fzf coreutils];
+      execer = [
+        "cannot:${jujutsu}/bin/jj"
+        "cannot:${fzf}/bin/fzf"
+      ];
+    } ''
       jj log --no-graph --color never -T 'change_id ++ " " ++ description.first_line() ++ "\n"' "$@" \
       | fzf --with-nth 2.. \
       | cut -d' ' -f1
     '';
-  };
 
-  jco = pkgs.writeShellApplication {
-    name = ",jco";
-    runtimeInputs = [pkgs.jujutsu jf];
-    text = ''
+  jco = with pkgs;
+    resholve.writeScriptBin ",jco" {
+      inherit interpreter;
+      inputs = [jujutsu jf];
+      execer = [
+        "cannot:${jujutsu}/bin/jj"
+        "cannot:${jf}/bin/,jf"
+      ];
+    } ''
       jj new "$(,jf "$@")"
     '';
-  };
 in {
   home.packages = builtins.attrValues {
     inherit jf jco;
