@@ -22,24 +22,6 @@
     ./services/vault-agent.nix
   ];
 
-  nixpkgs.overlays = [
-    (final: prev: {
-      pythonPackagesExtensions =
-        prev.pythonPackagesExtensions
-        ++ [
-          (pythonFinal: pythonPrev: {
-            # https://github.com/NixOS/nixpkgs/pull/280707
-            python3-saml = pythonPrev.python3-saml.overridePythonAttrs {doCheck = false;};
-            # https://github.com/NixOS/nixpkgs/pull/280764
-            dj-rest-auth = pythonPrev.dj-rest-auth.overridePythonAttrs {
-              patches = [];
-              doCheck = false;
-            };
-          })
-        ];
-    })
-  ];
-
   networking.hostName = "leto";
 
   boot.supportedFilesystems = ["xfs"];
