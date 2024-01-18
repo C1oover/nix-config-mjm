@@ -93,6 +93,8 @@
   environment.systemPackages = with pkgs; [
     git
     wget
+    # temp fix for yubikey-agent: https://github.com/NixOS/nixpkgs/pull/281421
+    pcscliteWithPolkit.out
   ];
 
   services.openssh.enable = true;
