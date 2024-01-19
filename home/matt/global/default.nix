@@ -18,7 +18,13 @@
 
   home.stateVersion = lib.mkDefault "22.11";
 
-  home.packages = with pkgs;
+  home.packages = with pkgs; let
+    interpreter = lib.getExe bash;
+    variant =
+      if stdenv.isLinux
+      then "linux"
+      else "darwin";
+  in
     [
       btop
       fx
@@ -32,49 +38,29 @@
       unzip
       wget
 
-      (pkgs.writeShellApplication {
-        name = ",rb";
-        runtimeInputs = with pkgs; [nix nix-output-monitor nvd];
-        text =
-          if pkgs.stdenv.isLinux
-          then ''
-            nom build ".#nixosConfigurations.$(hostname).config.system.build.toplevel"
-            nvd diff /run/current-system ./result
-          ''
-          else ''
-            nom build ".#darwinConfigurations.$(scutil --get LocalHostName).system"
-            nvd diff /run/current-system ./result
-          '';
-      })
+      (resholve.writeScriptBin ",rb" {
+        inherit interpreter;
+        inputs = [nix-output-monitor nvd];
+        fake.external = ["scutil"];
+        execer = [
+          "cannot:${nix-output-monitor}/bin/nom"
+          "cannot:${nvd}/bin/nvd"
+        ];
+      } (builtins.readFile ./rebuild.${variant}.sh))
 
-      (pkgs.writeShellApplication {
-        name = ",sw";
-        runtimeInputs = with pkgs; [nix];
-        text = let
-          profile = "/nix/var/nix/profiles/system";
-        in
-          if pkgs.stdenv.isLinux
-          then ''
-            sudo nix-env -p "${profile}" --set "$(readlink -f result)"
-            sudo systemd-run \
-              -E LOCALE_ARCHIVE \
-              --collect \
-              --no-ask-password \
-              --pty \
-              --quiet \
-              --same-dir \
-              --service-type=exec \
-              --unit=nixos-rebuild-switch-to-configuration \
-              --wait \
-              ./result/bin/switch-to-configuration \
-              switch
-          ''
-          else ''
-            sudo -H --preserve-env=PATH env nix-env -p "${profile}" --set "$(readlink -f result)"
-            ./result/activate-user
-            sudo -H --preserve-env=PATH ./result/activate
-          '';
-      })
+      (resholve.writeScriptBin ",sw" {
+        inherit interpreter;
+        inputs =
+          [
+            nix
+            coreutils
+          ]
+          ++ lib.optionals (variant == "linux") [
+            systemd
+          ];
+        fake.external = lib.optional (variant == "darwin") "sudo";
+        keep."$PWD" = true;
+      } (builtins.readFile ./switch.${variant}.sh))
 
       inputs.home-manager.packages.${pkgs.system}.home-manager
       inputs.agenix.packages.${pkgs.system}.default
