@@ -26,7 +26,11 @@
     ];
   };
 
-  systemd.tmpfiles.rules = ["d /run/secrets/lldap 0700"];
+  systemd.tmpfiles.settings."10-secrets"."/run/secrets/lldap".d = {
+    mode = "0700";
+    user = "root";
+    group = "root";
+  };
 
   services.vault-agent.instances.main.templates = [
     {

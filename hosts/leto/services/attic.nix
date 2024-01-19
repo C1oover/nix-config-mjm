@@ -45,7 +45,11 @@
     ];
   };
 
-  systemd.tmpfiles.rules = ["d /run/secrets/attic 0700 root root - -"];
+  systemd.tmpfiles.settings."10-secrets"."/run/secrets/attic".d = {
+    mode = "0700";
+    user = "root";
+    group = "root";
+  };
 
   services.vault-agent.instances.main.templates = [
     {

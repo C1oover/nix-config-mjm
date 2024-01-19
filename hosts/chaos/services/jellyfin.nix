@@ -10,7 +10,7 @@
 
   environment.systemPackages = with pkgs; [cifs-utils];
 
-  systemd.tmpfiles.rules = ["d /videos"];
+  systemd.tmpfiles.settings."10-videos"."/videos".d = {};
 
   users.groups.media = {};
 

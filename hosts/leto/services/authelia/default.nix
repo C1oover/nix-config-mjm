@@ -93,7 +93,10 @@ in {
     ];
   };
 
-  systemd.tmpfiles.rules = ["d /run/secrets/authelia 0700 ${user} ${group} - -"];
+  systemd.tmpfiles.settings."10-secrets"."/run/secrets/authelia".d = {
+    mode = "0700";
+    inherit user group;
+  };
 
   services.vault-agent.instances.main.templates = [
     {

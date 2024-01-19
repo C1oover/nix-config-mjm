@@ -118,7 +118,11 @@ in {
 
   networking.firewall.allowedTCPPorts = [80 443];
 
-  systemd.tmpfiles.rules = ["d /run/nginx-include 0755 nginx nginx"];
+  systemd.tmpfiles.settings."10-nginx"."/run/nginx-include".d = {
+    mode = "0755";
+    user = "nginx";
+    group = "nginx";
+  };
 
   services.consul-template.instances.ingress = {
     enable = true;

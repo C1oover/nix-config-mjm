@@ -42,7 +42,11 @@ in {
     ];
   };
 
-  systemd.tmpfiles.rules = ["d /run/secrets/paperless 0700 paperless paperless - -"];
+  systemd.tmpfiles.settings."10-secrets"."/run/secrets/paperless".d = {
+    mode = "0700";
+    user = "paperless";
+    group = "paperless";
+  };
 
   services.vault-agent.instances.main.templates = [
     {

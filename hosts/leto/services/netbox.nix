@@ -81,7 +81,11 @@
     meta.metrics_path = "/metrics";
   };
 
-  systemd.tmpfiles.rules = ["d /run/secrets/netbox 0700 netbox netbox - -"];
+  systemd.tmpfiles.settings."10-secrets"."/run/secrets/netbox".d = {
+    mode = "0700";
+    user = "netbox";
+    group = "netbox";
+  };
 
   services.vault-agent.instances.main.templates = [
     {
