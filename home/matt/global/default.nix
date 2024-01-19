@@ -40,7 +40,7 @@
 
       (resholve.writeScriptBin ",rb" {
         inherit interpreter;
-        inputs = [nix-output-monitor nvd];
+        inputs = [nix-output-monitor nvd] ++ lib.optional (variant == "linux") nettools;
         fake.external = ["scutil"];
         execer = [
           "cannot:${nix-output-monitor}/bin/nom"
@@ -55,10 +55,8 @@
             nix
             coreutils
           ]
-          ++ lib.optionals (variant == "linux") [
-            systemd
-          ];
-        fake.external = lib.optional (variant == "darwin") "sudo";
+          ++ lib.optional (variant == "linux") systemd;
+        fake.external = ["sudo"];
         keep."$PWD" = true;
       } (builtins.readFile ./switch.${variant}.sh))
 
