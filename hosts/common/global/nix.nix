@@ -25,13 +25,6 @@
     overlays = [
       inputs.nur.overlay
       inputs.attic.overlays.default
-      (final: prev: {
-        attic = prev.attic.overrideAttrs (o: {
-          patches =
-            (o.patches or [])
-            ++ [./attic.patch];
-        });
-      })
     ];
   };
 
