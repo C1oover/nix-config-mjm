@@ -1,3 +1,7 @@
+set -o errexit
+set -o nounset
+set -o pipefail
+
 preset="$1"
 
 case "$preset" in

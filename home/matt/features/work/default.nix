@@ -9,16 +9,10 @@
     ./ngrok.nix
   ];
 
-  home.packages = with pkgs; [
-    google-cloud-sdk
-    teleport
-
-    (writeShellApplication {
-      name = "db";
-      runtimeInputs = [teleport];
-      text = builtins.readFile ./db.sh;
-    })
-  ];
+  home.packages = builtins.attrValues {
+    inherit (pkgs) google-cloud-sdk teleport;
+    db = pkgs.callPackage ./db.nix {};
+  };
 
   home.shellAliases = {
     slab-restart = "npm run docker:down && npm run docker:up";
