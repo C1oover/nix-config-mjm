@@ -171,164 +171,67 @@ in {
       packages = [pkgs.colmena deploy-rs];
     };
 
-    apps.unseal.program = lib.getExe (pkgs.writeShellApplication {
-      name = "unseal";
-      # _1password intentionally left out since it goes through a security wrapper for setgid
-      runtimeInputs = [pkgs.vault];
-      text = ''
-        host="$1"
-        export VAULT_ADDR="http://$host:8200"
+    apps =
+      builtins.mapAttrs (_: script: {program = script;}) (pkgs.callPackages ./scripts.nix {
+        inherit attic;
+      })
+      // {
+        deploy.program = lib.getExe (pkgs.writeShellApplication {
+          name = "deploy";
+          runtimeInputs = [pkgs.coreutils pkgs.openssh pkgs.vault deploy-rs];
+          text = ''
+            tmp=$(mktemp -d)
+            keypath="$tmp/id_ed25519"
+            ssh-keygen -t ed25519 -f "$keypath" -N ""
+            vault write \
+              -field=signed_key \
+              ssh-client-signer/sign/homelab-client \
+              "public_key=@$keypath.pub" \
+              valid_principals=matt \
+              >"$keypath-cert.pub"
+            function finish {
+              rm -rf "$tmp"
+            }
+            trap finish EXIT
 
-        vault operator unseal "$(op read "op://Private/Homelab Vault Keys/Unseal Keys/638880CCF1664DED95BB219A708A896A")"
-        vault operator unseal "$(op read "op://Private/Homelab Vault Keys/Unseal Keys/979343926DF44A88B93808C49CE2FE26")"
-        vault operator unseal "$(op read "op://Private/Homelab Vault Keys/Unseal Keys/368F61C90CD34E2BBDF03F02C314AA1D")"
-      '';
-    });
+            deploy --skip-checks --ssh-opts="-i $keypath" "$@"
+          '';
+        });
 
-    apps.ci-attic-login.program = lib.getExe (pkgs.writeShellApplication {
-      name = "ci-attic-login";
-      runtimeInputs = [pkgs.vault attic];
-      text = ''
-        VAULT_TOKEN=$(vault write -field=token auth/gitlab/login role=homelab-infra "jwt=$VAULT_ID_TOKEN")
-        export VAULT_TOKEN
+        ci-deploy.program = lib.getExe (pkgs.writeShellApplication {
+          name = "ci-deploy";
+          runtimeInputs = [pkgs.coreutils pkgs.openssh pkgs.vault deploy-rs attic];
+          text = ''
+            VAULT_TOKEN=$(vault write -field=token auth/gitlab/login role=homelab-infra "jwt=$VAULT_ID_TOKEN")
+            export VAULT_TOKEN
 
-        ATTIC_TOKEN=$(vault kv get -field=token kv/attic/client)
-        attic login --set-default homelab https://attic.midna.dev "$ATTIC_TOKEN"
+            tmp=$(mktemp -d)
+            keypath="$tmp/id_ed25519"
+            ssh-keygen -t ed25519 -f "$keypath" -N ""
+            vault write \
+              -field=signed_key \
+              ssh-client-signer/sign/homelab-client \
+              "public_key=@$keypath.pub" \
+              valid_principals=matt \
+              >"$keypath-cert.pub"
+            function finish {
+              rm -rf "$tmp"
+            }
+            trap finish EXIT
 
-        # ensure attic itself gets cached, since it's expensive to build
-        attic push homelab ${attic}
-      '';
-    });
+            if [ "$ARCH" = "x86_64" ]; then
+              targets=(.#alecto .#cronus .#chaos .#helios .#leto .#megaera .#rhea .#themis .#tisiphone .#hypnos)
+            elif [ "$ARCH" = "arm64" ]; then
+              # deploy to arges first, because it may need to reload the gitlab-runner, which fails if
+              # the ingress is unavailable, which might temporarily happen when deploying to the other
+              # hosts.
+              targets=(.#arges .#nyx .#brontes .#steropes)
+            fi
 
-    apps.deploy.program = lib.getExe (pkgs.writeShellApplication {
-      name = "deploy";
-      runtimeInputs = [pkgs.coreutils pkgs.openssh pkgs.vault deploy-rs];
-      text = ''
-        tmp=$(mktemp -d)
-        keypath="$tmp/id_ed25519"
-        ssh-keygen -t ed25519 -f "$keypath" -N ""
-        vault write \
-          -field=signed_key \
-          ssh-client-signer/sign/homelab-client \
-          "public_key=@$keypath.pub" \
-          valid_principals=matt \
-          >"$keypath-cert.pub"
-        function finish {
-          rm -rf "$tmp"
-        }
-        trap finish EXIT
-
-        deploy --skip-checks --ssh-opts="-i $keypath" "$@"
-      '';
-    });
-
-    apps.deploy-colmena.program = lib.getExe (pkgs.writeShellApplication {
-      name = "deploy-colmena";
-      runtimeInputs = [pkgs.coreutils pkgs.colmena pkgs.openssh pkgs.vault];
-      text = ''
-        tmp=$(mktemp -d)
-        keypath="$tmp/id_ed25519"
-        ssh-keygen -t ed25519 -f "$keypath" -N ""
-        vault write \
-          -field=signed_key \
-          ssh-client-signer/sign/homelab-client \
-          "public_key=@$keypath.pub" \
-          valid_principals=matt \
-          >"$keypath-cert.pub"
-        function finish {
-          rm -rf "$tmp"
-        }
-        trap finish EXIT
-
-        config_file="$tmp/ssh_config"
-        cat >"$config_file" <<EOF
-        IdentityFile $keypath
-        Host *
-          UserKnownHostsFile ~/.ssh/known_hosts
-        EOF
-
-        export SSH_CONFIG_FILE="$config_file"
-        colmena apply "$@"
-      '';
-    });
-
-    apps.ci-deploy.program = lib.getExe (pkgs.writeShellApplication {
-      name = "ci-deploy";
-      runtimeInputs = [pkgs.coreutils pkgs.openssh pkgs.vault deploy-rs attic];
-      text = ''
-        VAULT_TOKEN=$(vault write -field=token auth/gitlab/login role=homelab-infra "jwt=$VAULT_ID_TOKEN")
-        export VAULT_TOKEN
-
-        tmp=$(mktemp -d)
-        keypath="$tmp/id_ed25519"
-        ssh-keygen -t ed25519 -f "$keypath" -N ""
-        vault write \
-          -field=signed_key \
-          ssh-client-signer/sign/homelab-client \
-          "public_key=@$keypath.pub" \
-          valid_principals=matt \
-          >"$keypath-cert.pub"
-        function finish {
-          rm -rf "$tmp"
-        }
-        trap finish EXIT
-
-        if [ "$ARCH" = "x86_64" ]; then
-          targets=(.#alecto .#cronus .#chaos .#helios .#leto .#megaera .#rhea .#themis .#tisiphone .#hypnos)
-        elif [ "$ARCH" = "arm64" ]; then
-          # deploy to arges first, because it may need to reload the gitlab-runner, which fails if
-          # the ingress is unavailable, which might temporarily happen when deploying to the other
-          # hosts.
-          targets=(.#arges .#nyx .#brontes .#steropes)
-        fi
-
-        deploy --skip-checks --ssh-opts="-i $keypath" --keep-result -r ./result --targets "''${targets[@]}"
-        attic push homelab result/*/system
-      '';
-    });
-
-    apps.ci-deploy-colmena.program = lib.getExe (pkgs.writeShellApplication {
-      name = "ci-deploy-colmena";
-      runtimeInputs = [pkgs.coreutils pkgs.openssh pkgs.vault pkgs.colmena attic];
-      text = ''
-        VAULT_TOKEN=$(vault write -field=token auth/gitlab/login role=homelab-infra "jwt=$VAULT_ID_TOKEN")
-        export VAULT_TOKEN
-
-        tmp=$(mktemp -d)
-        keypath="$tmp/id_ed25519"
-        ssh-keygen -t ed25519 -f "$keypath" -N ""
-        vault write \
-          -field=signed_key \
-          ssh-client-signer/sign/homelab-client \
-          "public_key=@$keypath.pub" \
-          valid_principals=matt \
-          >"$keypath-cert.pub"
-        function finish {
-          rm -rf "$tmp"
-        }
-        trap finish EXIT
-
-        config_file="$tmp/ssh_config"
-        cat >"$config_file" <<EOF
-        IdentityFile $keypath
-        EOF
-        export SSH_CONFIG_FILE="$config_file"
-
-        if [ "$ARCH" = "arm64" ]; then
-          # deploy to arges first, because it may need to reload the gitlab-runner, which fails if
-          # the ingress is unavailable, which might temporarily happen when deploying to the other
-          # hosts.
-          colmena apply --on arges --keep-result
-        fi
-
-        colmena apply --on "@$ARCH" --keep-result
-
-        if [ "$ARCH" = "x86_64" ]; then
-          colmena apply --on hypnos --keep-result
-        fi
-
-        attic push homelab .gcroots/node-*
-      '';
-    });
+            deploy --skip-checks --ssh-opts="-i $keypath" --keep-result -r ./result --targets "''${targets[@]}"
+            attic push homelab result/*/system
+          '';
+        });
+      };
   };
 }
