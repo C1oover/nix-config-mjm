@@ -5,7 +5,7 @@
     system,
     ...
   }: let
-    terraform = pkgs.opentofu.withPlugins (p: [
+    opentofu = pkgs.opentofu.withPlugins (p: [
       p.consul
       p.gitlab
       p.minio
@@ -36,7 +36,7 @@
       .terraformConfig
       .json;
   in {
-    packages.terraform = terraform;
+    packages.terraform = opentofu;
 
     devenv.shells.default = {
       env = {
@@ -51,45 +51,16 @@
       ];
 
       languages.terraform.enable = true;
-      languages.terraform.package = terraform;
+      languages.terraform.package = opentofu;
 
       scripts.tf.exec = ''
         cd terraform
-        ${lib.getExe terraform} "$@"
+        ${lib.getExe opentofu} "$@"
       '';
     };
 
-    apps.tf-plan.program = lib.getExe (pkgs.writeShellApplication {
-      name = "tf-plan";
-      runtimeInputs = [terraform];
-      text = ''
-        cd terraform
-        ln -sf ${terraformConfiguration} config.tf.json
-        tofu init && tofu plan "$@"
-      '';
-    });
-
-    apps.tf-apply.program = lib.getExe (pkgs.writeShellApplication {
-      name = "tf-apply";
-      runtimeInputs = [terraform];
-      text = ''
-        cd terraform
-        ln -sf ${terraformConfiguration} config.tf.json
-        tofu init && tofu apply "$@"
-      '';
-    });
-
-    apps.ci-terraform-apply.program = lib.getExe (pkgs.writeShellApplication {
-      name = "ci-terraform-apply";
-      runtimeInputs = [terraform pkgs.vault];
-      text = ''
-        VAULT_TOKEN=$(vault write -field=token auth/gitlab/login role=homelab-infra "jwt=$VAULT_ID_TOKEN")
-        export VAULT_TOKEN
-
-        cd terraform
-        ln -sf ${terraformConfiguration} config.tf.json
-        tofu init && tofu apply -auto-approve
-      '';
+    apps = builtins.mapAttrs (_: script: {program = toString script;}) (pkgs.callPackages ./scripts.nix {
+      inherit opentofu terraformConfiguration;
     });
   };
 }
