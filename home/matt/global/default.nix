@@ -18,52 +18,28 @@
 
   home.stateVersion = lib.mkDefault "22.11";
 
-  home.packages = with pkgs; let
-    interpreter = lib.getExe bash;
-    variant =
-      if stdenv.isLinux
-      then "linux"
-      else "darwin";
-  in
-    [
-      btop
-      fx
-      gh
-      httpie
-      nix-output-monitor
-      nix-tree
-      pstree
-      ripgrep
-      tree
-      unzip
-      wget
+  home.packages = builtins.attrValues ({
+      inherit
+        (pkgs)
+        btop
+        fx
+        gh
+        httpie
+        nix-output-monitor
+        nix-tree
+        pstree
+        ripgrep
+        tree
+        unzip
+        wget
+        ;
 
-      (resholve.writeScriptBin ",rb" {
-        inherit interpreter;
-        inputs = [nix-output-monitor nvd] ++ lib.optional (variant == "linux") nettools;
-        fake.external = ["scutil"];
-        execer = [
-          "cannot:${nix-output-monitor}/bin/nom"
-          "cannot:${nvd}/bin/nvd"
-        ];
-      } (builtins.readFile ./rebuild.${variant}.sh))
+      inherit (pkgs.callPackages ./rebuild.nix {}) rb sw;
 
-      (resholve.writeScriptBin ",sw" {
-        inherit interpreter;
-        inputs =
-          [
-            nix
-            coreutils
-          ]
-          ++ lib.optional (variant == "linux") systemd;
-        fake.external = ["sudo"];
-        keep."$PWD" = true;
-      } (builtins.readFile ./switch.${variant}.sh))
-
-      inputs.home-manager.packages.${pkgs.system}.home-manager
-      inputs.agenix.packages.${pkgs.system}.default
-    ]
-    ++ lib.optional pkgs.stdenv.isLinux pkgs.attic;
+      inherit (inputs.home-manager.packages.${pkgs.system}) home-manager;
+      agenix = inputs.agenix.packages.${pkgs.system}.default;
+    }
+    // lib.optionalAttrs pkgs.stdenv.isLinux {inherit (pkgs) attic;});
 
   home.shellAliases = {
     td = "cd $(mktemp -d)";
