@@ -30,7 +30,6 @@
       url = "github:terranix/terranix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    deploy-rs.url = "github:serokell/deploy-rs";
     helix.url = "github:helix-editor/helix";
     nix-colors.url = "github:misterio77/nix-colors";
     jujutsu.url = "github:martinvonz/jj";

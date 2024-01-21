@@ -122,39 +122,6 @@ in {
         imports = [./themis];
       };
     };
-
-    deploy = {
-      user = "root";
-      sshUser = "matt";
-      sshOpts = ["-i" "/home/matt/.ssh/yubikey-cert.pub"];
-      nodes = let
-        mkNode = name: cfg: let
-          nixos = outputs.nixosConfigurations.${name};
-        in
-          {
-            hostname = "${nixos.config.networking.hostName}.home.mattmoriarity.com";
-            profiles.system.path = inputs.deploy-rs.lib.${nixos.config.nixpkgs.hostPlatform.system}.activate.nixos nixos;
-          }
-          // cfg;
-      in {
-        alecto = mkNode "alecto" {};
-        arges = mkNode "arges" {};
-        brontes = mkNode "brontes" {};
-        chaos = mkNode "chaos" {};
-        cronus = mkNode "cronus" {};
-        helios = mkNode "helios" {};
-        hypnos = mkNode "hypnos" {};
-        leto = mkNode "leto" {};
-        megaera = mkNode "megaera" {};
-        nyx = mkNode "nyx" {
-          hostname = "nyx.mattmoriarity.com";
-        };
-        rhea = mkNode "rhea" {};
-        steropes = mkNode "steropes" {};
-        themis = mkNode "themis" {};
-        tisiphone = mkNode "tisiphone" {};
-      };
-    };
   };
 
   perSystem = {
@@ -164,74 +131,14 @@ in {
     inputs',
     ...
   }: let
-    deploy-rs = inputs'.deploy-rs.packages.default;
     attic = inputs'.attic.packages.default;
   in {
     devenv.shells.default = {
-      packages = [pkgs.colmena deploy-rs];
+      packages = [pkgs.colmena];
     };
 
-    apps =
-      builtins.mapAttrs (_: script: {program = script;}) (pkgs.callPackages ./scripts.nix {
-        inherit attic;
-      })
-      // {
-        deploy.program = lib.getExe (pkgs.writeShellApplication {
-          name = "deploy";
-          runtimeInputs = [pkgs.coreutils pkgs.openssh pkgs.vault deploy-rs];
-          text = ''
-            tmp=$(mktemp -d)
-            keypath="$tmp/id_ed25519"
-            ssh-keygen -t ed25519 -f "$keypath" -N ""
-            vault write \
-              -field=signed_key \
-              ssh-client-signer/sign/homelab-client \
-              "public_key=@$keypath.pub" \
-              valid_principals=matt \
-              >"$keypath-cert.pub"
-            function finish {
-              rm -rf "$tmp"
-            }
-            trap finish EXIT
-
-            deploy --skip-checks --ssh-opts="-i $keypath" "$@"
-          '';
-        });
-
-        ci-deploy.program = lib.getExe (pkgs.writeShellApplication {
-          name = "ci-deploy";
-          runtimeInputs = [pkgs.coreutils pkgs.openssh pkgs.vault deploy-rs attic];
-          text = ''
-            VAULT_TOKEN=$(vault write -field=token auth/gitlab/login role=homelab-infra "jwt=$VAULT_ID_TOKEN")
-            export VAULT_TOKEN
-
-            tmp=$(mktemp -d)
-            keypath="$tmp/id_ed25519"
-            ssh-keygen -t ed25519 -f "$keypath" -N ""
-            vault write \
-              -field=signed_key \
-              ssh-client-signer/sign/homelab-client \
-              "public_key=@$keypath.pub" \
-              valid_principals=matt \
-              >"$keypath-cert.pub"
-            function finish {
-              rm -rf "$tmp"
-            }
-            trap finish EXIT
-
-            if [ "$ARCH" = "x86_64" ]; then
-              targets=(.#alecto .#cronus .#chaos .#helios .#leto .#megaera .#rhea .#themis .#tisiphone .#hypnos)
-            elif [ "$ARCH" = "arm64" ]; then
-              # deploy to arges first, because it may need to reload the gitlab-runner, which fails if
-              # the ingress is unavailable, which might temporarily happen when deploying to the other
-              # hosts.
-              targets=(.#arges .#nyx .#brontes .#steropes)
-            fi
-
-            deploy --skip-checks --ssh-opts="-i $keypath" --keep-result -r ./result --targets "''${targets[@]}"
-            attic push homelab result/*/system
-          '';
-        });
-      };
+    apps = builtins.mapAttrs (_: script: {program = script;}) (pkgs.callPackages ./scripts.nix {
+      inherit attic;
+    });
   };
 }
