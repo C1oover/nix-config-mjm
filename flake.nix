@@ -123,11 +123,7 @@
 
         formatter = pkgs.alejandra;
 
-        apps.ci-flake-update.program = lib.getExe (pkgs.writeShellApplication {
-          name = "ci-flake-update";
-          runtimeInputs = with pkgs; [curl jq nix git];
-          text = builtins.readFile ./flake-update.sh;
-        });
+        apps = builtins.mapAttrs (_: script: {program = script;}) (pkgs.callPackages ./scripts.nix {});
       };
     };
 }
