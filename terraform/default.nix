@@ -35,8 +35,13 @@
       .config
       .terraformConfig
       .json;
+
+    tofu-scripts = pkgs.callPackage ./scripts {inherit opentofu terraformConfiguration;};
   in {
-    packages.terraform = opentofu;
+    packages = {
+      inherit opentofu tofu-scripts;
+      terraform = opentofu;
+    };
 
     devenv.shells.default = {
       env = {
@@ -59,8 +64,6 @@
       '';
     };
 
-    apps = builtins.mapAttrs (_: script: {program = toString script;}) (pkgs.callPackages ./scripts.nix {
-      inherit opentofu terraformConfiguration;
-    });
+    apps = lib.genAttrs tofu-scripts.scripts (script: {program = "${tofu-scripts}/bin/${script}";});
   };
 }
