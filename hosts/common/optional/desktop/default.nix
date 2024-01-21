@@ -13,6 +13,16 @@
   #   NIXOS_OZONE_WL = "1";
   # };
 
+  nixpkgs.overlays = [
+    (_: prev: {
+      qt6Packages = prev.qt6Packages.overrideScope (_: old: {
+        kdsoap = old.kdsoap.overrideAttrs {
+          postInstall = null;
+        };
+      });
+    })
+  ];
+
   services.xserver = {
     enable = true;
     displayManager.sddm = {
