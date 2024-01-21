@@ -72,8 +72,8 @@ in {
       attic push homelab ${attic}
     '';
 
-  deploy-colmena =
-    resholve.writeScriptBin "deploy-colmena" {
+  deploy =
+    resholve.writeScriptBin "deploy" {
       inherit interpreter;
       inputs = [coreutils colmena];
       keep.source = ["${create-temp-key}"];
@@ -92,7 +92,7 @@ in {
       colmena apply "$@"
     '';
 
-  ci-deploy-colmena =
+  ci-deploy =
     resholve.writeScriptBin "ci-deploy-colmena" {
       inherit interpreter;
       inputs = [coreutils colmena attic];

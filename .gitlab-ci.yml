@@ -38,7 +38,7 @@ deploy nixos hosts:
   # before_script: !reference [.snippets, setup_devenv]
   script:
     - nix run .#ci-attic-login
-    - nix run .#ci-deploy-colmena
+    - nix run .#ci-deploy
 apply terranix changes:
   tags: [nix, x86_64]
   rules:
