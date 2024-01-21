@@ -27,13 +27,7 @@ in {
     darwinLaunchOptions = ["--listen-on=unix:kitty.sock"];
   };
 
-  home.packages = with pkgs; [
-    (writeShellApplication {
-      name = "tt";
-      runtimeInputs = [kitty];
-      text = ''
-        kitty @ set-tab-title "$(basename "$PWD")"
-      '';
-    })
-  ];
+  home.packages = builtins.attrValues {
+    inherit (pkgs.callPackages ./scripts.nix {}) tt;
+  };
 }
