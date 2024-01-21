@@ -15,48 +15,6 @@
     then "yubikey.pub"
     else "id_ed25519.pub";
   sshPublicKeyPath = "${config.home.homeDirectory}/.ssh/${sshPublicKeyName}";
-  sshCertPath = builtins.replaceStrings [".pub"] ["-cert.pub"] sshPublicKeyPath;
-
-  updateSshCert = pkgs.writeShellApplication {
-    name = "update-ssh-cert";
-    runtimeInputs = [pkgs.vault];
-    text = ''
-      vault write \
-        -field=signed_key \
-        ssh-client-signer/sign/homelab-client \
-        public_key=@${sshPublicKeyPath} \
-        valid_principals=matt \
-        >"${sshCertPath}"
-    '';
-  };
-
-  vssh = pkgs.writeShellApplication {
-    name = "vssh";
-    runtimeInputs = [pkgs.openssh updateSshCert];
-    text = ''
-      update-ssh-cert
-      ssh -i "${sshCertPath}" "$@"
-    '';
-  };
-
-  tmssh = pkgs.writeShellApplication {
-    name = "tmssh";
-    runtimeInputs = [vssh];
-    text = ''
-      vssh "$@" -t 'tmux -CC new -A -s tmssh'
-    '';
-  };
-
-  s = pkgs.writeShellApplication {
-    name = "s";
-    runtimeInputs = [updateSshCert pkgs.kitty];
-    text = ''
-      update-ssh-cert
-      kitty +kitten ssh -i "${sshCertPath}" "$@"
-    '';
-  };
-
-  devenv = inputs.devenv.packages.${pkgs.system}.default;
 
   envVars = {
     NOMAD_ADDR = "http://nomad.service.consul:4646";
@@ -70,19 +28,28 @@
     then pkgs.nomad
     else pkgs.nomad_1_4;
 in {
-  home.packages = with pkgs; [
-    consul
-    devenv
-    minio-client
-    nomad
-    tarsnap
-    vault
-    wander
+  home.packages = builtins.attrValues {
+    inherit
+      (pkgs)
+      consul
+      minio-client
+      tarsnap
+      vault
+      wander
+      ;
 
-    s
-    vssh
-    tmssh
-  ];
+    inherit nomad;
+
+    devenv = inputs.devenv.packages.${pkgs.system}.default;
+
+    inherit
+      (pkgs.callPackages ./scripts.nix {
+        inherit sshPublicKeyPath;
+      })
+      s
+      vssh
+      ;
+  };
 
   home.sessionVariables = envVars;
 
