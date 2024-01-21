@@ -8,7 +8,7 @@
 
     ../common/optional/server
     ../common/optional/consul-agent.nix
-    ../common/optional/garage.nix
+    ../common/optional/garage
 
     ./services/actual.nix
     ./services/attic.nix

@@ -10,7 +10,7 @@
     ../common/optional/consul-agent.nix
     ../common/optional/nomad-client.nix
     ../common/optional/nix-remote.nix
-    ../common/optional/garage.nix
+    ../common/optional/garage
   ];
 
   networking.hostName = "helios";
