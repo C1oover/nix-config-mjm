@@ -132,13 +132,15 @@ in {
     ...
   }: let
     attic = inputs'.attic.packages.default;
+    host-scripts = pkgs.callPackage ./scripts {
+      inherit attic;
+    };
   in {
     devenv.shells.default = {
       packages = [pkgs.colmena];
     };
 
-    apps = builtins.mapAttrs (_: script: {program = script;}) (pkgs.callPackages ./scripts.nix {
-      inherit attic;
-    });
+    packages = {inherit host-scripts;};
+    apps = lib.genAttrs host-scripts.scripts (script: {program = "${host-scripts}/bin/${script}";});
   };
 }
