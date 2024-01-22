@@ -28,5 +28,6 @@
     ./proxmox
     ./taskserver
     ./vault
+    ./vaultwarden
   ];
 }

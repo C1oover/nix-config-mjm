@@ -36,6 +36,11 @@
         user = "taskd";
         group = "taskd";
       }
+      {
+        directory = "/var/lib/bitwarden_rs";
+        user = "vaultwarden";
+        group = "vaultwarden";
+      }
     ];
     files = [
       "/etc/machine-id"
