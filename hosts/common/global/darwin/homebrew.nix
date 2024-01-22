@@ -6,6 +6,7 @@
       "1password/tap/1password-cli"
       "alfred"
       "beeper"
+      "bitwarden"
       "chrysalis"
       "dash"
       "docker"
