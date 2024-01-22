@@ -1,3 +1,5 @@
+set -euo pipefail
+
 sudo nix-env -p /nix/var/nix/profiles/system --set "$(readlink -f result)"
 sudo systemd-run \
   -E LOCALE_ARCHIVE \
