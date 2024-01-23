@@ -4,6 +4,6 @@
     fqdn = "tasks.midna.dev";
     listenHost = "::";
     openFirewall = true;
-    organisations.home.users = ["mjm"];
+    organisations.home.users = [ "mjm" ];
   };
 }

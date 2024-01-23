@@ -1,8 +1,5 @@
+{ config, pkgs, ... }:
 {
-  config,
-  pkgs,
-  ...
-}: {
   imports = [
     ./global
     ./global/darwin.nix
@@ -13,19 +10,19 @@
   home.dock = {
     enable = true;
     entries = [
-      {path = "/System/Applications/Mail.app/";}
-      {path = "${pkgs.firefox-bin}/Applications/Firefox.app/";}
-      {path = "/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app/";}
-      {path = "/Applications/Beeper.app/";}
-      {path = "/System/Applications/Maps.app/";}
-      {path = "/Applications/Fantastical.app/";}
-      {path = "/System/Applications/System Settings.app/";}
-      {path = "/Applications/1Password.app/";}
-      {path = "/Applications/Drafts.app/";}
-      {path = "${pkgs.kitty}/Applications/kitty.app/";}
-      {path = "/Applications/Dash.app/";}
-      {path = "/Applications/Slab.app/";}
-      {path = "${pkgs.discord}/Applications/Discord.app/";}
+      { path = "/System/Applications/Mail.app/"; }
+      { path = "${pkgs.firefox-bin}/Applications/Firefox.app/"; }
+      { path = "/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app/"; }
+      { path = "/Applications/Beeper.app/"; }
+      { path = "/System/Applications/Maps.app/"; }
+      { path = "/Applications/Fantastical.app/"; }
+      { path = "/System/Applications/System Settings.app/"; }
+      { path = "/Applications/1Password.app/"; }
+      { path = "/Applications/Drafts.app/"; }
+      { path = "${pkgs.kitty}/Applications/kitty.app/"; }
+      { path = "/Applications/Dash.app/"; }
+      { path = "/Applications/Slab.app/"; }
+      { path = "${pkgs.discord}/Applications/Discord.app/"; }
       {
         path = "${config.home.homeDirectory}/Downloads/";
         section = "others";

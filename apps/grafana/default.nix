@@ -1,7 +1,9 @@
-{lib, ...}: let
+{ lib, ... }:
+let
   name = "grafana";
   image = "grafana/grafana-oss:10.2.3";
-in {
+in
+{
   nomad.jobs.grafana = {
     priority = 70;
 
@@ -30,13 +32,15 @@ in {
       ];
 
       tasks.grafana = {
-        docker = {inherit image;};
+        docker = {
+          inherit image;
+        };
         env.GF_PATHS_CONFIG = "$\${NOMAD_SECRETS_DIR}/grafana.ini";
         env.GF_PATHS_PROVISIONING = "$\${NOMAD_TASK_DIR}/provisioning";
         cpu = 200;
         memory = 200;
         loggingTag = name;
-        vault.policies = [name];
+        vault.policies = [ name ];
 
         templates =
           {
@@ -61,7 +65,8 @@ in {
                 leftDelimiter = "do_not_substitute";
               };
             })
-            (builtins.readDir ./dashboards));
+            (builtins.readDir ./dashboards)
+          );
       };
     };
   };

@@ -15,9 +15,12 @@ buildPythonPackage rec {
     hash = "sha256-on3eyKDIUOXu3u9HZ9rNBnZXrrSEx+g1k9r1nBZDPOI=";
   };
 
-  propagatedBuildInputs = [django six];
+  propagatedBuildInputs = [
+    django
+    six
+  ];
 
-  nativeCheckInputs = [mock];
+  nativeCheckInputs = [ mock ];
   checkPhase = ''
     ${python.interpreter} -m django test --settings=background_task.tests.test_settings
   '';

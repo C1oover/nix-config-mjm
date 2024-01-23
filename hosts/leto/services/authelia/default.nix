@@ -1,6 +1,8 @@
-{config, ...}: let
+{ config, ... }:
+let
   inherit (config.services.authelia.instances.main) user group;
-in {
+in
+{
   services.authelia.instances.main = {
     enable = true;
     settings = {
@@ -55,17 +57,19 @@ in {
       storageEncryptionKeyFile = config.age.secrets."authelia-storage-encryption-key".path;
     };
     environmentVariables = {
-      AUTHELIA_AUTHENTICATION_BACKEND_LDAP_PASSWORD_FILE = config.age.secrets."authelia-ldap-password".path;
+      AUTHELIA_AUTHENTICATION_BACKEND_LDAP_PASSWORD_FILE =
+        config.age.secrets."authelia-ldap-password".path;
       AUTHELIA_NOTIFIER_SMTP_PASSWORD_FILE = config.age.secrets."authelia-smtp-password".path;
     };
-    settingsFiles = [
-      "/run/secrets/authelia/db-config.yml"
-    ];
+    settingsFiles = [ "/run/secrets/authelia/db-config.yml" ];
   };
 
   systemd.services.authelia-main = {
-    after = ["lldap.service" "redis-authelia.service"];
-    serviceConfig.SupplementaryGroups = [config.services.redis.servers.authelia.user];
+    after = [
+      "lldap.service"
+      "redis-authelia.service"
+    ];
+    serviceConfig.SupplementaryGroups = [ config.services.redis.servers.authelia.user ];
   };
 
   services.redis.servers.authelia.enable = true;

@@ -1,22 +1,24 @@
-{lib, ...}: {
-  imports = [
-    ../common/optional/poe-hat.nix
-  ];
+{ lib, ... }:
+{
+  imports = [ ../common/optional/poe-hat.nix ];
 
-  boot.initrd.kernelModules = [];
-  boot.kernelModules = [];
-  boot.extraModulePackages = [];
+  boot.initrd.kernelModules = [ ];
+  boot.kernelModules = [ ];
+  boot.extraModulePackages = [ ];
 
   fileSystems."/" = {
     device = "none";
     fsType = "tmpfs";
-    options = ["defaults" "mode=755"];
+    options = [
+      "defaults"
+      "mode=755"
+    ];
   };
 
   fileSystems."/persist" = {
     device = "/dev/disk/by-label/NIXOS_SD";
     fsType = "ext4";
-    options = ["noatime"];
+    options = [ "noatime" ];
     neededForBoot = true;
   };
 

@@ -1,4 +1,5 @@
-{pkgs, ...}: let
+{ pkgs, ... }:
+let
   iconMap = pkgs.writeScript "sketchybar-plugin-icon-map" ''
     #!${pkgs.bash}/bin/bash
     ${builtins.readFile sketchybar/plugins/icon_map.sh}
@@ -11,7 +12,9 @@
     ${builtins.readFile sketchybar/plugins/battery.sh}
   '';
 
-  calendarPlugin = pkgs.writeShellScript "sketchybar-plugin-calendar" (builtins.readFile sketchybar/plugins/calendar.sh);
+  calendarPlugin = pkgs.writeShellScript "sketchybar-plugin-calendar" (
+    builtins.readFile sketchybar/plugins/calendar.sh
+  );
 
   spacePlugin = pkgs.writeScript "sketchybar-plugin-space" ''
     #!${pkgs.bash}/bin/bash
@@ -27,7 +30,8 @@
     JQ=${pkgs.jq}/bin/jq
     ${builtins.readFile sketchybar/plugins/yabai.sh}
   '';
-in {
+in
+{
   services.yabai = {
     enable = true;
     extraConfig = ''

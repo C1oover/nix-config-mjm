@@ -5,7 +5,8 @@
   config,
   ...
 }:
-with lib; {
+with lib;
+{
   options = {
     terraform = mkOption {
       type = types.submoduleWith {
@@ -13,7 +14,7 @@ with lib; {
         modules = [
           "${inputs.terranix}/core/terraform-options.nix"
           "${inputs.terranix}/modules"
-          {_module.args.pkgs = pkgs;}
+          { _module.args.pkgs = pkgs; }
         ];
       };
     };
@@ -35,49 +36,43 @@ with lib; {
   };
 
   config = {
-    terraformConfig.sanitized = let
-      strip_nulls = true;
-      sanitize = configuration:
-        getAttr (builtins.typeOf configuration) {
-          bool = configuration;
-          int = configuration;
-          string = configuration;
-          str = configuration;
-          list = map sanitize configuration;
-          null = null;
-          set = let
-            pred = name: value: name != "_module" && name != "_ref" && name != "__functor";
-            stripped_a =
-              flip filterAttrs configuration
-              (name: value: pred name value);
-            stripped_b =
-              flip filterAttrs configuration
-              (name: value: pred name value && value != null);
-            recursiveSanitized =
-              if strip_nulls
-              then mapAttrs (const sanitize) stripped_b
-              else mapAttrs (const sanitize) stripped_a;
-          in
-            if (length (attrNames configuration) == 0)
-            then {}
-            else recursiveSanitized;
-        };
-    in
+    terraformConfig.sanitized =
+      let
+        strip_nulls = true;
+        sanitize =
+          configuration:
+          getAttr (builtins.typeOf configuration) {
+            bool = configuration;
+            int = configuration;
+            string = configuration;
+            str = configuration;
+            list = map sanitize configuration;
+            null = null;
+            set =
+              let
+                pred = name: value: name != "_module" && name != "_ref" && name != "__functor";
+                stripped_a = flip filterAttrs configuration (name: value: pred name value);
+                stripped_b = flip filterAttrs configuration (name: value: pred name value && value != null);
+                recursiveSanitized =
+                  if strip_nulls then mapAttrs (const sanitize) stripped_b else mapAttrs (const sanitize) stripped_a;
+              in
+              if (length (attrNames configuration) == 0) then { } else recursiveSanitized;
+          };
+      in
       sanitize config.terraform;
 
-    terraformConfig.final = let
-      genericWhitelist = f: key: let
-        attr = f config.terraformConfig.sanitized.${key};
+    terraformConfig.final =
+      let
+        genericWhitelist =
+          f: key:
+          let
+            attr = f config.terraformConfig.sanitized.${key};
+          in
+          if attr == { } || attr == null then { } else { ${key} = attr; };
+        whitelist = genericWhitelist id;
+        whitelistWithoutEmpty = genericWhitelist (filterAttrs (name: attr: attr != { }));
       in
-        if attr == {} || attr == null
-        then {}
-        else {
-          ${key} = attr;
-        };
-      whitelist = genericWhitelist id;
-      whitelistWithoutEmpty = genericWhitelist (filterAttrs (name: attr: attr != {}));
-    in
-      {}
+      { }
       // (whitelistWithoutEmpty "data")
       // (whitelist "locals")
       // (whitelist "module")
@@ -87,6 +82,8 @@ with lib; {
       // (whitelist "terraform")
       // (whitelist "variable");
 
-    terraformConfig.json = (pkgs.formats.json {}).generate "config.tf.json" config.terraformConfig.final;
+    terraformConfig.json =
+      (pkgs.formats.json { }).generate "config.tf.json"
+        config.terraformConfig.final;
   };
 }

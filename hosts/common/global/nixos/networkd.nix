@@ -1,10 +1,8 @@
-{
-  config,
-  lib,
-  ...
-}: let
+{ config, lib, ... }:
+let
   useNetworkd = !config.boot.isContainer && !config.networking.networkmanager.enable;
-in {
+in
+{
   networking.useDHCP = lib.mkIf useNetworkd false;
   systemd.network = lib.mkIf useNetworkd {
     enable = true;

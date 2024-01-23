@@ -5,10 +5,13 @@
     secret = "$pbkdf2-sha512$310000$KBrmIfaP43sBTkOZ5tvwlA$y8/qNNGAeeco48h4vsmtqA73thgVubddQOepMfqG3w0zEvnWPf9w/L8kJpuanGwKtwkejAC.g.M4sQ.Q1qY6OQ";
     public = false;
     authorization_policy = "two_factor";
-    redirect_uris = [
-      "https://git.midna.dev/users/auth/openid_connect/callback"
+    redirect_uris = [ "https://git.midna.dev/users/auth/openid_connect/callback" ];
+    scopes = [
+      "openid"
+      "profile"
+      "groups"
+      "email"
     ];
-    scopes = ["openid" "profile" "groups" "email"];
     userinfo_signing_algorithm = "none";
   }
   {
@@ -22,7 +25,12 @@
       "https://vault.midna.dev/ui/vault/auth/oidc/oidc/callback"
       "http://localhost:8250/oidc/callback"
     ];
-    scopes = ["openid" "profile" "groups" "email"];
+    scopes = [
+      "openid"
+      "profile"
+      "groups"
+      "email"
+    ];
     userinfo_signing_algorithm = "none";
   }
   {
@@ -38,7 +46,11 @@
       "https://apollo.home.mattmoriarity.com:8006"
       "https://proxmox.midna.dev"
     ];
-    scopes = ["openid" "profile" "email"];
+    scopes = [
+      "openid"
+      "profile"
+      "email"
+    ];
     userinfo_signing_algorithm = "none";
   }
   {
@@ -47,10 +59,13 @@
     secret = "$pbkdf2-sha512$310000$lIbZcunKd9pcd.e/8.8esw$lJY3Zb7Ng8eSKHXV3xI9BA2THWMy7ZcCPYX/pCjuLw32nxN4stMnnIXb8poFbX8DFxvrWHT5sPeRWFl532RxHg";
     public = false;
     authorization_policy = "two_factor";
-    redirect_uris = [
-      "https://minio-console.midna.dev/oauth_callback"
+    redirect_uris = [ "https://minio-console.midna.dev/oauth_callback" ];
+    scopes = [
+      "openid"
+      "profile"
+      "groups"
+      "email"
     ];
-    scopes = ["openid" "profile" "groups" "email"];
     userinfo_signing_algorithm = "none";
   }
 ]

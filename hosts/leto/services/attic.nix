@@ -1,17 +1,12 @@
+{ lib, inputs, ... }:
 {
-  lib,
-  inputs,
-  ...
-}: {
-  imports = [
-    inputs.attic.nixosModules.atticd
-  ];
+  imports = [ inputs.attic.nixosModules.atticd ];
 
   services.atticd = {
     enable = true;
     settings = {
       listen = "[::]:8100";
-      database = lib.mkForce {};
+      database = lib.mkForce { };
       storage = {
         type = "s3";
         region = "home";
@@ -30,7 +25,7 @@
     credentialsFile = "/run/secrets/attic/attic.env";
   };
 
-  networking.firewall.allowedTCPPorts = [8100];
+  networking.firewall.allowedTCPPorts = [ 8100 ];
 
   services.consul.services.attic = {
     port = 8100;

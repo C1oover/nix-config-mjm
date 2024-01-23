@@ -4,16 +4,11 @@
   config,
   osConfig,
   ...
-}: let
-  useYubikey =
-    if pkgs.stdenv.isLinux
-    then osConfig.services.yubikey-agent.enable
-    else true;
+}:
+let
+  useYubikey = if pkgs.stdenv.isLinux then osConfig.services.yubikey-agent.enable else true;
 
-  sshPublicKeyName =
-    if useYubikey
-    then "yubikey.pub"
-    else "id_ed25519.pub";
+  sshPublicKeyName = if useYubikey then "yubikey.pub" else "id_ed25519.pub";
   sshPublicKeyPath = "${config.home.homeDirectory}/.ssh/${sshPublicKeyName}";
 
   envVars = {
@@ -23,14 +18,11 @@
   };
 
   # nomad 1.5 isn't building correctly on macOS rn
-  nomad =
-    if pkgs.stdenv.isLinux
-    then pkgs.nomad
-    else pkgs.nomad_1_4;
-in {
+  nomad = if pkgs.stdenv.isLinux then pkgs.nomad else pkgs.nomad_1_4;
+in
+{
   home.packages = builtins.attrValues {
-    inherit
-      (pkgs)
+    inherit (pkgs)
       consul
       minio-client
       tarsnap
@@ -42,13 +34,7 @@ in {
 
     devenv = inputs.devenv.packages.${pkgs.system}.default;
 
-    inherit
-      (pkgs.callPackages ./scripts.nix {
-        inherit sshPublicKeyPath;
-      })
-      s
-      vssh
-      ;
+    inherit (pkgs.callPackages ./scripts.nix { inherit sshPublicKeyPath; }) s vssh;
   };
 
   home.sessionVariables = envVars;
@@ -57,9 +43,7 @@ in {
     enable = true;
     extraOptionOverrides = {
       IdentityFile =
-        if useYubikey
-        then sshPublicKeyPath
-        else builtins.replaceStrings [".pub"] [""] sshPublicKeyPath;
+        if useYubikey then sshPublicKeyPath else builtins.replaceStrings [ ".pub" ] [ "" ] sshPublicKeyPath;
     };
   };
 }

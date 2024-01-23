@@ -4,7 +4,8 @@
   fetchFromGitHub,
   buildNpmPackage,
   uwsgi,
-}: let
+}:
+let
   pname = "linkding";
   version = "1.24.0";
   src = fetchFromGitHub {
@@ -31,73 +32,75 @@
 
   python = python3;
   django = python3Packages.django_4;
-  confusable-homoglyphs = python3Packages.callPackage ./confusable-homoglyphs.nix {};
-  django-generate-secret-key = python3Packages.callPackage ./django-generate-secret-key.nix {inherit django;};
+  confusable-homoglyphs = python3Packages.callPackage ./confusable-homoglyphs.nix { };
+  django-generate-secret-key = python3Packages.callPackage ./django-generate-secret-key.nix {
+    inherit django;
+  };
   django-registration = python3Packages.callPackage ./django-registration.nix {
     inherit django confusable-homoglyphs;
   };
-  django-sass-processor = python3Packages.callPackage ./django-sass-processor.nix {
-    inherit django;
-  };
+  django-sass-processor = python3Packages.callPackage ./django-sass-processor.nix { inherit django; };
   django4-background-tasks = python3Packages.callPackage ./django4-background-tasks.nix {
     inherit django;
   };
-  waybackpy = python3Packages.callPackage ./waybackpy.nix {};
+  waybackpy = python3Packages.callPackage ./waybackpy.nix { };
 in
-  python3Packages.buildPythonApplication rec {
-    inherit pname version src;
+python3Packages.buildPythonApplication rec {
+  inherit pname version src;
 
-    format = "other";
+  format = "other";
 
-    propagatedBuildInputs = with python3Packages; [
-      asgiref
-      beautifulsoup4
-      bleach
-      bleach-allowlist
-      certifi
-      charset-normalizer
-      click
-      confusable-homoglyphs
-      django
-      django-generate-secret-key
-      django-registration
-      django-sass-processor
-      django-widget-tweaks
-      django4-background-tasks
-      djangorestframework
-      idna
-      markdown
-      psycopg2
-      python-dateutil
-      pytz
-      requests
-      soupsieve
-      sqlparse
-      supervisor
-      typing-extensions
-      urllib3
-      uwsgi
-      waybackpy
-      webencodings
-    ];
+  propagatedBuildInputs = with python3Packages; [
+    asgiref
+    beautifulsoup4
+    bleach
+    bleach-allowlist
+    certifi
+    charset-normalizer
+    click
+    confusable-homoglyphs
+    django
+    django-generate-secret-key
+    django-registration
+    django-sass-processor
+    django-widget-tweaks
+    django4-background-tasks
+    djangorestframework
+    idna
+    markdown
+    psycopg2
+    python-dateutil
+    pytz
+    requests
+    soupsieve
+    sqlparse
+    supervisor
+    typing-extensions
+    urllib3
+    uwsgi
+    waybackpy
+    webencodings
+  ];
 
-    preBuild = ''
-      rm siteroot/settings/dev.py
-      sed -i 's|../../node_modules/spectre.css/src|${frontend}/lib/linkding-ui/spectre.css|g' bookmarks/styles/spectre.scss
-      sed -i -e '19i DATA_DIR = os.getenv("LD_DATA_DIR", "/var/lib/linkding")' -e "s/BASE_DIR, 'data',/DATA_DIR,/" siteroot/settings/base.py
-      sed -i -e 's/BASE_DIR, "secretkey.txt"/DATA_DIR, "secretkey.txt"/' siteroot/settings/prod.py
-    '';
+  preBuild = ''
+    rm siteroot/settings/dev.py
+    sed -i 's|../../node_modules/spectre.css/src|${frontend}/lib/linkding-ui/spectre.css|g' bookmarks/styles/spectre.scss
+    sed -i -e '19i DATA_DIR = os.getenv("LD_DATA_DIR", "/var/lib/linkding")' -e "s/BASE_DIR, 'data',/DATA_DIR,/" siteroot/settings/base.py
+    sed -i -e 's/BASE_DIR, "secretkey.txt"/DATA_DIR, "secretkey.txt"/' siteroot/settings/prod.py
+  '';
 
-    postBuild = ''
-      ${python.pythonOnBuildForHost.interpreter} -OO -m compileall .
-      ${python.pythonOnBuildForHost.interpreter} manage.py compilescss
-      ${python.pythonOnBuildForHost.interpreter} manage.py collectstatic --clear --no-input '--ignore=*.scss'
-      ${python.pythonOnBuildForHost.interpreter} manage.py compilescss --delete-files
-    '';
+  postBuild = ''
+    ${python.pythonOnBuildForHost.interpreter} -OO -m compileall .
+    ${python.pythonOnBuildForHost.interpreter} manage.py compilescss
+    ${python.pythonOnBuildForHost.interpreter} manage.py collectstatic --clear --no-input '--ignore=*.scss'
+    ${python.pythonOnBuildForHost.interpreter} manage.py compilescss --delete-files
+  '';
 
-    installPhase = let
+  installPhase =
+    let
       pythonPath = python3Packages.makePythonPath propagatedBuildInputs;
-    in ''
+    in
+    ''
       mkdir -p $out/lib/linkding
       cp -r {bookmarks,siteroot,static,LICENSE.txt,manage.py,version.txt} $out/lib/linkding
       cp ${frontend}/lib/linkding-ui/bundle.js{,.map} $out/lib/linkding/static/
@@ -106,7 +109,7 @@ in
         --prefix PYTHONPATH : ${pythonPath}
     '';
 
-    passthru = {
-      inherit python frontend;
-    };
-  }
+  passthru = {
+    inherit python frontend;
+  };
+}

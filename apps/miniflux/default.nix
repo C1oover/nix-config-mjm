@@ -2,7 +2,8 @@ let
   name = "miniflux";
   # miniflux 2.0.46
   image = "ghcr.io/miniflux/miniflux@sha256:0625952a7e45ff8824936d71eeaca57205c12b758d5b47e27fe11df98bebfcff";
-in {
+in
+{
   nomad.jobs.miniflux = {
     priority = 60;
 
@@ -28,7 +29,9 @@ in {
       ];
 
       tasks.miniflux = {
-        docker = {inherit image;};
+        docker = {
+          inherit image;
+        };
         env = {
           BASE_URL = "https://feeds.midna.dev/";
           METRICS_COLLECTOR = "1";
@@ -39,7 +42,7 @@ in {
         cpu = 200;
         memory = 300;
         loggingTag = name;
-        vault.policies = [name];
+        vault.policies = [ name ];
 
         templates."secrets/db.env" = {
           text = ''

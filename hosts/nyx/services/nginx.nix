@@ -1,4 +1,5 @@
-{lib, ...}: let
+{ lib, ... }:
+let
   baseVhost = {
     http2 = false;
     forceSSL = true;
@@ -18,7 +19,8 @@
     enableACME = true;
     globalRedirect = "${name}.midna.dev";
   };
-in {
+in
+{
   security.acme.acceptTerms = true;
   security.acme.defaults.email = "acme@matt.mattmoriarity.com";
 
@@ -33,9 +35,7 @@ in {
       "feeds.midna.dev" = baseVhost;
       "links.midna.dev" = baseVhost;
       "git.midna.dev" = baseVhost;
-      "paper.midna.dev" = lib.recursiveUpdate baseVhost {
-        locations."/".proxyWebsockets = true;
-      };
+      "paper.midna.dev" = lib.recursiveUpdate baseVhost { locations."/".proxyWebsockets = true; };
 
       "mjm.pages.midna.dev" = baseVhost;
       "www.midna.dev" = baseVhost;
@@ -48,7 +48,10 @@ in {
     };
   };
 
-  networking.firewall.allowedTCPPorts = [80 443];
+  networking.firewall.allowedTCPPorts = [
+    80
+    443
+  ];
 
   services.consul-template.instances.nginx = {
     enable = true;
@@ -62,11 +65,15 @@ in {
           destination = "/run/nginx-include/upstreams.conf";
           user = "nginx";
           group = "nginx";
-          exec.command = ["systemctl" "reload" "nginx.service"];
+          exec.command = [
+            "systemctl"
+            "reload"
+            "nginx.service"
+          ];
         }
       ];
     };
   };
 
-  systemd.services.nginx.wants = ["consul-template-nginx.service"];
+  systemd.services.nginx.wants = [ "consul-template-nginx.service" ];
 }

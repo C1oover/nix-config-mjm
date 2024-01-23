@@ -15,6 +15,10 @@ buildPythonPackage rec {
     hash = "sha256-SXo3F1arp2ROt62g69TtsVy4xTvBNMyXO/AjoSyv+D8=";
   };
 
-  propagatedBuildInputs = [click requests urllib3];
-  nativeCheckInputs = [pytest];
+  propagatedBuildInputs = [
+    click
+    requests
+    urllib3
+  ];
+  nativeCheckInputs = [ pytest ];
 }

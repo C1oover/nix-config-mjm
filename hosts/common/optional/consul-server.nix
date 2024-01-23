@@ -1,5 +1,5 @@
 {
-  imports = [./consul-agent.nix];
+  imports = [ ./consul-agent.nix ];
 
   services.consul = {
     webUi = true;
@@ -15,5 +15,5 @@
     };
   };
 
-  networking.firewall.allowedUDPPorts = [8302];
+  networking.firewall.allowedUDPPorts = [ 8302 ];
 }

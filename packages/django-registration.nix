@@ -15,6 +15,9 @@ buildPythonPackage rec {
     hash = "sha256-GgzO9+9x5np4pVGr2K03iXfcFKA28fzYvkIqaL1SVKk=";
   };
 
-  nativeBuildInputs = [setuptools-scm];
-  propagatedBuildInputs = [django confusable-homoglyphs];
+  nativeBuildInputs = [ setuptools-scm ];
+  propagatedBuildInputs = [
+    django
+    confusable-homoglyphs
+  ];
 }

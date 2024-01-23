@@ -14,6 +14,6 @@ buildPythonPackage rec {
     hash = "sha256-4v6bV87YLpocrYRRKZxNrPCXFY5ghD7zWm0TaD858Zc=";
   };
 
-  propagatedBuildInputs = [django];
+  propagatedBuildInputs = [ django ];
   doCheck = false;
 }

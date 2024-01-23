@@ -3,20 +3,30 @@
   lib,
   modulesPath,
   ...
-}: {
-  imports = [
-    (modulesPath + "/profiles/qemu-guest.nix")
-  ];
+}:
+{
+  imports = [ (modulesPath + "/profiles/qemu-guest.nix") ];
 
-  boot.initrd.availableKernelModules = ["ata_piix" "uhci_hcd" "virtio_pci" "virtio_scsi" "sd_mod" "sr_mod"];
-  boot.initrd.kernelModules = [];
-  boot.kernelModules = [];
-  boot.extraModulePackages = [];
+  boot.initrd.availableKernelModules = [
+    "ata_piix"
+    "uhci_hcd"
+    "virtio_pci"
+    "virtio_scsi"
+    "sd_mod"
+    "sr_mod"
+  ];
+  boot.initrd.kernelModules = [ ];
+  boot.kernelModules = [ ];
+  boot.extraModulePackages = [ ];
 
   fileSystems."/" = {
     device = "none";
     fsType = "tmpfs";
-    options = ["defaults" "mode=755" "size=24G"];
+    options = [
+      "defaults"
+      "mode=755"
+      "size=24G"
+    ];
   };
 
   fileSystems."/nix" = {
@@ -27,12 +37,15 @@
 
   fileSystems."/boot" = {
     device = "/nix/boot";
-    options = ["bind" "X-fstrim.notrim"];
+    options = [
+      "bind"
+      "X-fstrim.notrim"
+    ];
   };
 
   swapDevices = [
-    {device = "/dev/disk/by-label/swap";}
-    {device = "/dev/disk/by-label/swap2";}
+    { device = "/dev/disk/by-label/swap"; }
+    { device = "/dev/disk/by-label/swap2"; }
   ];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";

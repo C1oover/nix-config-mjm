@@ -3,7 +3,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   home.packages = with pkgs; [
     vit
     taskwarrior-tui
@@ -16,9 +17,10 @@
         ca = "${./ca.crt}";
         certificate = "${./cert.crt}";
         key =
-          if pkgs.stdenv.isDarwin
-          then "${config.home.homeDirectory}/.config/task/taskserver.key"
-          else "$XDG_RUNTIME_DIR/agenix/taskserver.key";
+          if pkgs.stdenv.isDarwin then
+            "${config.home.homeDirectory}/.config/task/taskserver.key"
+          else
+            "$XDG_RUNTIME_DIR/agenix/taskserver.key";
         server = "tasks.midna.dev:53589";
         credentials = "home/mjm/335503bd-9888-481a-b3e9-7d0c54e0b8bc";
       };
@@ -32,17 +34,23 @@
     '';
   };
 
-  home.activation.link-taskwarrior-key = lib.mkIf pkgs.stdenv.isDarwin (lib.hm.dag.entryAfter ["writeBoundary"] ''
-    # need to be able to use getconf
-    export PATH=$PATH:/usr/bin
-    mkdir -p ${config.home.homeDirectory}/.config/task
-    ln -sf ${config.age.secrets."taskserver.key".path} ${config.home.homeDirectory}/.config/task/taskserver.key
-  '');
+  home.activation.link-taskwarrior-key = lib.mkIf pkgs.stdenv.isDarwin (
+    lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      # need to be able to use getconf
+      export PATH=$PATH:/usr/bin
+      mkdir -p ${config.home.homeDirectory}/.config/task
+      ln -sf ${
+        config.age.secrets."taskserver.key".path
+      } ${config.home.homeDirectory}/.config/task/taskserver.key
+    ''
+  );
 
   age.secrets."taskserver.key".file = ../../../../secrets/taskwarrior-key.age;
 
-  home.file."${config.programs.taskwarrior.dataLocation}/hooks/on-exit-sync".source = lib.getExe (pkgs.writeShellApplication {
-    name = "tw-on-exit-sync";
-    text = builtins.readFile ./on-exit-sync.sh;
-  });
+  home.file."${config.programs.taskwarrior.dataLocation}/hooks/on-exit-sync".source = lib.getExe (
+    pkgs.writeShellApplication {
+      name = "tw-on-exit-sync";
+      text = builtins.readFile ./on-exit-sync.sh;
+    }
+  );
 }

@@ -14,8 +14,12 @@ buildPythonPackage rec {
     hash = "sha256-sX850H06dRCuxCXBkZN+IwUC3ut8pr9pUKGt+LS3wcM=";
   };
 
-  propagatedBuildInputs = [django django-compressor libsass];
+  propagatedBuildInputs = [
+    django
+    django-compressor
+    libsass
+  ];
 
   dontUseSetuptoolsCheck = true;
-  pythonImportsCheck = ["sass_processor"];
+  pythonImportsCheck = [ "sass_processor" ];
 }

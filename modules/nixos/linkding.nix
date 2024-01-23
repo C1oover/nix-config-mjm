@@ -4,21 +4,14 @@
   lib,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.services.linkding;
   pkg = cfg.package;
 
-  env =
-    {
-      LD_DATA_DIR = cfg.dataDir;
-    }
-    // (lib.mapAttrs (
-        _: s:
-          if lib.isBool s
-          then lib.boolToString s
-          else toString s
-      )
-      cfg.settings);
+  env = {
+    LD_DATA_DIR = cfg.dataDir;
+  } // (lib.mapAttrs (_: s: if lib.isBool s then lib.boolToString s else toString s) cfg.settings);
 
   uwsgiCfg = pkgs.writeText "linkding-uwsgi.ini" ''
     [uwsgi]
@@ -47,8 +40,9 @@ with lib; let
     log-x-forwarded-for = %(_)
     endif =
   '';
-in {
-  meta.maintainers = with maintainers; [mjm];
+in
+{
+  meta.maintainers = with maintainers; [ mjm ];
 
   options.services.linkding = {
     enable = mkOption {
@@ -85,9 +79,20 @@ in {
 
     settings = mkOption {
       type = types.submodule {
-        freeformType = with types; attrsOf (oneOf [bool float int str path package]);
+        freeformType =
+          with types;
+          attrsOf (
+            oneOf [
+              bool
+              float
+              int
+              str
+              path
+              package
+            ]
+          );
       };
-      default = {};
+      default = { };
       description = mdDoc ''
         Extra linkding config options.
 
@@ -116,9 +121,9 @@ in {
       description = "User under which linkding runs.";
     };
 
-    package = mkPackageOption pkgs "linkding" {};
+    package = mkPackageOption pkgs "linkding" { };
 
-    uwsgi.package = mkPackageOption pkgs "uwsgi" {};
+    uwsgi.package = mkPackageOption pkgs "uwsgi" { };
   };
 
   config = mkIf cfg.enable {
@@ -129,16 +134,16 @@ in {
         home = cfg.dataDir;
       };
 
-      groups.linkding = {};
+      groups.linkding = { };
     };
 
-    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [cfg.port];
+    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
 
     systemd.services.linkding = {
       description = "Linkding bookmarks manager";
-      wantedBy = ["multi-user.target"];
-      wants = ["linkding-tasks.service"];
-      after = ["network.target"];
+      wantedBy = [ "multi-user.target" ];
+      wants = [ "linkding-tasks.service" ];
+      after = [ "network.target" ];
       preStart = ''
         ${pkg}/bin/linkding migrate
         ${pkg}/bin/linkding enable_wal
@@ -155,16 +160,14 @@ in {
         WorkingDirectory = "${pkg}/lib/linkding";
         EnvironmentFile = optional (cfg.environmentFile != null) cfg.environmentFile;
       };
-      environment =
-        env
-        // {
-          PYTHONPATH = "${pkg.python.pkgs.makePythonPath pkg.propagatedBuildInputs}:${pkg}/lib/linkding";
-        };
+      environment = env // {
+        PYTHONPATH = "${pkg.python.pkgs.makePythonPath pkg.propagatedBuildInputs}:${pkg}/lib/linkding";
+      };
     };
 
     systemd.services.linkding-tasks = {
       description = "Linkding background task worker";
-      after = ["linkding.service"];
+      after = [ "linkding.service" ];
       preStart = ''
         mkdir -p ${cfg.dataDir}
       '';

@@ -1,7 +1,5 @@
 {
-  imports = [
-    ./containers.nix
-  ];
+  imports = [ ./containers.nix ];
 
   terraform.terraform.required_providers.proxmox = {
     source = "registry.terraform.io/Telmate/proxmox";

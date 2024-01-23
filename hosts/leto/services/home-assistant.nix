@@ -3,13 +3,13 @@
   config,
   outputs,
   ...
-}: let
+}:
+let
   port = config.services.home-assistant.config.http.server_port;
-in {
+in
+{
   # ugh
-  nixpkgs.config.permittedInsecurePackages = [
-    "openssl-1.1.1w"
-  ];
+  nixpkgs.config.permittedInsecurePackages = [ "openssl-1.1.1w" ];
 
   services.home-assistant = {
     enable = true;
@@ -29,7 +29,7 @@ in {
       "unifi"
     ];
     config = {
-      default_config = {};
+      default_config = { };
       homeassistant = {
         unit_system = "imperial"; # i'm sorry
         latitude = "!secret latitude_home";
@@ -70,7 +70,10 @@ in {
       ];
       homekit = {
         filter = {
-          exclude_domains = ["automation" "person"];
+          exclude_domains = [
+            "automation"
+            "person"
+          ];
           exclude_entity_globs = [
             "light.desk_overhead_light_*"
             "media_player.firefox*"
@@ -81,7 +84,7 @@ in {
           ];
         };
       };
-      adaptive_lighting = {};
+      adaptive_lighting = { };
     };
     customComponents = with pkgs.home-assistant-custom-components; [
       outputs.packages.${pkgs.system}.hass-auth-header
@@ -91,7 +94,7 @@ in {
   };
 
   # homekit bridge
-  networking.firewall.allowedTCPPorts = [21063];
+  networking.firewall.allowedTCPPorts = [ 21063 ];
 
   services.consul.services.home-assistant = {
     inherit port;
@@ -113,11 +116,11 @@ in {
     repository = "s3:http://garage.service.consul:3902/restic-backups/home-assistant";
     passwordFile = config.age.secrets."home-assistant-backup-password".path;
     environmentFile = config.age.secrets."backup.env".path;
-    paths = [
-      "/var/lib/hass/backups"
-    ];
+    paths = [ "/var/lib/hass/backups" ];
     backupPrepareCommand = ''
-      ${pkgs.curl}/bin/curl -XPOST http://localhost:${toString port}/api/services/backup/create -H "Authorization: Bearer $(cat ${config.age.secrets."home-assistant-token".path})"
+      ${pkgs.curl}/bin/curl -XPOST http://localhost:${toString port}/api/services/backup/create -H "Authorization: Bearer $(cat ${
+        config.age.secrets."home-assistant-token".path
+      })"
     '';
     backupCleanupCommand = ''
       rm /var/lib/hass/backups/*

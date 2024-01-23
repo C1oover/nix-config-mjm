@@ -2,7 +2,7 @@
   vault.databases.roles.netbox = {
     ttl = "long";
   };
-  vault.approles.roles.leto.tokenPolicies = ["netbox"];
+  vault.approles.roles.leto.tokenPolicies = [ "netbox" ];
 
   vault.policies.netbox.text = ''
     path "database/creds/netbox" {

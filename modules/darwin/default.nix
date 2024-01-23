@@ -1,3 +1,1 @@
-{
-  sketchybar = import ./sketchybar.nix;
-}
+{ sketchybar = import ./sketchybar.nix; }

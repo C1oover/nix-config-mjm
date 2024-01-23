@@ -3,7 +3,8 @@
   pkgs,
   outputs,
   ...
-}: {
+}:
+{
   services.linkding = {
     enable = true;
     package = outputs.packages.${pkgs.system}.linkding;

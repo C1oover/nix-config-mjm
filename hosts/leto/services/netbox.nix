@@ -3,7 +3,8 @@
   lib,
   pkgs,
   ...
-}: {
+}:
+{
   # The NetBox module only really supports running this locally, but I don't want to do that.
   services.postgresql.enable = lib.mkForce false;
 
@@ -18,7 +19,7 @@
         "netbox.service.consul"
         "10.0.2.41"
       ];
-      DATABASE = lib.mkForce {};
+      DATABASE = lib.mkForce { };
       CORS_ORIGIN_ALLOW_ALL = false;
       CORS_ORIGIN_WHITELIST = [
         "https://netbox.midna.dev"
@@ -37,8 +38,8 @@
       REMOTE_AUTH_GROUP_HEADER = "HTTP_REMOTE_GROUPS";
       REMOTE_AUTH_GROUP_SYNC_ENABLED = true;
       REMOTE_AUTH_GROUP_SEPARATOR = ",";
-      REMOTE_AUTH_SUPERUSER_GROUPS = ["admins"];
-      REMOTE_AUTH_STAFF_GROUPS = ["admins"];
+      REMOTE_AUTH_SUPERUSER_GROUPS = [ "admins" ];
+      REMOTE_AUTH_STAFF_GROUPS = [ "admins" ];
     };
     secretKeyFile = config.age.secrets."netbox-secret-key".path;
     extraConfig = ''
@@ -54,7 +55,9 @@
     defaultHTTPListenPort = 8000;
     upstreams = {
       netbox = {
-        servers = {"127.0.0.1:${toString config.services.netbox.port}" = {};};
+        servers = {
+          "127.0.0.1:${toString config.services.netbox.port}" = { };
+        };
       };
     };
     virtualHosts."netbox" = {
@@ -70,11 +73,9 @@
     };
   };
 
-  users.users.nginx.extraGroups = ["netbox"];
+  users.users.nginx.extraGroups = [ "netbox" ];
 
-  networking.firewall.allowedTCPPorts = [
-    config.services.nginx.defaultHTTPListenPort
-  ];
+  networking.firewall.allowedTCPPorts = [ config.services.nginx.defaultHTTPListenPort ];
 
   services.consul.services.netbox = {
     port = config.services.nginx.defaultHTTPListenPort;

@@ -3,9 +3,7 @@
     enable = true;
     configuration = {
       server.http_listen_port = 3101;
-      clients = [
-        {url = "http://loki.service.consul:3100/loki/api/v1/push";}
-      ];
+      clients = [ { url = "http://loki.service.consul:3100/loki/api/v1/push"; } ];
 
       scrape_configs = [
         {
@@ -16,15 +14,15 @@
           };
           relabel_configs = [
             {
-              source_labels = ["__journal__systemd_unit"];
+              source_labels = [ "__journal__systemd_unit" ];
               target_label = "systemd_unit";
             }
             {
-              source_labels = ["__journal__hostname"];
+              source_labels = [ "__journal__hostname" ];
               target_label = "hostname";
             }
             {
-              source_labels = ["__journal_syslog_identifier"];
+              source_labels = [ "__journal_syslog_identifier" ];
               target_label = "syslog_identifier";
             }
           ];
@@ -48,7 +46,5 @@
   };
 
   # expose port for metrics
-  networking.firewall.allowedTCPPorts = [
-    3101
-  ];
+  networking.firewall.allowedTCPPorts = [ 3101 ];
 }

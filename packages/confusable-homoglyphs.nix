@@ -12,5 +12,5 @@ buildPythonPackage rec {
     hash = "sha256-O0oNn6UQZpSYggyRoL/AwydWjOzskGSM84GdSm/Gp1E=";
   };
 
-  checkInputs = [click];
+  checkInputs = [ click ];
 }

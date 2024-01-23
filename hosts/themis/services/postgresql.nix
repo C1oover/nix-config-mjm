@@ -3,7 +3,8 @@
   lib,
   config,
   ...
-}: {
+}:
+{
   services.postgresql = {
     enable = true;
     package = pkgs.postgresql_15;
@@ -89,7 +90,7 @@
     ];
   };
 
-  networking.firewall.allowedTCPPorts = [config.services.postgresql.port];
+  networking.firewall.allowedTCPPorts = [ config.services.postgresql.port ];
 
   services.consul.services.postgresql = {
     inherit (config.services.postgresql) port;
@@ -104,33 +105,34 @@
     ];
   };
 
-  services.restic.backups.postgresql = let
-    pg = config.services.postgresql.package;
-  in {
-    initialize = true;
-    repository = "s3:http://garage.service.consul:3902/restic-backups/postgresql";
-    passwordFile = config.age.secrets."postgresql-backup-password".path;
-    environmentFile = config.age.secrets."backup.env".path;
-    paths = [
-      "/tmp/pgbackup"
-    ];
-    backupPrepareCommand = ''
-      mkdir /tmp/pgbackup
-      cd /tmp/pgbackup
-      ${pg}/bin/pg_dumpall -U postgres --globals-only -f /tmp/pgbackup/globals.sql
-      ${lib.concatMapStrings (dbname: ''
-          ${pg}/bin/pg_dump -U postgres --format=directory -j 4 -f ${dbname} ${dbname}
-        '')
-        config.services.postgresql.ensureDatabases}
-    '';
-    backupCleanupCommand = ''
-      rm -rf /tmp/pgbackup
-    '';
-    pruneOpts = [
-      "--keep-daily 7"
-      "--keep-weekly 4"
-    ];
-  };
+  services.restic.backups.postgresql =
+    let
+      pg = config.services.postgresql.package;
+    in
+    {
+      initialize = true;
+      repository = "s3:http://garage.service.consul:3902/restic-backups/postgresql";
+      passwordFile = config.age.secrets."postgresql-backup-password".path;
+      environmentFile = config.age.secrets."backup.env".path;
+      paths = [ "/tmp/pgbackup" ];
+      backupPrepareCommand = ''
+        mkdir /tmp/pgbackup
+        cd /tmp/pgbackup
+        ${pg}/bin/pg_dumpall -U postgres --globals-only -f /tmp/pgbackup/globals.sql
+        ${lib.concatMapStrings
+          (dbname: ''
+            ${pg}/bin/pg_dump -U postgres --format=directory -j 4 -f ${dbname} ${dbname}
+          '')
+          config.services.postgresql.ensureDatabases}
+      '';
+      backupCleanupCommand = ''
+        rm -rf /tmp/pgbackup
+      '';
+      pruneOpts = [
+        "--keep-daily 7"
+        "--keep-weekly 4"
+      ];
+    };
 
   age.secrets."backup.env".file = ../../../secrets/restic-backup-env.age;
   age.secrets."postgresql-backup-password".file = ../../../secrets/postgresql-backup-password.age;

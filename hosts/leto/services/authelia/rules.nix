@@ -1,7 +1,7 @@
 [
   {
     domain = "links.midna.dev";
-    resources = ["^/api/.*$"];
+    resources = [ "^/api/.*$" ];
     policy = "bypass";
   }
   {
@@ -15,30 +15,22 @@
   }
   {
     domain = "downloads.midna.dev";
-    resources = [
-      "^/api.*$"
-    ];
+    resources = [ "^/api.*$" ];
     policy = "bypass";
   }
   {
     domain = "tv.midna.dev";
-    resources = [
-      "^/api/.*$"
-    ];
+    resources = [ "^/api/.*$" ];
     policy = "bypass";
   }
   {
     domain = "movies.midna.dev";
-    resources = [
-      "^/api/.*$"
-    ];
+    resources = [ "^/api/.*$" ];
     policy = "bypass";
   }
   {
     domain = "home.midna.dev";
-    resources = [
-      "^/api/.*$"
-    ];
+    resources = [ "^/api/.*$" ];
     policy = "bypass";
   }
 ]

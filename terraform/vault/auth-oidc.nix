@@ -8,7 +8,11 @@
     role_name = "default";
     user_claim = "preferred_username";
     groups_claim = "groups";
-    oidc_scopes = ["groups" "email" "profile"];
+    oidc_scopes = [
+      "groups"
+      "email"
+      "profile"
+    ];
     allowed_redirect_uris = [
       "https://vault.home.mattmoriarity.com/oidc/callback"
       "https://vault.home.mattmoriarity.com/ui/vault/auth/oidc/oidc/callback"

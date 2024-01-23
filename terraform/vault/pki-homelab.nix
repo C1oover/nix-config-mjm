@@ -24,13 +24,20 @@
     max_ttl = 604800;
     generate_lease = true;
 
-    key_usage = ["DigitalSignature" "KeyAgreement" "KeyEncipherment"];
+    key_usage = [
+      "DigitalSignature"
+      "KeyAgreement"
+      "KeyEncipherment"
+    ];
 
     allow_localhost = false;
     allow_bare_domains = false;
     allow_subdomains = true;
     allow_glob_domains = false;
-    allowed_domains = ["homelab" "home.mattmoriarity.com"];
+    allowed_domains = [
+      "homelab"
+      "home.mattmoriarity.com"
+    ];
   };
 
   data.vault_generic_secret.homelab_ca = {

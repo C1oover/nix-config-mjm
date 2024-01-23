@@ -7,5 +7,5 @@
     ];
   };
 
-  nix.settings.trusted-users = ["nixremote"];
+  nix.settings.trusted-users = [ "nixremote" ];
 }

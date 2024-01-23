@@ -1,4 +1,5 @@
-{config, ...}: {
+{ config, ... }:
+{
   programs.ssh.extraConfig = ''
     Host hypnos arges
         # Prevent using ssh-agent or another keyfile, useful for testing
@@ -16,8 +17,13 @@
       protocol = "ssh-ng";
       maxJobs = 4;
       speedFactor = 2;
-      supportedFeatures = ["nixos-test" "benchmark" "big-parallel" "kvm"];
-      mandatoryFeatures = [];
+      supportedFeatures = [
+        "nixos-test"
+        "benchmark"
+        "big-parallel"
+        "kvm"
+      ];
+      mandatoryFeatures = [ ];
       publicHostKey = "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSUtuL3VmVVZ4YURkVEVsZ3M2MXhmdnNIc0huM1J3cEw3bjZETzVxY0JPMEsgcm9vdEBoeXBub3MK";
     }
     {
@@ -26,8 +32,13 @@
       protocol = "ssh-ng";
       maxJobs = 3;
       speedFactor = 2;
-      supportedFeatures = ["nixos-test" "benchmark" "big-parallel" "kvm"];
-      mandatoryFeatures = [];
+      supportedFeatures = [
+        "nixos-test"
+        "benchmark"
+        "big-parallel"
+        "kvm"
+      ];
+      mandatoryFeatures = [ ];
       publicHostKey = "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSURTM3BQTkVhSEEreWNEYTdrVHlOU3hzQVlCRlpJN1lNd2VEcnJOMEdnK2wgcm9vdEBuaXhvcwo=";
     }
   ];

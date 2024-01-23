@@ -1,20 +1,26 @@
-{lib, ...}: {
+{ lib, ... }:
+{
   services.consul = {
     enable = true;
 
     extraConfig = {
-      retry_join = lib.mkDefault ["10.0.2.40" "10.0.2.42" "10.0.2.43"];
+      retry_join = lib.mkDefault [
+        "10.0.2.40"
+        "10.0.2.42"
+        "10.0.2.43"
+      ];
 
       client_addr = "0.0.0.0";
       bind_addr = "[::]";
-      advertise_addr_ipv4 = "{{ GetDefaultInterfaces | include \"type\" \"ipv4\" | attr \"address\" }}";
+      advertise_addr_ipv4 = ''{{ GetDefaultInterfaces | include "type" "ipv4" | attr "address" }}'';
 
       ports.grpc = 8502;
       connect.enabled = true;
     };
   };
 
-  systemd.services.consul.preStart = lib.mkForce (''
+  systemd.services.consul.preStart = lib.mkForce (
+    ''
       mkdir -m 0700 -p /var/lib/consul
       chown -R consul /var/lib/consul
 
@@ -40,13 +46,23 @@
       echo "{" > /etc/consul-addrs.json
       delim=" "
     ''
-    + lib.concatStrings (lib.flip map ["advertise_addr" "advertise_addr_ipv6"] (key: ''
-      echo "$delim \"${key}\": \"$(getAddr)\"" >> /etc/consul-addrs.json
-      delim=","
-    ''))
+    + lib.concatStrings (
+      lib.flip map
+        [
+          "advertise_addr"
+          "advertise_addr_ipv6"
+        ]
+        (
+          key: ''
+            echo "$delim \"${key}\": \"$(getAddr)\"" >> /etc/consul-addrs.json
+            delim=","
+          ''
+        )
+    )
     + ''
       echo "}" >> /etc/consul-addrs.json
-    '');
+    ''
+  );
 
   networking.firewall.allowedTCPPorts = [
     8300

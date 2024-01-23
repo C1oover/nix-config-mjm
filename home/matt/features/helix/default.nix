@@ -3,13 +3,14 @@
   pkgs,
   inputs,
   ...
-}: {
+}:
+{
   home.sessionVariables.EDITOR = lib.mkForce "hx";
 
   programs.helix = {
     enable = true;
     package = inputs.helix.packages.${pkgs.system}.default.override {
-      includeGrammarIf = {source, ...}: !(lib.hasPrefix "https://git.sr.ht/" source.git);
+      includeGrammarIf = { source, ... }: !(lib.hasPrefix "https://git.sr.ht/" source.git);
     };
     extraPackages = with pkgs; [
       alejandra
@@ -55,12 +56,15 @@
           config.bashIde.backgroundAnalysisMaxFiles = 0;
         };
         nil = {
-          config.nil.formatting.command = ["alejandra" "-q"];
+          config.nil.formatting.command = [
+            "alejandra"
+            "-q"
+          ];
         };
         yaml-language-server = {
           config.yaml = {
             format.enable = true;
-            customTags = ["!reference sequence"];
+            customTags = [ "!reference sequence" ];
           };
         };
       };
@@ -74,7 +78,10 @@
           auto-format = true;
           formatter = {
             command = "shfmt";
-            args = ["-i" "2"];
+            args = [
+              "-i"
+              "2"
+            ];
           };
         }
         {
@@ -90,7 +97,10 @@
           auto-format = true;
           formatter = {
             command = "prettier";
-            args = ["--parser" "typescript"];
+            args = [
+              "--parser"
+              "typescript"
+            ];
           };
         }
         {
@@ -102,7 +112,10 @@
           auto-format = true;
           formatter = {
             command = "prettier";
-            args = ["--parser" "yaml"];
+            args = [
+              "--parser"
+              "yaml"
+            ];
           };
         }
       ];

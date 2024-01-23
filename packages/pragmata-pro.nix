@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation rec {
 
   sourceRoot = "PragmataPro${version}";
 
-  nativeBuildInputs = [unzip];
+  nativeBuildInputs = [ unzip ];
 
   installPhase = ''
 
@@ -32,7 +32,7 @@ stdenvNoCC.mkDerivation rec {
     description = "A condensed monospaced font optimized for screen";
     homepage = "https://fsd.it/shop/fonts/pragmatapro/";
     license = licenses.unfree;
-    maintainers = [];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

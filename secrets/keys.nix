@@ -52,7 +52,17 @@ rec {
       ;
   };
 
-  nomadClients = [arges brontes steropes helios];
-  allNixOS = [persephone] ++ (builtins.attrValues servers);
-  personalKeys = [matt-athena matt-mars matt-persephone matt-uranus];
+  nomadClients = [
+    arges
+    brontes
+    steropes
+    helios
+  ];
+  allNixOS = [ persephone ] ++ (builtins.attrValues servers);
+  personalKeys = [
+    matt-athena
+    matt-mars
+    matt-persephone
+    matt-uranus
+  ];
 }

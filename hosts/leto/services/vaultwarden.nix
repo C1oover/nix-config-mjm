@@ -1,8 +1,5 @@
+{ pkgs, config, ... }:
 {
-  pkgs,
-  config,
-  ...
-}: {
   services.vaultwarden = {
     enable = true;
     config = {
@@ -12,7 +9,7 @@
     };
   };
 
-  networking.firewall.allowedTCPPorts = [8222];
+  networking.firewall.allowedTCPPorts = [ 8222 ];
 
   services.consul.services.vaultwarden = {
     port = 8222;

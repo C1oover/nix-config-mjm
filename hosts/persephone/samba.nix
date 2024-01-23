@@ -1,11 +1,8 @@
+{ pkgs, config, ... }:
 {
-  pkgs,
-  config,
-  ...
-}: {
-  environment.systemPackages = with pkgs; [cifs-utils];
+  environment.systemPackages = with pkgs; [ cifs-utils ];
 
-  systemd.tmpfiles.settings."10-videos"."/videos".d = {};
+  systemd.tmpfiles.settings."10-videos"."/videos".d = { };
 
   fileSystems."/videos" = {
     device = "//selene.home.mattmoriarity.com/media";

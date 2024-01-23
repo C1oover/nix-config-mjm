@@ -1,4 +1,5 @@
-{lib, ...}: {
+{ lib, ... }:
+{
   hardware.raspberry-pi."4".apply-overlays-dtmerge.enable = lib.mkDefault true;
   # doesn't work for the CM module, so we exclude e.g. bcm2711-rpi-cm4.dts
   hardware.deviceTree.filter = "bcm2711-rpi-4*.dtb";

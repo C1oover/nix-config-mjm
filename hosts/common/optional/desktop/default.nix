@@ -4,10 +4,9 @@
   outputs,
   config,
   ...
-}: {
-  imports = [
-    inputs.kde2nix.nixosModules.plasma6
-  ];
+}:
+{
+  imports = [ inputs.kde2nix.nixosModules.plasma6 ];
 
   # make URLs open correctly in bubble-wrapped apps
   xdg.portal.xdgOpenUsePortal = true;
@@ -26,9 +25,12 @@
 
   # move fprintd after unix auth so that it's possible to unlock
   # by either entering a password or with fingerprint
-  security.pam.services.polkit-1.rules.auth.fprintd.order = config.security.pam.services.polkit-1.rules.auth.unix.order + 5;
-  security.pam.services.login.rules.auth.fprintd.order = config.security.pam.services.login.rules.auth.unix.order + 5;
-  security.pam.services.kde.rules.auth.fprintd.order = config.security.pam.services.kde.rules.auth.unix.order + 5;
+  security.pam.services.polkit-1.rules.auth.fprintd.order =
+    config.security.pam.services.polkit-1.rules.auth.unix.order + 5;
+  security.pam.services.login.rules.auth.fprintd.order =
+    config.security.pam.services.login.rules.auth.unix.order + 5;
+  security.pam.services.kde.rules.auth.fprintd.order =
+    config.security.pam.services.kde.rules.auth.unix.order + 5;
 
   fonts = {
     packages = with pkgs; [
@@ -36,7 +38,7 @@
       open-sans
       noto-fonts
       noto-fonts-emoji
-      (nerdfonts.override {fonts = ["NerdFontsSymbolsOnly"];})
+      (nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" ]; })
       font-awesome
       cascadia-code
       ibm-plex
@@ -47,9 +49,16 @@
 
     fontconfig = {
       defaultFonts = {
-        monospace = ["PragmataPro Mono" "Noto Sans Mono"];
-        sansSerif = ["Public Sans" "Open Sans" "Noto Sans"];
-        serif = ["Noto Serif"];
+        monospace = [
+          "PragmataPro Mono"
+          "Noto Sans Mono"
+        ];
+        sansSerif = [
+          "Public Sans"
+          "Open Sans"
+          "Noto Sans"
+        ];
+        serif = [ "Noto Serif" ];
       };
     };
   };

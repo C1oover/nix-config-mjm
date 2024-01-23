@@ -1,9 +1,8 @@
-{inputs, ...}: {
-  imports = [
-    inputs.impermanence.nixosModules.impermanence
-  ];
+{ inputs, ... }:
+{
+  imports = [ inputs.impermanence.nixosModules.impermanence ];
 
-  age.identityPaths = ["/persist/etc/ssh/ssh_host_ed25519_key"];
+  age.identityPaths = [ "/persist/etc/ssh/ssh_host_ed25519_key" ];
 
   environment.persistence."/persist" = {
     hideMounts = true;

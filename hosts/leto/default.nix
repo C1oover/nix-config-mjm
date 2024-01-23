@@ -26,7 +26,7 @@
 
   networking.hostName = "leto";
 
-  boot.supportedFilesystems = ["xfs"];
+  boot.supportedFilesystems = [ "xfs" ];
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;

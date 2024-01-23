@@ -1,8 +1,5 @@
+{ pkgs, inputs, ... }:
 {
-  pkgs,
-  inputs,
-  ...
-}: {
   imports = [
     ./git.nix
     ./helix.nix
@@ -11,7 +8,7 @@
 
   home.packages = builtins.attrValues {
     inherit (pkgs) google-cloud-sdk teleport;
-    db = pkgs.callPackage ./db.nix {};
+    db = pkgs.callPackage ./db.nix { };
   };
 
   home.shellAliases = {
@@ -23,5 +20,8 @@
 
   xdg.configFile."k9s/skin.yml".source = inputs.catppuccin-k9s + "/dist/mocha.yml";
 
-  programs.kitty.darwinLaunchOptions = ["--session" "${./kitty-session-slab}"];
+  programs.kitty.darwinLaunchOptions = [
+    "--session"
+    "${./kitty-session-slab}"
+  ];
 }

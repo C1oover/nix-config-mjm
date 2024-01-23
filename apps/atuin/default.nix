@@ -1,7 +1,8 @@
 let
   name = "atuin";
   image = "ghcr.io/atuinsh/atuin@sha256:73fe07e5f36e96dfb6badbe8abe75b9004c06ed17490cc3e3b2328daad223db3";
-in {
+in
+{
   nomad.jobs.atuin = {
     priority = 60;
 
@@ -19,10 +20,11 @@ in {
       tasks.atuin = {
         docker = {
           inherit image;
-          args = ["server" "start"];
-          volumes = [
-            "local:/config"
+          args = [
+            "server"
+            "start"
           ];
+          volumes = [ "local:/config" ];
         };
         env = {
           ATUIN_HOST = "0.0.0.0";
@@ -31,7 +33,7 @@ in {
         cpu = 200;
         memory = 300;
         loggingTag = name;
-        vault.policies = [name];
+        vault.policies = [ name ];
 
         templates."secrets/db.env" = {
           text = ''

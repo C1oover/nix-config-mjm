@@ -1,9 +1,6 @@
+{ pkgs, config, ... }:
 {
-  pkgs,
-  config,
-  ...
-}: {
-  imports = [./blocky.nix];
+  imports = [ ./blocky.nix ];
 
   services.bind = {
     enable = true;
@@ -11,7 +8,7 @@
       "127.0.0.0/24"
       "10.0.0.0/8"
     ];
-    forwarders = ["127.0.0.1 port 1053"];
+    forwarders = [ "127.0.0.1 port 1053" ];
 
     extraOptions = ''
       dnssec-validation no;
@@ -50,31 +47,29 @@
     };
   };
 
-  networking.firewall.allowedTCPPorts = [
-    53
-  ];
+  networking.firewall.allowedTCPPorts = [ 53 ];
 
-  networking.firewall.allowedUDPPorts = [
-    53
-  ];
+  networking.firewall.allowedUDPPorts = [ 53 ];
 
   services.prometheus.exporters.bind = {
     enable = true;
     openFirewall = true;
   };
 
-  services.consul.services.bind-exporter = let
-    inherit (config.services.prometheus.exporters.bind) port;
-  in {
-    inherit port;
-    meta.metrics_path = "/metrics";
+  services.consul.services.bind-exporter =
+    let
+      inherit (config.services.prometheus.exporters.bind) port;
+    in
+    {
+      inherit port;
+      meta.metrics_path = "/metrics";
 
-    checks = [
-      {
-        http = "http://localhost:${toString port}/";
-        interval = "30s";
-        timeout = "5s";
-      }
-    ];
-  };
+      checks = [
+        {
+          http = "http://localhost:${toString port}/";
+          interval = "30s";
+          timeout = "5s";
+        }
+      ];
+    };
 }

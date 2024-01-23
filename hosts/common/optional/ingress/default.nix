@@ -3,15 +3,15 @@
   config,
   lib,
   ...
-}: let
+}:
+let
   cfg = config.ingress;
   vhosts = cfg.virtualHosts;
   upstreams = builtins.mapAttrs (_name: vhost: vhost.upstream) vhosts;
   connectUpstreams = lib.filterAttrs (_name: u: u.service.connectPort != null) upstreams;
-in {
-  imports = [
-    ../../../../apps
-  ];
+in
+{
+  imports = [ ../../../../apps ];
 
   security.acme = {
     acceptTerms = true;
@@ -26,11 +26,12 @@ in {
       };
     };
     certs =
-      builtins.mapAttrs (name: _v: {
-        dnsProvider = "cloudflare";
-        webroot = null;
-      })
-      (lib.filterAttrs (_name: vhost: vhost.enableACME == true) config.services.nginx.virtualHosts);
+      builtins.mapAttrs
+        (name: _v: {
+          dnsProvider = "cloudflare";
+          webroot = null;
+        })
+        (lib.filterAttrs (_name: vhost: vhost.enableACME == true) config.services.nginx.virtualHosts);
   };
 
   services.nginx = {
@@ -41,56 +42,56 @@ in {
     '';
 
     upstreams =
-      lib.mapAttrs' (_name: u: {
-        inherit (u) name;
+      lib.mapAttrs'
+        (_name: u: {
+          inherit (u) name;
 
-        value = {
-          servers = {
-            "127.0.0.1:${toString u.service.connectPort}" = {};
-          };
-          extraConfig = lib.mkIf u.ipHash ''
-            ip_hash;
-          '';
-        };
-      })
-      connectUpstreams;
-
-    virtualHosts =
-      lib.mapAttrs' (name: vhost: {
-        name = "${name}.midna.dev";
-        value = {
-          serverAliases = vhost.serverAliases;
-          forceSSL = true;
-          enableACME = true;
-          extraConfig = ''
-            ${lib.optionalString vhost.recommendedProxySettings ''
-              proxy_buffering off;
-              client_max_body_size 0;
-            ''}
-            ${vhost.extraServerConfig}
-            ${lib.optionalString vhost.enableAuthProxy ''
-              include ${./authelia-location.conf};
-            ''}
-          '';
-
-          locations."/" = {
-            recommendedProxySettings = vhost.recommendedProxySettings;
-            proxyWebsockets = vhost.proxyWebsockets;
-            proxyPass = "http${
-              if vhost.upstream.useSSL
-              then "s"
-              else ""
-            }://${vhost.upstream.name}${vhost.upstream.path}";
-            extraConfig = ''
-              ${lib.optionalString vhost.enableAuthProxy ''
-                include ${./authelia-request.conf};
-              ''}
-              ${vhost.extraLocationConfig}
+          value = {
+            servers = {
+              "127.0.0.1:${toString u.service.connectPort}" = { };
+            };
+            extraConfig = lib.mkIf u.ipHash ''
+              ip_hash;
             '';
           };
-        };
-      })
-      vhosts
+        })
+        connectUpstreams;
+
+    virtualHosts =
+      lib.mapAttrs'
+        (name: vhost: {
+          name = "${name}.midna.dev";
+          value = {
+            serverAliases = vhost.serverAliases;
+            forceSSL = true;
+            enableACME = true;
+            extraConfig = ''
+              ${lib.optionalString vhost.recommendedProxySettings ''
+                proxy_buffering off;
+                client_max_body_size 0;
+              ''}
+              ${vhost.extraServerConfig}
+              ${lib.optionalString vhost.enableAuthProxy ''
+                include ${./authelia-location.conf};
+              ''}
+            '';
+
+            locations."/" = {
+              recommendedProxySettings = vhost.recommendedProxySettings;
+              proxyWebsockets = vhost.proxyWebsockets;
+              proxyPass = "http${
+                if vhost.upstream.useSSL then "s" else ""
+              }://${vhost.upstream.name}${vhost.upstream.path}";
+              extraConfig = ''
+                ${lib.optionalString vhost.enableAuthProxy ''
+                  include ${./authelia-request.conf};
+                ''}
+                ${vhost.extraLocationConfig}
+              '';
+            };
+          };
+        })
+        vhosts
       // {
         "_" = {
           default = true;
@@ -116,7 +117,10 @@ in {
       };
   };
 
-  networking.firewall.allowedTCPPorts = [80 443];
+  networking.firewall.allowedTCPPorts = [
+    80
+    443
+  ];
 
   systemd.tmpfiles.settings."10-nginx"."/run/nginx-include".d = {
     mode = "0755";
@@ -129,42 +133,53 @@ in {
     settings = {
       template = [
         {
-          source = let
-            nonConnectUpstreams = builtins.filter (u: u.service.connectPort == null) (lib.mapAttrsToList (_name: u: u) upstreams);
-          in
-            pkgs.writeText "upstreams.conf.tpl" (lib.concatStrings (map (u: ''
-                upstream ${u.name} {
-                  ${lib.optionalString u.ipHash ''
-                  ip_hash;
-                ''}
-                  ${
-                  if u.addresses != null
-                  then lib.concatMapStringsSep "\n" (a: "server ${a};") u.addresses
-                  else ''
-                    {{ range service "${u.service.name}" }}
-                    server {{ if sprig_contains ":" .Address }}{{ .NodeTaggedAddresses.lan_ipv4 }}{{ else }}{{ .Address }}{{ end }}:${
-                      if u.service.port != null
-                      then toString u.service.port
-                      else "{{ .Port }}"
-                    };
-                    {{ else }}server 127.0.0.1:65535; # force a 502
-                    {{ end }}
-                  ''
-                }
-                }
-              '')
-              nonConnectUpstreams));
+          source =
+            let
+              nonConnectUpstreams = builtins.filter (u: u.service.connectPort == null) (
+                lib.mapAttrsToList (_name: u: u) upstreams
+              );
+            in
+            pkgs.writeText "upstreams.conf.tpl" (
+              lib.concatStrings (
+                map
+                  (u: ''
+                    upstream ${u.name} {
+                      ${lib.optionalString u.ipHash ''
+                      ip_hash;
+                    ''}
+                      ${
+                        if u.addresses != null then
+                          lib.concatMapStringsSep "\n" (a: "server ${a};") u.addresses
+                        else
+                          ''
+                            {{ range service "${u.service.name}" }}
+                            server {{ if sprig_contains ":" .Address }}{{ .NodeTaggedAddresses.lan_ipv4 }}{{ else }}{{ .Address }}{{ end }}:${
+                              if u.service.port != null then toString u.service.port else "{{ .Port }}"
+                            };
+                            {{ else }}server 127.0.0.1:65535; # force a 502
+                            {{ end }}
+                          ''
+                      }
+                    }
+                  '')
+                  nonConnectUpstreams
+              )
+            );
 
           destination = "/run/nginx-include/upstreams.conf";
           user = "nginx";
           group = "nginx";
-          exec.command = ["systemctl" "reload" "nginx.service"];
+          exec.command = [
+            "systemctl"
+            "reload"
+            "nginx.service"
+          ];
         }
       ];
     };
   };
 
-  systemd.services.nginx.wants = ["consul-template-ingress.service"];
+  systemd.services.nginx.wants = [ "consul-template-ingress.service" ];
 
   services.consul.services = {
     ingress-http = {
@@ -190,22 +205,29 @@ in {
           bind_address = "[::]";
         };
         upstreams =
-          lib.mapAttrsToList (_name: u: {
-            destination_name = u.service.name;
-            local_bind_port = u.service.connectPort;
-          })
-          connectUpstreams;
+          lib.mapAttrsToList
+            (_name: u: {
+              destination_name = u.service.name;
+              local_bind_port = u.service.connectPort;
+            })
+            connectUpstreams;
       };
     };
   };
 
   systemd.services.consul-connect = {
-    path = with pkgs; [consul envoy];
+    path = with pkgs; [
+      consul
+      envoy
+    ];
     script = ''
       consul connect envoy -proxy-id ${config.services.consul.services.ingress-http-proxy.id} -envoy-version ${pkgs.envoy.version}
     '';
-    wantedBy = ["multi-user.target"];
-    after = ["network.target" "consul.service"];
+    wantedBy = [ "multi-user.target" ];
+    after = [
+      "network.target"
+      "consul.service"
+    ];
     serviceConfig = {
       DynamicUser = true;
       Restart = "always";

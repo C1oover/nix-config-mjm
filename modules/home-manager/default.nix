@@ -1,3 +1,1 @@
-{
-  dock = import ./dock.nix;
-}
+{ dock = import ./dock.nix; }

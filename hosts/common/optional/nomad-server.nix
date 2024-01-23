@@ -1,4 +1,5 @@
-{config, ...}: {
+{ config, ... }:
+{
   services.nomad = {
     enable = true;
     settings = {
@@ -37,7 +38,5 @@
     4648
   ];
 
-  networking.firewall.allowedUDPPorts = [
-    4648
-  ];
+  networking.firewall.allowedUDPPorts = [ 4648 ];
 }

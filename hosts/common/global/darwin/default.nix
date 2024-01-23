@@ -4,27 +4,24 @@
   inputs,
   outputs,
   ...
-}: {
-  imports =
-    [
-      inputs.home-manager.darwinModules.home-manager
-      inputs.agenix.darwinModules.default
+}:
+{
+  imports = [
+    inputs.home-manager.darwinModules.home-manager
+    inputs.agenix.darwinModules.default
 
-      ./dock.nix
-      ./fonts.nix
-      ./homebrew.nix
-      ./keyboard.nix
-      ../home-manager.nix
-      ../nix.nix
-    ]
-    ++ (builtins.attrValues outputs.darwinModules);
+    ./dock.nix
+    ./fonts.nix
+    ./homebrew.nix
+    ./keyboard.nix
+    ../home-manager.nix
+    ../nix.nix
+  ] ++ (builtins.attrValues outputs.darwinModules);
 
-  nixpkgs.overlays = [
-    inputs.nixpkgs-firefox-darwin.overlay
-  ];
+  nixpkgs.overlays = [ inputs.nixpkgs-firefox-darwin.overlay ];
 
   nix.configureBuildUsers = true;
-  nix.settings.trusted-users = ["@admin"];
+  nix.settings.trusted-users = [ "@admin" ];
   services.nix-daemon.enable = true;
 
   time.timeZone = "America/Denver";

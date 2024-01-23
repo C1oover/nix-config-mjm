@@ -1,18 +1,15 @@
+{ pkgs, config, ... }:
 {
-  pkgs,
-  config,
-  ...
-}: {
   services.jellyfin = {
     enable = true;
     openFirewall = true;
   };
 
-  environment.systemPackages = with pkgs; [cifs-utils];
+  environment.systemPackages = with pkgs; [ cifs-utils ];
 
-  systemd.tmpfiles.settings."10-videos"."/videos".d = {};
+  systemd.tmpfiles.settings."10-videos"."/videos".d = { };
 
-  users.groups.media = {};
+  users.groups.media = { };
 
   fileSystems."/videos" = {
     device = "//selene.home.mattmoriarity.com/media";

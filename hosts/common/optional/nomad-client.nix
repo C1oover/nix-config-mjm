@@ -1,20 +1,18 @@
+{ pkgs, config, ... }:
 {
-  pkgs,
-  config,
-  ...
-}: {
   services.nomad = {
     enable = true;
     dropPrivileges = false;
-    extraPackages = [pkgs.cni-plugins pkgs.consul];
+    extraPackages = [
+      pkgs.cni-plugins
+      pkgs.consul
+    ];
     settings = {
       client = {
         enabled = true;
         meta = {
           "connect.sidecar_image" =
-            if pkgs.stdenv.isAarch64
-            then "thegrandpkizzle/envoy:1.25.2"
-            else "envoyproxy/envoy:v1.25.2";
+            if pkgs.stdenv.isAarch64 then "thegrandpkizzle/envoy:1.25.2" else "envoyproxy/envoy:v1.25.2";
         };
         cni_path = "${pkgs.cni-plugins}/bin";
       };
@@ -37,7 +35,23 @@
 
               infra_image = "rancher/pause:3.2";
               allow_privileged = true;
-              allow_caps = ["CHOWN" "DAC_OVERRIDE" "FSETID" "FOWNER" "MKNOD" "NET_RAW" "NET_ADMIN" "SETGID" "SETUID" "SETFCAP" "SETPCAP" "NET_BIND_SERVICE" "SYS_CHROOT" "KILL" "AUDIT_WRITE"];
+              allow_caps = [
+                "CHOWN"
+                "DAC_OVERRIDE"
+                "FSETID"
+                "FOWNER"
+                "MKNOD"
+                "NET_RAW"
+                "NET_ADMIN"
+                "SETGID"
+                "SETUID"
+                "SETFCAP"
+                "SETPCAP"
+                "NET_BIND_SERVICE"
+                "SYS_CHROOT"
+                "KILL"
+                "AUDIT_WRITE"
+              ];
 
               volumes.enabled = true;
             };

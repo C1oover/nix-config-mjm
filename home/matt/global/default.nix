@@ -4,23 +4,22 @@
   outputs,
   inputs,
   ...
-}: {
-  imports =
-    [
-      inputs.agenix.homeManagerModules.default
-      inputs.nix-colors.homeManagerModules.default
+}:
+{
+  imports = [
+    inputs.agenix.homeManagerModules.default
+    inputs.nix-colors.homeManagerModules.default
 
-      ../features/git
-      ../features/shell
-      ../features/xdg
-    ]
-    ++ (builtins.attrValues outputs.homeManagerModules);
+    ../features/git
+    ../features/shell
+    ../features/xdg
+  ] ++ (builtins.attrValues outputs.homeManagerModules);
 
   home.stateVersion = lib.mkDefault "22.11";
 
-  home.packages = builtins.attrValues ({
-      inherit
-        (pkgs)
+  home.packages = builtins.attrValues (
+    {
+      inherit (pkgs)
         btop
         fx
         gh
@@ -34,12 +33,13 @@
         wget
         ;
 
-      inherit (pkgs.callPackages ./rebuild.nix {}) rb sw;
+      inherit (pkgs.callPackages ./rebuild.nix { }) rb sw;
 
       inherit (inputs.home-manager.packages.${pkgs.system}) home-manager;
       agenix = inputs.agenix.packages.${pkgs.system}.default;
     }
-    // lib.optionalAttrs pkgs.stdenv.isLinux {inherit (pkgs) attic;});
+    // lib.optionalAttrs pkgs.stdenv.isLinux { inherit (pkgs) attic; }
+  );
 
   home.shellAliases = {
     td = "cd $(mktemp -d)";

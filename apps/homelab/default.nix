@@ -1,7 +1,8 @@
 let
   name = "homelab";
   image = builtins.readFile ./image.txt;
-in {
+in
+{
   nomad.jobs.homelab = {
     priority = 60;
 
@@ -25,7 +26,9 @@ in {
       ];
 
       tasks.homelab = {
-        docker = {inherit image;};
+        docker = {
+          inherit image;
+        };
         env.OTEL_SERVICE_NAME = "homelab";
         env.OTEL_EXPORTER_OTLP_ENDPOINT = "http://$\${attr.unique.network.ip-address}:4318";
         env.TASKRC = "$\${NOMAD_TASK_DIR}/taskrc";
@@ -35,7 +38,7 @@ in {
         cpu = 500;
         memory = 500;
         loggingTag = name;
-        vault.policies = [name];
+        vault.policies = [ name ];
 
         templates."secrets/homelab.env" = {
           text = ''

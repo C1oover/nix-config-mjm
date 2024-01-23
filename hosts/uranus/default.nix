@@ -1,8 +1,5 @@
+{ lib, inputs, ... }:
 {
-  lib,
-  inputs,
-  ...
-}: {
   imports = [
     inputs.nixos-wsl.nixosModules.default
 
@@ -21,7 +18,7 @@
     startMenuLaunchers = true;
   };
 
-  nixpkgs.overlays = [inputs.jujutsu.overlays.default];
+  nixpkgs.overlays = [ inputs.jujutsu.overlays.default ];
 
   nixpkgs.hostPlatform = "x86_64-linux";
 

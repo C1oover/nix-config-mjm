@@ -3,16 +3,13 @@
   lib,
   inputs,
   ...
-}: let
-  addons = pkgs.callPackage ./addons {};
-  firefox =
-    if pkgs.stdenv.isLinux
-    then pkgs.firefox
-    else pkgs.firefox-bin;
-in {
-  home.packages = with pkgs; [
-    nur.repos.rycee.mozilla-addons-to-nix
-  ];
+}:
+let
+  addons = pkgs.callPackage ./addons { };
+  firefox = if pkgs.stdenv.isLinux then pkgs.firefox else pkgs.firefox-bin;
+in
+{
+  home.packages = with pkgs; [ nur.repos.rycee.mozilla-addons-to-nix ];
 
   programs.firefox = {
     enable = true;
@@ -45,10 +42,10 @@ in {
         "widget.use-xdg-desktop-portal.open-uri" = 1;
         "widget.use-xdg-desktop-portal.settings" = 1;
       };
-      extensions = with pkgs.nur.repos;
+      extensions =
+        with pkgs.nur.repos;
         builtins.attrValues {
-          inherit
-            (rycee.firefox-addons)
+          inherit (rycee.firefox-addons)
             betterttv
             bitwarden
             firefox-color
@@ -57,8 +54,7 @@ in {
             tampermonkey
             ublock-origin
             ;
-          inherit
-            (addons)
+          inherit (addons)
             minimaltwitter
             shinigami-eyes
             linkding-extension
@@ -69,7 +65,9 @@ in {
         };
       userChrome = ''
         ${builtins.readFile (inputs.firefox-csshacks + /chrome/window_control_placeholder_support.css)}
-        ${lib.optionalString pkgs.stdenv.isDarwin (builtins.readFile (inputs.firefox-csshacks + /chrome/hide_tabs_toolbar_osx.css))}
+        ${lib.optionalString pkgs.stdenv.isDarwin (
+          builtins.readFile (inputs.firefox-csshacks + /chrome/hide_tabs_toolbar_osx.css)
+        )}
         ${lib.optionalString pkgs.stdenv.isLinux ''
           #TabsToolbar{ visibility: collapse !important }
         ''}
@@ -90,7 +88,7 @@ in {
           ];
 
           icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
-          definedAliases = ["@n"];
+          definedAliases = [ "@n" ];
         };
         "Nix Packages" = {
           urls = [
@@ -114,7 +112,7 @@ in {
           ];
 
           icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
-          definedAliases = ["@np"];
+          definedAliases = [ "@np" ];
         };
         "Nix Options" = {
           urls = [
@@ -134,7 +132,7 @@ in {
           ];
 
           icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
-          definedAliases = ["@no"];
+          definedAliases = [ "@no" ];
         };
         "Links" = {
           urls = [
@@ -148,7 +146,7 @@ in {
               ];
             }
           ];
-          definedAliases = ["@l"];
+          definedAliases = [ "@l" ];
         };
         "Bing".metadata.hidden = true;
         "Google".metadata.alias = "@g";

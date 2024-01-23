@@ -1,9 +1,10 @@
-{config, ...}: {
+{ config, ... }:
+{
   services.sabnzbd = {
     enable = true;
   };
 
-  users.users.sabnzbd.extraGroups = ["media"];
+  users.users.sabnzbd.extraGroups = [ "media" ];
 
   services.prometheus.exporters.sabnzbd = {
     enable = true;
@@ -17,7 +18,7 @@
     ];
   };
 
-  networking.firewall.allowedTCPPorts = [8080];
+  networking.firewall.allowedTCPPorts = [ 8080 ];
 
   services.consul.services.sabnzbd = {
     port = 8080;

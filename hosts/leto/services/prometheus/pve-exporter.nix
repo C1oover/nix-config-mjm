@@ -1,4 +1,5 @@
-{config, ...}: {
+{ config, ... }:
+{
   services.prometheus.exporters.pve = {
     enable = true;
     configFile = config.age.secrets."pve.yml".path;

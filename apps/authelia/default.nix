@@ -23,7 +23,10 @@
     }
   '';
 
-  vault.approles.roles.leto.tokenPolicies = ["lldap" "authelia"];
+  vault.approles.roles.leto.tokenPolicies = [
+    "lldap"
+    "authelia"
+  ];
 
   ingress.virtualHosts = {
     auth = {

@@ -1,15 +1,14 @@
-{inputs, ...}: {
-  imports = [
-    inputs.impermanence.nixosModules.impermanence
-  ];
+{ inputs, ... }:
+{
+  imports = [ inputs.impermanence.nixosModules.impermanence ];
 
   # TODO remove later
   boot.initrd.preFailCommands = "allowShell=1";
 
-  age.identityPaths = ["/nix/persist/etc/ssh/ssh_host_ed25519_key"];
+  age.identityPaths = [ "/nix/persist/etc/ssh/ssh_host_ed25519_key" ];
 
   environment.persistence."/nix/persist" = {
-    directories = [];
+    directories = [ ];
     files = [
       "/etc/machine-id"
       "/etc/ssh/ssh_host_ed25519_key"
@@ -18,9 +17,7 @@
       "/etc/ssh/ssh_host_rsa_key.pub"
     ];
     users.matt = {
-      directories = [
-        ".local/share/atuin"
-      ];
+      directories = [ ".local/share/atuin" ];
     };
   };
 

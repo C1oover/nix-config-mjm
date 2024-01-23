@@ -1,8 +1,5 @@
+{ pkgs, config, ... }:
 {
-  pkgs,
-  config,
-  ...
-}: {
   services.garage = {
     enable = true;
     package = pkgs.garage_0_9;
@@ -28,20 +25,19 @@
   };
 
   environment.systemPackages = builtins.attrValues {
-    inherit
-      (pkgs.callPackages ./scripts.nix {
-        garage = config.services.garage.package;
-      })
-      g
-      ;
+    inherit (pkgs.callPackages ./scripts.nix { garage = config.services.garage.package; }) g;
   };
 
-  networking.firewall.allowedTCPPorts = [3901 3902 3903];
+  networking.firewall.allowedTCPPorts = [
+    3901
+    3902
+    3903
+  ];
 
   services.consul.services.garage = {
     port = 3902;
 
-    tags = ["s3"];
+    tags = [ "s3" ];
 
     meta = {
       metrics_path = "/metrics";

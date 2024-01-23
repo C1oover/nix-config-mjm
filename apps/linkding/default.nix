@@ -9,7 +9,7 @@
     }
   '';
 
-  vault.approles.roles.leto.tokenPolicies = ["linkding"];
+  vault.approles.roles.leto.tokenPolicies = [ "linkding" ];
 
   ingress.virtualHosts.links = {
     upstream.service.name = "linkding";

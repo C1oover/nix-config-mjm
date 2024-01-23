@@ -1,8 +1,5 @@
+{ pkgs, lib, ... }:
 {
-  pkgs,
-  lib,
-  ...
-}: {
   imports = [
     ../features/firefox
     ../features/kitty

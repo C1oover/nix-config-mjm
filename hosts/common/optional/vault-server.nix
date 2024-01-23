@@ -1,8 +1,5 @@
+{ pkgs, config, ... }:
 {
-  pkgs,
-  config,
-  ...
-}: {
   services.vault = {
     enable = true;
     package = pkgs.vault-bin;

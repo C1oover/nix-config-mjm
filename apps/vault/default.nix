@@ -4,12 +4,12 @@
     version = ">= 3.0.0";
   };
 
-  terraform.provider.vault = {};
+  terraform.provider.vault = { };
 
   terraform.resource.vault_identity_group.admins = {
     name = "admins";
     type = "external";
-    policies = ["admin"];
+    policies = [ "admin" ];
   };
 
   vault.databases.enable = true;

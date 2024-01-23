@@ -15,7 +15,7 @@
 
   networking.hostName = "helios";
 
-  boot.supportedFilesystems = ["xfs"];
+  boot.supportedFilesystems = [ "xfs" ];
 
   boot.loader.grub = {
     enable = true;

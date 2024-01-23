@@ -1,7 +1,4 @@
-{
-  buildPythonPackage,
-  fetchPypi,
-}:
+{ buildPythonPackage, fetchPypi }:
 buildPythonPackage rec {
   pname = "uwsgi";
   version = "2.0.23";

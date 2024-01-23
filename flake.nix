@@ -76,8 +76,9 @@
     };
   };
 
-  outputs = {flake-parts, ...} @ inputs:
-    flake-parts.lib.mkFlake {inherit inputs;} {
+  outputs =
+    { flake-parts, ... }@inputs:
+    flake-parts.lib.mkFlake { inherit inputs; } {
       imports = [
         inputs.devenv.flakeModule
         inputs.pre-commit-hooks-nix.flakeModule
@@ -87,43 +88,47 @@
         ./terraform
       ];
 
-      systems = ["x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin"];
+      systems = [
+        "x86_64-linux"
+        "aarch64-linux"
+        "x86_64-darwin"
+        "aarch64-darwin"
+      ];
 
-      perSystem = {
-        system,
-        pkgs,
-        lib,
-        ...
-      }: {
-        _module.args.pkgs = let
-          source =
-            if system == "x86_64-linux" || system == "aarch64-linux"
-            then inputs.nixos
-            else inputs.nixpkgs;
-        in
-          import source {
-            inherit system;
-            # terraform is now under an unfree license
-            config.allowUnfree = true;
-          };
-
-        devenv.shells.default = {
-          pre-commit = {
-            hooks = {
-              alejandra.enable = true;
-              deadnix.enable = true;
+      perSystem =
+        {
+          system,
+          pkgs,
+          lib,
+          ...
+        }:
+        {
+          _module.args.pkgs =
+            let
+              source =
+                if system == "x86_64-linux" || system == "aarch64-linux" then inputs.nixos else inputs.nixpkgs;
+            in
+            import source {
+              inherit system;
+              # terraform is now under an unfree license
+              config.allowUnfree = true;
             };
 
-            excludes = [
-              "home/matt/features/firefox/addons/addons.nix"
-            ];
+          devenv.shells.default = {
+            pre-commit = {
+              hooks = {
+                alejandra.enable = true;
+                deadnix.enable = true;
+              };
+
+              excludes = [ "home/matt/features/firefox/addons/addons.nix" ];
+            };
+            dotenv.disableHint = true;
           };
-          dotenv.disableHint = true;
+
+          formatter = pkgs.alejandra;
+
+          apps = builtins.mapAttrs (_: script: { program = script; }) (pkgs.callPackages ./scripts.nix { });
         };
-
-        formatter = pkgs.alejandra;
-
-        apps = builtins.mapAttrs (_: script: {program = script;}) (pkgs.callPackages ./scripts.nix {});
-      };
     };
 }

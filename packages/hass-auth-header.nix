@@ -2,10 +2,10 @@
   lib,
   buildHomeAssistantComponent,
   fetchFromGitHub,
-  # isort,
-  # black,
-  # ruff,
-  # pylint,
+# isort,
+# black,
+# ruff,
+# pylint,
 }:
 buildHomeAssistantComponent rec {
   owner = "BeryJu";
@@ -25,7 +25,7 @@ buildHomeAssistantComponent rec {
   meta = with lib; {
     description = "Home Assistant custom component which allows you to delegate authentication to a reverse proxy";
     homepage = "https://github.com/BeryJu/hass-auth-header";
-    maintainers = with maintainers; [mjm];
+    maintainers = with maintainers; [ mjm ];
     license = licenses.gpl3;
   };
 }

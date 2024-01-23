@@ -3,7 +3,8 @@
   lib,
   pkgs,
   ...
-}: {
+}:
+{
   age.secrets."gitlab-runner-registration.env" = {
     file = ../../../secrets/gitlab-runner-registration.age;
   };
@@ -29,7 +30,7 @@
       nix = with lib; {
         registrationConfigFile = config.age.secrets."gitlab-runner-registration.env".path;
         # temporary: remove when invalid host issue is fixed
-        registrationFlags = ["--docker-host tcp://127.0.0.1:2375"];
+        registrationFlags = [ "--docker-host tcp://127.0.0.1:2375" ];
         dockerImage = "alpine";
         dockerVolumes = [
           "/nix/store:/nix/store:ro"
@@ -50,7 +51,18 @@
           mkdir -p -m 0755 /nix/var/nix/profiles/per-user/root
           mkdir -p -m 0700 "$HOME/.nix-defexpr"
           . ${pkgs.nix}/etc/profile.d/nix-daemon.sh
-          ${pkgs.nix}/bin/nix-env -i ${concatStringsSep " " (with pkgs; [nix cacert git openssh glibcLocalesUtf8])}
+          ${pkgs.nix}/bin/nix-env -i ${
+            concatStringsSep " " (
+              with pkgs;
+              [
+                nix
+                cacert
+                git
+                openssh
+                glibcLocalesUtf8
+              ]
+            )
+          }
           ${pkgs.nix}/bin/nix-channel --add https://nixos.org/channels/nixos-unstable nixpkgs
           ${pkgs.nix}/bin/nix-channel --update nixpkgs
           mkdir -p -m 0755 /etc/nix
@@ -66,12 +78,18 @@
           NIX_SSL_CERT_FILE = "/nix/var/nix/profiles/default/etc/ssl/certs/ca-bundle.crt";
           LOCALE_ARCHIVE = "/nix/var/nix/profiles/default/lib/locale/locale-archive";
         };
-        tagList = ["nix" pkgs.stdenv.hostPlatform.linuxArch];
+        tagList = [
+          "nix"
+          pkgs.stdenv.hostPlatform.linuxArch
+        ];
       };
       nix-shell = {
         registrationConfigFile = config.age.secrets."gitlab-runner-registration.env".path;
         executor = "shell";
-        tagList = ["nix-shell" pkgs.stdenv.hostPlatform.linuxArch];
+        tagList = [
+          "nix-shell"
+          pkgs.stdenv.hostPlatform.linuxArch
+        ];
         protected = true;
       };
     };
@@ -87,18 +105,16 @@
     "127.0.0.1:2375"
   ];
 
-  services.openssh.knownHosts = let
-    keys = import ../../../secrets/keys.nix;
-  in
-    builtins.mapAttrs (name: publicKey: {
-      inherit publicKey;
-      extraHostNames = [
-        (
-          if name == "nyx"
-          then "${name}.mattmoriarity.com"
-          else "${name}.home.mattmoriarity.com"
-        )
-      ];
-    })
-    keys.servers;
+  services.openssh.knownHosts =
+    let
+      keys = import ../../../secrets/keys.nix;
+    in
+    builtins.mapAttrs
+      (name: publicKey: {
+        inherit publicKey;
+        extraHostNames = [
+          (if name == "nyx" then "${name}.mattmoriarity.com" else "${name}.home.mattmoriarity.com")
+        ];
+      })
+      keys.servers;
 }

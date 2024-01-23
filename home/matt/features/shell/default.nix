@@ -3,7 +3,8 @@
   config,
   inputs,
   ...
-}: {
+}:
+{
   home.sessionVariables.EDITOR = "nvim";
 
   programs.zsh = {

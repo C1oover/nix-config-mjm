@@ -1,9 +1,8 @@
-{pkgs, ...}: let
-  fontSize =
-    if pkgs.stdenv.isLinux
-    then 11
-    else 14;
-in {
+{ pkgs, ... }:
+let
+  fontSize = if pkgs.stdenv.isLinux then 11 else 14;
+in
+{
   programs.kitty = {
     enable = true;
     theme = "Catppuccin-Mocha";
@@ -24,10 +23,8 @@ in {
       "kitty_mod+enter" = "launch --cwd=current";
       "cmd+shift+enter" = "launch --cwd=current --type=tab";
     };
-    darwinLaunchOptions = ["--listen-on=unix:kitty.sock"];
+    darwinLaunchOptions = [ "--listen-on=unix:kitty.sock" ];
   };
 
-  home.packages = builtins.attrValues {
-    inherit (pkgs.callPackages ./scripts.nix {}) tt;
-  };
+  home.packages = builtins.attrValues { inherit (pkgs.callPackages ./scripts.nix { }) tt; };
 }

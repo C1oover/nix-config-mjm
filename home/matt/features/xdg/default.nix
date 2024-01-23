@@ -3,7 +3,8 @@
   pkgs,
   config,
   ...
-}: {
+}:
+{
   xdg = {
     enable = true;
     userDirs = lib.mkIf pkgs.stdenv.isLinux {

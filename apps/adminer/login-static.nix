@@ -1,4 +1,5 @@
-{databases}: let
+{ databases }:
+let
   mkDbConfig = db: ''
     {{ with secret "database/creds/${db.name}" }}
     '${db.name}' => array(
@@ -12,7 +13,8 @@
   '';
 
   configs = builtins.concatStringsSep "\n" (map mkDbConfig (builtins.attrValues databases));
-in ''
+in
+''
   <?php
 
   class AdminerCustom {

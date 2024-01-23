@@ -3,35 +3,50 @@
   pkgs,
   config,
   ...
-}: let
+}:
+let
   inherit (pkgs) resholve;
   interpreter = lib.getExe pkgs.bash;
-  jf = with pkgs;
-    resholve.writeScriptBin ",jf" {
-      inherit interpreter;
-      inputs = [jujutsu fzf coreutils];
-      execer = [
-        "cannot:${jujutsu}/bin/jj"
-        "cannot:${fzf}/bin/fzf"
-      ];
-    } ''
-      jj log --no-graph --color never -T 'change_id ++ " " ++ description.first_line() ++ "\n"' "$@" \
-      | fzf --with-nth 2.. \
-      | cut -d' ' -f1
-    '';
+  jf =
+    with pkgs;
+    resholve.writeScriptBin ",jf"
+      {
+        inherit interpreter;
+        inputs = [
+          jujutsu
+          fzf
+          coreutils
+        ];
+        execer = [
+          "cannot:${jujutsu}/bin/jj"
+          "cannot:${fzf}/bin/fzf"
+        ];
+      }
+      ''
+        jj log --no-graph --color never -T 'change_id ++ " " ++ description.first_line() ++ "\n"' "$@" \
+        | fzf --with-nth 2.. \
+        | cut -d' ' -f1
+      '';
 
-  jco = with pkgs;
-    resholve.writeScriptBin ",jco" {
-      inherit interpreter;
-      inputs = [jujutsu jf];
-      execer = [
-        "cannot:${jujutsu}/bin/jj"
-        "cannot:${jf}/bin/,jf"
-      ];
-    } ''
-      jj new "$(,jf "$@")"
-    '';
-in {
+  jco =
+    with pkgs;
+    resholve.writeScriptBin ",jco"
+      {
+        inherit interpreter;
+        inputs = [
+          jujutsu
+          jf
+        ];
+        execer = [
+          "cannot:${jujutsu}/bin/jj"
+          "cannot:${jf}/bin/,jf"
+        ];
+      }
+      ''
+        jj new "$(,jf "$@")"
+      '';
+in
+{
   home.packages = builtins.attrValues {
     inherit jf jco;
     inherit (pkgs) git-credential-manager watchman;
@@ -87,7 +102,11 @@ in {
       core.fsmonitor = "watchman";
 
       aliases = {
-        unpushed = ["log" "-r" "branches() & ~(main | remote_branches())"];
+        unpushed = [
+          "log"
+          "-r"
+          "branches() & ~(main | remote_branches())"
+        ];
       };
       revsets = {
         log = "@ | trunk() | ancestors(trunk()..(visible_heads() & mine() & ~tags()), 2)";

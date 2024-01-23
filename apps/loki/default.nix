@@ -2,7 +2,8 @@ let
   name = "loki";
   # loki 2.8.2
   image = "grafana/loki@sha256:b1da1d23037eb1b344cccfc5b587e30aed60ab4cad33b42890ff850aa3c4755d";
-in {
+in
+{
   nomad.jobs.loki = {
     priority = 80;
 
@@ -31,12 +32,12 @@ in {
       tasks.loki = {
         docker = {
           inherit image;
-          args = ["-config.file=$\${NOMAD_TASK_DIR}/loki.yml"];
+          args = [ "-config.file=$\${NOMAD_TASK_DIR}/loki.yml" ];
         };
         cpu = 100;
         memory = 500;
         loggingTag = name;
-        vault.policies = [name];
+        vault.policies = [ name ];
         vault.changeMode = "noop";
 
         templates."local/loki.yml" = {

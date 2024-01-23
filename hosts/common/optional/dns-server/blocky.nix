@@ -5,11 +5,12 @@ let
     "1.1.1.1"
     "1.0.0.1"
   ];
-in {
+in
+{
   services.blocky = {
     enable = true;
     settings = {
-      bootstrapDns = map (ip: {upstream = ip;}) upstreams;
+      bootstrapDns = map (ip: { upstream = ip; }) upstreams;
       upstream.default = upstreams;
       blocking = {
         blackLists.ads = [
@@ -25,7 +26,7 @@ in {
             app.segment.com
           ''
         ];
-        clientGroupsBlock.default = ["ads"];
+        clientGroupsBlock.default = [ "ads" ];
         downloadAttempts = 120;
         downloadCooldown = "30s";
       };
@@ -39,12 +40,10 @@ in {
     };
   };
 
-  networking.firewall.allowedTCPPorts = [
-    4000
-  ];
+  networking.firewall.allowedTCPPorts = [ 4000 ];
 
   services.consul.services.blocky = {
-    tags = ["http"];
+    tags = [ "http" ];
     port = 4000;
 
     meta.metrics_path = "/metrics";

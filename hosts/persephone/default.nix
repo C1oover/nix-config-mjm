@@ -3,7 +3,8 @@
   inputs,
   config,
   ...
-}: {
+}:
+{
   imports = [
     inputs.hardware.nixosModules.framework-13th-gen-intel
     ./hardware-configuration.nix
@@ -18,12 +19,15 @@
     ../common/optional/wireless.nix
   ];
 
-  nixpkgs.overlays = [inputs.jujutsu.overlays.default];
+  nixpkgs.overlays = [ inputs.jujutsu.overlays.default ];
 
-  boot.binfmt.emulatedSystems = ["aarch64-linux"];
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 
   boot.kernelPackages = pkgs.linuxPackages_testing;
-  boot.supportedFilesystems = ["btrfs" "bcachefs"];
+  boot.supportedFilesystems = [
+    "btrfs"
+    "bcachefs"
+  ];
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -31,11 +35,7 @@
   boot.consoleLogLevel = 3;
   boot.plymouth = {
     enable = true;
-    themePackages = [
-      (pkgs.catppuccin-plymouth.override {
-        variant = "mocha";
-      })
-    ];
+    themePackages = [ (pkgs.catppuccin-plymouth.override { variant = "mocha"; }) ];
     theme = "catppuccin-mocha";
   };
   boot.kernelParams = [
@@ -46,7 +46,7 @@
     "vt.default_blu=46,168,161,175,250,231,213,222,112,168,161,175,250,231,213,200"
   ];
 
-  boot.extraModulePackages = [config.boot.kernelPackages.framework-laptop-kmod];
+  boot.extraModulePackages = [ config.boot.kernelPackages.framework-laptop-kmod ];
 
   boot.swraid.enable = false;
 
@@ -66,7 +66,7 @@
 
   programs._1password-gui = {
     enable = true;
-    polkitPolicyOwners = ["matt"];
+    polkitPolicyOwners = [ "matt" ];
   };
   programs._1password.enable = true;
 
@@ -90,7 +90,7 @@
     keyMap = "us";
   };
   users.users.matt = {
-    extraGroups = ["video"];
+    extraGroups = [ "video" ];
   };
 
   environment.systemPackages = with pkgs; [

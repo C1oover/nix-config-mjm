@@ -114,7 +114,7 @@
 
   ingress.virtualHosts = {
     containers = {
-      upstream.addresses = ["10.0.2.32:5050"];
+      upstream.addresses = [ "10.0.2.32:5050" ];
 
       enableAuthProxy = false;
 
@@ -135,7 +135,7 @@
     };
 
     git = {
-      upstream.addresses = ["10.0.2.32"];
+      upstream.addresses = [ "10.0.2.32" ];
 
       enableAuthProxy = false;
 
@@ -156,8 +156,12 @@
     };
 
     pages = {
-      upstream.addresses = ["10.0.2.33"];
-      serverAliases = ["*.pages.midna.dev" "www.midna.dev" "midna.dev"];
+      upstream.addresses = [ "10.0.2.33" ];
+      serverAliases = [
+        "*.pages.midna.dev"
+        "www.midna.dev"
+        "midna.dev"
+      ];
       enableAuthProxy = false;
     };
   };

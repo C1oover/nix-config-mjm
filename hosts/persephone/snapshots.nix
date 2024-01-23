@@ -6,13 +6,13 @@
       snapshot_preserve = "14d";
       volume."/mnt" = {
         snapshot_dir = "snapshots";
-        subvolume."home" = {};
-        subvolume."persist" = {};
+        subvolume."home" = { };
+        subvolume."persist" = { };
       };
     };
   };
 
-  systemd.tmpfiles.rules = ["d /mnt 0755 root root - -"];
+  systemd.tmpfiles.rules = [ "d /mnt 0755 root root - -" ];
 
   systemd.services.btrbk-btrbk = {
     preStart = ''
@@ -25,15 +25,15 @@
 
   security.sudo.extraRules = [
     {
-      users = ["btrbk"];
+      users = [ "btrbk" ];
       commands = [
         {
           command = "/run/wrappers/bin/mount";
-          options = ["NOPASSWD"];
+          options = [ "NOPASSWD" ];
         }
         {
           command = "/run/wrappers/bin/umount";
-          options = ["NOPASSWD"];
+          options = [ "NOPASSWD" ];
         }
       ];
     }

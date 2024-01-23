@@ -11,11 +11,11 @@
         token_type = "default-service";
 
         # defaults
-        allowed_response_headers = [];
-        audit_non_hmac_request_keys = [];
-        audit_non_hmac_response_keys = [];
+        allowed_response_headers = [ ];
+        audit_non_hmac_request_keys = [ ];
+        audit_non_hmac_response_keys = [ ];
         listing_visibility = "hidden";
-        passthrough_request_headers = [];
+        passthrough_request_headers = [ ];
       }
     ];
   };
@@ -24,7 +24,7 @@
     backend = "\${vault_jwt_auth_backend.gitlab.path}";
     role_name = "homelab-infra";
     role_type = "jwt";
-    token_policies = ["\${vault_policy.gitlab.name}"];
+    token_policies = [ "\${vault_policy.gitlab.name}" ];
     user_claim = "user_email";
     bound_claims = {
       project_id = "30";
@@ -37,7 +37,7 @@
     backend = "\${vault_jwt_auth_backend.gitlab.path}";
     role_name = "homelab";
     role_type = "jwt";
-    token_policies = ["\${vault_policy.gitlab-homelab.name}"];
+    token_policies = [ "\${vault_policy.gitlab-homelab.name}" ];
     user_claim = "user_email";
     bound_claims = {
       project_id = "2";

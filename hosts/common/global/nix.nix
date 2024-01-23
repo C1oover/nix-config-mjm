@@ -1,6 +1,10 @@
-{inputs, ...}: {
+{ inputs, ... }:
+{
   nix.settings = {
-    experimental-features = ["nix-command" "flakes"];
+    experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
     substituters = [
       "https://nix-community.cachix.org"
       "https://devenv.cachix.org"
@@ -20,7 +24,7 @@
     home-manager.flake = inputs.home-manager;
   };
 
-  nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
+  nix.nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
 
   nixpkgs = {
     config.allowUnfree = true;

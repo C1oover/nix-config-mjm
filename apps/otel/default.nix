@@ -1,7 +1,8 @@
 let
   name = "otel-collector";
   image = "ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib@sha256:a69b30adceef622a2711101499610823f5735ac8a95439418cddacdceb428b1a";
-in {
+in
+{
   nomad.jobs.otel-collector = {
     priority = 70;
     type = "system";
@@ -20,7 +21,7 @@ in {
         {
           inherit name;
           port = "otlp_grpc";
-          tags = ["grpc"];
+          tags = [ "grpc" ];
           metrics = {
             enable = true;
             port = "metrics";
@@ -41,7 +42,10 @@ in {
       tasks.otel-collector = {
         docker = {
           inherit image;
-          args = ["--config" "$\${NOMAD_SECRETS_DIR}/config.yaml"];
+          args = [
+            "--config"
+            "$\${NOMAD_SECRETS_DIR}/config.yaml"
+          ];
         };
         ports = [
           "healthcheck"
@@ -54,7 +58,7 @@ in {
         cpu = 500;
         memory = 500;
         loggingTag = name;
-        vault.policies = [name];
+        vault.policies = [ name ];
         vault.changeMode = "noop";
 
         templates."secrets/config.yaml" = {

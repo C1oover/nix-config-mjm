@@ -4,15 +4,22 @@
   resholve,
   coreutils,
   kitty,
-}: let
+}:
+let
   interpreter = "${bash}/bin/bash";
-in {
+in
+{
   tt =
-    resholve.writeScriptBin "tt" {
-      inherit interpreter;
-      inputs = [coreutils kitty];
-      execer = ["cannot:${kitty}/bin/kitty"];
-    } ''
-      kitty @ set-tab-title "$(basename "$PWD")"
-    '';
+    resholve.writeScriptBin "tt"
+      {
+        inherit interpreter;
+        inputs = [
+          coreutils
+          kitty
+        ];
+        execer = [ "cannot:${kitty}/bin/kitty" ];
+      }
+      ''
+        kitty @ set-tab-title "$(basename "$PWD")"
+      '';
 }

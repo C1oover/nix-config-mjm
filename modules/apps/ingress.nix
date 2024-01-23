@@ -4,11 +4,14 @@
   pkgs,
   ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.ingress;
 
-  vhostType = with lib;
-    {name, ...}: {
+  vhostType =
+    with lib;
+    { name, ... }:
+    {
       options = {
         name = mkOption {
           type = types.str;
@@ -64,7 +67,7 @@ with lib; let
         };
         serverAliases = mkOption {
           type = types.listOf types.str;
-          default = [];
+          default = [ ];
         };
         extraServerConfig = mkOption {
           type = types.lines;
@@ -76,14 +79,15 @@ with lib; let
         };
       };
     };
-in {
+in
+{
   options.ingress = {
     virtualHosts = mkOption {
-      default = {};
+      default = { };
       type = types.attrsOf (types.submodule vhostType);
     };
     extraTemplates = mkOption {
-      default = {};
+      default = { };
       type = types.attrs;
     };
   };

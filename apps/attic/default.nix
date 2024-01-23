@@ -2,7 +2,7 @@
   vault.databases.roles.attic = {
     ttl = "long";
   };
-  vault.approles.roles.leto.tokenPolicies = ["attic"];
+  vault.approles.roles.leto.tokenPolicies = [ "attic" ];
 
   vault.policies.attic.text = ''
     path "database/creds/attic" {

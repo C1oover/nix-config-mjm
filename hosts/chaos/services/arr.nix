@@ -1,25 +1,22 @@
+{ pkgs, config, ... }:
 {
-  pkgs,
-  config,
-  ...
-}: {
   services.sonarr = {
     enable = true;
     openFirewall = true;
   };
-  users.users.sonarr.extraGroups = ["media"];
+  users.users.sonarr.extraGroups = [ "media" ];
 
   services.radarr = {
     enable = true;
     openFirewall = true;
   };
-  users.users.radarr.extraGroups = ["media"];
+  users.users.radarr.extraGroups = [ "media" ];
 
   services.readarr = {
     enable = true;
     openFirewall = true;
   };
-  users.users.readarr.extraGroups = ["media"];
+  users.users.readarr.extraGroups = [ "media" ];
 
   services.prometheus.exporters = {
     exportarr-sonarr = {
@@ -107,7 +104,7 @@
   };
 
   # ffprobe
-  systemd.services.radarr.path = [pkgs.ffmpeg];
+  systemd.services.radarr.path = [ pkgs.ffmpeg ];
 
   age.secrets = {
     "sonarr-apikey".file = ../../../secrets/sonarr-apikey.age;

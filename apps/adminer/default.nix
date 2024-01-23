@@ -1,10 +1,12 @@
-{config, ...}: let
+{ config, ... }:
+let
   name = "adminer";
   # adminer 4.8.1
   image = "adminer@sha256:ea38d6384f8f6f0dc29705d6497ca7d77af3e664288d655e574f433d592030df";
 
   databases = config.vault.databases.roles;
-in {
+in
+{
   nomad.jobs.adminer = {
     priority = 50;
 
@@ -26,14 +28,16 @@ in {
       tasks.adminer = {
         docker = {
           inherit image;
-          volumes = ["secrets/plugins:/var/www/html/plugins-enabled"];
+          volumes = [ "secrets/plugins:/var/www/html/plugins-enabled" ];
         };
         cpu = 100;
         memory = 100;
         loggingTag = name;
-        vault.policies = [name];
+        vault.policies = [ name ];
 
-        templates."secrets/plugins/login-static.php".text = import ./login-static.nix {inherit databases;};
+        templates."secrets/plugins/login-static.php".text = import ./login-static.nix {
+          inherit databases;
+        };
       };
     };
   };
