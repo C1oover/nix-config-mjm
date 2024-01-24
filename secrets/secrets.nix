@@ -22,6 +22,8 @@ in
     "alertmanager-env.age".publicKeys = personalKeys ++ [gaia leto];
     "pve-exporter-config.age".publicKeys = personalKeys ++ [leto];
     "vaultwarden-backup-password.age".publicKeys = personalKeys ++ [leto];
+    "home-assistant-backup-password.age".publicKeys = personalKeys ++ [leto];
+    "home-assistant-token.age".publicKeys = personalKeys ++ [leto];
 
     "garage-env.age".publicKeys = personalKeys ++ [leto chaos helios];
 

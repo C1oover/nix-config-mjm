@@ -3,7 +3,9 @@
   config,
   outputs,
   ...
-}: {
+}: let
+  port = config.services.home-assistant.config.http.server_port;
+in {
   # ugh
   nixpkgs.config.permittedInsecurePackages = [
     "openssl-1.1.1w"
@@ -91,9 +93,7 @@
   # homekit bridge
   networking.firewall.allowedTCPPorts = [21063];
 
-  services.consul.services.home-assistant = let
-    port = config.services.home-assistant.config.http.server_port;
-  in {
+  services.consul.services.home-assistant = {
     inherit port;
 
     checks = [
@@ -107,4 +107,28 @@
   };
 
   services.avahi.enable = true;
+
+  services.restic.backups.home-assistant = {
+    initialize = true;
+    repository = "s3:http://garage.service.consul:3902/restic-backups/home-assistant";
+    passwordFile = config.age.secrets."home-assistant-backup-password".path;
+    environmentFile = config.age.secrets."backup.env".path;
+    paths = [
+      "/var/lib/hass/backups"
+    ];
+    backupPrepareCommand = ''
+      ${pkgs.curl}/bin/curl -XPOST http://localhost:${toString port}/api/services/backup/create -H "Authorization: Bearer $(cat ${config.age.secrets."home-assistant-token".path})"
+    '';
+    backupCleanupCommand = ''
+      rm /var/lib/hass/backups/*
+    '';
+    pruneOpts = [
+      "--keep-daily 7"
+      "--keep-weekly 4"
+    ];
+  };
+
+  age.secrets."backup.env".file = ../../../secrets/restic-backup-env.age;
+  age.secrets."home-assistant-backup-password".file = ../../../secrets/home-assistant-backup-password.age;
+  age.secrets."home-assistant-token".file = ../../../secrets/home-assistant-token.age;
 }
