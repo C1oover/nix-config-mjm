@@ -112,4 +112,21 @@ in {
         AllowTcpForwarding no
         ForceCommand internal-sftp -u 0077 -d /var/lib/paperless/consume
   '';
+
+  services.restic.backups.paperless = {
+    initialize = true;
+    repository = "s3:http://garage.service.consul:3902/restic-backups/paperless";
+    passwordFile = config.age.secrets."paperless-backup-password".path;
+    environmentFile = config.age.secrets."backup.env".path;
+    paths = [
+      "/var/lib/paperless/media/documents"
+    ];
+    pruneOpts = [
+      "--keep-daily 7"
+      "--keep-weekly 4"
+    ];
+  };
+
+  age.secrets."backup.env".file = ../../../secrets/restic-backup-env.age;
+  age.secrets."paperless-backup-password".file = ../../../secrets/paperless-backup-password.age;
 }
