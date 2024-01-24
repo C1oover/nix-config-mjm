@@ -21,6 +21,7 @@ in
     "netbox-secret-key.age".publicKeys = personalKeys ++ [nemesis leto];
     "alertmanager-env.age".publicKeys = personalKeys ++ [gaia leto];
     "pve-exporter-config.age".publicKeys = personalKeys ++ [leto];
+    "vaultwarden-backup-password.age".publicKeys = personalKeys ++ [leto];
 
     "garage-env.age".publicKeys = personalKeys ++ [leto chaos helios];
 
@@ -29,6 +30,7 @@ in
     "newsboat-miniflux-token.age".publicKeys = personalKeys;
 
     "nixremote-key.age".publicKeys = personalKeys ++ allNixOS;
+    "restic-backup-env.age".publicKeys = personalKeys ++ allNixOS;
 
     "smb-creds.age".publicKeys = personalKeys ++ [persephone];
     "smb-creds-server.age".publicKeys = personalKeys ++ [chaos];
