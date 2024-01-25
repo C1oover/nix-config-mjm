@@ -20,6 +20,11 @@ in {
             /\.tumblr-live\.com$/
           ''
         ];
+        whiteLists.ads = [
+          ''
+            app.segment.com
+          ''
+        ];
         clientGroupsBlock.default = ["ads"];
         downloadAttempts = 120;
         downloadCooldown = "30s";
