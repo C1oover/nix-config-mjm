@@ -41,6 +41,8 @@ in
     "sonarr-apikey.age".publicKeys = personalKeys ++ [chaos];
     "radarr-apikey.age".publicKeys = personalKeys ++ [chaos];
 
+    "postgresql-backup-password.age".publicKeys = personalKeys ++ [themis];
+
     "nut-primary-password.age".publicKeys = personalKeys ++ [arges];
     "nut-secondary-password.age".publicKeys = personalKeys ++ allNixOS;
 
