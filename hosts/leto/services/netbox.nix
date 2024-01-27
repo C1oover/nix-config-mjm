@@ -9,7 +9,7 @@
 
   services.netbox = {
     enable = true;
-    package = pkgs.netbox_3_6;
+    package = pkgs.netbox_3_7;
     listenAddress = "[::]";
     settings = {
       ALLOWED_HOSTS = [
