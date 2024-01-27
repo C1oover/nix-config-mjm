@@ -1,13 +1,15 @@
 {inputs, ...}: {
   perSystem = {system, ...}: let
-    pkgs = import inputs.nixpkgs {
+    pkgs = import inputs.nixos {
       inherit system;
       config.allowUnfree = true;
     };
   in {
-    packages = {
-      pragmata-pro = pkgs.callPackage ./pragmata-pro.nix {};
+    packages = rec {
       hass-auth-header = pkgs.home-assistant.python.pkgs.callPackage ./hass-auth-header.nix {};
+      uwsgi = pkgs.python3Packages.callPackage ./uwsgi.nix {};
+      linkding = pkgs.callPackage ./linkding.nix {inherit uwsgi;};
+      pragmata-pro = pkgs.callPackage ./pragmata-pro.nix {};
     };
   };
 }

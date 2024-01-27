@@ -41,6 +41,11 @@
         user = "vaultwarden";
         group = "vaultwarden";
       }
+      {
+        directory = "/var/lib/linkding";
+        user = "linkding";
+        group = "linkding";
+      }
     ];
     files = [
       "/etc/machine-id"

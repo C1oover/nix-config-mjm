@@ -14,6 +14,7 @@
     ./services/attic.nix
     ./services/authelia
     ./services/home-assistant.nix
+    ./services/linkding.nix
     ./services/lldap.nix
     ./services/netbox.nix
     ./services/paperless.nix
