@@ -708,11 +708,11 @@
         "pre-commit-hooks": "pre-commit-hooks_2"
       },
       "locked": {
-        "lastModified": 1706682483,
-        "narHash": "sha256-JFCvvMt+iOVp7SbggJmDRI3S3RvpS1q8ZUG39qEcGyI=",
+        "lastModified": 1706716522,
+        "narHash": "sha256-+oDBA3Mqe/F6CQTzW+o7fHLYBTHwUYBH6YEahb6E/v8=",
         "owner": "nix-community",
         "repo": "kde2nix",
-        "rev": "d02a45c7c300be60dca156cd82d8562f764bb84f",
+        "rev": "cc4addd639713dcc1af1dba4908359fdb9f9e108",
         "type": "github"
       },
       "original": {
@@ -1013,11 +1013,11 @@
     },
     "nixpkgs_5": {
       "locked": {
-        "lastModified": 1706631780,
-        "narHash": "sha256-prq+Rk/1drYmoG5Xm/ttzyYux2NNn5ZGX0Lt3j69VBo=",
+        "lastModified": 1706672657,
+        "narHash": "sha256-API05c0SDZrmzz1wpqt/K3iCwlaOqDeDfZGp0YGQnek=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "d3c09ae008dbb08a238aadfad70d5a168bc63e29",
+        "rev": "632751bf0ceeefc74af7a9d2335ea923ad9c831a",
         "type": "github"
       },
       "original": {
