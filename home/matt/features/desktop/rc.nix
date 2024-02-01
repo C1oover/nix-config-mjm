@@ -130,7 +130,6 @@
       "kdeglobals"."General"."XftHintStyle" = "hintslight";
       "kdeglobals"."General"."XftSubPixel" = "none";
       "kdeglobals"."KDE"."AnimationDurationFactor" = 0.35355339059327373;
-      "kdeglobals"."KDE"."widgetStyle" = "Breeze";
       "kdeglobals"."KFileDialog Settings"."Allow Expansion" = false;
       "kdeglobals"."KFileDialog Settings"."Automatically select filename extension" = true;
       "kdeglobals"."KFileDialog Settings"."Breadcrumb Navigation" = true;
@@ -170,8 +169,7 @@
 
       "kwinrc"."Desktops"."Id_1" = "a61b19cd-ecd0-46bd-9fd8-f262ee95117b";
       "kwinrc"."Desktops"."Id_2" = "bdcd8814-0752-44b0-9312-e69128fd52f1";
-      "kwinrc"."Desktops"."Id_3" = "9ab21903-b830-4114-8774-ca2819c72256";
-      "kwinrc"."Desktops"."Number" = 3;
+      "kwinrc"."Desktops"."Number" = 2;
       "kwinrc"."Desktops"."Rows" = 1;
       "kwinrc"."Effect-kwin4_effect_translucency"."Inactive" = 96;
       "kwinrc"."Effect-zoom"."ZoomFactor" = 1.2;
@@ -187,12 +185,14 @@
       "kwinrc"."Windows"."FocusPolicy" = "FocusFollowsMouse";
       "kwinrc"."Windows"."NextFocusPrefersMouse" = true;
       "kwinrc"."Windows"."RollOverDesktops" = true;
-      "kwinrc"."Xwayland"."Scale" = 1.5;
+      "kwinrc"."Xwayland"."Scale" = 1.25;
 
       "kxkbrc"."Layout"."Options" = "caps:ctrl_modifier";
       "kxkbrc"."Layout"."ResetOldOptions" = true;
 
       "plasma-localerc"."Formats"."LANG" = "en_US.UTF-8";
+
+      systemsettingsrc.systemsettings_sidebar_mode.HighlightNonDefaultSettings = true;
     };
   };
 }

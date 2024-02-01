@@ -4,7 +4,8 @@
   ...
 }: {
   imports = [
-    ./rc.nix
+    # disable for now since using the plasma5 stuff for this seems to mess with plasma6 some
+    #    ./rc.nix
   ];
 
   home.packages = builtins.attrValues {
