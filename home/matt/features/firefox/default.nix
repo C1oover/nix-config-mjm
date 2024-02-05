@@ -45,21 +45,28 @@ in {
         "widget.use-xdg-desktop-portal.open-uri" = 1;
         "widget.use-xdg-desktop-portal.settings" = 1;
       };
-      extensions = with pkgs.nur.repos; [
-        rycee.firefox-addons.betterttv
-        rycee.firefox-addons.bitwarden
-        rycee.firefox-addons.firefox-color
-        rycee.firefox-addons.stylus
-        rycee.firefox-addons.sidebery
-        rycee.firefox-addons.tampermonkey
-        rycee.firefox-addons.ublock-origin
-        addons.minimaltwitter
-        addons.shinigami-eyes
-        addons.linkding-extension
-        addons.linkding-injector
-        addons.catppuccin-latte-mauve
-        addons.sixindicator
-      ];
+      extensions = with pkgs.nur.repos;
+        builtins.attrValues {
+          inherit
+            (rycee.firefox-addons)
+            betterttv
+            bitwarden
+            firefox-color
+            stylus
+            sidebery
+            tampermonkey
+            ublock-origin
+            ;
+          inherit
+            (addons)
+            minimaltwitter
+            shinigami-eyes
+            linkding-extension
+            linkding-injector
+            catppuccin-latte-mauve
+            sixindicator
+            ;
+        };
       userChrome = ''
         ${builtins.readFile (inputs.firefox-csshacks + /chrome/window_control_placeholder_support.css)}
         ${lib.optionalString pkgs.stdenv.isDarwin (builtins.readFile (inputs.firefox-csshacks + /chrome/hide_tabs_toolbar_osx.css))}
