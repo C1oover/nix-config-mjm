@@ -52,7 +52,6 @@ in {
         rycee.firefox-addons.stylus
         rycee.firefox-addons.sidebery
         rycee.firefox-addons.tampermonkey
-        bandithedoge.firefoxAddons.tree-style-tab
         bandithedoge.firefoxAddons.ublock-origin
         addons.minimaltwitter
         addons.shinigami-eyes
