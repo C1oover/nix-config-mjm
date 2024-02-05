@@ -52,7 +52,7 @@ in {
         rycee.firefox-addons.stylus
         rycee.firefox-addons.sidebery
         rycee.firefox-addons.tampermonkey
-        bandithedoge.firefoxAddons.ublock-origin
+        rycee.firefox-addons.ublock-origin
         addons.minimaltwitter
         addons.shinigami-eyes
         addons.linkding-extension
