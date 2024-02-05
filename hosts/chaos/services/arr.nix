@@ -15,6 +15,12 @@
   };
   users.users.radarr.extraGroups = ["media"];
 
+  services.readarr = {
+    enable = true;
+    openFirewall = true;
+  };
+  users.users.readarr.extraGroups = ["media"];
+
   services.prometheus.exporters = {
     exportarr-sonarr = {
       enable = true;
@@ -28,6 +34,13 @@
       openFirewall = true;
       apiKeyFile = config.age.secrets."radarr-apikey".path;
       url = "http://127.0.0.1:7878";
+    };
+    exportarr-readarr = {
+      enable = true;
+      port = 9706;
+      openFirewall = true;
+      apiKeyFile = config.age.secrets."readarr-apikey".path;
+      url = "http://127.0.0.1:8787";
     };
   };
 
@@ -71,6 +84,26 @@
         }
       ];
     };
+
+    readarr = {
+      port = 8787;
+
+      meta = {
+        metrics_path = "/metrics";
+        metrics_port = toString config.services.prometheus.exporters.exportarr-readarr.port;
+      };
+
+      checks = [
+        {
+          name = "readarr is ready";
+          http = "http://localhost:8787/";
+          interval = "15s";
+          timeout = "10s";
+          failures_before_warning = 2;
+          failures_before_critical = 6;
+        }
+      ];
+    };
   };
 
   # ffprobe
@@ -79,5 +112,6 @@
   age.secrets = {
     "sonarr-apikey".file = ../../../secrets/sonarr-apikey.age;
     "radarr-apikey".file = ../../../secrets/radarr-apikey.age;
+    "readarr-apikey".file = ../../../secrets/readarr-apikey.age;
   };
 }

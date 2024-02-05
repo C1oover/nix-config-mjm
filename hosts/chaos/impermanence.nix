@@ -27,6 +27,11 @@
         user = "radarr";
         group = "radarr";
       }
+      {
+        directory = "/var/lib/readarr";
+        user = "readarr";
+        group = "readarr";
+      }
     ];
     files = [
       "/etc/machine-id"

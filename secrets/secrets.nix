@@ -40,6 +40,7 @@ in
     "sabnzbd-apikey.age".publicKeys = personalKeys ++ [chaos];
     "sonarr-apikey.age".publicKeys = personalKeys ++ [chaos];
     "radarr-apikey.age".publicKeys = personalKeys ++ [chaos];
+    "readarr-apikey.age".publicKeys = personalKeys ++ [chaos];
 
     "postgresql-backup-password.age".publicKeys = personalKeys ++ [themis];
 
