@@ -2,6 +2,7 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     nixos.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixos-plasma6.url = "github:mjm/nixpkgs/plasma-6";
     darwin = {
       url = "github:lnl7/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -39,7 +40,6 @@
       inputs.nixpkgs.follows = "nixos";
       inputs.home-manager.follows = "home-manager";
     };
-    kde2nix.url = "github:nix-community/kde2nix";
     impermanence.url = "github:nix-community/impermanence";
 
     catppuccin-bat = {

@@ -36,7 +36,14 @@ in
     };
 
     nixosConfigurations = {
-      persephone = mkNixos [ ./persephone ];
+      # FIXME use mkNixos again once plasma6 stuff is merged
+      persephone = inputs.nixos-plasma6.lib.nixosSystem {
+        modules = [ ./persephone ];
+        specialArgs = {
+          inherit inputs outputs;
+        };
+      };
+
       nyx = mkNixos [ ./nyx ];
       uranus = mkNixos [ ./uranus ];
 

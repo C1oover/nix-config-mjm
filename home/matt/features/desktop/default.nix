@@ -14,7 +14,7 @@
       zeal
       ;
     inherit (pkgs.callPackages ./scripts.nix { }) night-mode;
-    inherit (inputs.kde2nix.packages.${pkgs.system})
+    inherit (pkgs.kdePackages)
       kbreakout
       kmahjongg
       kmines

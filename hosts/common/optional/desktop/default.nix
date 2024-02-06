@@ -1,13 +1,10 @@
 {
   pkgs,
-  inputs,
   outputs,
   config,
   ...
 }:
 {
-  imports = [ inputs.kde2nix.nixosModules.plasma6 ];
-
   # make URLs open correctly in bubble-wrapped apps
   xdg.portal.xdgOpenUsePortal = true;
 
