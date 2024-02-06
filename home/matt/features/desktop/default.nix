@@ -20,6 +20,7 @@
       kmines
       kpat
       palapeli
+      kcalc
       ;
     inherit (inputs.plasma-manager.packages.${pkgs.system}) rc2nix;
   };
