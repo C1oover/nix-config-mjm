@@ -115,18 +115,18 @@
             };
 
           devenv.shells.default = {
-            pre-commit = {
-              hooks = {
-                alejandra.enable = true;
-                deadnix.enable = true;
-              };
+            # pre-commit = {
+            #   hooks = {
+            #     alejandra.enable = true;
+            #     deadnix.enable = true;
+            #   };
 
-              excludes = [ "home/matt/features/firefox/addons/addons.nix" ];
-            };
+            #   excludes = [ "home/matt/features/firefox/addons/addons.nix" ];
+            # };
             dotenv.disableHint = true;
           };
 
-          formatter = pkgs.alejandra;
+          formatter = pkgs.nixfmt-rfc-style;
 
           apps = builtins.mapAttrs (_: script: { program = script; }) (pkgs.callPackages ./scripts.nix { });
         };

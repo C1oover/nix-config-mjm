@@ -13,10 +13,10 @@
       includeGrammarIf = { source, ... }: !(lib.hasPrefix "https://git.sr.ht/" source.git);
     };
     extraPackages = with pkgs; [
-      alejandra
       elixir-ls
       marksman
       nil
+      nixfmt-rfc-style
       shellcheck
       shfmt
       vscode-langservers-extracted
@@ -57,7 +57,7 @@
         };
         nil = {
           config.nil.formatting.command = [
-            "alejandra"
+            "nixfmt"
             "-q"
           ];
         };
