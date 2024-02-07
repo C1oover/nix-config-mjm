@@ -2,9 +2,6 @@
 {
   imports = [ inputs.impermanence.nixosModules.impermanence ];
 
-  # TODO remove later
-  boot.initrd.preFailCommands = "allowShell=1";
-
   age.identityPaths = [ "/nix/persist/etc/ssh/ssh_host_ed25519_key" ];
 
   environment.persistence."/nix/persist" = {

@@ -56,8 +56,6 @@
     ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="3496", ATTRS{idProduct}=="0006", ATTR{power/wakeup}="enabled"
   '';
 
-  boot.initrd.systemd.enable = true;
-
   networking.hostName = "persephone";
   services.resolved.enable = true;
   services.avahi.enable = true;
