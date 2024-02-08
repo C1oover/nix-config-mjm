@@ -70,4 +70,9 @@
   };
 
   programs.kdeconnect.enable = true;
+
+  systemd.oomd = {
+    enableRootSlice = true;
+    enableUserSlices = true;
+  };
 }
