@@ -17,7 +17,7 @@
   {
     id = "vault";
     description = "Hashicorp Vault";
-    secret = "$pbkdf2-sha512$310000$GcSGTc2f7qUrSu9cM1cGvQ$IJ.jX/HZx3lVujQbbdCp66vm2qWX8M6MEK1peMeTI1GZxMWaVRlVC59tGkIW08ij6WliBEfTvSTSToKmXYEGTQ";
+    secret = "$pbkdf2-sha512$310000$2Bhvj.sbtzKM5YNygbc7qw$93WKH2CEAacg7BIxVpZtIFnNH60WnMM5GkGeN4w31bQNqW/VX1BU4fMl.ZdA0HCHMtfeCJHIQVJSvCAdG9wjrg";
     public = false;
     authorization_policy = "two_factor";
     redirect_uris = [
