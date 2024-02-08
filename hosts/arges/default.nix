@@ -23,5 +23,7 @@
 
   services.tailscale.enable = true;
 
+  boot.initrd.systemd.enableTpm2 = false;
+
   system.stateVersion = "21.03";
 }
