@@ -56,6 +56,7 @@ in
 
   programs.jujutsu = {
     enable = true;
+    enableZshIntegration = false;
     settings = {
       user.name = config.programs.git.userName;
       user.email = config.programs.git.userEmail;
