@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   pkgs,
   inputs,
@@ -24,7 +25,7 @@
   ];
 
   zramSwap.enable = true;
-  boot.initrd.systemd.enable = true;
+  boot.initrd.systemd.enable = !config.boot.isContainer;
 
   # use nix-index/nix-locate instead
   programs.command-not-found.enable = false;
