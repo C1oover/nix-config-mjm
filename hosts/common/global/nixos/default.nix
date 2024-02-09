@@ -42,11 +42,6 @@
 
   security.sudo.wheelNeedsPassword = false;
 
-  environment.systemPackages = with pkgs; [
-    git
-    nvd
-  ];
-
   programs.zsh.enable = true;
   programs.tmux.enable = true;
 }

@@ -86,11 +86,6 @@
     extraGroups = [ "video" ];
   };
 
-  environment.systemPackages = with pkgs; [
-    git
-    wget
-  ];
-
   services.openssh.enable = true;
 
   system.stateVersion = "23.05";

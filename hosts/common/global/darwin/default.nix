@@ -34,11 +34,6 @@
     home = "/Users/matt";
   };
 
-  environment.systemPackages = with pkgs; [
-    nvd
-    inputs.agenix.packages.${config.nixpkgs.system}.default
-  ];
-
   environment.etc."sudoers.d/admin-no-passwd".text = ''
     %admin ALL = (ALL) NOPASSWD: ALL
   '';
