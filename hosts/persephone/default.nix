@@ -19,8 +19,6 @@
     ../common/optional/wireless.nix
   ];
 
-  nixpkgs.overlays = [ inputs.jujutsu.overlays.default ];
-
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 
   boot.kernelPackages = pkgs.linuxPackages_testing;

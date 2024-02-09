@@ -18,8 +18,6 @@
     startMenuLaunchers = true;
   };
 
-  nixpkgs.overlays = [ inputs.jujutsu.overlays.default ];
-
   nixpkgs.hostPlatform = "x86_64-linux";
 
   system.stateVersion = "23.05";

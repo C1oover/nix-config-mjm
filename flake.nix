@@ -33,7 +33,6 @@
     };
     helix.url = "github:helix-editor/helix";
     nix-colors.url = "github:misterio77/nix-colors";
-    jujutsu.url = "github:martinvonz/jj";
     attic.url = "github:zhaofengli/attic";
     plasma-manager = {
       url = "github:pjones/plasma-manager";
