@@ -78,11 +78,6 @@
 
   virtualisation.podman.enable = true;
 
-  systemd.oomd = {
-    enableRootSlice = true;
-    enableUserSlices = true;
-  };
-
   console = {
     font = "${pkgs.terminus_font}/share/consolefonts/ter-u32n.psf.gz";
     keyMap = "us";
@@ -94,8 +89,6 @@
   environment.systemPackages = with pkgs; [
     git
     wget
-    # temp fix for yubikey-agent: https://github.com/NixOS/nixpkgs/pull/281421
-    pcscliteWithPolkit.out
   ];
 
   services.openssh.enable = true;
