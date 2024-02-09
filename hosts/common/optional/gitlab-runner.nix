@@ -95,6 +95,9 @@
     };
   };
 
+  # The nix-shell runner needs this to be able to clone repos and evaluate flakes
+  environment.systemPackages = [ pkgs.git ];
+
   # If Docker changes, we don't want it to restart during a deploy, because that will cause the deploy
   # to fail, and then we'll just be stuck in that state.
   systemd.services.docker.restartIfChanged = false;
