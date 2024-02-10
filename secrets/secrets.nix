@@ -56,6 +56,7 @@ with keys;
   "home-assistant-backup-password.age".publicKeys = personalKeys ++ [ leto ];
   "home-assistant-token.age".publicKeys = personalKeys ++ [ leto ];
   "paperless-backup-password.age".publicKeys = personalKeys ++ [ leto ];
+  "attic-env.age".publicKeys = personalKeys ++ [ leto ];
   "loki-env.age".publicKeys = personalKeys ++ [ leto ];
 
   "garage-env.age".publicKeys = personalKeys ++ [

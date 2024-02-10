@@ -25,7 +25,6 @@
     ./services/postgresql.nix
     ./services/prometheus
     ./services/taskserver.nix
-    ./services/vault-agent.nix
     ./services/vaultwarden.nix
   ];
 

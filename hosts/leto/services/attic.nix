@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ inputs, config, ... }:
 {
   imports = [ inputs.attic.nixosModules.atticd ];
 
@@ -22,7 +22,7 @@
       compression.type = "zstd";
       garbage-collection.default-retention-period = "3 months";
     };
-    credentialsFile = "/run/secrets/attic/attic.env";
+    credentialsFile = config.age.secrets."attic.env".path;
   };
 
   services.postgresql = {
@@ -51,23 +51,5 @@
     ];
   };
 
-  systemd.tmpfiles.settings."10-secrets"."/run/secrets/attic".d = {
-    mode = "0700";
-    user = "root";
-    group = "root";
-  };
-
-  services.vault-agent.instances.main.templates = [
-    {
-      contents = ''
-        {{ with secret "kv/attic" }}
-        ATTIC_SERVER_TOKEN_HS256_SECRET_BASE64={{ .Data.data.token_secret }}
-        AWS_ACCESS_KEY_ID={{ .Data.data.garage_key_id }}
-        AWS_SECRET_ACCESS_KEY={{ .Data.data.garage_secret_key }}
-        {{ end }}
-      '';
-      destination = "/run/secrets/attic/attic.env";
-      command = "systemctl restart atticd.service";
-    }
-  ];
+  age.secrets."attic.env".file = ../../../secrets/attic-env.age;
 }
