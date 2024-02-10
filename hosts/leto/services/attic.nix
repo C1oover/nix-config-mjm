@@ -1,4 +1,4 @@
-{ lib, inputs, ... }:
+{ inputs, ... }:
 {
   imports = [ inputs.attic.nixosModules.atticd ];
 
@@ -6,7 +6,7 @@
     enable = true;
     settings = {
       listen = "[::]:8100";
-      database = lib.mkForce { };
+      database.url = "postgresql:///atticd?host=/run/postgresql";
       storage = {
         type = "s3";
         region = "home";
@@ -23,6 +23,17 @@
       garbage-collection.default-retention-period = "3 months";
     };
     credentialsFile = "/run/secrets/attic/attic.env";
+  };
+
+  services.postgresql = {
+    enable = true;
+    ensureDatabases = [ "atticd" ];
+    ensureUsers = [
+      {
+        name = "atticd";
+        ensureDBOwnership = true;
+      }
+    ];
   };
 
   networking.firewall.allowedTCPPorts = [ 8100 ];
@@ -53,9 +64,6 @@
         ATTIC_SERVER_TOKEN_HS256_SECRET_BASE64={{ .Data.data.token_secret }}
         AWS_ACCESS_KEY_ID={{ .Data.data.garage_key_id }}
         AWS_SECRET_ACCESS_KEY={{ .Data.data.garage_secret_key }}
-        {{ end }}
-        {{ with secret "database/creds/attic" }}
-        ATTIC_SERVER_DATABASE_URL=postgres://{{ .Data.username }}:{{ .Data.password }}@postgresql.service.consul/attic
         {{ end }}
       '';
       destination = "/run/secrets/attic/attic.env";
