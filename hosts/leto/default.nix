@@ -17,6 +17,7 @@
     ./services/home-assistant.nix
     ./services/linkding.nix
     ./services/lldap.nix
+    ./services/miniflux.nix
     ./services/netbox.nix
     ./services/paperless.nix
     ./services/postgresql.nix
