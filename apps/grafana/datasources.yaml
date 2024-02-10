@@ -12,8 +12,8 @@ datasources:
   - name: Loki
     type: loki
     access: proxy
-    url: http://127.0.0.1:3100
-    version: 1
+    url: http://loki.service.consul:3100
+    version: 2
     editable: false
     jsonData:
       maxLines: 1000
