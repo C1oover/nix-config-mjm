@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, ... }:
 let
   scannerPublicKey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC1NXtzg50EbpzudswkjUkxllahH+F54h6MnDoXarftqlHc26M46M5IPQeRpn5F4BLGWs94UNFyod4d7KNhRYXxh2G+gsJcDTREdUR7eKu5CfaFnB2sge8VJM8KwxbURXHlxNF2xha0lIg8HdfSIznogAGqcUYahTJAUdKB1A4UJ9DzHp1Mrlrk3o04TvokRmS18kPM39nstneqHRVC1TPf83QV3tAYBz2iayifH714KTcItflUe5IqDUhBfNURhOnhG0szfK2qtykdg+7/wu0Ah3HOlbfLybx2eAA048kyBiFpllFIGqoO0hN8w7wmMuQ6okxs3tssz7W+dGi5HDob root@BR5CF370C29B2A";
 in
@@ -7,10 +7,10 @@ in
     enable = true;
     address = "[::]";
     settings = {
-      PAPERLESS_DBHOST = "postgresql.service.consul";
+      PAPERLESS_DBHOST = "/run/postgresql";
       PAPERLESS_DBPORT = "5432";
       PAPERLESS_DBNAME = "paperless";
-      PAPERLESS_DBSSLMODE = "disable";
+      PAPERLESS_DBUSER = "paperless";
       PAPERLESS_URL = "https://paper.midna.dev";
       PAPERLESS_ALLOWED_HOSTS = "paperless.service.consul,localhost";
       PAPERLESS_ENABLE_HTTP_REMOTE_USER = true;
@@ -19,6 +19,17 @@ in
         invalidate_digital_signatures = true;
       };
     };
+  };
+
+  services.postgresql = {
+    enable = true;
+    ensureDatabases = [ "paperless" ];
+    ensureUsers = [
+      {
+        name = "paperless";
+        ensureDBOwnership = true;
+      }
+    ];
   };
 
   networking.firewall.allowedTCPPorts = [ config.services.paperless.port ];
@@ -39,48 +50,6 @@ in
         }
       ];
     };
-
-  systemd.tmpfiles.settings."10-secrets"."/run/secrets/paperless".d = {
-    mode = "0700";
-    user = "paperless";
-    group = "paperless";
-  };
-
-  services.vault-agent.instances.main.templates = [
-    {
-      contents = ''
-        {{ with secret "database/creds/paperless" }}
-        PAPERLESS_DBUSER={{ .Data.username }}
-        PAPERLESS_DBPASS={{ .Data.password }}
-        {{ end }}
-        PAPERLESS_SECRET_KEY={{ with secret "kv/paperless" }}{{ .Data.data.secret_key }}{{ end }}
-      '';
-      destination = "/run/secrets/paperless/paperless.env";
-      exec = {
-        command = "systemctl restart paperless-scheduler.service paperless-task-queue.service paperless-consumer.service paperless-web.service";
-        timeout = "5m";
-      };
-    }
-  ];
-
-  # Provide DB credentials where needed, and open network access to be able to talk
-  # to the PostgreSQL server.
-  systemd.services = {
-    paperless-scheduler.serviceConfig = {
-      EnvironmentFile = "/run/secrets/paperless/paperless.env";
-      PrivateNetwork = lib.mkForce false;
-    };
-    paperless-task-queue.serviceConfig = {
-      EnvironmentFile = "/run/secrets/paperless/paperless.env";
-    };
-    paperless-consumer.serviceConfig = {
-      EnvironmentFile = "/run/secrets/paperless/paperless.env";
-      PrivateNetwork = lib.mkForce false;
-    };
-    paperless-web.serviceConfig = {
-      EnvironmentFile = "/run/secrets/paperless/paperless.env";
-    };
-  };
 
   users.users.paperless.openssh.authorizedKeys.keys = [ scannerPublicKey ];
 
