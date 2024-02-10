@@ -11,7 +11,9 @@ in
 
       server.grpc_listen_port = 3102;
 
-      query_scheduler.max_outstanding_requests_per_tenant = 2048;
+      querier.max_concurrent = 16;
+
+      query_scheduler.max_outstanding_requests_per_tenant = 32768;
 
       ruler = {
         storage = {
@@ -53,6 +55,11 @@ in
           cache_ttl = "24h";
           shared_store = "s3";
         };
+        tsdb_shipper = {
+          active_index_directory = "${cfg.dataDir}/tsdb-index";
+          cache_location = "${cfg.dataDir}/tsdb-cache";
+          shared_store = "s3";
+        };
       };
 
       chunk_store_config.max_look_back_period = "0s";
@@ -63,6 +70,16 @@ in
           store = "boltdb-shipper";
           object_store = "aws";
           schema = "v11";
+          index = {
+            prefix = "index_";
+            period = "24h";
+          };
+        }
+        {
+          from = "2024-02-12";
+          store = "tsdb";
+          object_store = "aws";
+          schema = "v12";
           index = {
             prefix = "index_";
             period = "24h";
