@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
+{ config, pkgs, ... }:
 {
   services.netbox = {
     enable = true;
@@ -16,7 +11,6 @@
         "netbox.service.consul"
         "10.0.2.41"
       ];
-      DATABASE = lib.mkForce { };
       CORS_ORIGIN_ALLOW_ALL = false;
       CORS_ORIGIN_WHITELIST = [
         "https://netbox.midna.dev"
@@ -39,11 +33,6 @@
       REMOTE_AUTH_STAFF_GROUPS = [ "admins" ];
     };
     secretKeyFile = config.age.secrets."netbox-secret-key".path;
-    extraConfig = ''
-      import json
-      with open("/run/secrets/netbox/db-config.json", "r") as file:
-          DATABASE = json.load(file)
-    '';
   };
 
   services.nginx = {
@@ -78,33 +67,6 @@
     port = config.services.nginx.defaultHTTPListenPort;
     meta.metrics_path = "/metrics";
   };
-
-  systemd.tmpfiles.settings."10-secrets"."/run/secrets/netbox".d = {
-    mode = "0700";
-    user = "netbox";
-    group = "netbox";
-  };
-
-  services.vault-agent.instances.main.templates = [
-    {
-      contents = ''
-        {{ with secret "database/creds/netbox" }}
-        {
-          "NAME": "netbox",
-          "USER": {{ .Data.username | toJSON }},
-          "PASSWORD": {{ .Data.password | toJSON }},
-          "HOST": "postgresql.service.consul",
-          "CONN_MAX_AGE": 300
-        }
-        {{ end }}
-      '';
-      destination = "/run/secrets/netbox/db-config.json";
-      exec = {
-        command = "systemctl restart netbox.service";
-        timeout = "5m";
-      };
-    }
-  ];
 
   age.secrets = {
     "netbox-secret-key" = {
