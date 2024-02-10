@@ -4,8 +4,19 @@
     settings = {
       http_url = "https://ldap.home.mattmoriarity.com";
       ldap_base_dn = "dc=home,dc=mattmoriarity,dc=com";
+      database_url = "postgres://lldap@%2Frun%2Fpostgresql:5432/lldap";
     };
-    environmentFile = "/run/secrets/lldap/db.env";
+  };
+
+  services.postgresql = {
+    enable = true;
+    ensureDatabases = [ "lldap" ];
+    ensureUsers = [
+      {
+        name = "lldap";
+        ensureDBOwnership = true;
+      }
+    ];
   };
 
   networking.firewall.allowedTCPPorts = [
@@ -25,22 +36,4 @@
       }
     ];
   };
-
-  systemd.tmpfiles.settings."10-secrets"."/run/secrets/lldap".d = {
-    mode = "0700";
-    user = "root";
-    group = "root";
-  };
-
-  services.vault-agent.instances.main.templates = [
-    {
-      contents = ''
-        {{ with secret "database/creds/lldap" }}
-        LLDAP_DATABASE_URL=postgres://{{ .Data.username }}:{{ .Data.password }}@postgresql.service.consul/lldap
-        {{ end }}
-      '';
-      destination = "/run/secrets/lldap/db.env";
-      command = "systemctl restart lldap.service";
-    }
-  ];
 }
