@@ -5,6 +5,7 @@
     ./blackbox-dns-public.nix
     ./consul-agent.nix
     ./consul-connect-envoy.nix
+    ./consul-exporter.nix
     ./consul-services.nix
     ./homelab-https.nix
     ./nomad-agent.nix

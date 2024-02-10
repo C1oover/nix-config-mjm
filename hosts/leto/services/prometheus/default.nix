@@ -2,6 +2,7 @@
 {
   imports = [
     ./blackbox.nix
+    ./consul-exporter.nix
     ./pve-exporter.nix
     ./jobs
     ./rules

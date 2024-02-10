@@ -8,7 +8,6 @@
     ./atuin
     ./authelia
     ./consul
-    ./consul-exporter
     ./garage
     ./gitlab
     ./grafana
