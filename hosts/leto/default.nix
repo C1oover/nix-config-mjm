@@ -12,6 +12,7 @@
 
     ./services/actual.nix
     ./services/attic.nix
+    ./services/atuin.nix
     ./services/authelia
     ./services/home-assistant.nix
     ./services/linkding.nix
