@@ -7,18 +7,13 @@
     settings = {
       ALLOWED_HOSTS = [
         "netbox.midna.dev"
-        "netbox.home.mattmoriarity.com"
         "netbox.service.consul"
         "10.0.2.41"
       ];
       CORS_ORIGIN_ALLOW_ALL = false;
-      CORS_ORIGIN_WHITELIST = [
-        "https://netbox.midna.dev"
-        "https://netbox.home.mattmoriarity.com"
-      ];
+      CORS_ORIGIN_WHITELIST = [ "https://netbox.midna.dev" ];
       CSRF_TRUSTED_ORIGINS = [
         "https://netbox.midna.dev"
-        "https://netbox.home.mattmoriarity.com"
         "http://netbox.service.consul:8000"
       ];
       METRICS_ENABLED = true;
