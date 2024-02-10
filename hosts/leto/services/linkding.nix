@@ -22,11 +22,23 @@
       LD_CSRF_TRUSTED_ORIGINS = "https://links.midna.dev";
       LD_DB_ENGINE = "postgres";
       LD_DB_DATABASE = "linkding";
-      LD_DB_HOST = "postgresql.service.consul";
+      LD_DB_HOST = "/run/postgresql";
+      LD_DB_USER = "linkding";
     };
-
-    environmentFile = "/run/secrets/linkding/db.env";
   };
+
+  services.postgresql = {
+    enable = true;
+    ensureDatabases = [ "linkding" ];
+    ensureUsers = [
+      {
+        name = "linkding";
+        ensureDBOwnership = true;
+      }
+    ];
+  };
+
+  systemd.services.linkding.after = [ "postgresql.service" ];
 
   services.consul.services.linkding = {
     inherit (config.services.linkding) port;
@@ -40,23 +52,4 @@
       }
     ];
   };
-
-  systemd.tmpfiles.settings."10-secrets"."/run/secrets/linkding".d = {
-    mode = "0700";
-    user = "linkding";
-    group = "linkding";
-  };
-
-  services.vault-agent.instances.main.templates = [
-    {
-      contents = ''
-        {{ with secret "database/creds/linkding" }}
-        LD_DB_USER={{ .Data.username }}
-        LD_DB_PASSWORD={{ .Data.password }}
-        {{ end }}
-      '';
-      destination = "/run/secrets/linkding/db.env";
-      command = "systemctl restart linkding.service linkding-tasks.service";
-    }
-  ];
 }
