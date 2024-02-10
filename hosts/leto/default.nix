@@ -14,6 +14,7 @@
     ./services/attic.nix
     ./services/atuin.nix
     ./services/authelia
+    ./services/grafana.nix
     ./services/home-assistant.nix
     ./services/linkding.nix
     ./services/lldap.nix
