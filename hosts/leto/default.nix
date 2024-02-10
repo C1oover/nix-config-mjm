@@ -18,6 +18,7 @@
     ./services/lldap.nix
     ./services/netbox.nix
     ./services/paperless.nix
+    ./services/postgresql.nix
     ./services/prometheus
     ./services/taskserver.nix
     ./services/vault-agent.nix

@@ -5,9 +5,6 @@
   ...
 }:
 {
-  # The NetBox module only really supports running this locally, but I don't want to do that.
-  services.postgresql.enable = lib.mkForce false;
-
   services.netbox = {
     enable = true;
     package = pkgs.netbox_3_7;

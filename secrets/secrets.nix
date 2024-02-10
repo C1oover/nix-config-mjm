@@ -80,7 +80,10 @@ with keys;
   "radarr-apikey.age".publicKeys = personalKeys ++ [ chaos ];
   "readarr-apikey.age".publicKeys = personalKeys ++ [ chaos ];
 
-  "postgresql-backup-password.age".publicKeys = personalKeys ++ [ themis ];
+  "postgresql-backup-password.age".publicKeys = personalKeys ++ [
+    themis
+    leto
+  ];
 
   "nut-primary-password.age".publicKeys = personalKeys ++ [ arges ];
   "nut-secondary-password.age".publicKeys = personalKeys ++ allNixOS;

@@ -37,9 +37,11 @@ in
       session.domain = "midna.dev";
       session.redis.host = "${config.services.redis.servers.authelia.unixSocket}";
       storage.postgres = {
-        host = "postgresql.service.consul";
+        host = "/run/postgresql";
         port = 5432;
-        database = "authelia";
+        database = "authelia-main";
+        username = "authelia-main";
+        password = "authelia-main";
       };
       notifier.smtp = {
         host = "smtp.fastmail.com";
@@ -61,18 +63,28 @@ in
         config.age.secrets."authelia-ldap-password".path;
       AUTHELIA_NOTIFIER_SMTP_PASSWORD_FILE = config.age.secrets."authelia-smtp-password".path;
     };
-    settingsFiles = [ "/run/secrets/authelia/db-config.yml" ];
   };
 
   systemd.services.authelia-main = {
     after = [
       "lldap.service"
       "redis-authelia.service"
+      "postgresql.service"
     ];
     serviceConfig.SupplementaryGroups = [ config.services.redis.servers.authelia.user ];
   };
 
   services.redis.servers.authelia.enable = true;
+  services.postgresql = {
+    enable = true;
+    ensureDatabases = [ "authelia-main" ];
+    ensureUsers = [
+      {
+        name = "authelia-main";
+        ensureDBOwnership = true;
+      }
+    ];
+  };
 
   networking.firewall.allowedTCPPorts = [
     9091
@@ -96,26 +108,6 @@ in
       }
     ];
   };
-
-  systemd.tmpfiles.settings."10-secrets"."/run/secrets/authelia".d = {
-    mode = "0700";
-    inherit user group;
-  };
-
-  services.vault-agent.instances.main.templates = [
-    {
-      contents = ''
-        {{ with secret "database/creds/authelia" }}
-        storage:
-          postgres:
-            username: {{ .Data.username | toJSON }}
-            password: {{ .Data.password | toJSON }}
-        {{ end }}
-      '';
-      destination = "/run/secrets/authelia/db-config.yml";
-      command = "systemctl restart authelia-main.service";
-    }
-  ];
 
   age.secrets = {
     "authelia-hmac-secret" = {

@@ -11,6 +11,12 @@
       "/var/lib/private/lldap"
       "/var/lib/private/garage/meta"
       {
+        directory = "/var/lib/postgresql";
+        user = "postgres";
+        group = "postgres";
+        mode = "0750";
+      }
+      {
         directory = "/var/lib/netbox";
         user = "netbox";
         group = "netbox";
