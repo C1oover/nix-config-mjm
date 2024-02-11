@@ -7,6 +7,7 @@
   vault,
   attic,
   colmena,
+  rbw,
 }:
 let
   scripts = [
@@ -43,12 +44,13 @@ resholve.mkDerivation {
       vault
       attic
       colmena
+      rbw
     ];
-    fake.external = [ "op" ];
     execer = [
       "cannot:${vault}/bin/vault"
       "cannot:${openssh}/bin/ssh-keygen"
       "cannot:${colmena}/bin/colmena"
+      "cannot:${rbw}/bin/rbw"
     ];
   };
 }

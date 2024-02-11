@@ -3,6 +3,7 @@
   imports = [
     ./global
 
+    ./features/bitwarden
     ./features/controku
     ./features/desktop
     ./features/email
