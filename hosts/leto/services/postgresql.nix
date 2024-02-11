@@ -39,7 +39,10 @@
         "--keep-daily 7"
         "--keep-weekly 4"
       ];
-      timerConfig.RandomizedDelaySec = "2h";
+      timerConfig = {
+        OnCalendar = "daily";
+        RandomizedDelaySec = "2h";
+      };
     };
 
   age.secrets."backup.env".file = ../../../secrets/restic-backup-env.age;
