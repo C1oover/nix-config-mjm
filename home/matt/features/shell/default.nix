@@ -104,6 +104,12 @@
     enableAliases = true;
     git = true;
     icons = true;
+    extraOptions = [
+      "--group-directories-first"
+      "--header"
+      "--smart-group"
+      "--group"
+    ];
   };
 
   programs.bat = {
