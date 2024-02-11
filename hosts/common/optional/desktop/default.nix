@@ -44,11 +44,7 @@
           "PragmataPro Mono"
           "Noto Sans Mono"
         ];
-        sansSerif = [
-          "Public Sans"
-          "Open Sans"
-          "Noto Sans"
-        ];
+        sansSerif = [ "Noto Sans" ];
         serif = [ "Noto Serif" ];
       };
     };
