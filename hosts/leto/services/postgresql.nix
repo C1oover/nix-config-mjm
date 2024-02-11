@@ -20,13 +20,15 @@
       passwordFile = config.age.secrets."postgresql-backup-password".path;
       environmentFile = config.age.secrets."backup.env".path;
       paths = [ "/tmp/pgbackup" ];
+      user = "postgres";
       backupPrepareCommand = ''
+        set -x
         mkdir /tmp/pgbackup
         cd /tmp/pgbackup
-        ${pg}/bin/pg_dumpall -U postgres --globals-only -f /tmp/pgbackup/globals.sql
+        ${pg}/bin/pg_dumpall --globals-only -f /tmp/pgbackup/globals.sql
         ${lib.concatMapStrings
           (dbname: ''
-            ${pg}/bin/pg_dump -U postgres --format=directory -j 4 -f ${dbname} ${dbname}
+            ${pg}/bin/pg_dump --format=directory -j 4 -f ${dbname} ${dbname}
           '')
           config.services.postgresql.ensureDatabases}
       '';
@@ -37,8 +39,12 @@
         "--keep-daily 7"
         "--keep-weekly 4"
       ];
+      timerConfig.RandomizedDelaySec = "2h";
     };
 
   age.secrets."backup.env".file = ../../../secrets/restic-backup-env.age;
-  age.secrets."postgresql-backup-password".file = ../../../secrets/postgresql-backup-password.age;
+  age.secrets."postgresql-backup-password" = {
+    file = ../../../secrets/postgresql-backup-password.age;
+    owner = "postgres";
+  };
 }

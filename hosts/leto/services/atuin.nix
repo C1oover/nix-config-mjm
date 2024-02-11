@@ -6,17 +6,6 @@
     openFirewall = true;
   };
 
-  services.postgresql = {
-    enable = true;
-    ensureUsers = [
-      {
-        name = "atuin";
-        ensureDBOwnership = true;
-      }
-    ];
-    ensureDatabases = [ "atuin" ];
-  };
-
   services.consul.services.atuin =
     let
       inherit (config.services.atuin) port;
