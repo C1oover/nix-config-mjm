@@ -53,19 +53,4 @@
     ];
     userinfo_signing_algorithm = "none";
   }
-  {
-    id = "minio";
-    description = "MinIO";
-    secret = "$pbkdf2-sha512$310000$lIbZcunKd9pcd.e/8.8esw$lJY3Zb7Ng8eSKHXV3xI9BA2THWMy7ZcCPYX/pCjuLw32nxN4stMnnIXb8poFbX8DFxvrWHT5sPeRWFl532RxHg";
-    public = false;
-    authorization_policy = "two_factor";
-    redirect_uris = [ "https://minio-console.midna.dev/oauth_callback" ];
-    scopes = [
-      "openid"
-      "profile"
-      "groups"
-      "email"
-    ];
-    userinfo_signing_algorithm = "none";
-  }
 ]

@@ -18,7 +18,6 @@
     ./loki
     ./mediaserver
     ./miniflux
-    ./minio
     ./netbox
     ./nomad
     ./otel
