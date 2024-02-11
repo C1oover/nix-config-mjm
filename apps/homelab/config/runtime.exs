@@ -23,15 +23,18 @@ if System.get_env("PHX_SERVER") do
 end
 
 if config_env() == :prod do
-  database_url =
-    System.get_env("DATABASE_URL") ||
-      raise """
-      environment variable DATABASE_URL is missing.
-      For example: ecto://USER:PASS@HOST/DATABASE
-      """
+  # database_url =
+  #   System.get_env("DATABASE_URL") ||
+  #     raise """
+  #     environment variable DATABASE_URL is missing.
+  #     For example: ecto://USER:PASS@HOST/DATABASE
+  #     """
 
   config :homelab, Homelab.Repo,
-    url: database_url,
+    # url: database_url,
+    socket_dir: "/run/postgresql",
+    database: "homelab",
+    port: 5432,
     pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
     socket_options: []
 

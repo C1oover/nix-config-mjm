@@ -11,7 +11,7 @@
     ./garage
     ./gitlab
     ./grafana
-    ./homelab
+    ./homelab/app.nix
     ./home-assistant
     ./ingress
     ./linkding

@@ -31,3 +31,5 @@ config :homelab, Oban,
        {"*/5 * * * *", Homelab.Jobs.CreateReminderTasks}
      ]}
   ]
+
+config :tzdata, :data_dir, "/var/lib/homelab/tzdata"

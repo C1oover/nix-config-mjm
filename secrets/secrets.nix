@@ -31,6 +31,7 @@ with keys;
   "paperless-backup-password.age".publicKeys = personalKeys ++ [ leto ];
   "attic-env.age".publicKeys = personalKeys ++ [ leto ];
   "loki-env.age".publicKeys = personalKeys ++ [ leto ];
+  "homelab-env.age".publicKeys = personalKeys ++ [ leto ];
 
   "garage-env.age".publicKeys = personalKeys ++ [
     leto
@@ -64,7 +65,7 @@ with keys;
   "nut-primary-password.age".publicKeys = personalKeys ++ [ arges ];
   "nut-secondary-password.age".publicKeys = personalKeys ++ allNixOS;
 
-  "taskwarrior-key.age".publicKeys = personalKeys;
+  "taskwarrior-key.age".publicKeys = personalKeys ++ [ leto ];
 
   "cloudflare-api-token.age".publicKeys = personalKeys ++ [
     brontes
