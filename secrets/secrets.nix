@@ -15,42 +15,15 @@ with keys;
   ];
 
   "leto-approle-secret-id.age".publicKeys = personalKeys ++ [ leto ];
-  "authelia-jwt-secret.age".publicKeys = personalKeys ++ [
-    orion
-    leto
-  ];
-  "authelia-jwt-private-key.age".publicKeys = personalKeys ++ [
-    orion
-    leto
-  ];
-  "authelia-storage-encryption-key.age".publicKeys = personalKeys ++ [
-    orion
-    leto
-  ];
-  "authelia-session-secret.age".publicKeys = personalKeys ++ [
-    orion
-    leto
-  ];
-  "authelia-hmac-secret.age".publicKeys = personalKeys ++ [
-    orion
-    leto
-  ];
-  "authelia-smtp-password.age".publicKeys = personalKeys ++ [
-    orion
-    leto
-  ];
-  "authelia-ldap-password.age".publicKeys = personalKeys ++ [
-    orion
-    leto
-  ];
-  "netbox-secret-key.age".publicKeys = personalKeys ++ [
-    nemesis
-    leto
-  ];
-  "alertmanager-env.age".publicKeys = personalKeys ++ [
-    gaia
-    leto
-  ];
+  "authelia-jwt-secret.age".publicKeys = personalKeys ++ [ leto ];
+  "authelia-jwt-private-key.age".publicKeys = personalKeys ++ [ leto ];
+  "authelia-storage-encryption-key.age".publicKeys = personalKeys ++ [ leto ];
+  "authelia-session-secret.age".publicKeys = personalKeys ++ [ leto ];
+  "authelia-hmac-secret.age".publicKeys = personalKeys ++ [ leto ];
+  "authelia-smtp-password.age".publicKeys = personalKeys ++ [ leto ];
+  "authelia-ldap-password.age".publicKeys = personalKeys ++ [ leto ];
+  "netbox-secret-key.age".publicKeys = personalKeys ++ [ leto ];
+  "alertmanager-env.age".publicKeys = personalKeys ++ [ leto ];
   "pve-exporter-config.age".publicKeys = personalKeys ++ [ leto ];
   "vaultwarden-backup-password.age".publicKeys = personalKeys ++ [ leto ];
   "home-assistant-backup-password.age".publicKeys = personalKeys ++ [ leto ];
@@ -97,6 +70,4 @@ with keys;
     brontes
     steropes
   ];
-
-  "minio-root-credentials.age".publicKeys = personalKeys ++ [ phoebe ];
 }

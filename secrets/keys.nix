@@ -13,15 +13,9 @@ rec {
   helios = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHUqz5VSSneEjQXfTrFiK8dfbclhClA9faM1gobRaqJy";
   chaos = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIO304X73466BZXsreuqu+9IWjIZExH6uw55Qia1+Nmhc";
   leto = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJozGY8MtncB4AF+0k7l6jSxWJwQgLl5/YCpeXgCtKDH";
-  orion = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDFDLe0Oy6quuAu4ARXnZCWNDiYTgfdLjy7kp7MB8n4G";
-  nemesis = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIOBXAwxTy5mDt9jxKg1rhRryyNr5jkIPHnwAdLsQ1yI";
-  aion = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKFrAsGVNyUfMfNvdix1ON28I/eu4MBhU6YdzzgRItQf";
-  gaia = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPKBvQP0w1opkY5E8xZzVZodNDd/2HWdHYvjulULaK6t";
   rhea = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILaVCGokUWFMh7D+bqSY0vd5YrTMKdFmkEHJfqOVHRM6";
   cronus = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDLUriBaPvCj6y41zPhsxilpHG59b5ueVfx2eXwIcvZX";
-  phoebe = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF3F9IyWUYEHVqhq4gc1wtyvOqgNTZsF+LJjhknuvG3E";
   themis = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL+W3nQy3t3HePyqVHTL5W0zOl5fgDQYvIt6TuxPA51g";
-  thanatos = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN8ujiSXY7LtZd8lv33hUinjYgmO+F5B125iZT0T0r+k";
   nyx = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID2pPaX+7EoXMTzgmfoBJ7AeiXwfqq/LqKdbj8kcOa1P";
   persephone = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHNcGvd0FkGDH7rm02jm8fan2xqKoEr/Wx+3wAgfDR7A";
   matt-persephone = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK/65Yq1UkZie8WgsO2HUGq9bq++Y6o+FJd8wWvWhdLx";
@@ -39,15 +33,9 @@ rec {
       helios
       chaos
       leto
-      orion
-      nemesis
-      aion
-      gaia
       rhea
       cronus
-      phoebe
       themis
-      thanatos
       nyx
       ;
   };
