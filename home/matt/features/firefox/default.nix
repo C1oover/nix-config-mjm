@@ -14,6 +14,7 @@ in
   programs.firefox = {
     enable = true;
     package = firefox;
+    nativeMessagingHosts = lib.mkIf pkgs.stdenv.isLinux [ pkgs.kdePackages.plasma-browser-integration ];
     profiles.matt = {
       settings = {
         "app.update.auto" = false;
@@ -49,6 +50,7 @@ in
             betterttv
             bitwarden
             firefox-color
+            plasma-integration
             stylus
             sidebery
             tampermonkey
