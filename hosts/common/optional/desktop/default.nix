@@ -5,9 +5,6 @@
   ...
 }:
 {
-  # make URLs open correctly in bubble-wrapped apps
-  # xdg.portal.xdgOpenUsePortal = true;
-
   services.xserver = {
     enable = true;
     displayManager.sddm = {
