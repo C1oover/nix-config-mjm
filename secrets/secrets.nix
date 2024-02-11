@@ -74,6 +74,7 @@ with keys;
 
   "nixremote-key.age".publicKeys = personalKeys ++ allNixOS;
   "restic-backup-env.age".publicKeys = personalKeys ++ allNixOS;
+  "otel-collector-env.age".publicKeys = personalKeys ++ allNixOS;
 
   "smb-creds.age".publicKeys = personalKeys ++ [ persephone ];
   "smb-creds-server.age".publicKeys = personalKeys ++ [ chaos ];

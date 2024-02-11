@@ -9,6 +9,7 @@
     ../common/optional/server
     ../common/optional/consul-agent.nix
     ../common/optional/garage
+    ../common/optional/otel-collector.nix
 
     ./services/actual.nix
     ./services/attic.nix
