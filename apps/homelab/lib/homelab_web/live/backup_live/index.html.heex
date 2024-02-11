@@ -1,0 +1,51 @@
+<.page_header>Backups</.page_header>
+<div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+  <div class="flex flex-col">
+    <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+      <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+        <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+          <.table id="archives" rows={@streams.archives}>
+            <:col :let={{_id, archive}} class="text-right">
+              <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800">
+                <%= archive.kind |> to_string |> String.upcase() %>
+              </span>
+            </:col>
+            <:col :let={{_id, archive}} label="Name" class="font-medium">
+              <%= archive.name %>
+            </:col>
+            <:col :let={{_id, archive}} label="Created at" class="w-full">
+              <%= format_datetime(archive.time) %>
+            </:col>
+            <:col :let={{id, archive}} class="text-right">
+              <span class="relative z-0 inline-flex shadow-sm rounded-md">
+                <%= if archive.kind != :tarsnap do %>
+                  <.link
+                    navigate={~p"/backups/#{archive}"}
+                    class="relative inline-flex items-center px-3 py-2 rounded-l-md border border-gray-300 bg-white text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                  >
+                    Details
+                  </.link>
+                <% end %>
+                <button
+                  id={"#{id}-copy"}
+                  type="button"
+                  title="Copy extract command"
+                  phx-hook="CopyText"
+                  data-copy-text={extract_command(archive)}
+                  class={[
+                    "archive-copy-button -ml-px relative inline-flex items-center px-2 py-2",
+                    if(archive.kind == :tarsnap, do: "rounded-md", else: "rounded-r-md"),
+                    "border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                  ]}
+                >
+                  <span class="sr-only">Copy extract command</span>
+                  <.icon name="hero-clipboard-solid" class="h-5 w-5" />
+                </button>
+              </span>
+            </:col>
+          </.table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

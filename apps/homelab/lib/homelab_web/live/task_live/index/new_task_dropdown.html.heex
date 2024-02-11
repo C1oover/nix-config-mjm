@@ -1,0 +1,42 @@
+<div
+  x-data
+  id="new-task-dropdown"
+  class="z-10 w-56 origin-top-left rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+  role="menu"
+  aria-orientation="vertical"
+  aria-labelledby="new-task-dropdown-button"
+  tabindex="-1"
+  x-show="$store.dropdown.current == $el.id"
+  x-cloak
+  @click.away="$store.dropdown.hide()"
+  x-transition:enter="transition ease-out duration-100"
+  x-transition:enter-start="transform opacity-0 scale-95"
+  x-transition:enter-end="transform opacity-100 scale-100"
+  x-transition:leave="transition ease-in duration-75"
+  x-transition:leave-start="transform opacity-100 scale-100"
+  x-transition:leave-end="transform opacity-0 scale-95"
+>
+  <div class="py-1" role="none">
+    <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
+    <button
+      type="button"
+      class="text-gray-700 block px-4 py-2 text-sm"
+      role="menuitem"
+      tabindex="-1"
+      phx-click="add_weekly_meal_tasks"
+      @click="$store.dropdown.hide()"
+    >
+      Add weekly meal tasks
+    </button>
+    <button
+      type="button"
+      class="text-gray-700 block px-4 py-2 text-sm"
+      role="menuitem"
+      tabindex="-1"
+      phx-click="add_laundry_tasks"
+      @click="$store.dropdown.hide()"
+    >
+      Add laundry tasks
+    </button>
+  </div>
+</div>

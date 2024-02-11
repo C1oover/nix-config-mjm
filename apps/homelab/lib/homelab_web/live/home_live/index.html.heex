@@ -1,0 +1,110 @@
+<.page_header>
+  Homelab
+</.page_header>
+
+<div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+  <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 mb-6">
+    <.stat_card title="Alerts firing">
+      <:icon><.icon name="hero-fire" class="h-6 w-6" /></:icon>
+      <.async_result :let={alerts} assign={@alerts}>
+        <:loading>Loading alerts...</:loading>
+        <:failed>Couldn't load alerts.</:failed>
+        <%= Enum.count(alerts) %> alert<%= if Enum.count(alerts) != 1, do: "s" %>
+      </.async_result>
+      <:link href="https://alerts.midna.dev/" target="_blank">
+        View active alerts
+      </:link>
+    </.stat_card>
+
+    <.stat_card title="Paperless inbox">
+      <:icon><.icon name="hero-document-text" class="h-6 w-6" /></:icon>
+      <.async_result :let={docs} assign={@inbox_docs}>
+        <:loading>Loading documents...</:loading>
+        <:failed>Couldn't load documents.</:failed>
+        <%= Enum.count(docs) %> document<%= if Enum.count(docs) != 1, do: "s" %>
+      </.async_result>
+      <:link href="https://paper.midna.dev/view/1" target="_blank">
+        View inbox documents
+      </:link>
+    </.stat_card>
+  </div>
+
+  <div>
+    <h2 class="text-gray-500 text-xs font-medium uppercase tracking-wide">
+      Application Directory
+    </h2>
+    <ul role="list" class="mt-3 grid grid-cols-1 gap-5 sm:gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <.app_link initials="N" color="bg-green-500" href="https://nomad.midna.dev/">
+        <:title>Nomad</:title>
+        <:subtitle>Container orchestration</:subtitle>
+      </.app_link>
+
+      <.app_link initials="C" color="bg-pink-600" href="https://consul.midna.dev/">
+        <:title>Consul</:title>
+        <:subtitle>Service discovery</:subtitle>
+      </.app_link>
+
+      <.app_link initials="V" color="bg-gray-500" href="https://vault.midna.dev/">
+        <:title>Vault</:title>
+        <:subtitle>Secrets management</:subtitle>
+      </.app_link>
+
+      <.app_link
+        initials="G"
+        color="bg-green-700"
+        href="https://guacamole.home.mattmoriarity.com/"
+      >
+        <:title>Guacamole</:title>
+        <:subtitle>Remote management</:subtitle>
+      </.app_link>
+
+      <.app_link initials="P" color="bg-orange-500" href="https://metrics.midna.dev/alerts">
+        <:title>Prometheus</:title>
+        <:subtitle>Application monitoring</:subtitle>
+      </.app_link>
+
+      <.app_link
+        initials="G"
+        color="bg-yellow-500"
+        href="https://graphs.midna.dev/d/3frfw9AMz/cluster?orgId=1&refresh=1m"
+      >
+        <:title>Grafana</:title>
+        <:subtitle>Data visualization</:subtitle>
+      </.app_link>
+
+      <.app_link initials="M" color="bg-blue-700" href="https://minio-console.midna.dev">
+        <:title>MinIO</:title>
+        <:subtitle>Object storage</:subtitle>
+      </.app_link>
+
+      <.app_link initials="GL" color="bg-orange-600" href="https://git.midna.dev/">
+        <:title>GitLab</:title>
+        <:subtitle>Software development</:subtitle>
+      </.app_link>
+
+      <.app_link initials="NB" color="bg-sky-500" href="https://netbox.midna.dev/">
+        <:title>NetBox</:title>
+        <:subtitle>Network modeling</:subtitle>
+      </.app_link>
+
+      <.app_link initials="A" color="bg-purple-500" href="https://sql.midna.dev/">
+        <:title>Adminer</:title>
+        <:subtitle>Database querying</:subtitle>
+      </.app_link>
+
+      <.app_link initials="PM" color="bg-orange-400" href="https://proxmox.midna.dev/">
+        <:title>Proxmox</:title>
+        <:subtitle>Hypervisor management</:subtitle>
+      </.app_link>
+
+      <.app_link initials="LD" color="bg-indigo-600" href="https://links.midna.dev/">
+        <:title>linkding</:title>
+        <:subtitle>Bookmark keeping</:subtitle>
+      </.app_link>
+    </ul>
+  </div>
+
+  <div class="text-sm text-center text-gray-500 mt-6">
+    Homelab v<%= Application.spec(:homelab, :vsn) %>
+  </div>
+</div>

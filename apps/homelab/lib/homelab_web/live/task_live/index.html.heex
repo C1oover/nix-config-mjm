@@ -1,0 +1,25 @@
+<.page_header>
+  Tasks
+</.page_header>
+
+<div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8" phx-window-keydown="keydown">
+  <.tasks_topbar :if={@new_task_form == nil} report={@report} />
+  <.new_task_form :if={@new_task_form != nil} form={@new_task_form} />
+
+  <.tasks_list tasks={@tasks} now={@now} />
+  <.reminders_list reminders={@reminders} now={@now} />
+
+  <.new_task_dropdown :if={@new_task_form == nil} />
+</div>
+
+<.new_reminder_modal :if={@new_reminder_form} form={@new_reminder_form} />
+<.edit_reminder_modal :if={@edit_reminder_form} form={@edit_reminder_form} />
+
+<.reschedule_task_modal :if={@reschedule_form} form={@reschedule_form} />
+<.edit_task_modal :if={@edit_form} form={@edit_form} />
+
+<.reminder_row_dropdown :for={reminder <- @reminders} reminder={reminder} />
+
+<.async_result :let={%{rows: tasks}} assign={@tasks}>
+  <.task_row_dropdown :for={task <- tasks} task={task} />
+</.async_result>

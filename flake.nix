@@ -81,6 +81,7 @@
       imports = [
         inputs.devenv.flakeModule
         inputs.pre-commit-hooks-nix.flakeModule
+        ./apps/homelab
         ./hosts
         ./modules
         ./packages

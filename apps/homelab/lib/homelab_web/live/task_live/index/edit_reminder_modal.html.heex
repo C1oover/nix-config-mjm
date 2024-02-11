@@ -1,0 +1,28 @@
+<.modal
+  show
+  id="edit_reminder_modal"
+  on_confirm={JS.dispatch("submit", to: "#edit_reminder_form")}
+  on_cancel={JS.push("cancel_edit_reminder")}
+>
+  <:title>Edit reminder</:title>
+
+  <.form
+    for={@form}
+    id="edit_reminder_form"
+    phx-change="change_edit_reminder"
+    phx-submit="submit_edit_reminder"
+    x-on:keydown="if($event.key != 'Escape') { $event.stopPropagation() }"
+  >
+    <.input type="hidden" field={@form[:id]} />
+    <.input field={@form[:description]} label="Description" />
+    <.input field={@form[:project]} label="Project" />
+    <.input field={@form[:notify_at]} label="Notify at" type="datetime-local" />
+    <.input field={@form[:snooze_minutes]} label="Notify frequency (in minutes)" type="number" />
+    <.input field={@form[:recurrence_string]} label="Repeat every" />
+    <!-- needed for enter to work -->
+    <button class="hidden">Save</button>
+  </.form>
+
+  <:confirm>Save</:confirm>
+  <:cancel>Cancel</:cancel>
+</.modal>

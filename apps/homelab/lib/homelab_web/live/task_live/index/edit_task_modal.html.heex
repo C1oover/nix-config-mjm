@@ -1,0 +1,18 @@
+<.modal
+  show
+  id="edit_modal"
+  on_confirm={JS.dispatch("submit", to: "#edit_form")}
+  on_cancel={JS.push("cancel_edit")}
+>
+  <:title>Edit task</:title>
+  <.form for={@form} id="edit_form" phx-change="change_edit" phx-submit="edit">
+    <.input field={@form[:uuid]} type="hidden" />
+    <.input
+      field={@form[:task]}
+      x-on:keydown="if($event.key != 'Escape') { $event.stopPropagation() }"
+    />
+  </.form>
+
+  <:confirm>Save</:confirm>
+  <:cancel>Cancel</:cancel>
+</.modal>
