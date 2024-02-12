@@ -12,7 +12,6 @@
     policies = [ "admin" ];
   };
 
-  vault.databases.enable = true;
   vault.approles.enable = true;
 
   vault.policies = {

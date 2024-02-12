@@ -8,41 +8,9 @@
     base_url = "https://git.midna.dev/api/v4/";
   };
 
-  # minio.buckets = {
-  #   "gitlab-artifacts" = {};
-  #   "gitlab-ci-secure-files" = {};
-  #   "gitlab-container-registry" = {};
-  #   "gitlab-dependency-proxy" = {};
-  #   "gitlab-external-diffs" = {};
-  #   "gitlab-lfs" = {};
-  #   "gitlab-packages" = {};
-  #   "gitlab-pages" = {};
-  #   "gitlab-terraform-state" = {};
-  #   "gitlab-uploads" = {};
-  # };
-
-  # minio.iamPolicies.gitlab = {
-  #   users = ["gitlab"];
-  #   document = {
-  #     statement = [
-  #       {
-  #         actions = ["s3:*"];
-  #         resources = [
-  #           "arn:aws:s3:::gitlab-*"
-  #         ];
-  #       }
-  #     ];
-  #   };
-  # };
-
   vault.policies.gitlab.text = ''
     path "ssh-client-signer/sign/homelab-client" {
       capabilities = ["update"]
-    }
-
-    # Allow reading the Ansible vault password
-    path "kv/data/deploy" {
-      capabilities = ["read"]
     }
 
     # Allow reading Attic push token

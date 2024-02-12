@@ -1,32 +1,11 @@
 {
-  vault.databases.roles.lldap = {
-    ttl = "long";
-  };
-
-  vault.policies.lldap.text = ''
-    path "database/creds/lldap" {
-      capabilities = ["read"]
-    }
-  '';
-
-  vault.databases.roles.authelia = {
-    ttl = "long";
-  };
-
   vault.policies.authelia.text = ''
     path "kv/data/authelia" {
       capabilities = ["read"]
     }
-
-    path "database/creds/authelia" {
-      capabilities = ["read"]
-    }
   '';
 
-  vault.approles.roles.leto.tokenPolicies = [
-    "lldap"
-    "authelia"
-  ];
+  vault.approles.roles.leto.tokenPolicies = [ "authelia" ];
 
   ingress.virtualHosts = {
     auth = {
