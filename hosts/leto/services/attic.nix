@@ -22,8 +22,18 @@
       compression.type = "zstd";
       garbage-collection.default-retention-period = "3 months";
     };
-    credentialsFile = config.age.secrets."attic.env".path;
+    credentialsFile = config.vault-secrets.templates.attic-env.path;
   };
+
+  systemd.services.atticd.after = [ "render-vault-secrets.service" ];
+
+  vault-secrets.templates.attic-env.text = ''
+    {{ with secret "kv/attic" }}
+    ATTIC_SERVER_TOKEN_HS256_SECRET_BASE64={{ .Data.data.token_secret }}
+    AWS_ACCESS_KEY_ID={{ .Data.data.garage_key_id }}
+    AWS_SECRET_ACCESS_KEY={{ .Data.data.garage_secret_key }}
+    {{ end }}
+  '';
 
   services.postgresql = {
     enable = true;
@@ -50,6 +60,4 @@
       }
     ];
   };
-
-  age.secrets."attic.env".file = ../../../secrets/attic-env.age;
 }
