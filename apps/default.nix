@@ -3,7 +3,6 @@
     ../modules/apps
 
     ./actual
-    ./adminer
     ./attic
     ./atuin
     ./authelia
@@ -20,7 +19,6 @@
     ./miniflux
     ./netbox
     ./nomad
-    ./otel
     ./paperless
     ./prometheus
     ./proxmox
