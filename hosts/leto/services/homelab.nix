@@ -26,6 +26,7 @@ in
     after = [
       "network.target"
       "postgresql.service"
+      "render-vault-secrets.service"
     ];
     path = with pkgs; [ taskwarrior ];
     environment = {
@@ -44,14 +45,26 @@ in
     serviceConfig = {
       ExecStart = "${pkg}/bin/server";
       LoadCredential = [ "taskd-key:${config.age.secrets."taskwarrior.key".path}" ];
-      EnvironmentFile = config.age.secrets."homelab.env".path;
+      EnvironmentFile = config.vault-secrets.templates.homelab-env.path;
       Restart = "always";
       DynamicUser = true;
       User = "homelab";
       StateDirectory = "homelab";
       WorkingDirectory = "/var/lib/homelab";
+      # TODO harden
     };
   };
+
+  vault-secrets.templates.homelab-env.text = ''
+    {{ with secret "kv/paperless/client" }}
+    PAPERLESS_TOKEN={{ .Data.data.api_token }}
+    {{ end }}
+    {{ with secret "kv/homelab" }}
+    GITLAB_TOKEN={{ .Data.data.gitlab_token }}
+    NETBOX_TOKEN={{ .Data.data.netbox_token }}
+    SECRET_KEY_BASE={{ .Data.data.secret_key_base }}
+    {{ end }}
+  '';
 
   services.postgresql = {
     enable = true;
@@ -83,6 +96,5 @@ in
 
   age.secrets = {
     "taskwarrior.key".file = ../../../secrets/taskwarrior-key.age;
-    "homelab.env".file = ../../../secrets/homelab-env.age;
   };
 }
