@@ -27,10 +27,15 @@
       REMOTE_AUTH_SUPERUSER_GROUPS = [ "admins" ];
       REMOTE_AUTH_STAFF_GROUPS = [ "admins" ];
     };
-    secretKeyFile = "/run/vault-secrets/netbox-secret-key";
+    secretKeyFile = config.vault-secrets.templates.netbox-secret-key.path;
   };
 
   systemd.services.netbox.after = [ "render-vault-secrets.service" ];
+
+  vault-secrets.templates.netbox-secret-key = {
+    text = ''{{ with secret "kv/netbox" }}{{ .Data.data.secret_key }}{{ end }}'';
+    owner = "netbox";
+  };
 
   services.nginx = {
     enable = true;

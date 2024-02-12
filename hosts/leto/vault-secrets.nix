@@ -1,61 +1,153 @@
-{ pkgs, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 let
-  roleId = "29829ea8-3eb2-b3d6-8aab-d150dbb48e3d";
-  secretIdFile = config.age.secrets."approle-secret-id".path;
-  vaultAddr = "http://vault.service.consul:8200";
+  inherit (lib)
+    types
+    mkIf
+    mkOption
+    literalExpression
+    ;
+
+  cfg = config.vault-secrets;
+
+  mkTemplate = tmplCfg: {
+    contents = tmplCfg.text;
+    destination = tmplCfg.path;
+    user = tmplCfg.owner;
+    perms = tmplCfg.mode;
+  };
 
   consulTemplateConfig = {
     once = true;
-    vault.address = vaultAddr;
-    template = [
-      {
-        contents = ''{{ with secret "kv/netbox" }}{{ .Data.data.secret_key }}{{ end }}'';
-        destination = "/run/vault-secrets/netbox-secret-key";
-        user = "netbox";
-        perms = "0400";
-      }
-    ];
+    vault.address = cfg.vaultAddress;
+    template = map mkTemplate (builtins.attrValues cfg.templates);
   };
 
   format = pkgs.formats.json { };
   cfgFile = format.generate "secrets-template-config.json" consulTemplateConfig;
+
+  templateType = types.submodule (
+    { config, ... }:
+    {
+      options = {
+        name = mkOption {
+          type = types.str;
+          default = config._module.args.name;
+          defaultText = literalExpression "config._module.args.name";
+          description = ''
+            Name of the file to render in {option}`vault-secrets.secretsDir`.
+          '';
+        };
+        text = mkOption {
+          type = types.str;
+          description = ''
+            Template to use to render the file's contents from vault.
+          '';
+        };
+        path = mkOption {
+          type = types.str;
+          default = "${cfg.secretsDir}/${config.name}";
+          defaultText = literalExpression ''
+            "''${cfg.secretsDir}/''${config.name}"
+          '';
+          description = ''
+            Path where the rendered secret will be.
+          '';
+        };
+        mode = mkOption {
+          type = types.str;
+          default = "0400";
+          description = ''
+            Permissions mode of the rendered secret.
+          '';
+        };
+        owner = mkOption {
+          type = types.str;
+          default = "root";
+          description = ''
+            User who will own the rendered secret.
+          '';
+        };
+      };
+    }
+  );
 in
 {
-  fileSystems."/run/vault-secrets" = {
-    device = "none";
-    fsType = "ramfs";
-    options = [
-      "nodev"
-      "nosuid"
-      "mode=0751"
-    ];
+  options.vault-secrets = {
+    secretsDir = mkOption {
+      type = types.path;
+      default = "/run/vault-secrets";
+      description = ''
+        Folder where secrets are rendered.
+      '';
+    };
+    roleId = mkOption {
+      type = types.str;
+      description = ''
+        Role ID for the AppRole to use to log in to Vault.
+      '';
+    };
+    secretIdFile = mkOption {
+      type = types.path;
+      description = ''
+        Path to a file that contains the secret ID for the AppRole to use to log in to Vault.
+      '';
+    };
+    vaultAddress = mkOption {
+      type = types.str;
+      default = "http://vault.service.consul:8200";
+      description = ''
+        Address to use to communicate with Vault.
+      '';
+    };
+    templates = mkOption {
+      type = types.attrsOf templateType;
+      default = { };
+      description = ''
+        Attrset of templates for secrets.
+      '';
+    };
   };
 
-  systemd.services.render-vault-secrets = {
-    wantedBy = [ "multi-user.target" ];
-    after = [ "network.target" ];
-    path = with pkgs; [
-      vault
-      consul-template
-      glibc.getent
-    ];
-    script = ''
-      role_id=${roleId}
-      secret_id="$(cat ${secretIdFile})"
-
-      VAULT_TOKEN="$(vault write -field=token auth/approle/login role_id=$role_id secret_id=$secret_id)"
-      export VAULT_TOKEN
-
-      exec consul-template -config ${cfgFile} -exec true
-    '';
-    environment = {
-      VAULT_ADDR = vaultAddr;
+  config = mkIf (cfg.templates != [ ]) {
+    fileSystems."/run/vault-secrets" = {
+      device = "none";
+      fsType = "ramfs";
+      options = [
+        "nodev"
+        "nosuid"
+        "mode=0751"
+      ];
     };
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = true;
+
+    systemd.services.render-vault-secrets = {
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
+      path = with pkgs; [
+        vault
+        consul-template
+        glibc.getent
+      ];
+      script = ''
+        role_id=${cfg.roleId}
+        secret_id="$(cat ${cfg.secretIdFile})"
+
+        VAULT_TOKEN="$(vault write -field=token auth/approle/login role_id=$role_id secret_id=$secret_id)"
+        export VAULT_TOKEN
+
+        exec consul-template -config ${cfgFile} -exec true
+      '';
+      environment = {
+        VAULT_ADDR = cfg.vaultAddress;
+      };
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
     };
   };
-
-  age.secrets."approle-secret-id".file = ../../secrets/leto-approle-secret-id.age;
 }
