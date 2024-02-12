@@ -100,7 +100,6 @@ in
       brontes = {
         deployment.tags = [
           "arm64"
-          "nomad"
           "ingress"
         ];
         imports = [ ./brontes ];
@@ -108,7 +107,6 @@ in
       steropes = {
         deployment.tags = [
           "arm64"
-          "nomad"
           "ingress"
         ];
         imports = [ ./steropes ];
@@ -147,7 +145,6 @@ in
         deployment.tags = [
           "x86_64"
           "garage"
-          "nomad"
         ];
         imports = [ ./helios ];
       };
