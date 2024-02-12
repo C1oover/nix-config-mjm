@@ -64,6 +64,7 @@ in
       description = ''
         PostgreSQL
       '';
+      onboot = false;
     };
 
     thanatos = defaultLxc // {

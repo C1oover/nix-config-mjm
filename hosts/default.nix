@@ -66,7 +66,6 @@ in
       # Proxmox LXC containers
       rhea = mkNixos [ ./rhea ];
       cronus = mkNixos [ ./cronus ];
-      themis = mkNixos [ ./themis ];
     };
 
     colmena = {
@@ -177,10 +176,6 @@ in
           "dns"
         ];
         imports = [ ./cronus ];
-      };
-      themis = {
-        deployment.tags = [ "x86_64" ];
-        imports = [ ./themis ];
       };
     };
   };
