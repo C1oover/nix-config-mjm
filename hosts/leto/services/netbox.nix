@@ -27,8 +27,10 @@
       REMOTE_AUTH_SUPERUSER_GROUPS = [ "admins" ];
       REMOTE_AUTH_STAFF_GROUPS = [ "admins" ];
     };
-    secretKeyFile = config.age.secrets."netbox-secret-key".path;
+    secretKeyFile = "/run/vault-secrets/netbox-secret-key";
   };
+
+  systemd.services.netbox.after = [ "render-vault-secrets.service" ];
 
   services.nginx = {
     enable = true;
@@ -61,12 +63,5 @@
   services.consul.services.netbox = {
     port = config.services.nginx.defaultHTTPListenPort;
     meta.metrics_path = "/metrics";
-  };
-
-  age.secrets = {
-    "netbox-secret-key" = {
-      file = ../../../secrets/netbox-secret-key.age;
-      owner = "netbox";
-    };
   };
 }
