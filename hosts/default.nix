@@ -43,9 +43,14 @@ in
           inherit inputs outputs;
         };
       };
+      uranus = inputs.nixos-plasma6.lib.nixosSystem {
+        modules = [ ./uranus ];
+        specialArgs = {
+          inherit inputs outputs;
+        };
+      };
 
       nyx = mkNixos [ ./nyx ];
-      uranus = mkNixos [ ./uranus ];
 
       # Hashistack control plane VMs
       megaera = mkNixos [ ./megaera ];

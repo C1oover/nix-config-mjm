@@ -60,6 +60,10 @@
 
   time.timeZone = "America/Denver";
 
+  services.xserver.displayManager.sddm.wayland.enable = true;
+
+  programs.light.enable = true;
+
   programs._1password-gui = {
     enable = true;
     polkitPolicyOwners = [ "matt" ];
@@ -75,6 +79,15 @@
   services.yubikey-agent.enable = true;
 
   virtualisation.podman.enable = true;
+
+  # move fprintd after unix auth so that it's possible to unlock
+  # by either entering a password or with fingerprint
+  security.pam.services.polkit-1.rules.auth.fprintd.order =
+    config.security.pam.services.polkit-1.rules.auth.unix.order + 5;
+  security.pam.services.login.rules.auth.fprintd.order =
+    config.security.pam.services.login.rules.auth.unix.order + 5;
+  security.pam.services.kde.rules.auth.fprintd.order =
+    config.security.pam.services.kde.rules.auth.unix.order + 5;
 
   console = {
     font = "${pkgs.terminus_font}/share/consolefonts/ter-u32n.psf.gz";

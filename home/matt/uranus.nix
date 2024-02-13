@@ -1,18 +1,24 @@
-{ lib, ... }:
+{ pkgs, ... }:
 {
   imports = [
     ./global
 
+    ./features/bitwarden
     ./features/controku
+    ./features/desktop
+    ./features/email
+    ./features/firefox
+    ./features/games
     ./features/helix
     ./features/homelab
+    ./features/kitty
     ./features/taskwarrior
   ];
 
-  programs.git.extraConfig = {
-    credential = {
-      helper = lib.mkForce "/mnt/c/Program\\ Files/Git/mingw64/bin/git-credential-manager.exe";
-      credentialStore = lib.mkForce "wincredman";
-    };
-  };
+  home.packages = with pkgs; [
+    beeper
+    discord
+    krita
+    yt-dlp
+  ];
 }

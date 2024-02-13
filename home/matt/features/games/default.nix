@@ -1,4 +1,7 @@
 { pkgs, ... }:
 {
-  home.packages = with pkgs; [ lutris ];
+  home.packages = with pkgs; [
+    lutris
+    xivlauncher
+  ];
 }
