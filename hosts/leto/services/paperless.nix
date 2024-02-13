@@ -21,6 +21,10 @@ in
     };
   };
 
+  # workaround an issue that is partially caused by using PrivateTmp
+  # https://github.com/paperless-ngx/paperless-ngx/discussions/5606
+  systemd.services.paperless-consumer.unitConfig.JoinsNamespaceOf = "paperless-task-queue.service";
+
   services.postgresql = {
     enable = true;
     ensureDatabases = [ "paperless" ];
