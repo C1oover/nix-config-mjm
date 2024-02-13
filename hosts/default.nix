@@ -191,7 +191,7 @@ in
       ...
     }:
     let
-      attic = inputs'.attic.packages.default;
+      attic = inputs'.attic.packages.attic-client;
       host-scripts = pkgs.callPackage ./scripts { inherit attic; };
     in
     {

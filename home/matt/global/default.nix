@@ -38,7 +38,7 @@
       inherit (inputs.home-manager.packages.${pkgs.system}) home-manager;
       agenix = inputs.agenix.packages.${pkgs.system}.default;
     }
-    // lib.optionalAttrs pkgs.stdenv.isLinux { inherit (pkgs) attic; }
+    // lib.optionalAttrs pkgs.stdenv.isLinux { inherit (pkgs) attic-client; }
   );
 
   home.shellAliases = {
