@@ -13,6 +13,9 @@ in
         IPv6AcceptRA = true;
         IPv6PrivacyExtensions = true;
       };
+      dhcpV4Config = {
+        UseDomains = true;
+      };
       dhcpV6Config = {
         UseDNS = false;
       };
