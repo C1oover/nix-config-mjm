@@ -19,7 +19,7 @@ rec {
   nyx = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID2pPaX+7EoXMTzgmfoBJ7AeiXwfqq/LqKdbj8kcOa1P";
   persephone = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHNcGvd0FkGDH7rm02jm8fan2xqKoEr/Wx+3wAgfDR7A";
   matt-persephone = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK/65Yq1UkZie8WgsO2HUGq9bq++Y6o+FJd8wWvWhdLx";
-  matt-uranus = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGE0Qt7yq/SacEhYZ1lM5CXGfkuCjYXZyJ9On9KaCM8e";
+  matt-uranus = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICsOTXJIL5BfbiVcvrHLf49u+o6ja6DMJxzjmeJ7tPKu";
 
   servers = {
     inherit
