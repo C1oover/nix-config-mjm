@@ -17,8 +17,13 @@
 
   boot.loader.grub = {
     enable = true;
-    device = "/dev/sda";
-    storePath = "/persist/nix/store";
+    mirroredBoots = [
+      {
+        devices = [ "/dev/sda" ];
+        path = "/persist/boot";
+      }
+    ];
+    copyKernels = true;
   };
 
   services.qemuGuest.enable = true;
