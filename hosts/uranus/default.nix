@@ -12,7 +12,7 @@
   networking.hostName = "uranus";
   systemd.network.networks."10-lan".matchConfig.Name = lib.mkForce "enp3*";
 
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages_6_6;
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -39,6 +39,17 @@
   ];
 
   services.xserver.videoDrivers = [ "nvidia" ];
+
+  # needed for wayland to work at all
+  hardware.nvidia.modesetting.enable = true;
+
+  hardware.opengl.extraPackages = [
+    pkgs.libvdpau-va-gl
+    pkgs.nvidia-vaapi-driver
+  ];
+
+  # without this, discord won't run
+  environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
   # Allow desktop mouse and keyboard to wake the system
   services.udev.extraRules = ''
