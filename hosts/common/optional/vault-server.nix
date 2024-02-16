@@ -13,11 +13,6 @@ let
     "10.0.2.42"
     "10.0.2.43"
   ];
-  yamlFormat = pkgs.formats.yaml { };
-  vaultUnsealCfg = yamlFormat.generate "vault-unseal.yml" {
-    environment = "prod";
-    vault_nodes = map (n: "http://${n}:8200") nodes;
-  };
 in
 {
   services.vault = {
@@ -27,15 +22,13 @@ in
     storageBackend = "raft";
     storageConfig = ''
       node_id = "${config.networking.hostName}"
-      ${lib.concatMapStrings (
-        n:
-        ''
+      ${lib.concatMapStrings
+        (n: ''
           retry_join {
             leader_api_addr = "http://${n}:8200"
           }
-        ''
-          nodes
-      )}
+        '')
+        nodes}
     '';
     listenerExtraConfig = ''
       cluster_address = "0.0.0.0:8201"
@@ -68,10 +61,13 @@ in
     wantedBy = [ "multi-user.target" ];
     after = [ "network.target" ];
     serviceConfig = {
-      ExecStart = utils.escapeSystemdExecArgs [
-        (lib.getExe pkg)
-        "--config=${vaultUnsealCfg}"
-      ];
+      ExecStart = utils.escapeSystemdExecArgs (
+        [
+          (lib.getExe pkg)
+          "--environment=prod"
+        ]
+        ++ (map (n: "--nodes=http://${n}:8200") nodes)
+      );
       EnvironmentFile = config.age.secrets.vault-unseal-env.path;
       Restart = "always";
       DynamicUser = true;
