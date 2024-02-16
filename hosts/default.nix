@@ -191,8 +191,8 @@ in
       ...
     }:
     let
-      attic = inputs'.attic.packages.attic-client;
-      host-scripts = pkgs.callPackage ./scripts { inherit attic; };
+      inherit (inputs'.attic.packages) attic-client;
+      host-scripts = pkgs.callPackage ./scripts { inherit attic-client; };
     in
     {
       devenv.shells.default = {
