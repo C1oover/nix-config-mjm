@@ -38,6 +38,7 @@ in
       description = ''
         DNS server
       '';
+      startup = "order=2,up=30";
     };
 
     cronus = defaultLxc // {
@@ -46,6 +47,7 @@ in
       description = ''
         DNS server
       '';
+      startup = "order=2,up=30";
     };
 
     phoebe = defaultLxc // {
