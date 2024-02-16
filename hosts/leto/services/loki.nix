@@ -101,7 +101,14 @@ in
     };
   };
 
-  systemd.services.loki.serviceConfig.EnvironmentFile = config.age.secrets."loki.env".path;
+  systemd.services.loki.serviceConfig.EnvironmentFile = config.vault-secrets.templates.loki-env.path;
+
+  vault-secrets.templates.loki-env.text = ''
+    {{ with secret "kv/loki" }}
+    AWS_ACCESS_KEY_ID={{ .Data.data.garage_key_id }}
+    AWS_SECRET_ACCESS_KEY={{ .Data.data.garage_secret_key }}
+    {{ end }}
+  '';
 
   networking.firewall.allowedTCPPorts = [ 3100 ];
 
@@ -119,6 +126,4 @@ in
       }
     ];
   };
-
-  age.secrets."loki.env".file = ../../../secrets/loki-env.age;
 }
