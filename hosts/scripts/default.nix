@@ -6,7 +6,7 @@
   coreutils,
   openssh,
   vault,
-  attic,
+  attic-client,
   colmena,
   rbw,
   nix-output-monitor,
@@ -35,7 +35,7 @@ resholve.mkDerivation {
   src = ./.;
 
   installPhase = ''
-    sed -i '9i ATTIC="${attic}"' ci-attic-login.sh
+    sed -i '9i ATTIC="${attic-client}"' ci-attic-login.sh
     install -Dv functions.sh $out/functions.sh
     ${lib.concatMapStrings
       (script: ''
@@ -62,7 +62,7 @@ resholve.mkDerivation {
         coreutils
         openssh
         vault
-        attic
+        attic-client
         colmena
         rbw
         nix-output-monitor
