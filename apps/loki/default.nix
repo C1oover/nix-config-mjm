@@ -5,4 +5,6 @@
       capabilities = ["read"]
     }
   '';
+
+  vault.approles.roles.leto.tokenPolicies = [ "loki" ];
 }
