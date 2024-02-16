@@ -19,6 +19,7 @@
     ./miniflux
     ./netbox
     ./nomad
+    ./otel
     ./paperless
     ./prometheus
     ./proxmox
