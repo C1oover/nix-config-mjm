@@ -23,6 +23,8 @@
   systemd.services.consul.after = lib.mkForce [ "network.target" ];
   systemd.services.consul.bindsTo = lib.mkForce [ ];
 
+  services.consul.extraConfig.advertise_addr_ipv4 = lib.mkForce "10.0.2.48";
+
   nixpkgs.hostPlatform = "x86_64-linux";
   system.stateVersion = "23.05";
 }
