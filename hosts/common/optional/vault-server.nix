@@ -1,4 +1,24 @@
-{ pkgs, config, ... }:
+{
+  pkgs,
+  lib,
+  utils,
+  config,
+  outputs,
+  ...
+}:
+let
+  pkg = outputs.packages.${pkgs.system}.vault-unseal;
+  nodes = [
+    "10.0.2.40"
+    "10.0.2.42"
+    "10.0.2.43"
+  ];
+  yamlFormat = pkgs.formats.yaml { };
+  vaultUnsealCfg = yamlFormat.generate "vault-unseal.yml" {
+    environment = "prod";
+    vault_nodes = map (n: "http://${n}:8200") nodes;
+  };
+in
 {
   services.vault = {
     enable = true;
@@ -7,15 +27,15 @@
     storageBackend = "raft";
     storageConfig = ''
       node_id = "${config.networking.hostName}"
-      retry_join {
-        leader_api_addr = "http://10.0.2.40:8200"
-      }
-      retry_join {
-        leader_api_addr = "http://10.0.2.42:8200"
-      }
-      retry_join {
-        leader_api_addr = "http://10.0.2.43:8200"
-      }
+      ${lib.concatMapStrings (
+        n:
+        ''
+          retry_join {
+            leader_api_addr = "http://${n}:8200"
+          }
+        ''
+          nodes
+      )}
     '';
     listenerExtraConfig = ''
       cluster_address = "0.0.0.0:8201"
@@ -43,4 +63,44 @@
     8200
     8201
   ];
+
+  systemd.services.vault-unseal = {
+    wantedBy = [ "multi-user.target" ];
+    after = [ "network.target" ];
+    serviceConfig = {
+      ExecStart = utils.escapeSystemdExecArgs [
+        (lib.getExe pkg)
+        "--config=${vaultUnsealCfg}"
+      ];
+      EnvironmentFile = config.age.secrets.vault-unseal-env.path;
+      Restart = "always";
+      DynamicUser = true;
+      CapabilityBoundingSet = [ "" ];
+      DeviceAllow = [ "" ];
+      LockPersonality = true;
+      MemoryDenyWriteExecute = true;
+      PrivateTmp = true;
+      PrivateDevices = true;
+      ProtectClock = true;
+      ProtectControlGroups = true;
+      ProtectHome = true;
+      ProtectHostname = true;
+      ProtectKernelLogs = true;
+      ProtectKernelModules = true;
+      ProtectKernelTunables = true;
+      ProtectSystem = "strict";
+      RemoveIPC = true;
+      RestrictAddressFamilies = [
+        "AF_INET"
+        "AF_UNIX"
+      ];
+      RestrictNamespaces = true;
+      RestrictRealtime = true;
+      RestrictSUIDSGID = true;
+      SystemCallArchitectures = "native";
+      UMask = "0077";
+    };
+  };
+
+  age.secrets.vault-unseal-env.file = ../../../secrets/${config.networking.hostName}-vault-unseal-env.age;
 }
