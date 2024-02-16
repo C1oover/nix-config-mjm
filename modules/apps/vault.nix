@@ -1,7 +1,14 @@
-{ config, lib, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 with lib;
 let
   cfg = config.vault;
+
+  jsonFormat = pkgs.formats.json { };
 
   hoursToSecs = hours: hours * 3600;
   daysToSecs = days: hoursToSecs (days * 24);
@@ -81,6 +88,10 @@ let
         source = mkOption {
           type = types.nullOr types.path;
           default = null;
+        };
+        paths = mkOption {
+          default = { };
+          type = types.attrsOf jsonFormat.type;
         };
       };
     };
@@ -171,10 +182,21 @@ in
           builtins.mapAttrs
             (
               name:
-              { text, source, ... }:
+              {
+                text,
+                source,
+                paths,
+                ...
+              }:
               {
                 inherit name;
-                policy = if source != null then builtins.readFile source else text;
+                policy =
+                  if paths != { } then
+                    builtins.toJSON { path = paths; }
+                  else if source != null then
+                    builtins.readFile source
+                  else
+                    text;
               }
             )
             cfg.policies;
