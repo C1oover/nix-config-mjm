@@ -115,6 +115,7 @@
             };
 
           devenv.shells.default = {
+            packages = [ pkgs.just ];
             # pre-commit = {
             #   hooks = {
             #     alejandra.enable = true;

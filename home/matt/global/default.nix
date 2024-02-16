@@ -33,8 +33,6 @@
         wget
         ;
 
-      inherit (pkgs.callPackages ./rebuild.nix { }) rb sw;
-
       inherit (inputs.home-manager.packages.${pkgs.system}) home-manager;
       agenix = inputs.agenix.packages.${pkgs.system}.default;
     }
