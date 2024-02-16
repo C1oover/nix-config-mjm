@@ -43,14 +43,14 @@
     ${builtins.readFile ./nerd-font-symbols.toml}
 
     [palettes.nix_colors]
-    black = "#${config.colorScheme.colors.base00}"
-    white = "#${config.colorScheme.colors.base05}"
-    red = "#${config.colorScheme.colors.base08}"
-    yellow = "#${config.colorScheme.colors.base0A}"
-    green = "#${config.colorScheme.colors.base0B}"
-    cyan = "#${config.colorScheme.colors.base0C}"
-    blue = "#${config.colorScheme.colors.base0D}"
-    purple = "#${config.colorScheme.colors.base0E}"
+    black = "#${config.colorScheme.palette.base00}"
+    white = "#${config.colorScheme.palette.base05}"
+    red = "#${config.colorScheme.palette.base08}"
+    yellow = "#${config.colorScheme.palette.base0A}"
+    green = "#${config.colorScheme.palette.base0B}"
+    cyan = "#${config.colorScheme.palette.base0C}"
+    blue = "#${config.colorScheme.palette.base0D}"
+    purple = "#${config.colorScheme.palette.base0E}"
   '';
 
   programs.direnv = {

@@ -12,7 +12,7 @@
         toLua = lib.generators.toLua { };
         vars = {
           font_size = if pkgs.stdenv.isLinux then 8.0 else 14.0;
-          colors = builtins.mapAttrs (_name: value: "#${value}") config.colorScheme.colors;
+          colors = builtins.mapAttrs (_name: value: "#${value}") config.colorScheme.palette;
         };
       in
       ''
