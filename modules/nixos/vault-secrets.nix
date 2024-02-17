@@ -1,6 +1,7 @@
 {
   pkgs,
   lib,
+  utils,
   config,
   ...
 }:
@@ -11,6 +12,8 @@ let
     mkOption
     literalExpression
     ;
+
+  inherit (utils) systemdUtils;
 
   cfg = config.vault-secrets;
 
@@ -90,9 +93,9 @@ let
         };
       };
 
-      config.text = mkIf (config.kvPath != null) ''
-        {{ with secret "${builtins.dirOf config.kvPath}" }}{{ .Data.data.${builtins.baseNameOf config.kvPath} }}{{ end }}
-      '';
+      config.text =
+        mkIf (config.kvPath != null)
+          ''{{ with secret "${builtins.dirOf config.kvPath}" }}{{ .Data.data.${builtins.baseNameOf config.kvPath} }}{{ end }}'';
     }
   );
 in
@@ -131,6 +134,13 @@ in
         Attrset of templates for secrets.
       '';
     };
+    requiredBy = mkOption {
+      type = types.listOf systemdUtils.lib.unitNameType;
+      default = [ ];
+      description = ''
+        List of systemd unit names that depend on secrets from Vault.
+      '';
+    };
   };
 
   config = mkIf (cfg.templates != { }) {
@@ -147,6 +157,8 @@ in
     systemd.services.render-vault-secrets = {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
+      before = cfg.requiredBy;
+      requiredBy = cfg.requiredBy;
       path = with pkgs; [
         vault
         consul-template

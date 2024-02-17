@@ -22,23 +22,34 @@
     exportarr-sonarr = {
       enable = true;
       openFirewall = true;
-      apiKeyFile = config.age.secrets."sonarr-apikey".path;
+      apiKeyFile = config.vault-secrets.templates.sonarr-api-key.path;
       url = "http://127.0.0.1:8989";
     };
     exportarr-radarr = {
       enable = true;
       port = 9707;
       openFirewall = true;
-      apiKeyFile = config.age.secrets."radarr-apikey".path;
+      apiKeyFile = config.vault-secrets.templates.radarr-api-key.path;
       url = "http://127.0.0.1:7878";
     };
     exportarr-readarr = {
       enable = true;
       port = 9706;
       openFirewall = true;
-      apiKeyFile = config.age.secrets."readarr-apikey".path;
+      apiKeyFile = config.vault-secrets.templates.readarr-api-key.path;
       url = "http://127.0.0.1:8787";
     };
+  };
+
+  vault-secrets.requiredBy = [
+    "prometheus-exportarr-sonarr-exporter.service"
+    "prometheus-exportarr-radarr-exporter.service"
+    "prometheus-exportarr-readarr-exporter.service"
+  ];
+  vault-secrets.templates = {
+    sonarr-api-key.kvPath = "kv/mediaserver/sonarr_api_key";
+    radarr-api-key.kvPath = "kv/mediaserver/radarr_api_key";
+    readarr-api-key.kvPath = "kv/mediaserver/readarr_api_key";
   };
 
   services.consul.services = {
@@ -105,10 +116,4 @@
 
   # ffprobe
   systemd.services.radarr.path = [ pkgs.ffmpeg ];
-
-  age.secrets = {
-    "sonarr-apikey".file = ../../../secrets/sonarr-apikey.age;
-    "radarr-apikey".file = ../../../secrets/radarr-apikey.age;
-    "readarr-apikey".file = ../../../secrets/readarr-apikey.age;
-  };
 }

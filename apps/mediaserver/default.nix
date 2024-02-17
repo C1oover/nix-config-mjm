@@ -17,4 +17,10 @@
       upstream.service.name = "readarr";
     };
   };
+
+  vault.policies.mediaserver.paths = {
+    "kv/data/mediaserver".capabilities = [ "read" ];
+  };
+
+  vault.approles.roles.chaos.tokenPolicies = [ "mediaserver" ];
 }

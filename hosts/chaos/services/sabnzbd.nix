@@ -13,10 +13,13 @@
     servers = [
       {
         baseUrl = "http://localhost:8080/sabnzbd";
-        apiKeyFile = config.age.secrets."sabnzbd-apikey".path;
+        apiKeyFile = config.vault-secrets.templates.sabnzbd-api-key.path;
       }
     ];
   };
+
+  vault-secrets.requiredBy = [ "prometheus-sabnzbd-exporter.service" ];
+  vault-secrets.templates.sabnzbd-api-key.kvPath = "kv/mediaserver/sabnzbd_api_key";
 
   networking.firewall.allowedTCPPorts = [ 8080 ];
 
@@ -39,6 +42,4 @@
       }
     ];
   };
-
-  age.secrets."sabnzbd-apikey".file = ../../../secrets/sabnzbd-apikey.age;
 }

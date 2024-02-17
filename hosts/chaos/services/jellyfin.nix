@@ -20,7 +20,7 @@
       "x-systemd.idle-timeout=120"
       "x-systemd.device-timeout=5s"
       "x-systemd.mount-timeout=5s"
-      "credentials=${config.age.secrets."smb-creds".path}"
+      "credentials=${config.vault-secrets.templates.smb-creds.path}"
       "gid=media"
       "forcegid"
       "file_mode=0664"
@@ -30,7 +30,11 @@
     ];
   };
 
-  age.secrets."smb-creds".file = ../../../secrets/smb-creds-server.age;
+  vault-secrets.requiredBy = [ "videos.mount" ];
+  vault-secrets.templates.smb-creds.text = ''
+    username=mediaserver
+    password={{ with secret "kv/mediaserver" }}{{ .Data.data.smb_password }}{{ end }}
+  '';
 
   services.consul.services.jellyfin = {
     port = 8096;

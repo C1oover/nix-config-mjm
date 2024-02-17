@@ -34,11 +34,6 @@ in
   "restic-backup-env.age".publicKeys = personalKeys ++ allNixOS;
 
   "smb-creds.age".publicKeys = personalKeys ++ [ persephone ];
-  "smb-creds-server.age".publicKeys = personalKeys ++ [ chaos ];
-  "sabnzbd-apikey.age".publicKeys = personalKeys ++ [ chaos ];
-  "sonarr-apikey.age".publicKeys = personalKeys ++ [ chaos ];
-  "radarr-apikey.age".publicKeys = personalKeys ++ [ chaos ];
-  "readarr-apikey.age".publicKeys = personalKeys ++ [ chaos ];
 
   "nut-primary-password.age".publicKeys = personalKeys ++ [ arges ];
   "nut-secondary-password.age".publicKeys = personalKeys ++ allNixOS;

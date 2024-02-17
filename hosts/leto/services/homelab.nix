@@ -44,7 +44,7 @@ in
 
     serviceConfig = {
       ExecStart = "${pkg}/bin/server";
-      LoadCredential = [ "taskd-key:${config.age.secrets."taskwarrior.key".path}" ];
+      LoadCredential = [ "taskd-key:${config.vault-secrets.templates.taskwarrior-key.path}" ];
       EnvironmentFile = config.vault-secrets.templates.homelab-env.path;
       Restart = "always";
       DynamicUser = true;
@@ -55,16 +55,19 @@ in
     };
   };
 
-  vault-secrets.templates.homelab-env.text = ''
-    {{ with secret "kv/paperless/client" }}
-    PAPERLESS_TOKEN={{ .Data.data.api_token }}
-    {{ end }}
-    {{ with secret "kv/homelab" }}
-    GITLAB_TOKEN={{ .Data.data.gitlab_token }}
-    NETBOX_TOKEN={{ .Data.data.netbox_token }}
-    SECRET_KEY_BASE={{ .Data.data.secret_key_base }}
-    {{ end }}
-  '';
+  vault-secrets.templates = {
+    homelab-env.text = ''
+      {{ with secret "kv/paperless/client" }}
+      PAPERLESS_TOKEN={{ .Data.data.api_token }}
+      {{ end }}
+      {{ with secret "kv/homelab" }}
+      GITLAB_TOKEN={{ .Data.data.gitlab_token }}
+      NETBOX_TOKEN={{ .Data.data.netbox_token }}
+      SECRET_KEY_BASE={{ .Data.data.secret_key_base }}
+      {{ end }}
+    '';
+    taskwarrior-key.kvPath = "kv/taskwarrior/private_key";
+  };
 
   services.postgresql = {
     enable = true;
@@ -92,9 +95,5 @@ in
         timeout = "5s";
       }
     ];
-  };
-
-  age.secrets = {
-    "taskwarrior.key".file = ../../../secrets/taskwarrior-key.age;
   };
 }
