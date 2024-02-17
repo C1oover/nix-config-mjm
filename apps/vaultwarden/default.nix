@@ -4,4 +4,10 @@
 
     enableAuthProxy = false;
   };
+
+  vault.policies.vaultwarden.paths = {
+    "kv/data/vaultwarden".capabilities = [ "read" ];
+  };
+
+  vault.approles.roles.leto.tokenPolicies = [ "vaultwarden" ];
 }

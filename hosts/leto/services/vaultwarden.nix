@@ -1,5 +1,7 @@
 { pkgs, config, ... }:
 {
+  imports = [ ../../common/optional/backup.nix ];
+
   services.vaultwarden = {
     enable = true;
     config = {
@@ -27,8 +29,8 @@
   services.restic.backups.vaultwarden = {
     initialize = true;
     repository = "s3:http://garage.service.consul:3902/restic-backups/vaultwarden";
-    passwordFile = config.age.secrets."vaultwarden-backup-password".path;
-    environmentFile = config.age.secrets."backup.env".path;
+    passwordFile = config.vault-secrets.templates.vaultwarden-backup-password.path;
+    environmentFile = config.vault-secrets.templates.restic-backup-env.path;
     paths = [
       "/var/lib/bitwarden_rs/attachments"
       "/var/lib/bitwarden_rs/db-backup.sqlite3"
@@ -45,6 +47,5 @@
     ];
   };
 
-  age.secrets."backup.env".file = ../../../secrets/restic-backup-env.age;
-  age.secrets."vaultwarden-backup-password".file = ../../../secrets/vaultwarden-backup-password.age;
+  vault-secrets.templates.vaultwarden-backup-password.text = ''{{ with secret "kv/vaultwarden" }}{{ .Data.data.backup_password }}{{ end }}'';
 }

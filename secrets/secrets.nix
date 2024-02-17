@@ -16,7 +16,6 @@ with keys;
   "chaos-approle-secret-id.age".publicKeys = personalKeys ++ [ chaos ];
   "helios-approle-secret-id.age".publicKeys = personalKeys ++ [ helios ];
 
-  "vaultwarden-backup-password.age".publicKeys = personalKeys ++ [ leto ];
   "home-assistant-backup-password.age".publicKeys = personalKeys ++ [ leto ];
   "home-assistant-token.age".publicKeys = personalKeys ++ [ leto ];
 
