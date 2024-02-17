@@ -3,14 +3,9 @@ let
 in
 with keys;
 {
-  "megaera-nomad-vault-config.age".publicKeys = personalKeys ++ [ megaera ];
-  "tisiphone-nomad-vault-config.age".publicKeys = personalKeys ++ [ tisiphone ];
-  "alecto-nomad-vault-config.age".publicKeys = personalKeys ++ [ alecto ];
   "megaera-vault-unseal-env.age".publicKeys = personalKeys ++ [ megaera ];
   "tisiphone-vault-unseal-env.age".publicKeys = personalKeys ++ [ tisiphone ];
   "alecto-vault-unseal-env.age".publicKeys = personalKeys ++ [ alecto ];
-
-  "nomad-docker-auth.age".publicKeys = personalKeys ++ nomadClients;
 
   "gitlab-runner-registration.age".publicKeys = personalKeys ++ [
     hypnos

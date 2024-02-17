@@ -9,7 +9,6 @@
     ../common/optional/server
     ../common/optional/consul-server.nix
     ../common/optional/vault-server.nix
-    ../common/optional/nomad-server.nix
     ../common/optional/nix-remote.nix
   ];
 

@@ -9,7 +9,6 @@
       "/nix"
       "/boot"
       "/var/lib/consul"
-      "/var/lib/private/nomad"
       "/var/lib/vault"
     ];
     files = [

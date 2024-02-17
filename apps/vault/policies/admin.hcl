@@ -37,18 +37,6 @@ path "kv/*" {
   capabilities = ["create", "read", "update", "delete", "list", "sudo"]
 }
 
-path "database/roles/*" {
-  capabilities = ["create", "read", "update", "delete", "list", "sudo"]
-}
-
-path "database/config/*" {
-  capabilities = ["create", "read", "update", "delete", "list", "sudo"]
-}
-
-path "database/creds/*" {
-  capabilities = ["read"]
-}
-
 path "ssh-client-signer/*" {
   capabilities = ["create", "read", "update", "delete", "list", "sudo"]
 }
@@ -62,14 +50,6 @@ path "pki-homelab/*" {
 }
 
 path "identity/*" {
-  capabilities = ["create", "read", "update", "delete", "list", "sudo"]
-}
-
-path "consul/*" {
-  capabilities = ["create", "read", "update", "delete", "list", "sudo"]
-}
-
-path "nomad/*" {
   capabilities = ["create", "read", "update", "delete", "list", "sudo"]
 }
 

@@ -13,7 +13,6 @@
             "graphs.midna.dev"
             "home.midna.dev"
             "metrics.midna.dev"
-            "nomad.midna.dev"
             "vault.midna.dev"
           ];
         }

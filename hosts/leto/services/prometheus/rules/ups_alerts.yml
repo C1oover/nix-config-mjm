@@ -9,9 +9,9 @@ groups:
         annotations:
           summary: UPS metric data is missing
           description: >
-            No UPS metrics are being scraped. Check if the nut-exporter is running and is able to connect to NUT on the Synology.
+            No UPS metrics are being scraped. Check if the nut-exporter is running and is able to connect to NUT.
 
-            https://nomad.home.mattmoriarity.com/ui/jobs/nut https://consul.home.mattmoriarity.com/ui/dc1/services/nut/instances
+            https://consul.midna.dev/ui/dc1/services/nut-exporter/instances
 
       - alert: UPSDischarging
         expr: network_ups_tools_ups_status{flag="DISCHRG"} > 0

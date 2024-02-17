@@ -8,7 +8,6 @@
     ./consul-exporter.nix
     ./consul-services.nix
     ./homelab-https.nix
-    ./nomad-agent.nix
     ./proxmox.nix
     ./pushgateway.nix
     ./vault.nix

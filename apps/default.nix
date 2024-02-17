@@ -18,7 +18,6 @@
     ./mediaserver
     ./miniflux
     ./netbox
-    ./nomad
     ./otel
     ./paperless
     ./prometheus

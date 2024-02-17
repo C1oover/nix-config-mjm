@@ -13,7 +13,6 @@
           p.consul
           p.gitlab
           p.minio
-          p.nomad
           p.vault
           p.cloudflare
           p.proxmox
@@ -51,7 +50,6 @@
       devenv.shells.default = {
         env = {
           CONSUL_HTTP_ADDR = "consul.service.consul:8500";
-          NOMAD_ADDR = "http://nomad.service.consul:4646";
           VAULT_ADDR = "http://vault.service.consul:8200";
         };
 

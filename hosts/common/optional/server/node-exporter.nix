@@ -8,9 +8,9 @@
       "systemd"
     ];
     extraFlags = [
-      "--collector.filesystem.ignored-mount-points=^/(dev|proc|sys|nix/store|var/lib/docker/.+|var/lib/nomad/.+|run|run/.+|snap/.+)($|/)"
-      "--collector.netclass.ignored-devices=^(veth|docker|nomad)"
-      "--collector.netdev.device-exclude=^(veth|docker|nomad)"
+      "--collector.filesystem.ignored-mount-points=^/(dev|proc|sys|nix/store|var/lib/docker/.+|run|run/.+|snap/.+)($|/)"
+      "--collector.netclass.ignored-devices=^(veth|docker)"
+      "--collector.netdev.device-exclude=^(veth|docker)"
     ];
   };
 

@@ -40,12 +40,6 @@ rec {
       ;
   };
 
-  nomadClients = [
-    arges
-    brontes
-    steropes
-    helios
-  ];
   allNixOS = [ persephone ] ++ (builtins.attrValues servers);
   personalKeys = [
     matt-athena

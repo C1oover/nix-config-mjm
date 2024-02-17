@@ -14,11 +14,7 @@
 
   vault.approles.enable = true;
 
-  vault.policies = {
-    admin.source = ./policies/admin.hcl;
-    consul-template.source = ./policies/consul-template.hcl;
-    nomad-server.source = ./policies/nomad-server.hcl;
-  };
+  vault.policies.admin.source = ./policies/admin.hcl;
 
   ingress.virtualHosts.vault = {
     upstream.service.name = "vault";

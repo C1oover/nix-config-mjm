@@ -12,13 +12,9 @@ let
   sshPublicKeyPath = "${config.home.homeDirectory}/.ssh/${sshPublicKeyName}";
 
   envVars = {
-    NOMAD_ADDR = "http://nomad.service.consul:4646";
     CONSUL_HTTP_ADDR = "http://consul.service.consul:8500";
     VAULT_ADDR = "http://vault.service.consul:8200";
   };
-
-  # nomad 1.5 isn't building correctly on macOS rn
-  nomad = if pkgs.stdenv.isLinux then pkgs.nomad else pkgs.nomad_1_4;
 in
 {
   home.packages = builtins.attrValues {
@@ -29,8 +25,6 @@ in
       vault
       wander
       ;
-
-    inherit nomad;
 
     devenv = inputs.devenv.packages.${pkgs.system}.default;
 
