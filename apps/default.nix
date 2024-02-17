@@ -8,6 +8,7 @@
     ./authelia
     ./backup
     ./consul
+    ./garage
     ./gitlab
     ./grafana
     ./homelab/app.nix

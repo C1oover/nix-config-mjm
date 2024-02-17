@@ -21,8 +21,17 @@
 
       admin.api_bind_addr = "[::]:3903";
     };
-    environmentFile = config.age.secrets."garage.env".path;
+    environmentFile = config.vault-secrets.templates.garage-env.path;
   };
+
+  systemd.services.garage.after = [ "render-vault-secrets.service" ];
+
+  vault-secrets.templates.garage-env.text = ''
+    {{ with secret "kv/garage" }}
+    GARAGE_RPC_SECRET={{ .Data.data.rpc_secret }}
+    GARAGE_ADMIN_TOKEN={{ .Data.data.admin_token }}
+    {{ end }}
+  '';
 
   environment.systemPackages = builtins.attrValues {
     inherit (pkgs.callPackages ./scripts.nix { garage = config.services.garage.package; }) g;
@@ -53,6 +62,4 @@
       }
     ];
   };
-
-  age.secrets."garage.env".file = ../../../../secrets/garage-env.age;
 }

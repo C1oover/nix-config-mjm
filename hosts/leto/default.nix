@@ -12,8 +12,6 @@
     ../common/optional/garage
     ../common/optional/otel-collector.nix
 
-    ./vault-secrets.nix
-
     ./services/actual.nix
     ./services/attic.nix
     ./services/atuin.nix
