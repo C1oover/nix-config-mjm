@@ -61,13 +61,13 @@
   };
 
   vault-secrets.templates = {
-    authelia-jwt-secret.text = ''{{ with secret "kv/authelia" }}{{ .Data.data.jwt_secret }}{{ end }}'';
-    authelia-hmac-secret.text = ''{{ with secret "kv/authelia" }}{{ .Data.data.hmac_secret }}{{ end }}'';
-    authelia-jwt-private-key.text = ''{{ with secret "kv/authelia" }}{{ .Data.data.jwt_private_key }}{{ end }}'';
-    authelia-session-secret.text = ''{{ with secret "kv/authelia" }}{{ .Data.data.session_secret }}{{ end }}'';
-    authelia-storage-encryption-key.text = ''{{ with secret "kv/authelia" }}{{ .Data.data.storage_encryption_key }}{{ end }}'';
-    authelia-ldap-password.text = ''{{ with secret "kv/authelia" }}{{ .Data.data.ldap_password }}{{ end }}'';
-    authelia-smtp-password.text = ''{{ with secret "kv/authelia" }}{{ .Data.data.fastmail_password }}{{ end }}'';
+    authelia-jwt-secret.kvPath = "kv/authelia/jwt_secret";
+    authelia-hmac-secret.kvPath = "kv/authelia/hmac_secret";
+    authelia-jwt-private-key.kvPath = "kv/authelia/jwt_private_key";
+    authelia-session-secret.kvPath = "kv/authelia/session_secret";
+    authelia-storage-encryption-key.kvPath = "kv/authelia/storage_encryption_key";
+    authelia-ldap-password.kvPath = "kv/authelia/ldap_password";
+    authelia-smtp-password.kvPath = "kv/authelia/fastmail_password";
   };
 
   systemd.services.authelia-main = {

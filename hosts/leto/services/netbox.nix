@@ -33,7 +33,7 @@
   systemd.services.netbox.after = [ "render-vault-secrets.service" ];
 
   vault-secrets.templates.netbox-secret-key = {
-    text = ''{{ with secret "kv/netbox" }}{{ .Data.data.secret_key }}{{ end }}'';
+    kvPath = "kv/netbox/secret_key";
     owner = "netbox";
   };
 

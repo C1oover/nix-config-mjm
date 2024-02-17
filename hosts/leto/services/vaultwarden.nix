@@ -41,5 +41,5 @@
     '';
   };
 
-  vault-secrets.templates.vaultwarden-backup-password.text = ''{{ with secret "kv/vaultwarden" }}{{ .Data.data.backup_password }}{{ end }}'';
+  vault-secrets.templates.vaultwarden-backup-password.kvPath = "kv/vaultwarden/backup_password";
 }

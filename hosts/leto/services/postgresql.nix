@@ -38,9 +38,7 @@
     };
 
   vault-secrets.templates.postgresql-backup-password = {
-    text = ''
-      {{ with secret "kv/postgresql" }}{{ .Data.data.backup_password }}{{ end }}
-    '';
+    kvPath = "kv/postgresql/backup_password";
     owner = "postgres";
   };
 }

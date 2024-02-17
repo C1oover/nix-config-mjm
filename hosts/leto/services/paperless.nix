@@ -92,5 +92,5 @@ in
     paths = [ "/var/lib/paperless/media/documents" ];
   };
 
-  vault-secrets.templates.paperless-backup-password.text = ''{{ with secret "kv/paperless" }}{{ .Data.data.backup_password }}{{ end }}'';
+  vault-secrets.templates.paperless-backup-password.kvPath = "kv/paperless/backup_password";
 }
