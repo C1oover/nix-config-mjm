@@ -1,15 +1,16 @@
-{
-  pkgs,
-  outputs,
-  config,
-  ...
-}:
+{ pkgs, outputs, ... }:
 {
   services.xserver = {
     enable = true;
     displayManager.sddm.enable = true;
     desktopManager.plasma6.enable = true;
   };
+
+  services.dbus.packages = [ pkgs.kdePackages.kpmcore ];
+  environment.systemPackages = [
+    pkgs.kdePackages.kpmcore
+    pkgs.kdePackages.partitionmanager
+  ];
 
   fonts = {
     packages = with pkgs; [
