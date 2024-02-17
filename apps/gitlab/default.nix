@@ -1,13 +1,4 @@
 {
-  terraform.terraform.required_providers.gitlab = {
-    source = "registry.terraform.io/gitlabhq/gitlab";
-    version = ">= 1.0.0";
-  };
-
-  terraform.provider.gitlab = {
-    base_url = "https://git.midna.dev/api/v4/";
-  };
-
   vault.policies.gitlab.text = ''
     path "ssh-client-signer/sign/homelab-client" {
       capabilities = ["update"]

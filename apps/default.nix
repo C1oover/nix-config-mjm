@@ -7,7 +7,6 @@
     ./atuin
     ./authelia
     ./consul
-    ./garage
     ./gitlab
     ./grafana
     ./homelab/app.nix
