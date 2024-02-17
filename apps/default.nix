@@ -21,6 +21,7 @@
     ./netbox
     ./otel
     ./paperless
+    ./postgresql
     ./prometheus
     ./proxmox
     ./taskserver

@@ -5,6 +5,8 @@
   ...
 }:
 {
+  imports = [ ../../common/optional/backup.nix ];
+
   services.postgresql = {
     enable = true;
     package = pkgs.postgresql_16;
@@ -17,8 +19,8 @@
     {
       initialize = true;
       repository = "s3:http://garage.service.consul:3902/restic-backups/postgresql";
-      passwordFile = config.age.secrets."postgresql-backup-password".path;
-      environmentFile = config.age.secrets."backup.env".path;
+      passwordFile = config.vault-secrets.templates.postgresql-backup-password.path;
+      environmentFile = config.vault-secrets.templates.restic-backup-env.path;
       paths = [ "/tmp/pgbackup" ];
       user = "postgres";
       backupPrepareCommand = ''
@@ -45,9 +47,10 @@
       };
     };
 
-  age.secrets."backup.env".file = ../../../secrets/restic-backup-env.age;
-  age.secrets."postgresql-backup-password" = {
-    file = ../../../secrets/postgresql-backup-password.age;
+  vault-secrets.templates.postgresql-backup-password = {
+    text = ''
+      {{ with secret "kv/postgresql" }}{{ .Data.data.backup_password }}{{ end }}
+    '';
     owner = "postgres";
   };
 }
