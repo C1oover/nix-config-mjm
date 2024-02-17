@@ -27,10 +27,8 @@
   };
 
   services.restic.backups.vaultwarden = {
-    initialize = true;
-    repository = "s3:http://garage.service.consul:3902/restic-backups/vaultwarden";
+    repositoryName = "vaultwarden";
     passwordFile = config.vault-secrets.templates.vaultwarden-backup-password.path;
-    environmentFile = config.vault-secrets.templates.restic-backup-env.path;
     paths = [
       "/var/lib/bitwarden_rs/attachments"
       "/var/lib/bitwarden_rs/db-backup.sqlite3"
@@ -41,10 +39,6 @@
     backupCleanupCommand = ''
       rm /var/lib/bitwarden_rs/db-backup.sqlite3
     '';
-    pruneOpts = [
-      "--keep-daily 7"
-      "--keep-weekly 4"
-    ];
   };
 
   vault-secrets.templates.vaultwarden-backup-password.text = ''{{ with secret "kv/vaultwarden" }}{{ .Data.data.backup_password }}{{ end }}'';

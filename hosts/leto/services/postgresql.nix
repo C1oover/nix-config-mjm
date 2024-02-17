@@ -17,10 +17,8 @@
       pg = config.services.postgresql.package;
     in
     {
-      initialize = true;
-      repository = "s3:http://garage.service.consul:3902/restic-backups/postgresql";
+      repositoryName = "postgresql";
       passwordFile = config.vault-secrets.templates.postgresql-backup-password.path;
-      environmentFile = config.vault-secrets.templates.restic-backup-env.path;
       paths = [ "/tmp/pgbackup" ];
       user = "postgres";
       backupPrepareCommand = ''
@@ -37,14 +35,6 @@
       backupCleanupCommand = ''
         rm -rf /tmp/pgbackup
       '';
-      pruneOpts = [
-        "--keep-daily 7"
-        "--keep-weekly 4"
-      ];
-      timerConfig = {
-        OnCalendar = "daily";
-        RandomizedDelaySec = "2h";
-      };
     };
 
   vault-secrets.templates.postgresql-backup-password = {

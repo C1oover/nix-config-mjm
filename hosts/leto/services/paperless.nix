@@ -87,15 +87,9 @@ in
   '';
 
   services.restic.backups.paperless = {
-    initialize = true;
-    repository = "s3:http://garage.service.consul:3902/restic-backups/paperless";
+    repositoryName = "paperless";
     passwordFile = config.vault-secrets.templates.paperless-backup-password.path;
-    environmentFile = config.vault-secrets.templates.restic-backup-env.path;
     paths = [ "/var/lib/paperless/media/documents" ];
-    pruneOpts = [
-      "--keep-daily 7"
-      "--keep-weekly 4"
-    ];
   };
 
   vault-secrets.templates.paperless-backup-password.text = ''{{ with secret "kv/paperless" }}{{ .Data.data.backup_password }}{{ end }}'';
