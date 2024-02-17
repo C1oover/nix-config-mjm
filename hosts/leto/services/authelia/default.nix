@@ -1,7 +1,4 @@
 { config, ... }:
-let
-  inherit (config.services.authelia.instances.main) user group;
-in
 {
   services.authelia.instances.main = {
     enable = true;
@@ -51,18 +48,26 @@ in
       };
       identity_providers.oidc.clients = import ./oidc-clients.nix;
     };
-    secrets = {
-      jwtSecretFile = config.age.secrets."authelia-jwt-secret".path;
-      oidcHmacSecretFile = config.age.secrets."authelia-hmac-secret".path;
-      oidcIssuerPrivateKeyFile = config.age.secrets."authelia-jwt-private-key".path;
-      sessionSecretFile = config.age.secrets."authelia-session-secret".path;
-      storageEncryptionKeyFile = config.age.secrets."authelia-storage-encryption-key".path;
-    };
+    secrets.manual = true;
     environmentVariables = {
-      AUTHELIA_AUTHENTICATION_BACKEND_LDAP_PASSWORD_FILE =
-        config.age.secrets."authelia-ldap-password".path;
-      AUTHELIA_NOTIFIER_SMTP_PASSWORD_FILE = config.age.secrets."authelia-smtp-password".path;
+      AUTHELIA_JWT_SECRET_FILE = "%d/jwt-secret";
+      AUTHELIA_IDENTITY_PROVIDERS_OIDC_HMAC_SECRET_FILE = "%d/hmac-secret";
+      AUTHELIA_IDENTITY_PROVIDERS_OIDC_ISSUER_PRIVATE_KEY_FILE = "%d/jwt-private-key";
+      AUTHELIA_SESSION_SECRET_FILE = "%d/session-secret";
+      AUTHELIA_STORAGE_ENCRYPTION_KEY_FILE = "%d/storage-encryption-key";
+      AUTHELIA_AUTHENTICATION_BACKEND_LDAP_PASSWORD_FILE = "%d/ldap-password";
+      AUTHELIA_NOTIFIER_SMTP_PASSWORD_FILE = "%d/smtp-password";
     };
+  };
+
+  vault-secrets.templates = {
+    authelia-jwt-secret.text = ''{{ with secret "kv/authelia" }}{{ .Data.data.jwt_secret }}{{ end }}'';
+    authelia-hmac-secret.text = ''{{ with secret "kv/authelia" }}{{ .Data.data.hmac_secret }}{{ end }}'';
+    authelia-jwt-private-key.text = ''{{ with secret "kv/authelia" }}{{ .Data.data.jwt_private_key }}{{ end }}'';
+    authelia-session-secret.text = ''{{ with secret "kv/authelia" }}{{ .Data.data.session_secret }}{{ end }}'';
+    authelia-storage-encryption-key.text = ''{{ with secret "kv/authelia" }}{{ .Data.data.storage_encryption_key }}{{ end }}'';
+    authelia-ldap-password.text = ''{{ with secret "kv/authelia" }}{{ .Data.data.ldap_password }}{{ end }}'';
+    authelia-smtp-password.text = ''{{ with secret "kv/authelia" }}{{ .Data.data.fastmail_password }}{{ end }}'';
   };
 
   systemd.services.authelia-main = {
@@ -70,8 +75,22 @@ in
       "lldap.service"
       "redis-authelia.service"
       "postgresql.service"
+      "render-vault-secrets.service"
     ];
-    serviceConfig.SupplementaryGroups = [ config.services.redis.servers.authelia.user ];
+    serviceConfig = {
+      SupplementaryGroups = [ config.services.redis.servers.authelia.user ];
+      LoadCredential =
+        map (name: "${name}:${config.vault-secrets.templates.${"authelia-" + name}.path}")
+          [
+            "jwt-secret"
+            "hmac-secret"
+            "jwt-private-key"
+            "ldap-password"
+            "session-secret"
+            "smtp-password"
+            "storage-encryption-key"
+          ];
+    };
   };
 
   services.redis.servers.authelia.enable = true;
@@ -107,36 +126,5 @@ in
         timeout = "5s";
       }
     ];
-  };
-
-  age.secrets = {
-    "authelia-hmac-secret" = {
-      file = ../../../../secrets/authelia-hmac-secret.age;
-      owner = user;
-    };
-    "authelia-jwt-private-key" = {
-      file = ../../../../secrets/authelia-jwt-private-key.age;
-      owner = user;
-    };
-    "authelia-jwt-secret" = {
-      file = ../../../../secrets/authelia-jwt-secret.age;
-      owner = user;
-    };
-    "authelia-ldap-password" = {
-      file = ../../../../secrets/authelia-ldap-password.age;
-      owner = user;
-    };
-    "authelia-session-secret" = {
-      file = ../../../../secrets/authelia-session-secret.age;
-      owner = user;
-    };
-    "authelia-smtp-password" = {
-      file = ../../../../secrets/authelia-smtp-password.age;
-      owner = user;
-    };
-    "authelia-storage-encryption-key" = {
-      file = ../../../../secrets/authelia-storage-encryption-key.age;
-      owner = user;
-    };
   };
 }
