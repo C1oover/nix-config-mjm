@@ -14,6 +14,7 @@
     ./services/jellyfin.nix
     ./services/sabnzbd.nix
     ./services/arr.nix
+    ./services/mediaserver-backup.nix
   ];
 
   nixpkgs.overlays = [

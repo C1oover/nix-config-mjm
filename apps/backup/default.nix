@@ -4,4 +4,5 @@
   };
 
   vault.approles.roles.leto.tokenPolicies = [ "restic" ];
+  vault.approles.roles.chaos.tokenPolicies = [ "restic" ];
 }
