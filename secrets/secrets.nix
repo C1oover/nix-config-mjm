@@ -23,9 +23,6 @@ in
   "chaos-approle-secret-id.age".publicKeys = personalKeys ++ [ chaos ];
   "helios-approle-secret-id.age".publicKeys = personalKeys ++ [ helios ];
 
-  "home-assistant-backup-password.age".publicKeys = personalKeys ++ [ leto ];
-  "home-assistant-token.age".publicKeys = personalKeys ++ [ leto ];
-
   "ngrok.age".publicKeys = [
     matt-athena
     athena

@@ -48,6 +48,22 @@ let
             Template to use to render the file's contents from vault.
           '';
         };
+        kvPath = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = ''
+            Render file contents from a single key-value entry.
+
+            All but the last path component will be used as the path of the secret. The last
+            component will the key to lookup in that secret.
+
+            For example, given a path `"kv/foo/bar/baz"`, an equivalent template would be:
+
+            ```
+            {{ with secret "kv/foo/bar" }}{{ .Data.data.baz }}{{ end }}
+            ```
+          '';
+        };
         path = mkOption {
           type = types.str;
           default = "${cfg.secretsDir}/${config.name}";
@@ -73,6 +89,10 @@ let
           '';
         };
       };
+
+      config.text = mkIf (config.kvPath != null) ''
+        {{ with secret "${builtins.dirOf config.kvPath}" }}{{ .Data.data.${builtins.baseNameOf config.kvPath} }}{{ end }}
+      '';
     }
   );
 in
