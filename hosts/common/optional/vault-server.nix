@@ -98,5 +98,49 @@ in
     };
   };
 
+  services.restic.backups.vault =
+    let
+      vault = lib.getExe config.services.vault.package;
+    in
+    {
+      initialize = true;
+      repository = "s3:http://garage.service.consul:3902/restic-backups/vault";
+      passwordFile = config.age.secrets.vault-backup-password.path;
+      environmentFile = config.age.secrets.restic-backup-env.path;
+      paths = [ "/tmp/vault.snap" ];
+      backupPrepareCommand = ''
+        role_id=05d0f7d5-f24c-5442-dbf1-46db0121fc14
+        secret_id="$(cat ${config.age.secrets.vault-backup-secret-id.path})"
+
+        export VAULT_ADDR=http://127.0.0.1:8200
+        VAULT_TOKEN="$(${vault} write -field=token auth/approle/login role_id=$role_id secret_id=$secret_id)"
+        export VAULT_TOKEN
+
+        is_leader="$(${vault} read -field=is_self sys/leader)"
+        if [ "$is_leader" = "true" ]; then
+          ${vault} operator raft snapshot save /tmp/vault.snap
+        else
+          echo "not the leader, skipping backup."
+        fi
+      '';
+      backupCleanupCommand = ''
+        rm -f /tmp/vault.snap
+      '';
+      pruneOpts = [
+        "--keep-daily 7"
+        "--keep-weekly 4"
+      ];
+      timerConfig = {
+        OnCalendar = "daily";
+        RandomizedDelaySec = "2h";
+      };
+    };
+
+  # if not the leader, the backup command will fail, but we won't want to treat that as a failure.
+  systemd.services.restic-backups-vault.serviceConfig.SuccessExitStatus = "1";
+
   age.secrets.vault-unseal-env.file = ../../../secrets/${config.networking.hostName}-vault-unseal-env.age;
+  age.secrets.restic-backup-env.file = ../../../secrets/restic-backup-env.age;
+  age.secrets.vault-backup-password.file = ../../../secrets/vault-backup-password.age;
+  age.secrets.vault-backup-secret-id.file = ../../../secrets/vault-backup-secret-id.age;
 }

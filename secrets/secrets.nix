@@ -1,11 +1,18 @@
+with import ./keys.nix;
 let
-  keys = import ./keys.nix;
+  hashistack = [
+    megaera
+    tisiphone
+    alecto
+  ];
 in
-with keys;
 {
   "megaera-vault-unseal-env.age".publicKeys = personalKeys ++ [ megaera ];
   "tisiphone-vault-unseal-env.age".publicKeys = personalKeys ++ [ tisiphone ];
   "alecto-vault-unseal-env.age".publicKeys = personalKeys ++ [ alecto ];
+
+  "vault-backup-secret-id.age".publicKeys = personalKeys ++ hashistack;
+  "vault-backup-password.age".publicKeys = personalKeys ++ hashistack;
 
   "gitlab-runner-registration.age".publicKeys = personalKeys ++ [
     hypnos

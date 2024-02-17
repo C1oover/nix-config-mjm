@@ -1,4 +1,6 @@
 {
+  imports = [ ./backup.nix ];
+
   terraform.terraform.required_providers.vault = {
     source = "registry.terraform.io/hashicorp/vault";
     version = ">= 3.0.0";
