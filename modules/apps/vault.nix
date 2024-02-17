@@ -93,6 +93,10 @@ let
           default = { };
           type = types.attrsOf jsonFormat.type;
         };
+        approles = mkOption {
+          default = [ ];
+          type = types.listOf types.str;
+        };
       };
     };
 in
@@ -200,6 +204,12 @@ in
               }
             )
             cfg.policies;
+
+        vault.approles.roles = mkMerge (
+          map (policy: lib.genAttrs policy.approles (_name: { tokenPolicies = [ policy.name ]; })) (
+            builtins.attrValues cfg.policies
+          )
+        );
       };
     in
     mkMerge [
