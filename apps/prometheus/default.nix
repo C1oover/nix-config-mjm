@@ -11,6 +11,7 @@
 
   vault.policies.prometheus.paths = {
     "kv/data/proxmox".capabilities = [ "read" ];
+    "kv/data/pagerduty".capabilities = [ "read" ];
   };
 
   vault.approles.roles.leto.tokenPolicies = [ "prometheus" ];

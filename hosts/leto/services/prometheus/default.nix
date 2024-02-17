@@ -30,7 +30,7 @@
       enable = true;
       openFirewall = true;
       webExternalUrl = "https://alerts.midna.dev";
-      environmentFile = config.age.secrets."alertmanager.env".path;
+      environmentFile = config.vault-secrets.templates.alertmanager-env.path;
 
       configuration = {
         global.resolve_timeout = "5m";
@@ -64,6 +64,14 @@
       };
     };
   };
+
+  systemd.services.alertmanager.after = [ "render-vault-secrets.service" ];
+
+  vault-secrets.templates.alertmanager-env.text = ''
+    {{ with secret "kv/pagerduty" }}
+    PAGERDUTY_ROUTING_KEY={{ .Data.data.routing_key }}
+    {{ end }}
+  '';
 
   networking.firewall.allowedTCPPorts = [ config.services.prometheus.port ];
 
@@ -104,6 +112,4 @@
         ];
       };
   };
-
-  age.secrets."alertmanager.env".file = ../../../../secrets/alertmanager-env.age;
 }
