@@ -25,16 +25,10 @@ with keys;
   "authelia-hmac-secret.age".publicKeys = personalKeys ++ [ leto ];
   "authelia-smtp-password.age".publicKeys = personalKeys ++ [ leto ];
   "authelia-ldap-password.age".publicKeys = personalKeys ++ [ leto ];
-  "netbox-secret-key.age".publicKeys = personalKeys ++ [ leto ];
-  "alertmanager-env.age".publicKeys = personalKeys ++ [ leto ];
-  "pve-exporter-config.age".publicKeys = personalKeys ++ [ leto ];
   "vaultwarden-backup-password.age".publicKeys = personalKeys ++ [ leto ];
   "home-assistant-backup-password.age".publicKeys = personalKeys ++ [ leto ];
   "home-assistant-token.age".publicKeys = personalKeys ++ [ leto ];
   "paperless-backup-password.age".publicKeys = personalKeys ++ [ leto ];
-  "attic-env.age".publicKeys = personalKeys ++ [ leto ];
-  "loki-env.age".publicKeys = personalKeys ++ [ leto ];
-  "homelab-env.age".publicKeys = personalKeys ++ [ leto ];
 
   "garage-env.age".publicKeys = personalKeys ++ [
     leto
@@ -51,7 +45,6 @@ with keys;
 
   "nixremote-key.age".publicKeys = personalKeys ++ allNixOS;
   "restic-backup-env.age".publicKeys = personalKeys ++ allNixOS;
-  "otel-collector-env.age".publicKeys = personalKeys ++ allNixOS;
 
   "smb-creds.age".publicKeys = personalKeys ++ [ persephone ];
   "smb-creds-server.age".publicKeys = personalKeys ++ [ chaos ];
