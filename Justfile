@@ -18,6 +18,9 @@ deploy target *flags:
 unseal target:
   nix run .#unseal -- {{target}}
 
+tf-clean:
+  cd terraform && rm -rf .terraform.lock.hcl .terraform
+
 tf-plan:
   nix run .#tf-plan
 
