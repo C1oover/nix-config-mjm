@@ -25,9 +25,10 @@ in
       ''
         systemd-run \
           --service-type=oneshot \
-          -p EnvironmentFile=/run/agenix/garage.env \
+          -p EnvironmentFile=/run/vault-secrets/garage-env \
           --wait \
           -qt \
+          --collect \
           ${garage}/bin/garage \
           "$@"
       '';
