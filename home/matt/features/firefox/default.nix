@@ -70,9 +70,9 @@ in
         ${lib.optionalString pkgs.stdenv.isDarwin (
           builtins.readFile (inputs.firefox-csshacks + /chrome/hide_tabs_toolbar_osx.css)
         )}
-        ${lib.optionalString pkgs.stdenv.isLinux ''
-          #TabsToolbar{ visibility: collapse !important }
-        ''}
+        ${lib.optionalString pkgs.stdenv.isLinux (
+          builtins.readFile (inputs.firefox-csshacks + /chrome/hide_tabs_toolbar.css)
+        )}
       '';
       search.force = true;
       search.engines = {
