@@ -3,8 +3,8 @@ alias sw := switch
 alias tfp := tf-plan
 alias tfa := tf-apply
 
-rebuild:
-  nix run .#rebuild
+rebuild *flags:
+  nix run .#rebuild -- {{flags}}
 
 switch:
   nix run .#switch
