@@ -13,13 +13,6 @@ with keys;
   ];
 
   "leto-approle-secret-id.age".publicKeys = personalKeys ++ [ leto ];
-  "authelia-jwt-secret.age".publicKeys = personalKeys ++ [ leto ];
-  "authelia-jwt-private-key.age".publicKeys = personalKeys ++ [ leto ];
-  "authelia-storage-encryption-key.age".publicKeys = personalKeys ++ [ leto ];
-  "authelia-session-secret.age".publicKeys = personalKeys ++ [ leto ];
-  "authelia-hmac-secret.age".publicKeys = personalKeys ++ [ leto ];
-  "authelia-smtp-password.age".publicKeys = personalKeys ++ [ leto ];
-  "authelia-ldap-password.age".publicKeys = personalKeys ++ [ leto ];
   "vaultwarden-backup-password.age".publicKeys = personalKeys ++ [ leto ];
   "home-assistant-backup-password.age".publicKeys = personalKeys ++ [ leto ];
   "home-assistant-token.age".publicKeys = personalKeys ++ [ leto ];
