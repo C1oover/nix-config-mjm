@@ -113,7 +113,7 @@ in
     };
   };
 
-  config = mkIf (cfg.templates != [ ]) {
+  config = mkIf (cfg.templates != { }) {
     fileSystems."/run/vault-secrets" = {
       device = "none";
       fsType = "ramfs";
