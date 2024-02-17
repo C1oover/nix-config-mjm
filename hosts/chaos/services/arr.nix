@@ -41,7 +41,7 @@
     };
   };
 
-  vault-secrets.requiredBy = [
+  vault-secrets.wantedBy = [
     "prometheus-exportarr-sonarr-exporter.service"
     "prometheus-exportarr-radarr-exporter.service"
     "prometheus-exportarr-readarr-exporter.service"

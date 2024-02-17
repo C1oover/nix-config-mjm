@@ -18,7 +18,7 @@
     ];
   };
 
-  vault-secrets.requiredBy = [ "prometheus-sabnzbd-exporter.service" ];
+  vault-secrets.wantedBy = [ "prometheus-sabnzbd-exporter.service" ];
   vault-secrets.templates.sabnzbd-api-key.kvPath = "kv/mediaserver/sabnzbd_api_key";
 
   networking.firewall.allowedTCPPorts = [ 8080 ];

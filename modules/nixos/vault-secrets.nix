@@ -134,7 +134,7 @@ in
         Attrset of templates for secrets.
       '';
     };
-    requiredBy = mkOption {
+    wantedBy = mkOption {
       type = types.listOf systemdUtils.lib.unitNameType;
       default = [ ];
       description = ''
@@ -155,10 +155,9 @@ in
     };
 
     systemd.services.render-vault-secrets = {
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = [ "multi-user.target" ] ++ cfg.wantedBy;
+      before = cfg.wantedBy;
       after = [ "network.target" ];
-      before = cfg.requiredBy;
-      requiredBy = cfg.requiredBy;
       path = with pkgs; [
         vault
         consul-template
