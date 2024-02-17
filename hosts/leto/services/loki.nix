@@ -101,7 +101,10 @@ in
     };
   };
 
-  systemd.services.loki.serviceConfig.EnvironmentFile = config.vault-secrets.templates.loki-env.path;
+  systemd.services.loki = {
+    after = [ "render-vault-secrets.service" ];
+    serviceConfig.EnvironmentFile = config.vault-secrets.templates.loki-env.path;
+  };
 
   vault-secrets.templates.loki-env.text = ''
     {{ with secret "kv/loki" }}
