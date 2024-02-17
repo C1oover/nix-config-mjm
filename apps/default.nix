@@ -6,6 +6,7 @@
     ./attic
     ./atuin
     ./authelia
+    ./backup
     ./consul
     ./gitlab
     ./grafana

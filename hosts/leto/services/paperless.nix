@@ -3,6 +3,8 @@ let
   scannerPublicKey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC1NXtzg50EbpzudswkjUkxllahH+F54h6MnDoXarftqlHc26M46M5IPQeRpn5F4BLGWs94UNFyod4d7KNhRYXxh2G+gsJcDTREdUR7eKu5CfaFnB2sge8VJM8KwxbURXHlxNF2xha0lIg8HdfSIznogAGqcUYahTJAUdKB1A4UJ9DzHp1Mrlrk3o04TvokRmS18kPM39nstneqHRVC1TPf83QV3tAYBz2iayifH714KTcItflUe5IqDUhBfNURhOnhG0szfK2qtykdg+7/wu0Ah3HOlbfLybx2eAA048kyBiFpllFIGqoO0hN8w7wmMuQ6okxs3tssz7W+dGi5HDob root@BR5CF370C29B2A";
 in
 {
+  imports = [ ../../common/optional/backup.nix ];
+
   services.paperless = {
     enable = true;
     address = "[::]";
@@ -87,8 +89,8 @@ in
   services.restic.backups.paperless = {
     initialize = true;
     repository = "s3:http://garage.service.consul:3902/restic-backups/paperless";
-    passwordFile = config.age.secrets."paperless-backup-password".path;
-    environmentFile = config.age.secrets."backup.env".path;
+    passwordFile = config.vault-secrets.templates.paperless-backup-password.path;
+    environmentFile = config.vault-secrets.templates.restic-backup-env.path;
     paths = [ "/var/lib/paperless/media/documents" ];
     pruneOpts = [
       "--keep-daily 7"
@@ -96,6 +98,5 @@ in
     ];
   };
 
-  age.secrets."backup.env".file = ../../../secrets/restic-backup-env.age;
-  age.secrets."paperless-backup-password".file = ../../../secrets/paperless-backup-password.age;
+  vault-secrets.templates.paperless-backup-password.text = ''{{ with secret "kv/paperless" }}{{ .Data.data.backup_password }}{{ end }}'';
 }

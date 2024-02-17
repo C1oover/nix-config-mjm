@@ -16,7 +16,6 @@ with keys;
   "vaultwarden-backup-password.age".publicKeys = personalKeys ++ [ leto ];
   "home-assistant-backup-password.age".publicKeys = personalKeys ++ [ leto ];
   "home-assistant-token.age".publicKeys = personalKeys ++ [ leto ];
-  "paperless-backup-password.age".publicKeys = personalKeys ++ [ leto ];
 
   "garage-env.age".publicKeys = personalKeys ++ [
     leto
