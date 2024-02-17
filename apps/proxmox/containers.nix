@@ -49,33 +49,5 @@ in
       '';
       startup = "order=2,up=30";
     };
-
-    phoebe = defaultLxc // {
-      target_node = "apollo";
-      hostname = "phoebe";
-      description = ''
-        MinIO
-      '';
-      rootfs = mkRootFs "64G";
-      onboot = false;
-    };
-
-    themis = defaultLxc // {
-      target_node = "artemis";
-      hostname = "themis";
-      description = ''
-        PostgreSQL
-      '';
-      onboot = false;
-    };
-
-    thanatos = defaultLxc // {
-      target_node = "artemis";
-      hostname = "thanatos";
-      description = ''
-        Redis
-      '';
-      onboot = false;
-    };
   };
 }
