@@ -28,6 +28,11 @@
         user = "readarr";
         group = "readarr";
       }
+      {
+        directory = "/var/lib/readarr-audio";
+        user = "readarr";
+        group = "readarr";
+      }
     ];
     files = [
       "/etc/machine-id"

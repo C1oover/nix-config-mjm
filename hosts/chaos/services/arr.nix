@@ -18,6 +18,23 @@
   };
   users.users.readarr.extraGroups = [ "media" ];
 
+  systemd.services.readarr-audio = {
+    description = "Readarr (second instance)";
+    after = [ "network.target" ];
+    wantedBy = [ "multi-user.target" ];
+
+    serviceConfig = {
+      Type = "simple";
+      User = "readarr";
+      Group = "readarr";
+      StateDirectory = "readarr-audio";
+      ExecStart = "${pkgs.readarr}/bin/Readarr -nobrowser -data=/var/lib/readarr-audio";
+      Restart = "on-failure";
+    };
+  };
+
+  networking.firewall.allowedTCPPorts = [ 8788 ];
+
   services.prometheus.exporters = {
     exportarr-sonarr = {
       enable = true;
@@ -105,6 +122,21 @@
         {
           name = "readarr is ready";
           http = "http://localhost:8787/";
+          interval = "15s";
+          timeout = "10s";
+          failures_before_warning = 2;
+          failures_before_critical = 6;
+        }
+      ];
+    };
+
+    readarr-audio = {
+      port = 8788;
+
+      checks = [
+        {
+          name = "readarr is ready";
+          http = "http://localhost:8788/";
           interval = "15s";
           timeout = "10s";
           failures_before_warning = 2;

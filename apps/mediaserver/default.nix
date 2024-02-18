@@ -16,6 +16,9 @@
     books = {
       upstream.service.name = "readarr";
     };
+    audiobooks = {
+      upstream.service.name = "readarr-audio";
+    };
   };
 
   vault.policies.mediaserver = {
