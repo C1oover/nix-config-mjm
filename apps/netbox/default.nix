@@ -1,11 +1,8 @@
 {
-  vault.approles.roles.leto.tokenPolicies = [ "netbox" ];
-
-  vault.policies.netbox.text = ''
-    path "kv/data/netbox" {
-      capabilities = ["read"]
-    }
-  '';
+  vault.policies.netbox = {
+    paths."kv/data/netbox".capabilities = [ "read" ];
+    approles = [ "leto" ];
+  };
 
   ingress.virtualHosts.netbox = {
     upstream.service.name = "netbox";

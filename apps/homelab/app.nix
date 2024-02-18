@@ -3,19 +3,12 @@
     upstream.service.name = "homelab";
   };
 
-  vault.approles.roles.leto.tokenPolicies = [ "homelab" ];
-
-  vault.policies.homelab.text = ''
-    path "kv/data/paperless/client" {
-      capabilities = ["read"]
-    }
-
-    path "kv/data/homelab" {
-      capabilities = ["read"]
-    }
-
-    path "kv/data/taskwarrior" {
-      capabilities = ["read"]
-    }
-  '';
+  vault.policies.homelab = {
+    paths = {
+      "kv/data/paperless/client".capabilities = [ "read" ];
+      "kv/data/homelab".capabilities = [ "read" ];
+      "kv/data/taskwarrior".capabilities = [ "read" ];
+    };
+    approles = [ "leto" ];
+  };
 }

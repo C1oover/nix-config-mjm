@@ -1,12 +1,8 @@
 {
-  vault.approles.roles.leto.tokenPolicies = [ "paperless" ];
-
-  vault.policies.paperless.text = ''
-    # Allow paperless jail to read the secret key
-    path "kv/data/paperless" {
-      capabilities = ["read"]
-    }
-  '';
+  vault.policies.paperless = {
+    paths."kv/data/paperless".capabilities = [ "read" ];
+    approles = [ "leto" ];
+  };
 
   ingress.virtualHosts.paper = {
     upstream.service.name = "paperless";

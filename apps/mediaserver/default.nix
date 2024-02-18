@@ -18,9 +18,8 @@
     };
   };
 
-  vault.policies.mediaserver.paths = {
-    "kv/data/mediaserver".capabilities = [ "read" ];
+  vault.policies.mediaserver = {
+    paths."kv/data/mediaserver".capabilities = [ "read" ];
+    approles = [ "chaos" ];
   };
-
-  vault.approles.roles.chaos.tokenPolicies = [ "mediaserver" ];
 }

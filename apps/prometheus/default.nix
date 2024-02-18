@@ -9,10 +9,11 @@
     };
   };
 
-  vault.policies.prometheus.paths = {
-    "kv/data/proxmox".capabilities = [ "read" ];
-    "kv/data/pagerduty".capabilities = [ "read" ];
+  vault.policies.prometheus = {
+    paths = {
+      "kv/data/proxmox".capabilities = [ "read" ];
+      "kv/data/pagerduty".capabilities = [ "read" ];
+    };
+    approles = [ "leto" ];
   };
-
-  vault.approles.roles.leto.tokenPolicies = [ "prometheus" ];
 }

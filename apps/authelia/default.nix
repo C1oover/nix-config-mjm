@@ -1,11 +1,8 @@
 {
-  vault.policies.authelia.text = ''
-    path "kv/data/authelia" {
-      capabilities = ["read"]
-    }
-  '';
-
-  vault.approles.roles.leto.tokenPolicies = [ "authelia" ];
+  vault.policies.authelia = {
+    paths."kv/data/authelia".capabilities = [ "read" ];
+    approles = [ "leto" ];
+  };
 
   ingress.virtualHosts = {
     auth = {
