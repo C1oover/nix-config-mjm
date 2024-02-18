@@ -28,6 +28,7 @@
     ./services/postgresql.nix
     ./services/prometheus
     ./services/taskserver.nix
+    ./services/tempo.nix
     ./services/vaultwarden.nix
   ];
 

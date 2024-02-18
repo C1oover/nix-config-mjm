@@ -17,9 +17,15 @@
         };
       };
 
-      exporters.otlp = {
-        endpoint = "api.honeycomb.io:443";
-        headers.x-honeycomb-team = "\${env:HONEYCOMB_API_KEY}";
+      exporters = {
+        "otlp/honeycomb" = {
+          endpoint = "api.honeycomb.io:443";
+          headers.x-honeycomb-team = "\${env:HONEYCOMB_API_KEY}";
+        };
+        "otlp/tempo" = {
+          endpoint = "tempo.service.consul:14317";
+          tls.insecure = true;
+        };
       };
 
       extensions = {
@@ -42,7 +48,10 @@
             "memory_limiter"
             "batch"
           ];
-          exporters = [ "otlp" ];
+          exporters = [
+            "otlp/honeycomb"
+            "otlp/tempo"
+          ];
         };
         telemetry.metrics = {
           address = "0.0.0.0:4319";
