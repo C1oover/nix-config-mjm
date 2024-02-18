@@ -10,6 +10,7 @@
       bitwarden
       imv
       wl-clipboard
+      xclip
       xdg-utils
       zeal
       ;
