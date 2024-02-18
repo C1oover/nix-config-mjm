@@ -12,11 +12,9 @@
     package = pkgs.postgresql_16;
   };
 
-  services.restic.backups.postgresql =
+  services.restic.backups =
     let
       pg = config.services.postgresql.package;
-    in
-    {
       repositoryName = "postgresql";
       passwordFile = config.vault-secrets.templates.postgresql-backup-password.path;
       paths = [ "/tmp/pgbackup" ];
@@ -35,6 +33,29 @@
       backupCleanupCommand = ''
         rm -rf /tmp/pgbackup
       '';
+    in
+    {
+      postgresql = {
+        inherit
+          repositoryName
+          passwordFile
+          paths
+          user
+          backupPrepareCommand
+          backupCleanupCommand
+          ;
+      };
+      postgresql-offsite = {
+        offsite = true;
+        inherit
+          repositoryName
+          passwordFile
+          paths
+          user
+          backupPrepareCommand
+          backupCleanupCommand
+          ;
+      };
     };
 
   vault-secrets.templates.postgresql-backup-password = {
