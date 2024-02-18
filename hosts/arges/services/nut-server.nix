@@ -32,24 +32,21 @@
     };
   };
 
-  services.prometheus.exporters.nut =
-    let
-      enabledVariables = [
-        "battery.charge"
-        "battery.runtime"
-        "battery.voltage"
-        "battery.voltage.nominal"
-        "input.voltage"
-        "input.voltage.nominal"
-        "ups.load"
-        "ups.status"
-      ];
-    in
-    {
-      enable = true;
-      openFirewall = true;
-      extraFlags = [ "--nut.vars_enable=${builtins.concatStringsSep "," enabledVariables}" ];
-    };
+  services.prometheus.exporters.nut = {
+    enable = true;
+    openFirewall = true;
+    nutVariables = [
+      "battery.charge"
+      "battery.runtime"
+      "battery.voltage"
+      "battery.voltage.nominal"
+      "input.voltage"
+      "input.voltage.nominal"
+      "ups.load"
+      "ups.status"
+    ];
+    extraFlags = [ "--log.level=debug" ];
+  };
 
   services.consul.services.nut-exporter =
     let

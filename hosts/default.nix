@@ -58,7 +58,13 @@ in
       alecto = mkNixos [ ./alecto ];
 
       # Raspberry Pis
-      arges = mkNixos [ ./arges ];
+      # FIXME use mkNixos again once nut-exporter-variables branch is merged
+      arges = inputs.nixos-nut-exporter.lib.nixosSystem {
+        modules = [ ./arges ];
+        specialArgs = {
+          inherit inputs outputs;
+        };
+      };
       brontes = mkNixos [ ./brontes ];
       steropes = mkNixos [ ./steropes ];
 
@@ -79,11 +85,13 @@ in
         nodeNixpkgs =
           lib.genAttrs
             [
-              "arges"
               "brontes"
               "steropes"
             ]
-            (_node: inputs.nixos.legacyPackages.aarch64-linux);
+            (_node: inputs.nixos.legacyPackages.aarch64-linux)
+          // {
+            arges = inputs.nixos-nut-exporter.legacyPackages.aarch64-linux;
+          };
         specialArgs = {
           inherit inputs outputs;
         };

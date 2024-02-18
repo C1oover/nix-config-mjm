@@ -682,13 +682,29 @@
         "type": "github"
       }
     },
-    "nixos-plasma6": {
+    "nixos-nut-exporter": {
       "locked": {
-        "lastModified": 1708189876,
-        "narHash": "sha256-3hNq3Cnsorn3MFZi5+Enu3s48TP2sEQIjdtxDnL1dq4=",
+        "lastModified": 1708296909,
+        "narHash": "sha256-aCmfGRwhGFf+NOnUA4Cg3BEloqw4im3Y6GUgkph9F2o=",
         "owner": "mjm",
         "repo": "nixpkgs",
-        "rev": "41ee8d63a7c369194f842b350afd0e1f86cdf72b",
+        "rev": "bbad81f93796ffaafa1f5478e8425616a2513b0f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mjm",
+        "ref": "nut-exporter-variables",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixos-plasma6": {
+      "locked": {
+        "lastModified": 1708357504,
+        "narHash": "sha256-xgn9C8YzOhkPYGCggVNNFkPogGJy9wWrhUX34oH+73M=",
+        "owner": "mjm",
+        "repo": "nixpkgs",
+        "rev": "57d4a47dc301548e603bb30d0c780c03b7ba7f42",
         "type": "github"
       },
       "original": {
@@ -1040,6 +1056,7 @@
         "impermanence": "impermanence",
         "nix-colors": "nix-colors",
         "nixos": "nixos",
+        "nixos-nut-exporter": "nixos-nut-exporter",
         "nixos-plasma6": "nixos-plasma6",
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs_4",
