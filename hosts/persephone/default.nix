@@ -30,20 +30,6 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  boot.consoleLogLevel = 3;
-  boot.plymouth = {
-    enable = true;
-    themePackages = [ (pkgs.catppuccin-plymouth.override { variant = "mocha"; }) ];
-    theme = "catppuccin-mocha";
-  };
-  boot.kernelParams = [
-    "quiet"
-    # catppuccin mocha
-    "vt.default_red=30,243,166,249,137,245,148,186,88,243,166,249,137,245,148,166"
-    "vt.default_grn=30,139,227,226,180,194,226,194,91,139,227,226,180,194,226,173"
-    "vt.default_blu=46,168,161,175,250,231,213,222,112,168,161,175,250,231,213,200"
-  ];
-
   boot.extraModulePackages = [ config.boot.kernelPackages.framework-laptop-kmod ];
 
   boot.swraid.enable = false;
@@ -55,10 +41,6 @@
   '';
 
   networking.hostName = "persephone";
-  services.resolved.enable = true;
-  services.avahi.enable = true;
-
-  time.timeZone = "America/Denver";
 
   services.xserver.displayManager.sddm.wayland.enable = true;
 
@@ -70,8 +52,6 @@
   };
   programs._1password.enable = true;
 
-  programs.steam.enable = true;
-
   services.fwupd.enable = true;
   services.hardware.bolt.enable = true;
   hardware.bluetooth.enable = true;
@@ -80,10 +60,6 @@
 
   virtualisation.podman.enable = true;
 
-  console = {
-    font = "${pkgs.terminus_font}/share/consolefonts/ter-u32n.psf.gz";
-    keyMap = "us";
-  };
   users.users.matt = {
     extraGroups = [ "video" ];
   };
