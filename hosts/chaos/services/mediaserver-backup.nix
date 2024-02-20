@@ -2,7 +2,7 @@
 {
   imports = [ ../../common/optional/backup.nix ];
 
-  services.restic.backups.mediaserver = {
+  mjm.backups.mediaserver = {
     repositoryName = "mediaserver";
     passwordFile = config.vault-secrets.templates.mediaserver-backup-password.path;
     paths = [

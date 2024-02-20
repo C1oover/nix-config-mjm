@@ -113,8 +113,7 @@ in
 
   services.avahi.enable = true;
 
-  services.restic.backups.home-assistant = {
-    repositoryName = "home-assistant";
+  mjm.backups.home-assistant = {
     passwordFile = config.vault-secrets.templates.home-assistant-backup-password.path;
     paths = [ "/var/lib/hass/backups" ];
     backupPrepareCommand = ''

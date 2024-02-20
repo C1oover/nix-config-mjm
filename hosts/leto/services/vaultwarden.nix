@@ -26,42 +26,19 @@
     ];
   };
 
-  services.restic.backups =
-    let
-      repositoryName = "vaultwarden";
-      passwordFile = config.vault-secrets.templates.vaultwarden-backup-password.path;
-      paths = [
-        "/var/lib/bitwarden_rs/attachments"
-        "/var/lib/bitwarden_rs/db-backup.sqlite3"
-      ];
-      backupPrepareCommand = ''
-        ${pkgs.sqlite}/bin/sqlite3 /var/lib/bitwarden_rs/db.sqlite3 ".backup '/var/lib/bitwarden_rs/db-backup.sqlite3'"
-      '';
-      backupCleanupCommand = ''
-        rm /var/lib/bitwarden_rs/db-backup.sqlite3
-      '';
-    in
-    {
-      vaultwarden = {
-        inherit
-          repositoryName
-          passwordFile
-          paths
-          backupPrepareCommand
-          backupCleanupCommand
-          ;
-      };
-      vaultwarden-offsite = {
-        offsite = true;
-        inherit
-          repositoryName
-          passwordFile
-          paths
-          backupPrepareCommand
-          backupCleanupCommand
-          ;
-      };
-    };
+  mjm.backups.vaultwarden = {
+    passwordFile = config.vault-secrets.templates.vaultwarden-backup-password.path;
+    paths = [
+      "/var/lib/bitwarden_rs/attachments"
+      "/var/lib/bitwarden_rs/db-backup.sqlite3"
+    ];
+    backupPrepareCommand = ''
+      ${pkgs.sqlite}/bin/sqlite3 /var/lib/bitwarden_rs/db.sqlite3 ".backup '/var/lib/bitwarden_rs/db-backup.sqlite3'"
+    '';
+    backupCleanupCommand = ''
+      rm /var/lib/bitwarden_rs/db-backup.sqlite3
+    '';
+  };
 
   vault-secrets.templates.vaultwarden-backup-password.kvPath = "kv/vaultwarden/backup_password";
 }

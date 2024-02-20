@@ -1,57 +1,79 @@
-{ lib, config, ... }:
+{
+  lib,
+  config,
+  options,
+  ...
+}:
 let
   inherit (lib)
     types
-    mkIf
     mkMerge
     mkOption
-    mkDefault
+    mapAttrs
+    mapAttrs'
+    nameValuePair
     ;
+
+  cfg = config.mjm.backups;
 
   envPath = config.vault-secrets.templates.restic-backup-env.path;
   offsiteEnvPath = config.vault-secrets.templates.restic-backup-offsite-env.path;
 in
 {
-  # set up some default configuration for backup jobs
-  options.services.restic.backups = mkOption {
+  options.mjm.backups = mkOption {
     type = types.attrsOf (
       types.submodule (
-        { config, ... }:
+        { name, ... }:
         {
-          options.offsite = mkOption {
-            type = types.bool;
-            default = false;
-          };
-          options.repositoryName = mkOption {
-            type = types.nullOr types.str;
-            default = null;
-          };
+          options = {
+            inherit (options.services.restic.backups.type.getSubOptions [ ])
+              passwordFile
+              paths
+              exclude
+              user
+              backupPrepareCommand
+              backupCleanupCommand
+              ;
 
-          config = mkMerge [
-            (mkIf (config.repositoryName != null) {
-              repository =
-                if config.offsite then
-                  "s3:s3.us-west-001.backblazeb2.com/mjm-restic-backups/${config.repositoryName}"
-                else
-                  "s3:http://garage.service.consul:3902/restic-backups/${config.repositoryName}";
-            })
-            {
-              initialize = mkDefault true;
-              environmentFile = mkDefault (if config.offsite then offsiteEnvPath else envPath);
-              pruneOpts = mkDefault [
-                "--keep-daily 7"
-                "--keep-weekly 4"
-              ];
-              timerConfig = mkDefault {
-                OnCalendar = "daily";
-                RandomizedDelaySec = "2h";
-              };
-            }
-          ];
+            repositoryName = mkOption {
+              type = types.str;
+              default = name;
+            };
+          };
         }
       )
     );
   };
+
+  config.services.restic.backups =
+    mapAttrs
+      (
+        name: cfg:
+        mkMerge [
+          (removeAttrs cfg [ "repositoryName" ])
+          {
+            repository = "s3:http://garage.service.consul:3902/restic-backups/${cfg.repositoryName}";
+            environmentFile = envPath;
+            initialize = true;
+          }
+        ]
+      )
+      cfg
+    // mapAttrs'
+      (
+        name: cfg:
+        nameValuePair "${name}-offsite" (
+          mkMerge [
+            (removeAttrs cfg [ "repositoryName" ])
+            {
+              repository = "s3:s3.us-west-001.backblazeb2.com/mjm-restic-backups/${cfg.repositoryName}";
+              environmentFile = offsiteEnvPath;
+              initialize = true;
+            }
+          ]
+        )
+      )
+      cfg;
 
   config.vault-secrets.templates = {
     restic-backup-env.text = ''

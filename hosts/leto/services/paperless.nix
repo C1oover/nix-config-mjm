@@ -86,21 +86,10 @@ in
         ForceCommand internal-sftp -u 0077 -d /var/lib/paperless/consume
   '';
 
-  services.restic.backups =
-    let
-      repositoryName = "paperless";
-      passwordFile = config.vault-secrets.templates.paperless-backup-password.path;
-      paths = [ "/var/lib/paperless/media/documents" ];
-    in
-    {
-      paperless = {
-        inherit repositoryName passwordFile paths;
-      };
-      paperless-offsite = {
-        offsite = true;
-        inherit repositoryName passwordFile paths;
-      };
-    };
+  mjm.backups.paperless = {
+    passwordFile = config.vault-secrets.templates.paperless-backup-password.path;
+    paths = [ "/var/lib/paperless/media/documents" ];
+  };
 
   vault-secrets.templates.paperless-backup-password.kvPath = "kv/paperless/backup_password";
 }
