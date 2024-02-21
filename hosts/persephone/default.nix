@@ -21,7 +21,23 @@
 
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 
-  boot.kernelPackages = pkgs.linuxPackages_testing;
+  # boot.kernelPackages = pkgs.linuxPackages_testing;
+
+  boot.kernelPackages = pkgs.linuxPackagesFor (
+    pkgs.linux_testing.override {
+      argsOverride = {
+        modDirVersion = "6.8.0-rc1";
+        src = pkgs.fetchgit {
+          url = "https://evilpiepirate.org/git/bcachefs.git";
+          rev = "9cde7c92bce99069531cccdd6cd3412f3242a289";
+          hash = "sha256-Jgg0WXIvGJLMJjXIMRKszVw/g+rXK7q9uVx7lNt30wE=";
+        };
+      };
+    }
+  );
+
+  environment.systemPackages = [ config.boot.kernelPackages.perf ];
+
   boot.supportedFilesystems = [
     "btrfs"
     "bcachefs"
