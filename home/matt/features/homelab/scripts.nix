@@ -23,7 +23,7 @@ let
           -field=signed_key \
           ssh-client-signer/sign/homelab-client \
           public_key=@${sshPublicKeyPath} \
-          valid_principals=matt \
+          valid_principals=matt,root \
           >"${sshCertPath}"
       '';
 in
