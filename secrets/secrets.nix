@@ -14,14 +14,11 @@ in
   "vault-backup-secret-id.age".publicKeys = personalKeys ++ hashistack;
   "vault-backup-password.age".publicKeys = personalKeys ++ hashistack;
 
-  "gitlab-runner-registration.age".publicKeys = personalKeys ++ [
-    hypnos
-    arges
-  ];
-
-  "leto-approle-secret-id.age".publicKeys = personalKeys ++ [ leto ];
+  "arges-approle-secret-id.age".publicKeys = personalKeys ++ [ arges ];
   "chaos-approle-secret-id.age".publicKeys = personalKeys ++ [ chaos ];
   "helios-approle-secret-id.age".publicKeys = personalKeys ++ [ helios ];
+  "hypnos-approle-secret-id.age".publicKeys = personalKeys ++ [ hypnos ];
+  "leto-approle-secret-id.age".publicKeys = personalKeys ++ [ leto ];
 
   "ngrok.age".publicKeys = [
     matt-athena

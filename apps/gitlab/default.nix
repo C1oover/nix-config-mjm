@@ -71,6 +71,14 @@
     }
   '';
 
+  vault.policies.gitlab-runner = {
+    paths."kv/data/gitlab/runner".capabilities = [ "read" ];
+    approles = [
+      "hypnos"
+      "arges"
+    ];
+  };
+
   ingress.virtualHosts = {
     containers = {
       upstream.addresses = [ "10.0.2.32:5050" ];

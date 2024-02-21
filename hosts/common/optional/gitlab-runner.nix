@@ -5,9 +5,10 @@
   ...
 }:
 {
-  age.secrets."gitlab-runner-registration.env" = {
-    file = ../../../secrets/gitlab-runner-registration.age;
-  };
+  vault-secrets.templates.gitlab-runner-registration-env.text = ''
+    CI_SERVER_URL=https://git.midna.dev
+    REGISTRATION_TOKEN={{ with secret "kv/gitlab/runner" }}{{ .Data.data.registration_token }}{{ end }}
+  '';
 
   boot.kernel.sysctl."net.ipv4.ip_forward" = true;
 
@@ -28,7 +29,7 @@
     };
     services = {
       nix = with lib; {
-        registrationConfigFile = config.age.secrets."gitlab-runner-registration.env".path;
+        registrationConfigFile = config.vault-secrets.templates.gitlab-runner-registration-env.path;
         # temporary: remove when invalid host issue is fixed
         registrationFlags = [ "--docker-host tcp://127.0.0.1:2375" ];
         dockerImage = "alpine";
@@ -84,7 +85,7 @@
         ];
       };
       nix-shell = {
-        registrationConfigFile = config.age.secrets."gitlab-runner-registration.env".path;
+        registrationConfigFile = config.vault-secrets.templates.gitlab-runner-registration-env.path;
         executor = "shell";
         tagList = [
           "nix-shell"
