@@ -30,7 +30,6 @@ in
 
   "newsboat-miniflux-token.age".publicKeys = personalKeys;
 
-  "nixremote-key.age".publicKeys = personalKeys ++ allNixOS;
   "restic-backup-env.age".publicKeys = personalKeys ++ allNixOS;
 
   "smb-creds.age".publicKeys = personalKeys ++ [ persephone ];

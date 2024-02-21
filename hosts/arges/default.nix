@@ -12,7 +12,6 @@
     ../common/optional/server
     ../common/optional/consul-agent.nix
     ../common/optional/gitlab-runner.nix
-    ../common/optional/nix-builder.nix
 
     ./services/nut-server.nix
   ];
