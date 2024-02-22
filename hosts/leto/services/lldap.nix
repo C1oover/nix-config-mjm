@@ -8,6 +8,8 @@
     };
   };
 
+  systemd.services.lldap.after = [ "postgresql.service" ];
+
   services.postgresql = {
     enable = true;
     ensureDatabases = [ "lldap" ];
