@@ -25,8 +25,7 @@
     credentialsFile = config.vault-secrets.templates.attic-env.path;
   };
 
-  systemd.services.atticd.after = [ "render-vault-secrets.service" ];
-
+  vault-secrets.wantedBy = [ "atticd.service" ];
   vault-secrets.templates.attic-env.text = ''
     {{ with secret "kv/attic" }}
     ATTIC_SERVER_TOKEN_HS256_SECRET_BASE64={{ .Data.data.token_secret }}

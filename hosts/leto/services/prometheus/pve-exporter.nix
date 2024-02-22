@@ -5,8 +5,7 @@
     environmentFile = config.vault-secrets.templates.pve-env.path;
   };
 
-  systemd.services.prometheus-pve-exporter.after = [ "render-vault-secrets.service" ];
-
+  vault-secrets.wantedBy = [ "prometheus-pve-exporter.service" ];
   vault-secrets.templates.pve-env.text = ''
     # the certs are valid, but not for the proxmox.service.consul domain
     PVE_VERIFY_SSL=false

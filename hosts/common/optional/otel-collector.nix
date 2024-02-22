@@ -60,11 +60,10 @@
     };
   };
 
-  systemd.services.opentelemetry-collector = {
-    after = [ "render-vault-secrets.service" ];
-    serviceConfig.EnvironmentFile = config.vault-secrets.templates.otel-collector-env.path;
-  };
+  systemd.services.opentelemetry-collector.serviceConfig.EnvironmentFile =
+    config.vault-secrets.templates.otel-collector-env.path;
 
+  vault-secrets.wantedBy = [ "opentelemetry-collector.service" ];
   vault-secrets.templates.otel-collector-env.text = ''
     {{ with secret "kv/honeycomb" }}
     HONEYCOMB_API_KEY={{ .Data.data.api_key }}

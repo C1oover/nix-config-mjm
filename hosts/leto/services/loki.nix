@@ -101,11 +101,9 @@ in
     };
   };
 
-  systemd.services.loki = {
-    after = [ "render-vault-secrets.service" ];
-    serviceConfig.EnvironmentFile = config.vault-secrets.templates.loki-env.path;
-  };
+  systemd.services.loki.serviceConfig.EnvironmentFile = config.vault-secrets.templates.loki-env.path;
 
+  vault-secrets.wantedBy = [ "loki.service" ];
   vault-secrets.templates.loki-env.text = ''
     {{ with secret "kv/loki" }}
     AWS_ACCESS_KEY_ID={{ .Data.data.garage_key_id }}

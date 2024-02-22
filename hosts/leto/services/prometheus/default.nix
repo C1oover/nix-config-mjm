@@ -65,8 +65,7 @@
     };
   };
 
-  systemd.services.alertmanager.after = [ "render-vault-secrets.service" ];
-
+  vault-secrets.wantedBy = [ "alertmanager.service" ];
   vault-secrets.templates.alertmanager-env.text = ''
     {{ with secret "kv/pagerduty" }}
     PAGERDUTY_ROUTING_KEY={{ .Data.data.routing_key }}

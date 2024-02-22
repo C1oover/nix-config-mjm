@@ -26,7 +26,6 @@ in
     after = [
       "network.target"
       "postgresql.service"
-      "render-vault-secrets.service"
     ];
     path = with pkgs; [ taskwarrior ];
     environment = {
@@ -55,6 +54,7 @@ in
     };
   };
 
+  vault-secrets.wantedBy = [ "homelab.service" ];
   vault-secrets.templates = {
     homelab-env.text = ''
       {{ with secret "kv/paperless/client" }}

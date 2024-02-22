@@ -30,8 +30,7 @@
     secretKeyFile = config.vault-secrets.templates.netbox-secret-key.path;
   };
 
-  systemd.services.netbox.after = [ "render-vault-secrets.service" ];
-
+  vault-secrets.wantedBy = [ "netbox.service" ];
   vault-secrets.templates.netbox-secret-key = {
     kvPath = "kv/netbox/secret_key";
     owner = "netbox";

@@ -60,6 +60,7 @@
     };
   };
 
+  vault-secrets.wantedBy = [ "authelia-main.service" ];
   vault-secrets.templates = {
     authelia-jwt-secret.kvPath = "kv/authelia/jwt_secret";
     authelia-hmac-secret.kvPath = "kv/authelia/hmac_secret";
@@ -75,7 +76,6 @@
       "lldap.service"
       "redis-authelia.service"
       "postgresql.service"
-      "render-vault-secrets.service"
     ];
     serviceConfig = {
       SupplementaryGroups = [ config.services.redis.servers.authelia.user ];

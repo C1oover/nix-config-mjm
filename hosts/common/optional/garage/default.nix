@@ -24,8 +24,7 @@
     environmentFile = config.vault-secrets.templates.garage-env.path;
   };
 
-  systemd.services.garage.after = [ "render-vault-secrets.service" ];
-
+  vault-secrets.wantedBy = [ "garage.service" ];
   vault-secrets.templates.garage-env.text = ''
     {{ with secret "kv/garage" }}
     GARAGE_RPC_SECRET={{ .Data.data.rpc_secret }}
