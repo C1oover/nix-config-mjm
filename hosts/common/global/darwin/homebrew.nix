@@ -7,6 +7,7 @@
       "alfred"
       "beeper"
       "bitwarden"
+      "bruno"
       "chrysalis"
       "dash"
       "docker"
