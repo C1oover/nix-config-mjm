@@ -1,5 +1,5 @@
 {
-  imports = [ ./consul-agent.nix ];
+  mjm.consul-agent.enable = true;
 
   services.consul = {
     webUi = true;

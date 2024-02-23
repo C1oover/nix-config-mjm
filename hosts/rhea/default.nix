@@ -6,7 +6,6 @@
     ../common/global/nixos
 
     ../common/optional/server
-    ../common/optional/consul-agent.nix
     ../common/optional/dns-server
   ];
 
@@ -19,11 +18,10 @@
     "sys-fs-fuse-connections.mount"
   ];
 
-  # the network interface systemd service doesn't load in a container
-  systemd.services.consul.after = lib.mkForce [ "network.target" ];
-  systemd.services.consul.bindsTo = lib.mkForce [ ];
-
-  services.consul.extraConfig.advertise_addr_ipv4 = lib.mkForce "10.0.2.47";
+  mjm.consul-agent = {
+    enable = true;
+    ipv4Address = "10.0.2.47";
+  };
 
   nixpkgs.hostPlatform = "x86_64-linux";
   system.stateVersion = "23.05";

@@ -8,7 +8,6 @@
     ../common/users/matt
 
     ../common/optional/server
-    ../common/optional/consul-agent.nix
     ../common/optional/otel-collector.nix
 
     ./services/actual.nix
@@ -40,6 +39,7 @@
 
   services.qemuGuest.enable = true;
 
+  mjm.consul-agent.enable = true;
   mjm.garage.enable = true;
 
   vault-secrets.roleId = "29829ea8-3eb2-b3d6-8aab-d150dbb48e3d";

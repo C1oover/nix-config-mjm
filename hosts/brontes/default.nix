@@ -10,18 +10,20 @@
     ../common/users/matt
 
     ../common/optional/server
-    ../common/optional/consul-agent.nix
     ../common/optional/nut-client.nix
     ../common/optional/ingress
   ];
 
   networking.hostName = "brontes";
 
-  services.consul.extraConfig.node_meta.tailscale_ip = "100.113.14.91";
-
   services.tailscale.enable = true;
 
   boot.initrd.systemd.enableTpm2 = false;
+
+  mjm.consul-agent = {
+    enable = true;
+    tailscaleIp = "100.113.14.91";
+  };
 
   system.stateVersion = "21.03";
 }

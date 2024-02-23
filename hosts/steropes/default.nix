@@ -10,14 +10,16 @@
     ../common/users/matt
 
     ../common/optional/server
-    ../common/optional/consul-agent.nix
     ../common/optional/nut-client.nix
     ../common/optional/ingress
   ];
 
   networking.hostName = "steropes";
 
-  services.consul.extraConfig.node_meta.tailscale_ip = "100.103.187.51";
+  mjm.consul-agent = {
+    enable = true;
+    tailscaleIp = "100.103.187.51";
+  };
 
   services.tailscale.enable = true;
 

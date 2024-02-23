@@ -19,6 +19,7 @@
     ./ssl.nix
 
     ../../optional/backup.nix
+    ../../optional/consul-agent.nix
     ../../optional/garage
   ] ++ (builtins.attrValues outputs.nixosModules);
 

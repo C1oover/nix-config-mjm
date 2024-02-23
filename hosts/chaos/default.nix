@@ -1,4 +1,3 @@
-{ config, ... }:
 {
   imports = [
     ./hardware-configuration.nix
@@ -8,7 +7,6 @@
     ../common/users/matt
 
     ../common/optional/server
-    ../common/optional/consul-agent.nix
 
     ./services/jellyfin.nix
     ./services/sabnzbd.nix
@@ -35,6 +33,7 @@
 
   services.qemuGuest.enable = true;
 
+  mjm.consul-agent.enable = true;
   mjm.garage.enable = true;
 
   vault-secrets.roleId = "a87469f6-a653-37ab-8aa4-2a1adeed567f";
