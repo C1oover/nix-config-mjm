@@ -45,6 +45,15 @@
 
   services.consul.services.tempo = {
     port = 3200;
+
+    checks = [
+      {
+        name = "tempo is ready";
+        http = "http://localhost:3200/ready";
+        interval = "15s";
+        timeout = "10s";
+      }
+    ];
   };
 
   networking.firewall.allowedTCPPorts = [
