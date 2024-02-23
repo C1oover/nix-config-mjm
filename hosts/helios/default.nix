@@ -9,7 +9,6 @@
 
     ../common/optional/server
     ../common/optional/consul-agent.nix
-    ../common/optional/garage
   ];
 
   networking.hostName = "helios";
@@ -22,6 +21,8 @@
   };
 
   services.qemuGuest.enable = true;
+
+  mjm.garage.enable = true;
 
   vault-secrets.roleId = "61d175e1-7a2e-4554-2cca-cff48c926b82";
   vault-secrets.secretIdFile = config.age.secrets."approle-secret-id".path;
