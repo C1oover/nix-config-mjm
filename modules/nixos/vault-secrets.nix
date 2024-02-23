@@ -9,6 +9,7 @@ let
   inherit (lib)
     types
     mkIf
+    mkMerge
     mkOption
     literalExpression
     ;
@@ -120,6 +121,10 @@ in
         Path to a file that contains the secret ID for the AppRole to use to log in to Vault.
       '';
     };
+    secretIdAgeFile = mkOption {
+      type = types.nullOr types.str;
+      default = "${config.networking.hostName}-approle-secret-id.age";
+    };
     vaultAddress = mkOption {
       type = types.str;
       default = "http://vault.service.consul:8200";
@@ -143,42 +148,50 @@ in
     };
   };
 
-  config = mkIf (cfg.templates != { }) {
-    fileSystems."/run/vault-secrets" = {
-      device = "none";
-      fsType = "ramfs";
-      options = [
-        "nodev"
-        "nosuid"
-        "mode=0751"
-      ];
-    };
+  config = mkIf (cfg.templates != { }) (
+    mkMerge [
+      (mkIf (cfg.secretIdAgeFile != null) {
+        age.secrets.vault-secrets-approle-secret-id.file = ../../secrets/${cfg.secretIdAgeFile};
+        vault-secrets.secretIdFile = config.age.secrets.vault-secrets-approle-secret-id.path;
+      })
+      {
+        fileSystems."/run/vault-secrets" = {
+          device = "none";
+          fsType = "ramfs";
+          options = [
+            "nodev"
+            "nosuid"
+            "mode=0751"
+          ];
+        };
 
-    systemd.services.render-vault-secrets = {
-      wantedBy = [ "multi-user.target" ] ++ cfg.wantedBy;
-      before = cfg.wantedBy;
-      after = [ "network.target" ];
-      path = with pkgs; [
-        vault
-        consul-template
-        glibc.getent
-      ];
-      script = ''
-        role_id=${cfg.roleId}
-        secret_id="$(cat ${cfg.secretIdFile})"
+        systemd.services.render-vault-secrets = {
+          wantedBy = [ "multi-user.target" ] ++ cfg.wantedBy;
+          before = cfg.wantedBy;
+          after = [ "network.target" ];
+          path = with pkgs; [
+            vault
+            consul-template
+            glibc.getent
+          ];
+          script = ''
+            role_id=${cfg.roleId}
+            secret_id="$(cat ${cfg.secretIdFile})"
 
-        VAULT_TOKEN="$(vault write -field=token auth/approle/login role_id=$role_id secret_id=$secret_id)"
-        export VAULT_TOKEN
+            VAULT_TOKEN="$(vault write -field=token auth/approle/login role_id=$role_id secret_id=$secret_id)"
+            export VAULT_TOKEN
 
-        exec consul-template -config ${cfgFile} -exec true
-      '';
-      environment = {
-        VAULT_ADDR = cfg.vaultAddress;
-      };
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-      };
-    };
-  };
+            exec consul-template -config ${cfgFile} -exec true
+          '';
+          environment = {
+            VAULT_ADDR = cfg.vaultAddress;
+          };
+          serviceConfig = {
+            Type = "oneshot";
+            RemainAfterExit = true;
+          };
+        };
+      }
+    ]
+  );
 }

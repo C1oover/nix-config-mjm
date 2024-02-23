@@ -25,9 +25,6 @@
   mjm.garage.enable = true;
 
   vault-secrets.roleId = "61d175e1-7a2e-4554-2cca-cff48c926b82";
-  vault-secrets.secretIdFile = config.age.secrets."approle-secret-id".path;
-
-  age.secrets."approle-secret-id".file = ../../secrets/helios-approle-secret-id.age;
 
   system.stateVersion = "22.11";
 }

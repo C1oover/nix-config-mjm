@@ -43,9 +43,6 @@
   mjm.garage.enable = true;
 
   vault-secrets.roleId = "29829ea8-3eb2-b3d6-8aab-d150dbb48e3d";
-  vault-secrets.secretIdFile = config.age.secrets."approle-secret-id".path;
-
-  age.secrets."approle-secret-id".file = ../../secrets/leto-approle-secret-id.age;
 
   system.stateVersion = "24.05";
 }
