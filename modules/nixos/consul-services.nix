@@ -5,10 +5,15 @@
   ...
 }:
 let
+  inherit (lib) mkIf mkOption types;
+
   jsonFormat = pkgs.formats.json { };
   cfg = config.services.consul;
+
+  servicesCfg = jsonFormat.generate "consul-services.json" {
+    services = builtins.attrValues cfg.services;
+  };
 in
-with lib;
 {
   options.services.consul.services = mkOption {
     type = types.attrsOf (
@@ -31,8 +36,9 @@ with lib;
     default = { };
   };
 
-  config.services.consul.extraConfigFiles =
-    lib.attrsets.mapAttrsToList
-      (name: service: toString (jsonFormat.generate "${name}.json" { inherit service; }))
-      cfg.services;
+  config = mkIf (cfg.services != { }) {
+    environment.etc."consul-services.json".source = servicesCfg;
+    services.consul.extraConfigFiles = [ "/etc/consul-services.json" ];
+    systemd.services.consul.reloadTriggers = [ servicesCfg ];
+  };
 }
