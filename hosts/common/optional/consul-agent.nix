@@ -40,7 +40,6 @@ in
         advertise_addr_ipv4 = cfg.ipv4Address;
 
         ports.grpc = 8502;
-        connect.enabled = true;
 
         node_meta = mkIf (cfg.tailscaleIp != null) { tailscale_ip = cfg.tailscaleIp; };
       };
