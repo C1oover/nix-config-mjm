@@ -1,7 +1,5 @@
 { pkgs, config, ... }:
 {
-  imports = [ ../../common/optional/backup.nix ];
-
   services.vaultwarden = {
     enable = true;
     config = {

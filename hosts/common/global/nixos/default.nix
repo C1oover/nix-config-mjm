@@ -17,6 +17,7 @@
     ./networkd.nix
     ./ssh.nix
     ./ssl.nix
+    ../../optional/backup.nix
   ] ++ (builtins.attrValues outputs.nixosModules);
 
   nix.settings.trusted-users = [

@@ -5,8 +5,6 @@
   ...
 }:
 {
-  imports = [ ../../common/optional/backup.nix ];
-
   services.postgresql = {
     enable = true;
     package = pkgs.postgresql_16;

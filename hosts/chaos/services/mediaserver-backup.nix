@@ -1,7 +1,5 @@
 { config, pkgs, ... }:
 {
-  imports = [ ../../common/optional/backup.nix ];
-
   mjm.backups.mediaserver = {
     repositoryName = "mediaserver";
     passwordFile = config.vault-secrets.templates.mediaserver-backup-password.path;

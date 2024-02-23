@@ -8,8 +8,6 @@ let
   port = config.services.home-assistant.config.http.server_port;
 in
 {
-  imports = [ ../../common/optional/backup.nix ];
-
   # ugh
   nixpkgs.config.permittedInsecurePackages = [ "openssl-1.1.1w" ];
 

@@ -9,9 +9,10 @@ let
   inherit (lib)
     concatStringsSep
     getExe
-    mkOption
     mapAttrs'
     mapAttrsToList
+    mkIf
+    mkOption
     nameValuePair
     optional
     optionalString
@@ -23,6 +24,7 @@ let
 in
 {
   options.mjm.backups = mkOption {
+    default = { };
     type = types.attrsOf (
       types.submodule (
         { name, ... }:
@@ -47,7 +49,7 @@ in
     );
   };
 
-  config = {
+  config = mkIf (config.mjm.backups != { }) {
     systemd.services =
       mapAttrs'
         (
@@ -175,21 +177,21 @@ in
           ''
         )
         config.mjm.backups;
-  };
 
-  config.vault-secrets.templates = {
-    restic-backup-env.text = ''
-      AWS_DEFAULT_REGION=home
-      {{ with secret "kv/restic" }}
-      AWS_ACCESS_KEY_ID={{ .Data.data.garage_key_id }}
-      AWS_SECRET_ACCESS_KEY={{ .Data.data.garage_secret_key }}
-      {{ end }}
-    '';
-    restic-backup-offsite-env.text = ''
-      {{ with secret "kv/restic" }}
-      AWS_ACCESS_KEY_ID={{ .Data.data.b2_key_id }}
-      AWS_SECRET_ACCESS_KEY={{ .Data.data.b2_application_key }}
-      {{ end }}
-    '';
+    vault-secrets.templates = {
+      restic-backup-env.text = ''
+        AWS_DEFAULT_REGION=home
+        {{ with secret "kv/restic" }}
+        AWS_ACCESS_KEY_ID={{ .Data.data.garage_key_id }}
+        AWS_SECRET_ACCESS_KEY={{ .Data.data.garage_secret_key }}
+        {{ end }}
+      '';
+      restic-backup-offsite-env.text = ''
+        {{ with secret "kv/restic" }}
+        AWS_ACCESS_KEY_ID={{ .Data.data.b2_key_id }}
+        AWS_SECRET_ACCESS_KEY={{ .Data.data.b2_application_key }}
+        {{ end }}
+      '';
+    };
   };
 }
