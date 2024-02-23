@@ -47,10 +47,6 @@ let
               type = types.nullOr types.port;
               default = null;
             };
-            connectPort = mkOption {
-              type = types.nullOr types.port;
-              default = null;
-            };
           };
         };
         enableAuthProxy = mkOption {

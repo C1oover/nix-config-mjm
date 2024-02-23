@@ -8,7 +8,6 @@ let
   cfg = config.ingress;
   vhosts = cfg.virtualHosts;
   upstreams = builtins.mapAttrs (_name: vhost: vhost.upstream) vhosts;
-  connectUpstreams = lib.filterAttrs (_name: u: u.service.connectPort != null) upstreams;
 in
 {
   imports = [ ../../../../apps ];
@@ -40,22 +39,6 @@ in
     appendHttpConfig = ''
       include /run/nginx-include/upstreams.conf;
     '';
-
-    upstreams =
-      lib.mapAttrs'
-        (_name: u: {
-          inherit (u) name;
-
-          value = {
-            servers = {
-              "127.0.0.1:${toString u.service.connectPort}" = { };
-            };
-            extraConfig = lib.mkIf u.ipHash ''
-              ip_hash;
-            '';
-          };
-        })
-        connectUpstreams;
 
     virtualHosts =
       lib.mapAttrs'
@@ -133,38 +116,32 @@ in
     settings = {
       template = [
         {
-          source =
-            let
-              nonConnectUpstreams = builtins.filter (u: u.service.connectPort == null) (
-                lib.mapAttrsToList (_name: u: u) upstreams
-              );
-            in
-            pkgs.writeText "upstreams.conf.tpl" (
-              lib.concatStrings (
-                map
-                  (u: ''
-                    upstream ${u.name} {
-                      ${lib.optionalString u.ipHash ''
-                      ip_hash;
-                    ''}
-                      ${
-                        if u.addresses != null then
-                          lib.concatMapStringsSep "\n" (a: "server ${a};") u.addresses
-                        else
-                          ''
-                            {{ range service "${u.service.name}" }}
-                            server {{ if sprig_contains ":" .Address }}{{ .NodeTaggedAddresses.lan_ipv4 }}{{ else }}{{ .Address }}{{ end }}:${
-                              if u.service.port != null then toString u.service.port else "{{ .Port }}"
-                            };
-                            {{ else }}server 127.0.0.1:65535; # force a 502
-                            {{ end }}
-                          ''
-                      }
+          source = pkgs.writeText "upstreams.conf.tpl" (
+            lib.concatStrings (
+              lib.mapAttrsToList
+                (_name: u: ''
+                  upstream ${u.name} {
+                    ${lib.optionalString u.ipHash ''
+                    ip_hash;
+                  ''}
+                    ${
+                      if u.addresses != null then
+                        lib.concatMapStringsSep "\n" (a: "server ${a};") u.addresses
+                      else
+                        ''
+                          {{ range service "${u.service.name}" }}
+                          server {{ if sprig_contains ":" .Address }}{{ .NodeTaggedAddresses.lan_ipv4 }}{{ else }}{{ .Address }}{{ end }}:${
+                            if u.service.port != null then toString u.service.port else "{{ .Port }}"
+                          };
+                          {{ else }}server 127.0.0.1:65535; # force a 502
+                          {{ end }}
+                        ''
                     }
-                  '')
-                  nonConnectUpstreams
-              )
-            );
+                  }
+                '')
+                upstreams
+            )
+          );
 
           destination = "/run/nginx-include/upstreams.conf";
           user = "nginx";
@@ -192,46 +169,6 @@ in
           timeout = "3s";
         }
       ];
-    };
-    ingress-http-proxy = {
-      port = 10080;
-      kind = "connect-proxy";
-      proxy = {
-        destination_service_id = config.services.consul.services.ingress-http.id;
-        destination_service_name = "ingress-http";
-        local_service_address = "127.0.0.1";
-        local_service_port = 80;
-        config = {
-          bind_address = "[::]";
-        };
-        upstreams =
-          lib.mapAttrsToList
-            (_name: u: {
-              destination_name = u.service.name;
-              local_bind_port = u.service.connectPort;
-            })
-            connectUpstreams;
-      };
-    };
-  };
-
-  systemd.services.consul-connect = {
-    path = with pkgs; [
-      consul
-      envoy
-    ];
-    script = ''
-      consul connect envoy -proxy-id ${config.services.consul.services.ingress-http-proxy.id} -envoy-version ${pkgs.envoy.version}
-    '';
-    wantedBy = [ "multi-user.target" ];
-    after = [
-      "network.target"
-      "consul.service"
-    ];
-    serviceConfig = {
-      DynamicUser = true;
-      Restart = "always";
-      RestartSec = "10s";
     };
   };
 
