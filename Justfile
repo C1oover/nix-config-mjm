@@ -32,3 +32,6 @@ edit-secret file:
 
 rekey:
   cd secrets && agenix -r
+
+update-plasma:
+  nix flake lock --update-input nixos-plasma6
