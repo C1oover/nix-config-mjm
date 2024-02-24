@@ -19,6 +19,7 @@
     ./mediaserver
     ./miniflux
     ./netbox
+    ./nut
     ./otel
     ./paperless
     ./postgresql

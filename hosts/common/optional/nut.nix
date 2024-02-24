@@ -31,7 +31,8 @@ in
           upsmon.monitor.tripplite.system = "tripplite@10.0.0.2";
         };
 
-        age.secrets.nut-secondary-password.file = ../../../secrets/nut-secondary-password.age;
+        vault-secrets.wantedBy = [ "upsmon.service" ];
+        vault-secrets.templates.nut-secondary-password.kvPath = "kv/nut/client/secondary_password";
       }
 
       (mkIf (cfg.mode == "client") {
@@ -40,7 +41,7 @@ in
           upsmon.monitor.tripplite = {
             user = "upsmon_secondary";
             type = "secondary";
-            passwordFile = config.age.secrets.nut-secondary-password.path;
+            passwordFile = config.vault-secrets.templates.nut-secondary-password.path;
           };
         };
       })
@@ -62,11 +63,11 @@ in
           users = {
             upsmon = {
               upsmon = "primary";
-              passwordFile = config.age.secrets.nut-primary-password.path;
+              passwordFile = config.vault-secrets.templates.nut-primary-password.path;
             };
             upsmon_secondary = {
               upsmon = "secondary";
-              passwordFile = config.age.secrets.nut-secondary-password.path;
+              passwordFile = config.vault-secrets.templates.nut-secondary-password.path;
             };
           };
 
@@ -77,6 +78,7 @@ in
           upsmon.monitor.tripplite = {
             user = "upsmon";
             type = "primary";
+            passwordFile = config.vault-secrets.templates.nut-primary-password.path;
           };
         };
 
@@ -114,7 +116,8 @@ in
             ];
           };
 
-        age.secrets.nut-primary-password.file = ../../../secrets/nut-primary-password.age;
+        vault-secrets.wantedBy = [ "upsd.service" ];
+        vault-secrets.templates.nut-primary-password.kvPath = "kv/nut/primary_password";
       })
     ]
   );

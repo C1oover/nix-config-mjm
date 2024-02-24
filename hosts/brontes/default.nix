@@ -25,5 +25,7 @@
   mjm.nut.enable = true;
   mjm.server.enable = true;
 
+  vault-secrets.roleId = "3c25aad2-394f-9d07-2885-ebe80f05e9db";
+
   system.stateVersion = "21.03";
 }

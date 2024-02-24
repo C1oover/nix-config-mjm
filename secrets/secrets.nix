@@ -15,10 +15,12 @@ in
   "vault-backup-password.age".publicKeys = personalKeys ++ hashistack;
 
   "arges-approle-secret-id.age".publicKeys = personalKeys ++ [ arges ];
+  "brontes-approle-secret-id.age".publicKeys = personalKeys ++ [ brontes ];
   "chaos-approle-secret-id.age".publicKeys = personalKeys ++ [ chaos ];
   "helios-approle-secret-id.age".publicKeys = personalKeys ++ [ helios ];
   "hypnos-approle-secret-id.age".publicKeys = personalKeys ++ [ hypnos ];
   "leto-approle-secret-id.age".publicKeys = personalKeys ++ [ leto ];
+  "steropes-approle-secret-id.age".publicKeys = personalKeys ++ [ steropes ];
 
   "ngrok.age".publicKeys = [
     matt-athena
