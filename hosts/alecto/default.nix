@@ -7,7 +7,6 @@
     ../common/users/matt
 
     ../common/optional/server
-    ../common/optional/consul-server.nix
     ../common/optional/vault-server.nix
   ];
 
@@ -25,6 +24,11 @@
   };
 
   services.qemuGuest.enable = true;
+
+  mjm.consul-agent = {
+    enable = true;
+    server.enable = true;
+  };
 
   system.stateVersion = "22.11";
 }
