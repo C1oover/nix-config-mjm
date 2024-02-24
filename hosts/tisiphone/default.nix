@@ -5,8 +5,6 @@
 
     ../common/global/nixos
     ../common/users/matt
-
-    ../common/optional/vault-server.nix
   ];
 
   networking.hostName = "tisiphone";
@@ -29,6 +27,7 @@
     server.enable = true;
   };
   mjm.server.enable = true;
+  mjm.vault.enable = true;
 
   system.stateVersion = "22.11";
 }
