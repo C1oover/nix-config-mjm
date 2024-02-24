@@ -8,6 +8,7 @@
   home.packages = builtins.attrValues {
     inherit (pkgs)
       bitwarden
+      cider
       wl-clipboard
       xclip
       xdg-utils
