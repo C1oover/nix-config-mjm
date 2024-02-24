@@ -9,7 +9,6 @@
     ../common/global/nixos
     ../common/users/matt
 
-    ../common/optional/nut-client.nix
     ../common/optional/ingress
   ];
 
@@ -23,6 +22,7 @@
     enable = true;
     tailscaleIp = "100.113.14.91";
   };
+  mjm.nut.enable = true;
   mjm.server.enable = true;
 
   system.stateVersion = "21.03";

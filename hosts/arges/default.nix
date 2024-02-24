@@ -10,8 +10,6 @@
     ../common/users/matt
 
     ../common/optional/gitlab-runner.nix
-
-    ./services/nut-server.nix
   ];
 
   networking.hostName = "arges";
@@ -23,6 +21,10 @@
   mjm.consul-agent = {
     enable = true;
     tailscaleIp = "100.89.174.9";
+  };
+  mjm.nut = {
+    enable = true;
+    mode = "server";
   };
   mjm.server.enable = true;
 
