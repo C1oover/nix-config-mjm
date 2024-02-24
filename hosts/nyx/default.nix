@@ -4,11 +4,6 @@
 
     ../common/global/nixos
 
-    # normally this would get imported with the rest of optional/server,
-    # but that would also pull in promtail and node-exporter, which are
-    # not wanted on nyx since it's not running inside the homelab.
-    ../common/optional/server/gc.nix
-
     ./services/nginx.nix
   ];
 
@@ -16,6 +11,13 @@
 
   networking.hostName = "nyx";
   networking.domain = "mattmoriarity.com";
+
+  mjm.server = {
+    enable = true;
+    # these don't work here because this host isn't running in the lab
+    enablePromtail = false;
+    enableNodeExporter = false;
+  };
 
   services.openssh.enable = true;
   users.users.root.openssh.authorizedKeys.keys = [

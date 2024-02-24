@@ -6,8 +6,6 @@
     ../common/global/nixos
     ../common/users/matt
 
-    ../common/optional/server
-
     ./services/jellyfin.nix
     ./services/sabnzbd.nix
     ./services/arr.nix
@@ -35,6 +33,7 @@
 
   mjm.consul-agent.enable = true;
   mjm.garage.enable = true;
+  mjm.server.enable = true;
 
   vault-secrets.roleId = "a87469f6-a653-37ab-8aa4-2a1adeed567f";
 

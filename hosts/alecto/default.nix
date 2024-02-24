@@ -6,7 +6,6 @@
     ../common/global/nixos
     ../common/users/matt
 
-    ../common/optional/server
     ../common/optional/vault-server.nix
   ];
 
@@ -29,6 +28,7 @@
     enable = true;
     server.enable = true;
   };
+  mjm.server.enable = true;
 
   system.stateVersion = "22.11";
 }

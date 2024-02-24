@@ -21,6 +21,7 @@
     ../../optional/backup.nix
     ../../optional/consul-agent.nix
     ../../optional/garage
+    ../../optional/server
   ] ++ (builtins.attrValues outputs.nixosModules);
 
   nix.settings.trusted-users = [

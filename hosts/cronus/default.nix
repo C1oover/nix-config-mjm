@@ -5,7 +5,6 @@
 
     ../common/global/nixos
 
-    ../common/optional/server
     ../common/optional/dns-server
   ];
 
@@ -22,6 +21,7 @@
     enable = true;
     ipv4Address = "10.0.2.48";
   };
+  mjm.server.enable = true;
 
   nixpkgs.hostPlatform = "x86_64-linux";
   system.stateVersion = "23.05";
