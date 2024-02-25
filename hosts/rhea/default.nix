@@ -1,11 +1,9 @@
-{ modulesPath, lib, ... }:
+{ modulesPath, ... }:
 {
   imports = [
     (modulesPath + "/virtualisation/lxc-container.nix")
 
     ../common/global/nixos
-
-    ../common/optional/dns-server
   ];
 
   networking.hostName = "rhea";
@@ -21,6 +19,7 @@
     enable = true;
     ipv4Address = "10.0.2.47";
   };
+  mjm.dns-server.enable = true;
   mjm.server.enable = true;
 
   nixpkgs.hostPlatform = "x86_64-linux";

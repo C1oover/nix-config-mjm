@@ -20,6 +20,7 @@
 
     ../../optional/backup.nix
     ../../optional/consul-agent.nix
+    ../../optional/dns-server
     ../../optional/garage
     ../../optional/gitlab-runner.nix
     ../../optional/nut.nix
