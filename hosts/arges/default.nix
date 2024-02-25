@@ -8,8 +8,6 @@
 
     ../common/global/nixos
     ../common/users/matt
-
-    ../common/optional/gitlab-runner.nix
   ];
 
   networking.hostName = "arges";
@@ -22,6 +20,7 @@
     enable = true;
     tailscaleIp = "100.89.174.9";
   };
+  mjm.gitlab-runner.enable = true;
   mjm.nut = {
     enable = true;
     mode = "server";

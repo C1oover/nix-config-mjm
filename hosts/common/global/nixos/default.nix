@@ -21,6 +21,7 @@
     ../../optional/backup.nix
     ../../optional/consul-agent.nix
     ../../optional/garage
+    ../../optional/gitlab-runner.nix
     ../../optional/nut.nix
     ../../optional/server
     ../../optional/vault-server.nix
