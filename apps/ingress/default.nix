@@ -40,4 +40,12 @@ in
         })
         (builtins.attrNames ingressIPs)
     ));
+
+  vault.policies.ingress = {
+    paths."kv/data/ingress".capabilities = [ "read" ];
+    approles = [
+      "brontes"
+      "steropes"
+    ];
+  };
 }

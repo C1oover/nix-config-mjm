@@ -34,9 +34,4 @@ in
   "smb-creds.age".publicKeys = personalKeys ++ [ persephone ];
 
   "taskwarrior-key.age".publicKeys = personalKeys ++ [ leto ];
-
-  "cloudflare-api-token.age".publicKeys = personalKeys ++ [
-    brontes
-    steropes
-  ];
 }

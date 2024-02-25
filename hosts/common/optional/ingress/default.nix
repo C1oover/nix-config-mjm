@@ -20,8 +20,8 @@ in
       dnsResolver = "1.1.1.1:53";
       dnsProvider = "cloudflare";
       credentialFiles = {
-        CF_DNS_API_TOKEN_FILE = config.age.secrets."cloudflare-api-token".path;
-        CF_ZONE_API_TOKEN_FILE = config.age.secrets."cloudflare-api-token".path;
+        CF_DNS_API_TOKEN_FILE = config.vault-secrets.templates.cloudflare-api-token.path;
+        CF_ZONE_API_TOKEN_FILE = config.vault-secrets.templates.cloudflare-api-token.path;
       };
     };
     certs =
@@ -32,6 +32,8 @@ in
         })
         (lib.filterAttrs (_name: vhost: vhost.enableACME == true) config.services.nginx.virtualHosts);
   };
+
+  vault-secrets.templates.cloudflare-api-token.kvPath = "kv/ingress/cloudflare_api_token";
 
   services.nginx = {
     enable = true;
@@ -171,6 +173,4 @@ in
       ];
     };
   };
-
-  age.secrets."cloudflare-api-token".file = ../../../../secrets/cloudflare-api-token.age;
 }
