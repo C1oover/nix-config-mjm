@@ -700,11 +700,11 @@
     },
     "nixos-plasma6": {
       "locked": {
-        "lastModified": 1708877874,
-        "narHash": "sha256-Z/ITN0lpInTvDCBLXf+4d1Ns6EbKTyl3P7zVCznuAH4=",
+        "lastModified": 1708958428,
+        "narHash": "sha256-sQVw/PPb4M+FJFzYwrutkL3sBudUEswfPXIBHJfxssk=",
         "owner": "mjm",
         "repo": "nixpkgs",
-        "rev": "48d0ed71be9c6d450036258be007456a103a2742",
+        "rev": "51af722c48b16c2460db6df7488a3b039e9b73dd",
         "type": "github"
       },
       "original": {
