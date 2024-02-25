@@ -33,9 +33,6 @@ in
 
   "smb-creds.age".publicKeys = personalKeys ++ [ persephone ];
 
-  "nut-primary-password.age".publicKeys = personalKeys ++ [ arges ];
-  "nut-secondary-password.age".publicKeys = personalKeys ++ allNixOS;
-
   "taskwarrior-key.age".publicKeys = personalKeys ++ [ leto ];
 
   "cloudflare-api-token.age".publicKeys = personalKeys ++ [
