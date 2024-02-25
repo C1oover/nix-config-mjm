@@ -1,4 +1,3 @@
-{ config, ... }:
 {
   imports = [
     ./hardware-configuration.nix
@@ -6,8 +5,6 @@
 
     ../common/global/nixos
     ../common/users/matt
-
-    ../common/optional/otel-collector.nix
 
     ./services/actual.nix
     ./services/attic.nix

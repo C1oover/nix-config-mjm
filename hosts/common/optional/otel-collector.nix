@@ -1,72 +1,82 @@
-{ config, ... }:
+{ config, lib, ... }:
+let
+  inherit (lib) mkEnableOption mkIf;
+  cfg = config.mjm.otel-collector;
+in
 {
-  services.opentelemetry-collector = {
-    enable = true;
-    settings = {
-      receivers.otlp.protocols = {
-        grpc.endpoint = "127.0.0.1:4317";
-        http.endpoint = "127.0.0.1:4318";
-      };
+  options.mjm.otel-collector = {
+    enable = mkEnableOption "OpenTelemetry collector";
+  };
 
-      processors = {
-        batch = { };
-        memory_limiter = {
-          check_interval = "5s";
-          limit_mib = 400;
-          spike_limit_mib = 100;
+  config = mkIf cfg.enable {
+    services.opentelemetry-collector = {
+      enable = true;
+      settings = {
+        receivers.otlp.protocols = {
+          grpc.endpoint = "127.0.0.1:4317";
+          http.endpoint = "127.0.0.1:4318";
         };
-      };
 
-      exporters = {
-        "otlp/honeycomb" = {
-          endpoint = "api.honeycomb.io:443";
-          headers.x-honeycomb-team = "\${env:HONEYCOMB_API_KEY}";
+        processors = {
+          batch = { };
+          memory_limiter = {
+            check_interval = "5s";
+            limit_mib = 400;
+            spike_limit_mib = 100;
+          };
         };
-        "otlp/tempo" = {
-          endpoint = "tempo.service.consul:14317";
-          tls.insecure = true;
+
+        exporters = {
+          "otlp/honeycomb" = {
+            endpoint = "api.honeycomb.io:443";
+            headers.x-honeycomb-team = "\${env:HONEYCOMB_API_KEY}";
+          };
+          "otlp/tempo" = {
+            endpoint = "tempo.service.consul:14317";
+            tls.insecure = true;
+          };
         };
-      };
 
-      extensions = {
-        # health_check = { };
-        # pprof = { };
-        zpages = { };
-        memory_ballast.size_mib = 165;
-      };
+        extensions = {
+          # health_check = { };
+          # pprof = { };
+          zpages = { };
+          memory_ballast.size_mib = 165;
+        };
 
-      service = {
-        extensions = [
-          # "health_check"
-          # "pprof"
-          "zpages"
-          "memory_ballast"
-        ];
-        pipelines.traces = {
-          receivers = [ "otlp" ];
-          processors = [
-            "memory_limiter"
-            "batch"
+        service = {
+          extensions = [
+            # "health_check"
+            # "pprof"
+            "zpages"
+            "memory_ballast"
           ];
-          exporters = [
-            "otlp/honeycomb"
-            "otlp/tempo"
-          ];
-        };
-        telemetry.metrics = {
-          address = "0.0.0.0:4319";
+          pipelines.traces = {
+            receivers = [ "otlp" ];
+            processors = [
+              "memory_limiter"
+              "batch"
+            ];
+            exporters = [
+              "otlp/honeycomb"
+              "otlp/tempo"
+            ];
+          };
+          telemetry.metrics = {
+            address = "0.0.0.0:4319";
+          };
         };
       };
     };
+
+    systemd.services.opentelemetry-collector.serviceConfig.EnvironmentFile =
+      config.vault-secrets.templates.otel-collector-env.path;
+
+    vault-secrets.wantedBy = [ "opentelemetry-collector.service" ];
+    vault-secrets.templates.otel-collector-env.text = ''
+      {{ with secret "kv/honeycomb" }}
+      HONEYCOMB_API_KEY={{ .Data.data.api_key }}
+      {{ end }}
+    '';
   };
-
-  systemd.services.opentelemetry-collector.serviceConfig.EnvironmentFile =
-    config.vault-secrets.templates.otel-collector-env.path;
-
-  vault-secrets.wantedBy = [ "opentelemetry-collector.service" ];
-  vault-secrets.templates.otel-collector-env.text = ''
-    {{ with secret "kv/honeycomb" }}
-    HONEYCOMB_API_KEY={{ .Data.data.api_key }}
-    {{ end }}
-  '';
 }

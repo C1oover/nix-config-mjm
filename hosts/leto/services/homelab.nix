@@ -21,6 +21,8 @@ let
   '';
 in
 {
+  mjm.otel-collector.enable = true;
+
   systemd.services.homelab = {
     wantedBy = [ "multi-user.target" ];
     after = [

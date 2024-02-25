@@ -24,6 +24,7 @@
     ../../optional/garage
     ../../optional/gitlab-runner.nix
     ../../optional/nut.nix
+    ../../optional/otel-collector.nix
     ../../optional/server
     ../../optional/vault-server.nix
   ] ++ (builtins.attrValues outputs.nixosModules);
