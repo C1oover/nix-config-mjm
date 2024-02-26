@@ -3,6 +3,10 @@
     primary = true;
     flavor = "fastmail.com";
     address = "matt@mattmoriarity.com";
+    aliases = [
+      "mj@midna.dev"
+      "mjm@midna.dev"
+    ];
     realName = "Matt Moriarity";
 
     thunderbird.enable = true;
