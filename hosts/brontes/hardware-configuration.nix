@@ -1,7 +1,5 @@
 { lib, ... }:
 {
-  imports = [ ../common/optional/poe-hat.nix ];
-
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];

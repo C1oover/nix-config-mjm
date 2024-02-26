@@ -7,6 +7,8 @@
     ../common/users/matt
 
     ../common/optional/desktop
+
+    ./nvk.nix
   ];
 
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];

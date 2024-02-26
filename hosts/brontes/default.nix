@@ -1,8 +1,5 @@
-{ inputs, ... }:
 {
   imports = [
-    inputs.hardware.nixosModules.common-pc-ssd
-    inputs.hardware.nixosModules.raspberry-pi-4
     ./hardware-configuration.nix
     ./impermanence.nix
 
@@ -10,6 +7,7 @@
     ../common/users/matt
 
     ../common/optional/ingress
+    ../common/optional/raspberry-pi.nix
   ];
 
   networking.hostName = "brontes";
