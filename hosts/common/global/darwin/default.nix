@@ -1,10 +1,4 @@
-{
-  pkgs,
-  config,
-  inputs,
-  outputs,
-  ...
-}:
+{ inputs, outputs, ... }:
 {
   imports = [
     inputs.home-manager.darwinModules.home-manager
@@ -23,6 +17,9 @@
   nix.configureBuildUsers = true;
   nix.settings.trusted-users = [ "@admin" ];
   services.nix-daemon.enable = true;
+
+  nix.registry.nixpkgs.flake = inputs.nixpkgs;
+  nix.nixPath = [ "nixpkgs=flake:nixpkgs" ];
 
   time.timeZone = "America/Denver";
 
