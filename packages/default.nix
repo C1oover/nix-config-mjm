@@ -14,7 +14,6 @@
         uwsgi = pkgs.python3Packages.callPackage ./uwsgi.nix { };
         linkding = pkgs.callPackage ./linkding.nix { inherit uwsgi; };
         pragmata-pro = pkgs.callPackage ./pragmata-pro.nix { };
-        vault-unseal = pkgs.callPackage ./vault-unseal.nix { };
       };
     };
 }

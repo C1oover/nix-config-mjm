@@ -3,7 +3,6 @@
   lib,
   utils,
   config,
-  outputs,
   ...
 }:
 let
@@ -16,7 +15,7 @@ let
     ;
   cfg = config.mjm.vault;
 
-  pkg = outputs.packages.${pkgs.system}.vault-unseal;
+  pkg = pkgs.vault-unseal;
 in
 {
   options.mjm.vault = {
