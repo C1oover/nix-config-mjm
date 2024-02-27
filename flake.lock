@@ -682,38 +682,6 @@
         "type": "github"
       }
     },
-    "nixos-nut-exporter": {
-      "locked": {
-        "lastModified": 1708296909,
-        "narHash": "sha256-aCmfGRwhGFf+NOnUA4Cg3BEloqw4im3Y6GUgkph9F2o=",
-        "owner": "mjm",
-        "repo": "nixpkgs",
-        "rev": "bbad81f93796ffaafa1f5478e8425616a2513b0f",
-        "type": "github"
-      },
-      "original": {
-        "owner": "mjm",
-        "ref": "nut-exporter-variables",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixos-plasma6": {
-      "locked": {
-        "lastModified": 1709135731,
-        "narHash": "sha256-gbTm3II6kqABn9qsXJy551vxk/HDMrD9BWae1sSDNCQ=",
-        "owner": "mjm",
-        "repo": "nixpkgs",
-        "rev": "ee04f176b136c19babb95c0bf618c596616863f2",
-        "type": "github"
-      },
-      "original": {
-        "owner": "mjm",
-        "ref": "plasma-6",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nixos-wsl": {
       "inputs": {
         "flake-compat": "flake-compat_4",
@@ -1056,8 +1024,6 @@
         "impermanence": "impermanence",
         "nix-colors": "nix-colors",
         "nixos": "nixos",
-        "nixos-nut-exporter": "nixos-nut-exporter",
-        "nixos-plasma6": "nixos-plasma6",
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs_4",
         "nixpkgs-firefox-darwin": "nixpkgs-firefox-darwin",

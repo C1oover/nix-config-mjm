@@ -36,20 +36,8 @@ in
     };
 
     nixosConfigurations = {
-      # FIXME use mkNixos again once plasma6 stuff is merged
-      persephone = inputs.nixos-plasma6.lib.nixosSystem {
-        modules = [ ./persephone ];
-        specialArgs = {
-          inherit inputs outputs;
-        };
-      };
-      uranus = inputs.nixos-plasma6.lib.nixosSystem {
-        modules = [ ./uranus ];
-        specialArgs = {
-          inherit inputs outputs;
-        };
-      };
-
+      persephone = mkNixos [ ./persephone ];
+      uranus = mkNixos [ ./uranus ];
       nyx = mkNixos [ ./nyx ];
 
       # Hashistack control plane VMs
@@ -58,13 +46,7 @@ in
       alecto = mkNixos [ ./alecto ];
 
       # Raspberry Pis
-      # FIXME use mkNixos again once nut-exporter-variables branch is merged
-      arges = inputs.nixos-nut-exporter.lib.nixosSystem {
-        modules = [ ./arges ];
-        specialArgs = {
-          inherit inputs outputs;
-        };
-      };
+      arges = mkNixos [ ./arges ];
       brontes = mkNixos [ ./brontes ];
       steropes = mkNixos [ ./steropes ];
 
@@ -85,13 +67,11 @@ in
         nodeNixpkgs =
           lib.genAttrs
             [
+              "arges"
               "brontes"
               "steropes"
             ]
-            (_node: inputs.nixos.legacyPackages.aarch64-linux)
-          // {
-            arges = inputs.nixos-nut-exporter.legacyPackages.aarch64-linux;
-          };
+            (_node: inputs.nixos.legacyPackages.aarch64-linux);
         specialArgs = {
           inherit inputs outputs;
         };

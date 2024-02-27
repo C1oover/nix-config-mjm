@@ -2,8 +2,6 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     nixos.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixos-plasma6.url = "github:mjm/nixpkgs/plasma-6";
-    nixos-nut-exporter.url = "github:mjm/nixpkgs/nut-exporter-variables";
     darwin = {
       url = "github:lnl7/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
