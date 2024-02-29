@@ -8,9 +8,6 @@ let
   port = config.services.home-assistant.config.http.server_port;
 in
 {
-  # ugh
-  nixpkgs.config.permittedInsecurePackages = [ "openssl-1.1.1w" ];
-
   services.home-assistant = {
     enable = true;
     openFirewall = true;
