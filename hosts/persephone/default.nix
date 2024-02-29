@@ -15,9 +15,10 @@
     ../common/global/nixos
     ../common/users/matt
 
-    ../common/optional/desktop
     ../common/optional/wireless.nix
   ];
+
+  mjm.desktop.enable = true;
 
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 
