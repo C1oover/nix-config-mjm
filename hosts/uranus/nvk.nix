@@ -15,6 +15,8 @@ in
       # needed for wayland to work at all
       hardware.nvidia.modesetting.enable = true;
 
+      hardware.nvidia.powerManagement.enable = true;
+
       hardware.opengl.extraPackages = [
         pkgs.libvdpau-va-gl
         pkgs.nvidia-vaapi-driver
