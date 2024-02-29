@@ -1,6 +1,6 @@
 function latest_nixpkgs() {
   name="$1"
-  curl -s "https://monitoring.nixos.org/prometheus/api/v1/query?query=channel_revision%7Bchannel%3D%22$name%22%7D" |
+  curl -s "https://prometheus.nixos.org/api/v1/query?query=channel_revision%7Bchannel%3D%22$name%22%7D" |
     jq -r '.data.result[0].metric.revision'
 }
 
