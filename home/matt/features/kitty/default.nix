@@ -14,7 +14,7 @@ in
       tab_bar_style = "powerline";
       macos_option_as_alt = "both";
       allow_remote_control = "yes";
-      enabled_layouts = "tall:bias=55;full_size=1,fat:bias=60;full_size=1,stack";
+      enabled_layouts = "tall:bias=55;full_size=1,fat:bias=70;full_size=1,stack";
       focus_follows_mouse = "yes";
       scrollback_lines = 100000;
     };
