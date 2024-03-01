@@ -5,7 +5,6 @@
 
     ./features/bitwarden
     ./features/controku
-    ./features/desktop
     ./features/email
     ./features/firefox
     ./features/games

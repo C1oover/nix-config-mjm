@@ -1,32 +1,47 @@
-{ pkgs, inputs, ... }:
 {
-  imports = [
-    # disable for now since using the plasma5 stuff for this seems to mess with plasma6 some
-    #    ./rc.nix
-  ];
-
-  home.packages = builtins.attrValues {
-    inherit (pkgs)
-      bitwarden
-      cider
-      wl-clipboard
-      xclip
-      xdg-utils
-      zeal
-      ;
-    inherit (pkgs.callPackages ./scripts.nix { }) night-mode;
-    inherit (pkgs.kdePackages)
-      kbreakout
-      kmahjongg
-      kmines
-      kpat
-      palapeli
-      kcalc
-      ;
-    inherit (inputs.plasma-manager.packages.${pkgs.system}) rc2nix;
+  pkgs,
+  lib,
+  config,
+  osConfig,
+  inputs,
+  ...
+}:
+let
+  inherit (lib) mkIf mkOption types;
+  cfg = config.mjm.desktop;
+in
+{
+  options.mjm.desktop = {
+    enable = mkOption {
+      type = types.bool;
+      default = osConfig.mjm.desktop.enable or false;
+    };
   };
 
-  programs.mpv.enable = true;
+  config = mkIf cfg.enable {
+    home.packages = builtins.attrValues {
+      inherit (pkgs)
+        bitwarden
+        cider
+        wl-clipboard
+        xclip
+        xdg-utils
+        zeal
+        ;
+      inherit (pkgs.callPackages ./scripts.nix { }) night-mode;
+      inherit (pkgs.kdePackages)
+        kbreakout
+        kmahjongg
+        kmines
+        kpat
+        palapeli
+        kcalc
+        ;
+      inherit (inputs.plasma-manager.packages.${pkgs.system}) rc2nix;
+    };
 
-  services.kdeconnect.enable = true;
+    programs.mpv.enable = true;
+
+    services.kdeconnect.enable = true;
+  };
 }

@@ -13,6 +13,8 @@
     ../features/git
     ../features/shell
     ../features/xdg
+
+    ../features/desktop
   ] ++ (builtins.attrValues outputs.homeManagerModules);
 
   home.stateVersion = lib.mkDefault "22.11";
