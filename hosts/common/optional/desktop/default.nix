@@ -33,12 +33,18 @@ in
         open-sans
         noto-fonts
         noto-fonts-emoji
-        (nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" ]; })
+        (nerdfonts.override {
+          fonts = [
+            "NerdFontsSymbolsOnly"
+            "Agave"
+          ];
+        })
         font-awesome
         cascadia-code
         ibm-plex
         iosevka
         agave
+        monaspace
         outputs.packages.${pkgs.system}.pragmata-pro
       ];
 
