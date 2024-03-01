@@ -30,6 +30,7 @@ in
         ;
       inherit (pkgs.callPackages ./scripts.nix { }) night-mode;
       inherit (pkgs.kdePackages)
+        kcmutils
         kbreakout
         kmahjongg
         kmines
