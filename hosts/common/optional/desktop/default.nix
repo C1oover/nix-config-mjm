@@ -75,16 +75,29 @@ in
       themePackages = [ (pkgs.catppuccin-plymouth.override { variant = "mocha"; }) ];
       theme = "catppuccin-mocha";
     };
-    boot.kernelParams = [
-      "quiet"
-      # catppuccin mocha
-      "vt.default_red=30,243,166,249,137,245,148,186,88,243,166,249,137,245,148,166"
-      "vt.default_grn=30,139,227,226,180,194,226,194,91,139,227,226,180,194,226,173"
-      "vt.default_blu=46,168,161,175,250,231,213,222,112,168,161,175,250,231,213,200"
-    ];
+    boot.kernelParams = [ "quiet" ];
     console = {
       font = "${pkgs.terminus_font}/share/consolefonts/ter-u32n.psf.gz";
       keyMap = "us";
+      # catppuccin frappe
+      colors = [
+        "303446" # base
+        "e78284" # red
+        "a6d189" # green
+        "e5c890" # yellow
+        "8caaee" # blue
+        "f4b8e4" # pink
+        "81c8be" # teal
+        "b5bfe2" # subtext1
+        "626880" # surface2
+        "e78284" # red
+        "a6d189" # green
+        "e5c890" # yellow
+        "8caaee" # blue
+        "f4b8e4" # pink
+        "81c8be" # teal
+        "a5adce" # subtext0
+      ];
     };
 
     services.resolved.enable = true;
