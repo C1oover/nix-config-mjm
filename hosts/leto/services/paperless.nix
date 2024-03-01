@@ -21,10 +21,6 @@ in
     };
   };
 
-  # workaround an issue that is partially caused by using PrivateTmp
-  # https://github.com/paperless-ngx/paperless-ngx/discussions/5606
-  systemd.services.paperless-consumer.unitConfig.JoinsNamespaceOf = "paperless-task-queue.service";
-
   # wait for postgresql
   # the scheduler is the first service that needs the database
   systemd.services.paperless-scheduler.after = [ "postgresql.service" ];
