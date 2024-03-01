@@ -5,7 +5,7 @@ in
 {
   programs.kitty = {
     enable = true;
-    theme = "Catppuccin-Mocha";
+    theme = "Catppuccin-Macchiato";
     font.name = "Agave";
     font.size = fontSize;
     settings = {

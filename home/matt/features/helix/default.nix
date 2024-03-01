@@ -26,7 +26,7 @@
       nodePackages.yaml-language-server
     ];
     settings = {
-      theme = "catppuccin_mocha";
+      theme = "catppuccin_macchiato";
       editor = {
         bufferline = "always";
         color-modes = true;
