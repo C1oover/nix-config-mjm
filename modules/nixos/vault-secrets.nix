@@ -189,6 +189,9 @@ in
           serviceConfig = {
             Type = "oneshot";
             RemainAfterExit = true;
+            Restart = "on-failure";
+            RestartSec = "5s";
+            StartLimitIntervalSec = 0;
           };
         };
       }
