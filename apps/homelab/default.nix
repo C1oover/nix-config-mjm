@@ -26,6 +26,27 @@
               uda.next_notification.type=date
               uda.next_notification.label=Notify
             '').outPath;
+          env.DEVENV_SECRETS = "${config.env.DEVENV_STATE}/secrets";
+          env.RESTIC_PASSWORD_FILE = "${config.env.DEVENV_SECRETS}/restic_password";
+
+          enterShell =
+            let
+              vault = lib.getExe pkgs.vault;
+              getSecret = path: field: "${vault} kv get -mount=kv -field=${field} ${path}";
+              writeSecret =
+                path: field: filename:
+                "${getSecret path field} > $DEVENV_SECRETS/${filename}";
+            in
+            ''
+              export DEVENV_SECRETS="$DEVENV_STATE/secrets"
+              mkdir -p $DEVENV_SECRETS
+
+              ${writeSecret "homelab" "restic_password" "restic_password"}
+              ${writeSecret "restic" "garage_key_id" "garage_key_id"}
+              ${writeSecret "restic" "garage_secret_key" "garage_secret_key"}
+              ${writeSecret "restic" "b2_key_id" "b2_key_id"}
+              ${writeSecret "restic" "b2_application_key" "b2_application_key"}
+            '';
 
           languages.elixir.enable = true;
           languages.erlang.enable = true;
@@ -36,6 +57,7 @@
             [
               mix2nix
               node2nix
+              restic
             ]
             ++ (lib.optional stdenv.isLinux inotify-tools);
 

@@ -5,25 +5,29 @@ defmodule Homelab.Backups do
 
   require OpenTelemetry.Tracer, as: Tracer
 
-  alias Homelab.Backups.{Borg, Tarsnap}
+  alias Homelab.Backups.{Borg, Restic, Tarsnap}
   alias Homelab.Cache
   alias Homelab.Otel
 
-  def list_archives(kinds \\ [:borg, :tarsnap]) do
-    Tracer.with_span :list_archives do
-      {uncached_kinds, cached_results} = fetch_cached_results(kinds)
+  # def list_archives(kinds \\ [:borg, :tarsnap]) do
+  #   Tracer.with_span :list_archives do
+  #     {uncached_kinds, cached_results} = fetch_cached_results(kinds)
 
-      uncached_kinds
-      |> Enum.map(&async_list_archives(&1))
-      |> Task.yield_many(20_000)
-      |> Enum.map(fn {task, res} -> res || Task.shutdown(task, :brutal_kill) end)
-      |> Enum.flat_map(fn
-        {:ok, [first | _rest] = results} -> write_results_to_cache(first.kind, results)
-        _ -> []
-      end)
-      |> Kernel.++(cached_results)
-      |> Enum.sort(&(DateTime.compare(&1.time, &2.time) != :lt))
-    end
+  #     uncached_kinds
+  #     |> Enum.map(&async_list_archives(&1))
+  #     |> Task.yield_many(20_000)
+  #     |> Enum.map(fn {task, res} -> res || Task.shutdown(task, :brutal_kill) end)
+  #     |> Enum.flat_map(fn
+  #       {:ok, [first | _rest] = results} -> write_results_to_cache(first.kind, results)
+  #       _ -> []
+  #     end)
+  #     |> Kernel.++(cached_results)
+  #     |> Enum.sort(&(DateTime.compare(&1.time, &2.time) != :lt))
+  #   end
+  # end
+
+  def list_archives() do
+    Enum.sort(Restic.list_snapshots(:onsite), &(DateTime.compare(&1.time, &2.time) != :lt))
   end
 
   def get_archive(kind, name) do

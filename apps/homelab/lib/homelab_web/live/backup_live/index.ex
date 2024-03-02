@@ -22,4 +22,8 @@ defmodule HomelabWeb.BackupLive.Index do
   def extract_command(%Backup{kind: :tarsnap, name: name}) do
     "tarsnap --keyfile #{@tarsnap_local_keyfile} -x -f #{name}"
   end
+
+  def extract_command(%Backup{kind: :restic}) do
+    ""
+  end
 end

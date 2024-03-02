@@ -29,13 +29,17 @@ in
       "network.target"
       "postgresql.service"
     ];
-    path = with pkgs; [ taskwarrior ];
+    path = with pkgs; [
+      restic
+      taskwarrior
+    ];
     environment = {
       OTEL_SERVICE_NAME = "homelab";
       OTEL_EXPORTER_OTLP_ENDPOINT = "http://127.0.0.1:4318";
       TASKRC = "${taskRc}";
       RELEASE_COOKIE = "default";
       HOME = "/var/lib/homelab";
+      RESTIC_PASSWORD_FILE = "%d/restic-password";
     };
 
     preStart = ''
@@ -45,7 +49,14 @@ in
 
     serviceConfig = {
       ExecStart = "${pkg}/bin/server";
-      LoadCredential = [ "taskd-key:${config.vault-secrets.templates.taskwarrior-key.path}" ];
+      LoadCredential = [
+        "taskd-key:${config.vault-secrets.templates.taskwarrior-key.path}"
+        "restic-password:${config.vault-secrets.templates.restic-password.path}"
+        "garage-key-id:${config.vault-secrets.templates.garage-key-id.path}"
+        "garage-secret-key:${config.vault-secrets.templates.garage-secret-key.path}"
+        "b2-key-id:${config.vault-secrets.templates.b2-key-id.path}"
+        "b2-application-key:${config.vault-secrets.templates.b2-application-key.path}"
+      ];
       EnvironmentFile = config.vault-secrets.templates.homelab-env.path;
       Restart = "always";
       DynamicUser = true;
@@ -69,6 +80,11 @@ in
       {{ end }}
     '';
     taskwarrior-key.kvPath = "kv/taskwarrior/private_key";
+    restic-password.kvPath = "kv/homelab/restic_password";
+    garage-key-id.kvPath = "kv/restic/garage_key_id";
+    garage-secret-key.kvPath = "kv/restic/garage_secret_key";
+    b2-key-id.kvPath = "kv/restic/b2_key_id";
+    b2-application-key.kvPath = "kv/restic/b2_application_key";
   };
 
   services.postgresql = {

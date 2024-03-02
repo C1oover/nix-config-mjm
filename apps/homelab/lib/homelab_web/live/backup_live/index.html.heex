@@ -7,10 +7,13 @@
           <.table id="archives" rows={@streams.archives}>
             <:col :let={{_id, archive}} class="text-right">
               <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800">
-                <%= archive.kind |> to_string |> String.upcase() %>
+                <%= archive.location |> to_string |> String.upcase() %>
               </span>
             </:col>
-            <:col :let={{_id, archive}} label="Name" class="font-medium">
+            <:col :let={{_id, archive}} label="Repository" class="font-medium">
+              <%= archive.repository_name %>
+            </:col>
+            <:col :let={{_id, archive}} label="Name">
               <%= archive.name %>
             </:col>
             <:col :let={{_id, archive}} label="Created at" class="w-full">
@@ -18,7 +21,7 @@
             </:col>
             <:col :let={{id, archive}} class="text-right">
               <span class="relative z-0 inline-flex shadow-sm rounded-md">
-                <%= if archive.kind != :tarsnap do %>
+                <%= if archive.kind == :borg do %>
                   <.link
                     navigate={~p"/backups/#{archive}"}
                     class="relative inline-flex items-center px-3 py-2 rounded-l-md border border-gray-300 bg-white text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
@@ -34,7 +37,7 @@
                   data-copy-text={extract_command(archive)}
                   class={[
                     "archive-copy-button -ml-px relative inline-flex items-center px-2 py-2",
-                    if(archive.kind == :tarsnap, do: "rounded-md", else: "rounded-r-md"),
+                    if(archive.kind != :borg, do: "rounded-md", else: "rounded-r-md"),
                     "border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
                   ]}
                 >

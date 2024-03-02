@@ -58,6 +58,18 @@ if config_env() == :prod do
     http: [port: port],
     secret_key_base: secret_key_base
 
+  creds_dir = System.get_env("CREDENTIALS_DIRECTORY")
+
+  config :homelab, :restic,
+    onsite: [
+      key_id_file: Path.join(creds_dir, "garage-key-id"),
+      secret_key_file: Path.join(creds_dir, "garage-secret-key")
+    ],
+    offsite: [
+      key_id_file: Path.join(creds_dir, "b2-key-id"),
+      secret_key_file: Path.join(creds_dir, "b2-application-key")
+    ]
+
   # ## SSL Support
   #
   # To get SSL working, you will need to add the `https` key
