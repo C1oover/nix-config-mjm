@@ -72,6 +72,10 @@
       url = "github:MrOtherGuy/firefox-csshacks";
       flake = false;
     };
+    xiv-wine-proton8 = {
+      url = "tarball+https://github.com/rankynbass/wine-ge-xiv/releases/download/xiv-Proton8-26/unofficial-wine-xiv-Proton8-26-x86_64.tar.xz";
+      flake = false;
+    };
   };
 
   outputs =

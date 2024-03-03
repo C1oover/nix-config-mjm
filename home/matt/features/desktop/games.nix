@@ -2,6 +2,7 @@
   pkgs,
   lib,
   config,
+  inputs,
   ...
 }:
 let
@@ -27,6 +28,6 @@ in
         ;
     };
 
-    # TODO set up wine for xivlauncher
+    home.file.".xlcore/wine-runtimes/proton8-ge".source = inputs.xiv-wine-proton8;
   };
 }

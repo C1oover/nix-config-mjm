@@ -1030,7 +1030,8 @@
         "nur": "nur",
         "plasma-manager": "plasma-manager",
         "pre-commit-hooks-nix": "pre-commit-hooks-nix",
-        "terranix": "terranix"
+        "terranix": "terranix",
+        "xiv-wine-proton8": "xiv-wine-proton8"
       }
     },
     "rust-overlay": {
@@ -1170,6 +1171,19 @@
         "owner": "terranix",
         "repo": "terranix-examples",
         "type": "github"
+      }
+    },
+    "xiv-wine-proton8": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1707024126,
+        "narHash": "sha256-lx9AWJutI8iCWA3FbcozxoTOf4zlSdHpdMljwkXUZDA=",
+        "type": "tarball",
+        "url": "https://github.com/rankynbass/wine-ge-xiv/releases/download/xiv-Proton8-26/unofficial-wine-xiv-Proton8-26-x86_64.tar.xz"
+      },
+      "original": {
+        "type": "tarball",
+        "url": "https://github.com/rankynbass/wine-ge-xiv/releases/download/xiv-Proton8-26/unofficial-wine-xiv-Proton8-26-x86_64.tar.xz"
       }
     }
   },
