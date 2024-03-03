@@ -1,9 +1,7 @@
 { pkgs, lib, ... }:
 {
   imports = [
-    ../features/kitty
     ../features/newsboat
-    ../features/wezterm
     ../features/yubikey
   ];
 
@@ -24,6 +22,7 @@
     enable = true;
     package = pkgs.firefox-bin;
   };
+  mjm.terminal.enable = true;
 
   targets.darwin.defaults = {
     "com.tinyspeck.slackmacgap" = {

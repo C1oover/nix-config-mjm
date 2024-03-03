@@ -21,7 +21,7 @@
       { path = "/Applications/Fantastical.app/"; }
       { path = "/Applications/1Password.app/"; }
       { path = "/Applications/Slab.app/"; }
-      { path = "${pkgs.kitty}/Applications/kitty.app/"; }
+      { path = "${config.programs.kitty.package}/Applications/kitty.app/"; }
       { path = "/Applications/Dash.app/"; }
       { path = "/Applications/Postico 2.app/"; }
       { path = "${pkgs.discord}/Applications/Discord.app/"; }

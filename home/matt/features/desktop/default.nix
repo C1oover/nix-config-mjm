@@ -15,6 +15,7 @@ in
     ./controku.nix
     ./firefox.nix
     ./games.nix
+    ./terminal.nix
   ];
 
   options.mjm.desktop = {
