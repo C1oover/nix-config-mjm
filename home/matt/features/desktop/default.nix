@@ -15,6 +15,7 @@ in
     ./controku.nix
     ./firefox.nix
     ./games.nix
+    ./kdeconfig.nix
     ./terminal.nix
   ];
 
