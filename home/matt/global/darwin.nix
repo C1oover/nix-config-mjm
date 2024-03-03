@@ -1,7 +1,6 @@
 { pkgs, lib, ... }:
 {
   imports = [
-    ../features/firefox
     ../features/kitty
     ../features/newsboat
     ../features/wezterm
@@ -20,6 +19,11 @@
     discord
     shortcat
   ];
+
+  mjm.firefox = {
+    enable = true;
+    package = pkgs.firefox-bin;
+  };
 
   targets.darwin.defaults = {
     "com.tinyspeck.slackmacgap" = {

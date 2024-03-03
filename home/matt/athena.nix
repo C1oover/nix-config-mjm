@@ -13,7 +13,7 @@
     enable = true;
     entries = [
       { path = "/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app/"; }
-      { path = "${pkgs.firefox-bin}/Applications/Firefox.app/"; }
+      { path = "${config.programs.firefox.package}/Applications/Firefox.app/"; }
       { path = "/Applications/Beeper.app/"; }
       { path = "/System/Applications/Mail.app/"; }
       { path = "${pkgs.zoom-us}/Applications/zoom.us.app/"; }

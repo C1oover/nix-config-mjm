@@ -15,6 +15,7 @@
     ../features/xdg
 
     ../features/desktop
+    ../features/firefox
   ] ++ (builtins.attrValues outputs.homeManagerModules);
 
   home.stateVersion = lib.mkDefault "22.11";

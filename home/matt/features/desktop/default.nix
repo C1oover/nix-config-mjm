@@ -13,6 +13,7 @@ in
 {
   imports = [
     ./controku.nix
+    ./firefox.nix
     ./games.nix
   ];
 

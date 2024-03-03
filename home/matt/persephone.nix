@@ -5,7 +5,6 @@
 
     ./features/bitwarden
     ./features/email
-    ./features/firefox
     ./features/helix
     ./features/homelab
     ./features/kitty
