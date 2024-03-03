@@ -11,6 +11,11 @@ let
   cfg = config.mjm.desktop;
 in
 {
+  imports = [
+    ./controku.nix
+    ./games.nix
+  ];
+
   options.mjm.desktop = {
     enable = mkOption {
       type = types.bool;
@@ -29,15 +34,7 @@ in
         zeal
         ;
       inherit (pkgs.callPackages ./scripts.nix { }) night-mode;
-      inherit (pkgs.kdePackages)
-        kcmutils
-        kbreakout
-        kmahjongg
-        kmines
-        kpat
-        palapeli
-        kcalc
-        ;
+      inherit (pkgs.kdePackages) kcmutils kcalc;
       inherit (inputs.plasma-manager.packages.${pkgs.system}) rc2nix;
     };
 
