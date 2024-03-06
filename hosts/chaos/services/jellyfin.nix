@@ -10,6 +10,7 @@
   systemd.tmpfiles.settings."10-videos"."/videos".d = { };
 
   users.groups.media = { };
+  users.users.jellyfin.extraGroups = [ "media" ];
 
   fileSystems."/videos" = {
     device = "//selene.home.mattmoriarity.com/media";
