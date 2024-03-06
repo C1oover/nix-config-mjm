@@ -30,7 +30,7 @@ defmodule Homelab.Backups.Restic do
   end
 
   defp command_json(args, env) do
-    args = ["--json" | args]
+    args = ["--json", "--no-lock"] ++ args
 
     Tracer.with_span :run_restic_command, %{
       attributes: %{"restic.args": inspect(args)}
