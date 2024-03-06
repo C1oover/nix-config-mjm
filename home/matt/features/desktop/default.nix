@@ -37,7 +37,7 @@ in
         zeal
         ;
       inherit (pkgs.callPackages ./scripts.nix { }) night-mode;
-      inherit (pkgs.kdePackages) kcmutils kcalc;
+      inherit (pkgs.kdePackages) kcalc;
       inherit (inputs.plasma-manager.packages.${pkgs.system}) rc2nix;
     };
 
