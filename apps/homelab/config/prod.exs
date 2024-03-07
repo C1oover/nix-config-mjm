@@ -20,8 +20,6 @@ config :logger, level: :info
 # Runtime production configuration, including reading
 # of environment variables, is done on config/runtime.exs.
 
-config :homelab, tarsnap: [keyfile: "/usr/local/homelab/tarsnap.key"]
-
 config :homelab, Oban,
   plugins: [
     {Oban.Plugins.Pruner, max_age: 1800},

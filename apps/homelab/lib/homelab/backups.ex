@@ -5,7 +5,7 @@ defmodule Homelab.Backups do
 
   require OpenTelemetry.Tracer, as: Tracer
 
-  alias Homelab.Backups.{Borg, Restic, Tarsnap}
+  alias Homelab.Backups.Restic
   alias Homelab.Cache
   alias Homelab.Otel
 
@@ -23,29 +23,6 @@ defmodule Homelab.Backups do
       end)
       |> Kernel.++(cached_results)
       |> Enum.sort(&(DateTime.compare(&1.time, &2.time) != :lt))
-    end
-  end
-
-  def get_archive(kind, name) do
-    Tracer.with_span :get_archive, %{
-      attributes: %{
-        "backup.kind": kind,
-        "backup.name": name
-      }
-    } do
-      case Cache.get({:backup, kind, name}) do
-        nil ->
-          archive =
-            case kind do
-              :borg -> Borg.get_archive(name) |> IO.inspect()
-            end
-
-          :ok = Cache.put({:backup, kind, name}, archive)
-          archive
-
-        archive ->
-          archive
-      end
     end
   end
 

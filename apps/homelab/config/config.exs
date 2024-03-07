@@ -89,8 +89,6 @@ config :phoenix, :json_library, Jason
 
 config :tesla, :adapter, {Tesla.Adapter.Finch, name: Homelab.Finch}
 
-config :homelab, borg: [repository: "homelab@nas.home.mattmoriarity.com:/volume1/homelab/backup"]
-
 config :homelab, :restic,
   onsite: [url: "s3:http://garage.service.consul:3902/restic-backups"],
   offsite: [url: "s3:s3.us-west-001.backblazeb2.com/mjm-restic-backups"]
