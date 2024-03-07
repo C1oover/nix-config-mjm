@@ -9,25 +9,21 @@ defmodule Homelab.Backups do
   alias Homelab.Cache
   alias Homelab.Otel
 
-  # def list_archives(kinds \\ [:borg, :tarsnap]) do
-  #   Tracer.with_span :list_archives do
-  #     {uncached_kinds, cached_results} = fetch_cached_results(kinds)
+  def list_archives(locations \\ [:onsite, :offsite]) do
+    Tracer.with_span :list_archives do
+      {uncached_locations, cached_results} = fetch_cached_results(locations)
 
-  #     uncached_kinds
-  #     |> Enum.map(&async_list_archives(&1))
-  #     |> Task.yield_many(20_000)
-  #     |> Enum.map(fn {task, res} -> res || Task.shutdown(task, :brutal_kill) end)
-  #     |> Enum.flat_map(fn
-  #       {:ok, [first | _rest] = results} -> write_results_to_cache(first.kind, results)
-  #       _ -> []
-  #     end)
-  #     |> Kernel.++(cached_results)
-  #     |> Enum.sort(&(DateTime.compare(&1.time, &2.time) != :lt))
-  #   end
-  # end
-
-  def list_archives() do
-    Enum.sort(Restic.list_snapshots(:onsite), &(DateTime.compare(&1.time, &2.time) != :lt))
+      uncached_locations
+      |> Enum.map(&async_list_archives(&1))
+      |> Task.yield_many(30_000)
+      |> Enum.map(fn {task, res} -> res || Task.shutdown(task, :brutal_kill) end)
+      |> Enum.flat_map(fn
+        {:ok, [first | _rest] = results} -> write_results_to_cache(first.location, results)
+        _ -> []
+      end)
+      |> Kernel.++(cached_results)
+      |> Enum.sort(&(DateTime.compare(&1.time, &2.time) != :lt))
+    end
   end
 
   def get_archive(kind, name) do
@@ -53,43 +49,37 @@ defmodule Homelab.Backups do
     end
   end
 
-  defp async_list_archives(kind) do
+  defp async_list_archives(location) do
     Otel.async_nolink(
-      fn -> list_archives_by_kind(kind) end,
+      fn -> list_archives_by_location(location) end,
       shutdown: :brutal_kill
     )
   end
 
-  def list_archives_by_kind(kind) do
-    Tracer.with_span :list_archives_by_kind, %{attributes: %{"backup.kind": kind}} do
-      case kind do
-        :borg ->
-          Borg.list_archives()
-
-        :tarsnap ->
-          Tarsnap.list_archives()
-      end
+  def list_archives_by_location(location) do
+    Tracer.with_span :list_archives_by_location, %{attributes: %{"backup.location": location}} do
+      Restic.list_snapshots(location)
     end
   end
 
-  defp fetch_cached_results(kinds) do
-    {uncached_kinds, results} =
+  defp fetch_cached_results(locations) do
+    {uncached_locations, results} =
       Enum.reduce(
-        kinds,
+        locations,
         {[], []},
-        fn kind, {uncached_kinds, acc_results} ->
-          case Cache.get({:backups, kind}) do
-            nil -> {[kind | uncached_kinds], acc_results}
-            results -> {uncached_kinds, [results | acc_results]}
+        fn location, {uncached_locations, acc_results} ->
+          case Cache.get({:backups, location}) do
+            nil -> {[location | uncached_locations], acc_results}
+            results -> {uncached_locations, [results | acc_results]}
           end
         end
       )
 
-    {uncached_kinds, List.flatten(results)}
+    {uncached_locations, List.flatten(results)}
   end
 
-  defp write_results_to_cache(kind, results) do
-    :ok = Cache.put({:backups, kind}, results, ttl: :timer.minutes(5))
+  defp write_results_to_cache(location, results) do
+    :ok = Cache.put({:backups, location}, results, ttl: :timer.minutes(10))
     results
   end
 end
