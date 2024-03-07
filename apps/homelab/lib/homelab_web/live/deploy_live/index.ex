@@ -32,9 +32,6 @@ defmodule HomelabWeb.DeployLive.Index do
          refreshed_at: DateTime.utc_now()
        }}
     end)
-    |> assign_async(:homelab_build, fn ->
-      {:ok, %{homelab_build: Deploys.get_latest_homelab_build()}}
-    end)
     |> assign_async(:infra_build, fn ->
       {:ok, %{infra_build: Deploys.get_latest_infra_build()}}
     end)
@@ -63,14 +60,14 @@ defmodule HomelabWeb.DeployLive.Index do
     <.async_result :let={build} assign={@build}>
       <:loading>
         <.stat_card title={@finished_title}>
-          <:icon> <.icon name={@icon} class="h-6 w-6 animate-pulse" /> </:icon>
+          <:icon><.icon name={@icon} class="h-6 w-6 animate-pulse" /></:icon>
           Loading build info...
         </.stat_card>
       </:loading>
 
       <:failed>
         <.stat_card title={@finished_title}>
-          <:icon> <.icon name={@icon} class="h-6 w-6" /> </:icon>
+          <:icon><.icon name={@icon} class="h-6 w-6" /></:icon>
           Failed to load info.
         </.stat_card>
       </:failed>
