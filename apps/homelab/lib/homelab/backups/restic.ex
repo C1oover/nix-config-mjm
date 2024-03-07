@@ -1,6 +1,7 @@
 defmodule Homelab.Backups.Restic do
   @repositories [
     "home-assistant",
+    "mediaserver",
     "paperless",
     "postgresql",
     "vaultwarden"
