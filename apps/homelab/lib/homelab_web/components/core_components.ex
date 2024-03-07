@@ -850,9 +850,6 @@ defmodule HomelabWeb.CoreComponents do
     )
   end
 
-  defp pluralize(1, singular), do: "1 #{singular}"
-  defp pluralize(count, singular), do: "#{count} #{singular}s"
-
   def format_duration(start, finish) do
     start
     |> DateTime.diff(finish)
