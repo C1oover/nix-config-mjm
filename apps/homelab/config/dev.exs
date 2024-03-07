@@ -85,12 +85,3 @@ config :homelab, :restic,
     key_id_file: Path.join(secrets_dir, "b2_key_id"),
     secret_key_file: Path.join(secrets_dir, "b2_application_key")
   ]
-
-config :ex_aws, :s3, host: "minio.home.mattmoriarity.com", scheme: "https://", port: 443
-
-config :ex_aws, debug_requests: true
-
-config :ex_aws, :hackney_opts,
-  ssl_options: [
-    cacertfile: Path.join(__DIR__, "homelab.pem")
-  ]

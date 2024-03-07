@@ -73,19 +73,6 @@ let
       beamDeps = [];
     };
 
-    connection = buildMix rec {
-      name = "connection";
-      version = "1.1.0";
-
-      src = fetchHex {
-        pkg = "connection";
-        version = "${version}";
-        sha256 = "722c1eb0a418fbe91ba7bd59a47e28008a189d47e37e0e7bb85585a016b2869c";
-      };
-
-      beamDeps = [];
-    };
-
     cowboy = buildErlangMk rec {
       name = "cowboy";
       version = "2.10.0";
@@ -201,32 +188,6 @@ let
       };
 
       beamDeps = [ castore jason ];
-    };
-
-    ex_aws = buildMix rec {
-      name = "ex_aws";
-      version = "2.5.1";
-
-      src = fetchHex {
-        pkg = "ex_aws";
-        version = "${version}";
-        sha256 = "1b95431f70c446fa1871f0eb9b183043c5a625f75f9948a42d25f43ae2eff12b";
-      };
-
-      beamDeps = [ hackney jason mime sweet_xml telemetry ];
-    };
-
-    ex_aws_s3 = buildMix rec {
-      name = "ex_aws_s3";
-      version = "2.5.3";
-
-      src = fetchHex {
-        pkg = "ex_aws_s3";
-        version = "${version}";
-        sha256 = "4f09dd372cc386550e484808c5ac5027766c8d0cd8271ccc578b82ee6ef4f3b8";
-      };
-
-      beamDeps = [ ex_aws sweet_xml ];
     };
 
     expo = buildMix rec {
@@ -353,19 +314,6 @@ let
       };
 
       beamDeps = [ certifi idna metrics mimerl parse_trans ssl_verify_fun unicode_util_compat ];
-    };
-
-    heroicons = buildMix rec {
-      name = "heroicons";
-      version = "0.5.2";
-
-      src = fetchHex {
-        pkg = "heroicons";
-        version = "${version}";
-        sha256 = "7ef96f455c1c136c335f1da0f1d7b12c34002c80a224ad96fc0ebf841a6ffef5";
-      };
-
-      beamDeps = [ castore phoenix_live_view ];
     };
 
     hpack = buildRebar3 rec {
@@ -940,19 +888,6 @@ let
       beamDeps = [];
     };
 
-    sweet_xml = buildMix rec {
-      name = "sweet_xml";
-      version = "0.7.4";
-
-      src = fetchHex {
-        pkg = "sweet_xml";
-        version = "${version}";
-        sha256 = "e7c4b0bdbf460c928234951def54fe87edf1a170f6896675443279e2dbeba167";
-      };
-
-      beamDeps = [];
-    };
-
     swoosh = buildMix rec {
       name = "swoosh";
       version = "1.15.3";
@@ -963,7 +898,7 @@ let
         sha256 = "97a667b96ca8cc48a4679f6cd1f40a36d8701cf052587298473614caa70f164a";
       };
 
-      beamDeps = [ cowboy ex_aws finch hackney jason mime plug plug_cowboy telemetry ];
+      beamDeps = [ cowboy finch hackney jason mime plug plug_cowboy telemetry ];
     };
 
     tailwind = buildMix rec {
@@ -1026,19 +961,6 @@ let
         pkg = "telemetry_poller";
         version = "${version}";
         sha256 = "b3a24eafd66c3f42da30fc3ca7dda1e9d546c12250a2d60d7b81d264fbec4f6e";
-      };
-
-      beamDeps = [ telemetry ];
-    };
-
-    telemetry_registry = buildMix rec {
-      name = "telemetry_registry";
-      version = "0.3.1";
-
-      src = fetchHex {
-        pkg = "telemetry_registry";
-        version = "${version}";
-        sha256 = "6d0ca77b691cf854ed074b459a93b87f4c7f5512f8f7743c635ca83da81f939e";
       };
 
       beamDeps = [ telemetry ];

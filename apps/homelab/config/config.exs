@@ -101,8 +101,6 @@ config :homelab, :netbox,
   url: "http://netbox.service.consul:8000/graphql/",
   token: {:hush, SystemEnvironment, "NETBOX_TOKEN"}
 
-config :ex_aws, :s3, host: "minio.service.consul", scheme: "http://", port: 9000
-
 config :elixir, :time_zone_database, Tz.TimeZoneDatabase
 
 config :opentelemetry,

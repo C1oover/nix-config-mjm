@@ -81,12 +81,7 @@ defmodule Homelab.MixProject do
       {:opentelemetry_oban, "~> 1.0"},
       {:opentelemetry_tesla, "~> 2.0"},
       {:timex, "~> 3.7"},
-      {:human_time, "~> 0.3.1"},
-      {:ex_aws, "~> 2.0"},
-      {:ex_aws_s3, "~> 2.0"},
-      # only used for AWS (actually MinIO)
-      {:hackney, "~> 1.9"},
-      {:sweet_xml, "~> 0.6"}
+      {:human_time, "~> 0.3.1"}
     ]
   end
 
