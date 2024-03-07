@@ -105,6 +105,20 @@ defmodule Homelab.Tasks.Adapter do
   end
 
   @impl Ecto.Adapter.Schema
+  def insert_all(
+        _adapter_meta,
+        _schema_meta,
+        _header,
+        _list,
+        _on_conflict,
+        _returning,
+        _placeholders,
+        _options
+      ) do
+    raise "not implemented"
+  end
+
+  @impl Ecto.Adapter.Schema
   def update(_adapter_meta, _schema_meta, fields, filters, _returning, _opts) do
     {status, fields} = Keyword.pop(fields, :status)
     fields = Keyword.replace_lazy(fields, :tags, &Enum.join(&1, ","))
@@ -121,9 +135,14 @@ defmodule Homelab.Tasks.Adapter do
   end
 
   @impl Ecto.Adapter.Schema
-  def delete(_adapter_meta, _schema_meta, filters, _opts) do
+  def delete(_adapter_meta, _schema_meta, filters, _returning, _opts) do
     :ok = Connection.delete(filters)
 
     {:ok, []}
+  end
+
+  @impl Ecto.Adapter.Schema
+  def autogenerate(_field_type) do
+    raise "not implemented"
   end
 end
