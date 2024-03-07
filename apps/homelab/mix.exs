@@ -42,7 +42,7 @@ defmodule Homelab.MixProject do
     [
       {:phoenix, "~> 1.7.1"},
       {:phoenix_ecto, "~> 4.0"},
-      {:phoenix_html, "~> 3.3"},
+      {:phoenix_html, "~> 4.1"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_view, "~> 0.19"},
       {:ecto, "~> 3.10"},
@@ -72,6 +72,7 @@ defmodule Homelab.MixProject do
       {:oban, "~> 2.14"},
       {:opentelemetry, "~> 1.0"},
       {:opentelemetry_api, "~> 1.0"},
+      {:opentelemetry_telemetry, "~> 1.1", override: true},
       {:opentelemetry_exporter, "~> 1.0"},
       {:opentelemetry_phoenix, "~> 1.0"},
       {:opentelemetry_cowboy, "~> 0.2"},
@@ -80,7 +81,7 @@ defmodule Homelab.MixProject do
       {:opentelemetry_oban, "~> 1.0"},
       {:opentelemetry_tesla, "~> 2.0"},
       {:timex, "~> 3.7"},
-      {:human_time, "~> 0.2.3"},
+      {:human_time, "~> 0.3.1"},
       {:ex_aws, "~> 2.0"},
       {:ex_aws_s3, "~> 2.0"},
       # only used for AWS (actually MinIO)
