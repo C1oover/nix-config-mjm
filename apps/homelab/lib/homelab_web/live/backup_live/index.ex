@@ -11,7 +11,7 @@ defmodule HomelabWeb.BackupLive.Index do
     Homelab.Backups.list_archives()
   end
 
-  def extract_command(%Backup{kind: :restic}) do
-    ""
+  def extract_command(%Backup{} = backup) do
+    "sudo restic-#{backup.repository_name} #{backup.location} restore #{backup.id}"
   end
 end
