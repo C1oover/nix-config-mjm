@@ -13,6 +13,8 @@ in
 
   "vault-backup-secret-id.age".publicKeys = personalKeys ++ hashistack;
   "vault-backup-password.age".publicKeys = personalKeys ++ hashistack;
+  "restic-backup-env.age".publicKeys = personalKeys ++ hashistack;
+  "restic-backup-offsite-env.age".publicKeys = personalKeys ++ hashistack;
 
   "arges-approle-secret-id.age".publicKeys = personalKeys ++ [ arges ];
   "brontes-approle-secret-id.age".publicKeys = personalKeys ++ [ brontes ];
@@ -28,8 +30,6 @@ in
   ];
 
   "newsboat-miniflux-token.age".publicKeys = personalKeys;
-
-  "restic-backup-env.age".publicKeys = personalKeys ++ allNixOS;
 
   "smb-creds.age".publicKeys = personalKeys ++ [ persephone ];
 

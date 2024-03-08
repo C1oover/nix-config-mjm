@@ -44,13 +44,11 @@ in
       storageBackend = "raft";
       storageConfig = ''
         node_id = "${cfg.nodeId}"
-        ${concatMapStrings
-          (n: ''
-            retry_join {
-              leader_api_addr = "http://${n}:8200"
-            }
-          '')
-          cfg.nodes}
+        ${concatMapStrings (n: ''
+          retry_join {
+            leader_api_addr = "http://${n}:8200"
+          }
+        '') cfg.nodes}
       '';
       listenerExtraConfig = ''
         cluster_address = "0.0.0.0:8201"
@@ -120,15 +118,13 @@ in
       };
     };
 
-    services.restic.backups.vault =
+    mjm.backups.vault =
       let
         vault = lib.getExe config.services.vault.package;
       in
       {
-        initialize = true;
-        repository = "s3:http://garage.service.consul:3902/restic-backups/vault";
         passwordFile = config.age.secrets.vault-backup-password.path;
-        environmentFile = config.age.secrets.restic-backup-env.path;
+        useVaultSecrets = false;
         paths = [ "/tmp/vault.snap" ];
         backupPrepareCommand = ''
           role_id=05d0f7d5-f24c-5442-dbf1-46db0121fc14
@@ -148,21 +144,12 @@ in
         backupCleanupCommand = ''
           rm -f /tmp/vault.snap
         '';
-        pruneOpts = [
-          "--keep-daily 7"
-          "--keep-weekly 4"
-        ];
-        timerConfig = {
-          OnCalendar = "daily";
-          RandomizedDelaySec = "2h";
-        };
       };
 
     # if not the leader, the backup command will fail, but we won't want to treat that as a failure.
     systemd.services.restic-backups-vault.serviceConfig.SuccessExitStatus = "1";
 
     age.secrets.vault-unseal-env.file = ../../../secrets/${config.networking.hostName}-vault-unseal-env.age;
-    age.secrets.restic-backup-env.file = ../../../secrets/restic-backup-env.age;
     age.secrets.vault-backup-password.file = ../../../secrets/vault-backup-password.age;
     age.secrets.vault-backup-secret-id.file = ../../../secrets/vault-backup-secret-id.age;
   };
