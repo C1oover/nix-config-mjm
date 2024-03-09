@@ -22,7 +22,7 @@ defmodule Homelab.Backups do
         _ -> []
       end)
       |> Kernel.++(cached_results)
-      |> Enum.sort(&(DateTime.compare(&1.time, &2.time) != :lt))
+      |> sort_archives()
     end
   end
 
@@ -37,6 +37,13 @@ defmodule Homelab.Backups do
     Tracer.with_span :list_archives_by_location, %{attributes: %{"backup.location": location}} do
       Restic.list_snapshots(location)
     end
+  end
+
+  def sort_archives(archives) do
+    Enum.sort(
+      archives,
+      &(DateTime.compare(&1.time, &2.time) != :lt)
+    )
   end
 
   defp fetch_cached_results(locations) do

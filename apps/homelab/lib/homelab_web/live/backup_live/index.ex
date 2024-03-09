@@ -4,11 +4,22 @@ defmodule HomelabWeb.BackupLive.Index do
   alias Homelab.Backups.Backup
 
   def mount(_params, _session, socket) do
-    {:ok, stream(socket, :archives, list_archives())}
+    socket
+    |> assign(:onsite_archives, Homelab.Backups.list_archives([:onsite]))
+    |> assign_async(:offsite_archives, fn ->
+      {:ok, %{offsite_archives: Homelab.Backups.list_archives([:offsite])}}
+    end)
+    |> then(&{:ok, &1})
   end
 
-  defp list_archives() do
-    Homelab.Backups.list_archives()
+  defp all_archives(onsite, offsite) do
+    case offsite do
+      %{ok?: true, result: offsite} ->
+        Homelab.Backups.sort_archives(onsite ++ offsite)
+
+      _ ->
+        onsite
+    end
   end
 
   def extract_command(%Backup{} = backup) do
