@@ -4,6 +4,7 @@ defmodule Homelab.Backups.Restic do
     "mediaserver",
     "paperless",
     "postgresql",
+    "vault",
     "vaultwarden"
   ]
 
