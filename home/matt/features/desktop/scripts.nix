@@ -16,6 +16,7 @@ in
           light
           pulseaudio
         ];
+        execer = [ "cannot:${pulseaudio}/bin/pactl" ];
       }
       ''
         pactl set-sink-volume @DEFAULT_SINK@ 30%
