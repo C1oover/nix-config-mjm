@@ -1,9 +1,4 @@
-{
-  pkgs,
-  config,
-  outputs,
-  ...
-}:
+{ pkgs, config, ... }:
 let
   port = config.services.home-assistant.config.http.server_port;
 in
@@ -84,7 +79,7 @@ in
       adaptive_lighting = { };
     };
     customComponents = with pkgs.home-assistant-custom-components; [
-      outputs.packages.${pkgs.system}.hass-auth-header
+      auth-header
       waste_collection_schedule
       adaptive_lighting
     ];
