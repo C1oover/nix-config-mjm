@@ -1,6 +1,13 @@
-{ pkgs, lib, ... }:
+{
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 {
   imports = [
+    inputs.lanzaboote.nixosModules.lanzaboote
+
     ./hardware-configuration.nix
 
     ../common/global/nixos
@@ -8,6 +15,8 @@
 
     ./nvk.nix
   ];
+
+  environment.systemPackages = [ pkgs.sbctl ];
 
   mjm.desktop.enable = true;
 
@@ -18,8 +27,12 @@
 
   boot.kernelPackages = pkgs.linuxPackages_6_6;
 
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.systemd-boot.enable = false;
+
+  boot.lanzaboote = {
+    enable = true;
+    pkiBundle = "/etc/secureboot";
+  };
 
   boot.initrd.luks.devices = {
     cryptroot = {
