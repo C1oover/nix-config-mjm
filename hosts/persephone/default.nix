@@ -9,7 +9,6 @@
     inputs.hardware.nixosModules.framework-13th-gen-intel
     ./hardware-configuration.nix
     ./impermanence.nix
-    ./samba.nix
     ./virtualization.nix
 
     ../common/global/nixos
