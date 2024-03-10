@@ -3,7 +3,6 @@
   python3Packages,
   fetchFromGitHub,
   buildNpmPackage,
-  uwsgi,
 }:
 let
   pname = "linkding";
@@ -77,7 +76,6 @@ python3Packages.buildPythonApplication rec {
     supervisor
     typing-extensions
     urllib3
-    uwsgi
     waybackpy
     webencodings
   ];

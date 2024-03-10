@@ -8,7 +8,6 @@
   services.linkding = {
     enable = true;
     package = outputs.packages.${pkgs.system}.linkding;
-    uwsgi.package = outputs.packages.${pkgs.system}.uwsgi;
 
     address = "";
     port = 7090;

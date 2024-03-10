@@ -13,8 +13,10 @@ let
     LD_DATA_DIR = cfg.dataDir;
   } // (lib.mapAttrs (_: s: if lib.isBool s then lib.boolToString s else toString s) cfg.settings);
 
+  uwsgi = cfg.uwsgi.package.override { plugins = [ "python3" ]; };
   uwsgiCfg = pkgs.writeText "linkding-uwsgi.ini" ''
     [uwsgi]
+    need-plugin = python3
     module = siteroot.wsgi:application
     env = DJANGO_SETTINGS_MODULE=siteroot.settings.prod
     static-map = /static=${pkg}/lib/linkding/static
@@ -81,16 +83,14 @@ in
       type = types.submodule {
         freeformType =
           with types;
-          attrsOf (
-            oneOf [
-              bool
-              float
-              int
-              str
-              path
-              package
-            ]
-          );
+          attrsOf (oneOf [
+            bool
+            float
+            int
+            str
+            path
+            package
+          ]);
       };
       default = { };
       description = mdDoc ''
@@ -151,7 +151,7 @@ in
         ${pkg}/bin/linkding create_initial_superuser
       '';
       script = ''
-        exec ${cfg.uwsgi.package}/bin/uwsgi --http ${cfg.address}:${toString cfg.port} ${uwsgiCfg}
+        exec ${uwsgi}/bin/uwsgi --http ${cfg.address}:${toString cfg.port} ${uwsgiCfg}
       '';
       serviceConfig = {
         User = cfg.user;

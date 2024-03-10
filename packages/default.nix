@@ -9,9 +9,8 @@
       };
     in
     {
-      packages = rec {
-        uwsgi = pkgs.python3Packages.callPackage ./uwsgi.nix { };
-        linkding = pkgs.callPackage ./linkding.nix { inherit uwsgi; };
+      packages = {
+        linkding = pkgs.callPackage ./linkding.nix { };
         pragmata-pro = pkgs.callPackage ./pragmata-pro.nix { };
       };
     };
