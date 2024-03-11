@@ -34,6 +34,7 @@ in
           whiteLists.ads = [
             ''
               app.segment.com
+              api.segment.io
             ''
           ];
           clientGroupsBlock.default = [ "ads" ];
