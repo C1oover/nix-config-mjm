@@ -30,6 +30,7 @@
     ../../optional/vault-server.nix
   ] ++ (builtins.attrValues outputs.nixosModules);
 
+  nix.channel.enable = false;
   nix.settings.trusted-users = [
     "root"
     "matt"
