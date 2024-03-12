@@ -8,6 +8,7 @@
     directories = [
       "/var/lib/jellyfin"
       "/var/lib/private/garage/meta"
+      "/var/lib/private/invidious"
       {
         directory = "/var/lib/sabnzbd";
         user = "sabnzbd";

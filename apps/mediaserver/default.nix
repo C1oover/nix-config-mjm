@@ -19,6 +19,10 @@
     audiobooks = {
       upstream.service.name = "readarr-audio";
     };
+    tube = {
+      upstream.service.name = "invidious";
+      enableAuthProxy = false;
+    };
   };
 
   vault.policies.mediaserver = {

@@ -9,14 +9,15 @@
     ./services/jellyfin.nix
     ./services/sabnzbd.nix
     ./services/arr.nix
+    ./services/invidious.nix
     ./services/mediaserver-backup.nix
   ];
 
   nixpkgs.overlays = [
     (final: prev: {
-      jellyfin-ffmpeg = prev.jellyfin-ffmpeg.overrideAttrs (
-        old: { configureFlags = builtins.filter (f: f != "--enable-libaribcaption") old.configureFlags; }
-      );
+      jellyfin-ffmpeg = prev.jellyfin-ffmpeg.overrideAttrs (old: {
+        configureFlags = builtins.filter (f: f != "--enable-libaribcaption") old.configureFlags;
+      });
     })
   ];
 
