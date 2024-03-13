@@ -13,6 +13,10 @@
 
       devenv.shells.homelab =
         { config, ... }:
+        let
+          tailwind = self'.packages.homelab.tailwind;
+          esbuild = self'.packages.homelab.esbuild;
+        in
         {
           env.OTEL_SERVICE_NAME = "homelab";
           env.OTEL_EXPORTER_OTLP_ENDPOINT = "https://api.honeycomb.io:443";
@@ -28,6 +32,11 @@
             '').outPath;
           env.DEVENV_SECRETS = "${config.env.DEVENV_STATE}/secrets";
           env.RESTIC_PASSWORD_FILE = "${config.env.DEVENV_SECRETS}/restic_password";
+
+          env.MIX_TAILWIND_PATH = "${lib.getExe' tailwind "tailwind"}";
+          env.MIX_TAILWIND_VERSION = tailwind.version;
+          env.MIX_ESBUILD_PATH = "${lib.getExe esbuild}";
+          env.MIX_ESBUILD_VERSION = esbuild.version;
 
           enterShell =
             let
@@ -59,6 +68,10 @@
               node2nix
               restic
             ]
+            ++ (with self'.packages.homelab; [
+              esbuild
+              tailwind
+            ])
             ++ (lib.optional stdenv.isLinux inotify-tools);
 
           services.postgres = {

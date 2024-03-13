@@ -16,7 +16,7 @@
         </div>
         <div
           :if={tasks != []}
-          class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg"
+          class="shadow overflow-hidden border-b border-gray-200 dark:border-gray-700 sm:rounded-lg"
         >
           <.table
             id="tasks"
@@ -33,11 +33,11 @@
                   id={"task-#{task.id}-checked"}
                   name="done"
                   value="true"
-                  class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                  class="h-4 w-4 rounded border-gray-300 dark:border-gray-600 text-indigo-600 dark:text-indigo-300 focus:ring-indigo-600 dark:focus:ring-indigo-300 dark:bg-gray-900"
                 />
               </form>
             </:col>
-            <:col :let={task} label="Project" class="text-gray-500">
+            <:col :let={task} label="Project" class="text-gray-500 dark:text-gray-400">
               <%= task.project %>
             </:col>
             <:col :let={task} label="Description" class="w-full font-medium">
@@ -45,13 +45,13 @@
                 <span><%= task.description %></span>
                 <span
                   :for={tag <- task.tags}
-                  class="inline-flex items-center rounded-md bg-gray-50 px-1.5 py-0.5 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10"
+                  class="inline-flex items-center rounded-md bg-gray-50 dark:bg-gray-900 px-1.5 py-0.5 text-xs font-medium text-gray-600 dark:text-gray-400 ring-1 ring-inset ring-gray-500/10 dark:ring-gray-400/10"
                 >
                   <%= tag %>
                 </span>
               </div>
             </:col>
-            <:col :let={task} label="Created" class="text-gray-500">
+            <:col :let={task} label="Created" class="text-gray-500 dark:text-gray-400">
               <.relative_time now={@now} time={task.entry} />
             </:col>
             <:col :let={task}>

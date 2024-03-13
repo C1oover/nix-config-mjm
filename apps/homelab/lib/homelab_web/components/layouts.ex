@@ -5,7 +5,7 @@ defmodule HomelabWeb.Layouts do
 
   def navbar(assigns) do
     ~H"""
-    <nav x-data="{ mobileOpen: false }" class="bg-gray-800">
+    <nav x-data="{ mobileOpen: false }" class="bg-gray-800 dark:bg-gray-900">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
           <div class="flex items-center">

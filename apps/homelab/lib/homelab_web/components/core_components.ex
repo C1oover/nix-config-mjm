@@ -19,11 +19,11 @@ defmodule HomelabWeb.CoreComponents do
 
   def page_header(assigns) do
     ~H"""
-    <header class="bg-white shadow">
+    <header class="bg-white dark:bg-gray-600 shadow">
       <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <div class="md:flex md:items-center md:justify-between">
           <div class="flex-1 min-w-0">
-            <h1 class="text-2xl font-bold leading-tight text-gray-900 sm:text-3xl sm:truncate">
+            <h1 class="text-2xl font-bold leading-tight text-gray-900 dark:text-white sm:text-3xl sm:truncate">
               <%= render_slot(@inner_block) %>
             </h1>
           </div>
@@ -69,19 +69,19 @@ defmodule HomelabWeb.CoreComponents do
 
   def stat_card(assigns) do
     ~H"""
-    <div class="bg-white overflow-hidden shadow rounded-lg">
+    <div class="bg-white dark:bg-gray-900 overflow-hidden shadow rounded-lg">
       <div class="p-5">
         <div class="flex items-center">
-          <div class="flex-shrink-0 text-gray-400">
+          <div class="flex-shrink-0 text-gray-400 dark:text-gray-500">
             <%= render_slot(@icon) %>
           </div>
           <div class="ml-5 w-0 flex-1">
             <dl>
-              <dt class="text-sm leading-5 font-medium text-gray-500 truncate">
+              <dt class="text-sm leading-5 font-medium text-gray-500 dark:text-gray-400 truncate">
                 <%= @title %>
               </dt>
               <dd>
-                <div class="text-lg leading-7 font-medium text-gray-900 truncate">
+                <div class="text-lg leading-7 font-medium text-gray-900 dark:text-white truncate">
                   <%= render_slot(@inner_block) %>
                 </div>
               </dd>
@@ -89,12 +89,12 @@ defmodule HomelabWeb.CoreComponents do
           </div>
         </div>
       </div>
-      <div class="bg-gray-50 px-5 py-3">
+      <div class="bg-gray-50 dark:bg-gray-800 px-5 py-3">
         <div class="text-sm leading-5">
           <.link
             :for={link <- @link}
             class={[
-              "font-medium text-indigo-700 hover:text-indigo-900 transition ease-in-out duration-150",
+              "font-medium text-indigo-700 hover:text-indigo-900 dark:text-indigo-300 dark:hover:text-indigo-100 transition ease-in-out duration-150",
               Map.get(link, :class)
             ]}
             target={Map.get(link, :target)}
@@ -149,7 +149,11 @@ defmodule HomelabWeb.CoreComponents do
       phx-remove={hide_modal(@id)}
       class="relative z-50 hidden"
     >
-      <div id={"#{@id}-bg"} class="fixed inset-0 bg-zinc-50/90 transition-opacity" aria-hidden="true" />
+      <div
+        id={"#{@id}-bg"}
+        class="fixed inset-0 bg-zinc-50/90 dark:bg-zinc-950/90 transition-opacity"
+        aria-hidden="true"
+      />
       <div
         class="fixed inset-0 overflow-y-auto"
         aria-labelledby={"#{@id}-title"}
@@ -165,7 +169,7 @@ defmodule HomelabWeb.CoreComponents do
             phx-window-keydown={hide_modal(@on_cancel, @id)}
             phx-key="escape"
             phx-click-away={hide_modal(@on_cancel, @id)}
-            class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6"
+            class="relative transform overflow-hidden rounded-lg bg-white dark:bg-gray-800 px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6"
             x-transition:enter="ease-out duration-300"
             x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
@@ -177,7 +181,7 @@ defmodule HomelabWeb.CoreComponents do
               <button
                 phx-click={hide_modal(@on_cancel, @id)}
                 type="button"
-                class="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                class="rounded-md bg-white dark:bg-gray-800 text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:ring-offset-2"
                 aria-label={gettext("close")}
               >
                 <span class="sr-only"><%= gettext("close") %></span>
@@ -189,7 +193,7 @@ defmodule HomelabWeb.CoreComponents do
                 <h3
                   :if={@title != []}
                   id={"#{@id}-title"}
-                  class="text-base font-semibold leading-6 text-gray-900"
+                  class="text-base font-semibold leading-6 text-gray-900 dark:text-gray-100"
                   id="modal-title"
                 >
                   <%= render_slot(@title) %>
@@ -209,7 +213,7 @@ defmodule HomelabWeb.CoreComponents do
                 type="button"
                 phx-click={@on_confirm}
                 phx-disable-with
-                class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 sm:ml-3 sm:w-auto"
+                class="inline-flex w-full justify-center rounded-md bg-indigo-600 dark:bg-indigo-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 hover:bg-indigo-600 sm:ml-3 sm:w-auto"
               >
                 <%= render_slot(confirm) %>
               </button>
@@ -217,7 +221,7 @@ defmodule HomelabWeb.CoreComponents do
                 :for={cancel <- @cancel}
                 phx-click={hide_modal(@on_cancel, @id)}
                 type="button"
-                class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                class="mt-3 inline-flex w-full justify-center rounded-md bg-white dark:bg-gray-800 px-3 py-2 text-sm font-semibold text-gray-900 dark:text-gray-100 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 sm:mt-0 sm:w-auto"
               >
                 <%= render_slot(cancel) %>
               </button>
@@ -497,10 +501,11 @@ defmodule HomelabWeb.CoreComponents do
         id={@id || @name}
         value={normalize_value(@type, @value)}
         class={[
-          "mt-2 block w-full rounded-lg border-zinc-300 py-[7px] px-[11px]",
-          "text-zinc-900 focus:outline-none focus:ring-4 sm:text-sm sm:leading-6",
+          "mt-2 block w-full rounded-lg dark:bg-gray-900 border-zinc-300 dark:border-gray-700 py-[7px] px-[11px]",
+          "text-zinc-900 dark:text-gray-100 focus:outline-none focus:ring-4 sm:text-sm sm:leading-6",
           "phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400 phx-no-feedback:focus:ring-zinc-800/5",
-          "border-zinc-300 focus:border-zinc-400 focus:ring-zinc-800/5",
+          "phx-no-feedback:dark:border-gray-700 phx-no-feedback:focus:border-gray-600 phx-no-feedback:focus:ring-gray-200/5",
+          "focus:border-zinc-400 dark:focus:border-gray-600 focus:ring-zinc-800/5 dark:focus:ring-gray-200/5",
           @errors != [] && "border-rose-400 focus:border-rose-400 focus:ring-rose-400/10"
         ]}
         {@rest}
@@ -527,7 +532,7 @@ defmodule HomelabWeb.CoreComponents do
 
   def label(assigns) do
     ~H"""
-    <label for={@for} class="block text-sm font-semibold leading-6 text-zinc-800">
+    <label for={@for} class="block text-sm font-semibold leading-6 text-zinc-800 dark:text-zinc-200">
       <%= render_slot(@inner_block) %>
     </label>
     """
@@ -607,12 +612,12 @@ defmodule HomelabWeb.CoreComponents do
       end
 
     ~H"""
-    <table class="w-[40rem] sm:w-full divide-y divide-gray-200">
+    <table class="w-[40rem] sm:w-full divide-y divide-gray-200 dark:divide-gray-700">
       <thead class="text-left text-[0.8125rem] leading-4 text-zinc-500">
         <tr>
           <th
             :for={col <- @col}
-            class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+            class="px-6 py-3 bg-gray-50 dark:bg-gray-900 text-left text-xs leading-4 font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
           >
             <%= col[:label] %>
           </th>
@@ -622,12 +627,12 @@ defmodule HomelabWeb.CoreComponents do
       <tbody
         id={@id}
         phx-update={match?(%Phoenix.LiveView.LiveStream{}, @rows) && "stream"}
-        class="bg-white divide-y divide-gray-200 text-sm leading-5 text-zinc-700"
+        class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700 text-sm leading-5 text-zinc-700 dark:text-zinc-200"
       >
         <tr
           :for={row <- @rows}
           id={@row_id && @row_id.(row)}
-          class={["group", if(@selected? && @selected?.(row), do: "bg-zinc-50")]}
+          class={["group", if(@selected? && @selected?.(row), do: "bg-zinc-50 dark:bg-gray-950")]}
         >
           <td
             :for={{col, _i} <- Enum.with_index(@col)}
@@ -639,7 +644,7 @@ defmodule HomelabWeb.CoreComponents do
             ]}
           >
             <div class="block py-2 px-6">
-              <span class="absolute right-0 -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
+              <span class="absolute right-0 -left-4 group-hover:bg-zinc-50 dark:group-hover:bg-zinc-900 sm:rounded-l-xl" />
               <span class="relative">
                 <%= render_slot(col, @row_item.(row)) %>
               </span>

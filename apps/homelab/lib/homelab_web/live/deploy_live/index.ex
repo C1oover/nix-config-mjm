@@ -37,10 +37,13 @@ defmodule HomelabWeb.DeployLive.Index do
     end)
   end
 
-  defp icon_style(%Deploy{state: :success}), do: "bg-green-500"
-  defp icon_style(%Deploy{state: :failure}), do: "bg-red-600"
-  defp icon_style(%Deploy{state: state}) when state in [:inactive, :pending], do: "bg-gray-300"
-  defp icon_style(%Deploy{state: :in_progress}), do: "bg-yellow-500"
+  defp icon_style(%Deploy{state: :success}), do: "bg-green-500 dark:bg-green-300"
+  defp icon_style(%Deploy{state: :failure}), do: "bg-red-600 dark:bg-red-300"
+
+  defp icon_style(%Deploy{state: state}) when state in [:inactive, :pending],
+    do: "bg-gray-300 dark:bg-gray-600"
+
+  defp icon_style(%Deploy{state: :in_progress}), do: "bg-yellow-500 dark:bg-yellow-300"
   defp icon_style(_), do: nil
 
   def deploy_icon(%Deploy{state: :success}), do: "hero-check"
@@ -88,11 +91,17 @@ defmodule HomelabWeb.DeployLive.Index do
               />
               <%= case build.state do %>
                 <% :success -> %>
-                  <.icon name="hero-check-circle-mini" class="h-5 w-5 text-green-500" />
+                  <.icon
+                    name="hero-check-circle-mini"
+                    class="h-5 w-5 text-green-500 dark:text-green-300"
+                  />
                 <% :failure -> %>
-                  <.icon name="hero-x-circle-mini" class="h-5 w-5 text-red-600" />
+                  <.icon name="hero-x-circle-mini" class="h-5 w-5 text-red-600 dark:text-red-300" />
                 <% _ -> %>
-                  <.icon name="hero-question-mark-circle-mini" class="h-5 w-5 text-gray-300" />
+                  <.icon
+                    name="hero-question-mark-circle-mini"
+                    class="h-5 w-5 text-gray-300 dark:text-gray-600"
+                  />
               <% end %>
             </div>
           <% build.percent != nil -> %>
