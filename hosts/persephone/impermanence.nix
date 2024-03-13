@@ -15,6 +15,7 @@
       "/var/lib/NetworkManager"
       "/var/lib/iwd"
       "/etc/NetworkManager/system-connections"
+      "/etc/secureboot"
     ];
     files = [
       "/etc/machine-id"

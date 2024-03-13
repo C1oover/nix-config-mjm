@@ -6,6 +6,7 @@
 }:
 {
   imports = [
+    inputs.lanzaboote.nixosModules.lanzaboote
     inputs.hardware.nixosModules.framework-13th-gen-intel
     ./hardware-configuration.nix
     ./impermanence.nix
@@ -36,15 +37,22 @@
   #   }
   # );
 
-  environment.systemPackages = [ config.boot.kernelPackages.perf ];
+  environment.systemPackages = [
+    pkgs.sbctl
+    config.boot.kernelPackages.perf
+  ];
 
   boot.supportedFilesystems = [
     "btrfs"
     "bcachefs"
   ];
 
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.systemd-boot.enable = false;
+
+  boot.lanzaboote = {
+    enable = true;
+    pkiBundle = "/etc/secureboot";
+  };
 
   boot.extraModulePackages = [ config.boot.kernelPackages.framework-laptop-kmod ];
 
