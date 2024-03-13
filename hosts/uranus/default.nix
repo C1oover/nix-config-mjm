@@ -25,8 +25,6 @@
   networking.hostName = "uranus";
   systemd.network.networks."10-lan".matchConfig.Name = lib.mkForce "enp3*";
 
-  boot.kernelPackages = pkgs.linuxPackages_6_6;
-
   boot.loader.systemd-boot.enable = false;
 
   boot.lanzaboote = {
