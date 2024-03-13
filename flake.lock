@@ -819,6 +819,22 @@
         "type": "github"
       }
     },
+    "nixos-bcachefs-clevis-systemd": {
+      "locked": {
+        "lastModified": 1710372683,
+        "narHash": "sha256-UMYXGSJbSJQqNX6NaYkkw3AZA0MFJnMf2MDUUo+f/zQ=",
+        "owner": "mjm",
+        "repo": "nixpkgs",
+        "rev": "cdaae3d0d987d0c610fba009a82511761fccb91e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mjm",
+        "ref": "bcachefs-clevis-systemd",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixos-wsl": {
       "inputs": {
         "flake-compat": "flake-compat_5",
@@ -1209,6 +1225,7 @@
         "lanzaboote": "lanzaboote",
         "nix-colors": "nix-colors",
         "nixos": "nixos",
+        "nixos-bcachefs-clevis-systemd": "nixos-bcachefs-clevis-systemd",
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs_4",
         "nixpkgs-firefox-darwin": "nixpkgs-firefox-darwin",

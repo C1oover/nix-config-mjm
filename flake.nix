@@ -2,6 +2,7 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     nixos.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixos-bcachefs-clevis-systemd.url = "github:mjm/nixpkgs/bcachefs-clevis-systemd";
     darwin = {
       url = "github:lnl7/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
