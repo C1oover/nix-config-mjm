@@ -21,7 +21,7 @@
 
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 
-  boot.kernelPackages = pkgs.linuxPackages_testing;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # boot.kernelPackages = pkgs.linuxPackagesFor (
   #   pkgs.linux_testing.override {
