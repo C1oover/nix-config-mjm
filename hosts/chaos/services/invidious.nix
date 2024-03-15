@@ -6,6 +6,7 @@
     settings = {
       db.user = "invidious";
       external_port = 443;
+      https_only = true;
     };
   };
 
