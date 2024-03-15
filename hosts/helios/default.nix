@@ -11,10 +11,8 @@
 
   boot.supportedFilesystems = [ "xfs" ];
 
-  boot.loader.grub = {
-    enable = true;
-    device = "/dev/sda";
-  };
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
 
   services.qemuGuest.enable = true;
 
