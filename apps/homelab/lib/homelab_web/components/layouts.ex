@@ -74,7 +74,7 @@ defmodule HomelabWeb.Layouts do
   def nav_link(assigns) do
     ~H"""
     <.link
-      class={"inline-flex items-center px-3 py-2 rounded-md text-sm font-medium #{if not is_nil(@item) and @view_item == @item, do: "text-white bg-gray-900", else: "text-gray-300 hover:text-white hover:bg-gray-700"} focus:outline-none focus:text-white focus:bg-gray-700"}
+      class={"inline-flex items-center px-3 py-2 rounded-md text-sm font-medium #{if not is_nil(@item) and @view_item == @item, do: "text-white bg-gray-900 dark:bg-gray-800", else: "text-gray-300 hover:text-white hover:bg-gray-700"} focus:outline-none focus:text-white focus:bg-gray-700"}
       {@rest}
     >
       <%= render_slot(@inner_block) %>
