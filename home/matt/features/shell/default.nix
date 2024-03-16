@@ -9,10 +9,10 @@
 
   programs.zsh = {
     enable = true;
-    enableAutosuggestions = true;
     enableCompletion = true;
     syntaxHighlighting.enable = true;
     enableVteIntegration = true;
+    autosuggestion.enable = true;
     defaultKeymap = "emacs";
     initExtra = ''
       if [ -f "$HOME/.asdf/asdf.sh" ]; then . "$HOME/.asdf/asdf.sh"; fi
