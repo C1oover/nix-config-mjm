@@ -19,7 +19,6 @@
     ./services/miniflux.nix
     ./services/netbox.nix
     ./services/paperless.nix
-    ./services/postgresql.nix
     ./services/prometheus
     ./services/taskserver.nix
     ./services/tempo.nix
@@ -37,6 +36,7 @@
 
   mjm.consul-agent.enable = true;
   mjm.garage.enable = true;
+  mjm.postgresql.enable = true;
   mjm.server.enable = true;
 
   vault-secrets.roleId = "29829ea8-3eb2-b3d6-8aab-d150dbb48e3d";

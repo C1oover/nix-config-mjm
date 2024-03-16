@@ -10,6 +10,12 @@
       "/var/lib/private/garage/meta"
       "/var/lib/private/invidious"
       {
+        directory = "/var/lib/postgresql";
+        user = "postgres";
+        group = "postgres";
+        mode = "0750";
+      }
+      {
         directory = "/var/lib/sabnzbd";
         user = "sabnzbd";
         group = "sabnzbd";
