@@ -7,7 +7,6 @@
   environment.persistence."/persist" = {
     directories = [
       "/nix"
-      "/boot"
       "/var/lib/consul"
       "/var/lib/vault"
     ];
