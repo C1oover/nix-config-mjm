@@ -45,6 +45,8 @@ in
       {{ end }}
     '';
 
+    mjm.state.directories = [ "/var/lib/private/garage/meta" ];
+
     environment.systemPackages = builtins.attrValues {
       inherit (pkgs.callPackages ./scripts.nix { garage = config.services.garage.package; }) g;
     };

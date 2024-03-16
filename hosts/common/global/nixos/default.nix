@@ -14,6 +14,7 @@
     ../home-manager.nix
     ../nix.nix
     ./attic.nix
+    ./impermanence.nix
     ./networkd.nix
     ./ssh.nix
     ./ssl.nix
@@ -28,6 +29,7 @@
     ../../optional/otel-collector.nix
     ../../optional/postgresql.nix
     ../../optional/server
+    ../../optional/tailscale.nix
     ../../optional/vault-server.nix
   ] ++ (builtins.attrValues outputs.nixosModules);
 

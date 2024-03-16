@@ -1,4 +1,6 @@
 {
+  mjm.state.directories = [ "/var/lib/private/lldap" ];
+
   services.lldap = {
     enable = true;
     settings = {

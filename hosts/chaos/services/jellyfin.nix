@@ -1,5 +1,12 @@
 { pkgs, config, ... }:
 {
+  mjm.state.directories = [
+    {
+      directory = config.services.jellyfin.dataDir;
+      inherit (config.services.jellyfin) user group;
+    }
+  ];
+
   services.jellyfin = {
     enable = true;
     openFirewall = true;

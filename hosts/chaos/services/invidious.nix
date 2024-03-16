@@ -1,5 +1,7 @@
 { config, ... }:
 {
+  mjm.state.directories = [ "/var/lib/private/invidious" ];
+
   services.invidious = {
     enable = true;
     domain = "tube.midna.dev";

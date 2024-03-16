@@ -1,5 +1,13 @@
 { pkgs, config, ... }:
 {
+  mjm.state.directories = [
+    {
+      directory = "/var/lib/bitwarden_rs";
+      user = "vaultwarden";
+      group = "vaultwarden";
+    }
+  ];
+
   services.vaultwarden = {
     enable = true;
     config = {

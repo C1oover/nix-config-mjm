@@ -77,6 +77,15 @@ in
       8201
     ];
 
+    mjm.state.directories = [
+      {
+        directory = config.services.vault.storagePath;
+        user = "vault";
+        group = "vault";
+        mode = "0700";
+      }
+    ];
+
     systemd.services.vault-unseal = {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];

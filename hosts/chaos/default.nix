@@ -1,7 +1,6 @@
 {
   imports = [
     ./hardware-configuration.nix
-    ./impermanence.nix
 
     ../common/global/nixos
     ../common/users/matt
@@ -34,6 +33,10 @@
   mjm.garage.enable = true;
   mjm.postgresql.enable = true;
   mjm.server.enable = true;
+  mjm.state = {
+    enableImpermanence = true;
+    persistDir = "/nix/persist";
+  };
 
   vault-secrets.roleId = "a87469f6-a653-37ab-8aa4-2a1adeed567f";
 

@@ -1,7 +1,6 @@
 {
   imports = [
     ./hardware-configuration.nix
-    ./impermanence.nix
 
     ../common/global/nixos
     ../common/users/matt
@@ -19,6 +18,10 @@
   mjm.consul-agent.enable = true;
   mjm.garage.enable = true;
   mjm.server.enable = true;
+  mjm.state = {
+    enableImpermanence = true;
+    persistDir = "/nix/persist";
+  };
 
   vault-secrets.roleId = "61d175e1-7a2e-4554-2cca-cff48c926b82";
 

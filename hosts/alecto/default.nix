@@ -1,7 +1,6 @@
 {
   imports = [
     ./hardware-configuration.nix
-    ./impermanence.nix
 
     ../common/global/nixos
     ../common/users/matt
@@ -19,6 +18,11 @@
     server.enable = true;
   };
   mjm.server.enable = true;
+  mjm.state = {
+    enableImpermanence = true;
+    persistDir = "/persist";
+    directories = [ "/nix" ];
+  };
   mjm.vault.enable = true;
 
   system.stateVersion = "22.11";

@@ -12,6 +12,8 @@ in
 {
   imports = [ ../../../../apps ];
 
+  mjm.state.directories = [ "/var/lib/acme" ];
+
   security.acme = {
     acceptTerms = true;
     defaults = {
@@ -24,13 +26,10 @@ in
         CF_ZONE_API_TOKEN_FILE = config.vault-secrets.templates.cloudflare-api-token.path;
       };
     };
-    certs =
-      builtins.mapAttrs
-        (name: _v: {
-          dnsProvider = "cloudflare";
-          webroot = null;
-        })
-        (lib.filterAttrs (_name: vhost: vhost.enableACME == true) config.services.nginx.virtualHosts);
+    certs = builtins.mapAttrs (name: _v: {
+      dnsProvider = "cloudflare";
+      webroot = null;
+    }) (lib.filterAttrs (_name: vhost: vhost.enableACME == true) config.services.nginx.virtualHosts);
   };
 
   vault-secrets.templates.cloudflare-api-token.kvPath = "kv/ingress/cloudflare_api_token";
@@ -43,40 +42,38 @@ in
     '';
 
     virtualHosts =
-      lib.mapAttrs'
-        (name: vhost: {
-          name = "${name}.midna.dev";
-          value = {
-            serverAliases = vhost.serverAliases;
-            forceSSL = true;
-            enableACME = true;
-            extraConfig = ''
-              ${lib.optionalString vhost.recommendedProxySettings ''
-                proxy_buffering off;
-                client_max_body_size 0;
-              ''}
-              ${vhost.extraServerConfig}
-              ${lib.optionalString vhost.enableAuthProxy ''
-                include ${./authelia-location.conf};
-              ''}
-            '';
+      lib.mapAttrs' (name: vhost: {
+        name = "${name}.midna.dev";
+        value = {
+          serverAliases = vhost.serverAliases;
+          forceSSL = true;
+          enableACME = true;
+          extraConfig = ''
+            ${lib.optionalString vhost.recommendedProxySettings ''
+              proxy_buffering off;
+              client_max_body_size 0;
+            ''}
+            ${vhost.extraServerConfig}
+            ${lib.optionalString vhost.enableAuthProxy ''
+              include ${./authelia-location.conf};
+            ''}
+          '';
 
-            locations."/" = {
-              recommendedProxySettings = vhost.recommendedProxySettings;
-              proxyWebsockets = vhost.proxyWebsockets;
-              proxyPass = "http${
-                if vhost.upstream.useSSL then "s" else ""
-              }://${vhost.upstream.name}${vhost.upstream.path}";
-              extraConfig = ''
-                ${lib.optionalString vhost.enableAuthProxy ''
-                  include ${./authelia-request.conf};
-                ''}
-                ${vhost.extraLocationConfig}
-              '';
-            };
+          locations."/" = {
+            recommendedProxySettings = vhost.recommendedProxySettings;
+            proxyWebsockets = vhost.proxyWebsockets;
+            proxyPass = "http${
+              if vhost.upstream.useSSL then "s" else ""
+            }://${vhost.upstream.name}${vhost.upstream.path}";
+            extraConfig = ''
+              ${lib.optionalString vhost.enableAuthProxy ''
+                include ${./authelia-request.conf};
+              ''}
+              ${vhost.extraLocationConfig}
+            '';
           };
-        })
-        vhosts
+        };
+      }) vhosts
       // {
         "_" = {
           default = true;
@@ -120,28 +117,26 @@ in
         {
           source = pkgs.writeText "upstreams.conf.tpl" (
             lib.concatStrings (
-              lib.mapAttrsToList
-                (_name: u: ''
-                  upstream ${u.name} {
-                    ${lib.optionalString u.ipHash ''
+              lib.mapAttrsToList (_name: u: ''
+                upstream ${u.name} {
+                  ${lib.optionalString u.ipHash ''
                     ip_hash;
                   ''}
-                    ${
-                      if u.addresses != null then
-                        lib.concatMapStringsSep "\n" (a: "server ${a};") u.addresses
-                      else
-                        ''
-                          {{ range service "${u.service.name}" }}
-                          server {{ if sprig_contains ":" .Address }}{{ .NodeTaggedAddresses.lan_ipv4 }}{{ else }}{{ .Address }}{{ end }}:${
-                            if u.service.port != null then toString u.service.port else "{{ .Port }}"
-                          };
-                          {{ else }}server 127.0.0.1:65535; # force a 502
-                          {{ end }}
-                        ''
-                    }
+                  ${
+                    if u.addresses != null then
+                      lib.concatMapStringsSep "\n" (a: "server ${a};") u.addresses
+                    else
+                      ''
+                        {{ range service "${u.service.name}" }}
+                        server {{ if sprig_contains ":" .Address }}{{ .NodeTaggedAddresses.lan_ipv4 }}{{ else }}{{ .Address }}{{ end }}:${
+                          if u.service.port != null then toString u.service.port else "{{ .Port }}"
+                        };
+                        {{ else }}server 127.0.0.1:65535; # force a 502
+                        {{ end }}
+                      ''
                   }
-                '')
-                upstreams
+                }
+              '') upstreams
             )
           );
 

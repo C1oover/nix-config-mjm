@@ -1,5 +1,25 @@
 { pkgs, config, ... }:
 {
+  mjm.state.directories = [
+    {
+      directory = config.services.sonarr.dataDir;
+      inherit (config.services.sonarr) user group;
+    }
+    {
+      directory = config.services.radarr.dataDir;
+      inherit (config.services.radarr) user group;
+    }
+    {
+      directory = config.services.readarr.dataDir;
+      inherit (config.services.readarr) user group;
+    }
+    {
+      directory = "/var/lib/readarr-audio";
+      user = "readarr";
+      group = "readarr";
+    }
+  ];
+
   services.sonarr = {
     enable = true;
     openFirewall = true;

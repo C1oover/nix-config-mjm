@@ -5,6 +5,14 @@
   ...
 }:
 {
+  mjm.state.directories = [
+    {
+      directory = "/var/lib/linkding";
+      user = "linkding";
+      group = "linkding";
+    }
+  ];
+
   services.linkding = {
     enable = true;
     package = outputs.packages.${pkgs.system}.linkding;

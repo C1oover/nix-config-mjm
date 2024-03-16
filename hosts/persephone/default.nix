@@ -1,5 +1,6 @@
 {
   pkgs,
+  lib,
   inputs,
   config,
   ...
@@ -9,7 +10,6 @@
     inputs.lanzaboote.nixosModules.lanzaboote
     inputs.hardware.nixosModules.framework-13th-gen-intel
     ./hardware-configuration.nix
-    ./impermanence.nix
     ./virtualization.nix
 
     ../common/global/nixos
@@ -19,6 +19,22 @@
   ];
 
   mjm.desktop.enable = true;
+  mjm.state = {
+    enableImpermanence = true;
+    persistDir = "/persist";
+    directories = [
+      "/home"
+      "/nix"
+      "/var/log"
+      "/var/lib/libvirt"
+      "/var/lib/fprint"
+      "/var/lib/NetworkManager"
+      "/var/lib/iwd"
+      "/etc/NetworkManager/system-connections"
+      "/etc/secureboot"
+    ];
+  };
+  environment.persistence."/persist".users.matt.directories = lib.mkForce [ ];
 
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 

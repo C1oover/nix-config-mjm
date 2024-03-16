@@ -3,6 +3,14 @@ let
   port = config.services.home-assistant.config.http.server_port;
 in
 {
+  mjm.state.directories = [
+    {
+      directory = config.services.home-assistant.configDir;
+      user = "hass";
+      group = "hass";
+    }
+  ];
+
   services.home-assistant = {
     enable = true;
     openFirewall = true;

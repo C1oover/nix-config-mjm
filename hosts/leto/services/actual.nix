@@ -12,4 +12,6 @@
   services.consul.services.actual = {
     port = 5006;
   };
+
+  mjm.state.directories = [ "/var/lib/docker/volumes" ];
 }

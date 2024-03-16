@@ -1,5 +1,12 @@
 { config, ... }:
 {
+  mjm.state.directories = [
+    {
+      directory = "/var/lib/sabnzbd";
+      inherit (config.services.sabnzbd) user group;
+    }
+  ];
+
   services.sabnzbd = {
     enable = true;
   };

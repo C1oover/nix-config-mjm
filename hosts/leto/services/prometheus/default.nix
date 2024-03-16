@@ -8,6 +8,14 @@
     ./rules
   ];
 
+  mjm.state.directories = [
+    {
+      directory = "/var/lib/prometheus2";
+      user = "prometheus";
+      group = "prometheus";
+    }
+  ];
+
   services.prometheus = {
     enable = true;
     checkConfig = "syntax-only";

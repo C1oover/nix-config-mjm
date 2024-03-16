@@ -1,5 +1,13 @@
 { config, pkgs, ... }:
 {
+  mjm.state.directories = [
+    {
+      directory = config.services.netbox.dataDir;
+      user = "netbox";
+      group = "netbox";
+    }
+  ];
+
   services.netbox = {
     enable = true;
     package = pkgs.netbox_3_7;

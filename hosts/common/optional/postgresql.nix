@@ -15,6 +15,15 @@ in
   };
 
   config = mkIf cfg.enable {
+    mjm.state.directories = [
+      {
+        directory = "/var/lib/postgresql";
+        user = "postgres";
+        group = "postgres";
+        mode = "0750";
+      }
+    ];
+
     services.postgresql = {
       enable = true;
       package = pkgs.postgresql_16;
