@@ -36,11 +36,8 @@
   };
 
   fileSystems."/boot" = {
-    device = "/nix/boot";
-    options = [
-      "bind"
-      "X-fstrim.notrim"
-    ];
+    device = "/dev/disk/by-label/boot";
+    fsType = "vfat";
   };
 
   swapDevices = [
