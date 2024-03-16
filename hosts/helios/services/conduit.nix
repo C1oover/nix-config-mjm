@@ -15,6 +15,7 @@
       address = "::";
       server_name = "midna.dev";
       database_backend = "rocksdb";
+      log = "info";
     };
   };
 
