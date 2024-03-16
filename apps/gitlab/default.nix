@@ -105,6 +105,7 @@
       upstream.addresses = [ "10.0.2.32" ];
 
       enableAuthProxy = false;
+      useIPv4Proxy = true;
 
       extraServerConfig = ''
         # To allow special characters in headers

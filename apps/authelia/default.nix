@@ -9,6 +9,7 @@
       upstream.service.name = "authelia";
 
       enableAuthProxy = false;
+      useIPv4Proxy = true;
       recommendedProxySettings = false;
 
       extraServerConfig = ''
