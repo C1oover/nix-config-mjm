@@ -130,6 +130,19 @@
         "midna.dev"
       ];
       enableAuthProxy = false;
+
+      extraServerConfig = ''
+        location =/.well-known/matrix/server {
+          default_type application/json;
+          return 200 '{"m.server": "chat.midna.dev:443"}';
+        }
+
+        location =/.well-known/matrix/client {
+          default_type application/json;
+          add_header Access-Control-Allow-Origin *;
+          return 200 '{"m.homeserver": {"base_url": "https://chat.midna.dev/"}}';
+        }
+      '';
     };
   };
 }

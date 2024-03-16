@@ -1,5 +1,7 @@
 { config, lib, ... }:
 let
+  inherit (lib) concatMapAttrs mapAttrs;
+
   ingressIPs = {
     brontes = "2601:282:167f:3eec:dea6:32ff:fed5:d840";
     steropes = "2601:282:167f:3eec:dea6:32ff:fe96:bc05";
@@ -18,28 +20,29 @@ in
   };
 
   terraform.resource.cloudflare_record =
-    lib.mapAttrs
-      (name: vhost: {
+    mapAttrs (name: vhost: {
+      zone_id = "\${data.cloudflare_zone.external.id}";
+      type = "CNAME";
+      inherit name;
+      value = "ingress.midna.dev";
+      proxied = false;
+    }) config.ingress.virtualHosts
+    // (concatMapAttrs (name: value: {
+      "${name}_external" = {
         zone_id = "\${data.cloudflare_zone.external.id}";
-        type = "CNAME";
-        inherit name;
-        value = "ingress.midna.dev";
+        type = "AAAA";
+        name = "ingress";
+        inherit value;
         proxied = false;
-      })
-      config.ingress.virtualHosts
-    // (lib.attrsets.mergeAttrsList (
-      map
-        (name: {
-          "${name}_external" = {
-            zone_id = "\${data.cloudflare_zone.external.id}";
-            type = "AAAA";
-            name = "ingress";
-            value = ingressIPs.${name};
-            proxied = false;
-          };
-        })
-        (builtins.attrNames ingressIPs)
-    ));
+      };
+      "${name}_root" = {
+        zone_id = "\${data.cloudflare_zone.external.id}";
+        type = "AAAA";
+        name = "@";
+        inherit value;
+        proxied = false;
+      };
+    }) ingressIPs);
 
   vault.policies.ingress = {
     paths."kv/data/ingress".capabilities = [ "read" ];

@@ -8,6 +8,7 @@
     ./authelia
     ./backup
     ./consul
+    ./chat
     ./garage
     ./gitlab
     ./grafana

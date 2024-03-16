@@ -4,6 +4,8 @@
 
     ../common/global/nixos
     ../common/users/matt
+
+    ./services/conduit.nix
   ];
 
   networking.hostName = "helios";

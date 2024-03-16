@@ -44,6 +44,10 @@
       url = "github:nix-community/lanzaboote/v0.3.0";
       inputs.nixpkgs.follows = "nixos";
     };
+    conduit = {
+      url = "github:girlbossceo/conduwuit";
+      inputs.nixpkgs.follows = "nixos";
+    };
 
     catppuccin-bat = {
       url = "github:catppuccin/bat";
