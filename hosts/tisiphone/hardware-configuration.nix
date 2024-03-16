@@ -28,6 +28,11 @@
     ];
   };
 
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-label/boot";
+    fsType = "vfat";
+  };
+
   fileSystems."/persist" = {
     device = "/dev/disk/by-label/nixos";
     fsType = "ext4";
