@@ -1,7 +1,5 @@
 {
   imports = [
-    ./hardware-configuration.nix
-
     ../common/global/nixos
     ../common/users/matt
 
@@ -11,7 +9,28 @@
 
   networking.hostName = "brontes";
 
-  boot.initrd.systemd.enableTpm2 = false;
+  fileSystems."/" = {
+    device = "none";
+    fsType = "tmpfs";
+    options = [
+      "defaults"
+      "mode=755"
+    ];
+  };
+
+  fileSystems."/persist" = {
+    device = "/dev/disk/by-label/NIXOS_SD";
+    fsType = "ext4";
+    options = [ "noatime" ];
+    neededForBoot = true;
+  };
+
+  swapDevices = [
+    {
+      device = "/persist/swap";
+      size = 8 * 1024;
+    }
+  ];
 
   mjm.consul-agent.enable = true;
   mjm.nut.enable = true;
