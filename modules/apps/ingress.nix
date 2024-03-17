@@ -73,6 +73,10 @@ let
           type = types.lines;
           default = "";
         };
+        useIPv4Proxy = mkOption {
+          type = types.bool;
+          default = false;
+        };
       };
     };
 in

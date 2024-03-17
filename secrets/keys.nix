@@ -15,7 +15,8 @@ rec {
   leto = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJozGY8MtncB4AF+0k7l6jSxWJwQgLl5/YCpeXgCtKDH";
   rhea = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILaVCGokUWFMh7D+bqSY0vd5YrTMKdFmkEHJfqOVHRM6";
   cronus = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDLUriBaPvCj6y41zPhsxilpHG59b5ueVfx2eXwIcvZX";
-  nyx = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID2pPaX+7EoXMTzgmfoBJ7AeiXwfqq/LqKdbj8kcOa1P";
+  # nyx = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID2pPaX+7EoXMTzgmfoBJ7AeiXwfqq/LqKdbj8kcOa1P";
+  aion = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIICIfc6xDSYlKHxOwoFVii4n0TT/jPw/E3/nhyiEAPrH";
   persephone = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHNcGvd0FkGDH7rm02jm8fan2xqKoEr/Wx+3wAgfDR7A";
   matt-persephone = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK/65Yq1UkZie8WgsO2HUGq9bq++Y6o+FJd8wWvWhdLx";
   matt-uranus = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICsOTXJIL5BfbiVcvrHLf49u+o6ja6DMJxzjmeJ7tPKu";
@@ -34,7 +35,7 @@ rec {
       leto
       rhea
       cronus
-      nyx
+      aion
       ;
   };
 

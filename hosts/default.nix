@@ -39,6 +39,7 @@ in
       persephone = mkNixos [ ./persephone ];
       uranus = mkNixos [ ./uranus ];
       nyx = mkNixos [ ./nyx ];
+      aion = mkNixos [ ./aion ];
 
       # Hashistack control plane VMs
       megaera = mkNixos [ ./megaera ];
@@ -64,24 +65,21 @@ in
     colmena = {
       meta = {
         nixpkgs = inputs.nixos.legacyPackages.x86_64-linux;
-        nodeNixpkgs =
-          lib.genAttrs
-            [
-              "arges"
-              "brontes"
-              "steropes"
-            ]
-            (_node: inputs.nixos.legacyPackages.aarch64-linux);
+        nodeNixpkgs = lib.genAttrs [
+          "arges"
+          "brontes"
+          "steropes"
+        ] (_node: inputs.nixos.legacyPackages.aarch64-linux);
         specialArgs = {
           inherit inputs outputs;
         };
       };
 
       defaults =
-        { config, ... }:
+        { config, lib, ... }:
         {
           deployment = {
-            targetHost = "${config.networking.hostName}.home.mattmoriarity.com";
+            targetHost = lib.mkDefault "${config.networking.hostName}.home.mattmoriarity.com";
             targetUser = "matt";
           };
         };
@@ -152,6 +150,11 @@ in
         ];
         imports = [ ./leto ];
       };
+      aion = {
+        deployment.tags = [ "x86_64" ];
+        deployment.targetHost = "5.78.46.61";
+        imports = [ ./aion ];
+      };
 
       rhea = {
         deployment.tags = [
@@ -190,6 +193,8 @@ in
       packages = {
         inherit host-scripts;
       };
-      apps = lib.genAttrs host-scripts.scripts (script: { program = "${host-scripts}/bin/${script}"; });
+      apps = lib.genAttrs host-scripts.scripts (script: {
+        program = "${host-scripts}/bin/${script}";
+      });
     };
 }

@@ -7,7 +7,7 @@ in
   systemd.network = lib.mkIf useNetworkd {
     enable = true;
     networks."10-lan" = {
-      matchConfig.Name = "ens* end* enp0s6";
+      matchConfig.Name = lib.mkDefault "ens* end* enp0s6";
       networkConfig = {
         DHCP = "ipv4";
         IPv6AcceptRA = true;

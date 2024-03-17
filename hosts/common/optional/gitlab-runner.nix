@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  nodes,
   ...
 }:
 let
@@ -122,13 +123,9 @@ in
       let
         keys = import ../../../secrets/keys.nix;
       in
-      builtins.mapAttrs
-        (name: publicKey: {
-          inherit publicKey;
-          extraHostNames = [
-            (if name == "nyx" then "${name}.mattmoriarity.com" else "${name}.home.mattmoriarity.com")
-          ];
-        })
-        keys.servers;
+      builtins.mapAttrs (name: publicKey: {
+        inherit publicKey;
+        extraHostNames = [ (if name == "aion" then "5.78.46.61" else "${name}.home.mattmoriarity.com") ];
+      }) keys.servers;
   };
 }
