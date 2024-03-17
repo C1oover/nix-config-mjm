@@ -6,6 +6,7 @@
     ../common/users/matt
 
     ./services/conduit.nix
+    ./services/mautrix-slack.nix
   ];
 
   networking.hostName = "helios";

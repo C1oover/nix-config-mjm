@@ -4,6 +4,7 @@
     approles = [
       "leto"
       "chaos"
+      "helios"
     ];
   };
 }
