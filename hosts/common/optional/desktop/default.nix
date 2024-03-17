@@ -21,6 +21,8 @@ in
       desktopManager.plasma6.enable = true;
     };
 
+    programs.gnupg.agent.pinentryPackage = pkgs.pinentry-qt;
+
     services.dbus.packages = [ pkgs.kdePackages.kpmcore ];
     environment.systemPackages = [
       pkgs.kdePackages.kpmcore
