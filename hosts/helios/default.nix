@@ -6,6 +6,7 @@
     ../common/users/matt
 
     ./services/conduit.nix
+    ./services/mautrix-discord.nix
     ./services/mautrix-slack.nix
     ./services/heisenbridge.nix
   ];

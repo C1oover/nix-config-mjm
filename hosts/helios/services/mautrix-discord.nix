@@ -1,24 +1,23 @@
-{ pkgs, outputs, ... }:
+{ pkgs, ... }:
 let
-  pkg = outputs.packages.${pkgs.system}.mautrix-slack;
-
   configFormat = pkgs.formats.yaml { };
-  configFile = configFormat.generate "mautrix-slack-config.yaml" {
+  configFile = configFormat.generate "mautrix-discord-config.yaml" {
     homeserver = {
       address = "http://localhost:6167";
+      public_address = "https://chat.midna.dev";
       domain = "midna.dev";
     };
     appservice = {
-      address = "http://127.0.0.1:29335";
+      address = "http://127.0.0.1:29334";
       hostname = "127.0.0.1";
-      port = 29335;
+      port = 29334;
       database = {
         type = "postgres";
-        uri = "postgres:///mautrix-slack?host=/run/postgresql";
+        uri = "postgres:///mautrix-discord?host=/run/postgresql";
       };
-      id = "slack";
-      bot.username = "slackbot";
-      bot.displayname = "Slack Bridge Bot";
+      id = "discord";
+      bot.username = "discordbot";
+      bot.displayname = "Discord Bridge Bot";
     };
     bridge = {
       backfill.enable = true;
@@ -28,23 +27,24 @@ let
       };
     };
   };
-  settingsFile = "/var/lib/mautrix-slack/config.yml";
-  registrationFile = "/var/lib/mautrix-slack/registration.yml";
+  settingsFile = "/var/lib/mautrix-discord/config.yml";
+  registrationFile = "/var/lib/mautrix-discord/registration.yml";
 in
 {
   mjm.postgresql.enable = true;
   mjm.state.directories = [
     {
-      directory = "/var/lib/mautrix-slack";
-      user = "mautrix-slack";
-      group = "mautrix-slack";
+      directory = "/var/lib/mautrix-discord";
+      user = "mautrix-discord";
+      group = "mautrix-discord";
       mode = "0700";
     }
   ];
 
-  systemd.services.mautrix-slack = {
-    description = "mautrix-slack bridge";
+  systemd.services.mautrix-discord = {
+    description = "mautrix-discord bridge";
     wantedBy = [ "multi-user.target" ];
+    path = [ pkgs.ffmpeg-full ];
     preStart = ''
       # substitute the settings file by environment variables
       # in this case read from EnvironmentFile
@@ -58,7 +58,7 @@ in
 
       # generate the appservice's registration file if absent
       if [ ! -f '${registrationFile}' ]; then
-        ${pkg}/bin/mautrix-slack \
+        ${pkgs.mautrix-discord}/bin/mautrix-discord \
           --generate-registration \
           --config='${settingsFile}' \
           --registration='${registrationFile}'
@@ -76,11 +76,11 @@ in
     restartTriggers = [ configFile ];
     serviceConfig = {
       Type = "exec";
-      ExecStart = "${pkg}/bin/mautrix-slack -c ${settingsFile} -r ${registrationFile}";
-      User = "mautrix-slack";
-      Group = "mautrix-slack";
-      StateDirectory = "mautrix-slack";
-      WorkingDirectory = "/var/lib/mautrix-slack";
+      ExecStart = "${pkgs.mautrix-discord}/bin/mautrix-discord -c ${settingsFile} -r ${registrationFile}";
+      User = "mautrix-discord";
+      Group = "mautrix-discord";
+      StateDirectory = "mautrix-discord";
+      WorkingDirectory = "/var/lib/mautrix-discord";
       Restart = "on-failure";
       RestartSec = "30s";
 
@@ -106,18 +106,18 @@ in
     };
   };
 
-  users.users.mautrix-slack = {
+  users.users.mautrix-discord = {
     isSystemUser = true;
-    group = "mautrix-slack";
-    home = "/var/lib/mautrix-slack";
+    group = "mautrix-discord";
+    home = "/var/lib/mautrix-discord";
   };
-  users.groups.mautrix-slack = { };
+  users.groups.mautrix-discord = { };
 
   services.postgresql = {
-    ensureDatabases = [ "mautrix-slack" ];
+    ensureDatabases = [ "mautrix-discord" ];
     ensureUsers = [
       {
-        name = "mautrix-slack";
+        name = "mautrix-discord";
         ensureDBOwnership = true;
       }
     ];
