@@ -229,17 +229,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1710729212,
-        "narHash": "sha256-i5/5Xm6E8tcZ+1y2PkDOGj4s2K7ITb8qnGBDObKPj9I=",
+        "lastModified": 1710821861,
+        "narHash": "sha256-Y+x3q7VkPpRok7Om2bwB2v1JDK/OCZmiFaBrIOJRojY=",
         "owner": "girlbossceo",
         "repo": "conduwuit",
-        "rev": "4a62acbcf3dd146f243925c1c12c5e4d3f5d24ec",
+        "rev": "7809f0a6aee6900de59b720bf966d4a0315276bc",
         "type": "github"
       },
       "original": {
         "owner": "girlbossceo",
         "repo": "conduwuit",
-        "rev": "4a62acbcf3dd146f243925c1c12c5e4d3f5d24ec",
         "type": "github"
       }
     },

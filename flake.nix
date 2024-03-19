@@ -45,7 +45,7 @@
       inputs.nixpkgs.follows = "nixos";
     };
     conduit = {
-      url = "github:girlbossceo/conduwuit/4a62acbcf3dd146f243925c1c12c5e4d3f5d24ec";
+      url = "github:girlbossceo/conduwuit";
       inputs.nixpkgs.follows = "nixos";
     };
 
