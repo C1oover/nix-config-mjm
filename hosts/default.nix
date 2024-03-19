@@ -38,7 +38,6 @@ in
     nixosConfigurations = {
       persephone = mkNixos [ ./persephone ];
       uranus = mkNixos [ ./uranus ];
-      nyx = mkNixos [ ./nyx ];
       aion = mkNixos [ ./aion ];
 
       # Hashistack control plane VMs
