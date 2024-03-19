@@ -1,9 +1,9 @@
 {
   imports = [
-    ./hardware-configuration.nix
-
     ../common/global/nixos
     ../common/users/matt
+
+    ../common/optional/proxmox-vm.nix
 
     ./services/actual.nix
     ./services/attic.nix
@@ -26,12 +26,36 @@
 
   networking.hostName = "leto";
 
-  boot.supportedFilesystems = [ "xfs" ];
+  fileSystems."/" = {
+    device = "none";
+    fsType = "tmpfs";
+    options = [
+      "defaults"
+      "mode=755"
+      "size=8G"
+    ];
+  };
+
+  fileSystems."/persist" = {
+    device = "/dev/disk/by-label/nixos";
+    fsType = "ext4";
+    neededForBoot = true;
+  };
+
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-label/boot";
+    fsType = "vfat";
+  };
+
+  fileSystems."/var/lib/private/garage/data" = {
+    device = "/dev/disk/by-label/garage";
+    fsType = "xfs";
+  };
+
+  swapDevices = [ { device = "/dev/disk/by-label/swap"; } ];
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-
-  services.qemuGuest.enable = true;
 
   mjm.consul-agent.enable = true;
   mjm.garage.enable = true;
