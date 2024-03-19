@@ -31,6 +31,7 @@ in
       inherit (pkgs)
         bitwarden
         cider
+        cinny-desktop
         wl-clipboard
         xclip
         xdg-utils
