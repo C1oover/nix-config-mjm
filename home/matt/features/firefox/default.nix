@@ -31,18 +31,33 @@ in
       profiles.matt = {
         settings = {
           "app.update.auto" = false;
+          "browser.aboutConfig.showWarning" = false;
           "browser.discovery.enabled" = false;
           "browser.formfill.enable" = false;
+          "browser.newtabpage.activity-stream.asrouter.userprefs.cfr.addons" = false;
+          "browser.newtabpage.activity-stream.asrouter.userprefs.cfr.features" = false;
+          "browser.newtabpage.activity-stream.feeds.section.topstories" = false;
+          "browser.newtabpage.activity-stream.feeds.topsites" = false;
+          "browser.newtabpage.activity-stream.showSearch" = false;
+          "browser.newtabpage.enabled" = false;
           "browser.onboarding.enabled" = false;
+          "browser.search.suggest.enabled" = false;
           "browser.shell.checkDefaultBrowser" = false;
           "browser.startup.homepage" = "https://homelab.midna.dev/";
+          "browser.urlbar.suggest.bookmark" = false;
+          "browser.urlbar.suggest.quicksuggest.nonsponsored" = false;
+          "browser.urlbar.suggest.quicksuggest.sponsored" = false;
+          "browser.urlbar.suggest.searches" = false;
           "cookiebanners.service.mode" = 2;
-          "extensions.activeThemeID" = "{c827c446-3d00-4160-a992-3ebcbe6d81a6}";
+          "datareporting.healthreport.uploadEnabled" = false;
           "extensions.getAddons.cache.enabled" = false;
           "extensions.getAddons.showPane" = false;
           "extensions.pocket.enabled" = false;
           "extensions.update.autoUpdateDefault" = false;
           "extensions.update.enabled" = false;
+          "network.dns.disablePrefetch" = true;
+          "network.predictor.enabled" = false;
+          "network.prefetch-next" = false;
           "privacy.donottrackheader.enabled" = true;
           "privacy.globalprivacycontrol.enabled" = true;
           "security.enterprise_roots.enabled" = true;
@@ -63,6 +78,8 @@ in
               betterttv
               bitwarden
               firefox-color
+              istilldontcareaboutcookies
+              libredirect
               plasma-integration
               stylus
               sidebery
@@ -74,7 +91,6 @@ in
               shinigami-eyes
               linkding-extension
               linkding-injector
-              catppuccin-latte-mauve
               sixindicator
               ;
           };
