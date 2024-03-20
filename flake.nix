@@ -65,14 +65,6 @@
       url = "github:catppuccin/newsboat";
       flake = false;
     };
-    catppuccin-i3 = {
-      url = "github:catppuccin/i3";
-      flake = false;
-    };
-    catppuccin-rofi = {
-      url = "github:catppuccin/rofi";
-      flake = false;
-    };
     flake-compat = {
       url = "github:edolstra/flake-compat";
       flake = false;

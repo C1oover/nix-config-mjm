@@ -160,22 +160,6 @@
         "type": "github"
       }
     },
-    "catppuccin-i3": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1703057614,
-        "narHash": "sha256-DmwszeXRWt7LkCP8xqRIOgr/U3soTi7pbNHKTUCorcw=",
-        "owner": "catppuccin",
-        "repo": "i3",
-        "rev": "c7e54561a2539024020837f23068f70c6d2ae424",
-        "type": "github"
-      },
-      "original": {
-        "owner": "catppuccin",
-        "repo": "i3",
-        "type": "github"
-      }
-    },
     "catppuccin-k9s": {
       "flake": false,
       "locked": {
@@ -205,22 +189,6 @@
       "original": {
         "owner": "catppuccin",
         "repo": "newsboat",
-        "type": "github"
-      }
-    },
-    "catppuccin-rofi": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1672491652,
-        "narHash": "sha256-DNorfyl3C4RBclF2KDgwvQQwixpTwSRu7fIvihPN8JY=",
-        "owner": "catppuccin",
-        "repo": "rofi",
-        "rev": "5350da41a11814f950c3354f090b90d4674a95ce",
-        "type": "github"
-      },
-      "original": {
-        "owner": "catppuccin",
-        "repo": "rofi",
         "type": "github"
       }
     },
@@ -1747,10 +1715,8 @@
         "agenix": "agenix",
         "attic": "attic",
         "catppuccin-bat": "catppuccin-bat",
-        "catppuccin-i3": "catppuccin-i3",
         "catppuccin-k9s": "catppuccin-k9s",
         "catppuccin-newsboat": "catppuccin-newsboat",
-        "catppuccin-rofi": "catppuccin-rofi",
         "catppuccin-zsh": "catppuccin-zsh",
         "conduit": "conduit",
         "darwin": "darwin",
