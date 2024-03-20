@@ -14,16 +14,19 @@
     entries = [
       { path = "/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app/"; }
       { path = "${config.programs.firefox.package}/Applications/Firefox.app/"; }
-      { path = "/Applications/Beeper.app/"; }
+      { path = "/Applications/Cinny.app/"; }
+      { path = "/System/Applications/Messages.app/"; }
       { path = "/System/Applications/Mail.app/"; }
       { path = "${pkgs.zoom-us}/Applications/zoom.us.app/"; }
       { path = "${pkgs.slack}/Applications/Slack.app/"; }
       { path = "/Applications/Fantastical.app/"; }
       { path = "/Applications/1Password.app/"; }
+      { path = "/Applications/Bitwarden.app/"; }
       { path = "/Applications/Slab.app/"; }
       { path = "${config.programs.kitty.package}/Applications/kitty.app/"; }
       { path = "/Applications/Dash.app/"; }
       { path = "/Applications/Postico 2.app/"; }
+      { path = "/Applications/Teleport Connect.app/"; }
       { path = "${pkgs.discord}/Applications/Discord.app/"; }
       {
         path = "${config.home.homeDirectory}/Downloads/";
