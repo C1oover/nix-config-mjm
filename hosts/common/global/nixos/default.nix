@@ -31,6 +31,8 @@
     ../../optional/server
     ../../optional/tailscale.nix
     ../../optional/vault-server.nix
+
+    ../../../../services
   ] ++ (builtins.attrValues outputs.nixosModules);
 
   nix.channel.enable = false;

@@ -4,11 +4,6 @@
     ../common/users/matt
 
     ../common/optional/proxmox-vm.nix
-
-    ./services/conduit.nix
-    ./services/mautrix-discord.nix
-    ./services/mautrix-slack.nix
-    ./services/heisenbridge.nix
   ];
 
   networking.hostName = "helios";
@@ -51,6 +46,7 @@
 
   mjm.consul-agent.enable = true;
   mjm.garage.enable = true;
+  mjm.matrix-server.enable = true;
   mjm.server.enable = true;
   mjm.state = {
     enableImpermanence = true;
