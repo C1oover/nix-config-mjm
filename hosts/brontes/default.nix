@@ -32,7 +32,7 @@
     }
   ];
 
-  mjm.consul-agent.enable = true;
+  mjm.consul.enable = true;
   mjm.nut.enable = true;
   mjm.server.enable = true;
   mjm.state = {

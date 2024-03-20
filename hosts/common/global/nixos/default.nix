@@ -20,17 +20,8 @@
     ./ssl.nix
 
     ../../optional/backup.nix
-    ../../optional/consul-agent.nix
     ../../optional/desktop
-    ../../optional/dns-server
-    ../../optional/garage
-    ../../optional/gitlab-runner.nix
-    ../../optional/nut.nix
-    ../../optional/otel-collector.nix
-    ../../optional/postgresql.nix
     ../../optional/server
-    ../../optional/tailscale.nix
-    ../../optional/vault-server.nix
 
     ../../../../services
   ] ++ (builtins.attrValues outputs.nixosModules);

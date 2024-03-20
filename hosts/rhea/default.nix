@@ -15,7 +15,7 @@
     "sys-fs-fuse-connections.mount"
   ];
 
-  mjm.consul-agent = {
+  mjm.consul = {
     enable = true;
     ipv4Address = "10.0.2.47";
   };
