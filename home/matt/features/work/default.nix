@@ -7,7 +7,7 @@
   ];
 
   home.packages = builtins.attrValues {
-    inherit (pkgs) google-cloud-sdk teleport;
+    inherit (pkgs) cloudflared google-cloud-sdk teleport;
     db = pkgs.callPackage ./db.nix { };
   };
 
