@@ -182,7 +182,9 @@ in
     }:
     let
       inherit (inputs'.attic.packages) attic-client;
-      host-scripts = pkgs.callPackage ./scripts { inherit attic-client; };
+      # hash mismatch in the go modules for vault rn
+      vault = pkgs.vault-bin;
+      host-scripts = pkgs.callPackage ./scripts { inherit vault attic-client; };
     in
     {
       devenv.shells.default = {

@@ -8,13 +8,13 @@
       ...
     }:
     let
-      opentofu = pkgs.opentofu.withPlugins (
-        p: [
-          p.vault
-          p.cloudflare
-          p.proxmox
-        ]
-      );
+      # hash mismatch in the go modules for vault rn
+      vault = pkgs.vault-bin;
+      opentofu = pkgs.opentofu.withPlugins (p: [
+        p.vault
+        p.cloudflare
+        p.proxmox
+      ]);
       terraformConfiguration =
         (lib.evalModules {
           modules = [
@@ -27,7 +27,7 @@
           };
         }).config.terraformConfig.json;
 
-      tofu-scripts = pkgs.callPackage ./scripts { inherit opentofu terraformConfiguration; };
+      tofu-scripts = pkgs.callPackage ./scripts { inherit vault opentofu terraformConfiguration; };
     in
     {
       packages = {
@@ -55,6 +55,8 @@
         '';
       };
 
-      apps = lib.genAttrs tofu-scripts.scripts (script: { program = "${tofu-scripts}/bin/${script}"; });
+      apps = lib.genAttrs tofu-scripts.scripts (script: {
+        program = "${tofu-scripts}/bin/${script}";
+      });
     };
 }

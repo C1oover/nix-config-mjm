@@ -25,6 +25,9 @@
     ../../../../services
   ] ++ (builtins.attrValues outputs.nixosModules);
 
+  # hash mismatch in the go modules for vault rn
+  nixpkgs.overlays = [ (final: prev: { vault = prev.vault-bin; }) ];
+
   nix.channel.enable = false;
   nix.settings.trusted-users = [
     "root"
