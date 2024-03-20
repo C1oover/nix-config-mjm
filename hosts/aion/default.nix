@@ -4,8 +4,6 @@
 
     ../common/global/nixos
     ../common/users/matt
-
-    ./services/haproxy.nix
   ];
 
   boot.loader.grub = {
@@ -28,6 +26,7 @@
     };
   };
 
+  mjm.ipv4-proxy.enable = true;
   mjm.server = {
     enable = true;
     enablePromtail = false;
