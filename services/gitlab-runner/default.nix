@@ -2,7 +2,6 @@
   config,
   lib,
   pkgs,
-  nodes,
   ...
 }:
 let
@@ -121,7 +120,7 @@ in
 
     services.openssh.knownHosts =
       let
-        keys = import ../../../secrets/keys.nix;
+        keys = import ../../secrets/keys.nix;
       in
       builtins.mapAttrs (name: publicKey: {
         inherit publicKey;
