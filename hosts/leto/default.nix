@@ -18,7 +18,6 @@
     ./services/miniflux.nix
     ./services/netbox.nix
     ./services/paperless.nix
-    ./services/prometheus
     ./services/taskserver.nix
     ./services/tempo.nix
     ./services/vaultwarden.nix
@@ -60,6 +59,7 @@
   mjm.consul.enable = true;
   mjm.garage.enable = true;
   mjm.postgresql.enable = true;
+  mjm.prometheus.enable = true;
   mjm.server.enable = true;
   mjm.state = {
     enableImpermanence = true;

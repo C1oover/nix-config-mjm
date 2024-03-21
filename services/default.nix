@@ -10,6 +10,7 @@
     ./nut
     ./otel-collector
     ./postgresql
+    ./prometheus
     ./tailscale
     ./vault
   ];
