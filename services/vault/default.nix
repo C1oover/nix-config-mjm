@@ -158,8 +158,8 @@ in
     # if not the leader, the backup command will fail, but we won't want to treat that as a failure.
     systemd.services.restic-backups-vault.serviceConfig.SuccessExitStatus = "1";
 
-    age.secrets.vault-unseal-env.file = ../../../secrets/${config.networking.hostName}-vault-unseal-env.age;
-    age.secrets.vault-backup-password.file = ../../../secrets/vault-backup-password.age;
-    age.secrets.vault-backup-secret-id.file = ../../../secrets/vault-backup-secret-id.age;
+    age.secrets.vault-unseal-env.file = ../../secrets/${config.networking.hostName}-vault-unseal-env.age;
+    age.secrets.vault-backup-password.file = ../../secrets/vault-backup-password.age;
+    age.secrets.vault-backup-secret-id.file = ../../secrets/vault-backup-secret-id.age;
   };
 }
