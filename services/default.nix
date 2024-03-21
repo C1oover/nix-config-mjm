@@ -6,6 +6,7 @@
     ./gitlab-runner
     ./ipv4-proxy
     ./matrix-server
+    ./media-server
     ./nut
     ./otel-collector
     ./postgresql

@@ -4,12 +4,6 @@
     ../common/users/matt
 
     ../common/optional/proxmox-vm.nix
-
-    ./services/jellyfin.nix
-    ./services/sabnzbd.nix
-    ./services/arr.nix
-    ./services/invidious.nix
-    ./services/mediaserver-backup.nix
   ];
 
   nixpkgs.overlays = [
@@ -60,7 +54,7 @@
 
   mjm.consul.enable = true;
   mjm.garage.enable = true;
-  mjm.postgresql.enable = true;
+  mjm.media-server.enable = true;
   mjm.server.enable = true;
   mjm.state = {
     enableImpermanence = true;
