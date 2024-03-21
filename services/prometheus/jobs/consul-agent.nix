@@ -12,9 +12,9 @@
       params.format = [ "prometheus" ];
       relabel_configs = [
         {
-          source_labels = [ "__meta_consul_address" ];
+          source_labels = [ "__meta_consul_tagged_address_lan_ipv6" ];
           target_label = "__address__";
-          replacement = "$1:8500";
+          replacement = "[$1]:8500";
         }
         {
           source_labels = [ "__meta_consul_node" ];
