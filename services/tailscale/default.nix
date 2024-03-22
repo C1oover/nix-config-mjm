@@ -25,5 +25,10 @@ in
     services.tailscale.enable = true;
 
     services.consul.extraConfig = mkIf (cfg.ip != null) { node_meta.tailscale_ip = cfg.ip; };
+
+    systemd.network.networks."05-tailscale" = {
+      matchConfig.Name = "tailscale*";
+      linkConfig.Unmanaged = true;
+    };
   };
 }
