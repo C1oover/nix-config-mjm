@@ -1,5 +1,6 @@
 {
   imports = [
+    ./authelia
     ./consul
     ./dns-server
     ./garage

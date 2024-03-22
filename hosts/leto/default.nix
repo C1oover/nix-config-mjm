@@ -8,12 +8,10 @@
     ./services/actual.nix
     ./services/attic.nix
     ./services/atuin.nix
-    ./services/authelia
     ./services/grafana.nix
     ./services/homelab.nix
     ./services/home-assistant.nix
     ./services/linkding.nix
-    ./services/lldap.nix
     ./services/loki.nix
     ./services/miniflux.nix
     ./services/netbox.nix
@@ -56,6 +54,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  mjm.authelia.enable = true;
   mjm.consul.enable = true;
   mjm.garage.enable = true;
   mjm.postgresql.enable = true;
