@@ -13,7 +13,6 @@ in
     ./consul-exporter.nix
     ./pve-exporter.nix
     ./jobs
-    ./rules
   ];
 
   config = mkIf cfg.enable {
