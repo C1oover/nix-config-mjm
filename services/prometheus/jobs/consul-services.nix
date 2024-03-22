@@ -52,6 +52,11 @@
           replacement = "$1:$2";
           target_label = "__address__";
         }
+        {
+          source_labels = [ "__meta_consul_service_id" ];
+          target_label = "instance";
+          regex = "(.+)";
+        }
       ];
     }
   ];
