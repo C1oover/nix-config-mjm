@@ -23,7 +23,7 @@ buildGoModule {
   meta = with lib; {
     description = " A Matrix-Slack puppeting bridge";
     homepage = "https://github.com/mautrix/slack";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ mjm ];
   };
 }
