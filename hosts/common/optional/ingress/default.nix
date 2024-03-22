@@ -47,7 +47,7 @@ in
         value = {
           serverAliases = vhost.serverAliases;
           forceSSL = true;
-          enableACME = true;
+          useACMEHost = "midna.dev";
           extraConfig = ''
             ${lib.optionalString vhost.recommendedProxySettings ''
               proxy_buffering off;
@@ -75,8 +75,9 @@ in
         };
       }) vhosts
       // {
-        "_" = {
+        "midna.dev" = {
           default = true;
+          serverAliases = [ "*.midna.dev" ];
           listen = [
             {
               port = 80;
@@ -87,6 +88,8 @@ in
               addr = "[::]";
             }
           ];
+
+          enableACME = true;
 
           locations."/healthz" = {
             return = "200 'nginx is listening'";
