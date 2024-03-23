@@ -106,12 +106,6 @@
 
   programs.light.enable = true;
 
-  programs._1password-gui = {
-    enable = true;
-    polkitPolicyOwners = [ "matt" ];
-  };
-  programs._1password.enable = true;
-
   services.fwupd.enable = true;
   services.hardware.bolt.enable = true;
   hardware.bluetooth.enable = true;
