@@ -40,7 +40,7 @@
 
           enterShell =
             let
-              vault = lib.getExe pkgs.vault;
+              vault = lib.getExe pkgs.vault-bin;
               getSecret = path: field: "${vault} kv get -mount=kv -field=${field} ${path}";
               writeSecret =
                 path: field: filename:
@@ -67,11 +67,9 @@
               mix2nix
               node2nix
               restic
-            ]
-            ++ (with self'.packages.homelab; [
               esbuild
               tailwind
-            ])
+            ]
             ++ (lib.optional stdenv.isLinux inotify-tools);
 
           services.postgres = {
