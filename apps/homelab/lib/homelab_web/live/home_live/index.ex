@@ -10,7 +10,7 @@ defmodule HomelabWeb.HomeLive.Index do
 
   defp assign_alerts(socket) do
     assign_async(socket, :alerts, fn ->
-      with {:ok, alerts} <- Homelab.Prometheus.list_alerts() do
+      with {:ok, alerts} <- Homelab.Alertmanager.list_alerts() do
         {:ok, %{alerts: alerts}}
       end
     end)

@@ -11,7 +11,7 @@
         <:failed>Couldn't load alerts.</:failed>
         <%= Enum.count(alerts) %> alert<%= if Enum.count(alerts) != 1, do: "s" %>
       </.async_result>
-      <:link href="https://alerts.midna.dev/" target="_blank">
+      <:link href="https://graphs.midna.dev/alerting/list?search=state:firing" target="_blank">
         View active alerts
       </:link>
     </.stat_card>
