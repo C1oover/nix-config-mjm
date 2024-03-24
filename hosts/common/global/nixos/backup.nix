@@ -217,8 +217,8 @@ in
     age.secrets =
       mkIf (builtins.any (cfg: !cfg.useVaultSecrets) (builtins.attrValues config.mjm.backups))
         {
-          restic-backup-env.file = ../../../secrets/restic-backup-env.age;
-          restic-backup-offsite-env.file = ../../../secrets/restic-backup-offsite-env.age;
+          restic-backup-env.file = ../../../../secrets/restic-backup-env.age;
+          restic-backup-offsite-env.file = ../../../../secrets/restic-backup-offsite-env.age;
         };
   };
 }
