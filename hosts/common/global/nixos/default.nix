@@ -17,6 +17,7 @@
     ./impermanence.nix
     ./networkd.nix
     ./ssh.nix
+    ./wireless.nix
 
     ../../optional/backup.nix
     ../../optional/desktop

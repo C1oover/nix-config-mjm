@@ -14,8 +14,6 @@
 
     ../common/global/nixos
     ../common/users/matt
-
-    ../common/optional/wireless.nix
   ];
 
   nixpkgs.overlays = [
@@ -45,6 +43,8 @@
       "/etc/secureboot"
     ];
   };
+  mjm.wireless.enable = true;
+
   environment.persistence."/persist".users.matt.directories = lib.mkForce [ ];
 
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
