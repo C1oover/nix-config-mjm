@@ -115,8 +115,15 @@ in
         Role ID for the AppRole to use to log in to Vault.
       '';
     };
+    encryptedSecretId = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = ''
+        Encrypted systemd credential containing the secret ID for the AppRole to use to log in to Vault.
+      '';
+    };
     secretIdFile = mkOption {
-      type = types.path;
+      type = types.str;
       description = ''
         Path to a file that contains the secret ID for the AppRole to use to log in to Vault.
       '';
@@ -148,53 +155,57 @@ in
     };
   };
 
-  config = mkIf (cfg.templates != { }) (
-    mkMerge [
-      (mkIf (cfg.secretIdAgeFile != null) {
-        age.secrets.vault-secrets-approle-secret-id.file = ../../secrets/${cfg.secretIdAgeFile};
-        vault-secrets.secretIdFile = config.age.secrets.vault-secrets-approle-secret-id.path;
-      })
-      {
-        fileSystems."/run/vault-secrets" = {
-          device = "none";
-          fsType = "ramfs";
-          options = [
-            "nodev"
-            "nosuid"
-            "mode=0751"
-          ];
+  config = mkIf (cfg.templates != { }) (mkMerge [
+    (mkIf (cfg.encryptedSecretId == null && cfg.secretIdAgeFile != null) {
+      age.secrets.vault-secrets-approle-secret-id.file = ../../secrets/${cfg.secretIdAgeFile};
+      vault-secrets.secretIdFile = config.age.secrets.vault-secrets-approle-secret-id.path;
+    })
+    (mkIf (cfg.encryptedSecretId != null) {
+      systemd.services.render-vault-secrets.serviceConfig.LoadCredentialEncrypted = [
+        "secret-id:${pkgs.writeText "vault-secret-id" cfg.encryptedSecretId}"
+      ];
+      vault-secrets.secretIdFile = "$CREDENTIALS_DIRECTORY/secret-id";
+    })
+    {
+      fileSystems."/run/vault-secrets" = {
+        device = "none";
+        fsType = "ramfs";
+        options = [
+          "nodev"
+          "nosuid"
+          "mode=0751"
+        ];
+      };
+
+      systemd.services.render-vault-secrets = {
+        wantedBy = [ "multi-user.target" ] ++ cfg.wantedBy;
+        before = cfg.wantedBy;
+        after = [ "network.target" ];
+        path = with pkgs; [
+          vault
+          consul-template
+          glibc.getent
+        ];
+        script = ''
+          role_id=${cfg.roleId}
+          secret_id_file="${cfg.secretIdFile}"
+
+          VAULT_TOKEN="$(vault write -field=token auth/approle/login role_id=$role_id secret_id=@$secret_id_file)"
+          export VAULT_TOKEN
+
+          exec consul-template -config ${cfgFile} -exec true
+        '';
+        environment = {
+          VAULT_ADDR = cfg.vaultAddress;
         };
-
-        systemd.services.render-vault-secrets = {
-          wantedBy = [ "multi-user.target" ] ++ cfg.wantedBy;
-          before = cfg.wantedBy;
-          after = [ "network.target" ];
-          path = with pkgs; [
-            vault
-            consul-template
-            glibc.getent
-          ];
-          script = ''
-            role_id=${cfg.roleId}
-            secret_id="$(cat ${cfg.secretIdFile})"
-
-            VAULT_TOKEN="$(vault write -field=token auth/approle/login role_id=$role_id secret_id=$secret_id)"
-            export VAULT_TOKEN
-
-            exec consul-template -config ${cfgFile} -exec true
-          '';
-          environment = {
-            VAULT_ADDR = cfg.vaultAddress;
-          };
-          serviceConfig = {
-            Type = "oneshot";
-            RemainAfterExit = true;
-            Restart = "on-failure";
-            RestartSec = "5s";
-            StartLimitIntervalSec = 0;
-          };
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          Restart = "on-failure";
+          RestartSec = "5s";
+          StartLimitIntervalSec = 0;
         };
-      }
-    ]
-  );
+      };
+    }
+  ]);
 }
