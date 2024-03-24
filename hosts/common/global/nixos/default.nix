@@ -14,14 +14,13 @@
     ../home-manager.nix
     ../nix.nix
     ./attic.nix
+    ./backup.nix
+    ./desktop
     ./impermanence.nix
     ./networkd.nix
+    ./server
     ./ssh.nix
     ./wireless.nix
-
-    ../../optional/backup.nix
-    ../../optional/desktop
-    ../../optional/server
 
     ../../../../services
   ] ++ (builtins.attrValues outputs.nixosModules);
