@@ -7,10 +7,6 @@ let
   ];
 in
 {
-  "megaera-vault-unseal-env.age".publicKeys = personalKeys ++ [ megaera ];
-  "tisiphone-vault-unseal-env.age".publicKeys = personalKeys ++ [ tisiphone ];
-  "alecto-vault-unseal-env.age".publicKeys = personalKeys ++ [ alecto ];
-
   "vault-backup-secret-id.age".publicKeys = personalKeys ++ hashistack;
   "vault-backup-password.age".publicKeys = personalKeys ++ hashistack;
   "restic-backup-env.age".publicKeys = personalKeys ++ hashistack;

@@ -1,7 +1,6 @@
 {
   pkgs,
   lib,
-  utils,
   config,
   ...
 }:
@@ -14,8 +13,6 @@ let
     types
     ;
   cfg = config.mjm.vault;
-
-  pkg = pkgs.vault-unseal;
 in
 {
   options.mjm.vault = {
@@ -35,6 +32,8 @@ in
       ];
     };
   };
+
+  imports = [ ./unseal.nix ];
 
   config = mkIf cfg.enable {
     services.vault = {
@@ -86,47 +85,6 @@ in
       }
     ];
 
-    systemd.services.vault-unseal = {
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
-      serviceConfig = {
-        ExecStart = utils.escapeSystemdExecArgs (
-          [
-            (lib.getExe pkg)
-            "--environment=prod"
-          ]
-          ++ (map (n: "--nodes=http://${n}:8200") cfg.nodes)
-        );
-        EnvironmentFile = config.age.secrets.vault-unseal-env.path;
-        Restart = "always";
-        DynamicUser = true;
-        CapabilityBoundingSet = [ "" ];
-        DeviceAllow = [ "" ];
-        LockPersonality = true;
-        MemoryDenyWriteExecute = true;
-        PrivateTmp = true;
-        PrivateDevices = true;
-        ProtectClock = true;
-        ProtectControlGroups = true;
-        ProtectHome = true;
-        ProtectHostname = true;
-        ProtectKernelLogs = true;
-        ProtectKernelModules = true;
-        ProtectKernelTunables = true;
-        ProtectSystem = "strict";
-        RemoveIPC = true;
-        RestrictAddressFamilies = [
-          "AF_INET"
-          "AF_UNIX"
-        ];
-        RestrictNamespaces = true;
-        RestrictRealtime = true;
-        RestrictSUIDSGID = true;
-        SystemCallArchitectures = "native";
-        UMask = "0077";
-      };
-    };
-
     mjm.backups.vault =
       let
         vault = lib.getExe config.services.vault.package;
@@ -158,7 +116,6 @@ in
     # if not the leader, the backup command will fail, but we won't want to treat that as a failure.
     systemd.services.restic-backups-vault.serviceConfig.SuccessExitStatus = "1";
 
-    age.secrets.vault-unseal-env.file = ../../secrets/${config.networking.hostName}-vault-unseal-env.age;
     age.secrets.vault-backup-password.file = ../../secrets/vault-backup-password.age;
     age.secrets.vault-backup-secret-id.file = ../../secrets/vault-backup-secret-id.age;
   };
