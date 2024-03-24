@@ -8,16 +8,13 @@
     ./services/actual.nix
     ./services/attic.nix
     ./services/atuin.nix
-    ./services/grafana.nix
     ./services/homelab.nix
     ./services/home-assistant.nix
     ./services/linkding.nix
-    ./services/loki.nix
     ./services/miniflux.nix
     ./services/netbox.nix
     ./services/paperless.nix
     ./services/taskserver.nix
-    ./services/tempo.nix
     ./services/vaultwarden.nix
   ];
 
@@ -57,6 +54,7 @@
   mjm.authelia.enable = true;
   mjm.consul.enable = true;
   mjm.garage.enable = true;
+  mjm.grafana.enable = true;
   mjm.postgresql.enable = true;
   mjm.prometheus.enable = true;
   mjm.server.enable = true;
