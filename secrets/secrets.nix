@@ -12,7 +12,6 @@ in
   "restic-backup-env.age".publicKeys = personalKeys ++ hashistack;
   "restic-backup-offsite-env.age".publicKeys = personalKeys ++ hashistack;
 
-  "arges-approle-secret-id.age".publicKeys = personalKeys ++ [ arges ];
   "brontes-approle-secret-id.age".publicKeys = personalKeys ++ [ brontes ];
   "steropes-approle-secret-id.age".publicKeys = personalKeys ++ [ steropes ];
 
