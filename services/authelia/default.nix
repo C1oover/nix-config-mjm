@@ -63,25 +63,27 @@ in
       };
       secrets.manual = true;
       environmentVariables = {
-        AUTHELIA_JWT_SECRET_FILE = "%d/jwt-secret";
-        AUTHELIA_IDENTITY_PROVIDERS_OIDC_HMAC_SECRET_FILE = "%d/hmac-secret";
-        AUTHELIA_IDENTITY_PROVIDERS_OIDC_ISSUER_PRIVATE_KEY_FILE = "%d/jwt-private-key";
-        AUTHELIA_SESSION_SECRET_FILE = "%d/session-secret";
-        AUTHELIA_STORAGE_ENCRYPTION_KEY_FILE = "%d/storage-encryption-key";
-        AUTHELIA_AUTHENTICATION_BACKEND_LDAP_PASSWORD_FILE = "%d/ldap-password";
-        AUTHELIA_NOTIFIER_SMTP_PASSWORD_FILE = "%d/smtp-password";
+        AUTHELIA_JWT_SECRET_FILE = "%d/authelia_jwt_secret";
+        AUTHELIA_IDENTITY_PROVIDERS_OIDC_HMAC_SECRET_FILE = "%d/authelia_hmac_secret";
+        AUTHELIA_IDENTITY_PROVIDERS_OIDC_ISSUER_PRIVATE_KEY_FILE = "%d/authelia_jwt_private_key";
+        AUTHELIA_SESSION_SECRET_FILE = "%d/authelia_session_secret";
+        AUTHELIA_STORAGE_ENCRYPTION_KEY_FILE = "%d/authelia_storage_encryption_key";
+        AUTHELIA_AUTHENTICATION_BACKEND_LDAP_PASSWORD_FILE = "%d/authelia_ldap_password";
+        AUTHELIA_NOTIFIER_SMTP_PASSWORD_FILE = "%d/authelia_smtp_password";
       };
     };
 
-    vault-secrets.wantedBy = [ "authelia-main.service" ];
-    vault-secrets.templates = {
-      authelia-jwt-secret.kvPath = "kv/authelia/jwt_secret";
-      authelia-hmac-secret.kvPath = "kv/authelia/hmac_secret";
-      authelia-jwt-private-key.kvPath = "kv/authelia/jwt_private_key";
-      authelia-session-secret.kvPath = "kv/authelia/session_secret";
-      authelia-storage-encryption-key.kvPath = "kv/authelia/storage_encryption_key";
-      authelia-ldap-password.kvPath = "kv/authelia/ldap_password";
-      authelia-smtp-password.kvPath = "kv/authelia/fastmail_password";
+    vault-secrets.services.authelia = {
+      loadedBy = [ "authelia-main" ];
+      keys = {
+        jwt_secret = { };
+        hmac_secret = { };
+        jwt_private_key = { };
+        ldap_password = { };
+        session_secret = { };
+        smtp_password = { };
+        storage_encryption_key = { };
+      };
     };
 
     systemd.services.authelia-main = {
@@ -92,17 +94,6 @@ in
       ];
       serviceConfig = {
         SupplementaryGroups = [ config.services.redis.servers.authelia.user ];
-        LoadCredential =
-          map (name: "${name}:${config.vault-secrets.templates.${"authelia-" + name}.path}")
-            [
-              "jwt-secret"
-              "hmac-secret"
-              "jwt-private-key"
-              "ldap-password"
-              "session-secret"
-              "smtp-password"
-              "storage-encryption-key"
-            ];
       };
     };
 

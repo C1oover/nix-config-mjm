@@ -4,8 +4,18 @@
   lib,
   ...
 }:
-with lib;
 let
+  inherit (lib)
+    getAttr
+    mapAttrs'
+    mkEnableOption
+    mkIf
+    mkMerge
+    mkOption
+    nameValuePair
+    types
+    ;
+
   cfg = config.vault;
 
   jsonFormat = pkgs.formats.json { };
@@ -25,7 +35,6 @@ let
   };
 
   databaseRoleType =
-    with lib;
     { name, ... }:
     {
       options = {
@@ -57,7 +66,6 @@ let
     };
 
   approleType =
-    with lib;
     { name, ... }:
     {
       options = {
@@ -73,7 +81,6 @@ let
     };
 
   policyType =
-    with lib;
     { name, ... }:
     {
       options = {
@@ -99,6 +106,25 @@ let
         };
       };
     };
+
+  serviceType =
+    { name, ... }:
+    {
+      options = {
+        name = mkOption {
+          type = types.str;
+          default = name;
+        };
+        hosts = mkOption {
+          type = types.listOf types.str;
+          default = [ ];
+        };
+        paths = mkOption {
+          default = { };
+          type = types.attrsOf jsonFormat.type;
+        };
+      };
+    };
 in
 {
   options.vault = {
@@ -118,6 +144,10 @@ in
     };
     policies = mkOption {
       type = types.attrsOf (types.submodule policyType);
+      default = { };
+    };
+    services = mkOption {
+      type = types.attrsOf (types.submodule serviceType);
       default = { };
     };
   };
@@ -143,23 +173,20 @@ in
           type = "database";
         };
 
-        terraform.resource.vault_database_secret_backend_role =
-          builtins.mapAttrs
-            (
-              name:
-              { roleName, ttl, ... }:
-              let
-                ttlOpts = mkTtlOpts ttl;
-              in
-              {
-                inherit name;
-                backend = "\${vault_mount.database.path}";
-                db_name = "db1";
-                creation_statements = mkPgCreationStatements roleName;
-              }
-              // ttlOpts
-            )
-            cfg.databases.roles;
+        terraform.resource.vault_database_secret_backend_role = builtins.mapAttrs (
+          name:
+          { roleName, ttl, ... }:
+          let
+            ttlOpts = mkTtlOpts ttl;
+          in
+          {
+            inherit name;
+            backend = "\${vault_mount.database.path}";
+            db_name = "db1";
+            creation_statements = mkPgCreationStatements roleName;
+          }
+          // ttlOpts
+        ) cfg.databases.roles;
       };
 
       approles = mkIf cfg.approles.enable {
@@ -167,54 +194,65 @@ in
           type = "approle";
         };
 
-        terraform.resource.vault_approle_auth_backend_role =
-          builtins.mapAttrs
-            (
-              name:
-              { tokenPolicies, ... }:
-              {
-                backend = "\${vault_auth_backend.approle.id}";
-                role_name = name;
-                token_policies = tokenPolicies;
-              }
-            )
-            cfg.approles.roles;
+        terraform.resource.vault_approle_auth_backend_role = builtins.mapAttrs (
+          name:
+          { tokenPolicies, ... }:
+          {
+            backend = "\${vault_auth_backend.approle.id}";
+            role_name = name;
+            token_policies = tokenPolicies;
+          }
+        ) cfg.approles.roles;
       };
 
       policies = {
-        terraform.resource.vault_policy =
-          builtins.mapAttrs
-            (
-              name:
-              {
-                text,
-                source,
-                paths,
-                ...
-              }:
-              {
-                inherit name;
-                policy =
-                  if paths != { } then
-                    builtins.toJSON { path = paths; }
-                  else if source != null then
-                    builtins.readFile source
-                  else
-                    text;
-              }
-            )
-            cfg.policies;
+        terraform.resource.vault_policy = builtins.mapAttrs (
+          name:
+          {
+            text,
+            source,
+            paths,
+            ...
+          }:
+          {
+            inherit name;
+            policy =
+              if paths != { } then
+                builtins.toJSON { path = paths; }
+              else if source != null then
+                builtins.readFile source
+              else
+                text;
+          }
+        ) cfg.policies;
 
         vault.approles.roles = mkMerge (
-          map (policy: lib.genAttrs policy.approles (_name: { tokenPolicies = [ policy.name ]; })) (
-            builtins.attrValues cfg.policies
-          )
+          map (
+            policy:
+            lib.genAttrs policy.approles (_name: {
+              tokenPolicies = [ policy.name ];
+            })
+          ) (builtins.attrValues cfg.policies)
         );
+      };
+
+      services = {
+        vault.policies = mapAttrs' (
+          _: svc:
+          nameValuePair "service-${svc.name}" (mkMerge [
+            { paths."kv/data/prod/services/${svc.name}".capabilities = [ "read" ]; }
+            {
+              inherit (svc) paths;
+              approles = svc.hosts;
+            }
+          ])
+        ) cfg.services;
       };
     in
     mkMerge [
       databases
       approles
       policies
+      services
     ];
 }

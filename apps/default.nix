@@ -1,3 +1,6 @@
+let
+  services = [ "authelia" ];
+in
 {
   imports = [
     ../modules/apps
@@ -5,7 +8,6 @@
     ./actual
     ./attic
     ./atuin
-    ./authelia
     ./backup
     ./consul
     ./chat
@@ -29,5 +31,5 @@
     ./taskserver
     ./vault
     ./vaultwarden
-  ];
+  ] ++ map (s: ../services/${s}/service.nix) services;
 }

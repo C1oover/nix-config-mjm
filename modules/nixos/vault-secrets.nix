@@ -7,11 +7,19 @@
 }:
 let
   inherit (lib)
-    types
+    attrValues
+    concatMap
+    elem
+    filter
+    genAttrs
+    listToAttrs
+    literalExpression
+    mapAttrsToList
     mkIf
     mkMerge
     mkOption
-    literalExpression
+    nameValuePair
+    types
     ;
 
   inherit (utils) systemdUtils;
@@ -30,6 +38,22 @@ let
     vault.address = cfg.vaultAddress;
     template = map mkTemplate (builtins.attrValues cfg.templates);
   };
+
+  allServices = attrValues cfg.services;
+
+  allKeys = concatMap (
+    svc:
+    mapAttrsToList (
+      _: key:
+      key
+      // {
+        service = svc.name;
+        serviceLoadedBy = svc.loadedBy;
+      }
+    ) svc.keys
+  ) allServices;
+
+  loadedByNames = concatMap (svc: svc.loadedBy) allServices;
 
   format = pkgs.formats.json { };
   cfgFile = format.generate "secrets-template-config.json" consulTemplateConfig;
@@ -99,6 +123,38 @@ let
           ''{{ with secret "${builtins.dirOf config.kvPath}" }}{{ .Data.data.${builtins.baseNameOf config.kvPath} }}{{ end }}'';
     }
   );
+
+  keyType = types.submodule (
+    { name, ... }:
+    {
+      options = {
+        name = mkOption {
+          type = types.str;
+          default = name;
+        };
+      };
+    }
+  );
+
+  serviceType = types.submodule (
+    { name, ... }:
+    {
+      options = {
+        name = mkOption {
+          type = types.str;
+          default = name;
+        };
+        loadedBy = mkOption {
+          type = types.listOf types.str;
+          default = [ ];
+        };
+        keys = mkOption {
+          type = types.attrsOf keyType;
+          default = { };
+        };
+      };
+    }
+  );
 in
 {
   options.vault-secrets = {
@@ -146,6 +202,13 @@ in
         Attrset of templates for secrets.
       '';
     };
+    services = mkOption {
+      type = types.attrsOf serviceType;
+      default = { };
+      description = ''
+        Attrset of services to render secrets for.
+      '';
+    };
     wantedBy = mkOption {
       type = types.listOf systemdUtils.lib.unitNameType;
       default = [ ];
@@ -155,57 +218,77 @@ in
     };
   };
 
-  config = mkIf (cfg.templates != { }) (mkMerge [
-    (mkIf (cfg.encryptedSecretId == null && cfg.secretIdAgeFile != null) {
-      age.secrets.vault-secrets-approle-secret-id.file = ../../secrets/${cfg.secretIdAgeFile};
-      vault-secrets.secretIdFile = config.age.secrets.vault-secrets-approle-secret-id.path;
-    })
-    (mkIf (cfg.encryptedSecretId != null) {
-      systemd.services.render-vault-secrets.serviceConfig.LoadCredentialEncrypted = [
-        "secret-id:${pkgs.writeText "vault-secret-id" cfg.encryptedSecretId}"
-      ];
-      vault-secrets.secretIdFile = "$CREDENTIALS_DIRECTORY/secret-id";
-    })
+  config = mkMerge [
+    (mkIf (cfg.templates != { }) (mkMerge [
+      (mkIf (cfg.encryptedSecretId == null && cfg.secretIdAgeFile != null) {
+        age.secrets.vault-secrets-approle-secret-id.file = ../../secrets/${cfg.secretIdAgeFile};
+        vault-secrets.secretIdFile = config.age.secrets.vault-secrets-approle-secret-id.path;
+      })
+      (mkIf (cfg.encryptedSecretId != null) {
+        systemd.services.render-vault-secrets.serviceConfig.LoadCredentialEncrypted = [
+          "secret-id:${pkgs.writeText "vault-secret-id" cfg.encryptedSecretId}"
+        ];
+        vault-secrets.secretIdFile = "$CREDENTIALS_DIRECTORY/secret-id";
+      })
+      {
+        fileSystems."/run/vault-secrets" = {
+          device = "none";
+          fsType = "ramfs";
+          options = [
+            "nodev"
+            "nosuid"
+            "mode=0751"
+          ];
+        };
+
+        systemd.services.render-vault-secrets = {
+          wantedBy = [ "multi-user.target" ] ++ cfg.wantedBy;
+          before = cfg.wantedBy;
+          after = [ "network.target" ];
+          path = with pkgs; [
+            vault
+            consul-template
+            glibc.getent
+          ];
+          script = ''
+            role_id=${cfg.roleId}
+            secret_id_file="${cfg.secretIdFile}"
+
+            VAULT_TOKEN="$(vault write -field=token auth/approle/login role_id=$role_id secret_id=@$secret_id_file)"
+            export VAULT_TOKEN
+
+            exec consul-template -config ${cfgFile} -exec true
+          '';
+          environment = {
+            VAULT_ADDR = cfg.vaultAddress;
+          };
+          startLimitIntervalSec = 0;
+          serviceConfig = {
+            Type = "oneshot";
+            RemainAfterExit = true;
+            Restart = "on-failure";
+            RestartSec = "5s";
+          };
+        };
+      }
+    ]))
     {
-      fileSystems."/run/vault-secrets" = {
-        device = "none";
-        fsType = "ramfs";
-        options = [
-          "nodev"
-          "nosuid"
-          "mode=0751"
-        ];
-      };
+      vault-secrets.templates = listToAttrs (
+        map (
+          key:
+          nameValuePair "services/${key.service}/${key.name}" {
+            kvPath = "kv/prod/services/${key.service}/${key.name}";
+          }
+        ) allKeys
+      );
 
-      systemd.services.render-vault-secrets = {
-        wantedBy = [ "multi-user.target" ] ++ cfg.wantedBy;
-        before = cfg.wantedBy;
-        after = [ "network.target" ];
-        path = with pkgs; [
-          vault
-          consul-template
-          glibc.getent
-        ];
-        script = ''
-          role_id=${cfg.roleId}
-          secret_id_file="${cfg.secretIdFile}"
+      vault-secrets.wantedBy = map (s: "${s}.service") loadedByNames;
 
-          VAULT_TOKEN="$(vault write -field=token auth/approle/login role_id=$role_id secret_id=@$secret_id_file)"
-          export VAULT_TOKEN
-
-          exec consul-template -config ${cfgFile} -exec true
-        '';
-        environment = {
-          VAULT_ADDR = cfg.vaultAddress;
-        };
-        startLimitIntervalSec = 0;
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = true;
-          Restart = "on-failure";
-          RestartSec = "5s";
-        };
-      };
+      systemd.services = genAttrs loadedByNames (name: {
+        serviceConfig.LoadCredential = map (
+          key: "${key.service}_${key.name}:${cfg.secretsDir}/services/${key.service}/${key.name}"
+        ) (filter (key: elem name key.serviceLoadedBy) allKeys);
+      });
     }
-  ]);
+  ];
 }
