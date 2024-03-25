@@ -12,8 +12,6 @@ in
   "restic-backup-env.age".publicKeys = personalKeys ++ hashistack;
   "restic-backup-offsite-env.age".publicKeys = personalKeys ++ hashistack;
 
-  "steropes-approle-secret-id.age".publicKeys = personalKeys ++ [ steropes ];
-
   "ngrok.age".publicKeys = [
     matt-athena
     athena
