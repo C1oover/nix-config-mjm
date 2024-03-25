@@ -14,7 +14,6 @@ in
 
   "arges-approle-secret-id.age".publicKeys = personalKeys ++ [ arges ];
   "brontes-approle-secret-id.age".publicKeys = personalKeys ++ [ brontes ];
-  "helios-approle-secret-id.age".publicKeys = personalKeys ++ [ helios ];
   "steropes-approle-secret-id.age".publicKeys = personalKeys ++ [ steropes ];
 
   "ngrok.age".publicKeys = [
