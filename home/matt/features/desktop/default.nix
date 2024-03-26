@@ -32,6 +32,7 @@ in
         bitwarden
         cider
         cinny-desktop
+        element-desktop
         wl-clipboard
         xclip
         xdg-utils
