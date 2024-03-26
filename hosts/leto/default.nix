@@ -6,7 +6,6 @@
     ../common/optional/proxmox-vm.nix
 
     ./services/actual.nix
-    ./services/attic.nix
     ./services/atuin.nix
     ./services/home-assistant.nix
     ./services/linkding.nix
@@ -50,6 +49,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  mjm.atticd.enable = true;
   mjm.authelia.enable = true;
   mjm.consul.enable = true;
   mjm.garage.enable = true;
