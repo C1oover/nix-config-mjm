@@ -1,5 +1,8 @@
 let
-  services = [ "authelia" ];
+  services = [
+    "authelia"
+    "garage"
+  ];
 in
 {
   imports = [
@@ -11,7 +14,6 @@ in
     ./backup
     ./consul
     ./chat
-    ./garage
     ./gitlab
     ./grafana
     ./homelab/app.nix

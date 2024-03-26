@@ -39,7 +39,7 @@ in
 
     vault-secrets.wantedBy = [ "garage.service" ];
     vault-secrets.templates.garage-env.text = ''
-      {{ with secret "kv/garage" }}
+      {{ with secret "kv/prod/services/garage" }}
       GARAGE_RPC_SECRET={{ .Data.data.rpc_secret }}
       GARAGE_ADMIN_TOKEN={{ .Data.data.admin_token }}
       {{ end }}
