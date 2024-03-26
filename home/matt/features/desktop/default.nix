@@ -46,5 +46,7 @@ in
     programs.mpv.enable = true;
 
     services.kdeconnect.enable = true;
+
+    fonts.fontconfig.enable = false;
   };
 }
