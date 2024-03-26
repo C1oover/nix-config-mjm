@@ -48,6 +48,7 @@ apply terranix changes:
         - .gitlab-ci.yml
         - apps/**/*
         - modules/apps/**/*
+        - services/*/service.nix
         - terraform/**/*
         - flake.nix
         - flake.lock
