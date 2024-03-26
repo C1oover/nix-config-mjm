@@ -7,8 +7,6 @@
 let
   inherit (lib) mkDefault mkEnableOption mkIf;
   cfg = config.mjm.terminal;
-
-  fontSize = if pkgs.stdenv.isLinux then 12 else 14;
 in
 {
   options.mjm.terminal.kitty = {
@@ -22,7 +20,7 @@ in
       enable = true;
       theme = "Catppuccin-Macchiato";
       font.name = "Agave";
-      font.size = mkDefault fontSize;
+      font.size = mkDefault 14;
       settings = {
         shell = "${pkgs.zsh}/bin/zsh --login --interactive";
         shell_integration = "enabled";
