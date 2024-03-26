@@ -17,4 +17,6 @@
     krita
     yt-dlp
   ];
+
+  programs.kitty.font.size = 14;
 }
