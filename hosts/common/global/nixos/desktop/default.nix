@@ -24,14 +24,26 @@ in
     programs.gnupg.agent.pinentryPackage = pkgs.pinentry-qt;
 
     services.dbus.packages = [ pkgs.kdePackages.kpmcore ];
-    environment.systemPackages = [
-      pkgs.kdePackages.kpmcore
-      pkgs.kdePackages.partitionmanager
-      (pkgs.writeTextDir "share/sddm/themes/breeze/theme.conf.user" ''
-        [General]
-        background=${pkgs.kdePackages.plasma-workspace-wallpapers}/share/wallpapers/MilkyWay/contents/images/5120x2880.png
-      '')
-    ];
+    environment.systemPackages =
+      [
+        pkgs.kdePackages.kpmcore
+        pkgs.kdePackages.partitionmanager
+        (pkgs.writeTextDir "share/sddm/themes/breeze/theme.conf.user" ''
+          [General]
+          background=${pkgs.kdePackages.plasma-workspace-wallpapers}/share/wallpapers/MilkyWay/contents/images/5120x2880.png
+        '')
+      ]
+      ++ (with pkgs.kdePackages; [
+        akonadi
+        kdepim-runtime
+        akonadiconsole
+        kmail-account-wizard
+
+        kmail
+        kontact
+        merkuro
+        kdepim-addons
+      ]);
 
     fonts = {
       packages = with pkgs; [
