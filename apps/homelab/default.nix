@@ -50,7 +50,7 @@
               export DEVENV_SECRETS="$DEVENV_STATE/secrets"
               mkdir -p $DEVENV_SECRETS
 
-              ${writeSecret "homelab" "restic_password" "restic_password"}
+              ${writeSecret "prod/services/homelab" "restic_password" "restic_password"}
               ${writeSecret "restic" "garage_key_id" "garage_key_id"}
               ${writeSecret "restic" "garage_secret_key" "garage_secret_key"}
               ${writeSecret "restic" "b2_key_id" "b2_key_id"}
