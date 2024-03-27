@@ -2,9 +2,11 @@ let
   services = [
     "atticd"
     "authelia"
+    "consul"
     "garage"
     "gitlab-runner"
     "homelab"
+    "matrix-server"
     "media-server"
     "prometheus"
   ];
@@ -16,8 +18,6 @@ in
     ./actual
     ./atuin
     ./backup
-    ./consul
-    ./chat
     ./gitlab
     ./grafana
     ./home-assistant
