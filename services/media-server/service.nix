@@ -25,8 +25,5 @@
     };
   };
 
-  vault.policies.mediaserver = {
-    paths."kv/data/mediaserver".capabilities = [ "read" ];
-    approles = [ "chaos" ];
-  };
+  vault.services.media-server.hosts = [ "chaos" ];
 }

@@ -124,20 +124,27 @@ let
     }
   );
 
-  keyType = types.submodule (
-    { name, ... }:
-    {
-      options = {
-        name = mkOption {
-          type = types.str;
-          default = name;
+  keyType =
+    svcConfig:
+    types.submodule (
+      { name, config, ... }:
+      {
+        options = {
+          name = mkOption {
+            type = types.str;
+            default = name;
+          };
+          path = mkOption {
+            type = types.path;
+            default = "${cfg.secretsDir}/services/${svcConfig.name}/${config.name}";
+            internal = true;
+          };
         };
-      };
-    }
-  );
+      }
+    );
 
   serviceType = types.submodule (
-    { name, ... }:
+    { name, config, ... }:
     {
       options = {
         name = mkOption {
@@ -149,7 +156,7 @@ let
           default = [ ];
         };
         keys = mkOption {
-          type = types.attrsOf keyType;
+          type = types.attrsOf (keyType config);
           default = { };
         };
       };
@@ -285,9 +292,9 @@ in
       vault-secrets.wantedBy = map (s: "${s}.service") loadedByNames;
 
       systemd.services = genAttrs loadedByNames (name: {
-        serviceConfig.LoadCredential = map (
-          key: "${key.service}_${key.name}:${cfg.secretsDir}/services/${key.service}/${key.name}"
-        ) (filter (key: elem name key.serviceLoadedBy) allKeys);
+        serviceConfig.LoadCredential = map (key: "${key.service}_${key.name}:${key.path}") (
+          filter (key: elem name key.serviceLoadedBy) allKeys
+        );
       });
     }
   ];

@@ -3,6 +3,7 @@ let
     "authelia"
     "garage"
     "gitlab-runner"
+    "media-server"
   ];
 in
 {
@@ -22,7 +23,6 @@ in
     ./ingress
     ./linkding
     ./loki
-    ./mediaserver
     ./miniflux
     ./netbox
     ./nut

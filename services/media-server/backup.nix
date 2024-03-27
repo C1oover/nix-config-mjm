@@ -13,7 +13,7 @@ in
     # FIXME: move some of the app-specific paths/commands to those modules
     mjm.backups.mediaserver = {
       repositoryName = "mediaserver";
-      passwordFile = config.vault-secrets.templates.mediaserver-backup-password.path;
+      passwordFile = config.vault-secrets.services.media-server.keys.backup_password.path;
       paths = [
         "/var/lib/jellyfin"
         "/var/lib/sabnzbd/admin"
@@ -43,6 +43,6 @@ in
       '';
     };
 
-    vault-secrets.templates.mediaserver-backup-password.kvPath = "kv/mediaserver/backup_password";
+    vault-secrets.services.media-server.keys.backup_password = { };
   };
 }

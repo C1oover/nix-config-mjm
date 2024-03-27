@@ -51,7 +51,7 @@ in
     vault-secrets.wantedBy = [ "videos.mount" ];
     vault-secrets.templates.smb-creds.text = ''
       username=mediaserver
-      password={{ with secret "kv/mediaserver" }}{{ .Data.data.smb_password }}{{ end }}
+      password={{ with secret "kv/prod/services/media-server" }}{{ .Data.data.smb_password }}{{ end }}
     '';
 
     services.consul.services.jellyfin = {

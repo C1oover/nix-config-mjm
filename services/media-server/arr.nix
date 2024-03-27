@@ -69,21 +69,21 @@ in
       exportarr-sonarr = {
         enable = true;
         openFirewall = true;
-        apiKeyFile = config.vault-secrets.templates.sonarr-api-key.path;
+        apiKeyFile = config.vault-secrets.services.media-server.keys.sonarr_api_key.path;
         url = "http://127.0.0.1:8989";
       };
       exportarr-radarr = {
         enable = true;
         port = 9707;
         openFirewall = true;
-        apiKeyFile = config.vault-secrets.templates.radarr-api-key.path;
+        apiKeyFile = config.vault-secrets.services.media-server.keys.radarr_api_key.path;
         url = "http://127.0.0.1:7878";
       };
       exportarr-readarr = {
         enable = true;
         port = 9706;
         openFirewall = true;
-        apiKeyFile = config.vault-secrets.templates.readarr-api-key.path;
+        apiKeyFile = config.vault-secrets.services.media-server.keys.readarr_api_key.path;
         url = "http://127.0.0.1:8787";
       };
     };
@@ -93,10 +93,10 @@ in
       "prometheus-exportarr-radarr-exporter.service"
       "prometheus-exportarr-readarr-exporter.service"
     ];
-    vault-secrets.templates = {
-      sonarr-api-key.kvPath = "kv/mediaserver/sonarr_api_key";
-      radarr-api-key.kvPath = "kv/mediaserver/radarr_api_key";
-      readarr-api-key.kvPath = "kv/mediaserver/readarr_api_key";
+    vault-secrets.services.media-server.keys = {
+      sonarr_api_key = { };
+      radarr_api_key = { };
+      readarr_api_key = { };
     };
 
     services.consul.services = {
