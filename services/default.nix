@@ -6,6 +6,7 @@
     ./garage
     ./gitlab-runner
     ./grafana
+    ./homelab
     ./ipv4-proxy
     ./matrix-server
     ./media-server

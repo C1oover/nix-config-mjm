@@ -14,11 +14,11 @@ let
     genAttrs
     listToAttrs
     literalExpression
-    mapAttrsToList
     mkIf
     mkMerge
     mkOption
     nameValuePair
+    unique
     types
     ;
 
@@ -33,27 +33,17 @@ let
     perms = tmplCfg.mode;
   };
 
+  allTemplates = attrValues cfg.templates;
+  loadedByNames = unique (concatMap (tmpl: tmpl.loadedBy) allTemplates);
+
   consulTemplateConfig = {
     once = true;
     vault.address = cfg.vaultAddress;
-    template = map mkTemplate (builtins.attrValues cfg.templates);
+    template = map mkTemplate (attrValues cfg.templates);
   };
 
   allServices = attrValues cfg.services;
-
-  allKeys = concatMap (
-    svc:
-    mapAttrsToList (
-      _: key:
-      key
-      // {
-        service = svc.name;
-        serviceLoadedBy = svc.loadedBy;
-      }
-    ) svc.keys
-  ) allServices;
-
-  loadedByNames = concatMap (svc: svc.loadedBy) allServices;
+  allKeys = concatMap (svc: attrValues svc.keys) allServices;
 
   format = pkgs.formats.json { };
   cfgFile = format.generate "secrets-template-config.json" consulTemplateConfig;
@@ -116,6 +106,20 @@ let
             User who will own the rendered secret.
           '';
         };
+        loadedBy = mkOption {
+          type = types.listOf types.str;
+          default = [ ];
+          description = ''
+            Names of systemd services that should load this credential.
+          '';
+        };
+        credentialId = mkOption {
+          type = types.str;
+          default = config._module.args.name;
+          description = ''
+            ID of the credential when loaded into a systemd service.
+          '';
+        };
       };
 
       config.text =
@@ -134,11 +138,24 @@ let
             type = types.str;
             default = name;
           };
+          serviceName = mkOption {
+            type = types.str;
+            default = svcConfig.name;
+            readOnly = true;
+          };
           path = mkOption {
             type = types.path;
             default = "${cfg.secretsDir}/services/${svcConfig.name}/${config.name}";
             internal = true;
           };
+          loadedBy = mkOption {
+            type = types.listOf types.str;
+            default = [ ];
+          };
+        };
+
+        config = {
+          loadedBy = svcConfig.loadedBy;
         };
       }
     );
@@ -278,24 +295,27 @@ in
           };
         };
       }
+      {
+        vault-secrets.wantedBy = map (s: "${s}.service") loadedByNames;
+
+        systemd.services = genAttrs loadedByNames (name: {
+          serviceConfig.LoadCredential = map (tmpl: "${tmpl.credentialId}:${tmpl.path}") (
+            filter (tmpl: elem name tmpl.loadedBy) allTemplates
+          );
+        });
+      }
     ]))
     {
       vault-secrets.templates = listToAttrs (
         map (
           key:
-          nameValuePair "services/${key.service}/${key.name}" {
-            kvPath = "kv/prod/services/${key.service}/${key.name}";
+          nameValuePair "services/${key.serviceName}/${key.name}" {
+            kvPath = "kv/prod/services/${key.serviceName}/${key.name}";
+            loadedBy = key.loadedBy;
+            credentialId = "${key.serviceName}_${key.name}";
           }
         ) allKeys
       );
-
-      vault-secrets.wantedBy = map (s: "${s}.service") loadedByNames;
-
-      systemd.services = genAttrs loadedByNames (name: {
-        serviceConfig.LoadCredential = map (key: "${key.service}_${key.name}:${key.path}") (
-          filter (key: elem name key.serviceLoadedBy) allKeys
-        );
-      });
     }
   ];
 }

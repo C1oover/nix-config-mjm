@@ -1,0 +1,135 @@
+{
+  pkgs,
+  outputs,
+  config,
+  lib,
+  ...
+}:
+let
+  inherit (lib) mkEnableOption mkIf;
+
+  cfg = config.mjm.homelab;
+
+  pkg = outputs.packages.${pkgs.system}.homelab;
+  taskRc = pkgs.writeText "homelab-taskrc" ''
+    data.location=$STATE_DIRECTORY/task
+    taskd.ca=${../../home/matt/features/taskwarrior/ca.crt}
+    taskd.certificate=${../../home/matt/features/taskwarrior/cert.crt}
+    taskd.credentials=home/mjm/335503bd-9888-481a-b3e9-7d0c54e0b8bc
+    taskd.key=$CREDENTIALS_DIRECTORY/homelab_taskwarrior_key
+    taskd.server=tasks.midna.dev:53589
+
+    uda.reminder_id.type=string
+    uda.reminder_id.label=Reminder
+    uda.next_notification.type=date
+    uda.next_notification.label=Notify
+  '';
+in
+{
+  options.mjm.homelab = {
+    enable = mkEnableOption "homelab web app";
+  };
+
+  config = mkIf cfg.enable {
+    mjm.otel-collector.enable = true;
+    mjm.postgresql.enable = true;
+
+    systemd.services.homelab = {
+      wantedBy = [ "multi-user.target" ];
+      after = [
+        "network.target"
+        "postgresql.service"
+      ];
+      path = with pkgs; [
+        restic
+        taskwarrior
+      ];
+      environment = {
+        OTEL_SERVICE_NAME = "homelab";
+        OTEL_EXPORTER_OTLP_ENDPOINT = "http://127.0.0.1:4318";
+        TASKRC = "${taskRc}";
+        RELEASE_COOKIE = "default";
+        HOME = "/var/lib/homelab";
+        RESTIC_PASSWORD_FILE = "%d/homelab_restic_password";
+      };
+
+      preStart = ''
+        mkdir -p $STATE_DIRECTORY/task
+        task sync
+      '';
+
+      serviceConfig = {
+        ExecStart = "${pkg}/bin/server";
+        EnvironmentFile = config.vault-secrets.templates.homelab-env.path;
+        Restart = "always";
+        DynamicUser = true;
+        User = "homelab";
+        StateDirectory = "homelab";
+        WorkingDirectory = "/var/lib/homelab";
+        # TODO harden
+      };
+    };
+
+    vault-secrets.services.homelab = {
+      loadedBy = [ "homelab" ];
+      keys = {
+        taskwarrior_key = { };
+        restic_password = { };
+      };
+    };
+    vault-secrets.templates = {
+      homelab-env.text = ''
+        {{ with secret "kv/prod/services/homelab" }}
+        PAPERLESS_TOKEN={{ .Data.data.paperless_token }}
+        GITLAB_TOKEN={{ .Data.data.gitlab_token }}
+        NETBOX_TOKEN={{ .Data.data.netbox_token }}
+        SECRET_KEY_BASE={{ .Data.data.secret_key_base }}
+        {{ end }}
+      '';
+      # TODO clean this up once I figure out what I'm doing with common secrets
+      garage-key-id = {
+        kvPath = "kv/restic/garage_key_id";
+        loadedBy = [ "homelab" ];
+      };
+      garage-secret-key = {
+        kvPath = "kv/restic/garage_secret_key";
+        loadedBy = [ "homelab" ];
+      };
+      b2-key-id = {
+        kvPath = "kv/restic/b2_key_id";
+        loadedBy = [ "homelab" ];
+      };
+      b2-application-key = {
+        kvPath = "kv/restic/b2_application_key";
+        loadedBy = [ "homelab" ];
+      };
+    };
+
+    services.postgresql = {
+      ensureDatabases = [ "homelab" ];
+      ensureUsers = [
+        {
+          name = "homelab";
+          ensureDBOwnership = true;
+        }
+      ];
+    };
+
+    networking.firewall.allowedTCPPorts = [ 4000 ];
+
+    services.consul.services.homelab = {
+      port = 4000;
+
+      meta.metrics_path = "/metrics";
+
+      checks = [
+        {
+          name = "homelab is ready";
+          http = "http://localhost:4000/healthz";
+          interval = "15s";
+          timeout = "5s";
+        }
+      ];
+    };
+  };
+}

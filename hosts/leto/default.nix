@@ -8,7 +8,6 @@
     ./services/actual.nix
     ./services/attic.nix
     ./services/atuin.nix
-    ./services/homelab.nix
     ./services/home-assistant.nix
     ./services/linkding.nix
     ./services/miniflux.nix
@@ -55,6 +54,7 @@
   mjm.consul.enable = true;
   mjm.garage.enable = true;
   mjm.grafana.enable = true;
+  mjm.homelab.enable = true;
   mjm.postgresql.enable = true;
   mjm.prometheus.enable = true;
   mjm.server.enable = true;

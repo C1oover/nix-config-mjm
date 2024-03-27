@@ -3,6 +3,7 @@ let
     "authelia"
     "garage"
     "gitlab-runner"
+    "homelab"
     "media-server"
   ];
 in
@@ -18,7 +19,6 @@ in
     ./chat
     ./gitlab
     ./grafana
-    ./homelab/app.nix
     ./home-assistant
     ./ingress
     ./linkding
