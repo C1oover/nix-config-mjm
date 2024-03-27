@@ -11,6 +11,7 @@
       "chrysalis"
       "dash"
       "docker"
+      "element"
       "fantastical"
     ];
   };
