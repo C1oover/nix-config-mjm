@@ -2,6 +2,7 @@ let
   services = [
     "authelia"
     "garage"
+    "gitlab-runner"
   ];
 in
 {

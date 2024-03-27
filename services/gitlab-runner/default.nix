@@ -16,7 +16,7 @@ in
   config = mkIf cfg.enable {
     vault-secrets.templates.gitlab-runner-registration-env.text = ''
       CI_SERVER_URL=https://git.midna.dev
-      REGISTRATION_TOKEN={{ with secret "kv/gitlab/runner" }}{{ .Data.data.registration_token }}{{ end }}
+      REGISTRATION_TOKEN={{ with secret "kv/prod/services/gitlab-runner" }}{{ .Data.data.registration_token }}{{ end }}
     '';
 
     boot.kernel.sysctl."net.ipv4.ip_forward" = true;
