@@ -14,7 +14,7 @@
     entries = [
       { path = "/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app/"; }
       { path = "${config.programs.firefox.package}/Applications/Firefox.app/"; }
-      { path = "/Applications/Cinny.app/"; }
+      { path = "/Applications/Element.app/"; }
       { path = "/System/Applications/Messages.app/"; }
       { path = "/System/Applications/Mail.app/"; }
       { path = "${pkgs.zoom-us}/Applications/zoom.us.app/"; }
