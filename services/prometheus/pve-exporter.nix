@@ -17,8 +17,8 @@ in
 
       PVE_USER=prometheus@pam
       PVE_TOKEN_NAME=metrics
-      {{ with secret "kv/proxmox" }}
-      PVE_TOKEN_VALUE={{ .Data.data.metrics_token }}
+      {{ with secret "kv/prod/services/prometheus" }}
+      PVE_TOKEN_VALUE={{ .Data.data.pve_metrics_token }}
       {{ end }}
     '';
   };

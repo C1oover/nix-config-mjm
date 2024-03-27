@@ -83,8 +83,8 @@ in
 
     vault-secrets.wantedBy = [ "alertmanager.service" ];
     vault-secrets.templates.alertmanager-env.text = ''
-      {{ with secret "kv/pagerduty" }}
-      PAGERDUTY_ROUTING_KEY={{ .Data.data.routing_key }}
+      {{ with secret "kv/prod/services/prometheus" }}
+      PAGERDUTY_ROUTING_KEY={{ .Data.data.pagerduty_routing_key }}
       {{ end }}
     '';
 

@@ -5,6 +5,7 @@ let
     "gitlab-runner"
     "homelab"
     "media-server"
+    "prometheus"
   ];
 in
 {
@@ -29,7 +30,6 @@ in
     ./otel
     ./paperless
     ./postgresql
-    ./prometheus
     ./proxmox
     ./taskserver
     ./vault
