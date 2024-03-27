@@ -19,9 +19,10 @@ in
     programs.kitty = {
       enable = true;
       theme = "Catppuccin-Macchiato";
-      font.name = "Agave";
+      font.name = "Input Mono Condensed";
       font.size = mkDefault 14;
       settings = {
+        modify_font = "baseline 1";
         shell = "${pkgs.zsh}/bin/zsh --login --interactive";
         shell_integration = "enabled";
         tab_bar_style = "powerline";

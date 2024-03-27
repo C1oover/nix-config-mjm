@@ -51,6 +51,7 @@ in
         iosevka
         agave
         monaspace
+        (input-fonts.override { acceptLicense = true; })
         outputs.packages.${pkgs.system}.pragmata-pro
       ];
 
