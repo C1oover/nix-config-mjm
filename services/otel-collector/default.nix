@@ -74,8 +74,8 @@ in
 
     vault-secrets.wantedBy = [ "opentelemetry-collector.service" ];
     vault-secrets.templates.otel-collector-env.text = ''
-      {{ with secret "kv/honeycomb" }}
-      HONEYCOMB_API_KEY={{ .Data.data.api_key }}
+      {{ with secret "kv/prod/services/otel-collector" }}
+      HONEYCOMB_API_KEY={{ .Data.data.honeycomb_api_key }}
       {{ end }}
     '';
   };

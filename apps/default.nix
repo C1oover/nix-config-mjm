@@ -9,6 +9,7 @@ let
     "matrix-server"
     "media-server"
     "netbox"
+    "otel-collector"
     "postgresql"
     "prometheus"
   ];
@@ -28,7 +29,6 @@ in
     ./loki
     ./miniflux
     ./nut
-    ./otel
     ./paperless
     ./proxmox
     ./taskserver
