@@ -1,5 +1,7 @@
 set -euo pipefail
 
+ACTION=${1:-switch}
+
 sudo nix-env -p /nix/var/nix/profiles/system --set "$(readlink -f result)"
 sudo systemd-run \
   -E LOCALE_ARCHIVE \
@@ -12,4 +14,4 @@ sudo systemd-run \
   --unit=nixos-rebuild-switch-to-configuration \
   --wait \
   ./result/bin/switch-to-configuration \
-  switch
+  "$ACTION"

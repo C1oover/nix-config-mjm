@@ -1,5 +1,6 @@
 alias rb := rebuild
 alias sw := switch
+alias bt := boot
 alias tfp := tf-plan
 alias tfa := tf-apply
 
@@ -8,6 +9,9 @@ rebuild *flags:
 
 switch:
   nix run .#switch
+
+boot:
+  nix run .#switch -- boot
 
 build target *flags:
   colmena build --on {{target}} --keep-result {{flags}}
