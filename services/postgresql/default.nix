@@ -34,7 +34,7 @@ in
         pg = config.services.postgresql.package;
       in
       {
-        passwordFile = config.vault-secrets.templates.postgresql-backup-password.path;
+        passwordFile = config.vault-secrets.services.postgresql.keys.backup_password.path;
         paths = [ "/tmp/pgbackup" ];
         user = "postgres";
         backupPrepareCommand = ''
@@ -51,9 +51,10 @@ in
         '';
       };
 
-    vault-secrets.templates.postgresql-backup-password = {
-      kvPath = "kv/postgresql/backup_password";
-      owner = "postgres";
+    vault-secrets.services.postgresql = {
+      keys.backup_password = {
+        owner = "postgres";
+      };
     };
   };
 }

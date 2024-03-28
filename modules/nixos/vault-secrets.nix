@@ -11,7 +11,9 @@ let
     concatMap
     elem
     filter
+    filterAttrs
     genAttrs
+    getAttrs
     listToAttrs
     literalExpression
     mkIf
@@ -151,6 +153,10 @@ let
           loadedBy = mkOption {
             type = types.listOf types.str;
             default = [ ];
+          };
+          owner = mkOption {
+            type = types.nullOr types.str;
+            default = null;
           };
         };
 
@@ -309,11 +315,14 @@ in
       vault-secrets.templates = listToAttrs (
         map (
           key:
-          nameValuePair "services/${key.serviceName}/${key.name}" {
-            kvPath = "kv/prod/services/${key.serviceName}/${key.name}";
-            loadedBy = key.loadedBy;
-            credentialId = "${key.serviceName}_${key.name}";
-          }
+          nameValuePair "services/${key.serviceName}/${key.name}" (
+            {
+              kvPath = "kv/prod/services/${key.serviceName}/${key.name}";
+              loadedBy = key.loadedBy;
+              credentialId = "${key.serviceName}_${key.name}";
+            }
+            // filterAttrs (_: v: v != null) (getAttrs [ "owner" ] key)
+          )
         ) allKeys
       );
     }

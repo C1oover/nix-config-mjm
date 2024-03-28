@@ -1,7 +1,7 @@
 {
-  vault.policies.postgresql = {
+  vault.services.postgresql = {
     paths."kv/data/postgresql".capabilities = [ "read" ];
-    approles = [
+    hosts = [
       "chaos"
       "leto"
       "helios"

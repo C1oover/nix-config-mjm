@@ -8,6 +8,7 @@ let
     "homelab"
     "matrix-server"
     "media-server"
+    "postgresql"
     "prometheus"
   ];
 in
@@ -29,7 +30,6 @@ in
     ./nut
     ./otel
     ./paperless
-    ./postgresql
     ./proxmox
     ./taskserver
     ./vault
