@@ -11,6 +11,7 @@
     ./ipv4-proxy
     ./matrix-server
     ./media-server
+    ./netbox
     ./nut
     ./otel-collector
     ./postgresql

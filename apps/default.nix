@@ -8,6 +8,7 @@ let
     "homelab"
     "matrix-server"
     "media-server"
+    "netbox"
     "postgresql"
     "prometheus"
   ];
@@ -26,7 +27,6 @@ in
     ./linkding
     ./loki
     ./miniflux
-    ./netbox
     ./nut
     ./otel
     ./paperless
