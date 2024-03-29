@@ -30,7 +30,6 @@ in
         # default denylist, but without the local addresses so that we can send
         # messages to the bridges
         ip_range_denylist = [
-          "10.0.0.0/8"
           "172.16.0.0/12"
           "192.168.0.0/16"
           "100.64.0.0/10"
