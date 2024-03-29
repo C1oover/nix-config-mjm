@@ -68,5 +68,19 @@ in
         }
       ];
     };
+
+    mjm.backups.mediaserver = {
+      paths = [ "/var/lib/jellyfin" ];
+      exclude = [
+        "/var/lib/jellyfin/log"
+        "/var/lib/jellyfin/transcodes"
+      ];
+      backupPrepareCommand = ''
+        ${pkgs.sqlite}/bin/sqlite3 /var/lib/jellyfin/data/jellyfin.db ".backup '/var/lib/jellyfin/data/jellyfin-backup.db'"
+      '';
+      backupCleanupCommand = ''
+        rm /var/lib/jellyfin/data/jellyfin-backup.db
+      '';
+    };
   };
 }

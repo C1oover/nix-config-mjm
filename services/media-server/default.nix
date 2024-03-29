@@ -1,6 +1,7 @@
-{ lib, ... }:
+{ config, lib, ... }:
 let
-  inherit (lib) mkEnableOption;
+  inherit (lib) mkEnableOption mkIf;
+  cfg = config.mjm.media-server;
 in
 {
   options.mjm.media-server = {
@@ -9,9 +10,17 @@ in
 
   imports = [
     ./arr.nix
-    ./backup.nix
     ./invidious.nix
     ./jellyfin.nix
     ./sabnzbd.nix
   ];
+
+  config = mkIf cfg.enable {
+    mjm.backups.mediaserver = {
+      repositoryName = "mediaserver";
+      passwordFile = config.vault-secrets.services.media-server.keys.backup_password.path;
+    };
+
+    vault-secrets.services.media-server.keys.backup_password = { };
+  };
 }

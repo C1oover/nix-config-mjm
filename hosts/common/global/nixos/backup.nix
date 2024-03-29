@@ -34,8 +34,6 @@ in
               paths
               exclude
               user
-              backupPrepareCommand
-              backupCleanupCommand
               ;
 
             repositoryName = mkOption {
@@ -58,6 +56,16 @@ in
               type = types.path;
               readOnly = true;
               internal = true;
+            };
+
+            backupPrepareCommand = mkOption {
+              type = types.nullOr types.lines;
+              default = null;
+            };
+
+            backupCleanupCommand = mkOption {
+              type = types.nullOr types.lines;
+              default = null;
             };
           };
 

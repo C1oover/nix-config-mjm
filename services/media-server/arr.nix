@@ -178,5 +178,28 @@ in
 
     # ffprobe
     systemd.services.radarr.path = [ pkgs.ffmpeg ];
+
+    mjm.backups.mediaserver = {
+      paths = [
+        "/var/lib/sonarr/.config/NzbDrone"
+        "/var/lib/radarr/.config/Radarr"
+        "/var/lib/readarr"
+      ];
+      exclude = [
+        "/var/lib/sonarr/.config/NzbDrone/logs"
+        "/var/lib/radarr/.config/Radarr/logs"
+        "/var/lib/readarr/logs"
+      ];
+      backupPrepareCommand = ''
+        ${pkgs.sqlite}/bin/sqlite3 /var/lib/sonarr/.config/NzbDrone/sonarr.db ".backup '/var/lib/sonarr/.config/NzbDrone/sonarr-backup.db'"
+        ${pkgs.sqlite}/bin/sqlite3 /var/lib/radarr/.config/Radarr/radarr.db ".backup '/var/lib/radarr/.config/Radarr/radarr-backup.db'"
+        ${pkgs.sqlite}/bin/sqlite3 /var/lib/readarr/readarr.db ".backup '/var/lib/readarr/readarr-backup.db'"
+      '';
+      backupCleanupCommand = ''
+        rm /var/lib/sonarr/.config/NzbDrone/sonarr-backup.db
+        rm /var/lib/radarr/.config/Radarr/radarr-backup.db
+        rm /var/lib/readarr/readarr-backup.db
+      '';
+    };
   };
 }

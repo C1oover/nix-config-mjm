@@ -54,5 +54,10 @@ in
         }
       ];
     };
+
+    mjm.backups.mediaserver.paths = [
+      "/var/lib/sabnzbd/admin"
+      "/var/lib/sabnzbd/sabnzbd.ini"
+    ];
   };
 }
