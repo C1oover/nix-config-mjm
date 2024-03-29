@@ -7,6 +7,7 @@
     ./garage
     ./gitlab-runner
     ./grafana
+    ./home-assistant
     ./homelab
     ./ipv4-proxy
     ./matrix-server

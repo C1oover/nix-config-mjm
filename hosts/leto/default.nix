@@ -7,7 +7,6 @@
 
     ./services/actual.nix
     ./services/atuin.nix
-    ./services/home-assistant.nix
     ./services/linkding.nix
     ./services/miniflux.nix
     ./services/paperless.nix
@@ -53,6 +52,7 @@
   mjm.consul.enable = true;
   mjm.garage.enable = true;
   mjm.grafana.enable = true;
+  mjm.home-assistant.enable = true;
   mjm.homelab.enable = true;
   mjm.netbox.enable = true;
   mjm.prometheus.enable = true;

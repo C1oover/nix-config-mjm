@@ -5,6 +5,7 @@ let
     "consul"
     "garage"
     "gitlab-runner"
+    "home-assistant"
     "homelab"
     "matrix-server"
     "media-server"
@@ -23,7 +24,6 @@ in
     ./backup
     ./gitlab
     ./grafana
-    ./home-assistant
     ./ingress
     ./linkding
     ./loki
