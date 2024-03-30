@@ -14,6 +14,7 @@ let
     "otel-collector"
     "postgresql"
     "prometheus"
+    "vaultwarden"
   ];
 in
 {
@@ -32,6 +33,5 @@ in
     ./proxmox
     ./taskserver
     ./vault
-    ./vaultwarden
   ] ++ map (s: ../services/${s}/service.nix) services;
 }

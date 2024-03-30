@@ -19,5 +19,6 @@
     ./prometheus
     ./tailscale
     ./vault
+    ./vaultwarden
   ];
 }

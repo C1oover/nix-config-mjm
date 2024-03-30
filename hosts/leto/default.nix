@@ -11,7 +11,6 @@
     ./services/miniflux.nix
     ./services/paperless.nix
     ./services/taskserver.nix
-    ./services/vaultwarden.nix
   ];
 
   networking.hostName = "leto";
@@ -62,6 +61,7 @@
     persistDir = "/persist";
     directories = [ "/nix" ];
   };
+  mjm.vaultwarden.enable = true;
 
   vault-secrets.roleId = "29829ea8-3eb2-b3d6-8aab-d150dbb48e3d";
   vault-secrets.encryptedSecretId = ''
