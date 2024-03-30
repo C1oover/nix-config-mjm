@@ -8,6 +8,7 @@ let
     "grafana"
     "home-assistant"
     "homelab"
+    "ingress"
     "matrix-server"
     "media-server"
     "netbox"
@@ -27,7 +28,6 @@ in
     ./atuin
     ./backup
     ./gitlab
-    ./ingress
     ./linkding
     ./miniflux
     ./nut

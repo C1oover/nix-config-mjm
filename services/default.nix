@@ -9,6 +9,7 @@
     ./grafana
     ./home-assistant
     ./homelab
+    ./ingress
     ./ipv4-proxy
     ./matrix-server
     ./media-server

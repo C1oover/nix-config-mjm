@@ -3,7 +3,6 @@
     ../common/global/nixos
     ../common/users/matt
 
-    ../common/optional/ingress
     ../common/optional/raspberry-pi.nix
   ];
 
@@ -33,6 +32,7 @@
   ];
 
   mjm.consul.enable = true;
+  mjm.ingress.enable = true;
   mjm.nut.enable = true;
   mjm.server.enable = true;
   mjm.state = {

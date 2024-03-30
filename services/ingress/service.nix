@@ -67,11 +67,8 @@ in
       };
     };
 
-  vault.policies.ingress = {
-    paths."kv/data/ingress".capabilities = [ "read" ];
-    approles = [
-      "brontes"
-      "steropes"
-    ];
-  };
+  vault.services.ingress.hosts = [
+    "brontes"
+    "steropes"
+  ];
 }
