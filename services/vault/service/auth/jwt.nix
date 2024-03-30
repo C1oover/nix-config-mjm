@@ -1,5 +1,5 @@
 {
-  resource.vault_jwt_auth_backend.gitlab = {
+  terraform.resource.vault_jwt_auth_backend.gitlab = {
     path = "gitlab";
     bound_issuer = "https://git.midna.dev";
     jwks_url = "https://git.midna.dev/-/jwks";
@@ -20,7 +20,7 @@
     ];
   };
 
-  resource.vault_jwt_auth_backend_role.homelab_infra = {
+  terraform.resource.vault_jwt_auth_backend_role.homelab_infra = {
     backend = "\${vault_jwt_auth_backend.gitlab.path}";
     role_name = "homelab-infra";
     role_type = "jwt";

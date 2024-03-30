@@ -1,5 +1,15 @@
 {
-  imports = [ ./backup.nix ];
+  imports = [
+    ./service/admin.nix
+    ./service/backup.nix
+
+    ./service/auth/github.nix
+    ./service/auth/jwt.nix
+    ./service/auth/oidc.nix
+
+    ./service/mounts/kv.nix
+    ./service/mounts/ssh-client-signer.nix
+  ];
 
   terraform.terraform.required_providers.vault = {
     source = "registry.terraform.io/hashicorp/vault";
@@ -8,15 +18,7 @@
 
   terraform.provider.vault = { };
 
-  terraform.resource.vault_identity_group.admins = {
-    name = "admins";
-    type = "external";
-    policies = [ "admin" ];
-  };
-
   vault.approles.enable = true;
-
-  vault.policies.admin.source = ./policies/admin.hcl;
 
   ingress.virtualHosts.vault = {
     upstream.service.name = "vault";

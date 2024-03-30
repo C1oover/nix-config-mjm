@@ -15,6 +15,7 @@ let
     "paperless"
     "postgresql"
     "prometheus"
+    "vault"
     "vaultwarden"
   ];
 in
@@ -32,6 +33,5 @@ in
     ./nut
     ./proxmox
     ./taskserver
-    ./vault
   ] ++ map (s: ../services/${s}/service.nix) services;
 }

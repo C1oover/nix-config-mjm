@@ -20,7 +20,14 @@
           modules = [
             { _module.args.pkgs = pkgs; }
             ../apps
-            { terraform = ./config.nix; }
+            {
+              terraform.terraform.backend.consul = {
+                scheme = "http";
+                access_token = "";
+                datacenter = "dc1";
+                path = "terraform/state";
+              };
+            }
           ];
           specialArgs = {
             inherit inputs;
