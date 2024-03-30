@@ -1,5 +1,6 @@
 {
   inputs,
+  pkgs,
   config,
   lib,
   ...
@@ -9,7 +10,7 @@ let
   cfg = config.mjm.atticd;
 in
 {
-  # TODO remove once attic lands in nixpkgs
+  # TODO remove once a module for attic lands in nixpkgs
   imports = [ inputs.attic.nixosModules.atticd ];
 
   options.mjm.atticd = {
@@ -21,6 +22,7 @@ in
 
     services.atticd = {
       enable = true;
+      package = pkgs.attic-server;
       settings = {
         listen = "[::]:8100";
         database.url = "postgresql:///atticd?host=/run/postgresql";

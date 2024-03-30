@@ -35,13 +35,10 @@ resholve.mkDerivation {
   src = ./.;
 
   installPhase = ''
-    sed -i '9i ATTIC="${attic-client}"' ci-attic-login.sh
     install -Dv functions.sh $out/functions.sh
-    ${lib.concatMapStrings
-      (script: ''
-        install -Dv ${script}.sh $out/bin/${script}
-      '')
-      scripts}
+    ${lib.concatMapStrings (script: ''
+      install -Dv ${script}.sh $out/bin/${script}
+    '') scripts}
     ${lib.concatMapStrings
       (script: ''
         install -Dv ${script}.${variant}.sh $out/bin/${script}
@@ -49,7 +46,8 @@ resholve.mkDerivation {
       [
         "rebuild"
         "switch"
-      ]}
+      ]
+    }
   '';
 
   passthru.scripts = allScripts;

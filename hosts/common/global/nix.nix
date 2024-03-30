@@ -21,10 +21,7 @@
 
   nixpkgs = {
     config.allowUnfree = true;
-    overlays = [
-      inputs.nur.overlay
-      inputs.attic.overlays.default
-    ];
+    overlays = [ inputs.nur.overlay ];
   };
 
   programs.nix-index.enable = true;
