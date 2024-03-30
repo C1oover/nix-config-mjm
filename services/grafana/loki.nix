@@ -72,7 +72,7 @@ in
           {
             from = "2020-07-01";
             store = "boltdb-shipper";
-            object_store = "aws";
+            object_store = "s3";
             schema = "v11";
             index = {
               prefix = "index_";
@@ -82,7 +82,7 @@ in
           {
             from = "2024-02-12";
             store = "tsdb";
-            object_store = "aws";
+            object_store = "s3";
             schema = "v12";
             index = {
               prefix = "index_";
