@@ -42,9 +42,9 @@ in
 
     vault-secrets.wantedBy = [ "tempo.service" ];
     vault-secrets.templates.tempo-env.text = ''
-      {{ with secret "kv/tempo" }}
-      AWS_ACCESS_KEY_ID={{ .Data.data.garage_key_id }}
-      AWS_SECRET_ACCESS_KEY={{ .Data.data.garage_secret_key }}
+      {{ with secret "kv/prod/services/grafana" }}
+      AWS_ACCESS_KEY_ID={{ .Data.data.tempo_garage_key_id }}
+      AWS_SECRET_ACCESS_KEY={{ .Data.data.tempo_garage_secret_key }}
       {{ end }}
     '';
 

@@ -109,9 +109,9 @@ in
 
     vault-secrets.wantedBy = [ "loki.service" ];
     vault-secrets.templates.loki-env.text = ''
-      {{ with secret "kv/loki" }}
-      AWS_ACCESS_KEY_ID={{ .Data.data.garage_key_id }}
-      AWS_SECRET_ACCESS_KEY={{ .Data.data.garage_secret_key }}
+      {{ with secret "kv/prod/services/grafana" }}
+      AWS_ACCESS_KEY_ID={{ .Data.data.loki_garage_key_id }}
+      AWS_SECRET_ACCESS_KEY={{ .Data.data.loki_garage_secret_key }}
       {{ end }}
     '';
 
