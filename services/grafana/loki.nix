@@ -94,13 +94,12 @@ in
         compactor = {
           working_directory = "${dataDir}/compactor";
           shared_store = "s3";
+          retention_enabled = true;
         };
 
-        limits_config.enforce_metric_name = false;
-
-        table_manager = {
-          retention_deletes_enabled = true;
+        limits_config = {
           retention_period = "672h";
+          enforce_metric_name = false;
         };
       };
     };
