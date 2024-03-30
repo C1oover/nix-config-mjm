@@ -9,7 +9,6 @@
     ./services/atuin.nix
     ./services/linkding.nix
     ./services/miniflux.nix
-    ./services/paperless.nix
     ./services/taskserver.nix
   ];
 
@@ -54,6 +53,7 @@
   mjm.home-assistant.enable = true;
   mjm.homelab.enable = true;
   mjm.netbox.enable = true;
+  mjm.paperless.enable = true;
   mjm.prometheus.enable = true;
   mjm.server.enable = true;
   mjm.state = {

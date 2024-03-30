@@ -1,8 +1,5 @@
 {
-  vault.policies.paperless = {
-    paths."kv/data/paperless".capabilities = [ "read" ];
-    approles = [ "leto" ];
-  };
+  vault.services.paperless.hosts = [ "leto" ];
 
   ingress.virtualHosts.paper = {
     upstream.service.name = "paperless";

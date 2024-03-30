@@ -12,6 +12,7 @@ let
     "media-server"
     "netbox"
     "otel-collector"
+    "paperless"
     "postgresql"
     "prometheus"
     "vaultwarden"
@@ -29,7 +30,6 @@ in
     ./linkding
     ./miniflux
     ./nut
-    ./paperless
     ./proxmox
     ./taskserver
     ./vault
