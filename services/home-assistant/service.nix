@@ -3,5 +3,8 @@
     upstream.service.name = "home-assistant";
   };
 
-  vault.services.home-assistant.hosts = [ "leto" ];
+  vault.services.home-assistant = {
+    commonPolicies = [ "backups" ];
+    hosts = [ "leto" ];
+  };
 }

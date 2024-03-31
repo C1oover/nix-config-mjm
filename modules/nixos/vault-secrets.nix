@@ -44,7 +44,7 @@ let
     template = map mkTemplate (attrValues cfg.templates);
   };
 
-  allServices = attrValues cfg.services;
+  allServices = (attrValues cfg.services) ++ (attrValues cfg.common);
   allKeys = concatMap (svc: attrValues svc.keys) allServices;
 
   format = pkgs.formats.json { };
@@ -131,7 +131,7 @@ let
   );
 
   keyType =
-    svcConfig:
+    opts:
     types.submodule (
       { name, config, ... }:
       {
@@ -140,14 +140,18 @@ let
             type = types.str;
             default = name;
           };
+          namespace = mkOption {
+            type = types.str;
+            default = opts.namespace;
+          };
           serviceName = mkOption {
             type = types.str;
-            default = svcConfig.name;
+            default = cfg.${config.namespace}.${opts.name}.name;
             readOnly = true;
           };
           path = mkOption {
             type = types.path;
-            default = "${cfg.secretsDir}/services/${svcConfig.name}/${config.name}";
+            default = "${cfg.secretsDir}/${config.namespace}/${config.serviceName}/${config.name}";
             internal = true;
           };
           loadedBy = mkOption {
@@ -161,30 +165,34 @@ let
         };
 
         config = {
-          loadedBy = svcConfig.loadedBy;
+          loadedBy = cfg.${config.namespace}.${config.serviceName}.loadedBy;
         };
       }
     );
 
-  serviceType = types.submodule (
-    { name, config, ... }:
-    {
-      options = {
-        name = mkOption {
-          type = types.str;
-          default = name;
+  serviceType =
+    namespace:
+    types.submodule (
+      { name, config, ... }:
+      {
+        options = {
+          name = mkOption {
+            type = types.str;
+            default = name;
+          };
+          loadedBy = mkOption {
+            type = types.listOf types.str;
+            default = [ ];
+          };
+          keys = mkOption {
+            type = types.attrsOf (keyType {
+              inherit namespace name;
+            });
+            default = { };
+          };
         };
-        loadedBy = mkOption {
-          type = types.listOf types.str;
-          default = [ ];
-        };
-        keys = mkOption {
-          type = types.attrsOf (keyType config);
-          default = { };
-        };
-      };
-    }
-  );
+      }
+    );
 in
 {
   options.vault-secrets = {
@@ -233,11 +241,15 @@ in
       '';
     };
     services = mkOption {
-      type = types.attrsOf serviceType;
+      type = types.attrsOf (serviceType "services");
       default = { };
       description = ''
         Attrset of services to render secrets for.
       '';
+    };
+    common = mkOption {
+      type = types.attrsOf (serviceType "common");
+      default = { };
     };
     wantedBy = mkOption {
       type = types.listOf systemdUtils.lib.unitNameType;
@@ -272,7 +284,7 @@ in
         };
 
         systemd.services.render-vault-secrets = {
-          wantedBy = [ "multi-user.target" ] ++ cfg.wantedBy;
+          wantedBy = cfg.wantedBy;
           before = cfg.wantedBy;
           after = [ "network.target" ];
           path = with pkgs; [
@@ -315,9 +327,9 @@ in
       vault-secrets.templates = listToAttrs (
         map (
           key:
-          nameValuePair "services/${key.serviceName}/${key.name}" (
+          nameValuePair "${key.namespace}/${key.serviceName}/${key.name}" (
             {
-              kvPath = "kv/prod/services/${key.serviceName}/${key.name}";
+              kvPath = "kv/prod/${key.namespace}/${key.serviceName}/${key.name}";
               loadedBy = key.loadedBy;
               credentialId = "${key.serviceName}_${key.name}";
             }

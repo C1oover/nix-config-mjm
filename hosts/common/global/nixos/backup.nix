@@ -7,6 +7,7 @@
 }:
 let
   inherit (lib)
+    attrNames
     concatStringsSep
     getExe
     mapAttrs'
@@ -19,7 +20,7 @@ let
     types
     ;
 
-  topConfig = config;
+  backupKeys = config.vault-secrets.common.backups.keys;
 in
 {
   options.mjm.backups = mkOption {
@@ -41,18 +42,25 @@ in
               default = name;
             };
 
-            useVaultSecrets = mkOption {
-              type = types.bool;
-              default = true;
-            };
-
-            onsiteEnvPath = mkOption {
+            onsiteKeyIdFile = mkOption {
               type = types.path;
               readOnly = true;
               internal = true;
             };
 
-            offsiteEnvPath = mkOption {
+            onsiteSecretKeyFile = mkOption {
+              type = types.path;
+              readOnly = true;
+              internal = true;
+            };
+
+            offsiteKeyIdFile = mkOption {
+              type = types.path;
+              readOnly = true;
+              internal = true;
+            };
+
+            offsiteSecretKeyFile = mkOption {
               type = types.path;
               readOnly = true;
               internal = true;
@@ -69,15 +77,12 @@ in
             };
           };
 
-          config =
-            let
-              secrets =
-                if config.useVaultSecrets then topConfig.vault-secrets.templates else topConfig.age.secrets;
-            in
-            {
-              onsiteEnvPath = secrets.restic-backup-env.path;
-              offsiteEnvPath = secrets.restic-backup-offsite-env.path;
-            };
+          config = {
+            onsiteKeyIdFile = backupKeys.garage_key_id.path;
+            onsiteSecretKeyFile = backupKeys.garage_secret_key.path;
+            offsiteKeyIdFile = backupKeys.b2_key_id.path;
+            offsiteSecretKeyFile = backupKeys.b2_application_key.path;
+          };
         }
       )
     );
@@ -94,17 +99,19 @@ in
         includePaths = pkgs.writeText "include-patterns" (concatStringsSep "\n" cfg.paths);
         onsiteRepository = "s3:http://garage.service.consul:3902/restic-backups/${cfg.repositoryName}";
         offsiteRepository = "s3:s3.us-west-001.backblazeb2.com/mjm-restic-backups/${cfg.repositoryName}";
-        mkPreamble = repo: envFile: ''
-          set -ae
+        mkPreamble = repo: location: ''
+          set -e
           set -o pipefail
 
-          RESTIC_REPOSITORY="${repo}"
-          source $CREDENTIALS_DIRECTORY/${envFile}
+          export RESTIC_REPOSITORY="${repo}"
+          ${optionalString (location == "onsite") "export AWS_DEFAULT_REGION=home"}
+          export AWS_ACCESS_KEY_ID="$(cat $CREDENTIALS_DIRECTORY/${location}-key-id)"
+          export AWS_SECRET_ACCESS_KEY="$(cat $CREDENTIALS_DIRECTORY/${location}-secret-key)"
         '';
         mkExecStart =
-          repo: envFile:
+          repo: location:
           pkgs.writeShellScript "backup-exec-start" ''
-            ${mkPreamble repo envFile}
+            ${mkPreamble repo location}
 
             ${resticCmd} backup ${excludeFlags} --files-from=${includePaths}
             ${resticCmd} forget --prune --keep-weekly 4 --keep-daily 7
@@ -112,9 +119,9 @@ in
           '';
 
         mkExecStartPre =
-          repo: envFile:
+          repo: location:
           pkgs.writeShellScript "backup-exec-start-pre" ''
-            ${mkPreamble repo envFile}
+            ${mkPreamble repo location}
 
             ${resticCmd} snapshots || ${resticCmd} init
           '';
@@ -131,16 +138,16 @@ in
         serviceConfig = {
           Type = "oneshot";
           ExecStart = [
-            "${mkExecStart onsiteRepository "onsite-env"}"
-            "${mkExecStart offsiteRepository "offsite-env"}"
+            "${mkExecStart onsiteRepository "onsite"}"
+            "${mkExecStart offsiteRepository "offsite"}"
           ];
           ExecStartPre =
             optional (
               cfg.backupPrepareCommand != null
             ) "${pkgs.writeShellScript "backup-prepare-command" cfg.backupPrepareCommand}"
             ++ [
-              "${mkExecStartPre onsiteRepository "onsite-env"}"
-              "${mkExecStartPre offsiteRepository "offsite-env"}"
+              "${mkExecStartPre onsiteRepository "onsite"}"
+              "${mkExecStartPre offsiteRepository "offsite"}"
             ];
           ExecStopPost = optional (
             cfg.backupCleanupCommand != null
@@ -151,8 +158,10 @@ in
           CacheDirectoryMode = "0700";
           PrivateTmp = true;
           LoadCredential = [
-            "onsite-env:${cfg.onsiteEnvPath}"
-            "offsite-env:${cfg.offsiteEnvPath}"
+            "onsite-key-id:${cfg.onsiteKeyIdFile}"
+            "onsite-secret-key:${cfg.onsiteSecretKeyFile}"
+            "offsite-key-id:${cfg.offsiteKeyIdFile}"
+            "offsite-secret-key:${cfg.offsiteSecretKeyFile}"
           ];
         };
       }
@@ -177,17 +186,18 @@ in
         offsiteRepository = "s3:s3.us-west-001.backblazeb2.com/mjm-restic-backups/${cfg.repositoryName}";
       in
       pkgs.writeShellScriptBin "restic-${name}" ''
-        set -a
-
         kind="$1"
         shift
 
         if [ "$kind" = onsite ]; then
-          RESTIC_REPOSITORY="${onsiteRepository}"
-          source ${cfg.onsiteEnvPath}
+          export RESTIC_REPOSITORY="${onsiteRepository}"
+          export AWS_DEFAULT_REGION=home
+          export AWS_ACCESS_KEY_ID="$(cat ${cfg.onsiteKeyIdFile})"
+          export AWS_SECRET_ACCESS_KEY="$(cat ${cfg.onsiteSecretKeyFile})"
         elif [ "$kind" = offsite ]; then
-          RESTIC_REPOSITORY="${offsiteRepository}"
-          source ${cfg.offsiteEnvPath}
+          export RESTIC_REPOSITORY="${offsiteRepository}"
+          export AWS_ACCESS_KEY_ID="$(cat ${cfg.offsiteKeyIdFile})"
+          export AWS_SECRET_ACCESS_KEY="$(cat ${cfg.offsiteSecretKeyFile})"
         else
           echo "first argument must be 'onsite' or 'offsite'" >&2
           exit 1
@@ -195,38 +205,23 @@ in
 
         ${lib.pipe config.systemd.services."restic-backups-${name}".environment [
           (lib.filterAttrs (n: v: v != null && n != "PATH"))
-          (lib.mapAttrsToList (n: v: "${n}=${v}"))
+          (lib.mapAttrsToList (n: v: "export ${n}=${v}"))
           (lib.concatStringsSep "\n")
         ]}
-        PATH=${config.systemd.services."restic-backups-${name}".environment.PATH}:$PATH
+        export PATH=${config.systemd.services."restic-backups-${name}".environment.PATH}:$PATH
 
         exec ${resticCmd} "$@"
       ''
     ) config.mjm.backups;
 
-    vault-secrets.templates =
-      mkIf (builtins.any (cfg: cfg.useVaultSecrets) (builtins.attrValues config.mjm.backups))
-        {
-          restic-backup-env.text = ''
-            AWS_DEFAULT_REGION=home
-            {{ with secret "kv/restic" }}
-            AWS_ACCESS_KEY_ID={{ .Data.data.garage_key_id }}
-            AWS_SECRET_ACCESS_KEY={{ .Data.data.garage_secret_key }}
-            {{ end }}
-          '';
-          restic-backup-offsite-env.text = ''
-            {{ with secret "kv/restic" }}
-            AWS_ACCESS_KEY_ID={{ .Data.data.b2_key_id }}
-            AWS_SECRET_ACCESS_KEY={{ .Data.data.b2_application_key }}
-            {{ end }}
-          '';
-        };
-
-    age.secrets =
-      mkIf (builtins.any (cfg: !cfg.useVaultSecrets) (builtins.attrValues config.mjm.backups))
-        {
-          restic-backup-env.file = ../../../../secrets/restic-backup-env.age;
-          restic-backup-offsite-env.file = ../../../../secrets/restic-backup-offsite-env.age;
-        };
+    vault-secrets.wantedBy = map (name: "restic-backups-${name}.service") (
+      attrNames config.mjm.backups
+    );
+    vault-secrets.common.backups.keys = {
+      garage_key_id = { };
+      garage_secret_key = { };
+      b2_key_id = { };
+      b2_application_key = { };
+    };
   };
 }

@@ -6,13 +6,13 @@
 }:
 let
   inherit (lib)
+    genAttrs
     getAttr
-    mapAttrs'
+    mapAttrsToList
     mkEnableOption
     mkIf
     mkMerge
     mkOption
-    nameValuePair
     types
     ;
 
@@ -122,6 +122,10 @@ let
         paths = mkOption {
           default = { };
           type = types.attrsOf jsonFormat.type;
+        };
+        commonPolicies = mkOption {
+          default = [ ];
+          type = types.listOf types.str;
         };
       };
     };
@@ -237,16 +241,23 @@ in
       };
 
       services = {
-        vault.policies = mapAttrs' (
-          _: svc:
-          nameValuePair "service-${svc.name}" (mkMerge [
-            { paths."kv/data/prod/services/${svc.name}".capabilities = [ "read" ]; }
+        vault.policies = mkMerge (
+          mapAttrsToList (
+            _: svc:
             {
-              inherit (svc) paths;
-              approles = svc.hosts;
+              "service-${svc.name}" = mkMerge [
+                { paths."kv/data/prod/services/${svc.name}".capabilities = [ "read" ]; }
+                {
+                  inherit (svc) paths;
+                  approles = svc.hosts;
+                }
+              ];
             }
-          ])
-        ) cfg.services;
+            // (genAttrs (map (name: "common-${name}") svc.commonPolicies) (name: {
+              approles = svc.hosts;
+            }))
+          ) cfg.services
+        );
       };
     in
     mkMerge [

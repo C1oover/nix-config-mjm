@@ -25,5 +25,8 @@
     };
   };
 
-  vault.services.media-server.hosts = [ "chaos" ];
+  vault.services.media-server = {
+    commonPolicies = [ "backups" ];
+    hosts = [ "chaos" ];
+  };
 }

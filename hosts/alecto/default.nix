@@ -67,5 +67,17 @@
     ];
   };
 
+  vault-secrets.roleId = "3f881766-f139-fd79-3ea7-e74f9d1faa6a";
+  vault-secrets.encryptedSecretId = ''
+    DHzAexF2RZGcSwvqCLwg/iAAAAABAAAADAAAABAAAACKTfcIlgOq+Gg9BVgAAAAAgAAAAAAAAAALACM
+    A8AAAACAAAAAAngAgxy7FUxTEk3ThvFIcchSC8R5c5P06I0iDvKG110J6O1wAEImQZtC3oQLoDL5sdB
+    ipj9Rpr5Z338WM++p2U6mcRFwxjltj24vhoTluklFcnyVadS8OtbdFf2KUGZV9Adw7wuEtPYIni2cy5
+    2bZHwL7Ag81IOr+Tix+il0DxCfWZ7QRRMs9BvupFStstSP9dI/WgQs8Q3ik6/7kT11/AE4ACAALAAAA
+    EgAg/928wzzwZljax6QULbex0pLe130yDZJRVcq/rrtdgRsAEAAggZ4RV6I5w197YOGDy6uU9q4KPZ8
+    ObreX0dVb3nfFYK//3bzDPPBmWNrHpBQtt7HSkt7XfTINklFVyr+uu12BGwAAAAB4wLR1wA6/frzIQT
+    pCa/Nv6v81GGrr+zgQGbTuJkYm4pqGPpcjM6SU1dpZ9zLjbHHYEEspVcQ6EE0kSKJ7ym4HCtKQkZAmU
+    S0PFbwJ0Brz7ZzAfEOP
+  '';
+
   system.stateVersion = "22.11";
 }

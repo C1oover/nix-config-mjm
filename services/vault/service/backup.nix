@@ -1,9 +1,17 @@
+{ config, ... }:
 {
-  vault.policies.vault-backup = {
+  vault.services.vault = {
     paths = {
       "sys/leader".capabilities = [ "read" ];
       "sys/storage/raft/snapshot".capabilities = [ "read" ];
     };
-    approles = [ "vault-backup" ];
+    hosts = [
+      "vault-backup"
+      "megaera"
+      "tisiphone"
+      "alecto"
+    ];
   };
+
+  vault.policies.common-backups.approles = config.vault.services.vault.hosts;
 }

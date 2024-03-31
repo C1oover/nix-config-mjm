@@ -90,15 +90,14 @@ in
         vault = lib.getExe config.services.vault.package;
       in
       {
-        passwordFile = config.age.secrets.vault-backup-password.path;
-        useVaultSecrets = false;
+        passwordFile = config.vault-secrets.services.vault.keys.backup_password.path;
         paths = [ "/tmp/vault.snap" ];
         backupPrepareCommand = ''
-          role_id=05d0f7d5-f24c-5442-dbf1-46db0121fc14
-          secret_id="$(cat ${config.age.secrets.vault-backup-secret-id.path})"
+          role_id=${config.vault-secrets.roleId}
+          secret_id_file="$CREDENTIALS_DIRECTORY/secret-id"
 
           export VAULT_ADDR=http://127.0.0.1:8200
-          VAULT_TOKEN="$(${vault} write -field=token auth/approle/login role_id=$role_id secret_id=$secret_id)"
+          VAULT_TOKEN="$(${vault} write -field=token auth/approle/login role_id=$role_id secret_id=@$secret_id_file)"
           export VAULT_TOKEN
 
           is_leader="$(${vault} read -field=is_self sys/leader)"
@@ -113,10 +112,15 @@ in
         '';
       };
 
-    # if not the leader, the backup command will fail, but we won't want to treat that as a failure.
-    systemd.services.restic-backups-vault.serviceConfig.SuccessExitStatus = "1";
+    vault-secrets.services.vault = {
+      keys.backup_password = { };
+    };
 
-    age.secrets.vault-backup-password.file = ../../secrets/vault-backup-password.age;
-    age.secrets.vault-backup-secret-id.file = ../../secrets/vault-backup-secret-id.age;
+    systemd.services.restic-backups-vault.serviceConfig = {
+      # if not the leader, the backup command will fail, but we won't want to treat that as a failure.
+      SuccessExitStatus = "1";
+
+      inherit (config.systemd.services.render-vault-secrets.serviceConfig) LoadCredentialEncrypted;
+    };
   };
 }

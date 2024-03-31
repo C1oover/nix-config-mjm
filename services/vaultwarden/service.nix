@@ -5,5 +5,8 @@
     enableAuthProxy = false;
   };
 
-  vault.services.vaultwarden.hosts = [ "leto" ];
+  vault.services.vaultwarden = {
+    commonPolicies = [ "backups" ];
+    hosts = [ "leto" ];
+  };
 }
