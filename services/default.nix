@@ -11,6 +11,7 @@
     ./homelab
     ./ingress
     ./ipv4-proxy
+    ./linkding
     ./matrix-server
     ./media-server
     ./miniflux

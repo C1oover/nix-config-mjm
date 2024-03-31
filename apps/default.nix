@@ -9,6 +9,7 @@ let
     "home-assistant"
     "homelab"
     "ingress"
+    "linkding"
     "matrix-server"
     "media-server"
     "miniflux"
@@ -29,7 +30,6 @@ in
     ./atuin
     ./backup
     ./gitlab
-    ./linkding
     ./nut
     ./proxmox
     ./taskserver
