@@ -6,7 +6,6 @@
     ../common/optional/proxmox-vm.nix
 
     ./services/actual.nix
-    ./services/atuin.nix
     ./services/taskserver.nix
   ];
 
@@ -44,6 +43,7 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   mjm.atticd.enable = true;
+  mjm.atuin.enable = true;
   mjm.authelia.enable = true;
   mjm.consul.enable = true;
   mjm.garage.enable = true;

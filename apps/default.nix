@@ -1,6 +1,7 @@
 let
   services = [
     "atticd"
+    "atuin"
     "authelia"
     "consul"
     "garage"
@@ -27,7 +28,6 @@ in
     ../modules/apps
 
     ./actual
-    ./atuin
     ./backup
     ./gitlab
     ./nut

@@ -1,6 +1,7 @@
 {
   imports = [
     ./atticd
+    ./atuin
     ./authelia
     ./consul
     ./dns-server
