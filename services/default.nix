@@ -23,6 +23,7 @@
     ./postgresql
     ./prometheus
     ./tailscale
+    ./taskserver
     ./vault
     ./vaultwarden
   ];

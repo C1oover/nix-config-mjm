@@ -6,7 +6,6 @@
     ../common/optional/proxmox-vm.nix
 
     ./services/actual.nix
-    ./services/taskserver.nix
   ];
 
   networking.hostName = "leto";
@@ -61,6 +60,7 @@
     persistDir = "/persist";
     directories = [ "/nix" ];
   };
+  mjm.taskserver.enable = true;
   mjm.vaultwarden.enable = true;
 
   vault-secrets.roleId = "29829ea8-3eb2-b3d6-8aab-d150dbb48e3d";
