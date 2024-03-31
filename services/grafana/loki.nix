@@ -47,7 +47,7 @@ in
 
         storage_config = {
           aws = {
-            s3 = "http://\${AWS_ACCESS_KEY_ID}:\${AWS_SECRET_ACCESS_KEY}@garage.service.consul:3902";
+            s3 = "http://\${AWS_ACCESS_KEY_ID}:\${AWS_SECRET_ACCESS_KEY}@localhost:3902";
             region = "home";
             bucketnames = "loki-logs";
             insecure = true;

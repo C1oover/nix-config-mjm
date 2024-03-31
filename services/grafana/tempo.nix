@@ -23,7 +23,7 @@ in
         storage.trace = {
           backend = "s3";
           s3 = {
-            endpoint = "garage.service.consul:3902";
+            endpoint = "localhost:3902";
             bucket = "tempo-traces";
             region = "home";
             access_key = "\${AWS_ACCESS_KEY_ID}";
