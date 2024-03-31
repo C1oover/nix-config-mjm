@@ -11,6 +11,7 @@ let
     "ingress"
     "matrix-server"
     "media-server"
+    "miniflux"
     "netbox"
     "otel-collector"
     "paperless"
@@ -29,7 +30,6 @@ in
     ./backup
     ./gitlab
     ./linkding
-    ./miniflux
     ./nut
     ./proxmox
     ./taskserver

@@ -8,7 +8,6 @@
     ./services/actual.nix
     ./services/atuin.nix
     ./services/linkding.nix
-    ./services/miniflux.nix
     ./services/taskserver.nix
   ];
 
@@ -52,6 +51,7 @@
   mjm.grafana.enable = true;
   mjm.home-assistant.enable = true;
   mjm.homelab.enable = true;
+  mjm.miniflux.enable = true;
   mjm.netbox.enable = true;
   mjm.paperless.enable = true;
   mjm.prometheus.enable = true;

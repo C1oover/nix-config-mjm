@@ -13,6 +13,7 @@
     ./ipv4-proxy
     ./matrix-server
     ./media-server
+    ./miniflux
     ./netbox
     ./nut
     ./otel-collector
