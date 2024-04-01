@@ -4,8 +4,6 @@
     ../common/users/matt
 
     ../common/optional/proxmox-vm.nix
-
-    ./services/actual.nix
   ];
 
   networking.hostName = "leto";
@@ -41,6 +39,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  mjm.actual.enable = true;
   mjm.atticd.enable = true;
   mjm.atuin.enable = true;
   mjm.authelia.enable = true;

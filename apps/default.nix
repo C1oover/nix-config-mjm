@@ -1,5 +1,6 @@
 let
   services = [
+    "actual"
     "atticd"
     "atuin"
     "authelia"
@@ -28,7 +29,6 @@ in
   imports = [
     ../modules/apps
 
-    ./actual
     ./backup
     ./gitlab
     ./nut
