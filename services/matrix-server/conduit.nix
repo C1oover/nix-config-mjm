@@ -47,6 +47,7 @@ in
           "ff00::/8"
           "fec0::/10"
         ];
+        new_user_displayname_suffix = "";
       };
     };
 
