@@ -11,7 +11,7 @@ let
 in
 {
   # TODO remove once a module for attic lands in nixpkgs
-  imports = [ inputs.attic.nixosModules.atticd ];
+  imports = [ "${inputs.attic}/nixos/atticd.nix" ];
 
   options.mjm.atticd = {
     enable = mkEnableOption "atticd";
@@ -23,6 +23,8 @@ in
     services.atticd = {
       enable = true;
       package = pkgs.attic-server;
+      # TODO remove once a module for attic lands in nixpkgs
+      useFlakeCompatOverlay = false;
       settings = {
         listen = "[::]:8100";
         database.url = "postgresql:///atticd?host=/run/postgresql";
