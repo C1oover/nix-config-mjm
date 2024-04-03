@@ -30,7 +30,7 @@ in
       matchConfig.Name = "tailscale*";
       linkConfig = {
         Unmanaged = true;
-        RequiredForOnline = false;
+        ActivationPolicy = "manual";
       };
     };
   };
