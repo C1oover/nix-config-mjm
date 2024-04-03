@@ -28,7 +28,10 @@ in
 
     systemd.network.networks."05-tailscale" = {
       matchConfig.Name = "tailscale*";
-      linkConfig.Unmanaged = true;
+      linkConfig = {
+        Unmanaged = true;
+        RequiredForOnline = false;
+      };
     };
   };
 }
