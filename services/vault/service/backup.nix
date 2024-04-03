@@ -6,7 +6,6 @@
       "sys/storage/raft/snapshot".capabilities = [ "read" ];
     };
     hosts = [
-      "vault-backup"
       "megaera"
       "tisiphone"
       "alecto"
