@@ -77,7 +77,17 @@ in
         restic_password = { };
       };
     };
+    vault-secrets.common.backups = {
+      loadedBy = [ "homelab" ];
+      keys = {
+        garage_key_id = { };
+        garage_secret_key = { };
+        b2_key_id = { };
+        b2_application_key = { };
+      };
+    };
     vault-secrets.templates = {
+      # TODO load these from files
       homelab-env.text = ''
         {{ with secret "kv/prod/services/homelab" }}
         PAPERLESS_TOKEN={{ .Data.data.paperless_token }}
@@ -86,23 +96,6 @@ in
         SECRET_KEY_BASE={{ .Data.data.secret_key_base }}
         {{ end }}
       '';
-      # TODO clean this up once I figure out what I'm doing with common secrets
-      garage-key-id = {
-        kvPath = "kv/restic/garage_key_id";
-        loadedBy = [ "homelab" ];
-      };
-      garage-secret-key = {
-        kvPath = "kv/restic/garage_secret_key";
-        loadedBy = [ "homelab" ];
-      };
-      b2-key-id = {
-        kvPath = "kv/restic/b2_key_id";
-        loadedBy = [ "homelab" ];
-      };
-      b2-application-key = {
-        kvPath = "kv/restic/b2_application_key";
-        loadedBy = [ "homelab" ];
-      };
     };
 
     services.postgresql = {

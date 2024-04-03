@@ -23,15 +23,7 @@ if System.get_env("PHX_SERVER") do
 end
 
 if config_env() == :prod do
-  # database_url =
-  #   System.get_env("DATABASE_URL") ||
-  #     raise """
-  #     environment variable DATABASE_URL is missing.
-  #     For example: ecto://USER:PASS@HOST/DATABASE
-  #     """
-
   config :homelab, Homelab.Repo,
-    # url: database_url,
     socket_dir: "/run/postgresql",
     database: "homelab",
     port: 5432,
@@ -62,12 +54,12 @@ if config_env() == :prod do
 
   config :homelab, :restic,
     onsite: [
-      key_id_file: Path.join(creds_dir, "garage-key-id"),
-      secret_key_file: Path.join(creds_dir, "garage-secret-key")
+      key_id_file: Path.join(creds_dir, "backups_garage_key_id"),
+      secret_key_file: Path.join(creds_dir, "backups_garage_secret_key")
     ],
     offsite: [
-      key_id_file: Path.join(creds_dir, "b2-key-id"),
-      secret_key_file: Path.join(creds_dir, "b2-application-key")
+      key_id_file: Path.join(creds_dir, "backups_b2_key_id"),
+      secret_key_file: Path.join(creds_dir, "backups_b2_application_key")
     ]
 
   # ## SSL Support
