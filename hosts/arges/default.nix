@@ -47,10 +47,6 @@
       "/boot"
     ];
   };
-  mjm.tailscale = {
-    enable = true;
-    ip = "100.89.174.9";
-  };
 
   vault-secrets.roleId = "841fdaf1-6a2d-f471-ad85-ae485c232b89";
   vault-secrets.encryptedSecretId = ''
