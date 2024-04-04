@@ -24,5 +24,8 @@ in
   programs.ssh.extraConfig = ''
     CanonicalizeHostname yes
     CanonicalDomains home.mattmoriarity.com
+
+    Host apollo.home.mattmoriarity.com artemis.home.mattmoriarity.com hades.home.mattmoriarity.com
+      User root
   '';
 }
