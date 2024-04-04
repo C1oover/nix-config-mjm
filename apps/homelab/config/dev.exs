@@ -74,14 +74,14 @@ config :swoosh, :api_client, false
 
 config :homelab, local_timezone: "America/Denver"
 
-secrets_dir = System.get_env("DEVENV_SECRETS")
+creds_dir = System.get_env("DEVENV_SECRETS")
 
 config :homelab, :restic,
   onsite: [
-    key_id_file: Path.join(secrets_dir, "garage_key_id"),
-    secret_key_file: Path.join(secrets_dir, "garage_secret_key")
+    key_id_file: Path.join(creds_dir, "backups_garage_key_id"),
+    secret_key_file: Path.join(creds_dir, "backups_garage_secret_key")
   ],
   offsite: [
-    key_id_file: Path.join(secrets_dir, "b2_key_id"),
-    secret_key_file: Path.join(secrets_dir, "b2_application_key")
+    key_id_file: Path.join(creds_dir, "backups_b2_key_id"),
+    secret_key_file: Path.join(creds_dir, "backups_b2_application_key")
   ]

@@ -7,7 +7,7 @@
 # General application configuration
 import Config
 
-alias Hush.Provider.SystemEnvironment
+alias Hush.Provider.{SystemdCreds, SystemEnvironment}
 
 config :homelab,
   ecto_repos: [Homelab.Repo]
@@ -95,13 +95,13 @@ config :homelab, :restic,
   onsite: [url: "s3:http://garage.service.consul:3902/restic-backups"],
   offsite: [url: "s3:s3.us-west-001.backblazeb2.com/mjm-restic-backups"]
 
-config :homelab, :gitlab_token, {:hush, SystemEnvironment, "GITLAB_TOKEN"}
+config :homelab, :gitlab_token, {:hush, SystemdCreds, "homelab_gitlab_token"}
 
-config :homelab, :paperless_token, {:hush, SystemEnvironment, "PAPERLESS_TOKEN"}
+config :homelab, :paperless_token, {:hush, SystemdCreds, "homelab_paperless_token"}
 
 config :homelab, :netbox,
   url: "http://netbox.service.consul:8000/graphql/",
-  token: {:hush, SystemEnvironment, "NETBOX_TOKEN"}
+  token: {:hush, SystemdCreds, "homelab_netbox_token"}
 
 config :elixir, :time_zone_database, Tz.TimeZoneDatabase
 

@@ -41,20 +41,26 @@
           enterShell =
             let
               vault = lib.getExe pkgs.vault-bin;
-              getSecret = path: field: "${vault} kv get -mount=kv -field=${field} ${path}";
+              getSecret =
+                namespace: svcName: key:
+                "${vault} kv get -mount=kv -field=${key} prod/${namespace}/${svcName}";
               writeSecret =
-                path: field: filename:
-                "${getSecret path field} > $DEVENV_SECRETS/${filename}";
+                namespace: svcName: key:
+                "${getSecret namespace svcName key} > $DEVENV_SECRETS/${svcName}_${key}";
             in
             ''
               export DEVENV_SECRETS="$DEVENV_STATE/secrets"
               mkdir -p $DEVENV_SECRETS
+              export CREDENTIALS_DIRECTORY="$DEVENV_SECRETS"
 
-              ${writeSecret "prod/services/homelab" "restic_password" "restic_password"}
-              ${writeSecret "restic" "garage_key_id" "garage_key_id"}
-              ${writeSecret "restic" "garage_secret_key" "garage_secret_key"}
-              ${writeSecret "restic" "b2_key_id" "b2_key_id"}
-              ${writeSecret "restic" "b2_application_key" "b2_application_key"}
+              ${writeSecret "services" "homelab" "gitlab_token"}
+              ${writeSecret "services" "homelab" "netbox_token"}
+              ${writeSecret "services" "homelab" "paperless_token"}
+              ${writeSecret "services" "homelab" "restic_password"}
+              ${writeSecret "common" "backups" "garage_key_id"}
+              ${writeSecret "common" "backups" "garage_secret_key"}
+              ${writeSecret "common" "backups" "b2_key_id"}
+              ${writeSecret "common" "backups" "b2_application_key"}
             '';
 
           languages.elixir.enable = true;

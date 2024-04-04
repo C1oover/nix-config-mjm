@@ -1,5 +1,7 @@
 import Config
 
+alias Hush.Provider.SystemdCreds
+
 # For production, don't forget to configure the url host
 # to something meaningful, Phoenix uses this information
 # when generating URLs.
@@ -10,6 +12,9 @@ import Config
 # which you should run after static files are built and
 # before starting your production server.
 config :homelab, HomelabWeb.Endpoint, cache_static_manifest: "priv/static/cache_manifest.json"
+
+config :homelab, HomelabWeb.Endpoint,
+  secret_key_base: {:hush, SystemdCreds, "homelab_secret_key_base"}
 
 # Configures Swoosh API Client
 config :swoosh, api_client: Swoosh.ApiClient.Finch, finch_name: Homelab.Finch

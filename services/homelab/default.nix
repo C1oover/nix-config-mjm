@@ -60,7 +60,6 @@ in
 
       serviceConfig = {
         ExecStart = "${pkg}/bin/server";
-        EnvironmentFile = config.vault-secrets.templates.homelab-env.path;
         Restart = "always";
         DynamicUser = true;
         User = "homelab";
@@ -73,8 +72,12 @@ in
     vault-secrets.services.homelab = {
       loadedBy = [ "homelab" ];
       keys = {
-        taskwarrior_key = { };
+        gitlab_token = { };
+        netbox_token = { };
+        paperless_token = { };
         restic_password = { };
+        secret_key_base = { };
+        taskwarrior_key = { };
       };
     };
     vault-secrets.common.backups = {
@@ -85,17 +88,6 @@ in
         b2_key_id = { };
         b2_application_key = { };
       };
-    };
-    vault-secrets.templates = {
-      # TODO load these from files
-      homelab-env.text = ''
-        {{ with secret "kv/prod/services/homelab" }}
-        PAPERLESS_TOKEN={{ .Data.data.paperless_token }}
-        GITLAB_TOKEN={{ .Data.data.gitlab_token }}
-        NETBOX_TOKEN={{ .Data.data.netbox_token }}
-        SECRET_KEY_BASE={{ .Data.data.secret_key_base }}
-        {{ end }}
-      '';
     };
 
     services.postgresql = {
