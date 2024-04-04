@@ -16,6 +16,7 @@ let
     "media-server"
     "miniflux"
     "netbox"
+    "nut"
     "otel-collector"
     "paperless"
     "postgresql"
@@ -31,7 +32,6 @@ in
 
     ./backup
     ./gitlab
-    ./nut
     ./proxmox
   ] ++ map (s: ../services/${s}/service.nix) services;
 }

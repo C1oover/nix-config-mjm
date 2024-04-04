@@ -22,103 +22,105 @@ in
     };
   };
 
-  config = mkIf cfg.enable (
-    mkMerge [
-      {
-        power.ups = {
-          enable = true;
-          mode = if cfg.mode == "client" then "netclient" else "netserver";
-          upsmon.monitor.tripplite.system = "tripplite@10.0.0.2";
+  config = mkIf cfg.enable (mkMerge [
+    {
+      power.ups = {
+        enable = true;
+        mode = if cfg.mode == "client" then "netclient" else "netserver";
+        upsmon.monitor.tripplite.system = "tripplite@10.0.0.2";
+      };
+
+      vault-secrets.wantedBy = [ "upsmon.service" ];
+      vault-secrets.common.nut = {
+        keys.secondary_password = { };
+      };
+    }
+
+    (mkIf (cfg.mode == "client") {
+      power.ups = {
+        mode = "netclient";
+        upsmon.monitor.tripplite = {
+          user = "upsmon_secondary";
+          type = "secondary";
+          passwordFile = config.vault-secrets.common.nut.keys.secondary_password.path;
         };
+      };
+    })
 
-        vault-secrets.wantedBy = [ "upsmon.service" ];
-        vault-secrets.templates.nut-secondary-password.kvPath = "kv/nut/client/secondary_password";
-      }
+    (mkIf (cfg.mode == "server") {
+      power.ups = {
+        mode = "netserver";
+        openFirewall = true;
 
-      (mkIf (cfg.mode == "client") {
-        power.ups = {
-          mode = "netclient";
-          upsmon.monitor.tripplite = {
-            user = "upsmon_secondary";
-            type = "secondary";
-            passwordFile = config.vault-secrets.templates.nut-secondary-password.path;
-          };
-        };
-      })
-
-      (mkIf (cfg.mode == "server") {
-        power.ups = {
-          mode = "netserver";
-          openFirewall = true;
-
-          ups.tripplite = {
-            driver = "usbhid-ups";
-            port = "auto";
-            directives = [
-              ''vendorid = "09ae"''
-              ''productid = "3024"''
-            ];
-          };
-
-          users = {
-            upsmon = {
-              upsmon = "primary";
-              passwordFile = config.vault-secrets.templates.nut-primary-password.path;
-            };
-            upsmon_secondary = {
-              upsmon = "secondary";
-              passwordFile = config.vault-secrets.templates.nut-secondary-password.path;
-            };
-          };
-
-          upsd = {
-            listen = [ { address = "0.0.0.0"; } ];
-          };
-
-          upsmon.monitor.tripplite = {
-            user = "upsmon";
-            type = "primary";
-            passwordFile = config.vault-secrets.templates.nut-primary-password.path;
-          };
-        };
-
-        services.prometheus.exporters.nut = {
-          enable = true;
-          openFirewall = true;
-          nutVariables = [
-            "battery.charge"
-            "battery.runtime"
-            "battery.voltage"
-            "battery.voltage.nominal"
-            "input.voltage"
-            "input.voltage.nominal"
-            "ups.load"
-            "ups.status"
+        ups.tripplite = {
+          driver = "usbhid-ups";
+          port = "auto";
+          directives = [
+            ''vendorid = "09ae"''
+            ''productid = "3024"''
           ];
-          extraFlags = [ "--log.level=debug" ];
         };
 
-        services.consul.services.nut-exporter =
-          let
-            inherit (config.services.prometheus.exporters.nut) port;
-          in
-          {
-            inherit port;
-            meta.metrics_path = "/ups_metrics";
-
-            checks = [
-              {
-                name = "nut-exporter is ready";
-                http = "http://localhost:${toString port}/";
-                interval = "15s";
-                timeout = "10s";
-              }
-            ];
+        users = {
+          upsmon = {
+            upsmon = "primary";
+            passwordFile = config.vault-secrets.services.nut.keys.primary_password.path;
           };
+          upsmon_secondary = {
+            upsmon = "secondary";
+            passwordFile = config.vault-secrets.common.nut.keys.secondary_password.path;
+          };
+        };
 
-        vault-secrets.wantedBy = [ "upsd.service" ];
-        vault-secrets.templates.nut-primary-password.kvPath = "kv/nut/primary_password";
-      })
-    ]
-  );
+        upsd = {
+          listen = [ { address = "0.0.0.0"; } ];
+        };
+
+        upsmon.monitor.tripplite = {
+          user = "upsmon";
+          type = "primary";
+          passwordFile = config.vault-secrets.services.nut.keys.primary_password.path;
+        };
+      };
+
+      services.prometheus.exporters.nut = {
+        enable = true;
+        openFirewall = true;
+        nutVariables = [
+          "battery.charge"
+          "battery.runtime"
+          "battery.voltage"
+          "battery.voltage.nominal"
+          "input.voltage"
+          "input.voltage.nominal"
+          "ups.load"
+          "ups.status"
+        ];
+        extraFlags = [ "--log.level=debug" ];
+      };
+
+      services.consul.services.nut-exporter =
+        let
+          inherit (config.services.prometheus.exporters.nut) port;
+        in
+        {
+          inherit port;
+          meta.metrics_path = "/ups_metrics";
+
+          checks = [
+            {
+              name = "nut-exporter is ready";
+              http = "http://localhost:${toString port}/";
+              interval = "15s";
+              timeout = "10s";
+            }
+          ];
+        };
+
+      vault-secrets.wantedBy = [ "upsd.service" ];
+      vault-secrets.services.nut = {
+        keys.primary_password = { };
+      };
+    })
+  ]);
 }
