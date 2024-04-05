@@ -120,11 +120,21 @@ in
 
     services.openssh.knownHosts =
       let
-        keys = import ../../secrets/keys.nix;
+        inherit (import ../../secrets/keys.nix) servers;
       in
-      builtins.mapAttrs (name: publicKey: {
-        inherit publicKey;
-        extraHostNames = [ (if name == "aion" then "5.78.46.61" else "${name}.home.mattmoriarity.com") ];
-      }) keys.servers;
+      {
+        aion = {
+          extraHostNames = [ "5.78.46.61" ];
+          publicKey = servers.aion;
+        };
+        rhea = {
+          extraHostNames = [ "rhea.home.mattmoriarity.com" ];
+          publicKey = servers.rhea;
+        };
+        cronus = {
+          extraHostNames = [ "cronus.home.mattmoriarity.com" ];
+          publicKey = servers.cronus;
+        };
+      };
   };
 }
