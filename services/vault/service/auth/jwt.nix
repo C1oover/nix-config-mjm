@@ -24,7 +24,7 @@
     backend = "\${vault_jwt_auth_backend.gitlab.path}";
     role_name = "homelab-infra";
     role_type = "jwt";
-    token_policies = [ "\${vault_policy.gitlab.name}" ];
+    token_policies = [ "\${vault_policy.repo-nix-config.name}" ];
     user_claim = "user_email";
     bound_claims = {
       project_id = "30";

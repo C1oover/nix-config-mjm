@@ -1,68 +1,35 @@
+let
+  all = [
+    "create"
+    "read"
+    "update"
+    "delete"
+    "list"
+    "sudo"
+  ];
+in
 {
-  vault.policies.gitlab.text = ''
-    path "ssh-client-signer/sign/homelab-client" {
-      capabilities = ["update"]
-    }
+  vault.policies.repo-nix-config = {
+    paths = {
+      "kv/data/prod/repos/nix-config".capabilities = [ "read" ];
 
-    # Allow reading Attic push token
-    path "kv/data/attic/client" {
-      capabilities = ["read"]
-    }
+      "ssh-client-signer/sign/homelab-client".capabilities = [ "update" ];
 
-    # Allow updating Vault policies for apps
-    path "sys/policies/acl/*" {
-      capabilities = ["create", "read", "update", "delete", "list", "sudo"]
-    }
-
-    # Manage auth methods broadly across Vault
-    path "auth/*" {
-      capabilities = ["create", "read", "update", "delete", "list", "sudo"]
-    }
-
-    # Create, update, and delete auth methods
-    path "sys/auth/*" {
-      capabilities = ["create", "update", "delete", "sudo"]
-    }
-
-    # List auth methods
-    path "sys/auth" {
-      capabilities = ["read"]
-    }
-
-    # Manage secrets engines
-    path "sys/mounts/*" {
-      capabilities = ["create", "read", "update", "delete", "list", "sudo"]
-    }
-
-    # List existing secrets engines.
-    path "sys/mounts" {
-      capabilities = ["read"]
-    }
-
-    path "database/roles/*" {
-      capabilities = ["create", "read", "update", "delete", "list", "sudo"]
-    }
-
-    path "database/config/*" {
-      capabilities = ["create", "read", "update", "delete", "list", "sudo"]
-    }
-
-    path "database/creds/*" {
-      capabilities = ["read"]
-    }
-
-    path "ssh-client-signer/*" {
-      capabilities = ["create", "read", "update", "delete", "list", "sudo"]
-    }
-
-    path "pki-homelab/*" {
-      capabilities = ["create", "read", "update", "delete", "list", "sudo"]
-    }
-
-    path "identity/*" {
-      capabilities = ["create", "read", "update", "delete", "list", "sudo"]
-    }
-  '';
+      "sys/policies/acl/*".capabilities = all;
+      "auth/*".capabilities = all;
+      "sys/auth/*".capabilities = [
+        "create"
+        "update"
+        "delete"
+        "sudo"
+      ];
+      "sys/auth".capabilities = [ "read" ];
+      "sys/mounts/*".capabilities = all;
+      "sys/mounts".capabilities = [ "read" ];
+      "ssh-client-signer/*".capabilities = all;
+      "identity/*".capabilities = all;
+    };
+  };
 
   ingress.virtualHosts = {
     containers = {
