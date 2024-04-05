@@ -6,7 +6,7 @@
   ...
 }:
 let
-  inherit (lib) mkEnableOption mkIf;
+  inherit (lib) mkEnableOption mkForce mkIf;
   cfg = config.mjm.desktop;
 in
 {
@@ -20,8 +20,6 @@ in
       displayManager.sddm.enable = true;
       desktopManager.plasma6.enable = true;
     };
-
-    programs.gnupg.agent.pinentryPackage = pkgs.pinentry-qt;
 
     services.dbus.packages = [ pkgs.kdePackages.kpmcore ];
     environment.systemPackages =
@@ -131,5 +129,8 @@ in
     time.timeZone = "America/Denver";
 
     programs.steam.enable = true;
+
+    services.yubikey-agent.enable = true;
+    systemd.user.services.yubikey-agent.wantedBy = mkForce [ "graphical-session.target" ];
   };
 }

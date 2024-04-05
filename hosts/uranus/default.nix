@@ -45,8 +45,6 @@
     ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="3496", ATTRS{idProduct}=="0006", ATTR{power/wakeup}="enabled"
   '';
 
-  services.yubikey-agent.enable = true;
-
   services.openssh.enable = true;
 
   system.stateVersion = "24.05";

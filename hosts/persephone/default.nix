@@ -110,8 +110,6 @@
   services.hardware.bolt.enable = true;
   hardware.bluetooth.enable = true;
 
-  services.yubikey-agent.enable = true;
-
   virtualisation.podman.enable = true;
 
   users.users.matt = {
