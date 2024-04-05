@@ -27,6 +27,7 @@ in
       "sys/mounts/*".capabilities = all;
       "sys/mounts".capabilities = [ "read" ];
       "ssh-client-signer/*".capabilities = all;
+      "ssh-host-signer/*".capabilities = all;
       "identity/*".capabilities = all;
     };
   };
