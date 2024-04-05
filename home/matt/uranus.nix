@@ -11,7 +11,6 @@
   ];
 
   home.packages = with pkgs; [
-    beeper
     discord
     krita
     yt-dlp
