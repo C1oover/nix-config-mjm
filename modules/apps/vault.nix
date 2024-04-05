@@ -78,6 +78,8 @@ let
           default = [ name ];
         };
       };
+
+      config.tokenPolicies = [ "common-host" ];
     };
 
   policyType =

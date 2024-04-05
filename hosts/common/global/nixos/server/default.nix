@@ -7,6 +7,7 @@ in
     ./gc.nix
     ./node-exporter.nix
     ./promtail.nix
+    ./ssh-cert.nix
   ];
 
   options.mjm.server = {
@@ -28,6 +29,12 @@ in
       type = types.bool;
       default = true;
       description = "Whether to enable the Prometheus node-exporter";
+    };
+
+    enableSSHHostCert = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Whether to generate and configure an SSH host certificate";
     };
   };
 }

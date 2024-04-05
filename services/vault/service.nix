@@ -9,6 +9,7 @@
 
     ./service/mounts/kv.nix
     ./service/mounts/ssh-client-signer.nix
+    ./service/mounts/ssh-host-signer.nix
   ];
 
   terraform.terraform.required_providers.vault = {

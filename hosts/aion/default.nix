@@ -31,6 +31,7 @@
     enable = true;
     enablePromtail = false;
     enableNodeExporter = false;
+    enableSSHHostCert = false;
   };
 
   system.stateVersion = "23.11";
