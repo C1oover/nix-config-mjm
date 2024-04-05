@@ -16,6 +16,7 @@ in
     services.authelia.instances.main = {
       enable = true;
       settings = {
+        theme = "auto";
         default_redirection_url = "https://home.midna.dev/";
         default_2fa_method = "webauthn";
         server.host = "::";
