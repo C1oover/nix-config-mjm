@@ -21,6 +21,7 @@
   };
   mjm.dns-server.enable = true;
   mjm.server.enable = true;
+  mjm.server.enableSSHHostCert = false;
 
   nixpkgs.hostPlatform = "x86_64-linux";
   system.stateVersion = "23.05";
