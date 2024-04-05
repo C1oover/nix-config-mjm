@@ -5,6 +5,7 @@ let
 in
 {
   config = mkIf (cfg.enable && cfg.enableSSHHostCert) {
+    vault-secrets.wantedBy = [ "sshd.service" ];
     vault-secrets.templates.ssh-host-cert = {
       text = ''
         {{ with secret "ssh-host-signer/sign/homelab-host" "cert_type=host" (printf "public_key=%s" (file "/etc/ssh/ssh_host_ed25519_key.pub")) "valid_principals=${config.networking.hostName}.home.mattmoriarity.com" }}
