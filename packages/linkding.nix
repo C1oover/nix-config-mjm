@@ -6,19 +6,19 @@
 }:
 let
   pname = "linkding";
-  version = "1.24.0";
+  version = "1.27.1";
   src = fetchFromGitHub {
     owner = "sissbruecker";
-    repo = pname;
+    repo = "linkding";
     rev = "refs/tags/v${version}";
-    hash = "sha256-oqIGgP0JBPKGKPTnW+mflBfQ2BzRlRqpdVN1OKXE7bA=";
+    hash = "sha256-rAIdZuxNzma0lYYoDHrX4NtEnSNmlUaEO+qUCNCcT1A=";
   };
 
   frontend = buildNpmPackage {
     pname = "linkding-frontend";
     inherit version src;
 
-    npmDepsHash = "sha256-Ku8bCS0PHtbfzrlSnaAWMr315NYKcXe/Goiz/ZouRLk=";
+    npmDepsHash = "sha256-s+ZbAL+t+ABvrA3XXPSjlNmRZrwlWI4x9La2YByBI90=";
 
     installPhase = ''
       runHook preInstall
@@ -30,18 +30,12 @@ let
   };
 
   python = python3;
-  django = python3Packages.django_4;
   confusable-homoglyphs = python3Packages.callPackage ./confusable-homoglyphs.nix { };
-  django-generate-secret-key = python3Packages.callPackage ./django-generate-secret-key.nix {
-    inherit django;
-  };
   django-registration = python3Packages.callPackage ./django-registration.nix {
-    inherit django confusable-homoglyphs;
+    inherit confusable-homoglyphs;
   };
-  django-sass-processor = python3Packages.callPackage ./django-sass-processor.nix { inherit django; };
-  django4-background-tasks = python3Packages.callPackage ./django4-background-tasks.nix {
-    inherit django;
-  };
+  django-sass-processor = python3Packages.callPackage ./django-sass-processor.nix { };
+  mozilla-django-oidc = python3Packages.callPackage ./mozilla-django-oidc.nix { };
   waybackpy = python3Packages.callPackage ./waybackpy.nix { };
 in
 python3Packages.buildPythonApplication rec {
@@ -50,41 +44,32 @@ python3Packages.buildPythonApplication rec {
   format = "other";
 
   propagatedBuildInputs = with python3Packages; [
-    asgiref
     beautifulsoup4
     bleach
     bleach-allowlist
-    certifi
     charset-normalizer
-    click
-    confusable-homoglyphs
     django
-    django-generate-secret-key
     django-registration
     django-sass-processor
     django-widget-tweaks
-    django4-background-tasks
     djangorestframework
-    idna
+    huey
     markdown
+    mozilla-django-oidc
     psycopg2
     python-dateutil
-    pytz
     requests
-    soupsieve
-    sqlparse
     supervisor
-    typing-extensions
-    urllib3
     waybackpy
-    webencodings
   ];
 
   preBuild = ''
-    rm siteroot/settings/dev.py
+    rm Makefile siteroot/settings/dev.py
     sed -i 's|../../node_modules/spectre.css/src|${frontend}/lib/linkding-ui/spectre.css|g' bookmarks/styles/spectre.scss
-    sed -i -e '19i DATA_DIR = os.getenv("LD_DATA_DIR", "/var/lib/linkding")' -e "s/BASE_DIR, 'data',/DATA_DIR,/" siteroot/settings/base.py
-    sed -i -e 's/BASE_DIR, "secretkey.txt"/DATA_DIR, "secretkey.txt"/' siteroot/settings/prod.py
+    sed -i -e '19i DATA_DIR = os.getenv("LD_DATA_DIR", "/var/lib/linkding")' -e 's/BASE_DIR, "data",/DATA_DIR,/' siteroot/settings/base.py
+    sed -i -e 's/BASE_DIR, "data",/DATA_DIR,/' siteroot/settings/prod.py
+    sed -i -e 's/"data", "secretkey.txt"/"secretkey.txt"/' bookmarks/management/commands/generate_secret_key.py
+    export LD_DATA_DIR=$(mktemp -d)
   '';
 
   postBuild = ''

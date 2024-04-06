@@ -149,6 +149,7 @@ in
         ${pkg}/bin/linkding enable_wal
         (cd ${cfg.dataDir} && ${pkg}/bin/linkding generate_secret_key)
         ${pkg}/bin/linkding create_initial_superuser
+        # ${pkg}/bin/linkding migrate_tasks
       '';
       script = ''
         exec ${uwsgi}/bin/uwsgi --http ${cfg.address}:${toString cfg.port} ${uwsgiCfg}
@@ -172,8 +173,7 @@ in
         mkdir -p ${cfg.dataDir}
       '';
       script = ''
-        ${pkg}/bin/linkding clean_tasks
-        exec ${pkg}/bin/linkding process_tasks
+        exec ${pkg}/bin/linkding run_huey -f
       '';
       serviceConfig = {
         User = cfg.user;
