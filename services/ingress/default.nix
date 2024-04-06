@@ -58,11 +58,9 @@ in
       enable = true;
 
       logError = "syslog:server=unix:/dev/log";
-      appendConfig = ''
-        access_log syslog:server=unix:/dev/log combined;
-      '';
 
       appendHttpConfig = ''
+        access_log syslog:server=unix:/dev/log combined;
         include /run/nginx-include/upstreams.conf;
       '';
 
