@@ -34,5 +34,8 @@ in
 
     Host apollo.home.mattmoriarity.com artemis.home.mattmoriarity.com hades.home.mattmoriarity.com
       User root
+
+    Host aion
+      Hostname 5.78.46.61
   '';
 }
