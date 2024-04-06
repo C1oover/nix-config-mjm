@@ -286,7 +286,7 @@ in
         systemd.services.render-vault-secrets = {
           wantedBy = cfg.wantedBy;
           before = cfg.wantedBy;
-          after = [ "network.target" ];
+          after = [ "network-online.target" ];
           path = with pkgs; [
             vault
             consul-template
