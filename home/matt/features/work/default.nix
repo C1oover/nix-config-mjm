@@ -3,7 +3,6 @@
   imports = [
     ./git.nix
     ./helix.nix
-    ./ngrok.nix
   ];
 
   home.packages = builtins.attrValues {
