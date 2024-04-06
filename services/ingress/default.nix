@@ -57,6 +57,11 @@ in
     services.nginx = {
       enable = true;
 
+      logError = "syslog:server=unix:/dev/log";
+      appendConfig = ''
+        access_log syslog:server=unix:/dev/log combined;
+      '';
+
       appendHttpConfig = ''
         include /run/nginx-include/upstreams.conf;
       '';
