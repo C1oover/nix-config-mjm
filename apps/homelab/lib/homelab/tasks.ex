@@ -67,6 +67,10 @@ defmodule Homelab.Tasks do
     TaskRepo.delete(task)
   end
 
+  def delete_reminder(reminder) do
+    Repo.delete(reminder)
+  end
+
   def add_tags(task, tags) do
     tags_to_add =
       tags

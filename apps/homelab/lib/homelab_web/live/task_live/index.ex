@@ -254,6 +254,21 @@ defmodule HomelabWeb.TaskLive.Index do
     end
   end
 
+  def handle_event("delete_reminder", %{"id" => id}, socket) do
+    reminder = Homelab.Tasks.get_reminder(id)
+
+    case Homelab.Tasks.delete_reminder(reminder) do
+      {:ok, reminder} ->
+        socket
+        |> put_flash(:info, "Deleted reminder \"#{reminder.description}\".")
+        |> assign(:reminders, Homelab.Tasks.list_reminders())
+        |> then(&{:noreply, &1})
+
+      {:error, _err} ->
+        {:noreply, put_flash(socket, :error, "Couldn't delete reminder.")}
+    end
+  end
+
   def handle_event("toggle_next", %{"task_uuid" => task_uuid}, socket) do
     toggle_next_task(socket, task_uuid)
   end
