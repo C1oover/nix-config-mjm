@@ -18,6 +18,8 @@
           esbuild = self'.packages.homelab.esbuild;
         in
         {
+          imports = [ ../../modules/devenv/vault-secrets.nix ];
+
           env.OTEL_SERVICE_NAME = "homelab";
           env.OTEL_EXPORTER_OTLP_ENDPOINT = "https://api.honeycomb.io:443";
           env.TASKRC =
@@ -30,38 +32,27 @@
               uda.next_notification.type=date
               uda.next_notification.label=Notify
             '').outPath;
-          env.DEVENV_SECRETS = "${config.env.DEVENV_STATE}/secrets";
-          env.RESTIC_PASSWORD_FILE = "${config.env.DEVENV_SECRETS}/restic_password";
+          env.RESTIC_PASSWORD_FILE = config.vault-secrets.services.homelab.keys.restic_password.path;
 
           env.MIX_TAILWIND_PATH = "${lib.getExe' tailwind "tailwind"}";
           env.MIX_TAILWIND_VERSION = tailwind.version;
           env.MIX_ESBUILD_PATH = "${lib.getExe esbuild}";
           env.MIX_ESBUILD_VERSION = esbuild.version;
 
-          enterShell =
-            let
-              vault = lib.getExe pkgs.vault-bin;
-              getSecret =
-                namespace: svcName: key:
-                "${vault} kv get -mount=kv -field=${key} prod/${namespace}/${svcName}";
-              writeSecret =
-                namespace: svcName: key:
-                "${getSecret namespace svcName key} > $DEVENV_SECRETS/${svcName}_${key}";
-            in
-            ''
-              export DEVENV_SECRETS="$DEVENV_STATE/secrets"
-              mkdir -p $DEVENV_SECRETS
-              export CREDENTIALS_DIRECTORY="$DEVENV_SECRETS"
-
-              ${writeSecret "services" "homelab" "gitlab_token"}
-              ${writeSecret "services" "homelab" "netbox_token"}
-              ${writeSecret "services" "homelab" "paperless_token"}
-              ${writeSecret "services" "homelab" "restic_password"}
-              ${writeSecret "common" "backups" "garage_key_id"}
-              ${writeSecret "common" "backups" "garage_secret_key"}
-              ${writeSecret "common" "backups" "b2_key_id"}
-              ${writeSecret "common" "backups" "b2_application_key"}
-            '';
+          vault-secrets = {
+            services.homelab.keys = {
+              gitlab_token = { };
+              netbox_token = { };
+              paperless_token = { };
+              restic_password = { };
+            };
+            common.backups.keys = {
+              garage_key_id = { };
+              garage_secret_key = { };
+              b2_key_id = { };
+              b2_application_key = { };
+            };
+          };
 
           languages.elixir.enable = true;
           languages.erlang.enable = true;
