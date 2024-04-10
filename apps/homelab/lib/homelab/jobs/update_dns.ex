@@ -6,7 +6,7 @@ defmodule Homelab.Jobs.UpdateDNS do
   @domain "home.mattmoriarity.com"
 
   @project "mjm/nix-config"
-  @zone_file_path "hosts/common/optional/dns-server/#{@domain}.hosts.zone"
+  @zone_file_path "services/dns-server/#{@domain}.hosts.zone"
 
   @impl Oban.Worker
   def perform(%Oban.Job{}) do
