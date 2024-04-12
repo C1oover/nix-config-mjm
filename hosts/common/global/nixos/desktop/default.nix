@@ -15,18 +15,6 @@ in
   };
 
   config = mkIf cfg.enable {
-    nixpkgs.overlays = [
-      (final: prev: {
-        kdePackages = prev.kdePackages.overrideScope (
-          kfinal: kprev: {
-            kservice = kprev.kservice.overrideAttrs (oldAttrs: {
-              patches = oldAttrs.patches ++ [ ./ksycoca.patch ];
-            });
-          }
-        );
-      })
-    ];
-
     services.xserver = {
       enable = true;
       displayManager.sddm.enable = true;
