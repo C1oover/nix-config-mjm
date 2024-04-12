@@ -47,6 +47,7 @@ in
       environment = {
         OTEL_SERVICE_NAME = "homelab";
         OTEL_EXPORTER_OTLP_ENDPOINT = "http://127.0.0.1:4318";
+        OTEL_RESOURCE_ATTRIBUTES = "deployment.environment=prod";
         TASKRC = "${taskRc}";
         RELEASE_COOKIE = "default";
         HOME = "/var/lib/homelab";

@@ -21,7 +21,8 @@
           imports = [ ../../modules/devenv/vault-secrets.nix ];
 
           env.OTEL_SERVICE_NAME = "homelab";
-          env.OTEL_EXPORTER_OTLP_ENDPOINT = "https://api.honeycomb.io:443";
+          env.OTEL_EXPORTER_OTLP_ENDPOINT = "http://tempo.service.consul:14318";
+          env.OTEL_RESOURCE_ATTRIBUTES = "deployment.environment=dev";
           env.TASKRC =
             (pkgs.writeText "homelab-dev-taskrc" ''
               data.location=${config.env.DEVENV_STATE}/taskwarrior

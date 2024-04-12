@@ -58,7 +58,7 @@ in
               "batch"
             ];
             exporters = [
-              "otlp/honeycomb"
+              # "otlp/honeycomb"
               "otlp/tempo"
             ];
           };

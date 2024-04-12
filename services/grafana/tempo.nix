@@ -16,6 +16,7 @@ in
 
         distributor.receivers.otlp.protocols = {
           grpc.endpoint = "0.0.0.0:14317";
+          http.endpoint = "0.0.0.0:14318";
         };
 
         compactor.compaction.block_retention = "48h";
@@ -65,6 +66,7 @@ in
       3200
       3201
       14317
+      14318
     ];
   };
 }
