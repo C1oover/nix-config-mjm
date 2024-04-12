@@ -65,16 +65,6 @@ in
 
         schema_config.configs = [
           {
-            from = "2020-07-01";
-            store = "boltdb-shipper";
-            object_store = "s3";
-            schema = "v11";
-            index = {
-              prefix = "index_";
-              period = "24h";
-            };
-          }
-          {
             from = "2024-02-12";
             store = "tsdb";
             object_store = "s3";
@@ -104,8 +94,7 @@ in
 
         limits_config = {
           retention_period = "672h";
-          # TODO enable once current period is using schema v13
-          allow_structured_metadata = false;
+          allow_structured_metadata = true;
         };
       };
     };
