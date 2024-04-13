@@ -144,19 +144,18 @@
         "type": "github"
       }
     },
-    "catppuccin-bat": {
-      "flake": false,
+    "catppuccin": {
       "locked": {
-        "lastModified": 1712664886,
-        "narHash": "sha256-gzf0/Ltw8mGMsEFBTUuN33MSFtUP4xhdxfoZFntaycQ=",
+        "lastModified": 1712890104,
+        "narHash": "sha256-56RS7wdJ2QDUNCQt/9lx8MFcwuTdVQnzBV+9QToLLmM=",
         "owner": "catppuccin",
-        "repo": "bat",
-        "rev": "b8134f01b0ac176f1cf2a7043a5abf5a1a29457b",
+        "repo": "nix",
+        "rev": "850c26a3a2474b0d068abc89c905f536cca415de",
         "type": "github"
       },
       "original": {
         "owner": "catppuccin",
-        "repo": "bat",
+        "repo": "nix",
         "type": "github"
       }
     },
@@ -1698,7 +1697,7 @@
       "inputs": {
         "agenix": "agenix",
         "attic": "attic",
-        "catppuccin-bat": "catppuccin-bat",
+        "catppuccin": "catppuccin",
         "catppuccin-k9s": "catppuccin-k9s",
         "catppuccin-newsboat": "catppuccin-newsboat",
         "catppuccin-zsh": "catppuccin-zsh",

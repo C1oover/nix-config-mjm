@@ -26,6 +26,7 @@
     enableZshIntegration = true;
   };
 
+  # TODO catppuccin/nix
   xdg.configFile."starship.toml".text = ''
     format = "$all"
     palette = "nix_colors"
@@ -66,20 +67,7 @@
   programs.fzf = {
     enable = true;
     enableZshIntegration = true;
-    colors = {
-      "bg+" = "#313244";
-      bg = "#1e1e2e";
-      spinner = "#f5e0dc";
-      hl = "#f38ba8";
-      fg = "#cdd6f4";
-      header = "#f38ba8";
-      info = "#cba6f7";
-      pointer = "#f5e0dc";
-      marker = "#f5e0dc";
-      "fg+" = "#cdd6f4";
-      prompt = "#cba6f7";
-      "hl+" = "#f38ba8";
-    };
+    catppuccin.enable = true;
   };
 
   programs.atuin = {
@@ -113,14 +101,16 @@
 
   programs.bat = {
     enable = true;
-    themes.Catppuccin-mocha = {
-      src = inputs.catppuccin-bat;
-      file = "Catppuccin-mocha.tmTheme";
-    };
-    config.theme = "Catppuccin-mocha";
+    catppuccin.enable = true;
   };
 
   programs.yazi = {
     enable = true;
+    catppuccin.enable = true;
+  };
+
+  programs.btop = {
+    enable = true;
+    catppuccin.enable = true;
   };
 }

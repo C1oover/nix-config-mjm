@@ -9,6 +9,10 @@
 
   programs.helix = {
     enable = true;
+    catppuccin = {
+      enable = true;
+      useItalics = true;
+    };
     package = inputs.helix.packages.${pkgs.system}.default.override {
       includeGrammarIf = { source, ... }: !(lib.hasPrefix "https://git.sr.ht/" source.git);
     };
@@ -26,10 +30,8 @@
       nodePackages.yaml-language-server
     ];
     settings = {
-      theme = "catppuccin_macchiato";
       editor = {
         bufferline = "always";
-        color-modes = true;
         cursorline = true;
         cursor-shape = {
           insert = "bar";

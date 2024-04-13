@@ -18,7 +18,7 @@ in
   config = mkIf (cfg.enable && cfg.kitty.enable) {
     programs.kitty = {
       enable = true;
-      theme = "Catppuccin-Macchiato";
+      catppuccin.enable = true;
       font.name = "Input Mono Condensed";
       font.size = mkDefault 14;
       settings = {

@@ -47,11 +47,8 @@
       url = "github:girlbossceo/conduwuit";
       inputs.nixpkgs.follows = "nixos";
     };
+    catppuccin.url = "github:catppuccin/nix";
 
-    catppuccin-bat = {
-      url = "github:catppuccin/bat";
-      flake = false;
-    };
     catppuccin-zsh = {
       url = "github:catppuccin/zsh-syntax-highlighting";
       flake = false;

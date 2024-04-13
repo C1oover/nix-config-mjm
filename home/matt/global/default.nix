@@ -3,12 +3,14 @@
   lib,
   outputs,
   inputs,
+  osConfig,
   ...
 }:
 {
   imports = [
     inputs.agenix.homeManagerModules.default
     inputs.nix-colors.homeManagerModules.default
+    inputs.catppuccin.homeManagerModules.catppuccin
 
     ../features/git
     ../features/shell
@@ -24,7 +26,6 @@
   home.packages = builtins.attrValues (
     {
       inherit (pkgs)
-        btop
         fx
         gh
         httpie
@@ -53,5 +54,6 @@
 
   programs.jq.enable = true;
 
-  colorScheme = inputs.nix-colors.colorSchemes.catppuccin-mocha;
+  colorScheme = inputs.nix-colors.colorSchemes.catppuccin-frappe;
+  catppuccin.flavour = osConfig.catppuccin.flavour;
 }

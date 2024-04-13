@@ -109,32 +109,14 @@ in
     boot.consoleLogLevel = 3;
     boot.plymouth = {
       enable = true;
-      themePackages = [ (pkgs.catppuccin-plymouth.override { variant = "mocha"; }) ];
-      theme = "catppuccin-mocha";
+      themePackages = [ (pkgs.catppuccin-plymouth.override { variant = config.catppuccin.flavour; }) ];
+      theme = "catppuccin-${config.catppuccin.flavour}";
     };
     boot.kernelParams = [ "quiet" ];
     console = {
       font = "${pkgs.terminus_font}/share/consolefonts/ter-u32n.psf.gz";
       keyMap = "us";
-      # catppuccin frappe
-      colors = [
-        "303446" # base
-        "e78284" # red
-        "a6d189" # green
-        "e5c890" # yellow
-        "8caaee" # blue
-        "f4b8e4" # pink
-        "81c8be" # teal
-        "b5bfe2" # subtext1
-        "626880" # surface2
-        "e78284" # red
-        "a6d189" # green
-        "e5c890" # yellow
-        "8caaee" # blue
-        "f4b8e4" # pink
-        "81c8be" # teal
-        "a5adce" # subtext0
-      ];
+      catppuccin.enable = true;
     };
 
     services.resolved.enable = true;

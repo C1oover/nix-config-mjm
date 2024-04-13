@@ -10,6 +10,7 @@
   imports = [
     inputs.home-manager.nixosModules.home-manager
     inputs.agenix.nixosModules.default
+    inputs.catppuccin.nixosModules.catppuccin
 
     ../home-manager.nix
     ../nix.nix
@@ -54,4 +55,6 @@
   security.sudo.wheelNeedsPassword = false;
 
   programs.zsh.enable = true;
+
+  catppuccin.flavour = "macchiato";
 }
