@@ -23,7 +23,7 @@ Each system has its own directory with at minimum a `default.nix`
 
 ## Deploying changes
 
-Every hour, a CI job runs that checks for updates in either the `nixos` or `nixpkgs` (for Darwin) flake inputs, which target `nixos-unstable` and `nixpkgs-unstable` respectively.
+Every hour, [a CI job](../.gitlab-ci.yml#L64) runs that [checks for updates](../flake-update.sh) in either the `nixos` or `nixpkgs` (for Darwin) flake inputs, which target `nixos-unstable` and `nixpkgs-unstable` respectively.
 If either channel has updates, then all flake inputs are updated, and the updated lock file is committed by the CI job.
 
 Each commit (including the automatic lock file updates) to the `main` branch will trigger a deploy job to all NixOS servers.
