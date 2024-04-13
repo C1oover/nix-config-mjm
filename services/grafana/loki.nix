@@ -41,13 +41,12 @@ in
           };
           chunk_idle_period = "5m";
           chunk_retain_period = "30s";
-          max_transfer_retries = 0;
           wal.enabled = false;
         };
 
         storage_config = {
           aws = {
-            s3 = "http://\${AWS_ACCESS_KEY_ID}:\${AWS_SECRET_ACCESS_KEY}@localhost:3902";
+            s3 = "http://\${AWS_ACCESS_KEY_ID}:\${AWS_SECRET_ACCESS_KEY}@garage.service.consul:3902";
             region = "home";
             bucketnames = "loki-logs";
             insecure = true;
@@ -57,16 +56,12 @@ in
             active_index_directory = "${dataDir}/boltdb-shipper-active";
             cache_location = "${dataDir}/boltdb-shipper-cache";
             cache_ttl = "24h";
-            shared_store = "s3";
           };
           tsdb_shipper = {
             active_index_directory = "${dataDir}/tsdb-index";
             cache_location = "${dataDir}/tsdb-cache";
-            shared_store = "s3";
           };
         };
-
-        chunk_store_config.max_look_back_period = "0s";
 
         schema_config.configs = [
           {
@@ -89,17 +84,28 @@ in
               period = "24h";
             };
           }
+          {
+            from = "2024-04-15";
+            store = "tsdb";
+            object_store = "s3";
+            schema = "v13";
+            index = {
+              prefix = "index_";
+              period = "24h";
+            };
+          }
         ];
 
         compactor = {
           working_directory = "${dataDir}/compactor";
-          shared_store = "s3";
           retention_enabled = true;
+          delete_request_store = "s3";
         };
 
         limits_config = {
           retention_period = "672h";
-          enforce_metric_name = false;
+          # TODO enable once current period is using schema v13
+          allow_structured_metadata = false;
         };
       };
     };
