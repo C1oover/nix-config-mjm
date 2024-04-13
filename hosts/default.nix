@@ -84,15 +84,11 @@ in
         };
 
       arges = {
-        deployment.tags = [
-          "builder"
-          "phase-main"
-        ];
+        deployment.tags = [ "phase-main" ];
         imports = [ ./arges ];
       };
       brontes = {
         deployment.tags = [
-          "arm64"
           "ingress"
           "phase-ingress"
         ];
@@ -100,7 +96,6 @@ in
       };
       steropes = {
         deployment.tags = [
-          "arm64"
           "ingress"
           "phase-ingress"
         ];
@@ -109,7 +104,6 @@ in
 
       alecto = {
         deployment.tags = [
-          "x86_64"
           "hashistack"
           "phase-main"
         ];
@@ -117,7 +111,6 @@ in
       };
       megaera = {
         deployment.tags = [
-          "x86_64"
           "hashistack"
           "phase-main"
         ];
@@ -125,7 +118,6 @@ in
       };
       tisiphone = {
         deployment.tags = [
-          "x86_64"
           "hashistack"
           "phase-main"
         ];
@@ -134,7 +126,6 @@ in
 
       chaos = {
         deployment.tags = [
-          "x86_64"
           "garage"
           "phase-main"
         ];
@@ -142,39 +133,30 @@ in
       };
       helios = {
         deployment.tags = [
-          "x86_64"
           "garage"
           "phase-main"
         ];
         imports = [ ./helios ];
       };
       hypnos = {
-        deployment.tags = [
-          "builder"
-          "phase-main"
-        ];
+        deployment.tags = [ "phase-main" ];
         imports = [ ./hypnos ];
       };
       leto = {
         deployment.tags = [
-          "x86_64"
           "garage"
           "phase-main"
         ];
         imports = [ ./leto ];
       };
       aion = {
-        deployment.tags = [
-          "x86_64"
-          "phase-main"
-        ];
+        deployment.tags = [ "phase-main" ];
         deployment.targetHost = "5.78.46.61";
         imports = [ ./aion ];
       };
 
       rhea = {
         deployment.tags = [
-          "x86_64"
           "dns"
           "phase-main"
         ];
@@ -182,7 +164,6 @@ in
       };
       cronus = {
         deployment.tags = [
-          "x86_64"
           "dns"
           "phase-main"
         ];

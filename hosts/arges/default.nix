@@ -33,7 +33,6 @@
   ];
 
   mjm.consul.enable = true;
-  mjm.gitlab-runner.enable = true;
   mjm.nut = {
     enable = true;
     mode = "server";
