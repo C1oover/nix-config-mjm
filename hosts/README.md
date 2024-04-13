@@ -20,6 +20,8 @@ Each system has its own directory with at minimum a `default.nix`
 - Raspberry Pi 4B's
   - [arges](arges/): NUT server, remote builder for aarch64 in CI
   - [brontes](brontes/), [steropes](steropes/): Ingress reverse proxy with Nginx for all self-hosted services
+- VPS
+  - [aion](aion/): a super barebones Hetzner VM that serves as a public IPv4 proxy to brontes and steropes
 
 ## Deploying changes
 
