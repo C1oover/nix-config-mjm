@@ -83,7 +83,21 @@ in
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
+      extraConfig.pipewire.raop-discover = {
+        context.modules = [
+          {
+            name = "libpipewire-module-raop-discover";
+            args = { };
+          }
+        ];
+      };
     };
+
+    # airplay requires this
+    networking.firewall.allowedUDPPorts = [
+      6001
+      6002
+    ];
 
     programs.kdeconnect.enable = true;
 
