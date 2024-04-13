@@ -5,7 +5,7 @@
   ...
 }:
 let
-  inherit (lib) mkEnableOption mkIf;
+  inherit (lib) mkAfter mkEnableOption mkIf;
   cfg = config.mjm.gitlab-runner;
 in
 {
@@ -18,6 +18,10 @@ in
       CI_SERVER_URL=https://git.midna.dev
       REGISTRATION_TOKEN={{ with secret "kv/prod/services/gitlab-runner" }}{{ .Data.data.registration_token }}{{ end }}
     '';
+
+    vault-secrets.services.gitlab-runner = {
+      keys.remote_builder_private_key = { };
+    };
 
     boot.kernel.sysctl."net.ipv4.ip_forward" = true;
 
@@ -136,5 +140,31 @@ in
           publicKey = servers.cronus;
         };
       };
+
+    programs.ssh.extraConfig = mkAfter ''
+      Host arges.home.mattmoriarity.com
+        IdentitiesOnly yes
+        IdentityFile ${config.vault-secrets.services.gitlab-runner.keys.remote_builder_private_key.path}
+        User matt
+    '';
+
+    nix.distributedBuilds = true;
+    nix.buildMachines = [
+      {
+        hostName = "arges.home.mattmoriarity.com";
+        system = "aarch64-linux";
+        protocol = "ssh-ng";
+        maxJobs = 4;
+        speedFactor = 2;
+        supportedFeatures = [
+          "nixos-test"
+          "benchmark"
+          "big-parallel"
+          "kvm"
+        ];
+        mandatoryFeatures = [ ];
+        publicHostKey = "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSURTM3BQTkVhSEEreWNEYTdrVHlOU3hzQVlCRlpJN1lNd2VEcnJOMEdnK2wgcm9vdEBuaXhvcwo=";
+      }
+    ];
   };
 }

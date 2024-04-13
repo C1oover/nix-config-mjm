@@ -48,6 +48,12 @@
     ];
   };
 
+  # TODO consider if this should be in services/
+  # remote builder key
+  users.users.matt.openssh.authorizedKeys.keys = [
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHWS7+ecqC11q28WuizDlFuiEYEro1gv2ZtN4fs4hayg"
+  ];
+
   vault-secrets.roleId = "841fdaf1-6a2d-f471-ad85-ae485c232b89";
   vault-secrets.encryptedSecretId = ''
     Whxqht+dQJax1aZeCGLxmiAAAAABAAAADAAAABAAAACe8V46fSAKj3ptq8AAAAAA82YPKSCP+ruRutt
