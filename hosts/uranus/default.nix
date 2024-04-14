@@ -16,6 +16,8 @@
     ./nvk.nix
   ];
 
+  services.displayManager.defaultSession = "plasmax11";
+
   environment.systemPackages = [ pkgs.sbctl ];
 
   mjm.desktop.enable = true;
