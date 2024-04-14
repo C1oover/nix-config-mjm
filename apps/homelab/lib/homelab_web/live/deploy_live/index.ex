@@ -125,6 +125,8 @@ defmodule HomelabWeb.DeployLive.Index do
     ~H"""
     <span class="font-semibold">
       <%= case {@deploy.repo, @deploy.job} do %>
+        <% {"mjm/nix-config", "deploy nixos hosts"} -> %>
+          NixOS
         <% {"mjm/nix-config", "deploy nixos hosts: [x86_64]"} -> %>
           NixOS: x86_64
         <% {"mjm/nix-config", "deploy nixos hosts: [arm64]"} -> %>
