@@ -24,6 +24,11 @@ in
                 target_label = "systemd_unit";
               }
               {
+                source_labels = [ "__journal__systemd_unit" ];
+                regex = "(.*)\\.service";
+                target_label = "service_name";
+              }
+              {
                 source_labels = [ "__journal__hostname" ];
                 target_label = "hostname";
               }
