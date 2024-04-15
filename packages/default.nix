@@ -7,12 +7,14 @@
         inherit system;
         config.allowUnfree = true;
       };
+      callPackage = pkgs.lib.callPackageWith (pkgs // packages);
+      packages = {
+        linkding = callPackage ./linkding.nix { };
+        mautrix-slack = callPackage ./mautrix-slack.nix { };
+        pragmata-pro = callPackage ./pragmata-pro.nix { };
+      };
     in
     {
-      packages = {
-        linkding = pkgs.callPackage ./linkding.nix { };
-        mautrix-slack = pkgs.callPackage ./mautrix-slack.nix { };
-        pragmata-pro = pkgs.callPackage ./pragmata-pro.nix { };
-      };
+      inherit packages;
     };
 }
