@@ -25,7 +25,14 @@ in
 
     services.netbox = {
       enable = true;
-      package = pkgs.netbox_3_7;
+      # TODO remove override when rq builds
+      package = pkgs.netbox_3_7.override {
+        python3 = pkgs.python3 // {
+          pkgs = pkgs.python3.pkgs.overrideScope (
+            final: prev: { rq = prev.rq.overridePythonAttrs { doCheck = false; }; }
+          );
+        };
+      };
       listenAddress = "[::]";
       settings = {
         ALLOWED_HOSTS = [
