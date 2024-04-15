@@ -16,17 +16,6 @@
     ../common/users/matt
   ];
 
-  nixpkgs.overlays = [
-    (final: prev: {
-      fprintd = prev.fprintd.overrideAttrs {
-        mesonCheckFlags = [
-          "--no-suite"
-          "fprintd:TestPamFprintd"
-        ];
-      };
-    })
-  ];
-
   mjm.desktop.enable = true;
   mjm.state = {
     enableImpermanence = true;
