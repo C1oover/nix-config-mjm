@@ -39,7 +39,11 @@ in
         zeal-qt6
         ;
       inherit (pkgs.callPackages ./scripts.nix { }) night-mode;
-      inherit (pkgs.kdePackages) kcalc neochat plasmatube;
+      inherit (pkgs.kdePackages)
+        kcalc
+        # neochat
+        plasmatube
+        ;
       inherit (inputs.plasma-manager.packages.${pkgs.system}) rc2nix;
     };
 
