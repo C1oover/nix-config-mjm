@@ -24,6 +24,8 @@ in
 
   config = mkIf cfg.enable (mkMerge [
     {
+      deployment.tags = [ "svc-nut" ];
+
       power.ups = {
         enable = true;
         mode = if cfg.mode == "client" then "netclient" else "netserver";
@@ -48,6 +50,8 @@ in
     })
 
     (mkIf (cfg.mode == "server") {
+      deployment.tags = [ "svc-nut-server" ];
+
       power.ups = {
         mode = "netserver";
         openFirewall = true;

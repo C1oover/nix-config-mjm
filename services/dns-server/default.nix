@@ -32,6 +32,8 @@ in
   };
 
   config = mkIf cfg.enable {
+    deployment.tags = [ "svc-dns-server" ];
+
     services.bind = {
       enable = true;
       cacheNetworks = [

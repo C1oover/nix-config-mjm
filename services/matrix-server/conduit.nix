@@ -17,6 +17,7 @@ in
 
   config = mkIf cfg.enable {
     mjm.state.directories = [ "/var/lib/private/matrix-conduit" ];
+    deployment.tags = [ "svc-matrix-server" ];
 
     services.matrix-conduit = {
       enable = true;

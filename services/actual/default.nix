@@ -10,6 +10,7 @@ in
 
   config = mkIf cfg.enable {
     mjm.state.directories = [ "/var/lib/docker/volumes" ];
+    deployment.tags = [ "svc-actual" ];
 
     # I suspect issues with podman's ability to clean up external containers
     virtualisation.oci-containers.backend = "docker";

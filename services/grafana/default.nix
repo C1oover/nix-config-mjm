@@ -15,6 +15,7 @@ in
 
   config = mkIf cfg.enable {
     mjm.postgresql.enable = true;
+    deployment.tags = [ "svc-grafana" ];
 
     services.grafana = {
       enable = true;

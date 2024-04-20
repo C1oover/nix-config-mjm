@@ -109,6 +109,8 @@ in
     }
 
     (mkIf cfg.server.enable {
+      deployment.tags = [ "svc-consul" ];
+
       services.consul = {
         webUi = true;
 

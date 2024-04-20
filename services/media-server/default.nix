@@ -20,6 +20,7 @@ in
       repositoryName = "mediaserver";
       passwordFile = config.vault-secrets.services.media-server.keys.backup_password.path;
     };
+    deployment.tags = [ "svc-media-server" ];
 
     vault-secrets.services.media-server.keys.backup_password = { };
   };

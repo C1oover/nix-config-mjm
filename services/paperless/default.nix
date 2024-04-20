@@ -19,6 +19,7 @@ in
         group = "paperless";
       }
     ];
+    deployment.tags = [ "svc-paperless" ];
 
     services.paperless = {
       enable = true;

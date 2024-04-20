@@ -14,6 +14,8 @@ in
   };
 
   config = mkIf cfg.enable {
+    deployment.tags = [ "svc-gitlab-runner" ];
+
     vault-secrets.templates.gitlab-runner-registration-env.text = ''
       CI_SERVER_URL=https://git.midna.dev
       REGISTRATION_TOKEN={{ with secret "kv/prod/services/gitlab-runner" }}{{ .Data.data.registration_token }}{{ end }}

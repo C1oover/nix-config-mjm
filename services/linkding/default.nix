@@ -23,6 +23,7 @@ in
         group = "linkding";
       }
     ];
+    deployment.tags = [ "svc-linkding" ];
 
     services.linkding = {
       enable = true;

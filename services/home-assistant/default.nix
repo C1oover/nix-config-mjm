@@ -23,6 +23,7 @@ in
         group = "hass";
       }
     ];
+    deployment.tags = [ "svc-home-assistant" ];
 
     services.home-assistant = {
       enable = true;

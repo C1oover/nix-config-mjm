@@ -22,6 +22,7 @@ in
         group = "netbox";
       }
     ];
+    deployment.tags = [ "svc-netbox" ];
 
     services.netbox = {
       enable = true;

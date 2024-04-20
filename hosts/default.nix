@@ -88,54 +88,33 @@ in
         imports = [ ./arges ];
       };
       brontes = {
-        deployment.tags = [
-          "ingress"
-          "phase-ingress"
-        ];
+        deployment.tags = [ "phase-ingress" ];
         imports = [ ./brontes ];
       };
       steropes = {
-        deployment.tags = [
-          "ingress"
-          "phase-ingress"
-        ];
+        deployment.tags = [ "phase-ingress" ];
         imports = [ ./steropes ];
       };
 
       alecto = {
-        deployment.tags = [
-          "hashistack"
-          "phase-main"
-        ];
+        deployment.tags = [ "phase-main" ];
         imports = [ ./alecto ];
       };
       megaera = {
-        deployment.tags = [
-          "hashistack"
-          "phase-main"
-        ];
+        deployment.tags = [ "phase-main" ];
         imports = [ ./megaera ];
       };
       tisiphone = {
-        deployment.tags = [
-          "hashistack"
-          "phase-main"
-        ];
+        deployment.tags = [ "phase-main" ];
         imports = [ ./tisiphone ];
       };
 
       chaos = {
-        deployment.tags = [
-          "garage"
-          "phase-main"
-        ];
+        deployment.tags = [ "phase-main" ];
         imports = [ ./chaos ];
       };
       helios = {
-        deployment.tags = [
-          "garage"
-          "phase-main"
-        ];
+        deployment.tags = [ "phase-main" ];
         imports = [ ./helios ];
       };
       hypnos = {
@@ -143,10 +122,7 @@ in
         imports = [ ./hypnos ];
       };
       leto = {
-        deployment.tags = [
-          "garage"
-          "phase-main"
-        ];
+        deployment.tags = [ "phase-main" ];
         imports = [ ./leto ];
       };
       aion = {
@@ -156,17 +132,11 @@ in
       };
 
       rhea = {
-        deployment.tags = [
-          "dns"
-          "phase-main"
-        ];
+        deployment.tags = [ "phase-main" ];
         imports = [ ./rhea ];
       };
       cronus = {
-        deployment.tags = [
-          "dns"
-          "phase-main"
-        ];
+        deployment.tags = [ "phase-main" ];
         imports = [ ./cronus ];
       };
     };

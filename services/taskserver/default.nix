@@ -15,6 +15,7 @@ in
         inherit (config.services.taskserver) user group;
       }
     ];
+    deployment.tags = [ "svc-taskserver" ];
 
     services.taskserver = {
       enable = true;

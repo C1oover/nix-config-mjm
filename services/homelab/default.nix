@@ -33,6 +33,7 @@ in
   config = mkIf cfg.enable {
     mjm.otel-collector.enable = true;
     mjm.postgresql.enable = true;
+    deployment.tags = [ "svc-homelab" ];
 
     systemd.services.homelab = {
       wantedBy = [ "multi-user.target" ];

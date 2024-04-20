@@ -32,3 +32,13 @@ Some use `/persist`, some use `/nix/persist`, just because of the ad-hoc way I s
 
 My services can add their data directories to `mjm.state.directories` when the service is enabled, and these directories will end up persisted to whatever `mjm.state.persistDir` is configured as for that machine.
 This is way nicer than having a list of all the persisted directories for each host: if I enable a service on a new host, I can't forget to start persisting its data, because it's configured as part of the service.
+
+## Deployment tags
+
+Each service module adds a tag `svc-<name>` to the host's Colmena deployment configuration.
+This means that if I want to deploy every machine running a particular service (because I just changed something about it), I can easily do that.
+For instance, if I wanted to deploy every machine running garage, I could run:
+
+```
+$ just deploy @svc-garage
+```

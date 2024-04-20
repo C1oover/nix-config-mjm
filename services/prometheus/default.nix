@@ -23,6 +23,7 @@ in
         group = "prometheus";
       }
     ];
+    deployment.tags = [ "svc-prometheus" ];
 
     services.prometheus = {
       enable = true;

@@ -9,6 +9,8 @@ in
   };
 
   config = mkIf cfg.enable {
+    deployment.tags = [ "svc-atuin" ];
+
     services.atuin = {
       enable = true;
       host = "::";

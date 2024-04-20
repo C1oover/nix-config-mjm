@@ -21,6 +21,7 @@ in
 
   config = mkIf cfg.enable {
     mjm.state.directories = [ "/var/lib/tailscale" ];
+    deployment.tags = [ "svc-tailscale" ];
 
     services.tailscale.enable = true;
 

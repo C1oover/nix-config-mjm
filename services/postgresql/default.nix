@@ -23,6 +23,7 @@ in
         mode = "0750";
       }
     ];
+    deployment.tags = [ "svc-postgresql" ];
 
     services.postgresql = {
       enable = true;

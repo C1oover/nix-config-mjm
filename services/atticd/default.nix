@@ -19,6 +19,7 @@ in
 
   config = mkIf cfg.enable {
     mjm.postgresql.enable = true;
+    deployment.tags = [ "svc-atticd" ];
 
     services.atticd = {
       enable = true;

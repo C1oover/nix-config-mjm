@@ -9,6 +9,8 @@ in
   };
 
   config = mkIf cfg.enable {
+    deployment.tags = [ "svc-ipv4-proxy" ];
+
     services.haproxy = {
       enable = true;
       config = ''

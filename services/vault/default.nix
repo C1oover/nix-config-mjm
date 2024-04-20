@@ -36,6 +36,8 @@ in
   imports = [ ./unseal.nix ];
 
   config = mkIf cfg.enable {
+    deployment.tags = [ "svc-vault" ];
+
     services.vault = {
       enable = true;
       package = pkgs.vault-bin;

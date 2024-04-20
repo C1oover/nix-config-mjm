@@ -21,6 +21,7 @@ in
         group = "vaultwarden";
       }
     ];
+    deployment.tags = [ "svc-vaultwarden" ];
 
     services.vaultwarden = {
       enable = true;

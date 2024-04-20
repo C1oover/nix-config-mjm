@@ -12,6 +12,7 @@ in
 
   config = mkIf cfg.enable {
     mjm.postgresql.enable = true;
+    deployment.tags = [ "svc-authelia" ];
 
     services.authelia.instances.main = {
       enable = true;
