@@ -6,12 +6,12 @@
 }:
 let
   pname = "linkding";
-  version = "1.27.1";
+  version = "1.30.0";
   src = fetchFromGitHub {
     owner = "sissbruecker";
     repo = "linkding";
     rev = "refs/tags/v${version}";
-    hash = "sha256-rAIdZuxNzma0lYYoDHrX4NtEnSNmlUaEO+qUCNCcT1A=";
+    hash = "sha256-AZ1aXLC8AKpifFH9XkEeV3yqT+ST8X56JO1Sotlqu1I=";
   };
 
   frontend = buildNpmPackage {
