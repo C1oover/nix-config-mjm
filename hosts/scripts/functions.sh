@@ -23,3 +23,27 @@ remove_temp_key() {
   echo "Removing temp directory ${SSH_KEY_DIR}" >&2
   rm -rf "$SSH_KEY_DIR"
 }
+
+retry() {
+  local retries="$1"
+  shift
+  local options="$-"
+
+  if [[ $options == *e* ]]; then
+    set +e
+  fi
+
+  "$@"
+  local exit_code=$?
+
+  if [[ $options == *e* ]]; then
+    set -e
+  fi
+
+  if [[ $exit_code -ne 0 && $retries -gt 0 ]]; then
+    sleep 3
+    retry $((retries - 1)) "$@"
+  else
+    return $exit_code
+  fi
+}
