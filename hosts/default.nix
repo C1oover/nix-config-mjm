@@ -40,85 +40,59 @@ in
       uranus = mkNixos [ ./uranus ];
     };
 
-    colmena = {
-      meta = {
-        nixpkgs = inputs.nixos.legacyPackages.x86_64-linux;
-        nodeNixpkgs = lib.genAttrs [
-          "arges"
-          "brontes"
-          "steropes"
-        ] (_node: inputs.nixos.legacyPackages.aarch64-linux);
-        specialArgs = {
-          inherit inputs outputs;
-        };
-      };
-
-      defaults =
-        { config, lib, ... }:
-        {
-          deployment = {
-            targetHost = lib.mkDefault "${config.networking.hostName}.home.mattmoriarity.com";
-            targetUser = "matt";
+    colmena =
+      {
+        meta = {
+          nixpkgs = inputs.nixos.legacyPackages.x86_64-linux;
+          nodeNixpkgs = lib.genAttrs [
+            "arges"
+            "brontes"
+            "steropes"
+          ] (_node: inputs.nixos.legacyPackages.aarch64-linux);
+          specialArgs = {
+            inherit inputs outputs;
           };
         };
 
-      arges = {
-        deployment.tags = [ "phase-main" ];
-        imports = [ ./arges ];
-      };
-      brontes = {
-        deployment.tags = [ "phase-ingress" ];
-        imports = [ ./brontes ];
-      };
-      steropes = {
-        deployment.tags = [ "phase-ingress" ];
-        imports = [ ./steropes ];
-      };
+        defaults =
+          { config, lib, ... }:
+          {
+            options.deployment.phase = lib.mkOption {
+              type = lib.types.enum [
+                "main"
+                "ingress"
+              ];
+              default = "main";
+            };
 
-      alecto = {
-        deployment.tags = [ "phase-main" ];
-        imports = [ ./alecto ];
-      };
-      megaera = {
-        deployment.tags = [ "phase-main" ];
-        imports = [ ./megaera ];
-      };
-      tisiphone = {
-        deployment.tags = [ "phase-main" ];
-        imports = [ ./tisiphone ];
-      };
-
-      chaos = {
-        deployment.tags = [ "phase-main" ];
-        imports = [ ./chaos ];
-      };
-      helios = {
-        deployment.tags = [ "phase-main" ];
-        imports = [ ./helios ];
-      };
-      hypnos = {
-        deployment.tags = [ "phase-main" ];
-        imports = [ ./hypnos ];
-      };
-      leto = {
-        deployment.tags = [ "phase-main" ];
-        imports = [ ./leto ];
-      };
-      aion = {
-        deployment.tags = [ "phase-main" ];
-        deployment.targetHost = "5.78.46.61";
-        imports = [ ./aion ];
-      };
-
-      rhea = {
-        deployment.tags = [ "phase-main" ];
-        imports = [ ./rhea ];
-      };
-      cronus = {
-        deployment.tags = [ "phase-main" ];
-        imports = [ ./cronus ];
-      };
-    };
+            config = {
+              deployment = {
+                targetHost = lib.mkDefault "${config.networking.hostName}.home.mattmoriarity.com";
+                targetUser = "matt";
+                tags = [ "phase-${config.deployment.phase}" ];
+              };
+            };
+          };
+      }
+      // lib.genAttrs
+        [
+          "aion"
+          "alecto"
+          "arges"
+          "brontes"
+          "chaos"
+          "cronus"
+          "helios"
+          "hypnos"
+          "leto"
+          "megaera"
+          "rhea"
+          "steropes"
+          "tisiphone"
+        ]
+        (name: {
+          imports = [ ./${name} ];
+        });
   };
 
   perSystem =

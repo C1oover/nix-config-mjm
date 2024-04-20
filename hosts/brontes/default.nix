@@ -8,6 +8,8 @@
 
   networking.hostName = "brontes";
 
+  deployment.phase = "ingress";
+
   fileSystems."/" = {
     device = "none";
     fsType = "tmpfs";

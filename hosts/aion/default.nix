@@ -6,6 +6,8 @@
     ../common/users/matt
   ];
 
+  deployment.targetHost = "5.78.46.61";
+
   boot.loader.grub = {
     enable = true;
     device = "/dev/sda";
