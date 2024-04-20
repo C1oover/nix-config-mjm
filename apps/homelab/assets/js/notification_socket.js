@@ -67,9 +67,15 @@ channel
   });
 
 channel.on("notification", (resp) => {
-  new Notification(resp.text, {
+  let note = new Notification(resp.text, {
     tag: resp.tag,
     renotify: true,
+  });
+
+  note.addEventListener("click", (_) => {
+    if (!location.pathname.startsWith("/tasks")) {
+      window.liveSocket.historyRedirect("/tasks", "push");
+    }
   });
 });
 
