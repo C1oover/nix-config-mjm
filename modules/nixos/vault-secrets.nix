@@ -287,6 +287,7 @@ in
           wantedBy = cfg.wantedBy;
           before = cfg.wantedBy;
           after = [ "network-online.target" ];
+          wants = [ "network-online.target" ];
           path = with pkgs; [
             vault
             consul-template
