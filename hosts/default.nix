@@ -38,27 +38,6 @@ in
     nixosConfigurations = {
       persephone = mkNixos [ ./persephone ];
       uranus = mkNixos [ ./uranus ];
-      aion = mkNixos [ ./aion ];
-
-      # Hashistack control plane VMs
-      megaera = mkNixos [ ./megaera ];
-      tisiphone = mkNixos [ ./tisiphone ];
-      alecto = mkNixos [ ./alecto ];
-
-      # Raspberry Pis
-      arges = mkNixos [ ./arges ];
-      brontes = mkNixos [ ./brontes ];
-      steropes = mkNixos [ ./steropes ];
-
-      # Other Proxmox VMs
-      hypnos = mkNixos [ ./hypnos ];
-      helios = mkNixos [ ./helios ];
-      chaos = mkNixos [ ./chaos ];
-      leto = mkNixos [ ./leto ];
-
-      # Proxmox LXC containers
-      rhea = mkNixos [ ./rhea ];
-      cronus = mkNixos [ ./cronus ];
     };
 
     colmena = {
