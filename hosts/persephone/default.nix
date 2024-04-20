@@ -16,6 +16,8 @@
     ../common/users/matt
   ];
 
+  deployment.phase = null;
+
   mjm.desktop.enable = true;
   mjm.state = {
     enableImpermanence = true;

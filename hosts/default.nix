@@ -46,6 +46,7 @@ in
           {
             options.deployment.phase = lib.mkOption {
               type = lib.types.enum [
+                null
                 "main"
                 "ingress"
               ];
@@ -56,7 +57,7 @@ in
               deployment = {
                 targetHost = lib.mkDefault "${config.networking.hostName}.home.mattmoriarity.com";
                 targetUser = "matt";
-                tags = [ "phase-${config.deployment.phase}" ];
+                tags = lib.mkIf (config.deployment.phase != null) [ "phase-${config.deployment.phase}" ];
               };
             };
           };

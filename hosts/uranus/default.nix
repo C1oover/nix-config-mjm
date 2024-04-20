@@ -16,6 +16,8 @@
     ./nvk.nix
   ];
 
+  deployment.phase = null;
+
   services.displayManager.defaultSession = "plasmax11";
 
   environment.systemPackages = [ pkgs.sbctl ];
