@@ -1,6 +1,5 @@
 {
   pkgs,
-  inputs,
   config,
   osConfig,
   ...
@@ -25,8 +24,6 @@ in
       vault
       wander
       ;
-
-    devenv = inputs.devenv.packages.${pkgs.system}.default;
 
     inherit (pkgs.callPackages ./scripts.nix { inherit sshPublicKeyPath; }) s vssh;
   };
