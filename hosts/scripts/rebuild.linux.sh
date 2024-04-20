@@ -1,4 +1,4 @@
 set -euo pipefail
 
-nom build ".#nixosConfigurations.$(hostname).config.system.build.toplevel" "$@"
-nvd diff /run/current-system ./result
+colmena build --on "$(hostname)" --keep-result -v "$@"
+nvd diff /run/current-system "./.gcroots/node-$(hostname)"

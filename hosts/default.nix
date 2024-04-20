@@ -19,25 +19,12 @@ let
         inherit inputs outputs;
       };
     };
-  mkNixos =
-    modules:
-    inputs.nixos.lib.nixosSystem {
-      inherit modules;
-      specialArgs = {
-        inherit inputs outputs;
-      };
-    };
 in
 {
   flake = {
     darwinConfigurations = {
       mars = mkDarwin "x86_64" [ ./mars ];
       athena = mkDarwin "aarch64" [ ./athena ];
-    };
-
-    nixosConfigurations = {
-      persephone = mkNixos [ ./persephone ];
-      uranus = mkNixos [ ./uranus ];
     };
 
     colmena =
@@ -86,9 +73,11 @@ in
           "hypnos"
           "leto"
           "megaera"
+          "persephone"
           "rhea"
           "steropes"
           "tisiphone"
+          "uranus"
         ]
         (name: {
           imports = [ ./${name} ];
