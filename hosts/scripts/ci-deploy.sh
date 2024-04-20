@@ -17,4 +17,8 @@ colmena apply --on "@phase-main" --keep-result
 # deploy to ingress last, since it can disrupt the build
 colmena apply --on "@phase-ingress" --keep-result
 
-retry 5 attic push homelab .gcroots/node-*
+push_to_attic() {
+  attic push homelab .gcroots/node-*
+}
+
+retry 5 push_to_attic
