@@ -58,11 +58,6 @@
     config.boot.kernelPackages.perf
   ];
 
-  boot.supportedFilesystems = [
-    "btrfs"
-    "bcachefs"
-  ];
-
   boot.loader.systemd-boot.enable = false;
 
   boot.lanzaboote = {
