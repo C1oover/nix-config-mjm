@@ -1225,6 +1225,22 @@
         "type": "github"
       }
     },
+    "nixos-consul-services": {
+      "locked": {
+        "lastModified": 1714106750,
+        "narHash": "sha256-t5+8Su8Qo/QHasSwqyloCqps2/W4HzBiyHSJf4yxINA=",
+        "owner": "mjm",
+        "repo": "nixpkgs",
+        "rev": "f09c7eca9ec3d6bb1b025a7e3c31b4f030245044",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mjm",
+        "ref": "consul-services",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixos-wsl": {
       "inputs": {
         "flake-compat": "flake-compat_10",
@@ -1773,6 +1789,7 @@
         "lanzaboote": "lanzaboote",
         "nix-colors": "nix-colors",
         "nixos": "nixos",
+        "nixos-consul-services": "nixos-consul-services",
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs_8",
         "nixpkgs-firefox-darwin": "nixpkgs-firefox-darwin",
