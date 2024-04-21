@@ -41,6 +41,7 @@ in
       inherit (pkgs.callPackages ./scripts.nix { }) night-mode;
       inherit (pkgs.kdePackages)
         kcalc
+        ktorrent
         # neochat
         plasmatube
         ;
