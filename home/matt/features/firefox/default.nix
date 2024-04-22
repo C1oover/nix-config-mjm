@@ -17,6 +17,8 @@ let
   addons = pkgs.callPackage ./addons { };
 in
 {
+  imports = [ inputs.arkenfox.hmModules.arkenfox ];
+
   options.mjm.firefox = {
     enable = mkEnableOption "firefox";
     package = mkPackageOption pkgs "firefox" { };
@@ -28,41 +30,52 @@ in
     programs.firefox = {
       enable = true;
       package = cfg.package;
+      arkenfox = {
+        enable = true;
+        version = "122.0";
+      };
       profiles.matt = {
+        arkenfox = {
+          enable = true;
+          "0000".enable = true;
+          "0100" = {
+            enable = true;
+            "0102"."browser.startup.page".value = 3;
+            "0103"."browser.startup.homepage".value = "https://homelab.midna.dev/";
+          };
+          "0200".enable = true;
+          "0300".enable = true;
+          "0600".enable = true;
+          "0800".enable = true;
+          "0900".enable = true;
+          "1600".enable = true;
+          "1700".enable = true;
+          "2400".enable = true;
+          "2700".enable = true;
+          "4000".enable = true;
+          "5000" = {
+            enable = true;
+            "5003"."signon.rememberSignons".enable = true;
+            "5010"."browser.urlbar.suggest.bookmark".enable = true;
+          };
+          "6000".enable = true;
+          "9000".enable = true;
+        };
         settings = {
           "app.update.auto" = false;
-          "browser.aboutConfig.showWarning" = false;
-          "browser.discovery.enabled" = false;
-          "browser.formfill.enable" = false;
-          "browser.newtabpage.activity-stream.asrouter.userprefs.cfr.addons" = false;
-          "browser.newtabpage.activity-stream.asrouter.userprefs.cfr.features" = false;
           "browser.newtabpage.activity-stream.feeds.section.topstories" = false;
           "browser.newtabpage.activity-stream.feeds.topsites" = false;
           "browser.newtabpage.activity-stream.showSearch" = false;
-          "browser.newtabpage.enabled" = false;
           "browser.onboarding.enabled" = false;
-          "browser.search.suggest.enabled" = false;
           "browser.shell.checkDefaultBrowser" = false;
-          "browser.startup.homepage" = "https://homelab.midna.dev/";
-          "browser.urlbar.suggest.bookmark" = false;
-          "browser.urlbar.suggest.quicksuggest.nonsponsored" = false;
-          "browser.urlbar.suggest.quicksuggest.sponsored" = false;
-          "browser.urlbar.suggest.searches" = false;
           "cookiebanners.service.mode" = 2;
-          "datareporting.healthreport.uploadEnabled" = false;
           "extensions.getAddons.cache.enabled" = false;
-          "extensions.getAddons.showPane" = false;
           "extensions.pocket.enabled" = false;
           "extensions.update.autoUpdateDefault" = false;
           "extensions.update.enabled" = false;
-          "network.dns.disablePrefetch" = true;
-          "network.predictor.enabled" = false;
-          "network.prefetch-next" = false;
           "privacy.donottrackheader.enabled" = true;
           "privacy.globalprivacycontrol.enabled" = true;
           "security.enterprise_roots.enabled" = true;
-          "signon.autofillForms" = false;
-          "signon.rememberSignons" = false;
           "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
           "trailhead.firstrun.didSeeAboutWelcome" = true;
           "widget.use-xdg-desktop-portal.file-picker" = 1;

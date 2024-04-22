@@ -48,6 +48,7 @@
       inputs.nixpkgs.follows = "nixos";
     };
     catppuccin.url = "github:catppuccin/nix";
+    arkenfox.url = "github:dwarfmaster/arkenfox-nixos";
 
     catppuccin-zsh = {
       url = "github:catppuccin/zsh-syntax-highlighting";
