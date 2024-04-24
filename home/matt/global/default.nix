@@ -1,16 +1,18 @@
 {
   pkgs,
   lib,
-  outputs,
   inputs,
   osConfig,
   ...
 }:
+let
+  nix-colors = import inputs.nix-colors { };
+in
 {
   imports = [
-    inputs.agenix.homeManagerModules.default
-    inputs.nix-colors.homeManagerModules.default
-    inputs.catppuccin.homeManagerModules.catppuccin
+    "${inputs.agenix}/modules/age-home.nix"
+    nix-colors.homeManagerModules.default
+    "${inputs.catppuccin}/modules/home-manager"
 
     ../features/git
     ../features/shell
@@ -19,7 +21,7 @@
     ../features/desktop
     ../features/firefox
     ../features/terminal
-  ] ++ (builtins.attrValues outputs.homeManagerModules);
+  ] ++ (builtins.attrValues (import ../../../modules/home-manager));
 
   home.stateVersion = lib.mkDefault "22.11";
 
@@ -38,8 +40,7 @@
         wget
         ;
 
-      inherit (inputs.home-manager.packages.${pkgs.system}) home-manager;
-      agenix = inputs.agenix.packages.${pkgs.system}.default;
+      agenix = pkgs.callPackage "${inputs.agenix}/pkgs/agenix.nix" { };
     }
     // lib.optionalAttrs pkgs.stdenv.isLinux { inherit (pkgs) attic-client; }
   );
@@ -54,6 +55,6 @@
 
   programs.jq.enable = true;
 
-  colorScheme = inputs.nix-colors.colorSchemes.catppuccin-macchiato;
+  colorScheme = nix-colors.colorSchemes.catppuccin-macchiato;
   catppuccin.flavour = osConfig.catppuccin.flavour or "macchiato";
 }

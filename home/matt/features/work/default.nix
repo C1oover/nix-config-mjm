@@ -1,8 +1,9 @@
-{ pkgs, inputs, ... }:
+{ pkgs, ... }:
 {
   imports = [
     ./git.nix
     ./helix.nix
+    ./k9s.nix
   ];
 
   home.packages = builtins.attrValues {
@@ -16,8 +17,6 @@
     slab-ssh = "npm run docker:ssh";
     piex = "slab-ssh bin/phx-iex";
   };
-
-  xdg.configFile."k9s/skin.yml".source = inputs.catppuccin-k9s + "/dist/mocha.yml";
 
   programs.kitty.darwinLaunchOptions = [
     "--session"

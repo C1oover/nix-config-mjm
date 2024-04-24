@@ -4,9 +4,12 @@
   inputs,
   ...
 }:
+let
+  lanzaboote = import inputs.lanzaboote;
+in
 {
   imports = [
-    inputs.lanzaboote.nixosModules.lanzaboote
+    lanzaboote.nixosModules.lanzaboote
 
     ./hardware-configuration.nix
 

@@ -1,10 +1,13 @@
-{ pkgs, outputs, ... }:
+{ pkgs, ... }:
+let
+  inherit (import ../../../../packages { inherit pkgs; }) pragmata-pro;
+in
 {
   fonts = {
     fontDir.enable = true;
     fonts = with pkgs; [
       (nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" ]; })
-      outputs.packages.${pkgs.system}.pragmata-pro
+      pragmata-pro
       cascadia-code
       ibm-plex
       iosevka

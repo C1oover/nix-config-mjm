@@ -9,6 +9,14 @@ let
   inherit (lib) mkEnableOption mkIf;
 
   cfg = config.mjm.matrix-server;
+
+  conduit-patched = pkgs.applyPatches {
+    name = "conduit-patched";
+    src = inputs.conduit;
+    patches = [ ./conduit-version-fix.patch ];
+  };
+
+  pkg = (import conduit-patched).packages.${pkgs.system}.default;
 in
 {
   options.mjm.matrix-server = {
@@ -21,7 +29,7 @@ in
 
     services.matrix-conduit = {
       enable = true;
-      package = inputs.conduit.packages.${pkgs.system}.default;
+      package = pkg;
 
       settings.global = {
         address = "::";

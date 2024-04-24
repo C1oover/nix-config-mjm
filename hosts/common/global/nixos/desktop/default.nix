@@ -2,12 +2,13 @@
   pkgs,
   lib,
   config,
-  outputs,
   ...
 }:
 let
   inherit (lib) mkEnableOption mkForce mkIf;
   cfg = config.mjm.desktop;
+
+  inherit (import ../../../../../packages { inherit pkgs; }) pragmata-pro;
 in
 {
   options.mjm.desktop = {
@@ -60,7 +61,7 @@ in
         agave
         monaspace
         (input-fonts.override { acceptLicense = true; })
-        outputs.packages.${pkgs.system}.pragmata-pro
+        pragmata-pro
       ];
 
       fontconfig = {

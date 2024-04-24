@@ -2,7 +2,6 @@
   pkgs,
   config,
   lib,
-  inputs,
   ...
 }:
 {
@@ -21,7 +20,6 @@
       urls-source "miniflux"
       miniflux-url "https://feeds.midna.dev/"
       miniflux-tokenfile ${config.home.homeDirectory}/.config/newsboat/miniflux-token
-      include ${inputs.catppuccin-newsboat}/themes/dark
     '';
   };
 

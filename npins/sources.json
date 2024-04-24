@@ -1,0 +1,240 @@
+{
+  "pins": {
+    "agenix": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "ryantm",
+        "repo": "agenix"
+      },
+      "branch": "main",
+      "revision": "24a7ea390564ccd5b39b7884f597cfc8d7f6f44e",
+      "url": "https://github.com/ryantm/agenix/archive/24a7ea390564ccd5b39b7884f597cfc8d7f6f44e.tar.gz",
+      "hash": "165am10r61wl5v4hz169zrlljvj929hgnhr9sn7ak3bz73cr1m86"
+    },
+    "arkenfox": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "dwarfmaster",
+        "repo": "arkenfox-nixos"
+      },
+      "branch": "main",
+      "revision": "05e7e0996493f47bbc15228895c4e31ce24616f0",
+      "url": "https://github.com/dwarfmaster/arkenfox-nixos/archive/05e7e0996493f47bbc15228895c4e31ce24616f0.tar.gz",
+      "hash": "14ggi2nvpwkd3v2vj7y9a1sldjyn7j2ap41iyxynvcbc33kmw0i2"
+    },
+    "attic": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "zhaofengli",
+        "repo": "attic"
+      },
+      "branch": "main",
+      "revision": "4dbdbee45728d8ce5788db6461aaaa89d98081f0",
+      "url": "https://github.com/zhaofengli/attic/archive/4dbdbee45728d8ce5788db6461aaaa89d98081f0.tar.gz",
+      "hash": "1iri77pbf0gvas93zra29qy1c3l61n97z84xblqxmmhsxvljzvnh"
+    },
+    "catppuccin": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "catppuccin",
+        "repo": "nix"
+      },
+      "branch": "main",
+      "revision": "a48e70a31616cb63e4794fd3465bff1835cc4246",
+      "url": "https://github.com/catppuccin/nix/archive/a48e70a31616cb63e4794fd3465bff1835cc4246.tar.gz",
+      "hash": "1ij11481j5915jsckdp4ghx1fv6kzfm7cdnjgiwq7z7lqa2k2na9"
+    },
+    "catppuccin-zsh-syntax-highlighting": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "catppuccin",
+        "repo": "zsh-syntax-highlighting"
+      },
+      "branch": "main",
+      "revision": "06d519c20798f0ebe275fc3a8101841faaeee8ea",
+      "url": "https://github.com/catppuccin/zsh-syntax-highlighting/archive/06d519c20798f0ebe275fc3a8101841faaeee8ea.tar.gz",
+      "hash": "1yj916klvzpvwghii7m6qx2ya3p2kx25nydymilvjzbx8z0sdcj3"
+    },
+    "conduit": {
+      "type": "GitRelease",
+      "repository": {
+        "type": "Git",
+        "url": "https://github.com/girlbossceo/conduwuit.git"
+      },
+      "pre_releases": false,
+      "version_upper_bound": null,
+      "version": "v0.3.0",
+      "revision": "341bafb91e77cd95775d9cfa4f0810309889b176",
+      "url": null,
+      "hash": "0cpv17by8mgb6xc56qwqwlgcmmbfjc687dgz1cvxxn3jmzf9j7vb"
+    },
+    "darwin": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "LnL7",
+        "repo": "nix-darwin"
+      },
+      "branch": "master",
+      "revision": "230a197063de9287128e2c68a7a4b0cd7d0b50a7",
+      "url": "https://github.com/LnL7/nix-darwin/archive/230a197063de9287128e2c68a7a4b0cd7d0b50a7.tar.gz",
+      "hash": "17qf4kfxlig7l4vryiirhylkms583ybvy81s1xwdlbah0jpgkklm"
+    },
+    "devenv": {
+      "type": "GitRelease",
+      "repository": {
+        "type": "GitHub",
+        "owner": "cachix",
+        "repo": "devenv"
+      },
+      "pre_releases": false,
+      "version_upper_bound": null,
+      "version": "v1.0.4",
+      "revision": "5684af4fada7258eff6864ba821d9ae062384846",
+      "url": "https://api.github.com/repos/cachix/devenv/tarball/v1.0.4",
+      "hash": "0j0lii75axmi4q3lngdrccm9cdsa8p1cfayiypvyla0qywafiq14"
+    },
+    "firefox-csshacks": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "MrOtherGuy",
+        "repo": "firefox-csshacks"
+      },
+      "branch": "master",
+      "revision": "44e1db76fab20d50273116d538728b4822300686",
+      "url": "https://github.com/MrOtherGuy/firefox-csshacks/archive/44e1db76fab20d50273116d538728b4822300686.tar.gz",
+      "hash": "1s4m0yv21p27khqmwl12gfrfxzmb8vvmyhg9jbh43f0px9rq1mcb"
+    },
+    "hardware": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "NixOS",
+        "repo": "nixos-hardware"
+      },
+      "branch": "master",
+      "revision": "53db5e1070d07e750030bf65f1b9963df8f0c678",
+      "url": "https://github.com/NixOS/nixos-hardware/archive/53db5e1070d07e750030bf65f1b9963df8f0c678.tar.gz",
+      "hash": "0imqm7yz0p75k06ic810nwv5ml1nm8mdbr1fg51qgigvn7i1ckcy"
+    },
+    "helix": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "helix-editor",
+        "repo": "helix"
+      },
+      "branch": "master",
+      "revision": "e2594b64c0daf15bacdb5396d439f206fcbe11e6",
+      "url": "https://github.com/helix-editor/helix/archive/e2594b64c0daf15bacdb5396d439f206fcbe11e6.tar.gz",
+      "hash": "1b3krzq8w4x8dg11k6l9hcfv1cjcyvq929d19066dh07fc92ng3n"
+    },
+    "home-manager": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "nix-community",
+        "repo": "home-manager"
+      },
+      "branch": "master",
+      "revision": "c1609d584a6b5e9e6a02010f51bd368cb4782f8e",
+      "url": "https://github.com/nix-community/home-manager/archive/c1609d584a6b5e9e6a02010f51bd368cb4782f8e.tar.gz",
+      "hash": "112r86p3iah1xahwlp82yd3gvh10wkf271za5h7v3jsqv08c6gkr"
+    },
+    "impermanence": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "nix-community",
+        "repo": "impermanence"
+      },
+      "branch": "master",
+      "revision": "a33ef102a02ce77d3e39c25197664b7a636f9c30",
+      "url": "https://github.com/nix-community/impermanence/archive/a33ef102a02ce77d3e39c25197664b7a636f9c30.tar.gz",
+      "hash": "1mig6ns8l5iynsm6pfbnx2b9hmr592s1kqbw6gq1n25czdlcniam"
+    },
+    "lanzaboote": {
+      "type": "GitRelease",
+      "repository": {
+        "type": "GitHub",
+        "owner": "nix-community",
+        "repo": "lanzaboote"
+      },
+      "pre_releases": false,
+      "version_upper_bound": null,
+      "version": "v0.3.0",
+      "revision": "64b903ca87d18cef2752c19c098af275c6e51d63",
+      "url": "https://api.github.com/repos/nix-community/lanzaboote/tarball/v0.3.0",
+      "hash": "1ysq47isagsdaisni4sbhhmbmihbhpgxj8lnzxl4kgfx2iwm7ghm"
+    },
+    "nix-colors": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "Misterio77",
+        "repo": "nix-colors"
+      },
+      "branch": "main",
+      "revision": "b01f024090d2c4fc3152cd0cf12027a7b8453ba1",
+      "url": "https://github.com/Misterio77/nix-colors/archive/b01f024090d2c4fc3152cd0cf12027a7b8453ba1.tar.gz",
+      "hash": "0y9h042qrfjfys1gga65mkxd8j723xwivmcy94vfwnvnc9xy0dw5"
+    },
+    "nixos": {
+      "type": "Channel",
+      "name": "nixos-unstable",
+      "url": "https://releases.nixos.org/nixos/unstable/nixos-24.05pre617818.58a1abdbae32/nixexprs.tar.xz",
+      "hash": "1cly5scmyr9ndmm1rk1cp5vywcmw47ds78m9qjzbq7wh21qhwfym"
+    },
+    "nixpkgs": {
+      "type": "Channel",
+      "name": "nixpkgs-unstable",
+      "url": "https://releases.nixos.org/nixpkgs/nixpkgs-24.05pre617738.2b1f64b358f2/nixexprs.tar.xz",
+      "hash": "044m9sa67h3ch2vb388i14b8bj5av8dyvcpwbn603k5a6dbjjzqy"
+    },
+    "nixpkgs-firefox-darwin": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "bandithedoge",
+        "repo": "nixpkgs-firefox-darwin"
+      },
+      "branch": "main",
+      "revision": "7e82af679667cf9d56075dfa375b32c317aa708d",
+      "url": "https://github.com/bandithedoge/nixpkgs-firefox-darwin/archive/7e82af679667cf9d56075dfa375b32c317aa708d.tar.gz",
+      "hash": "108vnp85dr18s0bi7r34b0c1chaw3mcvdm9fr6dpvwwhdwz277qj"
+    },
+    "nur": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "nix-community",
+        "repo": "NUR"
+      },
+      "branch": "master",
+      "revision": "b196e8da8e8a49495973a09c66722feecf6105d2",
+      "url": "https://github.com/nix-community/NUR/archive/b196e8da8e8a49495973a09c66722feecf6105d2.tar.gz",
+      "hash": "0fxfwy0kq8nfz58ick7gm564k8gii209xhfg4vjx5gj2nslafmx9"
+    },
+    "terranix": {
+      "type": "GitRelease",
+      "repository": {
+        "type": "GitHub",
+        "owner": "terranix",
+        "repo": "terranix"
+      },
+      "pre_releases": false,
+      "version_upper_bound": null,
+      "version": "2.7.0",
+      "revision": "00710f39f38a0a654a2c4fd96cbb988b4f4cedfa",
+      "url": "https://api.github.com/repos/terranix/terranix/tarball/2.7.0",
+      "hash": "1wsyhsdsjw6xlhpkhaqvia3x0na3nx2vamcb2rbcbdmb7ra1y9f6"
+    }
+  },
+  "version": 3
+}

@@ -5,10 +5,13 @@
   config,
   ...
 }:
+let
+  lanzaboote = import inputs.lanzaboote;
+in
 {
   imports = [
-    inputs.lanzaboote.nixosModules.lanzaboote
-    inputs.hardware.nixosModules.framework-13th-gen-intel
+    lanzaboote.nixosModules.lanzaboote
+    "${inputs.hardware}/framework/13-inch/13th-gen-intel"
     ./hardware-configuration.nix
     ./virtualization.nix
 

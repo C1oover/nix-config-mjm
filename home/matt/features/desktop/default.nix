@@ -3,7 +3,6 @@
   lib,
   config,
   osConfig,
-  inputs,
   ...
 }:
 let
@@ -45,7 +44,6 @@ in
         # neochat
         plasmatube
         ;
-      inherit (inputs.plasma-manager.packages.${pkgs.system}) rc2nix;
     };
 
     programs.mpv.enable = true;

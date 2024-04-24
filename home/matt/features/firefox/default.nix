@@ -14,10 +14,12 @@ let
     ;
   cfg = config.mjm.firefox;
 
+  arkenfox = import inputs.arkenfox;
+
   addons = pkgs.callPackage ./addons { };
 in
 {
-  imports = [ inputs.arkenfox.hmModules.arkenfox ];
+  imports = [ arkenfox.hmModules.arkenfox ];
 
   options.mjm.firefox = {
     enable = mkEnableOption "firefox";

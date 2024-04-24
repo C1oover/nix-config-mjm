@@ -1,20 +1,14 @@
-{ inputs, ... }:
 {
-  perSystem =
-    { system, ... }:
-    let
-      pkgs = import inputs.nixos {
-        inherit system;
-        config.allowUnfree = true;
-      };
-      callPackage = pkgs.lib.callPackageWith (pkgs // packages);
-      packages = {
-        linkding = callPackage ./linkding.nix { };
-        mautrix-slack = callPackage ./mautrix-slack.nix { };
-        pragmata-pro = callPackage ./pragmata-pro.nix { };
-      };
-    in
-    {
-      inherit packages;
-    };
-}
+  inputs ? import ../npins,
+  pkgs ? import inputs.nixos { config.allowUnfree = true; },
+}:
+let
+  callPackage = pkgs.lib.callPackageWith (pkgs // packages);
+  packages = {
+    homelab = callPackage ../apps/homelab/package.nix { };
+    linkding = callPackage ./linkding.nix { };
+    mautrix-slack = callPackage ./mautrix-slack.nix { };
+    pragmata-pro = callPackage ./pragmata-pro.nix { };
+  };
+in
+packages

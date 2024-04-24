@@ -1,9 +1,4 @@
-{
-  pkgs,
-  config,
-  inputs,
-  ...
-}:
+{ config, inputs, ... }:
 {
   home.sessionVariables.EDITOR = "nvim";
 
@@ -16,7 +11,9 @@
     defaultKeymap = "emacs";
     initExtra = ''
       if [ -f "$HOME/.asdf/asdf.sh" ]; then . "$HOME/.asdf/asdf.sh"; fi
-      source ${inputs.catppuccin-zsh + /themes/catppuccin_mocha-zsh-syntax-highlighting.zsh}
+      source ${
+        inputs.catppuccin-zsh-syntax-highlighting + /themes/catppuccin_mocha-zsh-syntax-highlighting.zsh
+      }
       bindkey -- "''${terminfo[kdch1]}" delete-char
     '';
   };

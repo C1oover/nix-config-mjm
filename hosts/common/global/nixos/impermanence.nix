@@ -16,7 +16,7 @@ let
   cfg = config.mjm.state;
 in
 {
-  imports = [ inputs.impermanence.nixosModules.impermanence ];
+  imports = [ "${inputs.impermanence}/nixos.nix" ];
 
   options.mjm.state = {
     enableImpermanence = mkEnableOption "impermanence";

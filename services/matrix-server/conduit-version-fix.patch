@@ -1,0 +1,14 @@
+diff --git a/nix/pkgs/main/default.nix b/nix/pkgs/main/default.nix
+index 91b775a453...ec0b135945 100644
+--- a/nix/pkgs/main/default.nix
++++ b/nix/pkgs/main/default.nix
+@@ -36,7 +36,7 @@
+     in
+     {
+       CARGO_PROFILE = profile;
+-      CONDUIT_VERSION_EXTRA = inputs.self.shortRev or inputs.self.dirtyShortRev;
++      CONDUIT_VERSION_EXTRA = inputs.self.shortRev or inputs.self.dirtyShortRev or "";
+       ROCKSDB_INCLUDE_DIR = "${rocksdb'}/include";
+       ROCKSDB_LIB_DIR = "${rocksdb'}/lib";
+     }
+

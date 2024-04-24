@@ -1,8 +1,8 @@
-{ inputs, outputs, ... }:
+{ inputs, ... }:
 {
   imports = [
-    inputs.home-manager.darwinModules.home-manager
-    inputs.agenix.darwinModules.default
+    "${inputs.home-manager}/nix-darwin"
+    "${inputs.agenix}/modules/age.nix"
 
     ./dock.nix
     ./fonts.nix
@@ -10,9 +10,9 @@
     ./keyboard.nix
     ../home-manager.nix
     ../nix.nix
-  ] ++ (builtins.attrValues outputs.darwinModules);
+  ];
 
-  nixpkgs.overlays = [ inputs.nixpkgs-firefox-darwin.overlay ];
+  nixpkgs.overlays = [ (import "${inputs.nixpkgs-firefox-darwin}/overlay.nix") ];
 
   nix.configureBuildUsers = true;
   nix.settings.trusted-users = [ "@admin" ];

@@ -4,6 +4,10 @@
   inputs,
   ...
 }:
+let
+  # FIXME find a way to be explicit about the system helix is built for
+  helix = import inputs.helix;
+in
 {
   home.sessionVariables.EDITOR = lib.mkForce "hx";
 
@@ -13,7 +17,7 @@
       enable = true;
       useItalics = true;
     };
-    package = inputs.helix.packages.${pkgs.system}.default.override {
+    package = helix.override {
       includeGrammarIf = { source, ... }: !(lib.hasPrefix "https://git.sr.ht/" source.git);
     };
     extraPackages = with pkgs; [

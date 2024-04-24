@@ -82,6 +82,7 @@ resholve.mkDerivation {
       "cannot:${colmena}/bin/colmena"
       "cannot:${rbw}/bin/rbw"
       "cannot:${nix-output-monitor}/bin/nom"
+      "cannot:${nix-output-monitor}/bin/nom-build"
       "cannot:${nvd}/bin/nvd"
     ];
   };

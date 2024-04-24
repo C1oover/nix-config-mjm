@@ -2,7 +2,6 @@
   config,
   lib,
   pkgs,
-  outputs,
   ...
 }:
 let
@@ -27,7 +26,7 @@ in
 
     services.linkding = {
       enable = true;
-      package = outputs.packages.${pkgs.system}.linkding;
+      package = (import ../../packages { inherit pkgs; }).linkding;
 
       address = "";
       port = 7090;

@@ -1,8 +1,8 @@
 { inputs, lib, ... }:
 {
   imports = [
-    inputs.hardware.nixosModules.common-pc-ssd
-    inputs.hardware.nixosModules.raspberry-pi-4
+    "${inputs.hardware}/common/pc/ssd"
+    "${inputs.hardware}/raspberry-pi/4"
   ];
 
   powerManagement.cpuFreqGovernor = "ondemand";

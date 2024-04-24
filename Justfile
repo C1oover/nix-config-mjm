@@ -5,31 +5,28 @@ alias tfp := tf-plan
 alias tfa := tf-apply
 
 rebuild *flags:
-  nix run .#rebuild -- {{flags}}
+  $(nix-build -A host-scripts --no-out-link)/bin/rebuild {{flags}}
 
 switch:
-  nix run .#switch
+  $(nix-build -A host-scripts --no-out-link)/bin/switch
 
 boot:
-  nix run .#switch -- boot
+  $(nix-build -A host-scripts --no-out-link)/bin/switch boot
 
 build target *flags:
   colmena build --on {{target}} --keep-result {{flags}}
 
 deploy target *flags:
-  nix run .#deploy -- --on {{target}} {{flags}}
-
-unseal target:
-  nix run .#unseal -- {{target}}
+  $(nix-build -A host-scripts --no-out-link)/bin/deploy --on {{target}} {{flags}}
 
 tf-clean:
   cd terraform && rm -rf .terraform.lock.hcl .terraform
 
 tf-plan:
-  nix run .#tf-plan
+  $(nix-build -A tofu-scripts --no-out-link)/bin/tf-plan
 
 tf-apply:
-  nix run .#tf-apply
+  $(nix-build -A tofu-scripts --no-out-link)/bin/tf-apply
 
 edit-secret file:
   cd secrets && agenix -e {{file}}

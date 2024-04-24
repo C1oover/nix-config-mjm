@@ -2,7 +2,6 @@
   pkgs,
   lib,
   config,
-  inputs,
   ...
 }:
 let
@@ -28,6 +27,9 @@ in
         ;
     };
 
-    home.file.".xlcore/wine-runtimes/proton8-ge".source = inputs.xiv-wine-proton8;
+    home.file.".xlcore/wine-runtimes/proton8-ge".source = pkgs.fetchzip {
+      url = "https://github.com/rankynbass/wine-ge-xiv/releases/download/xiv-Proton8-26/unofficial-wine-xiv-Proton8-26-x86_64.tar.xz";
+      hash = "sha256-lx9AWJutI8iCWA3FbcozxoTOf4zlSdHpdMljwkXUZDA=";
+    };
   };
 }

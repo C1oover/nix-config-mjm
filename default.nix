@@ -1,12 +1,13 @@
-(import
-  (
-    let
-      lock = builtins.fromJSON (builtins.readFile ./flake.lock);
-    in
-    fetchTarball {
-      url = "https://github.com/edolstra/flake-compat/archive/${lock.nodes.flake-compat.locked.rev}.tar.gz";
-      sha256 = lock.nodes.flake-compat.locked.narHash;
-    }
-  )
-  { src = ./.; }
-).defaultNix
+let
+  sources = import ./npins;
+  lib = import "${sources.nixos}/lib";
+
+  isLinux = lib.hasSuffix "-linux" builtins.currentSystem;
+  pkgs = import sources.${if isLinux then "nixos" else "nixpkgs"} { config.allowUnfree = true; };
+in
+{
+  scripts = pkgs.callPackage ./scripts { };
+  host-scripts = pkgs.callPackage ./hosts/scripts { vault = pkgs.vault-bin; };
+  inherit (import ./terraform { inherit pkgs; }) tofu-scripts;
+}
+// (import ./packages { inherit pkgs; })

@@ -1,6 +1,5 @@
 {
   pkgs,
-  outputs,
   config,
   lib,
   ...
@@ -10,7 +9,7 @@ let
 
   cfg = config.mjm.homelab;
 
-  pkg = outputs.packages.${pkgs.system}.homelab;
+  pkg = (import ../../packages { inherit pkgs; }).homelab;
   taskRc = pkgs.writeText "homelab-taskrc" ''
     data.location=$STATE_DIRECTORY/task
     taskd.ca=${../../home/matt/features/taskwarrior/ca.crt}

@@ -1,6 +1,5 @@
 {
   pkgs,
-  outputs,
   config,
   lib,
   ...
@@ -10,7 +9,7 @@ let
 
   cfg = config.mjm.matrix-server;
 
-  pkg = outputs.packages.${pkgs.system}.mautrix-slack;
+  pkg = (import ../../packages { inherit pkgs; }).mautrix-slack;
 
   configFormat = pkgs.formats.yaml { };
   configFile = configFormat.generate "mautrix-slack-config.yaml" {

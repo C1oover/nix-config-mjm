@@ -21,7 +21,14 @@
 
   nixpkgs = {
     config.allowUnfree = true;
-    overlays = [ inputs.nur.overlay ];
+    overlays = [
+      (final: prev: {
+        nur = import inputs.nur {
+          nurpkgs = prev;
+          pkgs = prev;
+        };
+      })
+    ];
   };
 
   programs.nix-index.enable = true;

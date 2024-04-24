@@ -3,14 +3,13 @@
   lib,
   pkgs,
   inputs,
-  outputs,
   ...
 }:
 {
   imports = [
-    inputs.home-manager.nixosModules.home-manager
-    inputs.agenix.nixosModules.default
-    inputs.catppuccin.nixosModules.catppuccin
+    "${inputs.home-manager}/nixos"
+    "${inputs.agenix}/modules/age.nix"
+    "${inputs.catppuccin}/modules/nixos"
 
     ../home-manager.nix
     ../nix.nix
@@ -24,7 +23,7 @@
     ./wireless.nix
 
     ../../../../services
-  ] ++ (builtins.attrValues outputs.nixosModules);
+  ] ++ (builtins.attrValues (import ../../../../modules/nixos));
 
   # hash mismatch in the go modules for vault rn
   nixpkgs.overlays = [ (final: prev: { vault = prev.vault-bin; }) ];

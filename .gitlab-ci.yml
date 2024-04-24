@@ -6,7 +6,6 @@ stages:
   - deploy
 variables:
   CONSUL_HTTP_ADDR: "consul.service.consul:8500"
-  NOMAD_ADDR: "http://nomad.service.consul:4646"
   VAULT_ADDR: "http://vault.service.consul:8200"
 deploy nixos hosts:
   tags: [nix-shell, "x86_64"]
@@ -14,16 +13,16 @@ deploy nixos hosts:
     - if: $CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"
       changes:
         - .gitlab-ci.yml
-        - flake.nix
-        - flake.lock
+        - default.nix
+        - hive.nix
+        - apps/**/*
         - home/**/*
         - hosts/**/*
-        - lib/**/*
         - modules/**/*
+        - npins/*
         - packages/**/*
         - secrets/**/*
         - services/**/*
-        - apps/**/*
   stage: deploy
   needs: []
   environment:
@@ -34,8 +33,8 @@ deploy nixos hosts:
       aud: http://vault.service.consul:8200
   # before_script: !reference [.snippets, setup_devenv]
   script:
-    - nix run .#ci-attic-login
-    - nix run .#ci-deploy
+    - $(nix-build -A host-scripts --no-out-link)/bin/ci-attic-login
+    - $(nix-build -A host-scripts --no-out-link)/bin/ci-deploy
 apply terranix changes:
   tags: [nix, x86_64]
   rules:
@@ -44,10 +43,9 @@ apply terranix changes:
         - .gitlab-ci.yml
         - apps/**/*
         - modules/apps/**/*
+        - npins/*
         - services/*/service.nix
         - terraform/**/*
-        - flake.nix
-        - flake.lock
   stage: deploy
   needs: []
   environment:
@@ -60,7 +58,7 @@ apply terranix changes:
       aud: http://vault.service.consul:8200
   before_script: !reference [.snippets, setup_devenv]
   script:
-    - nix run .#ci-terraform-apply
+    - $(nix-build -A tofu-scripts --no-out-link)/bin/ci-terraform-apply
 check for flake updates:
   tags: [nix-shell]
   rules:
@@ -68,4 +66,4 @@ check for flake updates:
   stage: check
   # before_script: !reference [.snippets, setup_devenv]
   script:
-    - nix run .#ci-flake-update
+    - $(nix-build -A scripts --no-out-link)/bin/ci-update-pins
