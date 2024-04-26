@@ -8,6 +8,20 @@ in
     mjm.postgresql.enable = true;
     mjm.state.directories = [ "/var/lib/private/invidious" ];
 
+    nixpkgs.overlays = [
+      (final: prev: {
+        invidious = prev.invidious.overrideAttrs (_oldAttrs: {
+          src = prev.fetchFromGitHub {
+            owner = "iv-org";
+            repo = "invidious";
+            fetchSubmodules = true;
+            rev = "eda7444ca46dbc3941205316baba8030fe0b2989";
+            sha256 = "sha256-YZ+uhn1ESuRTZxAMoxKCpxEaUfeCUqOrSr3LkdbrTkU=";
+          };
+        });
+      })
+    ];
+
     services.invidious = {
       enable = true;
       domain = "tube.midna.dev";
