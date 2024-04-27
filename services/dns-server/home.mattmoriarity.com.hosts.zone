@@ -6,6 +6,7 @@ nas                   IN  A     10.0.0.10
 artemis               IN  A     10.0.2.10
 apollo                IN  A     10.0.2.11
 hades                 IN  A     10.0.2.12
+demeter               IN  A     10.0.2.13
 hermes                IN  A     10.0.2.30
 daedalus              IN  A     10.0.2.31
 chaos                 IN  A     10.0.2.31
