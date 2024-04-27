@@ -30,7 +30,7 @@ in
     users.users.jellyfin.extraGroups = [ "media" ];
 
     fileSystems."/videos" = {
-      device = "//selene.home.mattmoriarity.com/media";
+      device = "//demeter.home.mattmoriarity.com/media";
       fsType = "cifs";
       options = [
         "x-systemd.automount"
