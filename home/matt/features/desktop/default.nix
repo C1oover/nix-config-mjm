@@ -32,6 +32,7 @@ in
         cider
         cinny-desktop
         element-desktop
+        picard
         sonixd
         wl-clipboard
         xclip
