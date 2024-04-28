@@ -23,6 +23,9 @@
       upstream.service.name = "invidious";
       enableAuthProxy = false;
     };
+    music = {
+      upstream.service.name = "navidrome";
+    };
   };
 
   vault.services.media-server = {

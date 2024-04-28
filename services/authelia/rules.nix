@@ -33,4 +33,9 @@
     resources = [ "^/api/.*$" ];
     policy = "bypass";
   }
+  {
+    domain = "music.midna.dev";
+    resources = [ "^/rest/.*$" ];
+    policy = "bypass";
+  }
 ]

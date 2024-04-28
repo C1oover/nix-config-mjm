@@ -12,6 +12,7 @@ in
     ./arr.nix
     ./invidious.nix
     ./jellyfin.nix
+    ./navidrome.nix
     ./sabnzbd.nix
   ];
 
