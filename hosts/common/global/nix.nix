@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ inputs, pkgs, ... }:
 {
   nix.settings = {
     experimental-features = [
@@ -30,6 +30,10 @@
       })
     ];
   };
+
+  nix.channel.enable = true;
+  nix.nixPath = [ "nixpkgs=${pkgs.path}" ];
+  nix.registry.nixpkgs.flake.outPath = pkgs.path;
 
   programs.nix-index.enable = true;
 }
