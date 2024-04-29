@@ -20,6 +20,10 @@ in
         inherit (config.services.radarr) user group;
       }
       {
+        directory = config.services.lidarr.dataDir;
+        inherit (config.services.lidarr) user group;
+      }
+      {
         directory = config.services.readarr.dataDir;
         inherit (config.services.readarr) user group;
       }
@@ -41,6 +45,12 @@ in
       openFirewall = true;
     };
     users.users.radarr.extraGroups = [ "media" ];
+
+    services.lidarr = {
+      enable = true;
+      openFirewall = true;
+    };
+    users.users.lidarr.extraGroups = [ "media" ];
 
     services.readarr = {
       enable = true;
@@ -140,6 +150,21 @@ in
         ];
       };
 
+      lidarr = {
+        port = 8686;
+
+        checks = [
+          {
+            name = "lidarr is ready";
+            http = "http://localhost:8686/";
+            interval = "15s";
+            timeout = "10s";
+            failures_before_warning = 2;
+            failures_before_critical = 6;
+          }
+        ];
+      };
+
       readarr = {
         port = 8787;
 
@@ -179,6 +204,7 @@ in
     # ffprobe
     systemd.services.radarr.path = [ pkgs.ffmpeg ];
 
+    # TODO add lidarr
     mjm.backups.mediaserver = {
       paths = [
         "/var/lib/sonarr/.config/NzbDrone"

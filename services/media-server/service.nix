@@ -13,6 +13,9 @@
     movies = {
       upstream.service.name = "radarr";
     };
+    albums = {
+      upstream.service.name = "lidarr";
+    };
     books = {
       upstream.service.name = "readarr";
     };
