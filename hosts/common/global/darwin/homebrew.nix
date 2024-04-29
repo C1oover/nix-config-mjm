@@ -12,6 +12,7 @@
       "docker"
       "element"
       "fantastical"
+      "submariner"
     ];
   };
 }
