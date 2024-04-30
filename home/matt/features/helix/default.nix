@@ -9,10 +9,9 @@ let
   helix = import inputs.helix;
 in
 {
-  home.sessionVariables.EDITOR = lib.mkForce "hx";
-
   programs.helix = {
     enable = true;
+    defaultEditor = true;
     catppuccin = {
       enable = true;
       useItalics = true;

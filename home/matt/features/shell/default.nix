@@ -3,8 +3,6 @@ let
   inherit (lib) mkMerge;
 in
 {
-  home.sessionVariables.EDITOR = "nvim";
-
   programs.zsh = {
     enable = true;
     enableCompletion = true;
