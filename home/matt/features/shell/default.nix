@@ -1,4 +1,7 @@
-{ config, inputs, ... }:
+{ inputs, lib, ... }:
+let
+  inherit (lib) mkMerge;
+in
 {
   home.sessionVariables.EDITOR = "nvim";
 
@@ -21,35 +24,17 @@
   programs.starship = {
     enable = true;
     enableZshIntegration = true;
+    catppuccin.enable = true;
+    settings = mkMerge [
+      {
+        command_timeout = 2000;
+        os.disabled = true;
+        gcloud.disabled = true;
+        docker_context.disabled = true;
+      }
+      (builtins.fromTOML (builtins.readFile ./nerd-font-symbols.toml))
+    ];
   };
-
-  # TODO catppuccin/nix
-  xdg.configFile."starship.toml".text = ''
-    format = "$all"
-    palette = "nix_colors"
-    command_timeout = 2000
-
-    [os]
-    disabled = false
-
-    [gcloud]
-    disabled = true
-
-    [docker_context]
-    disabled = true
-
-    ${builtins.readFile ./nerd-font-symbols.toml}
-
-    [palettes.nix_colors]
-    black = "#${config.colorScheme.palette.base00}"
-    white = "#${config.colorScheme.palette.base05}"
-    red = "#${config.colorScheme.palette.base08}"
-    yellow = "#${config.colorScheme.palette.base0A}"
-    green = "#${config.colorScheme.palette.base0B}"
-    cyan = "#${config.colorScheme.palette.base0C}"
-    blue = "#${config.colorScheme.palette.base0D}"
-    purple = "#${config.colorScheme.palette.base0E}"
-  '';
 
   programs.direnv = {
     enable = true;
