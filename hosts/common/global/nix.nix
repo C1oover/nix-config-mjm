@@ -31,7 +31,6 @@
     ];
   };
 
-  nix.channel.enable = true;
   nix.nixPath = [ "nixpkgs=${pkgs.path}" ];
   nix.registry.nixpkgs.flake.outPath = pkgs.path;
 
