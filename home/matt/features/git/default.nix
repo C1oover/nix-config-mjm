@@ -43,17 +43,6 @@ in
     userEmail = lib.mkDefault "matt@mattmoriarity.com";
   };
 
-  programs.zsh.plugins = [
-    {
-      name = "forgit";
-      src = "${pkgs.zsh-forgit}/share/zsh/zsh-forgit";
-    }
-  ];
-
-  programs.mr = {
-    enable = true;
-  };
-
   programs.jujutsu = {
     enable = true;
     settings = {
