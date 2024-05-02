@@ -48,18 +48,6 @@
       "url": "https://github.com/catppuccin/nix/archive/b0dc7f3181063daa6532dc5f757ded1a605dfbd5.tar.gz",
       "hash": "1ax59mbvlbnmvdqki0kvl6x274glr4ijafscxppr3bmkjgw8sy82"
     },
-    "catppuccin-zsh-syntax-highlighting": {
-      "type": "Git",
-      "repository": {
-        "type": "GitHub",
-        "owner": "catppuccin",
-        "repo": "zsh-syntax-highlighting"
-      },
-      "branch": "main",
-      "revision": "06d519c20798f0ebe275fc3a8101841faaeee8ea",
-      "url": "https://github.com/catppuccin/zsh-syntax-highlighting/archive/06d519c20798f0ebe275fc3a8101841faaeee8ea.tar.gz",
-      "hash": "1yj916klvzpvwghii7m6qx2ya3p2kx25nydymilvjzbx8z0sdcj3"
-    },
     "conduit": {
       "type": "GitRelease",
       "repository": {
