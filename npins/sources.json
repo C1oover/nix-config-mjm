@@ -161,6 +161,30 @@
       "url": "https://api.github.com/repos/nix-community/lanzaboote/tarball/v0.3.0",
       "hash": "1ysq47isagsdaisni4sbhhmbmihbhpgxj8lnzxl4kgfx2iwm7ghm"
     },
+    "lix": {
+      "type": "GitRelease",
+      "repository": {
+        "type": "Git",
+        "url": "https://git.lix.systems/lix-project/lix"
+      },
+      "pre_releases": true,
+      "version_upper_bound": null,
+      "version": "2.90-beta.1",
+      "revision": "b6799ab0374a8e1907a48915d3187e07da41d88c",
+      "url": null,
+      "hash": "0d0dbn08pmrf7zlkihiyagcpy9ywdr14r6brqrjg47aqcjisaia4"
+    },
+    "lix-module": {
+      "type": "Git",
+      "repository": {
+        "type": "Git",
+        "url": "https://git.lix.systems/lix-project/nixos-module"
+      },
+      "branch": "main",
+      "revision": "e31baf57680bab449ab5b40179cc4a08a99f5314",
+      "url": null,
+      "hash": "1qpgq280lsfiafq2sha8ln8jv7cdn4lfp3pjij9bqsmf369wdns3"
+    },
     "nix-colors": {
       "type": "Git",
       "repository": {

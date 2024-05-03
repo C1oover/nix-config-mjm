@@ -1,5 +1,11 @@
 { inputs, pkgs, ... }:
+let
+  lix-module = import "${inputs.lix-module}/module.nix" { inherit (inputs) lix; };
+in
 {
+
+  imports = [ lix-module ];
+
   nix.settings = {
     experimental-features = [
       "nix-command"
