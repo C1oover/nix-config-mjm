@@ -38,6 +38,23 @@ in
         [Xwayland]
         Scale=1.25
       '';
+
+      # not sure if this one is safe, particularly with the indices for Containments
+      # plasma-org.kde.plasma.desktop-appletsrc = pkgs.writeText "appletsrc" ''
+      #   [Containments][1][Wallpaper][org.kde.image][General]
+      #   Image=/run/current-system/sw/share/wallpapers/MilkyWay/
+      #   PreviewImage=/run/current-system/sw/share/wallpapers/MilkyWay/
+
+      #   [Containments][2][Wallpaper][org.kde.image][General]
+      #   Image=/run/current-system/sw/share/wallpapers/MilkyWay/
+      #   PreviewImage=/run/current-system/sw/share/wallpapers/MilkyWay/
+      # '';
+
+      kscreenlockerrc = pkgs.writeText "kscreenlockerrc" ''
+        [Greeter][Wallpaper][org.kde.image][General]
+        Image=/run/current-system/sw/share/wallpapers/MilkyWay/
+        PreviewImage=/run/current-system/sw/share/wallpapers/MilkyWay/
+      '';
     };
 
     xdg.systemDirs.config = [ "${config.xdg.configHome}/kdeconfig" ];
