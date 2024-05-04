@@ -68,10 +68,10 @@
       },
       "pre_releases": false,
       "version_upper_bound": null,
-      "version": "v0.3.0",
-      "revision": "341bafb91e77cd95775d9cfa4f0810309889b176",
+      "version": "v0.3.1",
+      "revision": "42e3567153f20ace6f287d46fff2d7c070b68840",
       "url": null,
-      "hash": "0cpv17by8mgb6xc56qwqwlgcmmbfjc687dgz1cvxxn3jmzf9j7vb"
+      "hash": "1mldradabx597g99ca24907ccnv2a7pi36x75d6hqgcafl3fgqkk"
     },
     "darwin": {
       "type": "Git",

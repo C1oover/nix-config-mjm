@@ -13,7 +13,12 @@ let
   conduit-patched = pkgs.applyPatches {
     name = "conduit-patched";
     src = inputs.conduit;
-    patches = [ ./conduit-version-fix.patch ];
+    patches = [
+      (pkgs.fetchpatch {
+        url = "https://github.com/girlbossceo/conduwuit/pull/334.diff";
+        hash = "sha256-Gi2F19KSd4RGy2BULh5lPZxltJALrEmLOH5jXrXUZ+Q=";
+      })
+    ];
   };
 
   pkg = (import conduit-patched).packages.${pkgs.system}.default;
