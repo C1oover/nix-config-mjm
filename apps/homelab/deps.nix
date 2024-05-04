@@ -292,15 +292,6 @@ let
       };
 
       beamDeps = [ acceptor_pool chatterbox ctx gproc ];
-
-      unpackPhase = ''
-        runHook preUnpack
-        unpackFile "$src"
-        chmod -R u+w -- hex-source-grpcbox-0.17.1
-        mv hex-source-grpcbox-0.17.1 grpcbox
-        sourceRoot=grpcbox
-        runHook postUnpack
-      '';
     };
 
     hackney = buildRebar3 rec {
