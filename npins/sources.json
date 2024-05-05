@@ -107,9 +107,9 @@
         "repo": "nixos-hardware"
       },
       "branch": "master",
-      "revision": "3f017311191fe6d501ca2496a835d012f656ee9c",
-      "url": "https://github.com/NixOS/nixos-hardware/archive/3f017311191fe6d501ca2496a835d012f656ee9c.tar.gz",
-      "hash": "12q3hynch2l9jp6z6fkjdzdxkmaizic8rq15p4s39yhcaznv1p15"
+      "revision": "d623635bb7d9262c0422af8f74599c6b3cf60180",
+      "url": "https://github.com/NixOS/nixos-hardware/archive/d623635bb7d9262c0422af8f74599c6b3cf60180.tar.gz",
+      "hash": "00mdpifk2jk5ilx57075zwgs9an7w2a5zwknh6y3kfma6c9ard3p"
     },
     "helix": {
       "type": "Git",
@@ -176,8 +176,8 @@
     "nixos": {
       "type": "Channel",
       "name": "nixos-unstable",
-      "url": "https://releases.nixos.org/nixos/unstable/nixos-24.05pre619660.63c3a29ca824/nixexprs.tar.xz",
-      "hash": "05rnnwahlws41jsfwg8yji84g83dl0yni0ngv6l4fqkm4vi3bm6g"
+      "url": "https://releases.nixos.org/nixos/unstable/nixos-24.05pre621195.e9be42459999/nixexprs.tar.xz",
+      "hash": "074ck88i1sn9lbnbz82aqvhf7w6mvq39qjmsc5nj50rjdgc061g0"
     },
     "nixpkgs": {
       "type": "Channel",
@@ -205,9 +205,9 @@
         "repo": "NUR"
       },
       "branch": "master",
-      "revision": "ec864fb92873aa278e16dc75e3c1a2e72c3e2ea8",
-      "url": "https://github.com/nix-community/NUR/archive/ec864fb92873aa278e16dc75e3c1a2e72c3e2ea8.tar.gz",
-      "hash": "0l7gz828grdw3aj291lkmsl0vcc496y3gkx3qiw111nxgbj41pjy"
+      "revision": "78c731882ebc6494bca2b254207560dc4db5ada7",
+      "url": "https://github.com/nix-community/NUR/archive/78c731882ebc6494bca2b254207560dc4db5ada7.tar.gz",
+      "hash": "1p4k2vxcnmjm0qjf8x760y830alsagyn975mak0nk27niym4k08b"
     },
     "terranix": {
       "type": "GitRelease",
