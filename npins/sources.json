@@ -119,9 +119,9 @@
         "repo": "helix"
       },
       "branch": "master",
-      "revision": "61818996c63cb752afb817259a90108f884db1cb",
-      "url": "https://github.com/helix-editor/helix/archive/61818996c63cb752afb817259a90108f884db1cb.tar.gz",
-      "hash": "0gdw6ihg886wsjfqydcibaaiv2czrv2cy2z3s7nnbz03yck070gw"
+      "revision": "e16a4f8a2cc37f07c274c70c1bdcf03c70e61eec",
+      "url": "https://github.com/helix-editor/helix/archive/e16a4f8a2cc37f07c274c70c1bdcf03c70e61eec.tar.gz",
+      "hash": "0izkpljdln2lgfxipczfgzb95794mix1raw7sqckydq6bjl8js2x"
     },
     "home-manager": {
       "type": "Git",

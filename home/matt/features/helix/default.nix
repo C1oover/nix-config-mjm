@@ -5,18 +5,7 @@
   ...
 }:
 let
-  # TODO remove if PR is merged
-  helix-patched = pkgs.applyPatches {
-    name = "helix-patched";
-    src = inputs.helix;
-    patches = [
-      (pkgs.fetchpatch {
-        url = "https://patch-diff.githubusercontent.com/raw/helix-editor/helix/pull/10673.diff";
-        hash = "sha256-xyWenNs2uPWDRXytkzyXMxV3aWEjwYOuCL5nCnByLu4=";
-      })
-    ];
-  };
-  helix = (import helix-patched).packages.${pkgs.system}.default;
+  helix = (import inputs.helix).packages.${pkgs.system}.default;
 in
 {
   programs.helix = {
