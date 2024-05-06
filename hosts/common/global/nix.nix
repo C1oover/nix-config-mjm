@@ -36,7 +36,6 @@ in
       })
       (final: prev: {
         attic-client = prev.attic-client.override { nix = final.nixVersions.nix_2_18_upstream; };
-        attic-server = prev.attic-server.override { nix = final.nixVersions.nix_2_18_upstream; };
       })
     ];
   };
