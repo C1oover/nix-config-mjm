@@ -33,8 +33,8 @@ deploy nixos hosts:
       aud: http://vault.service.consul:8200
   # before_script: !reference [.snippets, setup_devenv]
   script:
-    - $(nix-build -A host-scripts --no-out-link)/bin/ci-attic-login
-    - $(nix-build -A host-scripts --no-out-link)/bin/ci-deploy
+    - nix run -f . ci-attic-login
+    - nix run -f . ci-deploy
 apply terranix changes:
   tags: [nix, x86_64]
   rules:
@@ -58,7 +58,7 @@ apply terranix changes:
       aud: http://vault.service.consul:8200
   before_script: !reference [.snippets, setup_devenv]
   script:
-    - $(nix-build -A tofu-scripts --no-out-link)/bin/ci-terraform-apply
+    - nix run -f . ci-terraform-apply
 check for flake updates:
   tags: [nix-shell]
   rules:
@@ -66,4 +66,4 @@ check for flake updates:
   stage: check
   # before_script: !reference [.snippets, setup_devenv]
   script:
-    - $(nix-build -A scripts --no-out-link)/bin/ci-update-pins
+    - nix run -f . ci-update-pins

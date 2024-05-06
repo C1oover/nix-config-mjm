@@ -30,4 +30,6 @@ resholve.mkDerivation {
       "cannot:${git}/bin/git"
     ];
   };
+
+  passthru.scripts = [ "ci-update-pins" ];
 }
