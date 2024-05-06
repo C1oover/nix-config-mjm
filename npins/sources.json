@@ -107,9 +107,9 @@
         "repo": "nixos-hardware"
       },
       "branch": "master",
-      "revision": "753176b57b3fcddb140c1c012868e62c025120bd",
-      "url": "https://github.com/NixOS/nixos-hardware/archive/753176b57b3fcddb140c1c012868e62c025120bd.tar.gz",
-      "hash": "1wgh1pcqc2c7lfj62z1vzvwrx9l24hq4havfxzr5g2wmb8hvcvrc"
+      "revision": "d1659c9eb8af718118fb4bbe2c86797c8b8623eb",
+      "url": "https://github.com/NixOS/nixos-hardware/archive/d1659c9eb8af718118fb4bbe2c86797c8b8623eb.tar.gz",
+      "hash": "15yw8p3sgpmr9qpwr1spllqi42r1hirzqbzj1q7ik0713yyn2rqn"
     },
     "helix": {
       "type": "Git",
@@ -119,9 +119,9 @@
         "repo": "helix"
       },
       "branch": "master",
-      "revision": "e16a4f8a2cc37f07c274c70c1bdcf03c70e61eec",
-      "url": "https://github.com/helix-editor/helix/archive/e16a4f8a2cc37f07c274c70c1bdcf03c70e61eec.tar.gz",
-      "hash": "0izkpljdln2lgfxipczfgzb95794mix1raw7sqckydq6bjl8js2x"
+      "revision": "beb5afcbef9f102c209de7aa32f126ded9dda515",
+      "url": "https://github.com/helix-editor/helix/archive/beb5afcbef9f102c209de7aa32f126ded9dda515.tar.gz",
+      "hash": "097iiavnx5b0s9z7psq4sy3xzda3v864zwnxlxj2bg7v99rn0izg"
     },
     "home-manager": {
       "type": "Git",
@@ -131,9 +131,9 @@
         "repo": "home-manager"
       },
       "branch": "master",
-      "revision": "3dfe05aa9b5646995ace887931fa60269a039777",
-      "url": "https://github.com/nix-community/home-manager/archive/3dfe05aa9b5646995ace887931fa60269a039777.tar.gz",
-      "hash": "1s92spka9kf4i3k8q9vflan9rm1vwb8bnrqacsvd5c5216d4nyj1"
+      "revision": "6ebe7be2e67be7b9b54d61ce5704f6fb466c536f",
+      "url": "https://github.com/nix-community/home-manager/archive/6ebe7be2e67be7b9b54d61ce5704f6fb466c536f.tar.gz",
+      "hash": "1rlhl2dq04z5mk0fv91cz8560rk43fjmlgb05b4ji349a3dx8zvg"
     },
     "impermanence": {
       "type": "Git",
@@ -181,9 +181,9 @@
         "url": "https://git.lix.systems/lix-project/nixos-module"
       },
       "branch": "main",
-      "revision": "e31baf57680bab449ab5b40179cc4a08a99f5314",
+      "revision": "10e849bdce7e2751b731d2dade2a97d8878ab647",
       "url": null,
-      "hash": "1qpgq280lsfiafq2sha8ln8jv7cdn4lfp3pjij9bqsmf369wdns3"
+      "hash": "0wlis776ywqssx88570a9flhck39ddjkh1n26dkj0ifypww461ak"
     },
     "nix-colors": {
       "type": "Git",
@@ -206,8 +206,8 @@
     "nixpkgs": {
       "type": "Channel",
       "name": "nixpkgs-unstable",
-      "url": "https://releases.nixos.org/nixpkgs/nixpkgs-24.05pre622008.ee4a6e0f566f/nixexprs.tar.xz",
-      "hash": "0pa8g6a8xg03pbqc98vm36cffjpk5ihmfa43vms86zb4xc1hq1n4"
+      "url": "https://releases.nixos.org/nixpkgs/nixpkgs-24.05pre622348.dd1290b0f857/nixexprs.tar.xz",
+      "hash": "1zqis3s02g0a8vzmz9v75ljb6zpipc279p3y9zv2mks64jq7ghra"
     },
     "nixpkgs-firefox-darwin": {
       "type": "Git",
@@ -217,9 +217,9 @@
         "repo": "nixpkgs-firefox-darwin"
       },
       "branch": "main",
-      "revision": "7e9014891eebabffa68351e3360da3fbc59b8066",
-      "url": "https://github.com/bandithedoge/nixpkgs-firefox-darwin/archive/7e9014891eebabffa68351e3360da3fbc59b8066.tar.gz",
-      "hash": "079vmb4ajqn2a37x4wlx0lx5ajzqy0rj7ybpmfp6c323klfhqc4i"
+      "revision": "8865626353ac6729c0b27213862d68cf3229a572",
+      "url": "https://github.com/bandithedoge/nixpkgs-firefox-darwin/archive/8865626353ac6729c0b27213862d68cf3229a572.tar.gz",
+      "hash": "01r0wlv1i77lqcllzlkwkm0vdcmdpwm7r7xr072gkppva9knl4sa"
     },
     "nur": {
       "type": "Git",
@@ -229,9 +229,9 @@
         "repo": "NUR"
       },
       "branch": "master",
-      "revision": "1da664fdb786f4536b209f252b68860777e5a6b6",
-      "url": "https://github.com/nix-community/NUR/archive/1da664fdb786f4536b209f252b68860777e5a6b6.tar.gz",
-      "hash": "0zbcnprp1fhb5s5w17nfzx4vf6zq0ajini5qs8zkjf741j2rj9af"
+      "revision": "590b4fc898660027bfa5baf09cebb0dc87f49ed5",
+      "url": "https://github.com/nix-community/NUR/archive/590b4fc898660027bfa5baf09cebb0dc87f49ed5.tar.gz",
+      "hash": "1hhdpl43q53fa4151qmiqa36gysbz6j12iwfilrr61ki2qd39k0z"
     },
     "terranix": {
       "type": "GitRelease",
