@@ -181,9 +181,9 @@
         "url": "https://git.lix.systems/lix-project/nixos-module"
       },
       "branch": "main",
-      "revision": "10e849bdce7e2751b731d2dade2a97d8878ab647",
+      "revision": "aaf759cd93d1946336247808e7551df714cfd332",
       "url": null,
-      "hash": "0wlis776ywqssx88570a9flhck39ddjkh1n26dkj0ifypww461ak"
+      "hash": "13405rcmbvkwmw4yfikv9g0d35rmckybnb8ic9xcrwjchcb5n9hc"
     },
     "nix-colors": {
       "type": "Git",
@@ -206,8 +206,8 @@
     "nixpkgs": {
       "type": "Channel",
       "name": "nixpkgs-unstable",
-      "url": "https://releases.nixos.org/nixpkgs/nixpkgs-24.05pre622348.dd1290b0f857/nixexprs.tar.xz",
-      "hash": "1zqis3s02g0a8vzmz9v75ljb6zpipc279p3y9zv2mks64jq7ghra"
+      "url": "https://releases.nixos.org/nixpkgs/nixpkgs-24.05pre622558.860e65d27036/nixexprs.tar.xz",
+      "hash": "0pw1q0znx7fkw6qr6wwpd0lidsmw85h7rh6digh69zbdqgbw0834"
     },
     "nixpkgs-firefox-darwin": {
       "type": "Git",
@@ -217,9 +217,9 @@
         "repo": "nixpkgs-firefox-darwin"
       },
       "branch": "main",
-      "revision": "8865626353ac6729c0b27213862d68cf3229a572",
-      "url": "https://github.com/bandithedoge/nixpkgs-firefox-darwin/archive/8865626353ac6729c0b27213862d68cf3229a572.tar.gz",
-      "hash": "01r0wlv1i77lqcllzlkwkm0vdcmdpwm7r7xr072gkppva9knl4sa"
+      "revision": "70c027573463dee385fb12b139996a13650c065a",
+      "url": "https://github.com/bandithedoge/nixpkgs-firefox-darwin/archive/70c027573463dee385fb12b139996a13650c065a.tar.gz",
+      "hash": "0mn5pkmky308xlzw8a3469xfb4q4v0ry6gzpf595h3i1dbdn6imr"
     },
     "nur": {
       "type": "Git",
