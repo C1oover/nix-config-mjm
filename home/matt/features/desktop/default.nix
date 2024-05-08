@@ -34,6 +34,7 @@ in
         element-desktop
         picard
         sonixd
+        strawberry-qt6
         wl-clipboard
         xclip
         xdg-utils
