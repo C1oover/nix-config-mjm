@@ -45,6 +45,7 @@ apply terranix changes:
         - modules/apps/**/*
         - npins/*
         - services/*/service.nix
+        - services/*/service/**/*
         - terraform/**/*
   stage: deploy
   needs: []
