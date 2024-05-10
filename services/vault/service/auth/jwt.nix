@@ -28,8 +28,6 @@
     user_claim = "user_email";
     bound_claims = {
       project_id = "30";
-      ref = "main";
-      ref_type = "branch";
     };
   };
 }
