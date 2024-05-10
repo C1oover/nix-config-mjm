@@ -21,6 +21,7 @@ let
     "ci-attic-login"
     "deploy"
     "ci-deploy"
+    "ci-build"
   ];
   allScripts = scripts ++ [
     "rebuild"

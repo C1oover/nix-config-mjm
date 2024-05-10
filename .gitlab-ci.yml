@@ -7,6 +7,30 @@ stages:
 variables:
   CONSUL_HTTP_ADDR: "consul.service.consul:8500"
   VAULT_ADDR: "http://vault.service.consul:8200"
+build nixos hosts:
+  tags: [nix-shell, "x86_64"]
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - .gitlab-ci.yml
+        - default.nix
+        - hive.nix
+        - apps/**/*
+        - home/**/*
+        - hosts/**/*
+        - modules/**/*
+        - npins/*
+        - packages/**/*
+        - secrets/**/*
+        - services/**/*
+  stage: check
+  needs: []
+  id_tokens:
+    VAULT_ID_TOKEN:
+      aud: http://vault.service.consul:8200
+  script:
+    - nix run -f . ci-attic-login
+    - nix run -f . ci-build
 deploy nixos hosts:
   tags: [nix-shell, "x86_64"]
   rules:
