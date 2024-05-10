@@ -24,7 +24,12 @@ in
       };
     };
 
-    systemd.services.navidrome.serviceConfig.SupplementaryGroups = [ "media" ];
+    systemd.services.navidrome = {
+      # navidrome won't start without the music folder existing
+      wants = [ "videos.mount" ];
+      after = [ "videos.mount" ];
+      serviceConfig.SupplementaryGroups = [ "media" ];
+    };
 
     services.consul.services.navidrome = {
       port = config.services.navidrome.settings.Port;
