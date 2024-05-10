@@ -10,7 +10,7 @@ in
 {
   home.packages = builtins.attrValues {
     inherit git-scripts;
-    inherit (pkgs) git-credential-manager watchman;
+    inherit (pkgs) glab git-credential-manager watchman;
   };
 
   programs.git = {
