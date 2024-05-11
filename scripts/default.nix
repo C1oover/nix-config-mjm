@@ -1,35 +1,31 @@
 {
-  bash,
-  resholve,
-  curl,
-  jq,
+  lib,
+  stdenvNoCC,
+  nushell,
+  makeWrapper,
   npins,
   git,
 }:
-resholve.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "scripts";
   version = "0.0.1";
 
   src = ./.;
 
-  installPhase = ''
-    install -Dv ci-update-pins.sh $out/bin/ci-update-pins
-  '';
+  nativeBuildInputs = [ makeWrapper ];
 
-  solutions.default = {
-    scripts = [ "bin/ci-update-pins" ];
-    interpreter = "${bash}/bin/bash";
-    inputs = [
-      curl
-      jq
-      npins
-      git
-    ];
-    execer = [
-      "cannot:${npins}/bin/npins"
-      "cannot:${git}/bin/git"
-    ];
-  };
+  buildInputs = [ nushell ];
+
+  installPhase = ''
+    install -Dv ci-update-pins.nu $out/bin/ci-update-pins
+    wrapProgram $out/bin/ci-update-pins \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          npins
+          git
+        ]
+      }
+  '';
 
   passthru.scripts = [ "ci-update-pins" ];
 }
