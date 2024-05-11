@@ -51,5 +51,6 @@ curl "$CI_API_V4_URL/projects/$CI_PROJECT_ID/merge_requests" \
   -H "Authorization: Bearer $PINS_UPDATE_TOKEN" \
   --form "source_branch=npins-update" \
   --form "target_branch=main" \
-  --form "title=npins%20update" \
-  --form "assignee_id=2"
+  --form "title=npins update" \
+  --form "assignee_id=2" \
+  --form "remove_source_branch=true"
