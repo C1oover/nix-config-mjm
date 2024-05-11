@@ -43,7 +43,7 @@ git config user.name "GitLab Automation"
 git add npins/sources.json
 git commit -m "npins update"
 git remote add gitlab "https://ci:$PINS_UPDATE_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git" || true
-git push -f gitlab HEAD:npins-update
+git push -f gitlab HEAD:refs/heads/npins-update
 
 echo "creating merge request..."
 curl "$CI_API_V4_URL/projects/$CI_PROJECT_ID/merge_requests" \
