@@ -49,4 +49,7 @@ echo "creating merge request..."
 curl "$CI_API_V4_URL/projects/$CI_PROJECT_ID/merge_requests" \
   -X POST \
   -H "Authorization: Bearer $PINS_UPDATE_TOKEN" \
-  -d "{\"source_branch\":\"npins-update\",\"target_branch\":\"main\",\"title\":\"npins update\",\"assignee_id\":2}"
+  --form "source_branch=npins-update" \
+  --form "target_branch=main" \
+  --form "title=npins%20update" \
+  --form "assignee_id=2"
