@@ -2,8 +2,9 @@
 
 use helpers.nu *
 
-def main [...args] {
-  link-tf-config
-  tofu init
-  tofu apply ...$args
+def --wrapped main [...args] {
+  with-tofu {
+    tofu init
+    tofu apply ...$args
+  }
 }

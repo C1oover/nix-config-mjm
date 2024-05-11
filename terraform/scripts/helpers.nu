@@ -1,10 +1,11 @@
-export def link-tf-config [] {
+def link-tf-config [] {
   ln -sf $env.TF_CONFIG terraform/config.tf.json
 }
 
-export def tofu [...args] {
+export def with-tofu [block] {
+  link-tf-config
   cd terraform
-  ^tofu ...$args
+  do $block
 }
 
 export def with-vault [block] {

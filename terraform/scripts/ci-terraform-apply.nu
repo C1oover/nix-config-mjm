@@ -3,7 +3,8 @@
 use helpers.nu *
 
 with-vault {
-  link-tf-config
-  tofu init
-  tofu apply -auto-approve
+  with-tofu {
+    tofu init
+    tofu apply -auto-approve
+  }
 }
