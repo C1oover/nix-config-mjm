@@ -11,6 +11,7 @@ let
   scripts = [
     "tf-plan"
     "tf-apply"
+    "ci-terraform-plan"
     "ci-terraform-apply"
   ];
 in
@@ -23,11 +24,9 @@ resholve.mkDerivation {
   installPhase = ''
     sed -i '1i TF_CONFIG="${terraformConfiguration}"' functions.sh
     install -Dv functions.sh $out/functions.sh
-    ${lib.concatMapStrings
-      (script: ''
-        install -Dv ${script}.sh $out/bin/${script}
-      '')
-      scripts}
+    ${lib.concatMapStrings (script: ''
+      install -Dv ${script}.sh $out/bin/${script}
+    '') scripts}
   '';
 
   passthru.scripts = scripts;

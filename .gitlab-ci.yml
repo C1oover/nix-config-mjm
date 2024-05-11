@@ -1,6 +1,26 @@
 .snippets:
   setup_devenv:
     - . "$HOME/.nix-profile/etc/profile.d/nix.sh"
+  nixos_changes:
+    - .gitlab-ci.yml
+    - default.nix
+    - hive.nix
+    - apps/**/*
+    - home/**/*
+    - hosts/**/*
+    - modules/**/*
+    - npins/*
+    - packages/**/*
+    - secrets/**/*
+    - services/**/*
+  tofu_changes:
+    - .gitlab-ci.yml
+    - apps/**/*
+    - modules/apps/**/*
+    - npins/*
+    - services/*/service.nix
+    - services/*/service/**/*
+    - terraform/**/*
 stages:
   - check
   - deploy
@@ -11,18 +31,7 @@ build nixos hosts:
   tags: [nix-shell, "x86_64"]
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      changes:
-        - .gitlab-ci.yml
-        - default.nix
-        - hive.nix
-        - apps/**/*
-        - home/**/*
-        - hosts/**/*
-        - modules/**/*
-        - npins/*
-        - packages/**/*
-        - secrets/**/*
-        - services/**/*
+      changes: !reference [.snippets, nixos_changes]
   stage: check
   needs: []
   id_tokens:
@@ -35,18 +44,7 @@ deploy nixos hosts:
   tags: [nix-shell, "x86_64"]
   rules:
     - if: $CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"
-      changes:
-        - .gitlab-ci.yml
-        - default.nix
-        - hive.nix
-        - apps/**/*
-        - home/**/*
-        - hosts/**/*
-        - modules/**/*
-        - npins/*
-        - packages/**/*
-        - secrets/**/*
-        - services/**/*
+      changes: !reference [.snippets, nixos_changes]
   stage: deploy
   needs: []
   environment:
@@ -59,18 +57,26 @@ deploy nixos hosts:
   script:
     - nix run -f . ci-attic-login
     - nix run -f . ci-deploy
+build tofu changes:
+  tags: [nix, x86_64]
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes: !reference [.snippets, tofu_changes]
+  stage: check
+  needs: []
+  variables:
+    TF_PLUGIN_CACHE_MAY_BREAK_DEPENDENCY_LOCK_FILE: "yes"
+  id_tokens:
+    VAULT_ID_TOKEN:
+      aud: http://vault.service.consul:8200
+  before_script: !reference [.snippets, setup_devenv]
+  script:
+    - nix run -f . ci-terraform-plan
 apply terranix changes:
   tags: [nix, x86_64]
   rules:
     - if: $CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"
-      changes:
-        - .gitlab-ci.yml
-        - apps/**/*
-        - modules/apps/**/*
-        - npins/*
-        - services/*/service.nix
-        - services/*/service/**/*
-        - terraform/**/*
+      changes: !reference [.snippets, tofu_changes]
   stage: deploy
   needs: []
   environment:
