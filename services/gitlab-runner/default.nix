@@ -106,7 +106,6 @@ in
             "nix-shell"
             pkgs.stdenv.hostPlatform.linuxArch
           ];
-          protected = true;
         };
       };
     };
