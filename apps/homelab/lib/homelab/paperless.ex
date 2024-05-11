@@ -1,16 +1,10 @@
 defmodule Homelab.Paperless do
-  def list_documents_by_tag(tag, opts \\ []) do
-    opts =
-      opts
-      |> Keyword.put(:tags__name__iexact, tag)
-      |> Keyword.put_new(:page_size, 200)
+  def count_documents_by_tag(tag, opts \\ []) do
+    opts = Keyword.put(opts, :tags__name__iexact, tag)
 
-    case Tesla.get(client(), "/api/documents/", opts: [path_params: []], query: opts) do
-      {:ok, %{body: %{"results" => results}}} ->
-        {:ok, results}
-
-      {:error, err} ->
-        {:error, err}
+    with {:ok, %{body: %{"count" => count}}} <-
+           Tesla.get(client(), "/api/documents/", opts: [path_params: []], query: opts) do
+      {:ok, count}
     end
   end
 

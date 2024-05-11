@@ -18,10 +18,10 @@
 
     <.stat_card title="Paperless inbox">
       <:icon><.icon name="hero-document-text" class="h-6 w-6" /></:icon>
-      <.async_result :let={docs} assign={@inbox_docs}>
+      <.async_result :let={count} assign={@inbox_docs_count}>
         <:loading>Loading documents...</:loading>
         <:failed>Couldn't load documents.</:failed>
-        <%= Enum.count(docs) %> document<%= if Enum.count(docs) != 1, do: "s" %>
+        <%= count %> document<%= if count != 1, do: "s" %>
       </.async_result>
       <:link href="https://paper.midna.dev/view/1" target="_blank">
         View inbox documents

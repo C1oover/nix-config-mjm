@@ -17,9 +17,9 @@ defmodule HomelabWeb.HomeLive.Index do
   end
 
   defp assign_inbox_docs(socket) do
-    assign_async(socket, :inbox_docs, fn ->
-      with {:ok, docs} <- Homelab.Paperless.list_documents_by_tag("inbox") do
-        {:ok, %{inbox_docs: docs}}
+    assign_async(socket, :inbox_docs_count, fn ->
+      with {:ok, count} <- Homelab.Paperless.count_documents_by_tag("inbox") do
+        {:ok, %{inbox_docs_count: count}}
       end
     end)
   end
