@@ -1,7 +1,8 @@
 {
   lib,
-  bash,
-  resholve,
+  stdenvNoCC,
+  makeWrapper,
+  nushell,
   coreutils,
   vault,
   opentofu,
@@ -15,33 +16,34 @@ let
     "ci-terraform-apply"
   ];
 in
-resholve.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "tofu-scripts";
   version = "0.0.1";
 
   src = ./.;
 
+  nativeBuildInputs = [ makeWrapper ];
+
+  buildInputs = [ nushell ];
+
   installPhase = ''
-    sed -i '1i TF_CONFIG="${terraformConfiguration}"' functions.sh
-    install -Dv functions.sh $out/functions.sh
+    install -Dv helpers.nu $out/libexec/nu/helpers.nu
+
     ${lib.concatMapStrings (script: ''
-      install -Dv ${script}.sh $out/bin/${script}
+      install -Dv ${script}.nu $out/bin/${script}
+      sed -i "1c\\#!${nushell}/bin/nu --env-config \'\' -I $out/libexec/nu" $out/bin/${script}
+
+      wrapProgram $out/bin/${script} \
+        --set TF_CONFIG ${terraformConfiguration} \
+        --prefix PATH : ${
+          lib.makeBinPath [
+            coreutils
+            opentofu
+            vault
+          ]
+        }
     '') scripts}
   '';
 
   passthru.scripts = scripts;
-
-  solutions.default = {
-    scripts = [ "functions.sh" ] ++ (map (script: "bin/${script}") scripts);
-    interpreter = "${bash}/bin/bash";
-    inputs = [
-      coreutils
-      vault
-      opentofu
-    ];
-    execer = [
-      "cannot:${vault}/bin/vault"
-      "cannot:${opentofu}/bin/tofu"
-    ];
-  };
 }
