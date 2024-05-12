@@ -6,6 +6,8 @@
     ../common/global/nixos
   ];
 
+  deployment.rebootPhase = null;
+
   networking.hostName = "cronus";
 
   # Supress systemd units that don't work because of LXC
