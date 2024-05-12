@@ -1,14 +1,13 @@
 {
   lib,
-  stdenv,
-  bash,
-  resholve,
+  stdenvNoCC,
+  nushell,
+  makeWrapper,
   coreutils,
   openssh,
   vault,
   attic-client,
   colmena,
-  rbw,
   nix-output-monitor,
   nvd,
   nettools,
@@ -17,74 +16,57 @@
 }:
 let
   scripts = [
-    "unseal"
     "ci-attic-login"
     "deploy"
     "ci-deploy"
     "ci-build"
   ];
-  allScripts = scripts ++ [
+  variantScripts = [
     "rebuild"
     "switch"
   ];
-  variant = if stdenv.isLinux then "linux" else "darwin";
+  allScripts = scripts ++ variantScripts;
+  variant = if stdenvNoCC.isLinux then "linux" else "darwin";
+
+  installScript = name: src: ''
+    install -Dv ${src} $out/bin/${name}
+    sed -i "1c\\#!${nushell}/bin/nu --env-config \'\' -I $out/libexec/nu" $out/bin/${name}
+
+    wrapProgram $out/bin/${name} \
+      --prefix PATH : ${
+        lib.makeBinPath (
+          [
+            coreutils
+            openssh
+            vault
+            attic-client
+            colmena
+            nix-output-monitor
+            nvd
+            nix
+          ]
+          ++ lib.optionals stdenvNoCC.isLinux [
+            nettools
+            systemd
+          ]
+        )
+      }
+  '';
 in
-resholve.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "host-scripts";
   version = "0.0.1";
 
   src = ./.;
 
+  nativeBuildInputs = [ makeWrapper ];
+
   installPhase = ''
-    install -Dv functions.sh $out/functions.sh
-    ${lib.concatMapStrings (script: ''
-      install -Dv ${script}.sh $out/bin/${script}
-    '') scripts}
-    ${lib.concatMapStrings
-      (script: ''
-        install -Dv ${script}.${variant}.sh $out/bin/${script}
-      '')
-      [
-        "rebuild"
-        "switch"
-      ]
-    }
+    install -Dv helpers.nu $out/libexec/nu/helpers.nu
+
+    ${lib.concatMapStrings (script: installScript script "${script}.nu") scripts}
+    ${lib.concatMapStrings (script: installScript script "${script}.${variant}.nu") variantScripts}
   '';
 
   passthru.scripts = allScripts;
-
-  solutions.default = {
-    scripts = [ "functions.sh" ] ++ (map (script: "bin/${script}") allScripts);
-    interpreter = "${bash}/bin/bash";
-    inputs =
-      [
-        coreutils
-        openssh
-        vault
-        attic-client
-        colmena
-        rbw
-        nix-output-monitor
-        nvd
-        nix
-      ]
-      ++ lib.optionals stdenv.isLinux [
-        nettools
-        systemd
-      ];
-    fake.external = [
-      "sudo"
-      "scutil"
-    ];
-    keep."$PWD" = true;
-    execer = [
-      "cannot:${vault}/bin/vault"
-      "cannot:${openssh}/bin/ssh-keygen"
-      "cannot:${colmena}/bin/colmena"
-      "cannot:${rbw}/bin/rbw"
-      "cannot:${nix-output-monitor}/bin/nom"
-      "cannot:${nix-output-monitor}/bin/nom-build"
-      "cannot:${nvd}/bin/nvd"
-    ];
-  };
 }
