@@ -17,6 +17,7 @@ in
       openFirewall = true;
       settings = {
         Address = "0.0.0.0";
+        Port = 4533;
         BaseUrl = "https://music.midna.dev";
         MusicFolder = "/videos/music";
         "Prometheus.Enabled" = true;
