@@ -45,8 +45,11 @@ in
       services = {
         nix = with lib; {
           registrationConfigFile = config.vault-secrets.templates.gitlab-runner-registration-env.path;
-          # temporary: remove when invalid host issue is fixed
-          registrationFlags = [ "--docker-host tcp://127.0.0.1:2375" ];
+          registrationFlags = [
+            # temporary: remove when invalid host issue is fixed
+            "--docker-host tcp://127.0.0.1:2375"
+            "--output-limit 102400"
+          ];
           dockerImage = "alpine";
           dockerVolumes = [
             "/nix/store:/nix/store:ro"
@@ -101,6 +104,7 @@ in
         };
         nix-shell = {
           registrationConfigFile = config.vault-secrets.templates.gitlab-runner-registration-env.path;
+          registrationFlags = [ "--output-limit 102400" ];
           executor = "shell";
           tagList = [
             "nix-shell"
