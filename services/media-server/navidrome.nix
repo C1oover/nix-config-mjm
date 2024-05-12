@@ -10,7 +10,7 @@ let
 in
 {
   config = mkIf cfg.enable {
-    mjm.state.directories = [ "/var/lib/private/navidrome" ];
+    mjm.state.directories = [ "/var/lib/navidrome" ];
 
     services.navidrome = {
       enable = true;
