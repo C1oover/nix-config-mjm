@@ -30,7 +30,7 @@ let
 
   installScript = name: src: ''
     install -Dv ${src} $out/bin/${name}
-    sed -i "1c\\#!${nushell}/bin/nu --env-config \'\' -I $out/libexec/nu" $out/bin/${name}
+    sed -i "1c\\#!${nushell}/bin/nu --env-config /dev/null -I $out/libexec/nu" $out/bin/${name}
 
     wrapProgram $out/bin/${name} \
       --prefix PATH : ${
