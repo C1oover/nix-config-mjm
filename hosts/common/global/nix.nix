@@ -1,10 +1,5 @@
 { inputs, pkgs, ... }:
-let
-  lix-module = import "${inputs.lix-module}/module.nix" { inherit (inputs) lix; };
-in
 {
-
-  imports = [ lix-module ];
 
   nix.settings = {
     experimental-features = [
@@ -36,6 +31,8 @@ in
       })
     ];
   };
+
+  nix.package = pkgs.lix;
 
   nix.nixPath = [ "nixpkgs=${pkgs.path}" ];
   nix.registry.nixpkgs.flake.outPath = pkgs.path;

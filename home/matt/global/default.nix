@@ -40,9 +40,7 @@ in
         wget
         ;
 
-      agenix = pkgs.callPackage "${inputs.agenix}/pkgs/agenix.nix" {
-        nix = pkgs.nixVersions.nix_2_18_upstream;
-      };
+      agenix = pkgs.callPackage "${inputs.agenix}/pkgs/agenix.nix" { };
     }
     // lib.optionalAttrs pkgs.stdenv.isLinux { inherit (pkgs) attic-client; }
   );
