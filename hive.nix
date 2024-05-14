@@ -26,21 +26,34 @@ in
 
   defaults =
     { config, lib, ... }:
+    let
+      phases = [
+        null
+        "main"
+        "ingress"
+      ];
+    in
     {
-      options.deployment.phase = lib.mkOption {
-        type = lib.types.enum [
-          null
-          "main"
-          "ingress"
-        ];
-        default = "main";
+      options.deployment = {
+        phase = lib.mkOption {
+          type = lib.types.enum phases;
+          default = "main";
+        };
+        rebootPhase = lib.mkOption {
+          type = lib.types.enum phases;
+          default = config.deployment.phase;
+        };
       };
 
       config = {
         deployment = {
           targetHost = lib.mkDefault "${config.networking.hostName}.home.mattmoriarity.com";
           targetUser = "matt";
-          tags = lib.mkIf (config.deployment.phase != null) [ "phase-${config.deployment.phase}" ];
+          tags =
+            lib.optional (config.deployment.phase != null) "phase-${config.deployment.phase}"
+            ++ lib.optional (
+              config.deployment.rebootPhase != null
+            ) "reboot-phase-${config.deployment.rebootPhase}";
         };
       };
     };

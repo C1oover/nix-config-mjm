@@ -19,6 +19,7 @@ let
     "ci-attic-login"
     "deploy"
     "ci-deploy"
+    "ci-deploy-reboot"
     "ci-build"
   ];
   variantScripts = [

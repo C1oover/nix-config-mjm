@@ -6,6 +6,8 @@
     ../common/optional/proxmox-vm.nix
   ];
 
+  deployment.rebootPhase = null;
+
   networking.hostName = "hypnos";
 
   fileSystems."/" = {

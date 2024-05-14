@@ -43,8 +43,7 @@ build nixos hosts:
 deploy nixos hosts:
   tags: [nix-shell, "x86_64"]
   rules:
-    - if: $CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"
-      changes: !reference [.snippets, nixos_changes]
+    - when: manual
   stage: deploy
   needs: []
   environment:
@@ -57,6 +56,21 @@ deploy nixos hosts:
   script:
     - nix run -f . ci-attic-login
     - nix run -f . ci-deploy
+deploy nixos hosts (reboot):
+  tags: [nix-shell, "x86_64"]
+  rules:
+    - when: manual
+  stage: deploy
+  needs: []
+  environment:
+    name: production
+  resource_group: production/nixos
+  id_tokens:
+    VAULT_ID_TOKEN:
+      aud: http://vault.service.consul:8200
+  script:
+    - nix run -f . ci-attic-login
+    - nix run -f . ci-deploy-reboot
 build tofu changes:
   tags: [nix, x86_64]
   rules:
