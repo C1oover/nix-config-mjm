@@ -48,6 +48,9 @@ in
   home.shellAliases = {
     td = "cd $(mktemp -d)";
   };
+  programs.nushell.extraConfig = ''
+    def --env td [] { cd (mktemp -d) }
+  '';
 
   news.display = "silent";
 

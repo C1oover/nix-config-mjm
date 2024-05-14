@@ -19,9 +19,16 @@ in
     '';
   };
 
+  programs.nushell = {
+    enable = true;
+    extraConfig = ''
+      $env.config.shell_integration = true
+      $env.config.show_banner = false
+    '';
+  };
+
   programs.starship = {
     enable = true;
-    enableZshIntegration = true;
     catppuccin.enable = true;
     settings = mkMerge [
       {
@@ -36,7 +43,6 @@ in
 
   programs.direnv = {
     enable = true;
-    enableZshIntegration = true;
     nix-direnv.enable = true;
 
     config = {
@@ -57,18 +63,12 @@ in
     };
   };
 
-  programs.dircolors = {
-    enable = true;
-    enableZshIntegration = true;
-  };
-
-  programs.zoxide = {
-    enable = true;
-    enableZshIntegration = true;
-  };
+  programs.dircolors.enable = true;
+  programs.zoxide.enable = true;
 
   programs.eza = {
     enable = true;
+    enableNushellIntegration = true;
     git = true;
     icons = true;
     extraOptions = [
@@ -87,6 +87,8 @@ in
   programs.yazi = {
     enable = true;
     catppuccin.enable = true;
+    enableZshIntegration = true;
+    enableNushellIntegration = true;
   };
 
   programs.btop = {

@@ -4,6 +4,8 @@
     "${inputs.home-manager}/nix-darwin"
     "${inputs.agenix}/modules/age.nix"
 
+    ../../../../modules/nixos/nushell.nix
+
     ./dock.nix
     ./fonts.nix
     ./homebrew.nix
@@ -20,6 +22,7 @@
 
   time.timeZone = "America/Denver";
 
+  programs.nushell.enable = true;
   programs.zsh.enable = true;
 
   security.pam.enableSudoTouchIdAuth = true;

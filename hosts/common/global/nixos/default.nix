@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   inputs,
   ...
 }:
@@ -47,12 +46,13 @@
     isNormalUser = true;
     description = "MJ";
     extraGroups = [ "wheel" ];
-    shell = pkgs.zsh;
+    shell = config.programs.nushell.wrappedPackage;
     hashedPassword = "$6$JhSUuIask83mtadB$iV5I3SmQE13rVV08RpCN4Ho09VvpmCm6xouZ2o7/1rhR63YFh/WtLAdM1f2P4hgJrxi.ss2zh53xpbSqx/zy9/";
   };
 
   security.sudo.wheelNeedsPassword = false;
 
+  programs.nushell.enable = true;
   programs.zsh.enable = true;
 
   catppuccin.flavour = "macchiato";

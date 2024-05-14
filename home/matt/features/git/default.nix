@@ -71,4 +71,30 @@ in
     ",jum" = "jj git fetch && jj rebase -d main";
     ",jrm" = "jj rebase -d main";
   };
+  programs.nushell.shellAliases = {
+    ",jp" = "jj git push";
+    ",jpc" = "jj git push --change @-";
+    ",jrm" = "jj rebase -d main";
+  };
+  programs.nushell.extraConfig = ''
+    def ,jpm [] {
+      jj branch set main -r @-
+      try {
+        jj git push
+      } catch {
+        jj undo
+      }
+    }
+
+    def ,jum [] {
+      jj git fetch
+      jj rebase -d main
+    }
+
+    source ${
+      pkgs.runCommand "jj-completions" { } ''
+        ${pkgs.jujutsu}/bin/jj util completion nushell > $out
+      ''
+    }
+  '';
 }
