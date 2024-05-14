@@ -44,6 +44,7 @@ deploy nixos hosts:
   tags: [nix-shell, "x86_64"]
   rules:
     - when: manual
+      if: $CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"
   stage: deploy
   needs: []
   environment:
@@ -60,6 +61,7 @@ deploy nixos hosts (reboot):
   tags: [nix-shell, "x86_64"]
   rules:
     - when: manual
+      if: $CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"
   stage: deploy
   needs: []
   environment:
