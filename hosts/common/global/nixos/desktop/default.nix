@@ -108,8 +108,7 @@ in
     boot.consoleLogLevel = 3;
     boot.plymouth = {
       enable = true;
-      themePackages = [ (pkgs.catppuccin-plymouth.override { variant = config.catppuccin.flavour; }) ];
-      theme = "catppuccin-${config.catppuccin.flavour}";
+      catppuccin.enable = true;
     };
     boot.kernelParams = [ "quiet" ];
     console = {
