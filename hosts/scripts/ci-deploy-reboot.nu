@@ -9,9 +9,9 @@ with-vault {
     ' | save $config_file
 
     with-env {SSH_CONFIG_FILE: $config_file} {
-      colmena apply --on @reboot-phase-main --keep-result
+      colmena apply --on @reboot-phase-main --keep-result --reboot
       # deploy to ingress last, since it can disrupt the build
-      colmena apply --on @reboot-phase-ingress --keep-result
+      colmena apply --on @reboot-phase-ingress --keep-result --reboot
     }
 
     retry -n 5 {
