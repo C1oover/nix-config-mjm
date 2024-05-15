@@ -91,6 +91,11 @@ in
       hideMounts = mkIf config.mjm.desktop.enable true;
     };
 
+    mjm.state.directories = [
+      # important for uids/gids to stay consistent
+      "/var/lib/nixos"
+    ];
+
     mjm.state.files = [
       "/etc/machine-id"
       "/etc/ssh/ssh_host_ed25519_key"
