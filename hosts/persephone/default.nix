@@ -19,21 +19,6 @@ in
     ../common/users/matt
   ];
 
-  nixpkgs.overlays = [
-    (final: prev: {
-      bcachefs-tools = prev.bcachefs-tools.overrideAttrs (_oldAttrs: {
-        patches = [
-          # code refactoring of bcachefs-tools broke reading passphrases from stdin (vs. terminal)
-          # upstream issue https://github.com/koverstreet/bcachefs-tools/issues/261
-          (final.fetchpatch {
-            url = "https://github.com/koverstreet/bcachefs-tools/commit/38b0cb721d2a35f5a4af429bc7bd367461f2fa26.patch";
-            hash = "sha256-/9reye+Qoa+EMkS+wfdX+KwDeLHHJ/S+Qm7sWl0MtqM=";
-          })
-        ];
-      });
-    })
-  ];
-
   deployment.phase = null;
 
   mjm.desktop.enable = true;
