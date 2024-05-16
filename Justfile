@@ -17,7 +17,7 @@ build target *flags:
   colmena build --on {{target}} --keep-result {{flags}}
 
 deploy target *flags:
-  nix run -f . deploy -- --on {{target}} {{flags}}
+  nix run -f . host-scripts -- deploy --on {{target}} {{flags}}
 
 tf-clean:
   cd terraform && rm -rf .terraform.lock.hcl .terraform

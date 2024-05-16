@@ -38,9 +38,9 @@ build nixos hosts:
     VAULT_ID_TOKEN:
       aud: http://vault.service.consul:8200
   script:
-    - nix run -f . ci-attic-login
-    - nix run -f . ci-build
-    - nix run -f . ci-diff
+    - nix run -f . host-scripts -- ci attic-login
+    - nix run -f . host-scripts -- ci build
+    - nix run -f . host-scripts -- ci diff
 deploy nixos hosts:
   tags: [nix-shell, "x86_64"]
   rules:
@@ -56,8 +56,8 @@ deploy nixos hosts:
       aud: http://vault.service.consul:8200
   # before_script: !reference [.snippets, setup_devenv]
   script:
-    - nix run -f . ci-attic-login
-    - nix run -f . ci-deploy
+    - nix run -f . host-scripts -- ci attic-login
+    - nix run -f . host-scripts -- ci deploy
 deploy nixos hosts (reboot):
   tags: [nix-shell, "x86_64"]
   rules:
@@ -72,8 +72,8 @@ deploy nixos hosts (reboot):
     VAULT_ID_TOKEN:
       aud: http://vault.service.consul:8200
   script:
-    - nix run -f . ci-attic-login
-    - nix run -f . ci-deploy-reboot
+    - nix run -f . host-scripts -- ci attic-login
+    - nix run -f . host-scripts -- ci deploy --reboot
 build tofu changes:
   tags: [nix, x86_64]
   rules:

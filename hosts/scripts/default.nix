@@ -15,14 +15,7 @@
   systemd,
 }:
 let
-  scripts = [
-    "ci-attic-login"
-    "deploy"
-    "ci-deploy"
-    "ci-deploy-reboot"
-    "ci-build"
-    "ci-diff"
-  ];
+  scripts = [ "host-scripts" ];
   variantScripts = [
     "rebuild"
     "switch"
@@ -32,7 +25,6 @@ let
 
   installScript = name: src: ''
     install -Dv ${src} $out/bin/${name}
-    sed -i "1c\\#!${nushell}/bin/nu --env-config /dev/null -I $out/libexec/nu" $out/bin/${name}
 
     wrapProgram $out/bin/${name} \
       --prefix PATH : ${
@@ -61,14 +53,16 @@ stdenvNoCC.mkDerivation {
 
   src = ./.;
 
+  buildInputs = [ nushell ];
+
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
-    install -Dv helpers.nu $out/libexec/nu/helpers.nu
-
-    ${lib.concatMapStrings (script: installScript script "${script}.nu") scripts}
+    ${installScript "host-scripts" "host-scripts.nu"}
     ${lib.concatMapStrings (script: installScript script "${script}.${variant}.nu") variantScripts}
   '';
 
   passthru.scripts = allScripts;
+
+  meta.mainProgram = "host-scripts";
 }
