@@ -37,6 +37,9 @@ in
       };
     };
 
+    # run a GC weekly in the middle of the night
+    nix.gc.dates = "Mon *-*-* 11:00:00";
+
     services.gitlab-runner = {
       enable = true;
       settings = {
