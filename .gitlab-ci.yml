@@ -40,6 +40,7 @@ build nixos hosts:
   script:
     - nix run -f . ci-attic-login
     - nix run -f . ci-build
+    - nix run -f . ci-diff
 deploy nixos hosts:
   tags: [nix-shell, "x86_64"]
   rules:

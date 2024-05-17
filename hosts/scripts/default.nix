@@ -21,6 +21,7 @@ let
     "ci-deploy"
     "ci-deploy-reboot"
     "ci-build"
+    "ci-diff"
   ];
   variantScripts = [
     "rebuild"
