@@ -88,7 +88,7 @@ build tofu changes:
       aud: http://vault.service.consul:8200
   before_script: !reference [.snippets, setup_devenv]
   script:
-    - nix run -f . ci-terraform-plan
+    - nix run -f . tofu-scripts -- ci plan
 apply terranix changes:
   tags: [nix, x86_64]
   rules:
@@ -106,7 +106,7 @@ apply terranix changes:
       aud: http://vault.service.consul:8200
   before_script: !reference [.snippets, setup_devenv]
   script:
-    - nix run -f . ci-terraform-apply
+    - nix run -f . tofu-scripts -- ci apply
 check for flake updates:
   tags: [nix-shell]
   rules:

@@ -8,14 +8,7 @@
   opentofu,
   terraformConfiguration,
 }:
-let
-  scripts = [
-    "tf-plan"
-    "tf-apply"
-    "ci-terraform-plan"
-    "ci-terraform-apply"
-  ];
-in
+
 stdenvNoCC.mkDerivation {
   pname = "tofu-scripts";
   version = "0.0.1";
@@ -27,23 +20,18 @@ stdenvNoCC.mkDerivation {
   buildInputs = [ nushell ];
 
   installPhase = ''
-    install -Dv helpers.nu $out/libexec/nu/helpers.nu
+    install -Dv tofu-scripts.nu $out/bin/tofu-scripts
 
-    ${lib.concatMapStrings (script: ''
-      install -Dv ${script}.nu $out/bin/${script}
-      sed -i "1c\\#!${nushell}/bin/nu --env-config \'\' -I $out/libexec/nu" $out/bin/${script}
-
-      wrapProgram $out/bin/${script} \
-        --set TF_CONFIG ${terraformConfiguration} \
-        --prefix PATH : ${
-          lib.makeBinPath [
-            coreutils
-            opentofu
-            vault
-          ]
-        }
-    '') scripts}
+    wrapProgram $out/bin/tofu-scripts \
+      --set TF_CONFIG ${terraformConfiguration} \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          coreutils
+          opentofu
+          vault
+        ]
+      }
   '';
 
-  passthru.scripts = scripts;
+  meta.mainProgram = "tofu-scripts";
 }

@@ -23,10 +23,10 @@ tf-clean:
   cd terraform && rm -rf .terraform.lock.hcl .terraform
 
 tf-plan:
-  nix run -f . tf-plan
+  nix run -f . tofu-scripts -- plan
 
 tf-apply:
-  nix run -f . tf-apply
+  nix run -f . tofu-scripts -- apply
 
 edit-secret file:
   cd secrets && agenix -e {{file}}
