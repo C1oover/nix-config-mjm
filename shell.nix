@@ -14,7 +14,15 @@ devenv.lib.mkShell {
   };
   modules = [
     (
-      { pkgs, ... }:
+      { pkgs, lib, ... }:
+      let
+        # TODO patch upstream
+        npins = pkgs.npins.overrideAttrs (oldAttrs: {
+          buildInputs =
+            oldAttrs.buildInputs
+            ++ lib.optional pkgs.stdenv.isDarwin pkgs.darwin.apple_sdk.frameworks.SystemConfiguration;
+        });
+      in
       {
         imports = [
           ./hosts/devenv.nix
@@ -23,7 +31,7 @@ devenv.lib.mkShell {
 
         packages = [
           pkgs.just
-          pkgs.npins
+          npins
         ];
 
         dotenv.disableHint = true;
