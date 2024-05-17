@@ -9,6 +9,8 @@
     ./features/work
   ];
 
+  programs.kitty.font.size = 13;
+
   home.dock = {
     enable = true;
     entries = [
