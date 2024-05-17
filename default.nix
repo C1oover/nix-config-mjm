@@ -8,7 +8,7 @@ let
 
   appsFromScripts =
     pkg:
-    lib.genAttrs pkg.scripts (
+    lib.genAttrs (pkg.scripts or [ ]) (
       name:
       pkg.overrideAttrs (_oldAttrs: {
         meta.mainProgram = name;

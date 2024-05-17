@@ -14,19 +14,21 @@
   nix,
   systemd,
 }:
-let
-  scripts = [ "host-scripts" ];
-  variantScripts = [
-    "rebuild"
-    "switch"
-  ];
-  allScripts = scripts ++ variantScripts;
-  variant = if stdenvNoCC.isLinux then "linux" else "darwin";
 
-  installScript = name: src: ''
-    install -Dv ${src} $out/bin/${name}
+stdenvNoCC.mkDerivation {
+  pname = "host-scripts";
+  version = "0.0.1";
 
-    wrapProgram $out/bin/${name} \
+  src = ./.;
+
+  buildInputs = [ nushell ];
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  installPhase = ''
+    install -Dv host-scripts.nu $out/bin/host-scripts
+
+    wrapProgram $out/bin/host-scripts \
       --prefix PATH : ${
         lib.makeBinPath (
           [
@@ -46,23 +48,6 @@ let
         )
       }
   '';
-in
-stdenvNoCC.mkDerivation {
-  pname = "host-scripts";
-  version = "0.0.1";
-
-  src = ./.;
-
-  buildInputs = [ nushell ];
-
-  nativeBuildInputs = [ makeWrapper ];
-
-  installPhase = ''
-    ${installScript "host-scripts" "host-scripts.nu"}
-    ${lib.concatMapStrings (script: installScript script "${script}.${variant}.nu") variantScripts}
-  '';
-
-  passthru.scripts = allScripts;
 
   meta.mainProgram = "host-scripts";
 }

@@ -43,6 +43,56 @@ export def retry [block, -n: int] {
   }
 }
 
+def --wrapped "darwin rebuild" [...args] {
+  nom-build hosts/darwin.nix -A $'(scutil --get LocalHostName).system' ...$args
+  nvd diff /run/current-system ./result
+}
+
+def "darwin switch" [] {
+  sudo -H --preserve-env=PATH env nix-env -p /nix/var/nix/profiles/system --set (readlink -f result)
+  $"(pwd)/result/activate-user"
+  sudo -H --preserve-env=PATH ./result/activate
+}
+
+def --wrapped "linux rebuild" [...args] {
+  colmena build --on (hostname) --keep-result -v ...$args
+  nvd diff /run/current-system $'.gcroots/node-(hostname)'
+}
+
+def "linux switch" [action: string = switch] {
+  let built_system = $".gcroots/node-(hostname)"
+
+  sudo nix-env -p /nix/var/nix/profiles/system --set (readlink -f $built_system)
+  (sudo systemd-run
+    -E LOCALE_ARCHIVE
+    --collect
+    --no-ask-password
+    --pty
+    --quiet
+    --same-dir
+    --service-type=exec
+    --unit=nixos-rebuild-switch-to-configuration
+    --wait
+    $'($built_system)/bin/switch-to-configuration'
+    $action)
+}
+
+def --wrapped "main rebuild" [...args] {
+  if (uname).operating-system == "Darwin" {
+    darwin rebuild ...$args
+  } else {
+    linux rebuild ...$args
+  }
+}
+
+def "main switch" [action: string = switch] {
+  if (uname).operating-system == "Darwin" {
+    darwin switch
+  } else {
+    linux switch $action
+  }
+}
+
 def --wrapped "main deploy" [...args] {
   with-temp-key {|key_path|
     let config_file = $key_path | path dirname | path join ssh_config

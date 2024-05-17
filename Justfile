@@ -5,13 +5,13 @@ alias tfp := tf-plan
 alias tfa := tf-apply
 
 rebuild *flags:
-  nix run -f . rebuild -- {{flags}}
+  nix run -f . host-scripts -- rebuild {{flags}}
 
 switch:
-  nix run -f . switch
+  nix run -f . host-scripts -- switch
 
 boot:
-  nix run -f . switch -- boot
+  nix run -f . host-scripts -- switch boot
 
 build target *flags:
   colmena build --on {{target}} --keep-result {{flags}}
