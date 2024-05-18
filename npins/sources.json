@@ -56,6 +56,7 @@
       },
       "pre_releases": false,
       "version_upper_bound": null,
+      "release_prefix": null,
       "version": "v0.3.4",
       "revision": "6ef4781050c2fa7fd89bcce0bd1f427b8f864a77",
       "url": null,
@@ -82,6 +83,7 @@
       },
       "pre_releases": false,
       "version_upper_bound": null,
+      "release_prefix": null,
       "version": "v1.0.5",
       "revision": "34e6461fd76b5f51ad5f8214f5cf22c4cd7a196e",
       "url": "https://api.github.com/repos/cachix/devenv/tarball/v1.0.5",
@@ -156,6 +158,7 @@
       },
       "pre_releases": false,
       "version_upper_bound": null,
+      "release_prefix": null,
       "version": "v0.3.0",
       "revision": "64b903ca87d18cef2752c19c098af275c6e51d63",
       "url": "https://api.github.com/repos/nix-community/lanzaboote/tarball/v0.3.0",
@@ -182,8 +185,8 @@
     "nixpkgs": {
       "type": "Channel",
       "name": "nixpkgs-unstable",
-      "url": "https://releases.nixos.org/nixpkgs/nixpkgs-24.05pre627947.63d3e5d82edf/nixexprs.tar.xz",
-      "hash": "0ms2yfm7wgzsikwdi6l77dp9q7bpj293f1m79gg3chqvikl8g5y4"
+      "url": "https://releases.nixos.org/nixpkgs/nixpkgs-24.05pre628150.dc1b0202a605/nixexprs.tar.xz",
+      "hash": "0i5xhzp6cjh1r4af8sykm5jqbx7nk951zndi65q4x75s5z79fkpv"
     },
     "nixpkgs-firefox-darwin": {
       "type": "Git",
@@ -205,9 +208,9 @@
         "repo": "NUR"
       },
       "branch": "master",
-      "revision": "4d8072080991b96b6d36e21c596bf0d7affa7ff0",
-      "url": "https://github.com/nix-community/NUR/archive/4d8072080991b96b6d36e21c596bf0d7affa7ff0.tar.gz",
-      "hash": "1dy166lihl3hcvhcqac6wis6nk5wkyxfqxn52c1gs9i9idfpcsql"
+      "revision": "8165b42de2bcfacff60797664f2d6d603fa5399e",
+      "url": "https://github.com/nix-community/NUR/archive/8165b42de2bcfacff60797664f2d6d603fa5399e.tar.gz",
+      "hash": "1b743kkbc98fywzzsk806314dy8s9m3s3lmrp808llaymff6xmrp"
     },
     "terranix": {
       "type": "GitRelease",
@@ -218,6 +221,7 @@
       },
       "pre_releases": false,
       "version_upper_bound": null,
+      "release_prefix": null,
       "version": "2.7.0",
       "revision": "00710f39f38a0a654a2c4fd96cbb988b4f4cedfa",
       "url": "https://api.github.com/repos/terranix/terranix/tarball/2.7.0",
