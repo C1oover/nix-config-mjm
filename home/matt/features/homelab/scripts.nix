@@ -55,6 +55,6 @@ in
       }
       ''
         update-ssh-cert
-        kitty +kitten ssh -i "${sshCertPath}" "$@"
+        kitty +kitten ssh -i "${sshCertPath}" --kitten interpreter=python3 "$@"
       '';
 }

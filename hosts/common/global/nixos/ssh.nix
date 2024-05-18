@@ -1,3 +1,4 @@
+{ pkgs, ... }:
 let
   sshTrustedKeys = builtins.fetchurl {
     url = "http://vault.service.consul:8200/v1/ssh-client-signer/public_key";
@@ -9,6 +10,9 @@ let
   };
 in
 {
+  # used for kitty ssh integration
+  environment.systemPackages = [ pkgs.python3 ];
+
   services.openssh = {
     enable = true;
     extraConfig = ''
