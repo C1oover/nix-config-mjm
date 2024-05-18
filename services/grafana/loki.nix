@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 let
   inherit (lib) mkIf;
   inherit (config.services.loki) dataDir;
@@ -99,7 +104,22 @@ in
       };
     };
 
-    systemd.services.loki.serviceConfig.EnvironmentFile = config.vault-secrets.templates.loki-env.path;
+    systemd.services.loki.serviceConfig =
+      # workaround the fact that config validation isn't optional in
+      # the module by overriding it ourselves.
+      let
+        prettyJSON =
+          conf:
+          pkgs.runCommand "loki-config.json" { } ''
+            echo '${builtins.toJSON conf}' | ${pkgs.jq}/bin/jq 'del(._module)' > $out
+          '';
+
+        conf = prettyJSON config.services.loki.configuration;
+      in
+      {
+        ExecStart = lib.mkForce "${config.services.loki.package}/bin/loki --config.file=${conf} -config.expand-env=true";
+        EnvironmentFile = config.vault-secrets.templates.loki-env.path;
+      };
 
     vault-secrets.wantedBy = [ "loki.service" ];
     vault-secrets.templates.loki-env.text = ''
