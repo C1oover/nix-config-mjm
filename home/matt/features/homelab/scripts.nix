@@ -1,60 +1,51 @@
 {
-  bash,
-  resholve,
+  lib,
+  writers,
   vault,
   openssh,
   kitty,
   sshPublicKeyPath,
 }:
+
 let
-  interpreter = "${bash}/bin/bash";
-
   sshCertPath = builtins.replaceStrings [ ".pub" ] [ "-cert.pub" ] sshPublicKeyPath;
-
-  update-ssh-cert =
-    resholve.writeScriptBin "update-ssh-cert"
-      {
-        inherit interpreter;
-        inputs = [ vault ];
-        execer = [ "cannot:${vault}/bin/vault" ];
-      }
-      ''
-        vault write \
-          -field=signed_key \
-          ssh-client-signer/sign/homelab-client \
-          public_key=@${sshPublicKeyPath} \
-          valid_principals=matt,root \
-          >"${sshCertPath}"
-      '';
 in
-{
-  vssh =
-    resholve.writeScriptBin "vssh"
-      {
-        inherit interpreter;
-        inputs = [
-          openssh
-          update-ssh-cert
-        ];
-        execer = [ "cannot:${openssh}/bin/ssh" ];
-      }
-      ''
-        update-ssh-cert
-        ssh -i "${sshCertPath}" "$@"
-      '';
+writers.writeNuBin "homelab"
+  {
+    makeWrapperArgs = [
+      "--prefix"
+      ":"
+      "PATH"
+      (lib.makeBinPath [
+        vault
+        openssh
+        kitty
+      ])
+    ];
+  }
+  ''
+    def update-ssh-cert [] {
+      (vault write
+        -field=signed_key
+        ssh-client-signer/sign/homelab-client
+        public_key=@${sshPublicKeyPath}
+        valid_principals=matt,root
+      ) o> "${sshCertPath}"
+    }
 
-  s =
-    resholve.writeScriptBin "s"
-      {
-        inherit interpreter;
-        inputs = [
-          update-ssh-cert
-          kitty
-        ];
-        execer = [ "cannot:${kitty}/bin/kitty" ];
-      }
-      ''
-        update-ssh-cert
-        kitty +kitten ssh -i "${sshCertPath}" --kitten interpreter=python3 "$@"
-      '';
-}
+    def --wrapped "main ssh vault" [...args] {
+      update-ssh-cert
+      ssh -i "${sshCertPath}" ...$args
+    }
+
+    def --wrapped "main ssh kitty" [...args] {
+      update-ssh-cert
+      (kitty
+        +kitten ssh
+        -i "${sshCertPath}"
+        --kitten interpreter=python3
+        ...$args)
+    }
+
+    def main [] {}
+  ''

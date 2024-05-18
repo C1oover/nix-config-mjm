@@ -25,10 +25,15 @@ in
       wander
       ;
 
-    inherit (pkgs.callPackages ./scripts.nix { inherit sshPublicKeyPath; }) s vssh;
+    homelab = pkgs.callPackage ./scripts.nix { inherit sshPublicKeyPath; };
   };
 
   home.sessionVariables = envVars;
+
+  programs.nushell.shellAliases = {
+    ",s" = "homelab ssh kitty";
+    ",vssh" = "homelab ssh vault";
+  };
 
   programs.ssh = {
     enable = true;
