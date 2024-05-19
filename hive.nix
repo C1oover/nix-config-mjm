@@ -16,7 +16,7 @@ let
       (fetchpatch {
         # loki skip config validation
         url = "https://github.com/NixOS/nixpkgs/pull/312785.diff";
-        hash = "sha256-lmkS2QM6MeACJlk4yMT7CqEo4eVWDecaRjYVmNxK4fE=";
+        hash = "sha256-WhxkfBzv1yxKERBdAA4mBdWc+NQKHZ78HRiUukiHBg0=";
       })
     ];
   };
