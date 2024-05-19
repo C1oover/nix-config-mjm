@@ -11,16 +11,6 @@ in
   };
 
   config = mkIf cfg.enable {
-    nixpkgs.overlays = [
-      (final: prev: {
-        pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
-          (pythonFinal: pythonPrev: {
-            cramjam = pythonPrev.cramjam.overridePythonAttrs { doCheck = false; };
-          })
-        ];
-      })
-    ];
-
     mjm.postgresql.enable = true;
     mjm.state.directories = [
       {
