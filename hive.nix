@@ -13,11 +13,6 @@ let
         url = "https://github.com/NixOS/nixpkgs/pull/309084.diff";
         hash = "sha256-3yfi8XuoM7EB8OpiwNxAi10KTf1o50Yakv1NylCu7cs=";
       })
-      (fetchpatch {
-        # loki skip config validation
-        url = "https://github.com/NixOS/nixpkgs/pull/312785.diff";
-        hash = "sha256-WhxkfBzv1yxKERBdAA4mBdWc+NQKHZ78HRiUukiHBg0=";
-      })
     ];
   };
 in
