@@ -4,21 +4,28 @@ let
 
   pkgsForPatching = import inputs.nixos { };
   inherit (pkgsForPatching) applyPatches fetchpatch;
-  nixos-patched = applyPatches {
-    name = "nixos-patched";
-    src = inputs.nixos;
-    patches = [
-      (fetchpatch {
-        # consul services
-        url = "https://github.com/NixOS/nixpkgs/pull/309084.diff";
-        hash = "sha256-3yfi8XuoM7EB8OpiwNxAi10KTf1o50Yakv1NylCu7cs=";
-      })
-    ];
-  };
+
+  patchNixpkgs =
+    src:
+    applyPatches {
+      name = "nixos-patched";
+      inherit src;
+      patches = [
+        (fetchpatch {
+          # consul services
+          url = "https://github.com/NixOS/nixpkgs/pull/309084.diff";
+          hash = "sha256-3yfi8XuoM7EB8OpiwNxAi10KTf1o50Yakv1NylCu7cs=";
+        })
+      ];
+    };
 in
 {
   meta = {
-    nixpkgs = nixos-patched;
+    nixpkgs = patchNixpkgs inputs.nixos;
+
+    # use plasma 6.1 beta branch for wayland explicit sync
+    nodeNixpkgs.uranus = patchNixpkgs inputs.nixos-plasma;
+
     specialArgs = {
       inherit inputs;
     };

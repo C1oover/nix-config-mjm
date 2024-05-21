@@ -21,7 +21,7 @@ in
 
   deployment.phase = null;
 
-  services.displayManager.defaultSession = "plasmax11";
+  # services.displayManager.defaultSession = "plasmax11";
 
   environment.systemPackages = [ pkgs.sbctl ];
 

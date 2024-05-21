@@ -182,6 +182,18 @@
       "url": "https://releases.nixos.org/nixos/unstable/nixos-24.05pre629726.5710852ba686/nixexprs.tar.xz",
       "hash": "1i45rvby1a1pi95j992j69i88pyhwch2qfg0zikjiwh9j9wn10x4"
     },
+    "nixos-plasma": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "k900",
+        "repo": "nixpkgs"
+      },
+      "branch": "plasma-6.1",
+      "revision": "18de2a031516595094325af8d6bc41d698874380",
+      "url": "https://github.com/k900/nixpkgs/archive/18de2a031516595094325af8d6bc41d698874380.tar.gz",
+      "hash": "0qaybr3jz6m7p5z5srf8j6qv1vnc2a3vwls8m42a7gn7s5nyb3zi"
+    },
     "nixpkgs": {
       "type": "Channel",
       "name": "nixpkgs-unstable",
