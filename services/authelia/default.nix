@@ -12,6 +12,13 @@ in
 
   config = mkIf cfg.enable {
     mjm.postgresql.enable = true;
+    mjm.state.directories = [
+      {
+        directory = "/var/lib/redis-authelia";
+        user = "redis-authelia";
+        group = "redis-authelia";
+      }
+    ];
     deployment.tags = [ "svc-authelia" ];
 
     services.authelia.instances.main = {
