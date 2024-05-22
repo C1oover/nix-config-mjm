@@ -55,5 +55,5 @@
   programs.nushell.enable = true;
   programs.zsh.enable = true;
 
-  catppuccin.flavour = "macchiato";
+  catppuccin.flavor = "macchiato";
 }

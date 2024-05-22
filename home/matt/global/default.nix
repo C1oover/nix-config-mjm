@@ -59,5 +59,5 @@ in
   programs.jq.enable = true;
 
   colorScheme = nix-colors.colorSchemes.catppuccin-macchiato;
-  catppuccin.flavour = osConfig.catppuccin.flavour or "macchiato";
+  catppuccin.flavor = osConfig.catppuccin.flavor or "macchiato";
 }
