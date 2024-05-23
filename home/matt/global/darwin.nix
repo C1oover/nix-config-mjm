@@ -1,9 +1,6 @@
 { pkgs, lib, ... }:
 {
-  imports = [
-    ../features/newsboat
-    ../features/yubikey
-  ];
+  imports = [ ../features/newsboat ];
 
   nixpkgs.config.allowUnfree = true;
 
