@@ -2,7 +2,7 @@
   terraform.resource.vault_jwt_auth_backend.gitlab = {
     path = "gitlab";
     bound_issuer = "https://git.midna.dev";
-    jwks_url = "https://git.midna.dev/-/jwks";
+    jwks_url = "https://git.midna.dev/oauth/discovery/keys";
 
     tune = [
       {
