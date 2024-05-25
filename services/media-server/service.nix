@@ -23,6 +23,10 @@
       upstream.service.name = "readarr-audio";
     };
     tube = {
+      upstream.service.name = "peertube";
+      enableAuthProxy = false;
+    };
+    yt = {
       upstream.service.name = "invidious";
       enableAuthProxy = false;
     };

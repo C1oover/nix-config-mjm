@@ -10,7 +10,7 @@ in
 
     services.invidious = {
       enable = true;
-      domain = "tube.midna.dev";
+      domain = "yt.midna.dev";
       settings = {
         db.user = "invidious";
         external_port = 443;

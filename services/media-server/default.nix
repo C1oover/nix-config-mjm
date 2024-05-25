@@ -13,6 +13,7 @@ in
     ./invidious.nix
     ./jellyfin.nix
     ./navidrome.nix
+    ./peertube.nix
     ./sabnzbd.nix
   ];
 
