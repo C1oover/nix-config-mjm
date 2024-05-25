@@ -29,6 +29,7 @@
     yt = {
       upstream.service.name = "invidious";
       enableAuthProxy = false;
+      useIPv4Proxy = true;
     };
     music = {
       upstream.service.name = "navidrome";
