@@ -14,5 +14,8 @@
     discord
     krita
     yt-dlp
+
+    # needed temporarily while firefox keeps crushing
+    chromium
   ];
 }
