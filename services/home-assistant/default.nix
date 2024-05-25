@@ -41,6 +41,7 @@ in
         "icloud"
         "roku"
         "unifi"
+        "wiz"
       ];
       config = {
         default_config = { };
