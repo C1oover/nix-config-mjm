@@ -53,4 +53,20 @@
     ];
     userinfo_signing_algorithm = "none";
   }
+  {
+    id = "peertube";
+    description = "PeerTube";
+    secret = "$pbkdf2-sha512$310000$i/oOcdThnanFjq1JqrACMg$IUGcZqmZZtGOwjfYT1O1ZiMVk634D73XX9qgmwYDtJW3HVcNDRwU9JcX2pJp4WchFkx2iwArh8DWfbU.2xLYiw";
+    public = false;
+    authorization_policy = "two_factor";
+    redirect_uris = [ "https://tube.midna.dev/plugins/auth-openid-connect/router/code-cb" ];
+    scopes = [
+      "openid"
+      "profile"
+      "groups"
+      "email"
+    ];
+    userinfo_signing_algorithm = "none";
+    response_modes = [ "form_post" ];
+  }
 ]
