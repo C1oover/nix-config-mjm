@@ -44,9 +44,9 @@
         "repo": "nix"
       },
       "branch": "main",
-      "revision": "96681f62faa285ad0c8dce2cdae6b0a1d0a8f094",
-      "url": "https://github.com/catppuccin/nix/archive/96681f62faa285ad0c8dce2cdae6b0a1d0a8f094.tar.gz",
-      "hash": "12avqv820scp9qmsjm2dasqaz93wq2nklpfv5sikv7hr8ww4nd05"
+      "revision": "2c7661c9fa26a920b8088300ef87d14179c71a27",
+      "url": "https://github.com/catppuccin/nix/archive/2c7661c9fa26a920b8088300ef87d14179c71a27.tar.gz",
+      "hash": "07ffbvgvpjvr0qijkdd2s7cf5z9910va09lrwykbyh3as4h0qcb5"
     },
     "conduit": {
       "type": "GitRelease",
@@ -179,8 +179,8 @@
     "nixos": {
       "type": "Channel",
       "name": "nixos-unstable",
-      "url": "https://releases.nixos.org/nixos/unstable/nixos-24.11pre631921.9ca3f6496142/nixexprs.tar.xz",
-      "hash": "085gpryqprv18spqhzjj7cicbdqw7mdsdm1v1rzg07jx88x2hvf3"
+      "url": "https://releases.nixos.org/nixos/unstable/nixos-24.11pre632549.ad57eef4ef06/nixexprs.tar.xz",
+      "hash": "0fqh8nmrwl6cy98m1y13q20qk9jrjlyz1jxmkckz5rqpdh41aism"
     },
     "nixos-plasma": {
       "type": "Git",
@@ -220,9 +220,9 @@
         "repo": "NUR"
       },
       "branch": "master",
-      "revision": "1da486889c3abe79342f915cea72869da9a1c704",
-      "url": "https://github.com/nix-community/NUR/archive/1da486889c3abe79342f915cea72869da9a1c704.tar.gz",
-      "hash": "06jkxf5mlg4r7dxyswb0zawzdgdw0kz2ys6c5jcd267pa2srll6n"
+      "revision": "69b2b95ef06173a9d86345c84dee30f86d89ba96",
+      "url": "https://github.com/nix-community/NUR/archive/69b2b95ef06173a9d86345c84dee30f86d89ba96.tar.gz",
+      "hash": "1wwxvpk5d5kf1m9x4b0d0s9bp7wvavxz7alzwg4hm78bsk8jvcc0"
     },
     "terranix": {
       "type": "GitRelease",
