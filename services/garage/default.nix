@@ -17,10 +17,10 @@ in
 
     services.garage = {
       enable = true;
-      package = pkgs.garage_0_9;
+      package = pkgs.garage_1_x;
       settings = {
         db_engine = "lmdb";
-        replication_mode = "3";
+        replication_factor = 3;
         rpc_bind_addr = "[::]:3901";
 
         s3_api = {
