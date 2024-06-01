@@ -127,10 +127,8 @@ defmodule HomelabWeb.DeployLive.Index do
       <%= case {@deploy.repo, @deploy.job} do %>
         <% {"mjm/nix-config", "deploy nixos hosts"} -> %>
           NixOS
-        <% {"mjm/nix-config", "deploy nixos hosts: [x86_64]"} -> %>
-          NixOS: x86_64
-        <% {"mjm/nix-config", "deploy nixos hosts: [arm64]"} -> %>
-          NixOS: aarch64
+        <% {"mjm/nix-config", "deploy nixos hosts (reboot)"} -> %>
+          NixOS (reboot)
         <% {"mjm/nix-config", "apply terranix changes"} -> %>
           Terranix
         <% {_, job} -> %>
