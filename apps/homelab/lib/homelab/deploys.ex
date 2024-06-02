@@ -25,7 +25,13 @@ defmodule Homelab.Deploys do
 
   defp get_latest_gitlab_build(repo) do
     Tracer.with_span :get_latest_gitlab_build, %{attributes: %{"gitlab.repo": repo}} do
-      with {:ok, [pipeline]} <- GitLab.list_project_pipelines(repo, per_page: 1, ref: "main"),
+      with {:ok, [pipeline]} <-
+             GitLab.list_project_pipelines(
+               repo,
+               per_page: 1,
+               source: "push",
+               ref: "main"
+             ),
            {:ok, pipeline} <- GitLab.get_pipeline(repo, pipeline.id) do
         GitLab.Pipeline.to_build(pipeline)
       else
