@@ -7,5 +7,6 @@ defmodule Homelab.Backups.Backup do
     field(:time, :utc_datetime)
     field(:location, Ecto.Enum, values: [:onsite, :offsite])
     field(:repository_name, :string)
+    field(:hostname, :string)
   end
 end

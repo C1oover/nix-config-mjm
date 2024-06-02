@@ -6,6 +6,7 @@ defmodule Homelab.Backups.Restic.Snapshot do
 
   embedded_schema do
     field(:short_id, :string)
+    field(:hostname, :string)
     field(:time, :utc_datetime)
   end
 
@@ -30,11 +31,12 @@ defmodule Homelab.Backups.Restic.Snapshot do
       name: snapshot.short_id,
       time: snapshot.time,
       location: location,
-      repository_name: repository
+      repository_name: repository,
+      hostname: snapshot.hostname
     }
   end
 
   def changeset(data, params) do
-    cast(data, params, [:id, :short_id, :time])
+    cast(data, params, [:id, :short_id, :hostname, :time])
   end
 end
