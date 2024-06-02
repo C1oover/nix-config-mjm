@@ -16,6 +16,11 @@ let
           url = "https://github.com/NixOS/nixpkgs/pull/309084.diff";
           hash = "sha256-3yfi8XuoM7EB8OpiwNxAi10KTf1o50Yakv1NylCu7cs=";
         })
+        (fetchpatch {
+          # nvidia beta driver
+          url = "https://github.com/NixOS/nixpkgs/commit/12d0fa9a11c7c261cb2ecd8c5cc167aec3d251a4.diff";
+          hash = "sha256-QRcaRrTtxGqaF+l2C5/TEavQqANxRyKYVO5ELMrCBzo=";
+        })
       ];
     };
 in
