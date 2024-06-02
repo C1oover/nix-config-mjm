@@ -1,4 +1,9 @@
-{ lib, ... }:
+{
+  lib,
+  inputs,
+  config,
+  ...
+}:
 let
   inherit (lib) mkMerge;
 in
@@ -95,4 +100,6 @@ in
     enable = true;
     catppuccin.enable = true;
   };
+
+  xdg.configFile."process-compose/theme.yaml".source = "${inputs.catppuccin-process-compose}/themes/catppuccin-${config.catppuccin.flavor}.yaml";
 }
