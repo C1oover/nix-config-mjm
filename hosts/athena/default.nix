@@ -1,4 +1,3 @@
-{ inputs, ... }:
 {
   imports = [
     ../common/global/darwin
@@ -11,6 +10,7 @@
   homebrew.casks = [
     "cleanshot"
     "loom"
+    "nikitabobko/tap/aerospace"
     "postico"
     "rectangle-pro"
     "slab"
