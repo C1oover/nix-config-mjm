@@ -50,7 +50,7 @@ def --wrapped "darwin rebuild" [...args] {
 
 def "darwin switch" [] {
   sudo -H --preserve-env=PATH env nix-env -p /nix/var/nix/profiles/system --set (readlink -f result)
-  $"(pwd)/result/activate-user"
+  ./result/activate-user
   sudo -H --preserve-env=PATH ./result/activate
 }
 
