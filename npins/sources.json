@@ -202,9 +202,9 @@
         "repo": "nixpkgs"
       },
       "branch": "plasma-6.1",
-      "revision": "da0d352660cc23161dbf29cd7f12d4f629d002c5",
-      "url": "https://github.com/k900/nixpkgs/archive/da0d352660cc23161dbf29cd7f12d4f629d002c5.tar.gz",
-      "hash": "1s0w3bfx0i717j5dygl3wc8dzwglanya7n12birs00n3gv4h0yy0"
+      "revision": "9b36ecf76d84d8f99e41bcbefb9f6a07da5e8bb4",
+      "url": "https://github.com/k900/nixpkgs/archive/9b36ecf76d84d8f99e41bcbefb9f6a07da5e8bb4.tar.gz",
+      "hash": "1y5qp8vixy8dyds15cafa3fd2kqkh18nq9lg4yq9gk0bqxr0npjx"
     },
     "nixpkgs": {
       "type": "Channel",

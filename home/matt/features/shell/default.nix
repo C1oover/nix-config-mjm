@@ -27,8 +27,16 @@ in
   programs.nushell = {
     enable = true;
     extraConfig = ''
-      $env.config.shell_integration = true
       $env.config.show_banner = false
+      $env.config.shell_integration = {
+        osc2: true
+        osc7: true
+        osc8: true
+        osc9_9: false
+        osc133: true
+        osc633: true
+        reset_application_mode: true
+      }
     '';
   };
 
