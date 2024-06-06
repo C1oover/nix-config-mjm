@@ -133,9 +133,9 @@
         "repo": "helix"
       },
       "branch": "master",
-      "revision": "c39cde8fc2a99871ff1ec9118d65ae404af9e702",
-      "url": "https://github.com/helix-editor/helix/archive/c39cde8fc2a99871ff1ec9118d65ae404af9e702.tar.gz",
-      "hash": "1h003z3098q1hvzaz9yfczifcrxp4iamk1drkzw0x62ynik9qyp8"
+      "revision": "6f1437e9f388f923fadcb3f734e22d2ede298da7",
+      "url": "https://github.com/helix-editor/helix/archive/6f1437e9f388f923fadcb3f734e22d2ede298da7.tar.gz",
+      "hash": "0rs2yjrmybdnfgm90xhgkgpw3fakhwhb06c6cby9mrb5j8japwdd"
     },
     "home-manager": {
       "type": "Git",
@@ -209,8 +209,8 @@
     "nixpkgs": {
       "type": "Channel",
       "name": "nixpkgs-unstable",
-      "url": "https://releases.nixos.org/nixpkgs/nixpkgs-24.11pre634787.3b01abcc2484/nixexprs.tar.xz",
-      "hash": "0klzc7g53bc75020hvxc3spkn4cqn5nmvzipzlcri941kx9811kl"
+      "url": "https://releases.nixos.org/nixpkgs/nixpkgs-24.11pre635622.818dbe2f96df/nixexprs.tar.xz",
+      "hash": "08arnh48qcb4imwk2jin3vsg43g74518gas04lpga62m7mldnrdw"
     },
     "nixpkgs-firefox-darwin": {
       "type": "Git",
@@ -220,9 +220,9 @@
         "repo": "nixpkgs-firefox-darwin"
       },
       "branch": "main",
-      "revision": "d04c9c234f63daac1a2cb81950c1ab193124917e",
-      "url": "https://github.com/bandithedoge/nixpkgs-firefox-darwin/archive/d04c9c234f63daac1a2cb81950c1ab193124917e.tar.gz",
-      "hash": "1ah0v1m705i57ss0xpqflaafrrr5v5jiprvyyk5jlq7l4px7an8a"
+      "revision": "801c9a2672964002cf56b2034ced78d688e3a487",
+      "url": "https://github.com/bandithedoge/nixpkgs-firefox-darwin/archive/801c9a2672964002cf56b2034ced78d688e3a487.tar.gz",
+      "hash": "0i0ilcabpyavjwb3cqzxks9f1mwvs4q46r5yvb4q4cmm2jrrppri"
     },
     "nur": {
       "type": "Git",
@@ -232,9 +232,9 @@
         "repo": "NUR"
       },
       "branch": "master",
-      "revision": "a70eab203e3b847d10c2b005ef1b944a4c267f3f",
-      "url": "https://github.com/nix-community/NUR/archive/a70eab203e3b847d10c2b005ef1b944a4c267f3f.tar.gz",
-      "hash": "1fyllvisd2x6p3r1fcxr49b7mnxcf8f7gjjjddnn54kwh1f5ka1i"
+      "revision": "9d640916ffb1680888b9898d2a26da9715648f60",
+      "url": "https://github.com/nix-community/NUR/archive/9d640916ffb1680888b9898d2a26da9715648f60.tar.gz",
+      "hash": "0dmbdwnwkd73dppw97a1m06dgj74c7dlsglxwhbb49h6gkqb9m0n"
     },
     "terranix": {
       "type": "GitRelease",
