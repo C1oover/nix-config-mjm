@@ -171,10 +171,10 @@
       "pre_releases": false,
       "version_upper_bound": null,
       "release_prefix": null,
-      "version": "v0.3.0",
-      "revision": "64b903ca87d18cef2752c19c098af275c6e51d63",
-      "url": "https://api.github.com/repos/nix-community/lanzaboote/tarball/v0.3.0",
-      "hash": "1ysq47isagsdaisni4sbhhmbmihbhpgxj8lnzxl4kgfx2iwm7ghm"
+      "version": "v0.4.0",
+      "revision": "911792cc8e5fac4c66243aaf96a5219a751a4ee8",
+      "url": "https://api.github.com/repos/nix-community/lanzaboote/tarball/v0.4.0",
+      "hash": "0i797wklcg6pipihwbw1zrz923180vk53qwqwlrk0lpvwgghsx73"
     },
     "nix-colors": {
       "type": "Git",
