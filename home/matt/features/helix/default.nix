@@ -33,6 +33,7 @@ in
     ];
     settings = {
       editor = {
+        auto-save.focus-lost = true;
         bufferline = "always";
         cursorline = true;
         cursor-shape = {
