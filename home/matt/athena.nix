@@ -82,11 +82,27 @@ in
       alt-shift-8 = "move-node-to-workspace 8";
       alt-shift-9 = "move-node-to-workspace 9";
 
+      alt-tab = "workspace-back-and-forth";
       alt-shift-tab = "move-workspace-to-monitor --wrap-around next";
 
       alt-shift-c = "reload-config";
 
       alt-shift-f = "layout floating tiling";
     };
+    workspace-to-monitor-force-assignment = {
+      "1" = "main";
+      "2" = [
+        "secondary"
+        "main"
+      ];
+      "3" = "main";
+      "4" = "main";
+    };
+    on-window-detected = [
+      {
+        "if".app-id = "us.zoom.xos";
+        run = "move-node-to-workspace 4";
+      }
+    ];
   };
 }
