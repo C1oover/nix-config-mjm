@@ -10,7 +10,12 @@ in
 {
   home.packages = builtins.attrValues {
     inherit git-scripts;
-    inherit (pkgs) glab git-credential-manager watchman;
+    inherit (pkgs)
+      glab
+      git-credential-manager
+      meld
+      watchman
+      ;
   };
 
   programs.git = {
@@ -48,7 +53,14 @@ in
     settings = {
       user.name = config.programs.git.userName;
       user.email = config.programs.git.userEmail;
-      ui.default-command = "log";
+
+      ui = {
+        default-command = "log";
+        diff.format = "git";
+        diff-editor = ":builtin";
+        merge-editor = "meld";
+      };
+
       core.fsmonitor = "watchman";
 
       aliases = {
