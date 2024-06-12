@@ -42,6 +42,7 @@ in
         "roku"
         "unifi"
         "wiz"
+        "zha"
       ];
       config = {
         default_config = { };
