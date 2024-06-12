@@ -113,6 +113,20 @@ in
             ];
           };
         };
+        notify = [
+          {
+            name = "Fastmail";
+            platform = "smtp";
+            sender = "homeassistant@mj.midna.dev";
+            recipient = "mj@midna.dev";
+            server = "smtp.fastmail.com";
+            port = 465;
+            username = "matt@mattmoriarity.com";
+            password = "!secret fastmail_password";
+            encryption = "tls";
+            sender_name = "Home Assistant";
+          }
+        ];
         adaptive_lighting = { };
         prometheus = { };
       };
@@ -130,6 +144,9 @@ in
       };
       "/var/lib/hass/themes/catppuccin.yaml"."L+" = {
         argument = "${inputs.catppuccin-home-assistant}/themes/catppuccin.yaml";
+      };
+      "/var/lib/hass/secrets.yaml"."L+" = {
+        argument = config.vault-secrets.templates.home-assistant-secrets.path;
       };
     };
 
@@ -163,6 +180,18 @@ in
       backupCleanupCommand = ''
         rm /var/lib/hass/backups/*
       '';
+    };
+
+    vault-secrets.wantedBy = [ "home-assistant.service" ];
+    vault-secrets.templates.home-assistant-secrets = {
+      text = ''
+        {{ with secret "kv/prod/services/home-assistant" }}
+        latitude_home: {{ .Data.data.latitude_home }}
+        longitude_home: {{ .Data.data.longitude_home }}
+        fastmail_password: {{ .Data.data.fastmail_password }}
+        {{ end }}
+      '';
+      owner = "hass";
     };
 
     vault-secrets.services.home-assistant.keys = {
