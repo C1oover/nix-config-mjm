@@ -26,7 +26,7 @@ in
       shellcheck
       shfmt
       vscode-langservers-extracted
-      nodePackages.bash-language-server
+      bash-language-server
       nodePackages.prettier
       nodePackages.typescript-language-server
       nodePackages.yaml-language-server
