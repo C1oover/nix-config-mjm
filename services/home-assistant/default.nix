@@ -35,11 +35,22 @@ in
         "radio_browser"
 
         "apple_tv"
-        "jellyfin"
+        "dlna_dmr"
+        "dlna_dms"
+        "gitlab_ci"
         "homekit_controller"
         "hue"
         "icloud"
+        "imap"
+        "jellyfin"
+        "lidarr"
+        "matrix"
+        "nut"
+        "radarr"
         "roku"
+        "sabnzbd"
+        "sonarr"
+        "tile"
         "unifi"
         "wiz"
         "zha"
@@ -101,6 +112,7 @@ in
           };
         };
         adaptive_lighting = { };
+        prometheus = { };
       };
       customComponents = with pkgs.home-assistant-custom-components; [
         auth-header
