@@ -129,6 +129,19 @@ in
         ];
         adaptive_lighting = { };
         prometheus = { };
+        rest = [
+          {
+            resource = "http://paperless.service.consul:28981/api/documents/";
+            params.tags__name__iexact = "inbox";
+            headers.Authorization = "!secret paperless_authorization";
+            sensor = [
+              {
+                name = "Paperless inbox document count";
+                value_template = "{{ value_json.count }}";
+              }
+            ];
+          }
+        ];
       };
       customComponents = with pkgs.home-assistant-custom-components; [
         auth-header
@@ -189,6 +202,7 @@ in
         latitude_home: {{ .Data.data.latitude_home }}
         longitude_home: {{ .Data.data.longitude_home }}
         fastmail_password: {{ .Data.data.fastmail_password }}
+        paperless_authorization: Token {{ .Data.data.paperless_token }}
         {{ end }}
       '';
       owner = "hass";
