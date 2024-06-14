@@ -48,6 +48,18 @@
       "url": "https://github.com/catppuccin/nix/archive/d34a94a17c6ec4a0c4e24b3e4336ea504d021f6d.tar.gz",
       "hash": "054j9nnl01scqfpyyqxj1plkvg3w474ms12lz5qwgkggydp7casb"
     },
+    "catppuccin-home-assistant": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "catppuccin",
+        "repo": "home-assistant"
+      },
+      "branch": "main",
+      "revision": "e877188ca467e7bbe8991440f6b5f6b3d30347fc",
+      "url": "https://github.com/catppuccin/home-assistant/archive/e877188ca467e7bbe8991440f6b5f6b3d30347fc.tar.gz",
+      "hash": "0xr9zlb6qqpaf5y93l7vlww16301p4cp3wbx5bdgfb6dlnarhjkr"
+    },
     "catppuccin-process-compose": {
       "type": "Git",
       "repository": {

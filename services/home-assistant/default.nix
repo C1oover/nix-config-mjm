@@ -1,4 +1,5 @@
 {
+  inputs,
   pkgs,
   config,
   lib,
@@ -78,6 +79,7 @@ in
         auth_header = {
           username_header = "Remote-User";
         };
+        frontend.themes = "!include_dir_merge_named themes";
         automation = "!include automations.yaml";
         scene = "!include scenes.yaml";
         waste_collection_schedule = {
@@ -119,6 +121,16 @@ in
         waste_collection_schedule
         adaptive_lighting
       ];
+    };
+
+    systemd.tmpfiles.settings."10-home-assistant" = {
+      "/var/lib/hass/themes".d = {
+        user = "hass";
+        group = "hass";
+      };
+      "/var/lib/hass/themes/catppuccin.yaml"."L+" = {
+        argument = "${inputs.catppuccin-home-assistant}/themes/catppuccin.yaml";
+      };
     };
 
     # homekit bridge
