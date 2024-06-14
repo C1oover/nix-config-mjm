@@ -17,9 +17,10 @@
     "teleport-connect"
   ];
 
-  # openssl is needed for building erlang with asdf
   homebrew.brews = [
+    # openssl is needed for building erlang with asdf
     "openssl@1.1"
     "openssl@3"
+    "teleport"
   ];
 }
