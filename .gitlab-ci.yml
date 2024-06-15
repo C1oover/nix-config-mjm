@@ -57,23 +57,12 @@ deploy nixos hosts:
   # before_script: !reference [.snippets, setup_devenv]
   script:
     - nix run -f . host-scripts -- ci attic-login
-    - nix run -f . host-scripts -- ci deploy
-deploy nixos hosts (reboot):
-  tags: [nix-shell, "x86_64"]
-  rules:
-    - when: manual
-      if: $CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"
-  stage: deploy
-  needs: []
-  environment:
-    name: production
-  resource_group: production/nixos
-  id_tokens:
-    VAULT_ID_TOKEN:
-      aud: http://vault.service.consul:8200
-  script:
-    - nix run -f . host-scripts -- ci attic-login
-    - nix run -f . host-scripts -- ci deploy --reboot
+    - |
+      if [ -z "$REBOOT" ]; then
+        nix run -f . host-scripts -- ci deploy
+      else
+        nix run -f . host-scripts -- ci deploy --reboot
+      fi
 build tofu changes:
   tags: [nix, x86_64]
   rules:
