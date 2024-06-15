@@ -210,13 +210,13 @@
       "type": "Git",
       "repository": {
         "type": "GitHub",
-        "owner": "k900",
+        "owner": "mjm",
         "repo": "nixpkgs"
       },
       "branch": "plasma-6.1",
-      "revision": "38f18502c52553b094507e647bd536eea06f8445",
-      "url": "https://github.com/k900/nixpkgs/archive/38f18502c52553b094507e647bd536eea06f8445.tar.gz",
-      "hash": "012m7sp0qbbzvqxg8jp61gz0iv1kqrypgay04p0yka2v68ry9ykg"
+      "revision": "a19dd9b687333ffefc79735ef2319ac1d977c5e1",
+      "url": "https://github.com/mjm/nixpkgs/archive/a19dd9b687333ffefc79735ef2319ac1d977c5e1.tar.gz",
+      "hash": "194kmwjvf0csz2g0b51winx970b4q2sv83dm7dxd4cicrm8xjhfn"
     },
     "nixpkgs": {
       "type": "Channel",
