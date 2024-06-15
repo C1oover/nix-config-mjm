@@ -24,7 +24,7 @@
       matchConfig.Name = "enp1s0";
       networkConfig.DHCP = "ipv4";
       address = [ "2a01:4ff:1f0:879b::1/64" ];
-      routes = [ { routeConfig.Gateway = "fe80::1"; } ];
+      routes = [ { Gateway = "fe80::1"; } ];
     };
   };
 
