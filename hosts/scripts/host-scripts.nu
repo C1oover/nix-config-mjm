@@ -134,7 +134,7 @@ def "main ci deploy" [--reboot] {
 }
 
 def "main ci build" [] {
-  colmena build --on @phase-main,@phase-ingress --keep-result
+  colmena build --on @phase-main,@phase-ingress,persephone --keep-result
 
   retry -n 5 {
     attic push homelab .gcroots/node-*
