@@ -32,6 +32,7 @@ in
         cider
         cinny-desktop
         element-desktop
+        libreoffice-qt-fresh
         picard
         sonixd
         strawberry-qt6
