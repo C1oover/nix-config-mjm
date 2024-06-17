@@ -20,9 +20,9 @@
         "repo": "arkenfox-nixos"
       },
       "branch": "main",
-      "revision": "69e312a746b9b76be2cb6c9fe2352fdf1752e2c7",
-      "url": "https://github.com/dwarfmaster/arkenfox-nixos/archive/69e312a746b9b76be2cb6c9fe2352fdf1752e2c7.tar.gz",
-      "hash": "1451kshnh0r4badw61p6iyqgdjpa5l9zqwad1wjrm4shb2lnmggb"
+      "revision": "35e803fa44abfd438c65b64ff2691f3f608cd2d3",
+      "url": "https://github.com/dwarfmaster/arkenfox-nixos/archive/35e803fa44abfd438c65b64ff2691f3f608cd2d3.tar.gz",
+      "hash": "03749fi30cdki86aphccvrzm1jk01795l226c73r249gr80z2z49"
     },
     "attic": {
       "type": "Git",
@@ -221,8 +221,8 @@
     "nixpkgs": {
       "type": "Channel",
       "name": "nixpkgs-unstable",
-      "url": "https://releases.nixos.org/nixpkgs/nixpkgs-24.11pre639394.3e6b93691653/nixexprs.tar.xz",
-      "hash": "04mabs81v2bdlvhi7035naxzf1nj919i629asq7jx2k66cb4xqzi"
+      "url": "https://releases.nixos.org/nixpkgs/nixpkgs-24.11pre639552.e6cea36f8349/nixexprs.tar.xz",
+      "hash": "0pii8c6wlh7wc6wxwhc85nyn3pk00qi3kn3jah2agf87cbmm9qdk"
     },
     "nixpkgs-firefox-darwin": {
       "type": "Git",
@@ -244,9 +244,9 @@
         "repo": "NUR"
       },
       "branch": "master",
-      "revision": "23af148935eeb5b5107bda6dcd9f5d63aa517cb4",
-      "url": "https://github.com/nix-community/NUR/archive/23af148935eeb5b5107bda6dcd9f5d63aa517cb4.tar.gz",
-      "hash": "13g9rlh2141a8b0hf9pq3nxazb2g96jphzsas2gf7jq09a76xw2d"
+      "revision": "6cbcfe3ed159045295fc7a4435aef97030ecf6f3",
+      "url": "https://github.com/nix-community/NUR/archive/6cbcfe3ed159045295fc7a4435aef97030ecf6f3.tar.gz",
+      "hash": "04i7dnhvhimah50va64adzri9bi3gf479njaiw784i7pk4bypwc7"
     },
     "terranix": {
       "type": "GitRelease",
