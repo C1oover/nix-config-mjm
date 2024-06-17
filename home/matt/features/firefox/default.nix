@@ -119,7 +119,21 @@ in
           )}
         '';
         search.force = true;
+        search.default = "SearXNG";
         search.engines = {
+          "SearXNG" = {
+            urls = [
+              {
+                template = "https://searx.org/search";
+                params = [
+                  {
+                    name = "q";
+                    value = "{searchTerms}";
+                  }
+                ];
+              }
+            ];
+          };
           "MyNixOS" = {
             urls = [
               {
