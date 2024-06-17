@@ -29,7 +29,12 @@ in
       # navidrome won't start without the music folder existing
       wants = [ "videos.mount" ];
       after = [ "videos.mount" ];
-      serviceConfig.SupplementaryGroups = [ "media" ];
+
+      serviceConfig = {
+        SupplementaryGroups = [ "media" ];
+        # without this, navidrome can't read the dns config, which prevents reaching listenbrainz to scrobble
+        BindReadOnlyPaths = [ "/run/systemd/resolve" ];
+      };
     };
 
     services.consul.services.navidrome = {
