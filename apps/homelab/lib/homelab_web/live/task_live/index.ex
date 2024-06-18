@@ -26,7 +26,7 @@ defmodule HomelabWeb.TaskLive.Index do
 
     socket
     |> assign(:report, report)
-    |> then(&assign_async(&1, :tasks, fn -> {:ok, %{tasks: TaskList.new(synced_tasks(report))}} end))
+    |> assign_async(:tasks, fn -> {:ok, %{tasks: TaskList.new(synced_tasks(report))}} end)
     |> then(&{:noreply, &1})
   end
 
@@ -94,7 +94,7 @@ defmodule HomelabWeb.TaskLive.Index do
         |> assign(:new_task_form, nil)
         |> update_tasks(fn tasks ->
           tasks
-          |> TaskList.put_rows(list_tasks(socket))
+          |> TaskList.put_rows(list_tasks(socket.assigns.report))
           |> TaskList.select(task.uuid)
         end)
         |> then(&{:noreply, &1})
@@ -169,7 +169,7 @@ defmodule HomelabWeb.TaskLive.Index do
         socket
         |> put_flash(:info, "Rescheduled task \"#{task.description}\".")
         |> assign(:reschedule_form, nil)
-        |> update_tasks(&TaskList.put_rows(&1, list_tasks(socket)))
+        |> update_tasks()
         |> then(&{:noreply, &1})
 
       {:error, _err} ->
@@ -198,7 +198,7 @@ defmodule HomelabWeb.TaskLive.Index do
         socket
         |> put_flash(:info, "Updated task \"#{task.description}\".")
         |> assign(:edit_form, nil)
-        |> update_tasks(&TaskList.put_rows(&1, list_tasks(socket)))
+        |> update_tasks()
         |> then(&{:noreply, &1})
 
       {:error, _err} ->
@@ -248,7 +248,7 @@ defmodule HomelabWeb.TaskLive.Index do
       {:ok, task} ->
         socket
         |> put_flash(:info, "Deleted task \"#{task.description}\".")
-        |> update_tasks(&TaskList.put_rows(&1, list_tasks(socket)))
+        |> update_tasks()
         |> then(&{:noreply, &1})
 
       {:error, _err} ->
@@ -284,7 +284,7 @@ defmodule HomelabWeb.TaskLive.Index do
       :ok ->
         socket
         |> put_flash(:info, "Added weekly meal tasks.")
-        |> update_tasks(&TaskList.put_rows(&1, list_tasks(socket)))
+        |> update_tasks()
         |> then(&{:noreply, &1})
 
       {:error, _err} ->
@@ -297,7 +297,7 @@ defmodule HomelabWeb.TaskLive.Index do
       :ok ->
         socket
         |> put_flash(:info, "Added laundry tasks.")
-        |> update_tasks(&TaskList.put_rows(&1, list_tasks(socket)))
+        |> update_tasks()
         |> then(&{:noreply, &1})
 
       {:error, _err} ->
@@ -381,7 +381,7 @@ defmodule HomelabWeb.TaskLive.Index do
     task = Homelab.Tasks.get_task(task_uuid)
     {:ok, _task} = Homelab.Tasks.mark_done(task)
 
-    {:noreply, update(socket, :tasks, &TaskList.put_rows(&1, list_tasks(socket)))}
+    {:noreply, update_tasks(socket)}
   end
 
   defp add_child_task(socket, task_uuid) do
@@ -403,7 +403,7 @@ defmodule HomelabWeb.TaskLive.Index do
       {:ok, task} ->
         socket
         |> put_flash(:info, "#{verb} task \"#{task.description}\".")
-        |> update_tasks(&TaskList.put_rows(&1, list_tasks(socket)))
+        |> update_tasks()
         |> then(&{:noreply, &1})
 
       {:error, _err} ->
@@ -421,7 +421,13 @@ defmodule HomelabWeb.TaskLive.Index do
     end
   end
 
-  defp update_tasks(socket, fun) do
+  defp update_tasks(socket, fun \\ nil) do
+    fun =
+      fun ||
+        fn task_list ->
+          TaskList.put_rows(task_list, list_tasks(socket.assigns.report))
+        end
+
     socket
     |> cancel_async(:tasks)
     |> update(:tasks, fun)
