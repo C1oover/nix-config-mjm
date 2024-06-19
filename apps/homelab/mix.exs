@@ -50,12 +50,12 @@ defmodule Homelab.MixProject do
       {:postgrex, ">= 0.0.0"},
       {:floki, ">= 0.30.0", only: :test},
       {:phoenix_live_dashboard, "~> 0.8"},
+      {:bandit, "~> 1.0"},
       {:esbuild, "~> 0.5", runtime: Mix.env() == :dev},
       {:tailwind, "~> 0.1", runtime: Mix.env() == :dev},
       {:swoosh, "~> 1.3"},
       # overrides because prom_ex is too specific in its deps
       {:finch, ">= 0.13.0", override: true},
-      {:plug_cowboy, "~> 2.6", override: true},
       {:telemetry, "~> 1.2.0", override: true},
       # end overrides
       {:telemetry_metrics, "~> 0.6"},
@@ -75,7 +75,6 @@ defmodule Homelab.MixProject do
       {:opentelemetry_telemetry, "~> 1.1", override: true},
       {:opentelemetry_exporter, "~> 1.0"},
       {:opentelemetry_phoenix, "~> 1.0"},
-      {:opentelemetry_cowboy, "~> 0.2"},
       {:opentelemetry_liveview, "1.0.0-rc.4"},
       {:opentelemetry_ecto, "~> 1.0"},
       {:opentelemetry_oban, "~> 1.0"},

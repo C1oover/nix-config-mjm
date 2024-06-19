@@ -40,6 +40,7 @@ config :homelab, Homelab.Cache,
 
 # Configures the endpoint
 config :homelab, HomelabWeb.Endpoint,
+  adapter: Bandit.PhoenixAdapter,
   url: [host: "localhost"],
   render_errors: [
     formats: [html: HomelabWeb.ErrorHTML, json: HomelabWeb.ErrorJSON],

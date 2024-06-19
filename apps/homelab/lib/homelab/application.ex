@@ -9,7 +9,6 @@ defmodule Homelab.Application do
   def start(_type, _args) do
     unless Hush.release_mode?(), do: Hush.resolve!()
 
-    :opentelemetry_cowboy.setup()
     OpentelemetryPhoenix.setup(adapter: :cowboy2)
     OpentelemetryLiveView.setup()
     OpentelemetryEcto.setup([:homelab, :repo])

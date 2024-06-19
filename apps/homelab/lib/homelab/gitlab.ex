@@ -3,7 +3,7 @@ defmodule Homelab.GitLab do
 
   def list_project_pipelines(project_id, opts \\ []) do
     url = "/projects/:id/pipelines"
-    params = [id: URI.encode_www_form(project_id)]
+    params = [id: project_id]
 
     case Tesla.get(client(), url, opts: [path_params: params], query: opts) do
       {:ok, %{status: 200, body: pipelines}} ->
@@ -21,7 +21,7 @@ defmodule Homelab.GitLab do
 
   def get_pipeline(project_id, pipeline_id, opts \\ []) do
     url = "/projects/:id/pipelines/:pipeline_id"
-    params = [id: URI.encode_www_form(project_id), pipeline_id: pipeline_id]
+    params = [id: project_id, pipeline_id: pipeline_id]
 
     case Tesla.get(client(), url, opts: [path_params: params], query: opts) do
       {:ok, %{status: 200, body: pipeline}} ->
@@ -39,7 +39,7 @@ defmodule Homelab.GitLab do
 
   def list_project_deployments(project_id, opts \\ []) do
     url = "/projects/:id/deployments"
-    params = [id: URI.encode_www_form(project_id)]
+    params = [id: project_id]
 
     case Tesla.get(client(), url, opts: [path_params: params], query: opts) do
       {:ok, %{status: 200, body: deployments}} ->
@@ -57,7 +57,7 @@ defmodule Homelab.GitLab do
 
   def get_repository_file_raw(project_id, path, opts \\ []) do
     url = "/projects/:id/repository/files/:file_path/raw"
-    params = [id: URI.encode_www_form(project_id), file_path: URI.encode_www_form(path)]
+    params = [id: project_id, file_path: path]
 
     case Tesla.get(client(), url, opts: [path_params: params], query: opts) do
       {:ok, %{status: 200, body: contents}} ->
@@ -76,7 +76,7 @@ defmodule Homelab.GitLab do
 
   def update_repository_file(project_id, path, content, opts \\ []) do
     url = "/projects/:id/repository/files/:file_path"
-    params = [id: URI.encode_www_form(project_id), file_path: URI.encode_www_form(path)]
+    params = [id: project_id, file_path: path]
 
     body =
       opts
@@ -97,7 +97,7 @@ defmodule Homelab.GitLab do
 
   def list_repository_tree(project_id, opts \\ []) do
     url = "/projects/:id/repository/tree"
-    params = [id: URI.encode_www_form(project_id)]
+    params = [id: project_id]
 
     case Tesla.get(client(), url, opts: [path_params: params], query: opts) do
       {:ok, %{status: 200, body: entries}} ->
@@ -115,7 +115,7 @@ defmodule Homelab.GitLab do
 
   def create_commit(project_id, opts \\ []) do
     url = "/projects/:id/repository/commits"
-    params = [id: URI.encode_www_form(project_id)]
+    params = [id: project_id]
     body = Map.new(opts)
 
     case Tesla.post(client(), url, body, opts: [path_params: params]) do

@@ -26,7 +26,7 @@ defmodule HomelabWeb.TaskLive.Index do
 
     socket
     |> assign(:report, report)
-    |> then(&assign_async(&1, :tasks, fn -> {:ok, %{tasks: TaskList.new(synced_tasks(&1))}} end))
+    |> then(&assign_async(&1, :tasks, fn -> {:ok, %{tasks: TaskList.new(synced_tasks(report))}} end))
     |> then(&{:noreply, &1})
   end
 
@@ -34,13 +34,13 @@ defmodule HomelabWeb.TaskLive.Index do
     assign(socket, :now, DateTime.utc_now())
   end
 
-  defp synced_tasks(socket) do
+  defp synced_tasks(report) do
     Homelab.Tasks.sync()
-    list_tasks(socket)
+    list_tasks(report)
   end
 
-  defp list_tasks(socket) do
-    Homelab.Tasks.list_tasks(report: socket.assigns.report)
+  defp list_tasks(report) do
+    Homelab.Tasks.list_tasks(report: report)
   end
 
   def handle_info(:update_now, socket) do
@@ -48,15 +48,17 @@ defmodule HomelabWeb.TaskLive.Index do
   end
 
   def handle_info(:update_tasks, %{assigns: %{tasks: %{loading: nil} = tasks}} = socket) do
+    report = socket.assigns.report
+
     {:noreply,
      assign_async(socket, :tasks, fn ->
        tasks
        |> case do
          %{ok?: true, result: old_tasks} ->
-           TaskList.put_rows(old_tasks, synced_tasks(socket))
+           TaskList.put_rows(old_tasks, synced_tasks(report))
 
          _ ->
-           TaskList.new(synced_tasks(socket))
+           TaskList.new(synced_tasks(report))
        end
        |> then(&{:ok, %{tasks: &1}})
      end)}

@@ -48,7 +48,6 @@ beamPackages.mixRelease {
     cd ..
 
     mix do deps.loadpaths --no-deps-check, phx.digest
-    mix phx.digest --no-deps-check
   '';
 
   passthru = {
