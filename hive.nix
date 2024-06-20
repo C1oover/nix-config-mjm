@@ -23,9 +23,6 @@ in
   meta = {
     nixpkgs = patchNixpkgs inputs.nixos;
 
-    # use plasma 6.1 beta branch for wayland explicit sync
-    nodeNixpkgs.uranus = patchNixpkgs inputs.nixos-plasma;
-
     specialArgs = {
       inherit inputs;
     };

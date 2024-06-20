@@ -133,9 +133,9 @@
         "repo": "nixos-hardware"
       },
       "branch": "master",
-      "revision": "acb4f0e9bfa8ca2d6fca5e692307b5c994e7dbda",
-      "url": "https://github.com/NixOS/nixos-hardware/archive/acb4f0e9bfa8ca2d6fca5e692307b5c994e7dbda.tar.gz",
-      "hash": "15gz0xr2zs5fr3jxwbc3f5lhp2x626jghlzvp270hr4xny8vzr8k"
+      "revision": "0307a32b553f81056edd6455168c635aeda6743b",
+      "url": "https://github.com/NixOS/nixos-hardware/archive/0307a32b553f81056edd6455168c635aeda6743b.tar.gz",
+      "hash": "07hp9vdbwky6lm7nb50b8qwgrxy107r597gljlv6z2isjw8qrclw"
     },
     "helix": {
       "type": "Git",
@@ -203,20 +203,8 @@
     "nixos": {
       "type": "Channel",
       "name": "nixos-unstable",
-      "url": "https://releases.nixos.org/nixos/unstable/nixos-24.11pre639882.b60ebf54c155/nixexprs.tar.xz",
-      "hash": "1b8g3m87364ch51ziwq47i5dhlhpd34ym20pwpg24iaxqdsa5jc2"
-    },
-    "nixos-plasma": {
-      "type": "Git",
-      "repository": {
-        "type": "GitHub",
-        "owner": "mjm",
-        "repo": "nixpkgs"
-      },
-      "branch": "plasma-6.1",
-      "revision": "a19dd9b687333ffefc79735ef2319ac1d977c5e1",
-      "url": "https://github.com/mjm/nixpkgs/archive/a19dd9b687333ffefc79735ef2319ac1d977c5e1.tar.gz",
-      "hash": "194kmwjvf0csz2g0b51winx970b4q2sv83dm7dxd4cicrm8xjhfn"
+      "url": "https://releases.nixos.org/nixos/unstable/nixos-24.11pre640871.c00d587b1a1a/nixexprs.tar.xz",
+      "hash": "0dsj810l800m9zyhgwvxxgwnnzmzgr3jibbrsg5pfcrm3zr7fpg0"
     },
     "nixpkgs": {
       "type": "Channel",
@@ -244,9 +232,9 @@
         "repo": "NUR"
       },
       "branch": "master",
-      "revision": "57f88b637d41f8f1f7c4a6d827ead6d9c4347e50",
-      "url": "https://github.com/nix-community/NUR/archive/57f88b637d41f8f1f7c4a6d827ead6d9c4347e50.tar.gz",
-      "hash": "1dsk1xsj4xiz4ki2xvgl831vcy7h3g47msbnp11kwnfbpp39kqd6"
+      "revision": "821b0a194df0dbf290b19c910039dc2a758bcd4d",
+      "url": "https://github.com/nix-community/NUR/archive/821b0a194df0dbf290b19c910039dc2a758bcd4d.tar.gz",
+      "hash": "0ssj2yzfv2jsjh2pbx3mxrmrvlynph0rr0nrrcc4cxpppmnn4c51"
     },
     "terranix": {
       "type": "GitRelease",
