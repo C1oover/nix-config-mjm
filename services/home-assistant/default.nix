@@ -47,6 +47,7 @@ in
         "lidarr"
         "matrix"
         "nut"
+        "openweathermap"
         "radarr"
         "roku"
         "sabnzbd"
