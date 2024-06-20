@@ -44,8 +44,9 @@ in
   xdg.configFile."aerospace/aerospace.toml".source = tomlFormat.generate "aerospace.toml" {
     start-at-login = true;
     mode.main.binding = {
-      alt-shift-slash = "layout tiles horizontal vertical";
-      alt-shift-quote = "layout accordion horizontal vertical";
+      alt-shift-slash = "layout tiles";
+      alt-shift-quote = "layout accordion";
+      alt-shift-t = "layout horizontal vertical";
 
       alt-h = "focus left";
       alt-j = "focus down";
