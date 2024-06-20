@@ -25,10 +25,7 @@ defmodule Homelab.MixProject do
   #
   # Type `mix help compile.app` for more information.
   def application do
-    [
-      mod: {Homelab.Application, []},
-      extra_applications: [:logger, :runtime_tools]
-    ]
+    [mod: {Homelab.Application, []}, extra_applications: [:logger, :runtime_tools]]
   end
 
   # Specifies which paths to compile per environment.
@@ -80,7 +77,8 @@ defmodule Homelab.MixProject do
       {:opentelemetry_oban, "~> 1.0"},
       {:opentelemetry_tesla, "~> 2.0"},
       {:timex, "~> 3.7"},
-      {:human_time, "~> 0.3.1"}
+      {:human_time, "~> 0.3.1"},
+      {:recode, "~> 0.7", only: [:dev, :test]}
     ]
   end
 
@@ -104,9 +102,7 @@ defmodule Homelab.MixProject do
       homelab: [
         config_providers: [{Hush.ConfigProvider, nil}],
         include_executables_for: [:unix],
-        applications: [
-          homelab: :permanent
-        ]
+        applications: [homelab: :permanent]
       ]
     ]
   end

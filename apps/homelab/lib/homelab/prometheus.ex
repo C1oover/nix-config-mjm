@@ -8,17 +8,10 @@ defmodule Homelab.Prometheus do
 
   def list_alerts() do
     case get("/api/v1/alerts", opts: [path_params: []]) do
-      {:ok, %{status: 200, body: %{"data" => %{"alerts" => alerts}}}} ->
-        {:ok, alerts}
-
-      {:ok, %{status: 200}} ->
-        {:error, :unexpected_data}
-
-      {:ok, %{status: status}} ->
-        {:error, {:unexpected_status, status}}
-
-      {:error, err} ->
-        {:error, err}
+      {:ok, %{status: 200, body: %{"data" => %{"alerts" => alerts}}}} -> {:ok, alerts}
+      {:ok, %{status: 200}} -> {:error, :unexpected_data}
+      {:ok, %{status: status}} -> {:error, {:unexpected_status, status}}
+      {:error, err} -> {:error, err}
     end
   end
 end

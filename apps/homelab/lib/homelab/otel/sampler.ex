@@ -15,15 +15,7 @@ defmodule Homelab.Otel.Sampler do
   @ignored_paths ["/healthz", "/metrics"]
 
   @impl :otel_sampler
-  def should_sample(
-        ctx,
-        _trace_id,
-        _links,
-        _span_name,
-        _span_kind,
-        attributes,
-        _sampler_config
-      ) do
+  def should_sample(ctx, _trace_id, _links, _span_name, _span_kind, attributes, _sampler_config) do
     tracestate = Tracer.current_span_ctx(ctx) |> OpenTelemetry.Span.tracestate()
 
     case Map.get(attributes, :"http.target") not in @ignored_paths do

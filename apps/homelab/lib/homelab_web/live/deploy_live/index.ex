@@ -27,10 +27,7 @@ defmodule HomelabWeb.DeployLive.Index do
     socket
     |> assign_async([:infra_deploys, :refreshed_at], fn ->
       {:ok,
-       %{
-         infra_deploys: Deploys.list_recent_infra_deployments(),
-         refreshed_at: DateTime.utc_now()
-       }}
+       %{infra_deploys: Deploys.list_recent_infra_deployments(), refreshed_at: DateTime.utc_now()}}
     end)
     |> assign_async(:infra_build, fn ->
       {:ok, %{infra_build: Deploys.get_latest_infra_build()}}

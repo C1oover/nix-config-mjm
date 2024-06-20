@@ -27,10 +27,7 @@ defmodule Homelab.Backups do
   end
 
   defp async_list_archives(location) do
-    Otel.async_nolink(
-      fn -> list_archives_by_location(location) end,
-      shutdown: :brutal_kill
-    )
+    Otel.async_nolink(fn -> list_archives_by_location(location) end, shutdown: :brutal_kill)
   end
 
   def list_archives_by_location(location) do
@@ -40,24 +37,17 @@ defmodule Homelab.Backups do
   end
 
   def sort_archives(archives) do
-    Enum.sort(
-      archives,
-      &(DateTime.compare(&1.time, &2.time) != :lt)
-    )
+    Enum.sort(archives, &(DateTime.compare(&1.time, &2.time) != :lt))
   end
 
   defp fetch_cached_results(locations) do
     {uncached_locations, results} =
-      Enum.reduce(
-        locations,
-        {[], []},
-        fn location, {uncached_locations, acc_results} ->
-          case Cache.get({:backups, location}) do
-            nil -> {[location | uncached_locations], acc_results}
-            results -> {uncached_locations, [results | acc_results]}
-          end
+      Enum.reduce(locations, {[], []}, fn location, {uncached_locations, acc_results} ->
+        case Cache.get({:backups, location}) do
+          nil -> {[location | uncached_locations], acc_results}
+          results -> {uncached_locations, [results | acc_results]}
         end
-      )
+      end)
 
     {uncached_locations, List.flatten(results)}
   end

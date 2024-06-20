@@ -1,8 +1,8 @@
 defmodule HomelabWeb.TaskLive.TaskList do
   defstruct rows: [], selected: nil
 
-  alias __MODULE__
   alias Phoenix.LiveView.AsyncResult
+  alias __MODULE__
 
   def new([]), do: %TaskList{}
   def new([first | _] = rows), do: %TaskList{rows: rows, selected: first.uuid}

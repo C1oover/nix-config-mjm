@@ -17,10 +17,7 @@ defmodule Homelab.NetBox.DNS do
     {:ok, %{"data" => %{"ip_address_list" => hosts}}} =
       NetBox.query(@hostnames_query, domain: [suffix])
 
-    a_records =
-      hosts
-      |> Enum.map(&a_record(&1, suffix))
-      |> Enum.join("\n")
+    a_records = hosts |> Enum.map(&a_record(&1, suffix)) |> Enum.join("\n")
 
     if Keyword.get(opts, :only_records, false) do
       "#{a_records}\n"

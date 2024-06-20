@@ -15,10 +15,7 @@ defmodule Homelab.GitLab.Commit do
   end
 
   def to_commit(%__MODULE__{} = commit) do
-    %Homelab.Deploys.Commit{
-      sha: commit.id,
-      message: commit.message
-    }
+    %Homelab.Deploys.Commit{sha: commit.id, message: commit.message}
   end
 
   def apply(%Homelab.Deploys.Deploy{} = deploy, %__MODULE__{} = commit) do

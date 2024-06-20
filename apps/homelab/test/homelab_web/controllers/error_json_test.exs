@@ -6,7 +6,8 @@ defmodule HomelabWeb.ErrorJSONTest do
   end
 
   test "renders 500" do
-    assert HomelabWeb.ErrorJSON.render("500.json", %{}) ==
-             %{errors: %{detail: "Internal Server Error"}}
+    assert HomelabWeb.ErrorJSON.render("500.json", %{}) == %{
+             errors: %{detail: "Internal Server Error"}
+           }
   end
 end

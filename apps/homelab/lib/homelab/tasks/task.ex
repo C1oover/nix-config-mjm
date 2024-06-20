@@ -31,14 +31,7 @@ defmodule Homelab.Tasks.Task do
   end
 
   def changeset(data, params) do
-    data
-    |> cast(params, [
-      :description,
-      :project,
-      :scheduled,
-      :status,
-      :tags
-    ])
+    cast(data, params, [:description, :project, :scheduled, :status, :tags])
   end
 
   def reminder_changeset(data, params) do

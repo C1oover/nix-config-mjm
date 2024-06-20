@@ -12,8 +12,7 @@ defmodule Homelab.Jobs.CreateReminderTasks do
     Reminder
     |> where(
       [r],
-      (is_nil(r.started_at) or r.notify_at > r.started_at) and
-        r.notify_at <= ^DateTime.utc_now()
+      (is_nil(r.started_at) or r.notify_at > r.started_at) and r.notify_at <= ^DateTime.utc_now()
     )
     |> Repo.all()
     |> Enum.each(&create_task/1)

@@ -107,30 +107,22 @@ defmodule Homelab.Tasks.Adapter.Connection do
   end
 
   defp command_json(args) do
-    Tracer.with_span :run_tw_command, %{
-      attributes: %{"tw.args": inspect(args), "tw.json": true}
-    } do
+    Tracer.with_span :run_tw_command, %{attributes: %{"tw.args": inspect(args), "tw.json": true}} do
       with {result_str, 0} <- System.cmd("task", args, env: task_env()) do
         Jason.decode(result_str)
       else
-        {output, code} when is_integer(code) ->
-          {:error, {:bad_code, code, output}}
-
-        {:error, reason} ->
-          {:error, reason}
+        {output, code} when is_integer(code) -> {:error, {:bad_code, code, output}}
+        {:error, reason} -> {:error, reason}
       end
     end
   end
 
   defp command(args) do
-    Tracer.with_span :run_tw_command, %{
-      attributes: %{"tw.args": inspect(args), "tw.json": false}
-    } do
+    Tracer.with_span :run_tw_command, %{attributes: %{"tw.args": inspect(args), "tw.json": false}} do
       with {result_str, 0} <- System.cmd("task", args, env: task_env()) do
         {:ok, result_str}
       else
-        {output, code} when is_integer(code) ->
-          {:error, {:bad_code, code, output}}
+        {output, code} when is_integer(code) -> {:error, {:bad_code, code, output}}
       end
     end
   end

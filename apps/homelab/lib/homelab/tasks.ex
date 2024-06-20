@@ -1,7 +1,7 @@
 defmodule Homelab.Tasks do
   alias Homelab.Repo
-  alias __MODULE__.Repo, as: TaskRepo
-  alias __MODULE__.{Reminder, Task}
+  alias Homelab.Tasks.{Reminder, Task}
+  alias Homelab.Tasks.Repo, as: TaskRepo
 
   import Ecto.Query
 
@@ -73,10 +73,7 @@ defmodule Homelab.Tasks do
 
   def add_tags(task, tags) do
     tags_to_add =
-      tags
-      |> MapSet.new()
-      |> MapSet.difference(MapSet.new(task.tags))
-      |> Enum.into([])
+      tags |> MapSet.new() |> MapSet.difference(MapSet.new(task.tags)) |> Enum.into([])
 
     task
     |> Task.changeset(%{tags: task.tags ++ tags_to_add})

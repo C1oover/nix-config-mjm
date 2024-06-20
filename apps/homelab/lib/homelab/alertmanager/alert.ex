@@ -23,14 +23,7 @@ defmodule Homelab.Alertmanager.Alert do
   end
 
   def changeset(data, params) do
-    data
-    |> cast(params, [
-      :annotations,
-      :labels,
-      :endsAt,
-      :startsAt,
-      :updatedAt
-    ])
+    cast(data, params, [:annotations, :labels, :endsAt, :startsAt, :updatedAt])
 
     # TODO pull description and summary out of annotations
   end

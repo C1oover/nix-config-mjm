@@ -76,10 +76,7 @@ defmodule Homelab.PromEx do
 
   @impl true
   def dashboard_assigns do
-    [
-      datasource_id: "prom_homelab",
-      default_selected_interval: "30s"
-    ]
+    [datasource_id: "prom_homelab", default_selected_interval: "30s"]
   end
 
   @impl true

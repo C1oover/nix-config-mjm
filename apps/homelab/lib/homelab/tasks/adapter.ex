@@ -60,9 +60,7 @@ defmodule Homelab.Tasks.Adapter do
   end
 
   defp types_from_query_meta(%{select: %{from: {_, {_, {_, schema}, _, types}}}}) do
-    Enum.map(types, fn {field, type} ->
-      {schema.__schema__(:field_source, field), type}
-    end)
+    Enum.map(types, fn {field, type} -> {schema.__schema__(:field_source, field), type} end)
   end
 
   defp decode_result(result, types) when is_list(result) do
@@ -71,9 +69,7 @@ defmodule Homelab.Tasks.Adapter do
 
   defp decode_result(%{} = result, types) do
     Enum.map(types, fn {field, type} ->
-      result
-      |> Map.get(Atom.to_string(field))
-      |> decode_type(type)
+      result |> Map.get(Atom.to_string(field)) |> decode_type(type)
     end)
   end
 

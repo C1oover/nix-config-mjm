@@ -28,14 +28,9 @@ defmodule Homelab.Deploys.Deploy do
       key = {deploy.source, deploy.repo, deploy.job}
 
       case {deploy.state, Map.has_key?(successes, key)} do
-        {:success, true} ->
-          {[%{deploy | state: :inactive} | deploys], successes}
-
-        {:success, false} ->
-          {[deploy | deploys], Map.put(successes, key, deploy)}
-
-        _ ->
-          {[deploy | deploys], successes}
+        {:success, true} -> {[%{deploy | state: :inactive} | deploys], successes}
+        {:success, false} -> {[deploy | deploys], Map.put(successes, key, deploy)}
+        _ -> {[deploy | deploys], successes}
       end
     end)
     |> elem(0)

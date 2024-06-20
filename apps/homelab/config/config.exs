@@ -7,7 +7,7 @@
 # General application configuration
 import Config
 
-alias Hush.Provider.{SystemdCreds, SystemEnvironment}
+alias Hush.Provider.{SystemEnvironment, SystemdCreds}
 
 config :homelab,
   ecto_repos: [Homelab.Repo]
@@ -16,10 +16,7 @@ config :homelab, Oban,
   repo: Homelab.Repo,
   plugins: [
     {Oban.Plugins.Pruner, max_age: 1800},
-    {Oban.Plugins.Cron,
-     crontab: [
-       {"*/5 * * * *", Homelab.Jobs.CreateReminderTasks}
-     ]}
+    {Oban.Plugins.Cron, crontab: [{"*/5 * * * *", Homelab.Jobs.CreateReminderTasks}]}
   ],
   queues: [default: 10],
   stage_interval: 10_000
@@ -73,14 +70,11 @@ config :esbuild,
 config :tailwind,
   version: System.get_env("MIX_TAILWIND_VERSION"),
   path: System.get_env("MIX_TAILWIND_PATH"),
-  default: [
-    args: ~w(
+  default: [args: ~w(
       --config=tailwind.config.js
       --input=css/app.css
       --output=../priv/static/assets/app.css
-    ),
-    cd: Path.expand("../assets", __DIR__)
-  ]
+    ), cd: Path.expand("../assets", __DIR__)]
 
 # Configures Elixir's Logger
 config :logger, :console,

@@ -62,7 +62,6 @@ defmodule Homelab.GitLab.Deployment do
   defp friendly_environment(%{name: "production"}), do: nil
 
   defp friendly_environment(environment) do
-    environment.name
-    |> String.replace_prefix("production/", "")
+    String.replace_prefix(environment.name, "production/", "")
   end
 end

@@ -1,14 +1,9 @@
 defmodule Homelab.NetBox do
   def query(query, variables \\ []) do
     case Tesla.post(client(), "/", %{query: query, variables: Map.new(variables)}) do
-      {:ok, %{status: 200, body: body}} ->
-        {:ok, body}
-
-      {:ok, %{status: status, body: body}} ->
-        {:error, {:unexpected_status, status, body}}
-
-      {:error, err} ->
-        {:error, err}
+      {:ok, %{status: 200, body: body}} -> {:ok, body}
+      {:ok, %{status: status, body: body}} -> {:error, {:unexpected_status, status, body}}
+      {:error, err} -> {:error, err}
     end
   end
 

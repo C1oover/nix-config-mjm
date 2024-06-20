@@ -54,11 +54,8 @@ defmodule HomelabWeb.TaskLive.Index do
      assign_async(socket, :tasks, fn ->
        tasks
        |> case do
-         %{ok?: true, result: old_tasks} ->
-           TaskList.put_rows(old_tasks, synced_tasks(report))
-
-         _ ->
-           TaskList.new(synced_tasks(report))
+         %{ok?: true, result: old_tasks} -> TaskList.put_rows(old_tasks, synced_tasks(report))
+         _ -> TaskList.new(synced_tasks(report))
        end
        |> then(&{:ok, %{tasks: &1}})
      end)}
@@ -109,10 +106,7 @@ defmodule HomelabWeb.TaskLive.Index do
     |> assign(
       :new_reminder_form,
       %Reminder{}
-      |> Reminder.changeset(%{
-        notify_at: DateTime.utc_now(),
-        snooze_minutes: 10
-      })
+      |> Reminder.changeset(%{notify_at: DateTime.utc_now(), snooze_minutes: 10})
       |> to_form()
     )
     |> then(&{:noreply, &1})
@@ -123,10 +117,7 @@ defmodule HomelabWeb.TaskLive.Index do
   end
 
   def handle_event("change_new_reminder", %{"reminder" => params}, socket) do
-    form =
-      %Reminder{}
-      |> Reminder.changeset(params)
-      |> to_form()
+    form = %Reminder{} |> Reminder.changeset(params) |> to_form()
 
     {:noreply, assign(socket, :new_reminder_form, form)}
   end
@@ -217,10 +208,7 @@ defmodule HomelabWeb.TaskLive.Index do
   end
 
   def handle_event("change_edit_reminder", %{"reminder" => params}, socket) do
-    form =
-      socket.assigns.edit_reminder_form.data
-      |> Reminder.changeset(params)
-      |> to_form()
+    form = socket.assigns.edit_reminder_form.data |> Reminder.changeset(params) |> to_form()
 
     {:noreply, assign(socket, :edit_reminder_form, form)}
   end
@@ -413,20 +401,14 @@ defmodule HomelabWeb.TaskLive.Index do
 
   defp with_selection(socket, func) do
     case socket.assigns.tasks do
-      %{ok?: true, result: %TaskList{selected: uuid}} ->
-        func.(socket, uuid)
-
-      _ ->
-        {:noreply, socket}
+      %{ok?: true, result: %TaskList{selected: uuid}} -> func.(socket, uuid)
+      _ -> {:noreply, socket}
     end
   end
 
   defp update_tasks(socket, fun \\ nil) do
     fun =
-      fun ||
-        fn task_list ->
-          TaskList.put_rows(task_list, list_tasks(socket.assigns.report))
-        end
+      fun || fn task_list -> TaskList.put_rows(task_list, list_tasks(socket.assigns.report)) end
 
     socket
     |> cancel_async(:tasks)

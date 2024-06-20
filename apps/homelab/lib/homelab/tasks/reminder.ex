@@ -18,29 +18,19 @@ defmodule Homelab.Tasks.Reminder do
 
   def changeset(data, params) do
     data
-    |> cast(params, [
-      :description,
-      :project,
-      :notify_at,
-      :snooze_minutes,
-      :recurrence
-    ])
+    |> cast(params, [:description, :project, :notify_at, :snooze_minutes, :recurrence])
     |> cast_recurrence_string(params)
     |> validate_required([:description, :notify_at])
   end
 
   def fire_changeset(data) do
     data
-    |> change(started_at: DateTime.utc_now() |> DateTime.truncate(:second))
+    |> change(started_at: DateTime.truncate(DateTime.utc_now(), :second))
     |> set_next_notify_at()
   end
 
   def with_recurrence_string(%{recurrence: %{} = recurrence} = reminder) do
-    str =
-      recurrence
-      |> Enum.map_join(" ", fn {key, value} ->
-        "#{key}:#{value}"
-      end)
+    str = Enum.map_join(recurrence, " ", fn {key, value} -> "#{key}:#{value}" end)
 
     %{reminder | recurrence_string: str}
   end
@@ -108,11 +98,8 @@ defmodule Homelab.Tasks.Reminder do
   # for a while.
   defp advance_next_notify_at(current, shift_params, started_at) do
     case DateTime.compare(current, started_at) do
-      :gt ->
-        current
-
-      _ ->
-        advance_next_notify_at(Timex.shift(current, shift_params), shift_params, started_at)
+      :gt -> current
+      _ -> advance_next_notify_at(Timex.shift(current, shift_params), shift_params, started_at)
     end
   end
 end

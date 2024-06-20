@@ -14,11 +14,8 @@ defmodule HomelabWeb.BackupLive.Index do
 
   defp all_archives(onsite, offsite) do
     case offsite do
-      %{ok?: true, result: offsite} ->
-        Homelab.Backups.sort_archives(onsite ++ offsite)
-
-      _ ->
-        onsite
+      %{ok?: true, result: offsite} -> Homelab.Backups.sort_archives(onsite ++ offsite)
+      _ -> onsite
     end
   end
 

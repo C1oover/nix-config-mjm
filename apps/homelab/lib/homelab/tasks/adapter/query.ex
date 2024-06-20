@@ -6,11 +6,7 @@ defmodule Homelab.Tasks.Adapter.Query do
 
     filters = filters_from_wheres(query)
 
-    %__MODULE__{
-      schema: schema,
-      report: report,
-      filters: filters
-    }
+    %__MODULE__{schema: schema, report: report, filters: filters}
   end
 
   defp filters_from_wheres(%Ecto.Query{wheres: wheres}) do

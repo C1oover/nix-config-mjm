@@ -1,8 +1,8 @@
 defmodule Homelab.Deploys do
   require OpenTelemetry.Tracer, as: Tracer
 
-  alias Homelab.GitLab
   alias Homelab.Deploys.Deploy
+  alias Homelab.GitLab
 
   def get_latest_infra_build(), do: get_latest_gitlab_build("mjm/nix-config")
 
@@ -18,25 +18,18 @@ defmodule Homelab.Deploys do
       |> GitLab.Deployment.to_deploy()
       |> Deploy.deactivate_old_deploys()
     else
-      err ->
-        raise "error fetching infra deployments: #{inspect(err)}"
+      err -> raise "error fetching infra deployments: #{inspect(err)}"
     end
   end
 
   defp get_latest_gitlab_build(repo) do
     Tracer.with_span :get_latest_gitlab_build, %{attributes: %{"gitlab.repo": repo}} do
       with {:ok, [pipeline]} <-
-             GitLab.list_project_pipelines(
-               repo,
-               per_page: 1,
-               source: "push",
-               ref: "main"
-             ),
+             GitLab.list_project_pipelines(repo, per_page: 1, source: "push", ref: "main"),
            {:ok, pipeline} <- GitLab.get_pipeline(repo, pipeline.id) do
         GitLab.Pipeline.to_build(pipeline)
       else
-        err ->
-          raise "error fetching latest gitlab build: #{inspect(err)}"
+        err -> raise "error fetching latest gitlab build: #{inspect(err)}"
       end
     end
   end

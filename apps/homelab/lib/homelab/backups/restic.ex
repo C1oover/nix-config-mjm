@@ -33,9 +33,7 @@ defmodule Homelab.Backups.Restic do
   defp command_json(args, env) do
     args = ["--json", "--no-lock"] ++ args
 
-    Tracer.with_span :run_restic_command, %{
-      attributes: %{"restic.args": inspect(args)}
-    } do
+    Tracer.with_span :run_restic_command, %{attributes: %{"restic.args": inspect(args)}} do
       {result_str, 0} = System.cmd("restic", args, env: env)
       # TODO set attribute for response length
       Jason.decode!(result_str)
@@ -54,10 +52,7 @@ defmodule Homelab.Backups.Restic do
     key_id = File.read!(cfg[:key_id_file])
     secret_key = File.read!(cfg[:secret_key_file])
 
-    [
-      {"AWS_ACCESS_KEY_ID", key_id},
-      {"AWS_SECRET_ACCESS_KEY", secret_key}
-    ]
+    [{"AWS_ACCESS_KEY_ID", key_id}, {"AWS_SECRET_ACCESS_KEY", secret_key}]
   end
 
   defp location_cfg(location) do
