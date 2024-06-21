@@ -94,7 +94,7 @@ in
         location =/.well-known/matrix/client {
           default_type application/json;
           add_header Access-Control-Allow-Origin *;
-          return 200 '{"m.homeserver": {"base_url": "https://chat.midna.dev/"}}';
+          return 200 '{"m.homeserver": {"base_url": "https://chat.midna.dev/"}, "org.matrix.msc3575.proxy": {"url": "https://chat.midna.dev"}}';
         }
       '';
     };
