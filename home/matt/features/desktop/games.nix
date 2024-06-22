@@ -20,6 +20,7 @@ in
       inherit (pkgs)
         chiaki
         # lutris
+        obs-studio
         xivlauncher
         ;
       inherit (pkgs.kdePackages)
