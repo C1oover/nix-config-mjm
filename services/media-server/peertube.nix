@@ -52,7 +52,12 @@ in
       ];
     };
 
-    networking.firewall.allowedTCPPorts = [ 9001 ];
+    networking.firewall.allowedTCPPorts = [
+      # rtmp for live streaming
+      1935
+      # http
+      9001
+    ];
 
     services.consul.services.peertube = {
       port = 9001;

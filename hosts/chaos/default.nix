@@ -47,7 +47,6 @@
   mjm.consul.enable = true;
   mjm.garage.enable = true;
   mjm.media-server.enable = true;
-  mjm.owncast.enable = true;
   mjm.server.enable = true;
   mjm.state = {
     enableImpermanence = true;
