@@ -26,6 +26,7 @@ in
       redis.createLocally = true;
 
       secrets.secretsFile = config.vault-secrets.services.media-server.keys.peertube_secrets.path;
+      smtp.passwordFile = config.vault-secrets.services.media-server.keys.fastmail_password.path;
 
       dataDirs = [ "/videos/peertube" ];
 
@@ -34,6 +35,12 @@ in
           web_videos = "/videos/peertube/web-videos/";
           streaming_playlists = "/videos/peertube/streaming-playlists/";
           redundancy = "/videos/peertube/redundancy/";
+        };
+        smtp = {
+          hostname = "smtp.fastmail.com";
+          username = "matt@mattmoriarity.com";
+          disable_starttls = true;
+          from_address = "peertube@mj.midna.dev";
         };
       };
     };
@@ -63,8 +70,9 @@ in
       port = 9001;
     };
 
-    vault-secrets.services.media-server.keys.peertube_secrets = {
-      owner = "peertube";
+    vault-secrets.services.media-server.keys = {
+      fastmail_password.owner = "peertube";
+      peertube_secrets.owner = "peertube";
     };
   };
 }
