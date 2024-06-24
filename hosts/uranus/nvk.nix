@@ -19,7 +19,7 @@ in
 
       hardware.nvidia.powerManagement.enable = true;
 
-      hardware.opengl.extraPackages = [
+      hardware.graphics.extraPackages = [
         pkgs.libvdpau-va-gl
         pkgs.nvidia-vaapi-driver
       ];
