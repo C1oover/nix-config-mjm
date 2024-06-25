@@ -44,9 +44,9 @@
         "repo": "nix"
       },
       "branch": "main",
-      "revision": "6e77fdd91d4d92e3e984306458dd14502d91ca60",
-      "url": "https://github.com/catppuccin/nix/archive/6e77fdd91d4d92e3e984306458dd14502d91ca60.tar.gz",
-      "hash": "10x6i15yx4il9hpr3wqljzjsv82hqd730v47wfcx9jjgwplqjdpi"
+      "revision": "1adbfeb44a54be0ae79eca751ba948a6faa3bb0f",
+      "url": "https://github.com/catppuccin/nix/archive/1adbfeb44a54be0ae79eca751ba948a6faa3bb0f.tar.gz",
+      "hash": "1020q0qnszc6qn3idsas61ahnfl4qqdd9nkyjrvmaskvsg4r5zvq"
     },
     "catppuccin-home-assistant": {
       "type": "Git",
@@ -133,9 +133,9 @@
         "repo": "nixos-hardware"
       },
       "branch": "master",
-      "revision": "c3e48cbd88414f583ff08804eb57b0da4c194f9e",
-      "url": "https://github.com/NixOS/nixos-hardware/archive/c3e48cbd88414f583ff08804eb57b0da4c194f9e.tar.gz",
-      "hash": "0h4x3xplr4awz7rmh27ksrbzf0np9ik0v3y24pac3inbxaaw2ipv"
+      "revision": "caabc425565bbd5c8640630b0bf6974961a49242",
+      "url": "https://github.com/NixOS/nixos-hardware/archive/caabc425565bbd5c8640630b0bf6974961a49242.tar.gz",
+      "hash": "15vkwwcxnbfk3chwn87ddb7nkpsz0zi39f8y1r895bhpbjsg38q6"
     },
     "helix": {
       "type": "Git",
@@ -145,9 +145,9 @@
         "repo": "helix"
       },
       "branch": "master",
-      "revision": "a982e5ce260e8191a2a24fa62e9e5bdf488bb5d4",
-      "url": "https://github.com/helix-editor/helix/archive/a982e5ce260e8191a2a24fa62e9e5bdf488bb5d4.tar.gz",
-      "hash": "04rs4wqlvif29il2xd4hc707vnypplp2sj2d8xr85fbn2mh0q1zf"
+      "revision": "b05ed9bf8518be662490fa669bf8b51b0c683fe9",
+      "url": "https://github.com/helix-editor/helix/archive/b05ed9bf8518be662490fa669bf8b51b0c683fe9.tar.gz",
+      "hash": "0q291iiggws83bz12ygnc03yhjs1g81vrnb4klw3b9h8x4fzc4bn"
     },
     "home-manager": {
       "type": "Git",
@@ -203,14 +203,14 @@
     "nixos": {
       "type": "Channel",
       "name": "nixos-unstable",
-      "url": "https://releases.nixos.org/nixos/unstable/nixos-24.11pre642660.a71e967ef369/nixexprs.tar.xz",
-      "hash": "0km1smh73aqa9syc3pd6f8l8rz6jb87x8a4qx7d6x1b8932z3is2"
+      "url": "https://releases.nixos.org/nixos/unstable/nixos-24.11pre643242.2893f56de080/nixexprs.tar.xz",
+      "hash": "0w1ccbrfwm9s1jswl0x4kibn8j47bg310iq5f2fn34acvjhffzw9"
     },
     "nixpkgs": {
       "type": "Channel",
       "name": "nixpkgs-unstable",
-      "url": "https://releases.nixos.org/nixpkgs/nixpkgs-24.11pre643113.efb39c6052f3/nixexprs.tar.xz",
-      "hash": "1vndspf6xs9mgq682i7rb1f517qwy0qh2lz7mfqs9ay6k0b4h8sb"
+      "url": "https://releases.nixos.org/nixpkgs/nixpkgs-24.11pre643429.cfb89a95f19b/nixexprs.tar.xz",
+      "hash": "0rak5zk4wz4j6xrkrc33mbqqlcxnjkvnvqv9j5naf38pgr6gcd5n"
     },
     "nixpkgs-firefox-darwin": {
       "type": "Git",
@@ -220,9 +220,9 @@
         "repo": "nixpkgs-firefox-darwin"
       },
       "branch": "main",
-      "revision": "ab2e32d06ebbde824ee0b505d6319a8557faf6a0",
-      "url": "https://github.com/bandithedoge/nixpkgs-firefox-darwin/archive/ab2e32d06ebbde824ee0b505d6319a8557faf6a0.tar.gz",
-      "hash": "06pprzjmdc9zpla6nj9mqxl5z6jnbmhq9c75x0jjwpp046sq0743"
+      "revision": "3846159363f3ada3ef2657160c5ef52788f12608",
+      "url": "https://github.com/bandithedoge/nixpkgs-firefox-darwin/archive/3846159363f3ada3ef2657160c5ef52788f12608.tar.gz",
+      "hash": "0aqsfpkcsvda4gihaand957cvyvirqxi32wghmc2jbnjdsfrrm14"
     },
     "nur": {
       "type": "Git",
@@ -232,9 +232,9 @@
         "repo": "NUR"
       },
       "branch": "master",
-      "revision": "05c15148223634c842ae20b576d786414488cf3b",
-      "url": "https://github.com/nix-community/NUR/archive/05c15148223634c842ae20b576d786414488cf3b.tar.gz",
-      "hash": "165y2kg90ayjb62j7aq13c8016k7111wk2w6lw08nf6fbndwz8pl"
+      "revision": "06d455cff79e4721e30e9170e122f600898c2ffe",
+      "url": "https://github.com/nix-community/NUR/archive/06d455cff79e4721e30e9170e122f600898c2ffe.tar.gz",
+      "hash": "0rl2bvcrbwibyyc2zjg30pd5rkd15pipmb47x4wpx86p4y2v6w8q"
     },
     "terranix": {
       "type": "GitRelease",
