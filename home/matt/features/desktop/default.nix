@@ -15,6 +15,7 @@ in
     ./firefox.nix
     ./games.nix
     ./kdeconfig.nix
+    ./syncthing.nix
     ./terminal.nix
   ];
 

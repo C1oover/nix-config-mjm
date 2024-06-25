@@ -14,13 +14,13 @@ in
     nix-colors.homeManagerModules.default
     "${inputs.catppuccin}/modules/home-manager"
 
-    ../features/git
-    ../features/shell
-    ../features/xdg
-
     ../features/desktop
     ../features/firefox
+    ../features/git
+    ../features/shell
+    ../features/syncthing
     ../features/terminal
+    ../features/xdg
   ] ++ (builtins.attrValues (import ../../../modules/home-manager));
 
   home.stateVersion = lib.mkDefault "22.11";
