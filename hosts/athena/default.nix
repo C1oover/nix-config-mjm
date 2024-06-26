@@ -11,6 +11,7 @@
     "cleanshot"
     "loom"
     "nikitabobko/tap/aerospace"
+    "notunes"
     "postico"
     "rectangle-pro"
     "slab"
