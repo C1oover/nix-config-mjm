@@ -81,7 +81,7 @@ in
 
   programs.eza = {
     enable = true;
-    enableNushellIntegration = true;
+    # enableNushellIntegration = true;
     git = true;
     icons = true;
     extraOptions = [

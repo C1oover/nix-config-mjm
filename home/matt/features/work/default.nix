@@ -29,6 +29,14 @@
       npm run docker:logs -- --no-log-prefix
     }
 
+    def ",t all" [] {
+      docker compose exec slab_1 mix test.all
+    }
+
+    def ",t" [] {
+      docker compose exec slab_1 mix test (ls test/**/*_test.exs | get name | str join (char nl) | fzf)
+    }
+
     $env.ASDF_DIR = ($env.HOME | path join '.asdf')
     source ${config.home.homeDirectory}/.asdf/asdf.nu
   '';
