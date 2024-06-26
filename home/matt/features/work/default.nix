@@ -33,8 +33,15 @@
       docker compose exec slab_1 mix test.all
     }
 
+    def ",t last" [] {
+      let last_test = open ~/.cache/mjm/last_test --raw | decode utf-8 | str trim
+      docker compose exec slab_1 mix test $last_test
+    }
+
     def ",t" [] {
-      docker compose exec slab_1 mix test (ls test/**/*_test.exs | get name | str join (char nl) | fzf)
+      mkdir ~/.cache/mjm
+      let test_path = ls test/**/*_test.exs | get name | str join (char nl) | fzf | tee { save -f ~/.cache/mjm/last_test }
+      docker compose exec slab_1 mix test $test_path
     }
 
     $env.ASDF_DIR = ($env.HOME | path join '.asdf')
