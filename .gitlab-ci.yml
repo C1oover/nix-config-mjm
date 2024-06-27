@@ -42,7 +42,7 @@ build nixos hosts:
     - nix run -f . host-scripts -- ci build
     - nix run -f . host-scripts -- ci diff
 deploy nixos hosts:
-  tags: [nix-shell, "x86_64"]
+  tags: [nix-shell]
   rules:
     - when: manual
       if: $CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"
