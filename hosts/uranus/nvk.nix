@@ -12,8 +12,6 @@ in
     (mkIf (config.specialisation != { }) {
       services.xserver.videoDrivers = [ "nvidia" ];
 
-      hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.beta;
-
       # needed for wayland to work at all
       hardware.nvidia.modesetting.enable = true;
 

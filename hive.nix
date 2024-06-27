@@ -21,6 +21,11 @@ let
           url = "https://github.com/NixOS/nixpkgs/pull/323006.diff";
           hash = "sha256-nhatCDxBamdFlEPUBf0IC5Nv27FA1JA2d/V/CVQSHNY=";
         })
+        (fetchpatch {
+          # nvidia 555.58 driver
+          url = "https://github.com/NixOS/nixpkgs/pull/322963.diff";
+          hash = "sha256-PYLUFe0jcaMSc2rwB9F4IlMHQjlNZFmXlhjC9+VZEZ8=";
+        })
       ];
     };
 in
