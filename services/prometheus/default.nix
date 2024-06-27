@@ -25,6 +25,16 @@ in
     ];
     deployment.tags = [ "svc-prometheus" ];
 
+    ingress.virtualHosts = {
+      alerts = {
+        upstream.service.name = "alertmanager";
+      };
+
+      metrics = {
+        upstream.service.name = "prometheus";
+      };
+    };
+
     services.prometheus = {
       enable = true;
       checkConfig = "syntax-only";
@@ -82,6 +92,7 @@ in
       };
     };
 
+    vault.services.prometheus = { };
     vault-secrets.wantedBy = [ "alertmanager.service" ];
     vault-secrets.templates.alertmanager-env.text = ''
       {{ with secret "kv/prod/services/prometheus" }}

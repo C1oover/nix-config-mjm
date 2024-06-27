@@ -201,6 +201,24 @@ in
       };
     };
 
+    ingress.virtualHosts = {
+      tv = {
+        upstream.service.name = "sonarr";
+      };
+      movies = {
+        upstream.service.name = "radarr";
+      };
+      albums = {
+        upstream.service.name = "lidarr";
+      };
+      books = {
+        upstream.service.name = "readarr";
+      };
+      audiobooks = {
+        upstream.service.name = "readarr-audio";
+      };
+    };
+
     # ffprobe
     systemd.services.radarr.path = [ pkgs.ffmpeg ];
 

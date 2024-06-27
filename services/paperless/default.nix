@@ -21,6 +21,14 @@ in
     ];
     deployment.tags = [ "svc-paperless" ];
 
+    ingress.virtualHosts.paper = {
+      upstream.service.name = "paperless";
+
+      extraLocationConfig = ''
+        proxy_redirect off;
+      '';
+    };
+
     services.paperless = {
       enable = true;
       address = "[::]";
@@ -107,6 +115,7 @@ in
       paths = [ "/var/lib/paperless/media/documents" ];
     };
 
+    vault.services.paperless = { };
     vault-secrets.services.paperless = {
       keys.backup_password = { };
     };

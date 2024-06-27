@@ -5,6 +5,9 @@ let
 in
 {
   config = mkIf (cfg.enable && cfg.enableSSHHostCert) {
+    vault.policies.common-host = {
+      paths."ssh-host-signer/sign/homelab-host".capabilities = [ "update" ];
+    };
     vault-secrets.wantedBy = [ "sshd.service" ];
     vault-secrets.templates.ssh-host-cert = {
       text = ''

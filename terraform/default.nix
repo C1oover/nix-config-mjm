@@ -12,11 +12,17 @@ let
     p.cloudflare
     p.proxmox
   ]);
+  evalHive = import "${inputs.colmena}/src/nix/hive/eval.nix";
+  hive = evalHive { rawHive = import ../hive.nix; };
   terraformConfiguration =
     (lib.evalModules {
       modules = [
-        { _module.args.pkgs = pkgs; }
-        ../apps
+        {
+          _module.args = {
+            inherit pkgs;
+            inherit (hive) nodes;
+          };
+        }
         {
           terraform.terraform.backend.consul = {
             scheme = "http";
@@ -25,6 +31,8 @@ let
             path = "terraform/state";
           };
         }
+        ./vault.nix
+        ./terraform.nix
       ];
       specialArgs = {
         inherit inputs;

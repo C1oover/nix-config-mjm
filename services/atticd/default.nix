@@ -21,6 +21,14 @@ in
     mjm.postgresql.enable = true;
     deployment.tags = [ "svc-atticd" ];
 
+    ingress.virtualHosts.attic = {
+      upstream.service.name = "attic";
+      enableAuthProxy = false;
+      extraLocationConfig = ''
+        proxy_buffering on;
+      '';
+    };
+
     services.atticd = {
       enable = true;
       package = pkgs.attic-server;
@@ -47,6 +55,7 @@ in
       credentialsFile = config.vault-secrets.templates.attic-env.path;
     };
 
+    vault.services.atticd = { };
     vault-secrets.wantedBy = [ "atticd.service" ];
     vault-secrets.templates.attic-env.text = ''
       {{ with secret "kv/prod/services/atticd" }}

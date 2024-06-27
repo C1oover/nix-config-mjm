@@ -17,6 +17,11 @@ in
       }
     ];
 
+    ingress.virtualHosts.media = {
+      upstream.service.name = "jellyfin";
+      enableAuthProxy = false;
+    };
+
     services.jellyfin = {
       enable = true;
       openFirewall = true;

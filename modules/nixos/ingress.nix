@@ -1,15 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
-with lib;
+{ lib, ... }:
 let
-  cfg = config.ingress;
+  inherit (lib) mkOption types;
 
   vhostType =
-    with lib;
     { name, ... }:
     {
       options = {
@@ -85,10 +78,6 @@ in
     virtualHosts = mkOption {
       default = { };
       type = types.attrsOf (types.submodule vhostType);
-    };
-    extraTemplates = mkOption {
-      default = { };
-      type = types.attrs;
     };
   };
 }

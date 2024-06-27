@@ -23,6 +23,12 @@ in
     ];
     deployment.tags = [ "svc-vaultwarden" ];
 
+    ingress.virtualHosts.pass = {
+      upstream.service.name = "vaultwarden";
+
+      enableAuthProxy = false;
+    };
+
     services.vaultwarden = {
       enable = true;
       config = {
@@ -61,6 +67,7 @@ in
       '';
     };
 
+    vault.services.vaultwarden = { };
     vault-secrets.services.vaultwarden = {
       keys.backup_password = { };
     };

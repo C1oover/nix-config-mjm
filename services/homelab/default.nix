@@ -34,6 +34,10 @@ in
     mjm.postgresql.enable = true;
     deployment.tags = [ "svc-homelab" ];
 
+    ingress.virtualHosts.homelab = {
+      upstream.service.name = "homelab";
+    };
+
     systemd.services.homelab = {
       wantedBy = [ "multi-user.target" ];
       after = [
@@ -70,6 +74,7 @@ in
       };
     };
 
+    vault.services.homelab.commonPolicies = [ "backups" ];
     vault-secrets.services.homelab = {
       loadedBy = [ "homelab" ];
       keys = {

@@ -39,6 +39,7 @@ in
       environmentFile = config.vault-secrets.templates.garage-env.path;
     };
 
+    vault.services.garage = { };
     vault-secrets.wantedBy = [ "garage.service" ];
     vault-secrets.templates.garage-env.text = ''
       {{ with secret "kv/prod/services/garage" }}

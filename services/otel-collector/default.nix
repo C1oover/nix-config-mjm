@@ -74,6 +74,7 @@ in
     systemd.services.opentelemetry-collector.serviceConfig.EnvironmentFile =
       config.vault-secrets.templates.otel-collector-env.path;
 
+    vault.services.otel-collector = { };
     vault-secrets.wantedBy = [ "opentelemetry-collector.service" ];
     vault-secrets.templates.otel-collector-env.text = ''
       {{ with secret "kv/prod/services/otel-collector" }}

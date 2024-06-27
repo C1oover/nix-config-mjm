@@ -214,6 +214,9 @@ in
       ''
     ) config.mjm.backups;
 
+    vault.policies.common-backups = {
+      paths."kv/data/prod/common/backups".capabilities = [ "read" ];
+    };
     vault-secrets.wantedBy = map (name: "restic-backups-${name}.service") (
       attrNames config.mjm.backups
     );

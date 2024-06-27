@@ -111,6 +111,13 @@ in
     (mkIf cfg.server.enable {
       deployment.tags = [ "svc-consul" ];
 
+      ingress.virtualHosts.consul = {
+        upstream.service = {
+          name = "consul";
+          port = 8500;
+        };
+      };
+
       services.consul = {
         webUi = true;
 

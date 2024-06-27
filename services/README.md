@@ -13,15 +13,16 @@ They're specifically configured to serve my own needs.
 
 ## Ingress and OpenTofu provisioning
 
-Some services also include a `service.nix` file (yes, this is a bad name).
-The `service.nix` defines configuration for the service that is independent of the host(s) it is running on.
-This mainly includes two things:
+Services can also define things that affect state outside just the host running the service, things like:
 
 - Ingress (nginx) reverse-proxy vhost configuration
 - Anything that needs to be provisioned with OpenTofu, primarily Vault approles and policies
 
-These `service.nix` modules are imported by the [ingress](ingress/) service and when building [OpenTofu](../terraform/) configuration.
-They are then used to generate the appropriate configuration and/or resources.
+The [ingress](ingress/) service will use the `nodes` parameter Colmena provides to get all of the vhost configuration from all the nodes and merge them together.
+It will then use that to generate the nginx configuration.
+Similarly, when creating the OpenTofu configuration, OpenTofu resources and Vault services and policies are merged together to produce the full configuration.
+
+The [Vault support](../terraform/vault.nix) is particularly nice, as it's smart about assigning policies to the hosts running the corresponding services, without having to explicitly declare which hosts those are.
 
 ## State and impermanence
 

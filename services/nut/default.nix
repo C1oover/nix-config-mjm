@@ -32,6 +32,9 @@ in
         upsmon.monitor.tripplite.system = "tripplite@10.0.0.2";
       };
 
+      vault.policies.common-nut = {
+        paths."kv/data/prod/common/nut".capabilities = [ "read" ];
+      };
       vault-secrets.wantedBy = [ "upsmon.service" ];
       vault-secrets.common.nut = {
         keys.secondary_password = { };
@@ -121,6 +124,7 @@ in
           ];
         };
 
+      vault.services.nut = { };
       vault-secrets.wantedBy = [ "upsd.service" ];
       vault-secrets.services.nut = {
         keys.primary_password = { };

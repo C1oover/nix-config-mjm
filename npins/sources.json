@@ -72,6 +72,18 @@
       "url": "https://github.com/catppuccin/process-compose/archive/4db4b805a1bfe6b48fbf3b993b29226c515151d8.tar.gz",
       "hash": "1nbsgysaz7jp9yd4ji6dfcln6pw6jzv5y1ij7qf84rd929v326bg"
     },
+    "colmena": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "zhaofengli",
+        "repo": "colmena"
+      },
+      "branch": "main",
+      "revision": "cd65ef7a25cdc75052fbd04b120aeb066c3881db",
+      "url": "https://github.com/zhaofengli/colmena/archive/cd65ef7a25cdc75052fbd04b120aeb066c3881db.tar.gz",
+      "hash": "0n1j499702iclz4hdb4ywvmn8rl4d1mbdf43dwm7lvpjq5pjjqc1"
+    },
     "conduit": {
       "type": "GitRelease",
       "repository": {

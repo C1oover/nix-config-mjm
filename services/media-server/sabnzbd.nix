@@ -12,6 +12,10 @@ in
       }
     ];
 
+    ingress.virtualHosts.downloads = {
+      upstream.service.name = "sabnzbd";
+    };
+
     services.sabnzbd = {
       enable = true;
     };

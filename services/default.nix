@@ -20,7 +20,6 @@
     ./netbox
     ./nut
     ./otel-collector
-    ./owncast
     ./paperless
     ./postgresql
     ./prometheus

@@ -52,6 +52,7 @@ in
         '';
       };
 
+    vault.services.postgresql = { };
     vault-secrets.services.postgresql = {
       keys.backup_password = {
         owner = "postgres";

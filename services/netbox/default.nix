@@ -24,6 +24,10 @@ in
     ];
     deployment.tags = [ "svc-netbox" ];
 
+    ingress.virtualHosts.netbox = {
+      upstream.service.name = "netbox";
+    };
+
     services.netbox = {
       enable = true;
       package = pkgs.netbox_3_7;
@@ -54,6 +58,7 @@ in
       secretKeyFile = config.vault-secrets.services.netbox.keys.secret_key.path;
     };
 
+    vault.services.netbox = { };
     vault-secrets.wantedBy = [
       "netbox.service"
       "netbox-rq.service"

@@ -33,10 +33,22 @@ in
     };
   };
 
-  imports = [ ./unseal.nix ];
+  imports = [
+    ./admin.nix
+    ./auth.nix
+    ./gitlab.nix
+    ./mounts.nix
+    ./unseal.nix
+  ];
 
   config = mkIf cfg.enable {
     deployment.tags = [ "svc-vault" ];
+
+    ingress.virtualHosts.vault = {
+      upstream.service.name = "vault";
+
+      enableAuthProxy = false;
+    };
 
     services.vault = {
       enable = true;
@@ -114,6 +126,10 @@ in
         '';
       };
 
+    vault.services.vault.paths = {
+      "sys/leader".capabilities = [ "read" ];
+      "sys/storage/raft/snapshot".capabilities = [ "read" ];
+    };
     vault-secrets.services.vault = {
       keys.backup_password = { };
     };
@@ -124,5 +140,12 @@ in
 
       inherit (config.systemd.services.render-vault-secrets.serviceConfig) LoadCredentialEncrypted;
     };
+
+    terraform.terraform.required_providers.vault = {
+      source = "registry.terraform.io/hashicorp/vault";
+      version = ">= 3.0.0";
+    };
+
+    terraform.provider.vault = { };
   };
 }

@@ -8,6 +8,12 @@ in
     mjm.postgresql.enable = true;
     mjm.state.directories = [ "/var/lib/private/invidious" ];
 
+    ingress.virtualHosts.yt = {
+      upstream.service.name = "invidious";
+      enableAuthProxy = false;
+      useIPv4Proxy = true;
+    };
+
     services.invidious = {
       enable = true;
       domain = "yt.midna.dev";

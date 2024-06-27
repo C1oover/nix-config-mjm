@@ -24,6 +24,10 @@ in
     ];
     deployment.tags = [ "svc-linkding" ];
 
+    ingress.virtualHosts.links = {
+      upstream.service.name = "linkding";
+    };
+
     services.linkding = {
       enable = true;
       package = (import ../../packages { inherit pkgs; }).linkding;

@@ -12,6 +12,10 @@ in
   config = mkIf cfg.enable {
     mjm.state.directories = [ "/var/lib/navidrome" ];
 
+    ingress.virtualHosts.music = {
+      upstream.service.name = "navidrome";
+    };
+
     services.navidrome = {
       enable = true;
       openFirewall = true;

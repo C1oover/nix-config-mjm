@@ -11,6 +11,11 @@ in
   config = mkIf cfg.enable {
     deployment.tags = [ "svc-atuin" ];
 
+    ingress.virtualHosts.atuin = {
+      upstream.service.name = "atuin";
+      enableAuthProxy = false;
+    };
+
     services.atuin = {
       enable = true;
       host = "::";

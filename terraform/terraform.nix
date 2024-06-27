@@ -1,24 +1,32 @@
 {
   pkgs,
   lib,
-  inputs,
   config,
+  nodes,
   ...
 }:
-with lib;
+let
+  inherit (lib)
+    attrNames
+    attrValues
+    const
+    filterAttrs
+    flip
+    foldl
+    getAttr
+    id
+    length
+    mapAttrs
+    mkOption
+    recursiveUpdate
+    types
+    ;
+in
 {
-  options = {
-    terraform = mkOption {
-      type = types.submoduleWith {
-        description = "Terraform module";
-        modules = [
-          "${inputs.terranix}/core/terraform-options.nix"
-          "${inputs.terranix}/modules"
-          { _module.args.pkgs = pkgs; }
-        ];
-      };
-    };
+  # need this to be able to define non-host-specific terraform resources
+  imports = [ ../modules/nixos/terraform.nix ];
 
+  options = {
     terraformConfig = {
       sanitized = mkOption {
         type = types.raw;
@@ -58,8 +66,9 @@ with lib;
               in
               if (length (attrNames configuration) == 0) then { } else recursiveSanitized;
           };
+        cfg = foldl recursiveUpdate config.terraform (map (node: node.config.terraform) (attrValues nodes));
       in
-      sanitize config.terraform;
+      sanitize cfg;
 
     terraformConfig.final =
       let

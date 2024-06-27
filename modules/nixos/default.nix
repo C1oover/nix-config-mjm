@@ -1,6 +1,9 @@
 {
-  linkding = import ./linkding.nix;
+  ingress = ./ingress.nix;
+  linkding = ./linkding.nix;
   nushell = ./nushell.nix;
-  vault-agent = import ./vault-agent.nix;
-  vault-secrets = import ./vault-secrets.nix;
+  terraform = ./terraform.nix;
+  vault = ./vault.nix;
+  vault-agent = ./vault-agent.nix;
+  vault-secrets = ./vault-secrets.nix;
 }

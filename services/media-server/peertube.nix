@@ -13,6 +13,11 @@ in
       }
     ];
 
+    ingress.virtualHosts.tube = {
+      upstream.service.name = "peertube";
+      enableAuthProxy = false;
+    };
+
     services.peertube = {
       enable = true;
       group = "media";

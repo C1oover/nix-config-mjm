@@ -17,6 +17,12 @@ in
     mjm.postgresql.enable = true;
     deployment.tags = [ "svc-grafana" ];
 
+    ingress.virtualHosts.graphs = {
+      upstream.service.name = "grafana";
+    };
+
+    vault.services.grafana = { };
+
     services.grafana = {
       enable = true;
       settings = {

@@ -24,6 +24,7 @@ in
     };
     deployment.tags = [ "svc-media-server" ];
 
+    vault.services.media-server = { };
     vault-secrets.services.media-server.keys.backup_password = { };
   };
 }

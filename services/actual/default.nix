@@ -12,6 +12,10 @@ in
     mjm.state.directories = [ "/var/lib/docker/volumes" ];
     deployment.tags = [ "svc-actual" ];
 
+    ingress.virtualHosts.budget = {
+      upstream.service.name = "actual";
+    };
+
     # I suspect issues with podman's ability to clean up external containers
     virtualisation.oci-containers.backend = "docker";
 

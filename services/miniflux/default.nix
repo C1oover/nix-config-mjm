@@ -17,6 +17,10 @@ in
     mjm.postgresql.enable = true;
     deployment.tags = [ "svc-miniflux" ];
 
+    ingress.virtualHosts.feeds = {
+      upstream.service.name = "miniflux";
+    };
+
     services.miniflux = {
       enable = true;
       config = {

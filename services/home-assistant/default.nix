@@ -26,6 +26,10 @@ in
     ];
     deployment.tags = [ "svc-home-assistant" ];
 
+    ingress.virtualHosts.home = {
+      upstream.service.name = "home-assistant";
+    };
+
     services.home-assistant = {
       enable = true;
       openFirewall = true;
@@ -196,6 +200,7 @@ in
       '';
     };
 
+    vault.services.home-assistant = { };
     vault-secrets.wantedBy = [ "home-assistant.service" ];
     vault-secrets.templates.home-assistant-secrets = {
       text = ''
@@ -208,7 +213,6 @@ in
       '';
       owner = "hass";
     };
-
     vault-secrets.services.home-assistant.keys = {
       backup_password = { };
       api_token = { };
