@@ -20,7 +20,6 @@ in
       inherit (pkgs)
         chiaki
         # lutris
-        obs-studio
         xivlauncher
         ;
       inherit (pkgs.kdePackages)
@@ -35,6 +34,15 @@ in
     home.file.".xlcore/wine-runtimes/proton8-ge".source = pkgs.fetchzip {
       url = "https://github.com/rankynbass/wine-ge-xiv/releases/download/xiv-Proton8-26/unofficial-wine-xiv-Proton8-26-x86_64.tar.xz";
       hash = "sha256-lx9AWJutI8iCWA3FbcozxoTOf4zlSdHpdMljwkXUZDA=";
+    };
+
+    programs.obs-studio = {
+      enable = true;
+      plugins = with pkgs.obs-studio-plugins; [
+        obs-vkcapture
+        obs-mute-filter
+        input-overlay
+      ];
     };
   };
 }
