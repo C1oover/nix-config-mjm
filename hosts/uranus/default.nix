@@ -19,6 +19,27 @@ in
     ./nvk.nix
   ];
 
+  nixpkgs.overlays = [
+    (self: super: {
+      firefox-unwrapped = super.firefox-unwrapped.overrideAttrs (oldAttrs: {
+        patches = oldAttrs.patches ++ [
+          (pkgs.fetchpatch {
+            url = "https://phabricator.services.mozilla.com/D214883?download=true";
+            hash = "sha256-/twQc6svBiojaceDrUg/qIfgUT5gNfj4s4yM5ldpPz4=";
+          })
+          (pkgs.fetchpatch {
+            url = "https://phabricator.services.mozilla.com/D214884?download=true";
+            hash = "sha256-5RNr4plnLP1BRll2J/dzCg64/xtqJoQTUh94AmqZ9/w=";
+          })
+          (pkgs.fetchpatch {
+            url = "https://phabricator.services.mozilla.com/D214885?download=true";
+            hash = "sha256-8XdNDPjriIwLRn0UB7DYmmXkw1MHzlwiCrnng+Oh494=";
+          })
+        ];
+      });
+    })
+  ];
+
   deployment.phase = null;
 
   # services.displayManager.defaultSession = "plasmax11";
