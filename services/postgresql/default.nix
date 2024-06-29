@@ -15,7 +15,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    mjm.services.postgresql = { };
+    deployment.tags = [ "svc-postgresql" ];
     mjm.state.directories = [
       {
         directory = "/var/lib/postgresql";

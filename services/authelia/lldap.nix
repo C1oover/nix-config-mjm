@@ -5,7 +5,7 @@ let
 in
 {
   config = mkIf cfg.enable {
-    mjm.postgresql.enable = true;
+    mjm.services.authelia.postgresql.databases = [ "lldap" ];
     mjm.state.directories = [ "/var/lib/private/lldap" ];
 
     services.lldap = {
@@ -18,16 +18,6 @@ in
     };
 
     systemd.services.lldap.after = [ "postgresql.service" ];
-
-    services.postgresql = {
-      ensureDatabases = [ "lldap" ];
-      ensureUsers = [
-        {
-          name = "lldap";
-          ensureDBOwnership = true;
-        }
-      ];
-    };
 
     networking.firewall.allowedTCPPorts = [
       3890

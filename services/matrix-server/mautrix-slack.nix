@@ -48,7 +48,10 @@ in
   };
 
   config = mkIf (cfg.enable && cfg.bridges.slack.enable) {
-    mjm.postgresql.enable = true;
+    mjm.services.matrix-server.postgresql = {
+      enable = true;
+      databases = [ "mautrix-slack" ];
+    };
     mjm.state.directories = [
       {
         directory = "/var/lib/mautrix-slack";
@@ -128,15 +131,5 @@ in
       home = "/var/lib/mautrix-slack";
     };
     users.groups.mautrix-slack = { };
-
-    services.postgresql = {
-      ensureDatabases = [ "mautrix-slack" ];
-      ensureUsers = [
-        {
-          name = "mautrix-slack";
-          ensureDBOwnership = true;
-        }
-      ];
-    };
   };
 }

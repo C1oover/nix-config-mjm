@@ -11,8 +11,9 @@ in
   };
 
   config = mkIf cfg.enable {
-    mjm.services.paperless = { };
-    mjm.postgresql.enable = true;
+    mjm.services.paperless = {
+      postgresql.enable = true;
+    };
     mjm.state.directories = [
       {
         directory = config.services.paperless.dataDir;
@@ -50,16 +51,6 @@ in
     # wait for postgresql
     # the scheduler is the first service that needs the database
     systemd.services.paperless-scheduler.after = [ "postgresql.service" ];
-
-    services.postgresql = {
-      ensureDatabases = [ "paperless" ];
-      ensureUsers = [
-        {
-          name = "paperless";
-          ensureDBOwnership = true;
-        }
-      ];
-    };
 
     networking.firewall.allowedTCPPorts = [ config.services.paperless.port ];
 

@@ -30,9 +30,10 @@ in
   };
 
   config = mkIf cfg.enable {
-    mjm.services.homelab = { };
+    mjm.services.homelab = {
+      postgresql.enable = true;
+    };
     mjm.otel-collector.enable = true;
-    mjm.postgresql.enable = true;
 
     ingress.virtualHosts.homelab = {
       upstream.service.name = "homelab";
@@ -94,16 +95,6 @@ in
         b2_key_id = { };
         b2_application_key = { };
       };
-    };
-
-    services.postgresql = {
-      ensureDatabases = [ "homelab" ];
-      ensureUsers = [
-        {
-          name = "homelab";
-          ensureDBOwnership = true;
-        }
-      ];
     };
 
     networking.firewall.allowedTCPPorts = [ 4000 ];

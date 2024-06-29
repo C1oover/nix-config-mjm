@@ -11,8 +11,12 @@ in
   imports = [ ./lldap.nix ];
 
   config = mkIf cfg.enable {
-    mjm.services.authelia = { };
-    mjm.postgresql.enable = true;
+    mjm.services.authelia = {
+      postgresql = {
+        enable = true;
+        databases = [ "authelia-main" ];
+      };
+    };
     mjm.state.directories = [
       {
         directory = "/var/lib/redis-authelia";
@@ -108,15 +112,6 @@ in
     };
 
     services.redis.servers.authelia.enable = true;
-    services.postgresql = {
-      ensureDatabases = [ "authelia-main" ];
-      ensureUsers = [
-        {
-          name = "authelia-main";
-          ensureDBOwnership = true;
-        }
-      ];
-    };
 
     networking.firewall.allowedTCPPorts = [
       9091

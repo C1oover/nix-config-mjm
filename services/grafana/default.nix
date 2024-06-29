@@ -14,8 +14,9 @@ in
   ];
 
   config = mkIf cfg.enable {
-    mjm.services.grafana = { };
-    mjm.postgresql.enable = true;
+    mjm.services.grafana = {
+      postgresql.enable = true;
+    };
 
     ingress.virtualHosts.graphs = {
       upstream.service.name = "grafana";
@@ -43,16 +44,6 @@ in
           headers = "Email:Remote-Email";
         };
       };
-    };
-
-    services.postgresql = {
-      ensureDatabases = [ "grafana" ];
-      ensureUsers = [
-        {
-          name = "grafana";
-          ensureDBOwnership = true;
-        }
-      ];
     };
 
     networking.firewall.allowedTCPPorts = [ 3000 ];

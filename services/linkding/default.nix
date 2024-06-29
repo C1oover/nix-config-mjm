@@ -14,8 +14,9 @@ in
   };
 
   config = mkIf cfg.enable {
-    mjm.services.linkding = { };
-    mjm.postgresql.enable = true;
+    mjm.services.linkding = {
+      postgresql.enable = true;
+    };
     mjm.state.directories = [
       {
         directory = "/var/lib/linkding";
@@ -47,16 +48,6 @@ in
         LD_DB_HOST = "/run/postgresql";
         LD_DB_USER = "linkding";
       };
-    };
-
-    services.postgresql = {
-      ensureDatabases = [ "linkding" ];
-      ensureUsers = [
-        {
-          name = "linkding";
-          ensureDBOwnership = true;
-        }
-      ];
     };
 
     systemd.services.linkding.after = [ "postgresql.service" ];

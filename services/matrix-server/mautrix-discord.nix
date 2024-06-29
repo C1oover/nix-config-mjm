@@ -47,7 +47,10 @@ in
   };
 
   config = mkIf (cfg.enable && cfg.bridges.discord.enable) {
-    mjm.postgresql.enable = true;
+    mjm.services.matrix-server.postgresql = {
+      enable = true;
+      databases = [ "mautrix-discord" ];
+    };
     mjm.state.directories = [
       {
         directory = "/var/lib/mautrix-discord";
@@ -128,15 +131,5 @@ in
       home = "/var/lib/mautrix-discord";
     };
     users.groups.mautrix-discord = { };
-
-    services.postgresql = {
-      ensureDatabases = [ "mautrix-discord" ];
-      ensureUsers = [
-        {
-          name = "mautrix-discord";
-          ensureDBOwnership = true;
-        }
-      ];
-    };
   };
 }

@@ -18,8 +18,9 @@ in
   };
 
   config = mkIf cfg.enable {
-    mjm.services.atticd = { };
-    mjm.postgresql.enable = true;
+    mjm.services.atticd = {
+      postgresql.enable = true;
+    };
 
     ingress.virtualHosts.attic = {
       upstream.service.name = "attic";
@@ -64,16 +65,6 @@ in
       AWS_SECRET_ACCESS_KEY={{ .Data.data.garage_secret_key }}
       {{ end }}
     '';
-
-    services.postgresql = {
-      ensureDatabases = [ "atticd" ];
-      ensureUsers = [
-        {
-          name = "atticd";
-          ensureDBOwnership = true;
-        }
-      ];
-    };
 
     networking.firewall.allowedTCPPorts = [ 8100 ];
 
