@@ -40,7 +40,8 @@ in
         wl-clipboard
         xclip
         xdg-utils
-        zeal-qt6
+        # won't build currently
+        # zeal-qt6
         ;
       inherit (pkgs.callPackages ./scripts.nix { }) night-mode;
       inherit (pkgs.kdePackages)
