@@ -32,7 +32,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    deployment.tags = [ "svc-dns-server" ];
+    mjm.services.dns-server = { };
 
     services.bind = {
       enable = true;

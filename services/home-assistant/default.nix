@@ -17,6 +17,7 @@ in
   };
 
   config = mkIf cfg.enable {
+    mjm.services.home-assistant = { };
     mjm.state.directories = [
       {
         directory = config.services.home-assistant.configDir;
@@ -24,7 +25,6 @@ in
         group = "hass";
       }
     ];
-    deployment.tags = [ "svc-home-assistant" ];
 
     ingress.virtualHosts.home = {
       upstream.service.name = "home-assistant";

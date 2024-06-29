@@ -18,8 +18,8 @@ in
   };
 
   config = mkIf cfg.enable {
+    mjm.services.atticd = { };
     mjm.postgresql.enable = true;
-    deployment.tags = [ "svc-atticd" ];
 
     ingress.virtualHosts.attic = {
       upstream.service.name = "attic";

@@ -14,6 +14,7 @@ in
   };
 
   config = mkIf cfg.enable {
+    mjm.services.linkding = { };
     mjm.postgresql.enable = true;
     mjm.state.directories = [
       {
@@ -22,7 +23,6 @@ in
         group = "linkding";
       }
     ];
-    deployment.tags = [ "svc-linkding" ];
 
     ingress.virtualHosts.links = {
       upstream.service.name = "linkding";

@@ -42,7 +42,7 @@ in
   ];
 
   config = mkIf cfg.enable {
-    deployment.tags = [ "svc-vault" ];
+    mjm.services.vault = { };
 
     ingress.virtualHosts.vault = {
       upstream.service.name = "vault";

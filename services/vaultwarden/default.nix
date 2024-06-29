@@ -14,6 +14,7 @@ in
   };
 
   config = mkIf cfg.enable {
+    mjm.services.vaultwarden = { };
     mjm.state.directories = [
       {
         directory = "/var/lib/bitwarden_rs";
@@ -21,7 +22,6 @@ in
         group = "vaultwarden";
       }
     ];
-    deployment.tags = [ "svc-vaultwarden" ];
 
     ingress.virtualHosts.pass = {
       upstream.service.name = "vaultwarden";

@@ -9,7 +9,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    deployment.tags = [ "svc-otel-collector" ];
+    mjm.services.otel-collector = { };
 
     services.opentelemetry-collector = {
       enable = true;

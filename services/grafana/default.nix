@@ -14,8 +14,8 @@ in
   ];
 
   config = mkIf cfg.enable {
+    mjm.services.grafana = { };
     mjm.postgresql.enable = true;
-    deployment.tags = [ "svc-grafana" ];
 
     ingress.virtualHosts.graphs = {
       upstream.service.name = "grafana";

@@ -11,6 +11,7 @@ in
   imports = [ ./lldap.nix ];
 
   config = mkIf cfg.enable {
+    mjm.services.authelia = { };
     mjm.postgresql.enable = true;
     mjm.state.directories = [
       {
@@ -19,7 +20,6 @@ in
         group = "redis-authelia";
       }
     ];
-    deployment.tags = [ "svc-authelia" ];
 
     services.authelia.instances.main = {
       enable = true;

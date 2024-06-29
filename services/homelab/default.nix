@@ -30,9 +30,9 @@ in
   };
 
   config = mkIf cfg.enable {
+    mjm.services.homelab = { };
     mjm.otel-collector.enable = true;
     mjm.postgresql.enable = true;
-    deployment.tags = [ "svc-homelab" ];
 
     ingress.virtualHosts.homelab = {
       upstream.service.name = "homelab";

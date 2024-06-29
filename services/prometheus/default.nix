@@ -16,6 +16,7 @@ in
   ];
 
   config = mkIf cfg.enable {
+    mjm.services.prometheus = { };
     mjm.state.directories = [
       {
         directory = "/var/lib/prometheus2";
@@ -23,7 +24,6 @@ in
         group = "prometheus";
       }
     ];
-    deployment.tags = [ "svc-prometheus" ];
 
     ingress.virtualHosts = {
       alerts = {

@@ -109,7 +109,7 @@ in
     }
 
     (mkIf cfg.server.enable {
-      deployment.tags = [ "svc-consul" ];
+      mjm.services.consul = { };
 
       ingress.virtualHosts.consul = {
         upstream.service = {

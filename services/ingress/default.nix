@@ -35,8 +35,8 @@ in
 
   config = mkIf config.mjm.ingress.enable (mkMerge [
     {
+      mjm.services.ingress = { };
       mjm.state.directories = [ "/var/lib/acme" ];
-      deployment.tags = [ "svc-ingress" ];
 
       security.acme = {
         acceptTerms = true;

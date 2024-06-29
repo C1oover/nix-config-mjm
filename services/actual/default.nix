@@ -9,8 +9,8 @@ in
   };
 
   config = mkIf cfg.enable {
+    mjm.services.actual = { };
     mjm.state.directories = [ "/var/lib/docker/volumes" ];
-    deployment.tags = [ "svc-actual" ];
 
     ingress.virtualHosts.budget = {
       upstream.service.name = "actual";

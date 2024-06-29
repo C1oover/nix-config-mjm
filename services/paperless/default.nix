@@ -11,6 +11,7 @@ in
   };
 
   config = mkIf cfg.enable {
+    mjm.services.paperless = { };
     mjm.postgresql.enable = true;
     mjm.state.directories = [
       {
@@ -19,7 +20,6 @@ in
         group = "paperless";
       }
     ];
-    deployment.tags = [ "svc-paperless" ];
 
     ingress.virtualHosts.paper = {
       upstream.service.name = "paperless";

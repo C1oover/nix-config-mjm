@@ -17,8 +17,8 @@ in
   };
 
   config = mkIf cfg.enable {
+    mjm.services.matrix-server = { };
     mjm.state.directories = [ "/var/lib/private/matrix-conduit" ];
-    deployment.tags = [ "svc-matrix-server" ];
 
     ingress.virtualHosts.chat = {
       upstream.service.name = "conduit";

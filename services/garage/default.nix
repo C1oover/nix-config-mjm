@@ -13,7 +13,7 @@ in
   };
 
   config = mkIf config.mjm.garage.enable {
-    deployment.tags = [ "svc-garage" ];
+    mjm.services.garage = { };
 
     services.garage = {
       enable = true;

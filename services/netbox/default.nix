@@ -14,6 +14,7 @@ in
   };
 
   config = mkIf cfg.enable {
+    mjm.services.netbox = { };
     mjm.postgresql.enable = true;
     mjm.state.directories = [
       {
@@ -22,7 +23,6 @@ in
         group = "netbox";
       }
     ];
-    deployment.tags = [ "svc-netbox" ];
 
     ingress.virtualHosts.netbox = {
       upstream.service.name = "netbox";

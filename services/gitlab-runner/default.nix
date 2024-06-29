@@ -14,7 +14,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    deployment.tags = [ "svc-gitlab-runner" ];
+    mjm.services.gitlab-runner = { };
 
     vault.services.gitlab-runner = { };
     vault-secrets.templates.gitlab-runner-registration-env.text = ''

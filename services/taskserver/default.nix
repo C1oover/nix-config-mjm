@@ -9,13 +9,13 @@ in
   };
 
   config = mkIf cfg.enable {
+    mjm.services.taskserver = { };
     mjm.state.directories = [
       {
         directory = config.services.taskserver.dataDir;
         inherit (config.services.taskserver) user group;
       }
     ];
-    deployment.tags = [ "svc-taskserver" ];
 
     services.taskserver = {
       enable = true;

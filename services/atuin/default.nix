@@ -9,7 +9,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    deployment.tags = [ "svc-atuin" ];
+    mjm.services.atuin = { };
 
     ingress.virtualHosts.atuin = {
       upstream.service.name = "atuin";
