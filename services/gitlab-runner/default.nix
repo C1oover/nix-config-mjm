@@ -21,9 +21,14 @@ in
       };
     };
 
-    vault-secrets.templates.gitlab-runner-registration-env.text = ''
+    vault-secrets.wantedBy = [ "gitlab-runner.service" ];
+    vault-secrets.templates.gitlab-runner-docker-env.text = ''
       CI_SERVER_URL=https://git.midna.dev
-      REGISTRATION_TOKEN={{ with secret "kv/prod/services/gitlab-runner" }}{{ .Data.data.registration_token }}{{ end }}
+      CI_SERVER_TOKEN={{ with secret "kv/prod/services/gitlab-runner" }}{{ .Data.data.nix_docker_auth_token }}{{ end }}
+    '';
+    vault-secrets.templates.gitlab-runner-shell-env.text = ''
+      CI_SERVER_URL=https://git.midna.dev
+      CI_SERVER_TOKEN={{ with secret "kv/prod/services/gitlab-runner" }}{{ .Data.data.nix_shell_auth_token }}{{ end }}
     '';
 
     boot.kernel.sysctl."net.ipv4.ip_forward" = true;
@@ -48,7 +53,7 @@ in
       };
       services = {
         nix = with lib; {
-          registrationConfigFile = config.vault-secrets.templates.gitlab-runner-registration-env.path;
+          authenticationTokenConfigFile = config.vault-secrets.templates.gitlab-runner-docker-env.path;
           registrationFlags = [
             # temporary: remove when invalid host issue is fixed
             "--docker-host tcp://127.0.0.1:2375"
@@ -101,19 +106,11 @@ in
             NIX_SSL_CERT_FILE = "/nix/var/nix/profiles/default/etc/ssl/certs/ca-bundle.crt";
             LOCALE_ARCHIVE = "/nix/var/nix/profiles/default/lib/locale/locale-archive";
           };
-          tagList = [
-            "nix"
-            pkgs.stdenv.hostPlatform.linuxArch
-          ];
         };
         nix-shell = {
-          registrationConfigFile = config.vault-secrets.templates.gitlab-runner-registration-env.path;
+          authenticationTokenConfigFile = config.vault-secrets.templates.gitlab-runner-shell-env.path;
           registrationFlags = [ "--output-limit 102400" ];
           executor = "shell";
-          tagList = [
-            "nix-shell"
-            pkgs.stdenv.hostPlatform.linuxArch
-          ];
         };
       };
     };

@@ -28,7 +28,7 @@ variables:
   CONSUL_HTTP_ADDR: "consul.service.consul:8500"
   VAULT_ADDR: "http://vault.service.consul:8200"
 build nixos hosts:
-  tags: [nix-shell, "x86_64"]
+  tags: [nix-shell]
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes: !reference [.snippets, nixos_changes]
@@ -64,7 +64,7 @@ deploy nixos hosts:
         nix run -f . host-scripts -- ci deploy --reboot
       fi
 build tofu changes:
-  tags: [nix, x86_64]
+  tags: [nix]
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes: !reference [.snippets, tofu_changes]
@@ -79,7 +79,7 @@ build tofu changes:
   script:
     - nix run -f . tofu-scripts -- ci plan
 apply terranix changes:
-  tags: [nix, x86_64]
+  tags: [nix]
   rules:
     - if: $CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"
       changes: !reference [.snippets, tofu_changes]
