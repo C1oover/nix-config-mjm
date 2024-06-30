@@ -35,7 +35,13 @@ in
 
   config = mkIf config.mjm.ingress.enable (mkMerge [
     {
-      mjm.services.ingress = { };
+      mjm.services.ingress = {
+        vault = {
+          enable = true;
+          keys.cloudflare_api_token = { };
+        };
+      };
+      vault-secrets.wantedBy = [ "acme-midna.dev.service" ];
       mjm.state.directories = [ "/var/lib/acme" ];
 
       security.acme = {
@@ -46,20 +52,14 @@ in
           dnsResolver = "1.1.1.1:53";
           dnsProvider = "cloudflare";
           credentialFiles = {
-            CF_DNS_API_TOKEN_FILE = config.vault-secrets.services.ingress.keys.cloudflare_api_token.path;
-            CF_ZONE_API_TOKEN_FILE = config.vault-secrets.services.ingress.keys.cloudflare_api_token.path;
+            CF_DNS_API_TOKEN_FILE = config.mjm.services.ingress.vault.keys.cloudflare_api_token.path;
+            CF_ZONE_API_TOKEN_FILE = config.mjm.services.ingress.vault.keys.cloudflare_api_token.path;
           };
         };
         certs = mapAttrs (name: _v: {
           dnsProvider = "cloudflare";
           webroot = null;
         }) (filterAttrs (_name: vhost: vhost.enableACME == true) config.services.nginx.virtualHosts);
-      };
-
-      vault.services.ingress = { };
-      vault-secrets.wantedBy = [ "acme-midna.dev.service" ];
-      vault-secrets.services.ingress = {
-        keys.cloudflare_api_token = { };
       };
 
       services.nginx = {

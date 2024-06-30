@@ -17,7 +17,15 @@ in
   };
 
   config = mkIf cfg.enable {
-    mjm.services.home-assistant = { };
+    mjm.services.home-assistant = {
+      vault = {
+        enable = true;
+        keys = {
+          backup_password = { };
+          api_token = { };
+        };
+      };
+    };
     mjm.state.directories = [
       {
         directory = config.services.home-assistant.configDir;
@@ -25,6 +33,19 @@ in
         group = "hass";
       }
     ];
+
+    vault-secrets.wantedBy = [ "home-assistant.service" ];
+    vault-secrets.templates.home-assistant-secrets = {
+      text = ''
+        {{ with secret "kv/prod/services/home-assistant" }}
+        latitude_home: {{ .Data.data.latitude_home }}
+        longitude_home: {{ .Data.data.longitude_home }}
+        fastmail_password: {{ .Data.data.fastmail_password }}
+        paperless_authorization: Token {{ .Data.data.paperless_token }}
+        {{ end }}
+      '';
+      owner = "hass";
+    };
 
     ingress.virtualHosts.home = {
       upstream.service.name = "home-assistant";
@@ -187,35 +208,17 @@ in
     services.avahi.enable = true;
 
     mjm.backups.home-assistant = {
-      passwordFile = config.vault-secrets.services.home-assistant.keys.backup_password.path;
+      passwordFile = config.mjm.services.home-assistant.vault.keys.backup_password.path;
       paths = [ "/var/lib/hass/backups" ];
       backupPrepareCommand = ''
         ${pkgs.curl}/bin/curl \
           -X POST \
           http://localhost:${toString port}/api/services/backup/create \
-          -H "Authorization: Bearer $(cat ${config.vault-secrets.services.home-assistant.keys.api_token.path})"
+          -H "Authorization: Bearer $(cat ${config.mjm.services.home-assistant.vault.keys.api_token.path})"
       '';
       backupCleanupCommand = ''
         rm /var/lib/hass/backups/*
       '';
-    };
-
-    vault.services.home-assistant = { };
-    vault-secrets.wantedBy = [ "home-assistant.service" ];
-    vault-secrets.templates.home-assistant-secrets = {
-      text = ''
-        {{ with secret "kv/prod/services/home-assistant" }}
-        latitude_home: {{ .Data.data.latitude_home }}
-        longitude_home: {{ .Data.data.longitude_home }}
-        fastmail_password: {{ .Data.data.fastmail_password }}
-        paperless_authorization: Token {{ .Data.data.paperless_token }}
-        {{ end }}
-      '';
-      owner = "hass";
-    };
-    vault-secrets.services.home-assistant.keys = {
-      backup_password = { };
-      api_token = { };
     };
   };
 }

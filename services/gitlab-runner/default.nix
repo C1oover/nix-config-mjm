@@ -14,16 +14,17 @@ in
   };
 
   config = mkIf cfg.enable {
-    mjm.services.gitlab-runner = { };
+    mjm.services.gitlab-runner = {
+      vault = {
+        enable = true;
+        keys.remote_builder_private_key = { };
+      };
+    };
 
-    vault.services.gitlab-runner = { };
     vault-secrets.templates.gitlab-runner-registration-env.text = ''
       CI_SERVER_URL=https://git.midna.dev
       REGISTRATION_TOKEN={{ with secret "kv/prod/services/gitlab-runner" }}{{ .Data.data.registration_token }}{{ end }}
     '';
-    vault-secrets.services.gitlab-runner = {
-      keys.remote_builder_private_key = { };
-    };
 
     boot.kernel.sysctl."net.ipv4.ip_forward" = true;
 
@@ -152,7 +153,7 @@ in
     programs.ssh.extraConfig = mkAfter ''
       Host arges.home.mattmoriarity.com
         IdentitiesOnly yes
-        IdentityFile ${config.vault-secrets.services.gitlab-runner.keys.remote_builder_private_key.path}
+        IdentityFile ${config.mjm.services.gitlab-runner.vault.keys.remote_builder_private_key.path}
         User matt
     '';
 

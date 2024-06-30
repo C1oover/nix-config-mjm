@@ -14,7 +14,12 @@ in
   };
 
   config = mkIf cfg.enable {
-    mjm.services.netbox = { };
+    mjm.services.netbox = {
+      vault = {
+        enable = true;
+        keys.secret_key.owner = "netbox";
+      };
+    };
     mjm.postgresql.enable = true;
     mjm.state.directories = [
       {
@@ -22,6 +27,12 @@ in
         user = "netbox";
         group = "netbox";
       }
+    ];
+
+    vault-secrets.wantedBy = [
+      "netbox.service"
+      "netbox-rq.service"
+      "netbox-housekeeping.service"
     ];
 
     ingress.virtualHosts.netbox = {
@@ -55,17 +66,7 @@ in
         REMOTE_AUTH_SUPERUSER_GROUPS = [ "admins" ];
         REMOTE_AUTH_STAFF_GROUPS = [ "admins" ];
       };
-      secretKeyFile = config.vault-secrets.services.netbox.keys.secret_key.path;
-    };
-
-    vault.services.netbox = { };
-    vault-secrets.wantedBy = [
-      "netbox.service"
-      "netbox-rq.service"
-      "netbox-housekeeping.service"
-    ];
-    vault-secrets.services.netbox = {
-      keys.secret_key.owner = "netbox";
+      secretKeyFile = config.mjm.services.netbox.vault.keys.secret_key.path;
     };
 
     services.nginx = {

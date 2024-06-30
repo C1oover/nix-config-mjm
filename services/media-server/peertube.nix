@@ -5,6 +5,10 @@ let
 in
 {
   config = mkIf cfg.enable {
+    mjm.services.media-server.vault.keys = {
+      fastmail_password.owner = "peertube";
+      peertube_secrets.owner = "peertube";
+    };
     mjm.postgresql.enable = true;
     mjm.state.directories = [
       {
@@ -30,8 +34,8 @@ in
       database.createLocally = true;
       redis.createLocally = true;
 
-      secrets.secretsFile = config.vault-secrets.services.media-server.keys.peertube_secrets.path;
-      smtp.passwordFile = config.vault-secrets.services.media-server.keys.fastmail_password.path;
+      secrets.secretsFile = config.mjm.services.media-server.vault.keys.peertube_secrets.path;
+      smtp.passwordFile = config.mjm.services.media-server.vault.keys.fastmail_password.path;
 
       dataDirs = [ "/videos/peertube" ];
 
@@ -73,11 +77,6 @@ in
 
     services.consul.services.peertube = {
       port = 9001;
-    };
-
-    vault-secrets.services.media-server.keys = {
-      fastmail_password.owner = "peertube";
-      peertube_secrets.owner = "peertube";
     };
   };
 }

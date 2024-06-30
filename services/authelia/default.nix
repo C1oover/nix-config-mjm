@@ -16,6 +16,19 @@ in
         enable = true;
         databases = [ "authelia-main" ];
       };
+      vault = {
+        enable = true;
+        loadedBy = [ "authelia-main" ];
+        keys = {
+          jwt_secret = { };
+          hmac_secret = { };
+          jwt_private_key = { };
+          ldap_password = { };
+          session_secret = { };
+          smtp_password = { };
+          storage_encryption_key = { };
+        };
+      };
     };
     mjm.state.directories = [
       {
@@ -83,20 +96,6 @@ in
         AUTHELIA_STORAGE_ENCRYPTION_KEY_FILE = "%d/authelia_storage_encryption_key";
         AUTHELIA_AUTHENTICATION_BACKEND_LDAP_PASSWORD_FILE = "%d/authelia_ldap_password";
         AUTHELIA_NOTIFIER_SMTP_PASSWORD_FILE = "%d/authelia_smtp_password";
-      };
-    };
-
-    vault.services.authelia = { };
-    vault-secrets.services.authelia = {
-      loadedBy = [ "authelia-main" ];
-      keys = {
-        jwt_secret = { };
-        hmac_secret = { };
-        jwt_private_key = { };
-        ldap_password = { };
-        session_secret = { };
-        smtp_password = { };
-        storage_encryption_key = { };
       };
     };
 

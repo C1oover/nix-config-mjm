@@ -18,13 +18,16 @@ in
   ];
 
   config = mkIf cfg.enable {
-    mjm.services.media-server = { };
-    mjm.backups.mediaserver = {
-      repositoryName = "mediaserver";
-      passwordFile = config.vault-secrets.services.media-server.keys.backup_password.path;
+    mjm.services.media-server = {
+      vault = {
+        enable = true;
+        keys.backup_password = { };
+      };
     };
 
-    vault.services.media-server = { };
-    vault-secrets.services.media-server.keys.backup_password = { };
+    mjm.backups.mediaserver = {
+      repositoryName = "mediaserver";
+      passwordFile = config.mjm.services.media-server.vault.keys.backup_password.path;
+    };
   };
 }

@@ -5,23 +5,30 @@ let
     attrValues
     concatMap
     filterAttrs
+    listToAttrs
     mkEnableOption
     mkIf
     mkMerge
     mkOption
+    nameValuePair
     types
     ;
 
   cfg = config.mjm.services;
+  osConfig = config;
 
   serviceType =
     { name, ... }:
+    let
+      svcName = name;
+    in
     {
       options = {
         name = mkOption {
           type = types.str;
           default = name;
         };
+
         postgresql = {
           enable = mkEnableOption "PostgreSQL for the service";
           databases = mkOption {
@@ -29,10 +36,51 @@ let
             default = [ name ];
           };
         };
+
+        vault = {
+          enable = mkEnableOption "Vault service policy";
+
+          commonPolicies = mkOption {
+            type = types.listOf types.str;
+            default = [ ];
+          };
+
+          loadedBy = mkOption {
+            type = types.listOf types.str;
+            default = [ ];
+          };
+
+          keys = mkOption {
+            type = types.attrsOf (
+              types.submodule (
+                { name, config, ... }:
+                {
+                  options = {
+                    loadedBy = mkOption {
+                      type = types.listOf types.str;
+                      default = [ ];
+                    };
+                    owner = mkOption {
+                      type = types.nullOr types.str;
+                      default = null;
+                    };
+                    # this is copied here because trying to get it from `vault-secrets` introduces infinite recursion
+                    path = mkOption {
+                      type = types.path;
+                      default = "${osConfig.vault-secrets.secretsDir}/services/${svcName}/${name}";
+                    };
+                  };
+                }
+              )
+            );
+            default = { };
+          };
+        };
       };
     };
 
   postgresServices = attrValues (filterAttrs (_: s: s.postgresql.enable) cfg);
+  vaultServices = attrValues (filterAttrs (_: s: s.vault.enable) cfg);
 in
 {
   options.mjm.services = mkOption {
@@ -55,6 +103,15 @@ in
           }) s.postgresql.databases
         ) postgresServices;
       };
+    })
+    (mkIf (vaultServices != [ ]) {
+      vault.services = listToAttrs (
+        map (s: nameValuePair s.name { inherit (s.vault) commonPolicies; }) vaultServices
+      );
+
+      vault-secrets.services = listToAttrs (
+        map (s: nameValuePair s.name { inherit (s.vault) loadedBy keys; }) vaultServices
+      );
     })
   ];
 }

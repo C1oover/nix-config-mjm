@@ -13,6 +13,10 @@ in
   config = mkIf cfg.enable {
     mjm.services.paperless = {
       postgresql.enable = true;
+      vault = {
+        enable = true;
+        keys.backup_password = { };
+      };
     };
     mjm.state.directories = [
       {
@@ -102,13 +106,8 @@ in
     '';
 
     mjm.backups.paperless = {
-      passwordFile = config.vault-secrets.services.paperless.keys.backup_password.path;
+      passwordFile = config.mjm.services.paperless.vault.keys.backup_password.path;
       paths = [ "/var/lib/paperless/media/documents" ];
-    };
-
-    vault.services.paperless = { };
-    vault-secrets.services.paperless = {
-      keys.backup_password = { };
     };
   };
 }

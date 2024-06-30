@@ -14,7 +14,12 @@ in
   };
 
   config = mkIf cfg.enable {
-    mjm.services.vaultwarden = { };
+    mjm.services.vaultwarden = {
+      vault = {
+        enable = true;
+        keys.backup_password = { };
+      };
+    };
     mjm.state.directories = [
       {
         directory = "/var/lib/bitwarden_rs";
@@ -54,7 +59,7 @@ in
     };
 
     mjm.backups.vaultwarden = {
-      passwordFile = config.vault-secrets.services.vaultwarden.keys.backup_password.path;
+      passwordFile = config.mjm.services.vaultwarden.vault.keys.backup_password.path;
       paths = [
         "/var/lib/bitwarden_rs/attachments"
         "/var/lib/bitwarden_rs/db-backup.sqlite3"
@@ -65,11 +70,6 @@ in
       backupCleanupCommand = ''
         rm /var/lib/bitwarden_rs/db-backup.sqlite3
       '';
-    };
-
-    vault.services.vaultwarden = { };
-    vault-secrets.services.vaultwarden = {
-      keys.backup_password = { };
     };
   };
 }

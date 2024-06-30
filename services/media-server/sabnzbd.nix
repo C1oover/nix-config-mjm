@@ -5,12 +5,15 @@ let
 in
 {
   config = mkIf cfg.enable {
+    mjm.services.media-server.vault.keys.sabnzbd_api_key = { };
     mjm.state.directories = [
       {
         directory = "/var/lib/sabnzbd";
         inherit (config.services.sabnzbd) user group;
       }
     ];
+
+    vault-secrets.wantedBy = [ "prometheus-sabnzbd-exporter.service" ];
 
     ingress.virtualHosts.downloads = {
       upstream.service.name = "sabnzbd";
@@ -29,13 +32,10 @@ in
       servers = [
         {
           baseUrl = "http://localhost:8080/sabnzbd";
-          apiKeyFile = config.vault-secrets.services.media-server.keys.sabnzbd_api_key.path;
+          apiKeyFile = config.mjm.services.media-server.vault.keys.sabnzbd_api_key.path;
         }
       ];
     };
-
-    vault-secrets.wantedBy = [ "prometheus-sabnzbd-exporter.service" ];
-    vault-secrets.services.media-server.keys.sabnzbd_api_key = { };
 
     networking.firewall.allowedTCPPorts = [ 8080 ];
 

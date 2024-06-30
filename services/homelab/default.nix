@@ -32,8 +32,31 @@ in
   config = mkIf cfg.enable {
     mjm.services.homelab = {
       postgresql.enable = true;
+      vault = {
+        enable = true;
+        commonPolicies = [ "backups" ];
+        loadedBy = [ "homelab" ];
+        keys = {
+          gitlab_token = { };
+          netbox_token = { };
+          paperless_token = { };
+          restic_password = { };
+          secret_key_base = { };
+          taskwarrior_key = { };
+        };
+      };
     };
     mjm.otel-collector.enable = true;
+
+    vault-secrets.common.backups = {
+      loadedBy = [ "homelab" ];
+      keys = {
+        garage_key_id = { };
+        garage_secret_key = { };
+        b2_key_id = { };
+        b2_application_key = { };
+      };
+    };
 
     ingress.virtualHosts.homelab = {
       upstream.service.name = "homelab";
@@ -72,28 +95,6 @@ in
         StateDirectory = "homelab";
         WorkingDirectory = "/var/lib/homelab";
         # TODO harden
-      };
-    };
-
-    vault.services.homelab.commonPolicies = [ "backups" ];
-    vault-secrets.services.homelab = {
-      loadedBy = [ "homelab" ];
-      keys = {
-        gitlab_token = { };
-        netbox_token = { };
-        paperless_token = { };
-        restic_password = { };
-        secret_key_base = { };
-        taskwarrior_key = { };
-      };
-    };
-    vault-secrets.common.backups = {
-      loadedBy = [ "homelab" ];
-      keys = {
-        garage_key_id = { };
-        garage_secret_key = { };
-        b2_key_id = { };
-        b2_application_key = { };
       };
     };
 
