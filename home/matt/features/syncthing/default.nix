@@ -19,6 +19,7 @@ in
       tray = {
         enable = true;
         package = pkgs.syncthingtray;
+        command = "syncthingtray --wait";
       };
     };
 
