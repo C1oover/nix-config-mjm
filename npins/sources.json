@@ -169,9 +169,9 @@
         "repo": "home-manager"
       },
       "branch": "master",
-      "revision": "36317d4d38887f7629876b0e43c8d9593c5cc48d",
-      "url": "https://github.com/nix-community/home-manager/archive/36317d4d38887f7629876b0e43c8d9593c5cc48d.tar.gz",
-      "hash": "1wrz1s78fhd8fvqsxkn10rzig7w8pxfbf1xff2rlxl7zr1k5dvx8"
+      "revision": "59ce796b2563e19821361abbe2067c3bb4143a7d",
+      "url": "https://github.com/nix-community/home-manager/archive/59ce796b2563e19821361abbe2067c3bb4143a7d.tar.gz",
+      "hash": "0mc4mi23mds8c9r50r8f50sczcpb6fwgml2bcypld57micw8fxxn"
     },
     "impermanence": {
       "type": "Git",
@@ -215,14 +215,14 @@
     "nixos": {
       "type": "Channel",
       "name": "nixos-unstable",
-      "url": "https://releases.nixos.org/nixos/unstable/nixos-24.11pre644565.b2852eb9365c/nixexprs.tar.xz",
-      "hash": "0jykdcs08z1cfjaqgdaqf5dadsx9sj3lr0nsfkz2ydp9rx5vhb7i"
+      "url": "https://releases.nixos.org/nixos/unstable/nixos-24.11pre645454.2741b4b489b5/nixexprs.tar.xz",
+      "hash": "1lqa1zb6bkh2kjiv2g9439mh4rzfpmflw6rjkc4gj0ww56lizf7r"
     },
     "nixpkgs": {
       "type": "Channel",
       "name": "nixpkgs-unstable",
-      "url": "https://releases.nixos.org/nixpkgs/nixpkgs-24.11pre645342.53a702e155d4/nixexprs.tar.xz",
-      "hash": "0qnrzlvwv9yk4af976p5hqpkdagrb64hdjqdvk5xyf4hbwpmpq2s"
+      "url": "https://releases.nixos.org/nixpkgs/nixpkgs-24.11pre645735.12a9c0004bc9/nixexprs.tar.xz",
+      "hash": "17py5ah7l7hya9y33vch86d1ws0z1v2s7mffi11vb4fgy5maim55"
     },
     "nixpkgs-firefox-darwin": {
       "type": "Git",
@@ -244,9 +244,9 @@
         "repo": "NUR"
       },
       "branch": "master",
-      "revision": "eb317e310f2c5e4dc6a670601af21a7bc0c323ef",
-      "url": "https://github.com/nix-community/NUR/archive/eb317e310f2c5e4dc6a670601af21a7bc0c323ef.tar.gz",
-      "hash": "1b5vafiixh8vr1sn34ch2cv0k65vq13dzq56hf8ardvfkipjfqa1"
+      "revision": "0575d7fb334ea662a0a03620780c87df0612eb9a",
+      "url": "https://github.com/nix-community/NUR/archive/0575d7fb334ea662a0a03620780c87df0612eb9a.tar.gz",
+      "hash": "1xn5zihi8r7m7mlnplacidkqhy84ylv21x9zrgcfqjdrhr2m8pbm"
     },
     "terranix": {
       "type": "GitRelease",

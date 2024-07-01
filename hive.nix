@@ -16,16 +16,6 @@ let
           url = "https://github.com/NixOS/nixpkgs/pull/309084.diff";
           hash = "sha256-3yfi8XuoM7EB8OpiwNxAi10KTf1o50Yakv1NylCu7cs=";
         })
-        (fetchpatch {
-          # xivlauncher 1.0.9 (for dawntrail)
-          url = "https://github.com/NixOS/nixpkgs/pull/323006.diff";
-          hash = "sha256-nhatCDxBamdFlEPUBf0IC5Nv27FA1JA2d/V/CVQSHNY=";
-        })
-        (fetchpatch {
-          # nvidia 555.58 driver
-          url = "https://github.com/NixOS/nixpkgs/pull/322963.diff";
-          hash = "sha256-PYLUFe0jcaMSc2rwB9F4IlMHQjlNZFmXlhjC9+VZEZ8=";
-        })
       ];
     };
 in
