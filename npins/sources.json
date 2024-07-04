@@ -215,8 +215,8 @@
     "nixos": {
       "type": "Channel",
       "name": "nixos-unstable",
-      "url": "https://releases.nixos.org/nixos/unstable/nixos-24.11pre646099.00d80d13810d/nixexprs.tar.xz",
-      "hash": "1pii9x023qjwzznrrr45fwya33f4a902yqyc101fnys1qcdkbfd9"
+      "url": "https://releases.nixos.org/nixos/unstable/nixos-24.11pre647193.9f4128e00b0a/nixexprs.tar.xz",
+      "hash": "02ixm7pzl0jzanv7lmwfzqg7znjmq3wwads1l8r94xhln758lm1z"
     },
     "nixpkgs": {
       "type": "Channel",
@@ -244,9 +244,9 @@
         "repo": "NUR"
       },
       "branch": "master",
-      "revision": "dd332d4c8247a452e5112af85d183340bd88640a",
-      "url": "https://github.com/nix-community/NUR/archive/dd332d4c8247a452e5112af85d183340bd88640a.tar.gz",
-      "hash": "07587jxxwhgmsrbr1r3c7ayr0fh6w11jnam4wwy7z3v6ydas6c56"
+      "revision": "b5d57ed0159780f55ac6df4cd041fb07b057d49b",
+      "url": "https://github.com/nix-community/NUR/archive/b5d57ed0159780f55ac6df4cd041fb07b057d49b.tar.gz",
+      "hash": "0l23d4sqsg9h62qswpjijmbmrk4sq6d8qbzpxwzzpdgzvsyp68dd"
     },
     "terranix": {
       "type": "GitRelease",
