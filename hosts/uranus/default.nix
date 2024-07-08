@@ -24,16 +24,16 @@ in
       firefox-unwrapped = super.firefox-unwrapped.overrideAttrs (oldAttrs: {
         patches = oldAttrs.patches ++ [
           (pkgs.fetchpatch {
-            url = "https://phabricator.services.mozilla.com/D214883?download=true";
-            hash = "sha256-/twQc6svBiojaceDrUg/qIfgUT5gNfj4s4yM5ldpPz4=";
+            url = "https://phabricator.services.mozilla.com/D214883?id=887831&download=true";
+            hash = "sha256-wIukbMDp0olbY8j+w+T4QcKjQSi3gj5RzaXKC6ctw0I=";
           })
           (pkgs.fetchpatch {
-            url = "https://phabricator.services.mozilla.com/D214884?download=true";
-            hash = "sha256-5RNr4plnLP1BRll2J/dzCg64/xtqJoQTUh94AmqZ9/w=";
+            url = "https://phabricator.services.mozilla.com/D214884?id=887832&download=true";
+            hash = "sha256-2CAIVWPUSoNYcjMR22abv5+ODZeKQFXizB3L0vC73ss=";
           })
           (pkgs.fetchpatch {
-            url = "https://phabricator.services.mozilla.com/D214885?download=true";
-            hash = "sha256-8XdNDPjriIwLRn0UB7DYmmXkw1MHzlwiCrnng+Oh494=";
+            url = "https://phabricator.services.mozilla.com/D214885?id=887833&download=true";
+            hash = "sha256-qN3aqDZTReG090luS8fI138yzQ8rq3oHrMArEzHDr8A=";
           })
         ];
       });

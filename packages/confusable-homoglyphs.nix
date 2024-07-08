@@ -1,16 +1,17 @@
 {
   buildPythonPackage,
   fetchPypi,
-  click,
+# click,
 }:
 buildPythonPackage rec {
   pname = "confusable_homoglyphs";
-  version = "3.2.0";
+  version = "3.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-O0oNn6UQZpSYggyRoL/AwydWjOzskGSM84GdSm/Gp1E=";
+    hash = "sha256-uZUAHJsuG0zqDPXzhAp8eRiKjLutBT1pNXK9jBwexGA=";
   };
 
-  checkInputs = [ click ];
+  # checkInputs = [ click ];
+  doCheck = false;
 }

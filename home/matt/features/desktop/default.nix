@@ -34,7 +34,7 @@ in
         cinny-desktop
         element-desktop
         libreoffice-qt-fresh
-        picard
+        # picard
         sonixd
         strawberry-qt6
         wl-clipboard
