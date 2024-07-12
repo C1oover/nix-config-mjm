@@ -120,97 +120,78 @@ in
         '';
         search.force = true;
         search.default = "SearXNG";
-        search.engines = {
-          "SearXNG" = {
-            urls = [
+        search.engines =
+          let
+            mkSearchix =
               {
-                template = "https://searx.org/search";
-                params = [
+                type ? "options",
+                project,
+                alias,
+              }:
+              {
+                urls = [
                   {
-                    name = "q";
-                    value = "{searchTerms}";
+                    template = "https://searchix.alanpearce.eu/${type}/${project}/search";
+                    params = [
+                      {
+                        name = "query";
+                        value = "{searchTerms}";
+                      }
+                    ];
                   }
                 ];
-              }
-            ];
+                icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
+                definedAliases = [ "@${alias}" ];
+              };
+          in
+          {
+            "SearXNG" = {
+              urls = [
+                {
+                  template = "https://searx.org/search";
+                  params = [
+                    {
+                      name = "q";
+                      value = "{searchTerms}";
+                    }
+                  ];
+                }
+              ];
+            };
+            "Nix Packages" = mkSearchix {
+              type = "packages";
+              project = "nixpkgs";
+              alias = "np";
+            };
+            "NixOS Options" = mkSearchix {
+              project = "nixos";
+              alias = "no";
+            };
+            "nix-darwin Options" = mkSearchix {
+              project = "darwin";
+              alias = "nd";
+            };
+            "Home Manager Options" = mkSearchix {
+              project = "home-manager";
+              alias = "nh";
+            };
+            "Links" = {
+              urls = [
+                {
+                  template = "https://links.midna.dev/bookmarks";
+                  params = [
+                    {
+                      name = "q";
+                      value = "{searchTerms}";
+                    }
+                  ];
+                }
+              ];
+              definedAliases = [ "@l" ];
+            };
+            "Bing".metadata.hidden = true;
+            "Google".metadata.alias = "@g";
           };
-          "MyNixOS" = {
-            urls = [
-              {
-                template = "https://mynixos.com/search";
-                params = [
-                  {
-                    name = "q";
-                    value = "{searchTerms}";
-                  }
-                ];
-              }
-            ];
-
-            icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
-            definedAliases = [ "@n" ];
-          };
-          "Nix Packages" = {
-            urls = [
-              {
-                template = "https://search.nixos.org/packages";
-                params = [
-                  {
-                    name = "type";
-                    value = "packages";
-                  }
-                  {
-                    name = "channel";
-                    value = "unstable";
-                  }
-                  {
-                    name = "query";
-                    value = "{searchTerms}";
-                  }
-                ];
-              }
-            ];
-
-            icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
-            definedAliases = [ "@np" ];
-          };
-          "Nix Options" = {
-            urls = [
-              {
-                template = "https://search.nixos.org/options";
-                params = [
-                  {
-                    name = "channel";
-                    value = "unstable";
-                  }
-                  {
-                    name = "query";
-                    value = "{searchTerms}";
-                  }
-                ];
-              }
-            ];
-
-            icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
-            definedAliases = [ "@no" ];
-          };
-          "Links" = {
-            urls = [
-              {
-                template = "https://links.midna.dev/bookmarks";
-                params = [
-                  {
-                    name = "q";
-                    value = "{searchTerms}";
-                  }
-                ];
-              }
-            ];
-            definedAliases = [ "@l" ];
-          };
-          "Bing".metadata.hidden = true;
-          "Google".metadata.alias = "@g";
-        };
       };
     };
   };
