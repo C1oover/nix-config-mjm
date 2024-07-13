@@ -157,9 +157,9 @@
         "repo": "helix"
       },
       "branch": "master",
-      "revision": "fd7b1a3e3722ec49d42f795a475806c476799c30",
-      "url": "https://github.com/helix-editor/helix/archive/fd7b1a3e3722ec49d42f795a475806c476799c30.tar.gz",
-      "hash": "1wadfghrv55vkq4wr27mwip9nmdclh30n4q2wy96jlng2bdjryjx"
+      "revision": "e6bf97b8434aa9ecc9e9c6a25411ea6f1148360f",
+      "url": "https://github.com/helix-editor/helix/archive/e6bf97b8434aa9ecc9e9c6a25411ea6f1148360f.tar.gz",
+      "hash": "1ayvic67jsgxw5mkl5ngmgv35ycvqh27vfczysnnhw1cm7q3x7wc"
     },
     "home-manager": {
       "type": "Git",
@@ -215,8 +215,8 @@
     "nixos": {
       "type": "Channel",
       "name": "nixos-unstable",
-      "url": "https://releases.nixos.org/nixos/unstable/nixos-24.11pre651108.feb2849fdeb7/nixexprs.tar.xz",
-      "hash": "1z0mgqfdzk367cqx3nx6v16p42mw3l3fwlv8znxldw779n124j4s"
+      "url": "https://releases.nixos.org/nixos/unstable/nixos-24.11pre652179.7e7c39ea35c5/nixexprs.tar.xz",
+      "hash": "1lnn7albgphjx9lyyklvrpckbjy3g9dyy4shc8f9smipbzlkmpyk"
     },
     "nixpkgs": {
       "type": "Channel",
@@ -244,9 +244,9 @@
         "repo": "NUR"
       },
       "branch": "master",
-      "revision": "34794b9e757b66c3166f204ec14ea07d034131dc",
-      "url": "https://github.com/nix-community/NUR/archive/34794b9e757b66c3166f204ec14ea07d034131dc.tar.gz",
-      "hash": "0g1sv6v33969xwv3fpbar5bkdzhrm883sizmi5wkpww86404466h"
+      "revision": "7f34d06ba108a36478931976805421570419f594",
+      "url": "https://github.com/nix-community/NUR/archive/7f34d06ba108a36478931976805421570419f594.tar.gz",
+      "hash": "03bsmxz67l0hawjh8qb3cfdpx8h9pw8phiqbdz02lgv4njgx4drc"
     },
     "terranix": {
       "type": "GitRelease",
