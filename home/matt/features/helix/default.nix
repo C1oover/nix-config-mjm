@@ -2,10 +2,14 @@
   lib,
   pkgs,
   inputs,
+  osConfig,
   ...
 }:
 let
-  helix = (import inputs.helix).packages.${pkgs.system}.default;
+  # helix = (import inputs.helix).packages.${pkgs.system}.default;
+
+  # steel branch doesn't have my flake-compat fix
+  helix = import inputs.helix;
 in
 {
   programs.helix = {
@@ -30,10 +34,11 @@ in
       nodePackages.prettier
       nodePackages.typescript-language-server
       nodePackages.yaml-language-server
+      osConfig.programs.nushell.wrappedPackage
     ];
     settings = {
       editor = {
-        auto-save.focus-lost = true;
+        # auto-save.focus-lost = true;
         bufferline = "always";
         cursorline = true;
         cursor-shape = {
@@ -125,5 +130,10 @@ in
         }
       ];
     };
+  };
+
+  xdg.configFile."helix" = {
+    source = ./config;
+    recursive = true;
   };
 }

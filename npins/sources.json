@@ -153,13 +153,13 @@
       "type": "Git",
       "repository": {
         "type": "GitHub",
-        "owner": "helix-editor",
+        "owner": "mattwparas",
         "repo": "helix"
       },
-      "branch": "master",
-      "revision": "079f544260f4f5eaff08104bf07abd57bfb7b611",
-      "url": "https://github.com/helix-editor/helix/archive/079f544260f4f5eaff08104bf07abd57bfb7b611.tar.gz",
-      "hash": "1f0l65z1cy8m9x79p5y5kwk1psv0ppfz9lwylggm71q0lj127awl"
+      "branch": "steel-event-system",
+      "revision": "25a8f033de85b2f14b3dd5eb4ca1a0388ca9231c",
+      "url": "https://github.com/mattwparas/helix/archive/25a8f033de85b2f14b3dd5eb4ca1a0388ca9231c.tar.gz",
+      "hash": "1v63rc00kk8pvngl1l86jbk3cx2j7gfkqirlg4nwp47pcyh5gcpf"
     },
     "home-manager": {
       "type": "Git",
