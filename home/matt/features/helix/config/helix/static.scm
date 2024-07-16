@@ -1143,10 +1143,6 @@
 (define (set-current-selection-object! arg)
     (helix.static.set-current-selection-object! *helix.cx* arg))
 
-(provide search-in-directory)
-(define (search-in-directory arg)
-    (helix.static.search-in-directory *helix.cx* arg))
-
 (provide regex-selection)
 (define (regex-selection arg)
     (helix.static.regex-selection *helix.cx* arg))

@@ -250,3 +250,11 @@
 (provide keybindings)
 (define (keybindings arg)
     (helix.keybindings *helix.config* arg))
+
+(provide inline-diagnostics-cursor-line-enable)
+(define (inline-diagnostics-cursor-line-enable arg)
+    (helix.inline-diagnostics-cursor-line-enable *helix.config* arg))
+
+(provide inline-diagnostics-end-of-line-enable)
+(define (inline-diagnostics-end-of-line-enable arg)
+    (helix.inline-diagnostics-end-of-line-enable *helix.config* arg))
