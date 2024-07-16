@@ -1,8 +1,15 @@
+(require-builtin steel/process as process.)
 (require (prefix-in helix. "helix/commands.scm"))
 (require (prefix-in helix.static. "helix/static.scm"))
 (require "helix/editor.scm")
 
-(provide run-mix kitty-run test-all test-current-file test-previous test-current-line)
+(provide run-mix
+         kitty-run
+         test-all
+         test-current-file
+         test-previous
+         test-current-line
+         open-in-github)
 
 (define previous-test #f)
 
@@ -24,6 +31,24 @@
   (if (not previous-test)
       (error! "no previous test saved")
       (run-mix "test" previous-test)))
+
+(define (open-in-github)
+  (let ([path (current-relative-path)]
+        [line (to-string (helix.static.get-current-line-number))])
+    (helix.run-shell-command "gh browse" (string-append path ":" line))))
+
+; (define (open-url url)
+;   (if (darwin?)
+;       (helix.run-shell-command "open" url)
+;       (helix.run-shell-command "xdg-open" url)))
+
+; (define (run-command cmd args)
+;   (~> (process.command cmd args)
+;       (process.spawn-process)
+;       (process.wait->stdout)))
+
+; (define (darwin?)
+;   (equal? "Darwin" (trim-end (run-command "uname" '()))))
 
 (define (editor-get-doc-if-exists doc-id)
   (if (editor-doc-exists? doc-id) (editor->get-document doc-id) #f))
