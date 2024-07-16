@@ -1,15 +1,11 @@
 {
-  lib,
   pkgs,
   inputs,
   osConfig,
   ...
 }:
 let
-  # helix = (import inputs.helix).packages.${pkgs.system}.default;
-
-  # steel branch doesn't have my flake-compat fix
-  helix = import inputs.helix;
+  helix = (import inputs.helix).packages.${pkgs.system}.default;
 in
 {
   programs.helix = {
@@ -19,9 +15,7 @@ in
       enable = true;
       useItalics = true;
     };
-    package = helix.override {
-      includeGrammarIf = { source, ... }: !(lib.hasPrefix "https://git.sr.ht/" source.git);
-    };
+    package = helix;
     extraPackages = with pkgs; [
       elixir-ls
       marksman
@@ -38,7 +32,7 @@ in
     ];
     settings = {
       editor = {
-        # auto-save.focus-lost = true;
+        auto-save.focus-lost = true;
         bufferline = "always";
         cursorline = true;
         cursor-shape = {

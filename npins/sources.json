@@ -157,9 +157,9 @@
         "repo": "helix"
       },
       "branch": "steel-event-system",
-      "revision": "25a8f033de85b2f14b3dd5eb4ca1a0388ca9231c",
-      "url": "https://github.com/mattwparas/helix/archive/25a8f033de85b2f14b3dd5eb4ca1a0388ca9231c.tar.gz",
-      "hash": "1v63rc00kk8pvngl1l86jbk3cx2j7gfkqirlg4nwp47pcyh5gcpf"
+      "revision": "d34839781a2e9ed18fac7aae27d0a923fc68870a",
+      "url": "https://github.com/mattwparas/helix/archive/d34839781a2e9ed18fac7aae27d0a923fc68870a.tar.gz",
+      "hash": "009py7hrvf4bl6bid74373gh3bwfp0p50mgblj1iqbaghxh91ylp"
     },
     "home-manager": {
       "type": "Git",
