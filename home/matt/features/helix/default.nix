@@ -42,6 +42,10 @@ in
         };
         idle-timeout = 100;
         indent-guides.render = true;
+        inline-diagnostics = {
+          cursor-line = "hint";
+          other-lines = "error";
+        };
         lsp = {
           display-messages = true;
           display-inlay-hints = true;
