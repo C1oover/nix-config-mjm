@@ -13,10 +13,10 @@
   (keybindings global-bindings))
 
 (add-global-keybinding
-  (hash "normal"
-        (hash "space"
-              (hash "t"
-                    (hash "a" ":test-all"
-                          "f" ":test-current-file"
-                          "l" ":test-current-line"
-                          "t" ":test-previous")))))
+ (hash
+  "normal"
+  (hash
+   "space"
+   (hash
+    "t"
+    (hash "a" ":test-all" "f" ":test-current-file" "l" ":test-current-line" "t" ":test-previous")))))

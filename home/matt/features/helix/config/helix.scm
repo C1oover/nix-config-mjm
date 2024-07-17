@@ -21,20 +21,16 @@
   (test-previous))
 
 (define (test-current-line)
-  (set! previous-test
-    (string-append (current-relative-path)
-                   ":"
-                   (to-string (helix.static.get-current-line-number))))
+  (set!
+   previous-test
+   (string-append (current-relative-path) ":" (to-string (helix.static.get-current-line-number))))
   (test-previous))
 
 (define (test-previous)
-  (if (not previous-test)
-      (error! "no previous test saved")
-      (run-mix "test" previous-test)))
+  (if (not previous-test) (error! "no previous test saved") (run-mix "test" previous-test)))
 
 (define (open-in-github)
-  (let ([path (current-relative-path)]
-        [line (to-string (helix.static.get-current-line-number))])
+  (let ([path (current-relative-path)] [line (to-string (helix.static.get-current-line-number))])
     (helix.run-shell-command "gh browse" (string-append path ":" line))))
 
 ; (define (open-url url)
@@ -61,14 +57,13 @@
     (if document (Document-path document) #f)))
 
 (define (current-relative-path)
-  (let* ([workspace-path (helix-find-workspace)]
-         [file-path (to-string (current-path))])
+  (let* ([workspace-path (helix-find-workspace)] [file-path (to-string (current-path))])
     (strip-path-prefix file-path workspace-path)))
 
 (define (strip-path-prefix path prefix)
   (if (starts-with? path prefix)
-    (substring path (+ 1 (string-length prefix)) (string-length path))
-    (error! "bad path")))
+      (substring path (+ 1 (string-length prefix)) (string-length path))
+      (error! "bad path")))
 
 (define (slab-workspace?)
   (equal? "slab" (file-name (helix-find-workspace))))
@@ -77,13 +72,15 @@
   (let ([cmd (string-join args " ")])
     (helix.run-shell-command "kitty @"
                              (string-append "--to=" (env-var "KITTY_LISTEN_ON"))
-                             "launch" "--type=overlay" "--cwd=current"
-                             "`which nu`" "-li" "-c"
+                             "launch"
+                             "--type=overlay"
+                             "--cwd=current"
+                             "`which nu`"
+                             "-li"
+                             "-c"
                              (string-append "'" cmd "; read" "'")
                              ">/dev/null")))
 
 (define (run-mix . args)
-  (let ([mix (if (slab-workspace?)
-                 "docker compose exec slab_1 mix"
-                 "mix")])
+  (let ([mix (if (slab-workspace?) "docker compose exec slab_1 mix" "mix")])
     (apply kitty-run (cons mix args))))

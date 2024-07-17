@@ -21,6 +21,7 @@ in
       marksman
       nil
       nixfmt-rfc-style
+      racket
       shellcheck
       shfmt
       vscode-langservers-extracted
@@ -114,6 +115,17 @@ in
         {
           name = "nix";
           auto-format = true;
+        }
+        {
+          name = "scheme";
+          auto-format = true;
+          formatter = {
+            command = "raco";
+            args = [
+              "fmt"
+              "-i"
+            ];
+          };
         }
         {
           name = "yaml";
