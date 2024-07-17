@@ -5,7 +5,13 @@
   ...
 }:
 let
-  helix = (import inputs.helix).packages.${pkgs.system}.default;
+  inherit (pkgs) applyPatches;
+  helixSrc = applyPatches {
+    name = "helix-patched";
+    src = inputs.helix;
+    patches = [ ./jujutsu.diff ];
+  };
+  helix = (import helixSrc).packages.${pkgs.system}.default;
 in
 {
   programs.helix = {
