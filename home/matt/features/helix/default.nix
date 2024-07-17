@@ -57,6 +57,14 @@ in
           display-messages = true;
           display-inlay-hints = true;
         };
+        statusline.right = [
+          "version-control"
+          "diagnostics"
+          "selections"
+          "register"
+          "position"
+          "file-encoding"
+        ];
         true-color = true;
         whitespace.render.newline = "all";
       };
