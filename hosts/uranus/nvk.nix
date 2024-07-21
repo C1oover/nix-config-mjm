@@ -9,7 +9,7 @@ let
 in
 {
   config = mkMerge [
-    (mkIf (config.specialisation != { }) { boot.kernelPackages = pkgs.linuxPackages_latest; })
+    (mkIf (config.specialisation != { }) { boot.kernelPackages = pkgs.linuxPackages_6_9; })
     {
       specialisation.nvidia.configuration = {
         services.xserver.videoDrivers = [ "nvidia" ];
