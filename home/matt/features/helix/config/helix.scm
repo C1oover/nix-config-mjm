@@ -78,7 +78,7 @@
                              "`which nu`"
                              "-li"
                              "-c"
-                             (string-append "'" cmd "; read" "'")
+                             (string-append "'try { " cmd "}; read" "'")
                              ">/dev/null")))
 
 (define (run-mix . args)
