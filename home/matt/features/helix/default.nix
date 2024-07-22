@@ -68,10 +68,6 @@ in
         true-color = true;
         whitespace.render.newline = "all";
       };
-      keys.normal = {
-        "]".b = ":buffer-next";
-        "[".b = ":buffer-previous";
-      };
     };
     languages = {
       language-server = {
