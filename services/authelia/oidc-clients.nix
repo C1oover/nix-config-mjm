@@ -13,6 +13,7 @@
       "email"
     ];
     userinfo_signing_algorithm = "none";
+    token_endpoint_auth_method = "client_secret_basic";
   }
   {
     id = "vault";
