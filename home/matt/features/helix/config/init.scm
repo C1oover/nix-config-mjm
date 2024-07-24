@@ -17,6 +17,7 @@
   "normal"
   (hash
    "space"
-   (hash
-    "t"
-    (hash "a" ":test-all" "f" ":test-current-file" "l" ":test-current-line" "t" ":test-previous")))))
+   (hash "t"
+         (hash "a" ":test-all" "f" ":test-current-file" "l" ":test-current-line" "t" ":test-previous")
+         "K"
+         ":search-selection-in-dash"))))

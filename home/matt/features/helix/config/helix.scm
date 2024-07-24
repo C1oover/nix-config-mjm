@@ -9,7 +9,8 @@
          test-current-file
          test-previous
          test-current-line
-         open-in-github)
+         open-in-github
+         search-selection-in-dash)
 
 (define previous-test #f)
 
@@ -45,6 +46,10 @@
 
 ; (define (darwin?)
 ;   (equal? "Darwin" (trim-end (run-command "uname" '()))))
+
+(define (search-selection-in-dash)
+  (let ([url (string-append "dash://?query=" (helix.static.current-highlighted-text!))])
+    (helix.run-shell-command "open" url)))
 
 (define (editor-get-doc-if-exists doc-id)
   (if (editor-doc-exists? doc-id) (editor->get-document doc-id) #f))
