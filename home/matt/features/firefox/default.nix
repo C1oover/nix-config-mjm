@@ -98,6 +98,7 @@ in
               plasma-integration
               stylus
               sidebery
+              sponsorblock
               tampermonkey
               ublock-origin
               ;
