@@ -14,19 +14,27 @@
 
 (define previous-test #f)
 
+;;@doc
+;; Run all tests
 (define (test-all)
   (run-mix "test.all"))
 
+;;@doc
+;; Run tests in the current file
 (define (test-current-file)
   (set! previous-test (current-relative-path))
   (test-previous))
 
+;;@doc
+;; Run the test from the current line
 (define (test-current-line)
   (set!
    previous-test
    (string-append (current-relative-path) ":" (to-string (helix.static.get-current-line-number))))
   (test-previous))
 
+;;@doc
+;; Re-run the last test
 (define (test-previous)
   (if (not previous-test) (error! "no previous test saved") (run-mix "test" previous-test)))
 
@@ -47,6 +55,8 @@
 ; (define (darwin?)
 ;   (equal? "Darwin" (trim-end (run-command "uname" '()))))
 
+;;@doc
+;; Search selected text in Dash
 (define (search-selection-in-dash)
   (let ([url (string-append "dash://?query=" (helix.static.current-highlighted-text!))])
     (helix.run-shell-command "open" url)))
