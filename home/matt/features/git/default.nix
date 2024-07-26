@@ -76,6 +76,48 @@ in
     };
   };
 
+  programs.starship.settings = {
+    git_branch.only_attached = true;
+    git_commit.disabled = true;
+    git_status.disabled = true;
+    custom.jj = {
+      command = ''
+        jj log -r@ -l1 --ignore-working-copy --no-graph --color always  -T '
+          separate(" ",
+            branches.map(|x| if(
+                x.name().substr(0, 10).starts_with(x.name()),
+                x.name().substr(0, 10),
+                x.name().substr(0, 9) ++ "…")
+              ).join(" "),
+            tags.map(|x| if(
+                x.name().substr(0, 10).starts_with(x.name()),
+                x.name().substr(0, 10),
+                x.name().substr(0, 9) ++ "…")
+              ).join(" "),
+            surround("\"","\"",
+              if(
+                 description.first_line().substr(0, 24).starts_with(description.first_line()),
+                 description.first_line().substr(0, 24),
+                 description.first_line().substr(0, 23) ++ "…"
+              )
+            ),
+            if(conflict, "conflict"),
+            if(divergent, "divergent"),
+            if(hidden, "hidden"),
+          )
+        '
+      '';
+      detect_folders = [ ".jj" ];
+      symbol = "@ ";
+    };
+    custom.jjstate = {
+      command = ''
+        jj log -r@ -l1 --no-graph -T "" --stat | tail -n1 | sd "(\d+) files? changed, (\d+) insertions?\(\+\), (\d+) deletions?\(-\)" " ''${1}m ''${2}+ ''${3}-" | sd " 0." ""
+      '';
+      detect_folders = [ ".jj" ];
+    };
+  };
+
   home.shellAliases = {
     ",jp" = "jj git push";
     ",jpc" = "jj git push --change @-";

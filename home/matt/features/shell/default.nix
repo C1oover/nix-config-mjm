@@ -49,6 +49,11 @@ in
         os.disabled = true;
         gcloud.disabled = true;
         docker_context.disabled = true;
+        terraform.disabled = true;
+
+        nix_shell.heuristic = true;
+
+        format = "$username$hostname$localip$shlvl$directory$vcsh\${custom.jj}\${custom.jjstate}$all";
       }
       (builtins.fromTOML (builtins.readFile ./nerd-font-symbols.toml))
     ];
