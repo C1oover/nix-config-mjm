@@ -39,7 +39,6 @@ build nixos hosts:
       aud: http://vault.service.consul:8200
   script:
     - nix run -f . host-scripts -- ci attic-login
-    - nix run -f . host-scripts -- ci build
     - nix run -f . host-scripts -- ci diff
 deploy nixos hosts:
   tags: [nix-shell]

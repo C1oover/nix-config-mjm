@@ -43,6 +43,21 @@ export def retry [block, -n: int] {
   }
 }
 
+def with-colmena [block, --use-known-hosts] {
+  with-temp-key {|key_path|
+    let config_file = $key_path | path dirname | path join ssh_config
+    ($'IdentityFile ($key_path)' | if $use_known_hosts {
+      $in ++ '
+      Host *
+        UserKnownHostsFile ~/.ssh/known_hosts'
+    } else { $in } | save $config_file)
+
+    with-env {SSH_CONFIG_FILE: $config_file} {
+      do -c $block
+    }
+  }
+}
+
 def --wrapped "darwin rebuild" [...args] {
   nom-build hosts/darwin.nix -A $'(scutil --get LocalHostName).system' ...$args
   nvd diff /run/current-system ./result
@@ -93,42 +108,36 @@ def "main switch" [action: string = switch] {
   }
 }
 
-def --wrapped "main deploy" [...args] {
-  with-temp-key {|key_path|
-    let config_file = $key_path | path dirname | path join ssh_config
-    $'IdentityFile ($key_path)
-    Host *
-      UserKnownHostsFile ~/.ssh/known_hosts
-    ' | save $config_file
+def "main diff" [host: string] {
+  with-colmena --use-known-hosts {
+    colmena apply --on $host --keep-result push
+    let system_path = readlink -f $'.gcroots/node-($host)'
+    colmena exec -v --on $host -- nix run nixpkgs#nvd -- diff /run/current-system $system_path
+  }
+}
 
-    with-env {SSH_CONFIG_FILE: $config_file} {
-      colmena apply ...$args
-    }
+def --wrapped "main deploy" [...args] {
+  with-colmena --use-known-hosts {
+    colmena apply ...$args
   }
 }
 
 def "main ci deploy" [--reboot] {
   with-vault {
-    with-temp-key {|key_path|
-      let $config_file = $key_path | path dirname | path join ssh_config
-      $'IdentityFile ($key_path)
-      ' | save $config_file
-
-      with-env {SSH_CONFIG_FILE: $config_file} {
-        if $reboot {
-          colmena apply --on @reboot-phase-main --keep-result --reboot
-          # deploy to ingress last, since it can disrupt the build
-          colmena apply --on @reboot-phase-ingress --keep-result --reboot
-        } else {
-          colmena apply --on @phase-main --keep-result
-          # deploy to ingress last, since it can disrupt the build
-          colmena apply --on @phase-ingress --keep-result
-        }
+    with-colmena {
+      if $reboot {
+        colmena apply --on @reboot-phase-main --keep-result --reboot
+        # deploy to ingress last, since it can disrupt the build
+        colmena apply --on @reboot-phase-ingress --keep-result --reboot
+      } else {
+        colmena apply --on @phase-main --keep-result
+        # deploy to ingress last, since it can disrupt the build
+        colmena apply --on @phase-ingress --keep-result
       }
+    }
 
-      retry -n 5 {
-        attic push homelab .gcroots/node-*
-      }
+    retry -n 5 {
+      attic push homelab .gcroots/node-*
     }
   }
 }
@@ -142,7 +151,26 @@ def "main ci build" [] {
 }
 
 def "main ci diff" [] {
-  nvd diff /run/current-system .gcroots/node-hypnos
+  with-vault {
+    with-colmena {
+      colmena build --keep-result
+
+      retry -n 5 {
+        attic push homelab .gcroots/node-*
+      }
+
+      colmena apply --on @phase-main,@phase-ingress --keep-result push
+
+      mkdir diffs
+      colmena eval -E '{ nodes, ... }: builtins.filter (n: nodes.${n}.config.deployment.phase != null) (builtins.attrNames nodes)' | from json | par-each {|host|
+        let system_path = readlink -f $'.gcroots/node-($host)'
+        print $'($host): diffing ($system_path) against current system'
+        colmena exec -v --on $host -- nix run nixpkgs#nvd -- diff /run/current-system $system_path out+err> $'diffs/($host)'
+        print $'($host): done'
+      }
+      cat diffs/*
+    }
+  }
 }
 
 def "main ci attic-login" [] {

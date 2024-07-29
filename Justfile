@@ -19,6 +19,9 @@ build target *flags:
 deploy target *flags:
   nix run -f . host-scripts -- deploy --on {{target}} {{flags}}
 
+diff host:
+  nix run -f . host-scripts -- diff {{host}}
+
 tf-clean:
   cd terraform && rm -rf .terraform.lock.hcl .terraform
 
