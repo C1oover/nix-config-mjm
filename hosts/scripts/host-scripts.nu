@@ -58,6 +58,16 @@ def with-colmena [block, --use-known-hosts] {
   }
 }
 
+def get-kernel-version [system_path: path] {
+  let kernel_path = $system_path | path join kernel | path expand | path dirname
+  $kernel_path | path basename | split row - | get 2
+}
+
+def get-systemd-version [system_path: path] {
+  let systemd_path = $system_path | path join systemd | path expand
+  $systemd_path | path basename | split row - | get 2
+}
+
 def --wrapped "darwin rebuild" [...args] {
   nom-build hosts/darwin.nix -A $'(scutil --get LocalHostName).system' ...$args
   nvd diff /run/current-system ./result
@@ -71,7 +81,28 @@ def "darwin switch" [] {
 
 def --wrapped "linux rebuild" [...args] {
   colmena build --on (hostname) --keep-result -v ...$args
-  nvd diff /run/current-system $'.gcroots/node-(hostname)'
+
+  let system_path = $'.gcroots/node-(hostname)' | path expand
+  nvd diff /run/current-system $system_path
+
+  let old_kernel_version = get-kernel-version /run/booted-system
+  let new_kernel_version = get-kernel-version $system_path
+  let kernel_changed = $old_kernel_version != $new_kernel_version;
+  if $kernel_changed {
+    print $'Kernel versions differ: ($old_kernel_version) -> ($new_kernel_version)'
+  }
+
+  let old_systemd_version = get-systemd-version /run/booted-system
+  let new_systemd_version = get-systemd-version $system_path
+  let systemd_changed = $old_systemd_version != $new_systemd_version
+  if $systemd_changed {
+    print $'systemd versions differ: ($old_systemd_version) -> ($new_systemd_version)'
+  }
+
+  if $kernel_changed or $systemd_changed {
+    print 'Reboot needed.'
+    exit 1
+  }
 }
 
 def "linux switch" [action: string = switch] {
