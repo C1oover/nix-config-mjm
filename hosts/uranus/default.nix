@@ -15,8 +15,6 @@ in
 
     ../common/global/nixos
     ../common/users/matt
-
-    ./nvk.nix
   ];
 
   deployment.phase = null;
@@ -24,6 +22,8 @@ in
   environment.systemPackages = [ pkgs.sbctl ];
 
   mjm.desktop.enable = true;
+
+  boot.kernelPackages = pkgs.linuxPackages_6_9;
 
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 
