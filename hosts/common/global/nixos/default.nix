@@ -1,5 +1,6 @@
 {
   config,
+  pkgs,
   lib,
   inputs,
   ...
@@ -56,4 +57,42 @@
   programs.zsh.enable = true;
 
   catppuccin.flavor = "macchiato";
+
+  environment.systemPackages = [
+    pkgs.nvd
+    (pkgs.writers.writeNuBin "system-upgrade-check" ''
+      def get-kernel-version [system_path: path] {
+        let kernel_path = $system_path | path join kernel | path expand | path dirname
+        $kernel_path | path basename | split row - | get 2
+      }
+
+      def get-systemd-version [system_path: path] {
+        let systemd_path = $system_path | path join systemd | path expand
+        $systemd_path | path basename | split row - | get 2
+      }
+
+      def main [system_path: path] {
+        nvd diff /run/current-system $system_path
+
+        let old_kernel_version = get-kernel-version /run/booted-system
+        let new_kernel_version = get-kernel-version $system_path
+        let kernel_changed = $old_kernel_version != $new_kernel_version;
+        if $kernel_changed {
+          print $'Kernel versions differ: ($old_kernel_version) -> ($new_kernel_version)'
+        }
+
+        let old_systemd_version = get-systemd-version /run/booted-system
+        let new_systemd_version = get-systemd-version $system_path
+        let systemd_changed = $old_systemd_version != $new_systemd_version
+        if $systemd_changed {
+          print $'systemd versions differ: ($old_systemd_version) -> ($new_systemd_version)'
+        }
+
+        if $kernel_changed or $systemd_changed {
+          print 'Reboot needed.'
+          exit 1
+        }
+      }
+    '')
+  ];
 }
