@@ -58,16 +58,6 @@ def with-colmena [block, --use-known-hosts] {
   }
 }
 
-def get-kernel-version [system_path: path] {
-  let kernel_path = $system_path | path join kernel | path expand | path dirname
-  $kernel_path | path basename | split row - | get 2
-}
-
-def get-systemd-version [system_path: path] {
-  let systemd_path = $system_path | path join systemd | path expand
-  $systemd_path | path basename | split row - | get 2
-}
-
 def --wrapped "darwin rebuild" [...args] {
   nom-build hosts/darwin.nix -A $'(scutil --get LocalHostName).system' ...$args
   nvd diff /run/current-system ./result
@@ -83,26 +73,7 @@ def --wrapped "linux rebuild" [...args] {
   colmena build --on (hostname) --keep-result -v ...$args
 
   let system_path = $'.gcroots/node-(hostname)' | path expand
-  nvd diff /run/current-system $system_path
-
-  let old_kernel_version = get-kernel-version /run/booted-system
-  let new_kernel_version = get-kernel-version $system_path
-  let kernel_changed = $old_kernel_version != $new_kernel_version;
-  if $kernel_changed {
-    print $'Kernel versions differ: ($old_kernel_version) -> ($new_kernel_version)'
-  }
-
-  let old_systemd_version = get-systemd-version /run/booted-system
-  let new_systemd_version = get-systemd-version $system_path
-  let systemd_changed = $old_systemd_version != $new_systemd_version
-  if $systemd_changed {
-    print $'systemd versions differ: ($old_systemd_version) -> ($new_systemd_version)'
-  }
-
-  if $kernel_changed or $systemd_changed {
-    print 'Reboot needed.'
-    exit 1
-  }
+  system-upgrade-check $system_path
 }
 
 def "linux switch" [action: string = switch] {
@@ -143,7 +114,7 @@ def "main diff" [host: string] {
   with-colmena --use-known-hosts {
     colmena apply --on $host --keep-result push
     let system_path = readlink -f $'.gcroots/node-($host)'
-    colmena exec -v --on $host -- nix run nixpkgs#nvd -- diff /run/current-system $system_path
+    colmena exec -v --on $host -- system-upgrade-check -n $system_path
   }
 }
 
@@ -196,7 +167,7 @@ def "main ci diff" [] {
       colmena eval -E '{ nodes, ... }: builtins.filter (n: nodes.${n}.config.deployment.phase != null) (builtins.attrNames nodes)' | from json | par-each {|host|
         let system_path = readlink -f $'.gcroots/node-($host)'
         print $'($host): diffing ($system_path) against current system'
-        colmena exec -v --on $host -- nix run nixpkgs#nvd -- diff /run/current-system $system_path out+err> $'diffs/($host)'
+        colmena exec -v --on $host -- system-upgrade-check -n $system_path out+err> $'diffs/($host)'
         print $'($host): done'
       }
       cat diffs/*
