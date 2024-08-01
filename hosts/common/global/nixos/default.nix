@@ -71,7 +71,10 @@
         $systemd_path | path basename | split row - | get 2
       }
 
-      def main [system_path: path] {
+      def main [
+        system_path: path
+        --ignore-errors (-n)
+      ] {
         nvd diff /run/current-system $system_path
 
         let old_kernel_version = get-kernel-version /run/booted-system
@@ -90,7 +93,7 @@
 
         if $kernel_changed or $systemd_changed {
           print 'Reboot needed.'
-          exit 1
+          if not $ignore_errors { exit 1 }
         }
       }
     '')
