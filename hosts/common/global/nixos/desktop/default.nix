@@ -20,27 +20,13 @@ in
     services.displayManager.sddm.wayland.enable = true;
     services.desktopManager.plasma6.enable = true;
 
-    services.dbus.packages = [ pkgs.kdePackages.kpmcore ];
-    environment.systemPackages =
-      [
-        pkgs.kdePackages.kpmcore
-        pkgs.kdePackages.partitionmanager
-        (pkgs.writeTextDir "share/sddm/themes/breeze/theme.conf.user" ''
-          [General]
-          background=${pkgs.kdePackages.plasma-workspace-wallpapers}/share/wallpapers/MilkyWay/contents/images/5120x2880.png
-        '')
-      ]
-      ++ (with pkgs.kdePackages; [
-        akonadi
-        kdepim-runtime
-        akonadiconsole
-        kmail-account-wizard
-
-        kmail
-        kontact
-        merkuro
-        kdepim-addons
-      ]);
+    environment.systemPackages = [
+      pkgs.kdePackages.kdepim-addons
+      (pkgs.writeTextDir "share/sddm/themes/breeze/theme.conf.user" ''
+        [General]
+        background=${pkgs.kdePackages.plasma-workspace-wallpapers}/share/wallpapers/MilkyWay/contents/images/5120x2880.png
+      '')
+    ];
 
     fonts = {
       packages = with pkgs; [
@@ -99,6 +85,12 @@ in
     ];
 
     programs.kdeconnect.enable = true;
+    programs.partition-manager.enable = true;
+    programs.kde-pim = {
+      kmail = true;
+      kontact = true;
+      merkuro = true;
+    };
 
     systemd.oomd = {
       enableRootSlice = true;
