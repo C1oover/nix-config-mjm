@@ -23,7 +23,7 @@ in
 
   mjm.desktop.enable = true;
 
-  boot.kernelPackages = pkgs.linuxPackages_6_9;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 
