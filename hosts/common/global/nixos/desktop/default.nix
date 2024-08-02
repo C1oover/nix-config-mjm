@@ -112,6 +112,7 @@ in
     };
     boot.kernelParams = [ "quiet" ];
     console = {
+      earlySetup = true;
       font = "${pkgs.terminus_font}/share/consolefonts/ter-u32n.psf.gz";
       keyMap = "us";
       catppuccin.enable = true;
