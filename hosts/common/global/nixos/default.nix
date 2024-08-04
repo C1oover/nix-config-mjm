@@ -62,8 +62,12 @@
     pkgs.nvd
     (pkgs.writers.writeNuBin "system-upgrade-check" ''
       def get-kernel-version [system_path: path] {
-        let kernel_path = $system_path | path join kernel | path expand | path dirname
-        $kernel_path | path basename | split row - | get 2
+        let kernel_path = $system_path | path join kernel
+        if ($kernel_path | path exists) {
+          $kernel_path | path expand | path dirname | path basename | split row - | get 2
+        } else {
+          '<none>'
+        }
       }
 
       def get-systemd-version [system_path: path] {
