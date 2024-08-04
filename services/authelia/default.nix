@@ -44,7 +44,7 @@ in
         theme = "auto";
         default_redirection_url = "https://home.midna.dev/";
         default_2fa_method = "webauthn";
-        server.host = "::";
+        server.address = "tcp://:9091";
         telemetry.metrics = {
           enabled = true;
           address = "tcp://0.0.0.0:9959";
