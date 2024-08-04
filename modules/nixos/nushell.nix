@@ -23,7 +23,8 @@ let
         [ -z "$__NIX_DARWIN_SET_ENVIRONMENT_DONE" ] && . ${config.system.build.setEnvironment}
         eval "$(/opt/homebrew/bin/brew shellenv)"
       ''}
-      . /etc/profiles/per-user/$USER/etc/profile.d/hm-session-vars.sh
+      HM_VARS=/etc/profiles/per-user/$USER/etc/profile.d/hm-session-vars.sh
+      [ -f "$HM_VARS" ] && . "$HM_VARS"
 
       export SHELL=${lib.getExe cfg.package}
       exec $SHELL "$@"
