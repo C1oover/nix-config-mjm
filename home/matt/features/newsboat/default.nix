@@ -14,7 +14,7 @@
       if pkgs.stdenv.isLinux then
         ''"xdg-open %u"''
       else
-        ''"/usr/bin/open -a ${pkgs.firefox-bin}/Applications/Firefox.app -u %u"'';
+        ''"/usr/bin/open -a ${config.programs.firefox.package}/Applications/Firefox.app -u %u"'';
     extraConfig = ''
       text-width 100
       urls-source "miniflux"
