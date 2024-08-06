@@ -16,6 +16,11 @@ let
           url = "https://github.com/NixOS/nixpkgs/pull/309084.diff";
           hash = "sha256-3yfi8XuoM7EB8OpiwNxAi10KTf1o50Yakv1NylCu7cs=";
         })
+        (fetchpatch {
+          # music-assistant 2.1.1
+          url = "https://github.com/NixOS/nixpkgs/pull/332336.diff";
+          hash = "sha256-FHZz/aMrTOxVIkffgBrLS5+ZDwwA/WaCkFiWKScz4MM=";
+        })
       ];
     };
 in

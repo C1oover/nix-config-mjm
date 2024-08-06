@@ -12,6 +12,8 @@ let
   port = config.services.home-assistant.config.http.server_port;
 in
 {
+  imports = [ ./music-assistant.nix ];
+
   options.mjm.home-assistant = {
     enable = mkEnableOption "home assistant";
   };
