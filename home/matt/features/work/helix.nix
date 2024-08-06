@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 let
   yamlFormat = pkgs.formats.yaml { };
   tomlFormat = pkgs.formats.toml { };
@@ -59,6 +59,25 @@ in
         };
       in
       "${elixir-ls}/language_server.sh";
+
+    language-server.typescript-language-server = {
+      config =
+        let
+          disableInlayHints = {
+            includeInlayEnumMemberValueHints = false;
+            includeInlayFunctionLikeReturnTypeHints = false;
+            includeInlayFunctionParameterTypeHints = false;
+            includeInlayParameterNameHints = "none";
+            includeInlayParameterNameHintsWhenArgumentMatchesName = false;
+            includeInlayPropertyDeclarationTypeHints = false;
+            includeInlayVariableTypeHints = false;
+          };
+        in
+        {
+          typescript.inlayHints = disableInlayHints;
+          javascript.inlayHints = disableInlayHints;
+        };
+    };
 
     language = [
       {
