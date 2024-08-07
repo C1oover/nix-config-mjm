@@ -53,23 +53,6 @@ in
 
     services.home-assistant = {
       enable = true;
-      package =
-        (pkgs.home-assistant.override {
-          packageOverrides = self: super: {
-            # pyopenweathermap was updated to 0.1.1 in nixpkgs, but this included API changes
-            # that home-assistant's integration hasn't been updated to support.
-            pyopenweathermap = super.pyopenweathermap.overridePythonAttrs (oldAttrs: rec {
-              version = "0.0.10";
-              src = pkgs.fetchFromGitHub {
-                owner = "freekode";
-                repo = "pyopenweathermap";
-                rev = "refs/tags/v${version}";
-                hash = "sha256-wEcE4IYVvxEwW5Hhz+DqDIqbjd5/O1hEr7dGgiuMI00=";
-              };
-            });
-          };
-        }).overrideAttrs
-          { doInstallCheck = false; };
       openFirewall = true;
       extraComponents = [
         # Components required to complete the onboarding
