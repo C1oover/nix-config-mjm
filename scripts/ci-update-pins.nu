@@ -42,9 +42,11 @@ export def create-mr [
   --url: string
   --project: string
   --token: string
+  --description: string = ""
 ] {
   let body = {
     title: "npins update"
+    description: $description
     source_branch: "npins-update"
     target_branch: "main"
     assignee_id: 2
@@ -75,9 +77,9 @@ def main [] {
   }
 
   print "latest nixpkgs doesn't match my version. updating pinned sources..."
-  npins update
+  let output = npins update o+e>| $in
   git config user.email "gitlab@mj.midna.dev"
-  git config user.name "GitLab Automation"
+  git config user.name "Pins Updater"
   git add npins/sources.json
   git commit -m "npins update"
   try {
@@ -86,5 +88,5 @@ def main [] {
   git push -f gitlab HEAD:refs/heads/npins-update
 
   print "creating merge request..."
-  create-mr --url $url --project $project --token $token
+  create-mr --url $url --project $project --token $token --description $"```\n($output)\n```"
 }
