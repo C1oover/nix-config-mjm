@@ -21,7 +21,11 @@ let
 in
 {
   meta = {
-    nixpkgs = patchNixpkgs inputs.nixos;
+    nixpkgs = patchNixpkgs inputs.nixos-small;
+    nodeNixpkgs = {
+      uranus = patchNixpkgs inputs.nixos;
+      persephone = patchNixpkgs inputs.nixos;
+    };
 
     specialArgs = {
       inherit inputs;

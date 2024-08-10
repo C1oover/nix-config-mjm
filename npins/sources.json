@@ -218,6 +218,12 @@
       "url": "https://releases.nixos.org/nixos/unstable/nixos-24.11pre664135.5e0ca22929f3/nixexprs.tar.xz",
       "hash": "1bs0l5x55vxgqhmil8rbnv8ly7zw1h3lsvrqwcqr68cqf7wyyj77"
     },
+    "nixos-small": {
+      "type": "Channel",
+      "name": "nixos-unstable-small",
+      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-24.11pre664519.33c40979a7cc/nixexprs.tar.xz",
+      "hash": "0fw7q7kp1xp5a0yym32g4gwv09hn0w650mqlc5q26v9a0slhvrb8"
+    },
     "nixpkgs": {
       "type": "Channel",
       "name": "nixpkgs-unstable",

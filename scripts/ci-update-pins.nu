@@ -71,7 +71,7 @@ def main [] {
     return
   }
 
-  if (is-current nixpkgs) and (is-current nixos) {
+  if (is-current nixpkgs) and (is-current nixos) and (is-current nixos-small) {
     print "no updates: all done"
     return
   }
