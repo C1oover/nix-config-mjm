@@ -16,11 +16,6 @@ let
           url = "https://github.com/NixOS/nixpkgs/pull/309084.diff";
           hash = "sha256-3yfi8XuoM7EB8OpiwNxAi10KTf1o50Yakv1NylCu7cs=";
         })
-        (fetchpatch {
-          # vaultwarden eval fix
-          url = "https://github.com/NixOS/nixpkgs/pull/332919.diff";
-          hash = "sha256-mzUjfUwzj7+ihjjrdrk3bhS219VibdSPTjZzgQd4yps=";
-        })
       ];
     };
 in
