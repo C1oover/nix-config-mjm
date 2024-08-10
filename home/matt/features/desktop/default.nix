@@ -30,12 +30,8 @@ in
     home.packages = builtins.attrValues {
       inherit (pkgs)
         bitwarden
-        cider
-        cinny-desktop
         element-desktop
         libreoffice-qt-fresh
-        # picard
-        sonixd
         strawberry-qt6
         wl-clipboard
         xclip
@@ -44,12 +40,7 @@ in
         # zeal-qt6
         ;
       inherit (pkgs.callPackages ./scripts.nix { }) night-mode;
-      inherit (pkgs.kdePackages)
-        kcalc
-        ktorrent
-        # neochat
-        plasmatube
-        ;
+      inherit (pkgs.kdePackages) kcalc ktorrent plasmatube;
     };
 
     programs.mpv.enable = true;
