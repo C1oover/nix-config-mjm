@@ -103,5 +103,19 @@ in
       "/etc/ssh/ssh_host_rsa_key"
       "/etc/ssh/ssh_host_rsa_key.pub"
     ];
+
+    # point directly at the keys on the persist path, to avoid a race where sshd
+    # starts before the host keys are mounted into place
+    services.openssh.hostKeys = [
+      {
+        bits = 4096;
+        path = "${cfg.persistDir}/etc/ssh/ssh_host_rsa_key";
+        type = "rsa";
+      }
+      {
+        path = "${cfg.persistDir}/etc/ssh/ssh_host_ed25519_key";
+        type = "ed25519";
+      }
+    ];
   };
 }
