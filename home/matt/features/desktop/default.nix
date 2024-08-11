@@ -32,6 +32,7 @@ in
         bitwarden
         element-desktop
         libreoffice-qt-fresh
+        piper
         strawberry-qt6
         wl-clipboard
         xclip

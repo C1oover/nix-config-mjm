@@ -116,6 +116,7 @@ in
     time.timeZone = "America/Denver";
 
     programs.steam.enable = true;
+    services.ratbagd.enable = true;
 
     services.yubikey-agent.enable = true;
     systemd.user.services.yubikey-agent.wantedBy = mkForce [ "graphical-session.target" ];
