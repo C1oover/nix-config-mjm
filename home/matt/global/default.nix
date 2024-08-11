@@ -35,6 +35,7 @@ in
         nix-tree
         pstree
         ripgrep
+        serpl
         tree
         unzip
         wget

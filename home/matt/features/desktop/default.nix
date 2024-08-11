@@ -41,7 +41,12 @@ in
         # zeal-qt6
         ;
       inherit (pkgs.callPackages ./scripts.nix { }) night-mode;
-      inherit (pkgs.kdePackages) kcalc ktorrent plasmatube;
+      inherit (pkgs.kdePackages)
+        filelight
+        kcalc
+        ktorrent
+        plasmatube
+        ;
     };
 
     programs.mpv.enable = true;
