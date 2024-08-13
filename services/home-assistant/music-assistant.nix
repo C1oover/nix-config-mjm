@@ -7,6 +7,8 @@
 let
   inherit (lib) mkIf;
   cfg = config.mjm.home-assistant;
+
+  inherit (import ../../packages { inherit pkgs; }) cliraop;
 in
 {
   config = mkIf cfg.enable {
@@ -19,16 +21,9 @@ in
     services.music-assistant = {
       enable = true;
       package = pkgs.music-assistant.overrideAttrs (oldAttrs: {
-        preBuild =
-          let
-            rpath = lib.makeLibraryPath [ pkgs.stdenv.cc.cc.lib ];
-          in
-          ''
-            patchelf \
-              --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-              --set-rpath "${rpath}" \
-              music_assistant/server/providers/airplay/bin/cliraop-linux-x86_64
-          '';
+        preBuild = ''
+          ln -sf ${cliraop}/bin/cliraop music_assistant/server/providers/airplay/bin/cliraop-linux-x86_64
+        '';
       });
       providers = [
         # "airplay"
@@ -57,6 +52,16 @@ in
       {
         from = 4953;
         to = 5153;
+      }
+    ];
+
+    # airplay (via cliraop) will open UDP ports from the local IP port range,
+    # and will expect the device playing the music to be able to connect to it.
+    # so we have to open the whole stupid range.
+    networking.firewall.allowedUDPPortRanges = [
+      {
+        from = 32768;
+        to = 60999;
       }
     ];
 
