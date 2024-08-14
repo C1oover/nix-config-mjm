@@ -10,5 +10,13 @@
       "-r"
       ''@ | main | branches("mjm-")''
     ];
+    aliases.wip = [
+      "log"
+      "-r"
+      "wip()"
+    ];
+    revset-aliases = {
+      "wip()" = "mine() & ~(::immutable_heads())";
+    };
   };
 }
