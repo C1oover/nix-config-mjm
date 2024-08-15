@@ -16,6 +16,11 @@ let
           url = "https://github.com/NixOS/nixpkgs/pull/309084.diff";
           hash = "sha256-3yfi8XuoM7EB8OpiwNxAi10KTf1o50Yakv1NylCu7cs=";
         })
+        (fetchpatch {
+          # garage build fix
+          url = "https://github.com/NixOS/nixpkgs/pull/335280.diff";
+          hash = "sha256-Sxy5vf2DpdEnAXiJw+knglefplB0xJaV6TCc/nerb6g=";
+        })
       ];
     };
 in
