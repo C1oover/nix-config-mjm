@@ -42,5 +42,21 @@ in
         proxied = false;
       };
     };
+    terraform.resource.desec_rrset = {
+      tasks_a = {
+        domain = "\${desec_domain.midna-dev.id}";
+        type = "A";
+        subname = "tasks";
+        records = [ "10.0.2.41" ];
+        ttl = 3600;
+      };
+      tasks_aaaa = {
+        domain = "\${desec_domain.midna-dev.id}";
+        type = "AAAA";
+        subname = "tasks";
+        records = [ "2601:282:167f:3eec:acf4:f0ff:feb0:3126" ];
+        ttl = 3600;
+      };
+    };
   };
 }

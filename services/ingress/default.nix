@@ -38,7 +38,7 @@ in
       mjm.services.ingress = {
         vault = {
           enable = true;
-          keys.cloudflare_api_token = { };
+          keys.desec_api_token = { };
         };
       };
       vault-secrets.wantedBy = [ "acme-midna.dev.service" ];
@@ -50,14 +50,13 @@ in
           # server = "https://acme-staging-v02.api.letsencrypt.org/directory";
           email = "acme@matt.mattmoriarity.com";
           dnsResolver = "1.1.1.1:53";
-          dnsProvider = "cloudflare";
+          dnsProvider = "desec";
           credentialFiles = {
-            CF_DNS_API_TOKEN_FILE = config.mjm.services.ingress.vault.keys.cloudflare_api_token.path;
-            CF_ZONE_API_TOKEN_FILE = config.mjm.services.ingress.vault.keys.cloudflare_api_token.path;
+            DESEC_TOKEN_FILE = config.mjm.services.ingress.vault.keys.desec_api_token.path;
           };
         };
         certs = mapAttrs (name: _v: {
-          dnsProvider = "cloudflare";
+          dnsProvider = "desec";
           webroot = null;
         }) (filterAttrs (_name: vhost: vhost.enableACME == true) config.services.nginx.virtualHosts);
       };
