@@ -72,7 +72,8 @@ in
         "imap"
         "jellyfin"
         "lidarr"
-        "matrix"
+        # not using yet, and it uses olm
+        # "matrix"
         "nut"
         "openweathermap"
         "radarr"

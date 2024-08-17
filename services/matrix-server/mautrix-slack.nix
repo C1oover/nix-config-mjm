@@ -61,6 +61,8 @@ in
       }
     ];
 
+    nixpkgs.config.permittedInsecurePackages = [ "olm-3.2.16" ];
+
     systemd.services.mautrix-slack = {
       description = "mautrix-slack bridge";
       wantedBy = [ "multi-user.target" ];
