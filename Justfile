@@ -13,6 +13,10 @@ switch:
 boot:
   nix run -f . host-scripts -- switch boot
 
+gc:
+  nix-collect-garbage --delete-older-than 7d
+  sudo nix-collect-garbage --delete-older-than 7d
+
 build target *flags:
   colmena build --on {{target}} --keep-result {{flags}}
 
