@@ -33,6 +33,7 @@ in
         element-desktop
         libreoffice-qt-fresh
         piper
+        signal-desktop
         strawberry-qt6
         wl-clipboard
         xclip
