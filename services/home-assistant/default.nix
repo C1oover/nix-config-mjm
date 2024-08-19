@@ -101,8 +101,7 @@ in
           trusted_proxies = [
             "10.0.0.3"
             "10.0.0.4"
-            "2601:282:167f:3eec:dea6:32ff:fed5:d840"
-            "2601:282:167f:3eec:dea6:32ff:fe96:bc05"
+            "2601:282:167f:3eec::/64"
           ];
         };
         auth_header = {

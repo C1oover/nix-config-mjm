@@ -5,6 +5,7 @@
 let
   callPackage = pkgs.lib.callPackageWith (pkgs // packages);
   packages = {
+    caddy-desec = callPackage ./caddy { };
     cliraop = callPackage ./cliraop.nix { };
     homelab = callPackage ../apps/homelab/package.nix { };
     linkding = callPackage ./linkding.nix { };

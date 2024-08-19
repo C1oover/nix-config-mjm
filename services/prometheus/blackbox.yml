@@ -39,4 +39,6 @@ modules:
     prober: http
     http:
       method: GET
+      headers:
+        Accept: text/html
       preferred_ip_protocol: ip6

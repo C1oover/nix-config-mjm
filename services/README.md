@@ -15,11 +15,11 @@ They're specifically configured to serve my own needs.
 
 Services can also define things that affect state outside just the host running the service, things like:
 
-- Ingress (nginx) reverse-proxy vhost configuration
+- Ingress (Caddy) reverse-proxy vhost configuration
 - Anything that needs to be provisioned with OpenTofu, primarily Vault approles and policies
 
 The [ingress](ingress/) service will use the `nodes` parameter Colmena provides to get all of the vhost configuration from all the nodes and merge them together.
-It will then use that to generate the nginx configuration.
+It will then use that to generate the Caddy configuration.
 Similarly, when creating the OpenTofu configuration, OpenTofu resources and Vault services and policies are merged together to produce the full configuration.
 
 The [Vault support](../terraform/vault.nix) is particularly nice, as it's smart about assigning policies to the hosts running the corresponding services, without having to explicitly declare which hosts those are.
