@@ -6,9 +6,12 @@ let
   inherit (pkgsForPatching) applyPatches fetchpatch;
 
   patchNixpkgs =
-    src:
+    {
+      src,
+      patches ? [ ],
+    }:
     applyPatches {
-      name = "nixos-patched";
+      name = "${src.name}-patched";
       inherit src;
       patches = [
         (fetchpatch {
@@ -16,16 +19,30 @@ let
           url = "https://github.com/NixOS/nixpkgs/pull/309084.diff";
           hash = "sha256-3yfi8XuoM7EB8OpiwNxAi10KTf1o50Yakv1NylCu7cs=";
         })
-      ];
+      ] ++ patches;
     };
 in
 {
   meta = {
-    nixpkgs = patchNixpkgs inputs.nixos-small;
-    nodeNixpkgs = {
-      uranus = patchNixpkgs inputs.nixos;
-      persephone = patchNixpkgs inputs.nixos;
-    };
+    nixpkgs = patchNixpkgs { src = inputs.nixos-small; };
+    nodeNixpkgs =
+      let
+        patches = [
+          (fetchpatch {
+            # vscode-langservers-extracted fix
+            url = "https://github.com/NixOS/nixpkgs/pull/335559.diff";
+            hash = "sha256-Q9HVD4ZVVHCX+C/jtH7pE289sXeGoXBxUU0yahvVsqk=";
+          })
+        ];
+        nixos = patchNixpkgs {
+          src = inputs.nixos;
+          inherit patches;
+        };
+      in
+      {
+        uranus = nixos;
+        persephone = nixos;
+      };
 
     specialArgs = {
       inherit inputs;

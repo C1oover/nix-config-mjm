@@ -16,6 +16,11 @@ in
   };
 
   config = mkIf cfg.enable {
+    nixpkgs.config.permittedInsecurePackages = [
+      # actually element-desktop
+      "jitsi-meet-1.0.8043"
+    ];
+
     services.displayManager.sddm.enable = true;
     services.displayManager.sddm.wayland.enable = true;
     services.desktopManager.plasma6.enable = true;
