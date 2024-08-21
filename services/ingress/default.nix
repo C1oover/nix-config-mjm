@@ -163,8 +163,14 @@ in
               servers.default = {
                 listen = [ ":443" ];
                 logs = { };
+                metrics = { };
                 automatic_https.disable_certificates = true;
                 routes = map mkVhostRoute (attrValues vhosts);
+              };
+              servers.metrics = {
+                listen = [ ":2020" ];
+                automatic_https.disable = true;
+                routes = [ { handle = [ { handler = "metrics"; } ]; } ];
               };
             };
         };
@@ -173,21 +179,23 @@ in
       networking.firewall.allowedTCPPorts = [
         80
         443
+        2020
       ];
 
-      services.consul.services = {
-        caddy = {
-          port = 443;
+      services.consul.services.caddy = {
+        port = 443;
 
-          checks = [
-            {
-              name = "caddy is healthy";
-              http = "http://localhost:2019/reverse_proxy/upstreams";
-              interval = "15s";
-              timeout = "3s";
-            }
-          ];
-        };
+        meta.metrics_path = "/metrics";
+        meta.metrics_port = "2020";
+
+        checks = [
+          {
+            name = "caddy is healthy";
+            http = "http://localhost:2019/reverse_proxy/upstreams";
+            interval = "15s";
+            timeout = "3s";
+          }
+        ];
       };
 
       # vhosts for things that aren't running on NixOS machines
