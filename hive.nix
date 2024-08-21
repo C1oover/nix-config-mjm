@@ -57,6 +57,7 @@ in
         "main"
         "ingress"
       ];
+      rebootPhases = phases ++ [ "vault" ];
     in
     {
       options.deployment = {
@@ -65,7 +66,7 @@ in
           default = "main";
         };
         rebootPhase = lib.mkOption {
-          type = lib.types.enum phases;
+          type = lib.types.enum rebootPhases;
           default = config.deployment.phase;
         };
       };

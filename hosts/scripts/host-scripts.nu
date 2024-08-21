@@ -128,6 +128,13 @@ def "main ci deploy" [--reboot] {
   with-vault {
     with-colmena {
       if $reboot {
+        # deploy to vault hosts first, since other hosts will need them to be up
+        # and working to get their secrets
+        colmena apply --on @reboot-phase-vault --keep-result --reboot
+        # assuming the time to eval/build will generally be enough to let the
+        # vault hosts be alive.
+        #
+        # TODO actually check if vault is healthy
         colmena apply --on @reboot-phase-main --keep-result --reboot
         # deploy to ingress last, since it can disrupt the build
         colmena apply --on @reboot-phase-ingress --keep-result --reboot

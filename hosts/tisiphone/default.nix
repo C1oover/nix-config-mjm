@@ -6,6 +6,8 @@
     ../common/optional/proxmox-vm.nix
   ];
 
+  deployment.rebootPhase = "vault";
+
   networking.hostName = "tisiphone";
 
   fileSystems."/" = {
