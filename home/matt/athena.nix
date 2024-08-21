@@ -14,32 +14,40 @@ in
 
   programs.kitty.font.size = 13;
 
-  home.dock = {
-    enable = true;
-    entries = [
-      { path = "/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app/"; }
-      { path = "${config.programs.firefox.package}/Applications/Firefox.app/"; }
-      { path = "/Applications/Element.app/"; }
-      { path = "/System/Applications/Messages.app/"; }
-      { path = "/System/Applications/Mail.app/"; }
-      { path = "${pkgs.zoom-us}/Applications/zoom.us.app/"; }
-      { path = "${pkgs.slack}/Applications/Slack.app/"; }
-      { path = "/Applications/Fantastical.app/"; }
-      { path = "/Applications/1Password.app/"; }
-      { path = "/Applications/Bitwarden.app/"; }
-      { path = "/Applications/Slab.app/"; }
-      { path = "${config.programs.kitty.package}/Applications/kitty.app/"; }
-      { path = "/Applications/Dash.app/"; }
-      { path = "/Applications/Postico 2.app/"; }
-      { path = "/Applications/Teleport Connect.app/"; }
-      { path = "${pkgs.discord}/Applications/Discord.app/"; }
-      {
-        path = "${config.home.homeDirectory}/Downloads/";
-        section = "others";
-        options = "--sort dateadded --view grid --display folder";
-      }
-    ];
-  };
+  home.dock.entries = [
+    {
+      app = "Firefox";
+      package = config.programs.firefox.package;
+    }
+    { app = "Element"; }
+    { app = "Signal"; }
+    { app = "Mail"; }
+    {
+      app = "zoom.us";
+      package = pkgs.zoom-us;
+    }
+    {
+      app = "Slack";
+      package = pkgs.slack;
+    }
+    { app = "Fantastical"; }
+    { app = "1Password"; }
+    { app = "Bitwarden"; }
+    { app = "Slab"; }
+    {
+      app = "kitty";
+      package = config.programs.kitty.package;
+    }
+    { app = "Dash"; }
+    { app = "Postico 2"; }
+    { app = "Teleport Connect"; }
+    { app = "Bruno"; }
+    {
+      path = "${config.home.homeDirectory}/Downloads/";
+      section = "others";
+      options = "--sort dateadded --view grid --display folder";
+    }
+  ];
 
   xdg.configFile."aerospace/aerospace.toml".source = tomlFormat.generate "aerospace.toml" {
     start-at-login = true;

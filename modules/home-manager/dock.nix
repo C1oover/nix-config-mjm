@@ -4,8 +4,16 @@
   lib,
   ...
 }:
-with lib;
 let
+  inherit (lib)
+    concatMapStrings
+    hasSuffix
+    mkIf
+    mkMerge
+    mkOption
+    types
+    ;
+
   cfg = config.home.dock;
   stdenv = pkgs.stdenv;
 in
@@ -22,25 +30,55 @@ in
       type =
         with types;
         listOf (
-          submodule {
-            options = {
-              path = lib.mkOption { type = str; };
-              section = lib.mkOption {
-                type = str;
-                default = "apps";
+          submodule (
+            { config, ... }:
+            {
+              options = {
+                app = mkOption {
+                  type = nullOr str;
+                  default = null;
+                };
+
+                package = mkOption {
+                  type = nullOr package;
+                  default = null;
+                };
+
+                path = mkOption { type = str; };
+
+                section = mkOption {
+                  type = str;
+                  default = "apps";
+                };
+                options = mkOption {
+                  type = str;
+                  default = "";
+                };
               };
-              options = lib.mkOption {
-                type = str;
-                default = "";
-              };
-            };
-          }
+
+              config = mkMerge [
+                (mkIf (config.app != null) {
+                  path =
+                    let
+                      prefix =
+                        if config.app == "Mail" then
+                          "/System"
+                        else if config.package != null then
+                          "${config.package}"
+                        else
+                          "";
+                    in
+                    "${prefix}/Applications/${config.app}.app";
+                })
+              ];
+            }
+          )
         );
       readOnly = true;
     };
   };
 
-  config = mkIf (cfg.enable) (
+  config = mkIf cfg.enable (
     let
       du = "env PYTHONIOENCODING=utf-8 ${pkgs.dockutil}/bin/dockutil ${config.home.homeDirectory}";
       normalize = path: if hasSuffix ".app" path then path + "/" else path;
@@ -75,21 +113,15 @@ in
           ]
           (normalize path)
         );
-      wantURIs =
-        concatMapStrings
-          (entry: ''
-            ${entryURI entry.path}
-          '')
-          cfg.entries;
-      createEntries =
-        concatMapStrings
-          (entry: ''
-            ${du} --no-restart --add '${entry.path}' --section ${entry.section} ${entry.options}
-          '')
-          cfg.entries;
+      wantURIs = concatMapStrings (entry: ''
+        ${entryURI entry.path}
+      '') cfg.entries;
+      createEntries = concatMapStrings (entry: ''
+        ${du} --no-restart --add '${entry.path}' --section ${entry.section} ${entry.options}
+      '') cfg.entries;
     in
     {
-      home.activation.setupDock = hm.dag.entryAfter [ "writeBoundary" ] ''
+      home.activation.setupDock = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
         echo >&2 "Setting up persistent dock items..."
         haveURIs="$(${du} --list | ${pkgs.coreutils}/bin/cut -f2)"
         if ! diff -wu <(echo -n "$haveURIs") <(echo -n '${wantURIs}') >&2 ; then
