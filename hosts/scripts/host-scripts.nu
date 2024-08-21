@@ -138,15 +138,22 @@ def "main ci deploy" [--reboot] {
         colmena apply --on @reboot-phase-main --keep-result --reboot
         # deploy to ingress last, since it can disrupt the build
         colmena apply --on @reboot-phase-ingress --keep-result --reboot
+
+        # the attic, ingress, and garage hosts have been rebooted now, so there
+        # is possibly some big delay in attic being ready to receive things.
+        retry -n 60 {
+          sleep 5sec
+          attic push homelab .gcroots/node-*
+        }
       } else {
         colmena apply --on @phase-main --keep-result
         # deploy to ingress last, since it can disrupt the build
         colmena apply --on @phase-ingress --keep-result
-      }
-    }
 
-    retry -n 5 {
-      attic push homelab .gcroots/node-*
+        retry -n 5 {
+          attic push homelab .gcroots/node-*
+        }
+      }
     }
   }
 }
