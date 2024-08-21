@@ -113,9 +113,11 @@ in
           ]
           (normalize path)
         );
-      wantURIs = concatMapStrings (entry: ''
-        ${entryURI entry.path}
-      '') cfg.entries;
+      wantURIs = pkgs.writeText "dock-uris" (
+        concatMapStrings (entry: ''
+          ${entryURI entry.path}
+        '') cfg.entries
+      );
       createEntries = concatMapStrings (entry: ''
         ${du} --no-restart --add '${entry.path}' --section ${entry.section} ${entry.options}
       '') cfg.entries;
@@ -124,7 +126,7 @@ in
       home.activation.setupDock = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
         echo >&2 "Setting up persistent dock items..."
         haveURIs="$(${du} --list | ${pkgs.coreutils}/bin/cut -f2)"
-        if ! diff -wu <(echo -n "$haveURIs") <(echo -n '${wantURIs}') >&2 ; then
+        if ! diff -wu <(echo -n "$haveURIs") ${wantURIs} >&2 ; then
           echo >&2 "Resetting Dock."
           ${du} --no-restart --remove all
           ${createEntries}
