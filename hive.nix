@@ -35,17 +35,7 @@ in
     };
     nodeNixpkgs =
       let
-        patches = [
-          (fetchpatch {
-            # vscode-langservers-extracted fix
-            url = "https://github.com/NixOS/nixpkgs/pull/335559.diff";
-            hash = "sha256-Q9HVD4ZVVHCX+C/jtH7pE289sXeGoXBxUU0yahvVsqk=";
-          })
-        ];
-        nixos = patchNixpkgs {
-          src = inputs.nixos;
-          inherit patches;
-        };
+        nixos = patchNixpkgs { src = inputs.nixos; };
       in
       {
         uranus = nixos;
