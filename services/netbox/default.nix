@@ -69,36 +69,32 @@ in
       secretKeyFile = config.mjm.services.netbox.vault.keys.secret_key.path;
     };
 
-    services.nginx = {
+    services.caddy = {
       enable = true;
-      package = pkgs.nginxMainline;
-      defaultHTTPListenPort = 8000;
-      upstreams = {
-        netbox = {
-          servers = {
-            "127.0.0.1:${toString config.services.netbox.port}" = { };
-          };
-        };
-      };
-      virtualHosts."netbox" = {
-        serverName = "_";
-        default = true;
-        locations."/static/" = {
-          alias = config.services.netbox.settings.STATIC_ROOT + "/";
-        };
-        locations."/" = {
-          proxyPass = "http://netbox";
-          recommendedProxySettings = true;
-        };
+      globalConfig = ''
+        auto_https off
+      '';
+      virtualHosts.":8000" = {
+        extraConfig = ''
+          encode gzip zstd
+          root * /var/lib/netbox/
+
+          @not_static {
+            not path /static/*
+          }
+
+          reverse_proxy @not_static 127.0.0.1:${toString config.services.netbox.port}
+          file_server
+        '';
       };
     };
 
-    users.users.nginx.extraGroups = [ "netbox" ];
+    users.users.caddy.extraGroups = [ "netbox" ];
 
-    networking.firewall.allowedTCPPorts = [ config.services.nginx.defaultHTTPListenPort ];
+    networking.firewall.allowedTCPPorts = [ 8000 ];
 
     services.consul.services.netbox = {
-      port = config.services.nginx.defaultHTTPListenPort;
+      port = 8000;
       meta.metrics_path = "/metrics";
     };
   };
