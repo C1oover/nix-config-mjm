@@ -69,6 +69,13 @@ in
           "-r"
           "branches() & ~(main | remote_branches())"
         ];
+        history = [
+          "log"
+          "-r"
+          "::@"
+        ];
+        hist = [ "history" ];
+        h = [ "history" ];
       };
       revsets = {
         log = "@ | trunk() | ancestors(trunk()..(visible_heads() & mine() & ~tags()), 2)";
