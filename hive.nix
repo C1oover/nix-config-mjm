@@ -24,15 +24,7 @@ let
 in
 {
   meta = {
-    nixpkgs = patchNixpkgs {
-      src = inputs.nixos-small;
-      patches = [
-        (fetchpatch {
-          url = "https://github.com/NixOS/nixpkgs/pull/336426.diff";
-          hash = "sha256-RBEG6EmzAgk42O0UJccOkRAPPo6/AswdVIim3UPd2jg=";
-        })
-      ];
-    };
+    nixpkgs = patchNixpkgs { src = inputs.nixos-small; };
     nodeNixpkgs =
       let
         nixos = patchNixpkgs { src = inputs.nixos; };
