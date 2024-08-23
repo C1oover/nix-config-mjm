@@ -6,7 +6,13 @@ buildGoModule rec {
 
   src = ./.;
 
-  vendorHash = "sha256-zlfzgmaFvKVSXbflpDvTh37FU1Ek76+TU68C4rcR7pw=";
+  vendorHash = "sha256-153v07SsO2zf0mwUZInm1R7RuNu8We1U1jQXGT+XvhU=";
+
+  overrideModAttrs = _: {
+    postBuild = ''
+      sed -i -e '392i if rec.Name == "" {\nrec.Name = "@"\n}' vendor/github.com/caddyserver/certmagic/solvers.go
+    '';
+  };
 
   ldflags = [
     "-s"
@@ -25,4 +31,6 @@ buildGoModule rec {
     substitute ${caddy}/lib/systemd/system/caddy-api.service $out/lib/systemd/system/caddy-api.service \
       --replace-fail ${caddy}/bin/caddy $out/bin/caddy
   '';
+
+  meta.mainProgram = "caddy";
 }

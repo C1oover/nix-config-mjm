@@ -56,9 +56,17 @@ in
                   {
                     module = "acme";
                     email = "acme@matt.mattmoriarity.com";
-                    challenges.dns.provider = {
-                      name = "desec";
-                      token = "{file.${config.mjm.services.ingress.vault.keys.desec_api_token.path}}";
+                    challenges.dns = {
+                      propagation_delay = "30s";
+                      propagation_timeout = "30m";
+                      provider = {
+                        name = "desec";
+                        token = "{file.${config.mjm.services.ingress.vault.keys.desec_api_token.path}}";
+                      };
+                      resolvers = [
+                        "1.1.1.1"
+                        "1.0.0.1"
+                      ];
                     };
                   }
                 ];
