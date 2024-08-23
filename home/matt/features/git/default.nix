@@ -147,6 +147,16 @@ in
       }
     }
 
+    def ,jpb [] {
+      let branch = jj log -r '::@ & branches()' --no-graph -T local_branches -n 1
+      jj branch set main -r @-
+      try {
+        jj git push
+      } catch {
+        jj undo
+      }
+    }
+
     def ,jum [] {
       jj git fetch
       jj rebase -d main
