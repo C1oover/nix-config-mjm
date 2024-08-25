@@ -10,6 +10,8 @@
     ./features/taskwarrior
   ];
 
+  mjm.emacs.enable = true;
+
   home.packages = with pkgs; [
     discord
     krita
