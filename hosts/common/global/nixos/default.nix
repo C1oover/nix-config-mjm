@@ -26,7 +26,10 @@
   ] ++ (builtins.attrValues (import ../../../../modules/nixos));
 
   # hash mismatch in the go modules for vault rn
-  nixpkgs.overlays = [ (final: prev: { vault = prev.vault-bin; }) ];
+  nixpkgs.overlays = [
+    (final: prev: { vault = prev.vault-bin; })
+    (import inputs.emacs-overlay)
+  ];
 
   nix.channel.enable = true;
   nix.settings.trusted-users = [

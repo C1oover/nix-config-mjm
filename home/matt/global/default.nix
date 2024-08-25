@@ -15,6 +15,7 @@ in
     "${inputs.catppuccin}/modules/home-manager"
 
     ../features/desktop
+    ../features/emacs
     ../features/firefox
     ../features/git
     ../features/shell
