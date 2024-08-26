@@ -133,9 +133,9 @@
         "repo": "emacs-overlay"
       },
       "branch": "master",
-      "revision": "86e302cd5f144f7bc4bb7a4d52536c92831c4c57",
-      "url": "https://github.com/nix-community/emacs-overlay/archive/86e302cd5f144f7bc4bb7a4d52536c92831c4c57.tar.gz",
-      "hash": "0xy796474ar01lyk7gl36yq99q3pr9b1dwh0hw8vf3zqg79mggpg"
+      "revision": "3052bb01d404ee9bd03b040c9ae898febca05b81",
+      "url": "https://github.com/nix-community/emacs-overlay/archive/3052bb01d404ee9bd03b040c9ae898febca05b81.tar.gz",
+      "hash": "1h5cr9rcm7asm961s5czbbna4b18zlx9kiyd6p8v82xrz7ln3s7i"
     },
     "firefox-csshacks": {
       "type": "Git",
@@ -233,8 +233,8 @@
     "nixos-small": {
       "type": "Channel",
       "name": "nixos-unstable-small",
-      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-24.11pre671622.8da188f8e754/nixexprs.tar.xz",
-      "hash": "0rscp55b9chhspixm910m782qfb9g089iq9kbnjr9cwrz5v96viv"
+      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-24.11pre671775.b7c9821df6d6/nixexprs.tar.xz",
+      "hash": "07pzimbv99nq8ds79809z6qi4gqcdqdp8h9lklrhcqfwcslckb76"
     },
     "nixpkgs": {
       "type": "Channel",
@@ -250,9 +250,9 @@
         "repo": "nixpkgs-firefox-darwin"
       },
       "branch": "main",
-      "revision": "75c57b274d5c01b1625e52b42de9f6cc8f250348",
-      "url": "https://github.com/bandithedoge/nixpkgs-firefox-darwin/archive/75c57b274d5c01b1625e52b42de9f6cc8f250348.tar.gz",
-      "hash": "1cbhp9k4j8pn5cj3rx6gpr5fq59fgnn1sb1814hxy5220kzqwhp8"
+      "revision": "44aa30f3266b53aa01208e0b1a4ad0ea440bbf7e",
+      "url": "https://github.com/bandithedoge/nixpkgs-firefox-darwin/archive/44aa30f3266b53aa01208e0b1a4ad0ea440bbf7e.tar.gz",
+      "hash": "1fq3hsi33jd63csnkcyfq5ympdqh5nrn0hmzbxip6k56z53w16im"
     },
     "nur": {
       "type": "Git",
@@ -262,9 +262,9 @@
         "repo": "NUR"
       },
       "branch": "master",
-      "revision": "3c82a4d6b1e85b2909da8cc926821f8b9503c810",
-      "url": "https://github.com/nix-community/NUR/archive/3c82a4d6b1e85b2909da8cc926821f8b9503c810.tar.gz",
-      "hash": "1572rlnk25fqjkgffar1zm4phzdpw0y4qk85m60jalhp1x0clrfq"
+      "revision": "81943752ddb10faecf33d9af332354491cd781b7",
+      "url": "https://github.com/nix-community/NUR/archive/81943752ddb10faecf33d9af332354491cd781b7.tar.gz",
+      "hash": "1lrghp70dcgcl55j9sw8hixk3y5lgww9x31f7vr7m78d1ljm2nxc"
     },
     "terranix": {
       "type": "GitRelease",
