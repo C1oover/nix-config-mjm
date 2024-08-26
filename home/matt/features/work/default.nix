@@ -1,4 +1,22 @@
 { pkgs, config, ... }:
+let
+  snappy-decompress =
+    pkgs.writers.writePython3 "snappy-decompress" { libraries = [ pkgs.python3Packages.cramjam ]; }
+      ''
+        import sys
+        import cramjam
+
+        input = sys.stdin.buffer.read()
+        sys.stdout.buffer.write(bytes(cramjam.snappy.decompress_raw(input[:-1])))
+      '';
+
+  slab-token = pkgs.writers.writeNuBin ",slab-token" ''
+    cd (mktemp -d)
+
+    cp `~/Library/Application Support/Firefox/Profiles/matt/storage/default/https+++matt.slabdev.com/ls/data.sqlite` data.sqlite
+    ${pkgs.sqlite}/bin/sqlite3 data.sqlite "select value from data where key = 'CapacitorStorage.authToken'" | ${snappy-decompress}
+  '';
+in
 {
   imports = [
     ./git.nix
@@ -7,6 +25,7 @@
   ];
 
   home.packages = builtins.attrValues {
+    inherit slab-token;
     inherit (pkgs) cloudflared google-cloud-sdk;
     # db = pkgs.callPackage ./db.nix { };
     # teleport = pkgs.teleport.overrideAttrs { meta.broken = false; };
