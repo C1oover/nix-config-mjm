@@ -21,6 +21,7 @@ in
         epkgs.catppuccin-theme
         epkgs.geiser
         epkgs.geiser-guile
+        epkgs.helm
         epkgs.paredit
         epkgs.rainbow-delimiters
       ];
@@ -39,7 +40,16 @@ in
 
         (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 
+        (require 'helm)
+        (require 'helm-autoloads)
+        (global-set-key (kbd "M-x") #'helm-M-x)
+        (global-set-key (kbd "C-x r b") #'helm-filtered-bookmarks)
+        (global-set-key (kbd "C-x C-f") #'helm-find-files)
+        (helm-mode 1)
+
         (setq make-backup-files nil)
+        (setq-default indent-tabs-mode nil)
+        (set-frame-font "Input Mono Condensed-14")
       '';
     };
   };
