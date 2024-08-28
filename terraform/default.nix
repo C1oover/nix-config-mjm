@@ -9,7 +9,6 @@ let
   vault = pkgs.vault-bin;
   opentofu = pkgs.opentofu.withPlugins (p: [
     p.vault
-    p.cloudflare
     p.proxmox
     (p.mkProvider {
       owner = "Valodim";
