@@ -38,6 +38,10 @@ in
         (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
         (add-hook 'scheme-mode-hook           #'enable-paredit-mode)
 
+        (put 'with-vat 'scheme-indent-function 'defun)
+        (put 'let-on 'scheme-indent-function 'scheme-let-indent)
+        (put 'let-on 'scheme-indent-function 'scheme-let-indent)
+
         (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 
         (require 'helm)
