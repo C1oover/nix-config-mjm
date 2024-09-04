@@ -84,7 +84,7 @@ in
 
       preStart = ''
         mkdir -p $STATE_DIRECTORY/task
-        task sync
+        # task sync
       '';
 
       serviceConfig = {
