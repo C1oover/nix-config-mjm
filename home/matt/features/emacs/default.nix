@@ -53,7 +53,7 @@ in
 
         (setq make-backup-files nil)
         (setq-default indent-tabs-mode nil)
-        (set-frame-font "Input Mono Condensed-14")
+        (set-frame-font "Departure Mono-13")
       '';
     };
   };
