@@ -53,6 +53,7 @@ in
         monaspace
         (input-fonts.override { acceptLicense = true; })
         pragmata-pro
+        departure-mono
       ];
 
       fontconfig = {

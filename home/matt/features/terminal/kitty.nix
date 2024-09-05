@@ -21,10 +21,10 @@ in
     programs.kitty = {
       enable = true;
       catppuccin.enable = true;
-      font.name = "Input Mono Condensed";
+      font.name = "Departure Mono";
       font.size = mkDefault 14;
       settings = {
-        modify_font = "baseline 1";
+        # modify_font = "baseline 1";
         shell = "${lib.getExe nu} --login --interactive";
         shell_integration = "enabled";
         tab_bar_style = "powerline";
