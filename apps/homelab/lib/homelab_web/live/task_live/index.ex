@@ -8,7 +8,7 @@ defmodule HomelabWeb.TaskLive.Index do
 
   def mount(_params, _session, socket) do
     :timer.send_interval(5_000, :update_now)
-    :timer.send_interval(30_000, :update_tasks)
+    # :timer.send_interval(30_000, :update_tasks)
 
     socket
     |> assign_now()
@@ -26,7 +26,8 @@ defmodule HomelabWeb.TaskLive.Index do
 
     socket
     |> assign(:report, report)
-    |> assign_async(:tasks, fn -> {:ok, %{tasks: TaskList.new(synced_tasks(report))}} end)
+    # |> assign_async(:tasks, fn -> {:ok, %{tasks: TaskList.new(synced_tasks(report))}} end)
+    |> assign_async(:tasks, fn -> {:ok, %{tasks: TaskList.new([])}} end)
     |> then(&{:noreply, &1})
   end
 
