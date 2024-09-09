@@ -127,5 +127,10 @@ in
     services.yubikey-agent.enable = true;
     systemd.user.services.yubikey-agent.wantedBy = mkForce [ "graphical-session.target" ];
     systemd.services.NetworkManager-wait-online.enable = false;
+
+    virtualisation.libvirtd.enable = true;
+    programs.virt-manager.enable = true;
+    users.users.matt.extraGroups = [ "libvirtd" ];
+    mjm.state.directories = [ "/var/lib/libvirt" ];
   };
 }

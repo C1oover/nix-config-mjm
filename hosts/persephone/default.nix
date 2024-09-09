@@ -13,7 +13,6 @@ in
     lanzaboote.nixosModules.lanzaboote
     "${inputs.hardware}/framework/13-inch/13th-gen-intel"
     ./hardware-configuration.nix
-    ./virtualization.nix
 
     ../common/global/nixos
     ../common/users/matt
@@ -29,7 +28,6 @@ in
       "/home"
       "/nix"
       "/var/log"
-      "/var/lib/libvirt"
       "/var/lib/fprint"
       "/var/lib/NetworkManager"
       "/var/lib/iwd"
