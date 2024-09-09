@@ -149,7 +149,7 @@ in
 
     def ,jpb [] {
       let branch = jj log -r '::@ & branches()' --no-graph -T local_branches -n 1
-      jj branch set main -r @-
+      jj branch set $branch -r @-
       try {
         jj git push
       } catch {
