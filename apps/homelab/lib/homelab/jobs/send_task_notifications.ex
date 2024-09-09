@@ -9,11 +9,13 @@ defmodule Homelab.Jobs.SendTaskNotifications do
 
   @impl Oban.Worker
   def perform(%Oban.Job{}) do
-    Task
-    |> where([t], t.status == :pending and "reminder" in t.tags)
-    |> TaskRepo.all()
-    |> Enum.filter(&DateTime.before?(&1.next_notification, DateTime.utc_now()))
-    |> Enum.each(&send_notification/1)
+    # Task
+    # |> where([t], t.status == :pending and "reminder" in t.tags)
+    # |> TaskRepo.all()
+    # |> Enum.filter(&DateTime.before?(&1.next_notification, DateTime.utc_now()))
+    # |> Enum.each(&send_notification/1)
+
+    :ok
   end
 
   defp send_notification(task) do

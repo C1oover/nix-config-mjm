@@ -15,8 +15,8 @@ config :homelab,
 config :homelab, Oban,
   repo: Homelab.Repo,
   plugins: [
-    {Oban.Plugins.Pruner, max_age: 1800}
-    # {Oban.Plugins.Cron, crontab: [{"*/5 * * * *", Homelab.Jobs.CreateReminderTasks}]}
+    {Oban.Plugins.Pruner, max_age: 1800},
+    {Oban.Plugins.Cron, crontab: [{"*/5 * * * *", Homelab.Jobs.CreateReminderTasks}]}
   ],
   queues: [default: 10],
   stage_interval: 10_000
