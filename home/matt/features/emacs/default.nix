@@ -19,8 +19,24 @@ in
       package = pkgs.emacs-unstable-pgtk;
       extraPackages = epkgs: [
         epkgs.catppuccin-theme
-        epkgs.geiser
-        epkgs.geiser-guile
+        (epkgs.geiser.overrideAttrs {
+          src = pkgs.fetchFromGitLab {
+            owner = "emacs-geiser";
+            repo = "geiser";
+            rev = "97ce88463f346ff0dab147334fa0ce7b81569d7c";
+            hash = "sha256-fC4dEWvMiDVx7P8dLrX5CVvR5QZyj383V9lV1bxryPM=";
+          };
+        })
+        (epkgs.geiser-guile.override {
+          geiser = epkgs.geiser.overrideAttrs {
+            src = pkgs.fetchFromGitLab {
+              owner = "emacs-geiser";
+              repo = "geiser";
+              rev = "97ce88463f346ff0dab147334fa0ce7b81569d7c";
+              hash = "sha256-fC4dEWvMiDVx7P8dLrX5CVvR5QZyj383V9lV1bxryPM=";
+            };
+          };
+        })
         epkgs.helm
         epkgs.paredit
         epkgs.rainbow-delimiters
