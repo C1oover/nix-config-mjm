@@ -3,9 +3,8 @@
 {% block title %}Welcome!{% endblock title %}
 
 {% block content %}
-<h1>Launchpad</h1>
 
-<div class="row" hx-get="/status-cards" hx-trigger="every 30s">
+<div class="row gy-2" hx-get="/status-cards" hx-trigger="every 30s">
   {% include "status-cards.html" %}
 </div>
 
