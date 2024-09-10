@@ -7,8 +7,10 @@
 <h1>Deploys</h1>
 
 {% if update_mr %}
-<p>There is an outstanding update <a href="https://git.midna.dev/mjm/nix-config/-/merge_requests/{{ update_mr.iid }}"
-    target="_blank">merge request</a>.</p>
+<p class="alert alert-primary mt-3" role="alert">
+  There is an outstanding update <a href="https://git.midna.dev/mjm/nix-config/-/merge_requests/{{ update_mr.iid }}"
+    target="_blank">merge request</a>.
+</p>
 {% endif %}
 
 <ul class="list-group">
