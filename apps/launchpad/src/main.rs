@@ -1,10 +1,11 @@
 mod app;
 mod config;
 mod deploys;
+mod tasks;
 
 use axum::extract::State;
 use axum::response::IntoResponse;
-use axum::routing::get;
+use axum::routing::{get, post};
 use axum::{serve, Router};
 use axum_template::RenderHtml;
 use config::Config;
@@ -70,6 +71,8 @@ async fn main() {
         .route("/", get(index))
         .route("/status-cards", get(status_cards))
         .route("/deploys", get(deploys::index))
+        .route("/tasks", get(tasks::index).post(tasks::create_task))
+        .route("/tasks/:id/toggle", post(tasks::toggle_task))
         .with_state(app_state)
         .layer(TraceLayer::new_for_http());
 

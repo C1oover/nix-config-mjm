@@ -6,6 +6,7 @@ use serde::Deserialize;
 pub struct Config {
     #[serde(default = "default_bind_address")]
     pub bind_address: String,
+    pub database_url: String,
     pub gitlab_token: String,
     pub paperless_token: String,
 }

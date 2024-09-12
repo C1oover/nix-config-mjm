@@ -3,6 +3,7 @@ use anyhow::Result;
 use axum::extract::FromRef;
 use axum::http::StatusCode;
 use axum::response::{IntoResponse, Response};
+use sqlx::PgPool;
 use tera::Tera;
 
 #[tracing::instrument(skip(config))]
@@ -11,9 +12,12 @@ pub async fn new_state(config: Config) -> Result<State> {
 
     let gitlab_client = deploys::GitLabClient::new(config.gitlab_token.clone()).await;
 
+    let pool = PgPool::connect(&config.database_url).await?;
+
     Ok(State {
         config,
         engine: axum_template::engine::Engine::from(tera),
+        pool,
         gitlab_client,
     })
 }
@@ -24,6 +28,7 @@ pub type Engine = axum_template::engine::Engine<Tera>;
 pub struct State {
     config: Config,
     engine: Engine,
+    pool: PgPool,
     gitlab_client: deploys::GitLabClient,
 }
 

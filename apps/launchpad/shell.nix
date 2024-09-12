@@ -5,6 +5,10 @@ in
   pkgs ? import sources.nixos { },
 }:
 
+let
+  postgres = pkgs.postgresql_16;
+in
+
 pkgs.mkShell {
   packages = builtins.attrValues {
     inherit (pkgs)
@@ -16,11 +20,45 @@ pkgs.mkShell {
 
       openssl
       pkg-config
+      postgresql_16
+      sqlx-cli
       ;
+
+    pg = pkgs.writers.writeNuBin "pg" ''
+      def "main start" [] {
+        mkdir $env.PGHOST
+        if ($env.PGDATA | path type) != "dir" {
+          ${postgres}/bin/initdb
+        }
+
+        cp -f ${pkgs.writeText "postgresql.conf" ''
+          listen_addresses = '''
+          port = 5432
+          unix_socket_directories = '__PWD__/.pg/host'
+        ''} ($env.PGDATA | path join postgresql.conf)
+        sed -i -e $'s$__PWD__$($env.PWD)$' ($env.PGDATA | path join postgresql.conf)
+
+        exec ${postgres}/bin/postgres
+      }
+
+      def "main create" [] {
+        'create database "launchpad_dev";' | ${postgres}/bin/psql --dbname postgres
+      }
+
+      def main [] {}
+    '';
   };
 
   shellHook = ''
+    mkdir -p .secrets
     export LAUNCHPAD_PAPERLESS_TOKEN_FILE=".secrets/paperless_token"
     export LAUNCHPAD_GITLAB_TOKEN_FILE=".secrets/gitlab_token"
+
+    mkdir -p .pg
+    export PGDATA="$PWD/.pg/data"
+    export PGHOST="$PWD/.pg/host"
+    export PGPORT="5432"
+    export DATABASE_URL="postgresql:///launchpad_dev?host=$PGHOST"
+    export LAUNCHPAD_DATABASE_URL="$DATABASE_URL"
   '';
 }

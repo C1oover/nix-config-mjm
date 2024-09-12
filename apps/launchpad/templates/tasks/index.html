@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Tasks{% endblock title %}
+
+{% block content %}
+
+<h1>Tasks</h1>
+
+<ul id="task-list" class="list-group mb-2">
+  {% include "tasks/list-tasks.html" %}
+</ul>
+
+<div class="d-grid gap-2 d-md-block">
+  <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#new-task-modal">
+    New task
+  </button>
+</div>
+
+{% include "tasks/new-task-modal.html" %}
+
+{% endblock content %}
