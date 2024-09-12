@@ -8,7 +8,6 @@ in
     pragmata-pro
     cascadia-code
     ibm-plex
-    iosevka
     agave
     (input-fonts.override { acceptLicense = true; })
   ];
