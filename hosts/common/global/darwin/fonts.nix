@@ -10,5 +10,6 @@ in
     ibm-plex
     agave
     (input-fonts.override { acceptLicense = true; })
+    departure-mono
   ];
 }
