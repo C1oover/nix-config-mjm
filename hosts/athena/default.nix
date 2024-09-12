@@ -23,4 +23,6 @@
     "openssl@1.1"
     "openssl@3"
   ];
+
+  system.stateVersion = 4;
 }
