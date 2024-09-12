@@ -11,5 +11,6 @@ in
     agave
     (input-fonts.override { acceptLicense = true; })
     departure-mono
+    noto-fonts
   ];
 }
