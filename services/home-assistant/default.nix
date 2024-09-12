@@ -53,6 +53,26 @@ in
       upstream.service.name = "home-assistant";
     };
 
+    nixpkgs.overlays = [
+      (self: super: {
+        home-assistant = super.home-assistant.override {
+          packageOverrides = self: super: {
+            icalevents = super.icalevents.overridePythonAttrs (oldAttrs: rec {
+              version = "0.1.27";
+              src = pkgs.fetchFromGitHub {
+                owner = "jazzband";
+                repo = "icalevents";
+                rev = "refs/tags/v${version}";
+                hash = "sha256-vSYQEJFBjXUF4WwEAtkLtcO3y/am00jGS+8Vj+JMMqQ=";
+              };
+              dependencies = oldAttrs.dependencies ++ [ self.datetime ];
+              pythonRelaxDeps = oldAttrs.pythonRelaxDeps ++ [ "datetime" ];
+            });
+          };
+        };
+      })
+    ];
+
     services.home-assistant = {
       enable = true;
       openFirewall = true;
