@@ -21,7 +21,7 @@ in
     programs.kitty = {
       enable = true;
       catppuccin.enable = true;
-      font.name = "Departure Mono";
+      font.name = "Noto Sans Mono";
       font.size = mkDefault 14;
       settings = {
         # modify_font = "baseline 1";
