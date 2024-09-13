@@ -55,5 +55,22 @@ in
     services.kdeconnect.enable = true;
 
     fonts.fontconfig.enable = false;
+
+    # Noto Sans Mono doesn't have a spacing value set, so kitty won't allow its
+    # use on Linux without forcing the issue.
+    xdg.configFile."fontconfig/conf.d/50-noto-mono.conf".text = ''
+      <?xml version="1.0"?>
+      <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+      <fontconfig>
+      <match target="scan">
+          <test name="family">
+              <string>Noto Sans Mono</string>
+          </test>
+          <edit name="spacing">
+              <int>100</int>
+          </edit>
+      </match>
+      </fontconfig>
+    '';
   };
 }
