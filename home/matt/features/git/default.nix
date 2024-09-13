@@ -148,7 +148,7 @@ in
     }
 
     def ,jpb [] {
-      let branch = jj log -r '::@ & branches()' --no-graph -T local_branches -n 1
+      let branch = jj log -r '::@ & branches()' --no-graph -T local_branches -n 1 | str trim -r -c '*'
       jj branch set $branch -r @-
       try {
         jj git push
