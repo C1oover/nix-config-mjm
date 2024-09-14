@@ -125,18 +125,6 @@
       "url": "https://api.github.com/repos/cachix/devenv/tarball/v1.1",
       "hash": "1pllgxvr7skr8nrzpxl25vqmq11c76wf4h90616mdrq49h2qx3gf"
     },
-    "emacs-overlay": {
-      "type": "Git",
-      "repository": {
-        "type": "GitHub",
-        "owner": "nix-community",
-        "repo": "emacs-overlay"
-      },
-      "branch": "master",
-      "revision": "5788c86646c42ebce3d8731fccd4f973b530240b",
-      "url": "https://github.com/nix-community/emacs-overlay/archive/5788c86646c42ebce3d8731fccd4f973b530240b.tar.gz",
-      "hash": "08cr12avcfpq9llb4knkfmsvflqq1jbg126g3p19rk28ks66yqq2"
-    },
     "firefox-csshacks": {
       "type": "Git",
       "repository": {

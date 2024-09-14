@@ -28,7 +28,6 @@
   # hash mismatch in the go modules for vault rn
   nixpkgs.overlays = [
     (final: prev: { vault = prev.vault-bin; })
-    (import inputs.emacs-overlay)
   ];
 
   nix.channel.enable = true;
