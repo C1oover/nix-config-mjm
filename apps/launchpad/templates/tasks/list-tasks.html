@@ -1,8 +1,9 @@
 {% for task in tasks %}
-<li class="list-group-item {% if task.completed %}bg-secondary{% endif %}">
+<li class="list-group-item">
   <input class="form-check-input me-1" type="checkbox" value="" {% if task.completed %}checked{% endif %}
     id="task-check-{{ task.id }}" hx-post="/tasks/{{ task.id }}/toggle" hx-target="#task-list">
-  <label class="form-check-label" for="task-check-{{ task.id }}">
+  <label class="form-check-label {% if task.completed %}text-secondary-emphasis text-decoration-line-through{% endif %}"
+    for="task-check-{{ task.id }}">
     {{ task.description }}
   </label>
 </li>
