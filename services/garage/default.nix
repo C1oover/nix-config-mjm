@@ -17,7 +17,15 @@ in
 
     services.garage = {
       enable = true;
-      package = pkgs.garage_1_x;
+      package = pkgs.garage_1_x.overrideAttrs (oldAttrs: {
+        patches = oldAttrs.patches ++ [
+          (pkgs.fetchpatch {
+            # kill open connections after SIGINT after 10s deadline
+            url = "https://git.deuxfleurs.fr/Deuxfleurs/garage/pulls/864.diff";
+            hash = "sha256-32UChZng7/J75dM8lBwRXRU7hvYRzxJ83GlJ/2Kjmvo=";
+          })
+        ];
+      });
       settings = {
         db_engine = "lmdb";
         replication_factor = 3;
