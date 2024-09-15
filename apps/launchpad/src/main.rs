@@ -96,7 +96,10 @@ async fn main() {
         .route("/status-cards", get(status_cards))
         .route("/deploys", get(deploys::index))
         .route("/tasks", get(tasks::index).post(tasks::create_task))
-        .route("/tasks/:id", put(tasks::update_task))
+        .route(
+            "/tasks/:id",
+            put(tasks::update_task).delete(tasks::delete_task),
+        )
         .route("/tasks/:id/edit", get(tasks::edit_task))
         .route("/tasks/:id/toggle", post(tasks::toggle_task))
         .with_state(app_state)

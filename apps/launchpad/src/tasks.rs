@@ -98,8 +98,18 @@ pub async fn edit_task(
                 }
 
                 .d-grid .gap-2 .d-md-block {
-                    button .btn.btn-primary {
+                    button .btn.btn-primary .me-md-2 {
                         "Save"
+                    }
+                    a .btn.btn-secondary .me-md-2 href="/tasks" {
+                        "Cancel"
+                    }
+                    button
+                        .btn.btn-outline-danger
+                        type="button"
+                        hx-delete={ "/tasks/" (task.id) }
+                        hx-confirm="Are you sure you want to delete this task?" {
+                        "Delete"
                     }
                 }
             }
@@ -131,6 +141,15 @@ pub async fn toggle_task(
     let tasks = list_tasks(&pool).await?;
 
     Ok(render_task_list(&tasks))
+}
+
+pub async fn delete_task(
+    State(pool): State<PgPool>,
+    Path(id): Path<i64>,
+) -> Result<impl IntoResponse, app::Error> {
+    task_delete(&pool, id).await?;
+
+    Ok(index(State(pool)).await?)
 }
 
 fn render_task_list(tasks: &[Task]) -> Markup {
@@ -292,4 +311,19 @@ RETURNING *
     )
     .fetch_one(pool)
     .await?)
+}
+
+#[tracing::instrument(skip(pool))]
+async fn task_delete(pool: &PgPool, id: i64) -> anyhow::Result<()> {
+    sqlx::query!(
+        r#"
+DELETE FROM tasks
+WHERE id = $1
+        "#,
+        id
+    )
+    .execute(pool)
+    .await?;
+
+    Ok(())
 }
