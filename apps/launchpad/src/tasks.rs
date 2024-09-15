@@ -163,14 +163,14 @@ fn render_task_list(tasks: &[Task]) -> Markup {
                         .me-1
                         type="checkbox"
                         value=""
-                        checked[task.completed]
+                        checked[task.is_completed()]
                         hx-post={ "/tasks/" (task.id) "/toggle"}
                         hx-target="#task-list";
                     " "
                     label
                         .form-check-label
-                        .text-secondary-emphasis[task.completed]
-                        .text-decoration-line-through[task.completed]
+                        .text-secondary-emphasis[task.is_completed()]
+                        .text-decoration-line-through[task.is_completed()]
                         for={ "task-check-" (task.id) } {
                         (task.description)
                     }
@@ -229,9 +229,18 @@ fn render_new_task_modal() -> Markup {
 struct Task {
     id: i64,
     description: String,
-    completed: bool,
+    completed_at: Option<DateTime<Utc>>,
     created_at: DateTime<Utc>,
     updated_at: DateTime<Utc>,
+}
+
+impl Task {
+    fn is_completed(self: &Task) -> bool {
+        match self.completed_at {
+            None => false,
+            Some(_) => true,
+        }
+    }
 }
 
 #[tracing::instrument(skip(pool))]
@@ -239,9 +248,11 @@ async fn list_tasks(pool: &PgPool) -> anyhow::Result<Vec<Task>> {
     Ok(sqlx::query_as!(
         Task,
         r#"
-SELECT id, description, completed, created_at, updated_at
+SELECT id, description, completed_at, created_at, updated_at
 FROM tasks
-ORDER BY created_at
+ORDER BY
+    (CASE WHEN completed_at IS NULL THEN 0 ELSE 1 END),
+    (CASE WHEN completed_at IS NULL THEN created_at ELSE completed_at END)
         "#
     )
     .fetch_all(pool)
@@ -270,7 +281,7 @@ async fn task_get(pool: &PgPool, id: i64) -> anyhow::Result<Task> {
     Ok(sqlx::query_as!(
         Task,
         r#"
-SELECT id, description, completed, created_at, updated_at
+SELECT id, description, completed_at, created_at, updated_at
 FROM tasks
 WHERE id = $1
         "#,
@@ -286,7 +297,7 @@ async fn task_toggle(pool: &PgPool, id: i64) -> anyhow::Result<Task> {
         Task,
         r#"
 UPDATE tasks
-SET completed = NOT completed
+SET completed_at = (CASE WHEN completed_at IS NULL THEN current_timestamp ELSE NULL END)
 WHERE id = $1
 RETURNING *
         "#,
