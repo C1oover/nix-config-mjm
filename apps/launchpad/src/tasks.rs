@@ -10,6 +10,7 @@ use sqlx::PgPool;
 
 use crate::app;
 
+#[tracing::instrument(skip(pool))]
 pub async fn index(State(pool): State<PgPool>) -> Result<impl IntoResponse, app::Error> {
     let tasks = list_tasks(&pool).await?;
 
@@ -67,6 +68,7 @@ pub async fn create_task(
     })
 }
 
+#[tracing::instrument(skip(pool))]
 pub async fn edit_task(
     State(pool): State<PgPool>,
     Path(id): Path<i64>,
@@ -136,6 +138,7 @@ pub struct UpdateTaskForm {
     tags: String,
 }
 
+#[tracing::instrument(skip(pool))]
 pub async fn update_task(
     State(pool): State<PgPool>,
     Path(id): Path<i64>,
@@ -146,6 +149,7 @@ pub async fn update_task(
     Ok(index(State(pool)).await?)
 }
 
+#[tracing::instrument(skip(pool))]
 pub async fn toggle_task(
     State(pool): State<PgPool>,
     Path(id): Path<i64>,
@@ -157,6 +161,7 @@ pub async fn toggle_task(
     Ok(render_task_list(&tasks))
 }
 
+#[tracing::instrument(skip(pool))]
 pub async fn delete_task(
     State(pool): State<PgPool>,
     Path(id): Path<i64>,

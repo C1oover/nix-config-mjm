@@ -12,6 +12,7 @@ use tokio::try_join;
 
 use crate::app;
 
+#[tracing::instrument(skip(client))]
 pub async fn index(State(client): State<GitLabClient>) -> Result<impl IntoResponse, app::Error> {
     let (update_mr, deploys) =
         try_join!(client.get_update_merge_request(), client.list_deployments())?;
@@ -58,7 +59,7 @@ impl GitLabClient {
         GitLabClient { client }
     }
 
-    #[tracing::instrument]
+    #[tracing::instrument(skip(self))]
     async fn get_update_merge_request(self: &Self) -> anyhow::Result<Option<MergeRequest>> {
         let endpoint = projects::merge_requests::MergeRequests::builder()
             .project("mjm/nix-config")
@@ -71,7 +72,7 @@ impl GitLabClient {
         Ok(mrs.pop())
     }
 
-    #[tracing::instrument]
+    #[tracing::instrument(skip(self))]
     async fn list_deployments(self: &Self) -> anyhow::Result<Vec<Deployment>> {
         let endpoint = projects::deployments::Deployments::builder()
             .project("mjm/nix-config")

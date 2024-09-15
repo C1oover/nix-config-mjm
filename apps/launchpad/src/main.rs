@@ -16,6 +16,7 @@ use tower_http::trace::TraceLayer;
 use tracing::Level;
 use tracing_subscriber::FmtSubscriber;
 
+#[tracing::instrument(skip(config))]
 async fn index(State(config): State<Config>) -> Result<impl IntoResponse, app::Error> {
     let status_cards = load_status_cards_context(&config).await?;
 
@@ -29,6 +30,7 @@ async fn index(State(config): State<Config>) -> Result<impl IntoResponse, app::E
     ))
 }
 
+#[tracing::instrument(skip(config))]
 async fn status_cards(State(config): State<Config>) -> Result<impl IntoResponse, app::Error> {
     let status_cards = load_status_cards_context(&config).await?;
 
@@ -71,6 +73,7 @@ fn render_status_cards(status_cards: StatusCardsContext) -> Markup {
     }
 }
 
+#[tracing::instrument(skip(config), ret, err)]
 async fn load_status_cards_context(config: &Config) -> anyhow::Result<StatusCardsContext> {
     let alerts_fut = list_alerts();
     let num_inbox_docs_fut = count_paperless_inbox_docs(&config.paperless_token);
@@ -115,7 +118,7 @@ struct Alert {
     starts_at: String,
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Debug)]
 struct StatusCardsContext {
     num_alerts: i32,
     num_inbox_docs: i32,
