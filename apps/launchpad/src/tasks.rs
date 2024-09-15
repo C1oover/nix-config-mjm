@@ -67,6 +67,61 @@ pub async fn create_task(
     })
 }
 
+pub async fn edit_task(
+    State(pool): State<PgPool>,
+    Path(id): Path<i64>,
+) -> Result<impl IntoResponse, app::Error> {
+    let task = task_get(&pool, id).await?;
+
+    Ok(app::layout(
+        "Edit task",
+        html! {
+            h1 { "Edit task" }
+
+            form
+                hx-put={ "/tasks/" (task.id) }
+                hx-push-url="/tasks"
+                hx-swap="outerHTML"
+                hx-target="body" {
+
+                .mb-3 {
+                    label .form-label for="edit-task-description" {
+                        "Description"
+                    }
+                    input
+                        #edit-task-description
+                        .form-control
+                        name="description"
+                        type="text"
+                        value=(task.description)
+                        autocomplete="off";
+                }
+
+                .d-grid .gap-2 .d-md-block {
+                    button .btn.btn-primary {
+                        "Save"
+                    }
+                }
+            }
+        },
+    ))
+}
+
+#[derive(Deserialize, Serialize, Debug)]
+pub struct UpdateTaskForm {
+    description: String,
+}
+
+pub async fn update_task(
+    State(pool): State<PgPool>,
+    Path(id): Path<i64>,
+    Form(form): Form<UpdateTaskForm>,
+) -> Result<impl IntoResponse, app::Error> {
+    task_update(&pool, id, form).await?;
+
+    Ok(index(State(pool)).await?)
+}
+
 pub async fn toggle_task(
     State(pool): State<PgPool>,
     Path(id): Path<i64>,
@@ -81,23 +136,29 @@ pub async fn toggle_task(
 fn render_task_list(tasks: &[Task]) -> Markup {
     html! {
         @for task in tasks {
-            li .list-group-item {
-                input
-                    #{ "task-check-" (task.id) }
-                    .form-check-input
-                    .me-1
-                    type="checkbox"
-                    value=""
-                    checked[task.completed]
-                    hx-post={ "/tasks/" (task.id) "/toggle"}
-                    hx-target="#task-list";
-                " "
-                label
-                    .form-check-label
-                    .text-secondary-emphasis[task.completed]
-                    .text-decoration-line-through[task.completed]
-                    for={ "task-check-" (task.id) } {
-                    (task.description)
+            li .list-group-item .d-flex .justify-content-between .align-items-start {
+                .me-auto {
+                    input
+                        #{ "task-check-" (task.id) }
+                        .form-check-input
+                        .me-1
+                        type="checkbox"
+                        value=""
+                        checked[task.completed]
+                        hx-post={ "/tasks/" (task.id) "/toggle"}
+                        hx-target="#task-list";
+                    " "
+                    label
+                        .form-check-label
+                        .text-secondary-emphasis[task.completed]
+                        .text-decoration-line-through[task.completed]
+                        for={ "task-check-" (task.id) } {
+                        (task.description)
+                    }
+                }
+
+                a .btn.btn-primary.btn-sm href={ "/tasks/" (task.id) "/edit" } {
+                    "Edit"
                 }
             }
         }
@@ -186,6 +247,21 @@ RETURNING *
 }
 
 #[tracing::instrument(skip(pool))]
+async fn task_get(pool: &PgPool, id: i64) -> anyhow::Result<Task> {
+    Ok(sqlx::query_as!(
+        Task,
+        r#"
+SELECT id, description, completed, created_at, updated_at
+FROM tasks
+WHERE id = $1
+        "#,
+        id
+    )
+    .fetch_one(pool)
+    .await?)
+}
+
+#[tracing::instrument(skip(pool))]
 async fn task_toggle(pool: &PgPool, id: i64) -> anyhow::Result<Task> {
     Ok(sqlx::query_as!(
         Task,
@@ -196,6 +272,23 @@ WHERE id = $1
 RETURNING *
         "#,
         id
+    )
+    .fetch_one(pool)
+    .await?)
+}
+
+#[tracing::instrument(skip(pool))]
+async fn task_update(pool: &PgPool, id: i64, t: UpdateTaskForm) -> anyhow::Result<Task> {
+    Ok(sqlx::query_as!(
+        Task,
+        r#"
+UPDATE tasks
+SET description = $2
+WHERE id = $1
+RETURNING *
+        "#,
+        id,
+        t.description
     )
     .fetch_one(pool)
     .await?)
