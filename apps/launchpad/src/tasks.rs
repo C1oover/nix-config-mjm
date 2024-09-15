@@ -97,6 +97,19 @@ pub async fn edit_task(
                         autocomplete="off";
                 }
 
+                .mb-3 {
+                    label .form-label for="edit-task-tags" {
+                        "Tags"
+                    }
+                    input
+                        #edit-task-tags
+                        .form-control
+                        name="tags"
+                        type="text"
+                        value=(task.tags_string())
+                        autocomplete="off";
+                }
+
                 .d-grid .gap-2 .d-md-block {
                     button .btn.btn-primary .me-md-2 {
                         "Save"
@@ -120,6 +133,7 @@ pub async fn edit_task(
 #[derive(Deserialize, Serialize, Debug)]
 pub struct UpdateTaskForm {
     description: String,
+    tags: String,
 }
 
 pub async fn update_task(
@@ -156,23 +170,34 @@ fn render_task_list(tasks: &[Task]) -> Markup {
     html! {
         @for task in tasks {
             li .list-group-item .d-flex .justify-content-between .align-items-start {
-                .me-auto {
-                    input
-                        #{ "task-check-" (task.id) }
-                        .form-check-input
-                        .me-1
-                        type="checkbox"
-                        value=""
-                        checked[task.is_completed()]
-                        hx-post={ "/tasks/" (task.id) "/toggle"}
-                        hx-target="#task-list";
-                    " "
+                input
+                    #{ "task-check-" (task.id) }
+                    .form-check-input
+                    .me-2
+                    type="checkbox"
+                    value=""
+                    checked[task.is_completed()]
+                    hx-post={ "/tasks/" (task.id) "/toggle"}
+                    hx-target="#task-list";
+
+                div .me-auto {
                     label
                         .form-check-label
+                        .me-auto
                         .text-secondary-emphasis[task.is_completed()]
                         .text-decoration-line-through[task.is_completed()]
                         for={ "task-check-" (task.id) } {
                         (task.description)
+                    }
+
+                    @if !task.tags.is_empty() {
+                        div {
+                            @for tag in &task.tags {
+                                span .badge .text-bg-secondary .me-1 {
+                                    (tag)
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -213,6 +238,16 @@ fn render_new_task_modal() -> Markup {
                                     type="text"
                                     autocomplete="off";
                             }
+
+                            .mb-3 {
+                                label .form-label for="new-task-tags" { "Tags" }
+                                input
+                                    #new-task-tags
+                                    .form-control
+                                    name="tags"
+                                    type="text"
+                                    autocomplete="off";
+                            }
                         }
                         .modal-footer {
                             button .btn.btn-secondary type="button" data-bs-dismiss="modal" { "Close" }
@@ -229,6 +264,7 @@ fn render_new_task_modal() -> Markup {
 struct Task {
     id: i64,
     description: String,
+    tags: Vec<String>,
     completed_at: Option<DateTime<Utc>>,
     created_at: DateTime<Utc>,
     updated_at: DateTime<Utc>,
@@ -241,6 +277,10 @@ impl Task {
             Some(_) => true,
         }
     }
+
+    fn tags_string(self: &Task) -> String {
+        self.tags.join(", ")
+    }
 }
 
 #[tracing::instrument(skip(pool))]
@@ -248,7 +288,7 @@ async fn list_tasks(pool: &PgPool) -> anyhow::Result<Vec<Task>> {
     Ok(sqlx::query_as!(
         Task,
         r#"
-SELECT id, description, completed_at, created_at, updated_at
+SELECT id, description, tags, completed_at, created_at, updated_at
 FROM tasks
 ORDER BY
     (CASE WHEN completed_at IS NULL THEN 0 ELSE 1 END),
@@ -281,7 +321,7 @@ async fn task_get(pool: &PgPool, id: i64) -> anyhow::Result<Task> {
     Ok(sqlx::query_as!(
         Task,
         r#"
-SELECT id, description, completed_at, created_at, updated_at
+SELECT id, description, tags, completed_at, created_at, updated_at
 FROM tasks
 WHERE id = $1
         "#,
@@ -309,16 +349,25 @@ RETURNING *
 
 #[tracing::instrument(skip(pool))]
 async fn task_update(pool: &PgPool, id: i64, t: UpdateTaskForm) -> anyhow::Result<Task> {
+    let tags: Vec<String> = t
+        .tags
+        .split(",")
+        .map(|s| s.trim().to_string())
+        .filter(|s| !s.is_empty())
+        .collect();
+
     Ok(sqlx::query_as!(
         Task,
         r#"
 UPDATE tasks
-SET description = $2
+SET description = $2,
+    tags = $3
 WHERE id = $1
 RETURNING *
         "#,
         id,
-        t.description
+        t.description,
+        &tags
     )
     .fetch_one(pool)
     .await?)
