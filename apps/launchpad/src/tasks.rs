@@ -3,27 +3,37 @@ use axum::{
     response::IntoResponse,
     Form,
 };
-use axum_template::RenderHtml;
 use chrono::{DateTime, Utc};
+use maud::{html, Markup, PreEscaped};
 use serde::{Deserialize, Serialize};
 use sqlx::PgPool;
 
 use crate::app;
 
-#[derive(Serialize)]
-struct IndexContext {
-    tasks: Vec<Task>,
-}
-
-pub async fn index(
-    engine: app::Engine,
-    State(pool): State<PgPool>,
-) -> Result<impl IntoResponse, app::Error> {
+pub async fn index(State(pool): State<PgPool>) -> Result<impl IntoResponse, app::Error> {
     let tasks = list_tasks(&pool).await?;
-    Ok(RenderHtml(
-        "tasks/index.html",
-        engine,
-        IndexContext { tasks },
+
+    Ok(app::layout(
+        "Tasks",
+        html! {
+            h1 { "Tasks" }
+
+            ul #task-list .list-group .mb-2 {
+                (render_task_list(&tasks))
+            }
+
+            .d-grid .gap-2 .d-md-block {
+                button
+                    .btn.btn-primary
+                    type="button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#new-task-modal" {
+                    "New task"
+                }
+            }
+
+            (render_new_task_modal())
+        },
     ))
 }
 
@@ -32,14 +42,8 @@ pub struct NewTaskForm {
     description: String,
 }
 
-#[derive(Serialize)]
-struct CreateTaskContext {
-    tasks: Vec<Task>,
-}
-
-#[tracing::instrument(skip(engine, pool))]
+#[tracing::instrument(skip(pool))]
 pub async fn create_task(
-    engine: app::Engine,
     State(pool): State<PgPool>,
     Form(form): Form<NewTaskForm>,
 ) -> Result<impl IntoResponse, app::Error> {
@@ -48,20 +52,22 @@ pub async fn create_task(
 
     let tasks = list_tasks(&pool).await?;
 
-    Ok(RenderHtml(
-        "tasks/create-task.html",
-        engine,
-        CreateTaskContext { tasks },
-    ))
-}
+    Ok(html! {
+        (render_task_list(&tasks))
 
-#[derive(Serialize)]
-struct ToggleTaskContext {
-    tasks: Vec<Task>,
+        script type="text/javascript" {
+            (PreEscaped(r##"
+                bootstrap.Modal.getInstance("#new-task-modal").hide();
+            "##))
+        }
+
+        div hx-swap="innerHTML:#new-task-modal" {
+            (render_new_task_modal())
+        }
+    })
 }
 
 pub async fn toggle_task(
-    engine: app::Engine,
     State(pool): State<PgPool>,
     Path(id): Path<i64>,
 ) -> Result<impl IntoResponse, app::Error> {
@@ -69,11 +75,74 @@ pub async fn toggle_task(
 
     let tasks = list_tasks(&pool).await?;
 
-    Ok(RenderHtml(
-        "tasks/toggle-task.html",
-        engine,
-        ToggleTaskContext { tasks },
-    ))
+    Ok(render_task_list(&tasks))
+}
+
+fn render_task_list(tasks: &[Task]) -> Markup {
+    html! {
+        @for task in tasks {
+            li .list-group-item {
+                input
+                    #{ "task-check-" (task.id) }
+                    .form-check-input
+                    .me-1
+                    type="checkbox"
+                    value=""
+                    checked[task.completed]
+                    hx-post={ "/tasks/" (task.id) "/toggle"}
+                    hx-target="#task-list";
+                " "
+                label
+                    .form-check-label
+                    .text-secondary-emphasis[task.completed]
+                    .text-decoration-line-through[task.completed]
+                    for={ "task-check-" (task.id) } {
+                    (task.description)
+                }
+            }
+        }
+    }
+}
+
+fn render_new_task_modal() -> Markup {
+    html! {
+        #new-task-modal
+            .modal .fade
+            aria-hidden="true"
+            aria-labelledby="new-task-modal-title"
+            tabindex="-1" {
+
+            .modal-dialog .modal-fullscreen-md-down {
+                .modal-content {
+                    form
+                        hx-post="/tasks"
+                        hx-target="#task-list" {
+                        .modal-header {
+                            h1 #new-task-modal-title .modal-title .fs-5 {
+                                "New task"
+                            }
+                            button .btn-close type="button" data-bs-dismiss="modal" aria-label="Close" {}
+                        }
+                        .modal-body {
+                            .mb-3 {
+                                label .form-label for="new-task-description" { "Description" }
+                                input
+                                    #new-task-description
+                                    .form-control
+                                    name="description"
+                                    type="text"
+                                    autocomplete="off";
+                            }
+                        }
+                        .modal-footer {
+                            button .btn.btn-secondary type="button" data-bs-dismiss="modal" { "Close" }
+                            button .btn.btn-primary { "Save" }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 #[derive(Serialize)]

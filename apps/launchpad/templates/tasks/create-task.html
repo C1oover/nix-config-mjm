@@ -1,9 +1,0 @@
-{% include "tasks/list-tasks.html" %}
-
-<script type="text/javascript">
-  bootstrap.Modal.getInstance("#new-task-modal").hide();
-</script>
-
-<div hx-swap="innerHTML:#new-task-modal">
-  {% include "tasks/new-task-modal.html" %}
-</div>

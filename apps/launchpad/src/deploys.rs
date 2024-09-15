@@ -1,40 +1,46 @@
 use axum::extract::State;
 use axum::response::IntoResponse;
-use axum_template::RenderHtml;
 use gitlab::api::common::SortOrder;
 use gitlab::api::projects::merge_requests::MergeRequestState;
 use gitlab::api::projects::{self, deployments::DeploymentOrderBy};
 use gitlab::api::AsyncQuery;
 use gitlab::AsyncGitlab;
+use maud::html;
 use serde::{Deserialize, Serialize};
 use tokio::try_join;
 
 use crate::app;
 
-#[derive(Serialize)]
-struct IndexContext {
-    update_mr: Option<MergeRequest>,
-    deploys: Vec<Deployment>,
-}
+pub async fn index(State(client): State<GitLabClient>) -> Result<impl IntoResponse, app::Error> {
+    let (update_mr, deploys) =
+        try_join!(client.get_update_merge_request(), client.list_deployments())?;
 
-pub async fn index(
-    engine: app::Engine,
-    State(client): State<GitLabClient>,
-) -> Result<impl IntoResponse, app::Error> {
-    let context = try_join!(client.get_update_merge_request(), client.list_deployments())
-        .map(|(update_mr, deploys)| IndexContext { update_mr, deploys })?;
+    Ok(app::layout(
+        "Deploys",
+        html! {
+            h1 { "Deploys" }
 
-    Ok(RenderHtml("deploys/index.html", engine, context))
-}
+            @if let Some(mr) = update_mr {
+                p .alert .alert-primary .mt-3 role="alert" {
+                    "There is an outstanding update "
+                    a href={ "https://git.midna.dev/mjm/nix-config/-/merge_requests/" (mr.iid) } target="_blank" {
+                        "merge request"
+                    }
+                    "."
+                }
+            }
 
-#[derive(Deserialize, Serialize)]
-pub struct UpdateMergeRequest {
-    mr: Option<MergeRequest>,
-}
-
-#[derive(Deserialize, Serialize)]
-pub struct DeploymentsList {
-    deploys: Vec<Deployment>,
+            ul .list-group {
+                @for deploy in &deploys {
+                    li .list-group-item {
+                        (deploy.deployable.name)
+                        " - "
+                        (deploy.deployable.commit.message)
+                    }
+                }
+            }
+        },
+    ))
 }
 
 #[derive(Clone, Debug)]

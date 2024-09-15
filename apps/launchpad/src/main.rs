@@ -7,8 +7,8 @@ use axum::extract::State;
 use axum::response::IntoResponse;
 use axum::routing::{get, post};
 use axum::{serve, Router};
-use axum_template::RenderHtml;
 use config::Config;
+use maud::{html, Markup};
 use serde::{Deserialize, Serialize};
 use tokio::net::TcpListener;
 use tokio::try_join;
@@ -16,35 +16,59 @@ use tower_http::trace::TraceLayer;
 use tracing::Level;
 use tracing_subscriber::FmtSubscriber;
 
-#[derive(Deserialize, Serialize)]
-struct IndexContext {
-    status_cards: StatusCardsContext,
-}
-
-async fn index(
-    engine: app::Engine,
-    State(config): State<Config>,
-) -> Result<impl IntoResponse, app::Error> {
+async fn index(State(config): State<Config>) -> Result<impl IntoResponse, app::Error> {
     let status_cards = load_status_cards_context(&config).await?;
 
-    Ok(RenderHtml(
-        "index.html",
-        engine,
-        IndexContext { status_cards },
+    Ok(app::layout(
+        "Welcome!",
+        html! {
+            .row .gy-2 hx-get="/status-cards" hx-trigger="every 30s" {
+                (render_status_cards(status_cards))
+            }
+        },
     ))
 }
 
-async fn status_cards(
-    engine: app::Engine,
-    State(config): State<Config>,
-) -> Result<impl IntoResponse, app::Error> {
+async fn status_cards(State(config): State<Config>) -> Result<impl IntoResponse, app::Error> {
     let status_cards = load_status_cards_context(&config).await?;
 
-    Ok(RenderHtml(
-        "status-cards.html",
-        engine,
-        IndexContext { status_cards },
-    ))
+    Ok(render_status_cards(status_cards))
+}
+
+fn render_status_cards(status_cards: StatusCardsContext) -> Markup {
+    html! {
+        .col-sm {
+            .card {
+                .card-body {
+                    h5 .card-title { "Alerts firing" }
+                    p {
+                        (status_cards.num_alerts)
+                        " alert"
+                        @if status_cards.num_alerts == 1 { "" } @else { "s" }
+                    }
+                    a .btn .btn-primary href="https://graphs.midna.dev/alerting/list?search=state:firing" {
+                        "View firing alerts"
+                    }
+                }
+            }
+        }
+
+        .col-sm {
+            .card {
+                .card-body {
+                    h5 .card-title { "Paperless inbox" }
+                    p {
+                        (status_cards.num_inbox_docs)
+                        " document"
+                        @if status_cards.num_inbox_docs == 1 { "" } @else { "s" }
+                    }
+                    a .btn .btn-primary href="https://paper.midna.dev/view/1" {
+                        "View inbox documents"
+                    }
+                }
+            }
+        }
+    }
 }
 
 async fn load_status_cards_context(config: &Config) -> anyhow::Result<StatusCardsContext> {

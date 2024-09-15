@@ -3,31 +3,25 @@ use anyhow::Result;
 use axum::extract::FromRef;
 use axum::http::StatusCode;
 use axum::response::{IntoResponse, Response};
+use maud::{html, Markup, DOCTYPE};
 use sqlx::PgPool;
-use tera::Tera;
 
 #[tracing::instrument(skip(config))]
 pub async fn new_state(config: Config) -> Result<State> {
-    let tera = Tera::new("templates/**/*.html")?;
-
     let gitlab_client = deploys::GitLabClient::new(config.gitlab_token.clone()).await;
 
     let pool = PgPool::connect(&config.database_url).await?;
 
     Ok(State {
         config,
-        engine: axum_template::engine::Engine::from(tera),
         pool,
         gitlab_client,
     })
 }
 
-pub type Engine = axum_template::engine::Engine<Tera>;
-
 #[derive(Clone, FromRef)]
 pub struct State {
     config: Config,
-    engine: Engine,
     pool: PgPool,
     gitlab_client: deploys::GitLabClient,
 }
@@ -50,5 +44,67 @@ impl IntoResponse for Error {
             format!("Something went wrong: {}", self.0),
         )
             .into_response()
+    }
+}
+
+pub fn layout(title: &str, content: Markup) -> Markup {
+    html! {
+        (DOCTYPE)
+        html data-bs-theme="dark" {
+            head {
+                title { (title) " - Launchpad" }
+                script
+                    src="https://unpkg.com/htmx.org@2.0.2/dist/htmx.js"
+                    integrity="sha384-yZq+5izaUBKcRgFbxgkRYwpHhHHCpp5nseXp0MEQ1A4MTWVMnqkmcuFez8x5qfxr"
+                    crossorigin="anonymous" {}
+                link
+                    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+                    rel="stylesheet"
+                    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+                    crossorigin="anonymous";
+                meta charset="utf-8";
+                meta name="viewport" content="width=device-width, initial-scale=1";
+            }
+            body {
+                (navbar())
+                .container { (content) }
+                script
+                    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+                    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+                    crossorigin="anonymous" {}
+            }
+        }
+    }
+}
+
+fn navbar() -> Markup {
+    html! {
+        nav .navbar .navbar-expand-lg .bg-body-tertiary .mb-3 {
+            .container-fluid {
+                a .navbar-brand href="/" { "Launchpad" }
+                button .navbar-toggler
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbar-items"
+                    aria-controls="navbar-items"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation" {
+                    span.navbar-toggler-icon {}
+                }
+                #navbar-items .collapse .navbar-collapse {
+                    ul .navbar-nav {
+                        li .nav-item {
+                            a .nav-link href="/deploys" { "Deploys" }
+                        }
+                        li .nav-item {
+                            a .nav-link href="/backups" { "Backups" }
+                        }
+                        li .nav-item {
+                            a .nav-link href="/tasks" { "Tasks" }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
