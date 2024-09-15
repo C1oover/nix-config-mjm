@@ -1,5 +1,6 @@
 use axum::extract::State;
 use axum::response::IntoResponse;
+use chrono::{DateTime, Utc};
 use gitlab::api::common::SortOrder;
 use gitlab::api::projects::merge_requests::MergeRequestState;
 use gitlab::api::projects::{self, deployments::DeploymentOrderBy};
@@ -93,21 +94,52 @@ struct MergeRequest {
 struct Deployment {
     id: i64,
     sha: String,
-    // TODO should be an enum
-    status: String,
-    // TODO created_at/updated_at
+    status: DeploymentStatus,
+    created_at: DateTime<Utc>,
+    updated_at: DateTime<Utc>,
     deployable: Job,
+}
+
+#[derive(Deserialize, Serialize, Debug)]
+#[serde(rename_all = "snake_case")]
+enum DeploymentStatus {
+    Success,
+    Running,
+    Failed,
+    Canceled,
+    Skipped,
+    Created,
+    Blocked,
+    #[serde(other)]
+    Unknown,
 }
 
 #[derive(Deserialize, Serialize, Debug)]
 struct Job {
     name: String,
     stage: String,
-    // TODO should be an enum
-    status: String,
+    status: JobStatus,
     web_url: String,
-    // TODO created_at/started_at/finished_at
+    created_at: DateTime<Utc>,
+    started_at: Option<DateTime<Utc>>,
+    finished_at: Option<DateTime<Utc>>,
     commit: Commit,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+#[serde(rename_all = "snake_case")]
+enum JobStatus {
+    Created,
+    Pending,
+    Running,
+    Failed,
+    Success,
+    Canceled,
+    Skipped,
+    WaitingForResource,
+    Manual,
+    #[serde(other)]
+    Unknown,
 }
 
 #[derive(Deserialize, Serialize, Debug)]
