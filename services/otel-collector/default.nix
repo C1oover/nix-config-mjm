@@ -43,7 +43,6 @@ in
           # health_check = { };
           # pprof = { };
           zpages = { };
-          memory_ballast.size_mib = 165;
         };
 
         service = {
@@ -51,7 +50,6 @@ in
             # "health_check"
             # "pprof"
             "zpages"
-            "memory_ballast"
           ];
           pipelines.traces = {
             receivers = [ "otlp" ];
