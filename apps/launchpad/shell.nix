@@ -20,8 +20,6 @@ pkgs.mkShell {
       rust-analyzer
       rustfmt
 
-      openssl
-      pkg-config
       postgresql_16
       sqlx-cli
       just
