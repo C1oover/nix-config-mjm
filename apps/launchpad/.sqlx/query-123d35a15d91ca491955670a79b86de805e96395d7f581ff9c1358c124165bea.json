@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "\nINSERT INTO tasks\n(description)\nVALUES\n($1)\nRETURNING *\n        ",
+  "query": "\nINSERT INTO tasks\n(description, tags)\nVALUES\n($1, $2)\nRETURNING *\n        ",
   "describe": {
     "columns": [
       {
@@ -36,7 +36,8 @@
     ],
     "parameters": {
       "Left": [
-        "Text"
+        "Text",
+        "TextArray"
       ]
     },
     "nullable": [
@@ -48,5 +49,5 @@
       false
     ]
   },
-  "hash": "aa6f3b1c9c31bdaf682b459109f66562baa276b1bc725e628972b5cfa02e7612"
+  "hash": "123d35a15d91ca491955670a79b86de805e96395d7f581ff9c1358c124165bea"
 }
