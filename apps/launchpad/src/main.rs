@@ -40,6 +40,10 @@ async fn status_cards(State(config): State<Config>) -> Result<impl IntoResponse,
     Ok(render_status_cards(status_cards))
 }
 
+async fn health() -> impl IntoResponse {
+    "OK"
+}
+
 fn render_status_cards(status_cards: StatusCardsContext) -> Markup {
     html! {
         .col-sm {
@@ -96,6 +100,7 @@ async fn main() {
 
     let app = Router::new()
         .route("/", get(index))
+        .route("/healthz", get(health))
         .route("/status-cards", get(status_cards))
         .route("/deploys", get(deploys::index))
         .route("/tasks", get(tasks::index).post(tasks::create_task))

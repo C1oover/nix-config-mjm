@@ -62,6 +62,15 @@ in
 
     services.consul.services.launchpad = {
       port = 4100;
+
+      checks = [
+        {
+          name = "launchpad is ready";
+          http = "http://localhost:4100/healthz";
+          interval = "30s";
+          timeout = "10s";
+        }
+      ];
     };
   };
 }
