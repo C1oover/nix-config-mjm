@@ -60,5 +60,9 @@ pkgs.mkShell {
     export PGPORT="5432"
     export DATABASE_URL="postgresql:///launchpad_dev?host=$PGHOST"
     export LAUNCHPAD_DATABASE_URL="$DATABASE_URL"
+
+    export OTEL_SERVICE_NAME="launchpad"
+    export OTEL_RESOURCE_ATTRIBUTES="deployment.environment.name=dev"
+    export OTEL_EXPORTER_OTLP_ENDPOINT="http://tempo.service.consul:14317"
   '';
 }

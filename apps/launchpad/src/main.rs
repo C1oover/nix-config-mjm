@@ -9,12 +9,15 @@ use axum::routing::{get, post, put};
 use axum::{serve, Router};
 use config::Config;
 use maud::{html, Markup};
+use opentelemetry::{global, trace::TracerProvider};
+use opentelemetry_sdk::runtime;
 use serde::{Deserialize, Serialize};
 use tokio::net::TcpListener;
 use tokio::try_join;
 use tower_http::trace::TraceLayer;
 use tracing::Level;
-use tracing_subscriber::FmtSubscriber;
+use tracing_opentelemetry::OpenTelemetryLayer;
+use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 #[tracing::instrument(skip(config))]
 async fn index(State(config): State<Config>) -> Result<impl IntoResponse, app::Error> {
@@ -85,13 +88,8 @@ async fn load_status_cards_context(config: &Config) -> anyhow::Result<StatusCard
 
 #[tokio::main]
 async fn main() {
-    let subscriber = FmtSubscriber::builder()
-        .with_max_level(Level::TRACE)
-        .finish();
-
-    tracing::subscriber::set_global_default(subscriber).unwrap();
-
     let config: Config = Config::figment().extract().unwrap();
+    init_tracing(&config);
 
     let app_state = app::new_state(config.clone()).await.unwrap();
     let app = Router::new()
@@ -110,6 +108,32 @@ async fn main() {
 
     let listener = TcpListener::bind(&config.bind_address).await.unwrap();
     serve(listener, app.into_make_service()).await.unwrap();
+}
+
+fn init_tracing(config: &Config) {
+    let otlp_exporter = opentelemetry_otlp::new_exporter().tonic();
+    let provider = opentelemetry_otlp::new_pipeline()
+        .tracing()
+        .with_exporter(otlp_exporter)
+        .install_batch(runtime::Tokio)
+        .unwrap();
+
+    global::set_tracer_provider(provider.clone());
+    let tracer = provider.tracer("launchpad");
+
+    let fmt_layer = tracing_subscriber::fmt::layer();
+
+    let registry = tracing_subscriber::registry()
+        .with(tracing_subscriber::filter::LevelFilter::from_level(
+            Level::DEBUG,
+        ))
+        .with(OpenTelemetryLayer::new(tracer));
+
+    if config.enable_pretty_output {
+        registry.with(fmt_layer.pretty()).init();
+    } else {
+        registry.with(fmt_layer).init();
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug)]
