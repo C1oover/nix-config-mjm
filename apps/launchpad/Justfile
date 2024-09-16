@@ -1,0 +1,11 @@
+build:
+    nix-build
+
+pg:
+    pg start
+
+dev:
+    cargo watch -x run
+
+migrate:
+    sqlx migrate run

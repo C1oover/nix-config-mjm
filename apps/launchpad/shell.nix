@@ -24,6 +24,7 @@ pkgs.mkShell {
       pkg-config
       postgresql_16
       sqlx-cli
+      just
       ;
 
     pg = pkgs.writers.writeNuBin "pg" ''
