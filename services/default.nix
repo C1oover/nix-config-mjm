@@ -13,6 +13,7 @@
     ./homelab
     ./ingress
     ./ipv4-proxy
+    ./launchpad
     ./linkding
     ./matrix-server
     ./media-server
