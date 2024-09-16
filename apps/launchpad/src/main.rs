@@ -92,6 +92,8 @@ async fn main() {
     init_tracing(&config);
 
     let app_state = app::new_state(config.clone()).await.unwrap();
+    sqlx::migrate!().run(&app_state.pool).await.unwrap();
+
     let app = Router::new()
         .route("/", get(index))
         .route("/status-cards", get(status_cards))

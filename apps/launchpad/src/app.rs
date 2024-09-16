@@ -21,9 +21,9 @@ pub async fn new_state(config: Config) -> Result<State> {
 
 #[derive(Clone, FromRef)]
 pub struct State {
-    config: Config,
-    pool: PgPool,
-    gitlab_client: deploys::GitLabClient,
+    pub config: Config,
+    pub pool: PgPool,
+    pub gitlab_client: deploys::GitLabClient,
 }
 
 pub struct Error(anyhow::Error);
