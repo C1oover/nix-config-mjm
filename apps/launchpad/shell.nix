@@ -2,14 +2,16 @@ let
   sources = import ../../npins;
 in
 {
-  pkgs ? import sources.nixos { },
+  pkgs ? import sources.nixos-small { },
 }:
 
 let
   postgres = pkgs.postgresql_16;
+  pkg = import ./default.nix { inherit pkgs; };
 in
 
 pkgs.mkShell {
+  inputsFrom = [ pkg ];
   packages = builtins.attrValues {
     inherit (pkgs)
       cargo
