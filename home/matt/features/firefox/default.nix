@@ -34,7 +34,7 @@ in
       package = cfg.package;
       arkenfox = {
         enable = true;
-        version = "126.1";
+        version = "128.0";
       };
       profiles.matt = {
         arkenfox = {
