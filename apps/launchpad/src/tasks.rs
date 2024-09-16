@@ -41,6 +41,7 @@ pub async fn index(State(pool): State<PgPool>) -> Result<impl IntoResponse, app:
 #[derive(Deserialize, Debug)]
 pub struct NewTaskForm {
     description: String,
+    tags: String,
 }
 
 #[tracing::instrument(skip(pool))]
@@ -49,7 +50,7 @@ pub async fn create_task(
     Form(form): Form<NewTaskForm>,
 ) -> Result<impl IntoResponse, app::Error> {
     // TODO better error handling/validation
-    insert_task(&pool, form).await?;
+    task_insert(&pool, form).await?;
 
     let tasks = list_tasks(&pool).await?;
 
@@ -305,17 +306,18 @@ ORDER BY
 }
 
 #[tracing::instrument(skip(pool))]
-async fn insert_task(pool: &PgPool, t: NewTaskForm) -> anyhow::Result<Task> {
+async fn task_insert(pool: &PgPool, t: NewTaskForm) -> anyhow::Result<Task> {
     Ok(sqlx::query_as!(
         Task,
         r#"
 INSERT INTO tasks
-(description)
+(description, tags)
 VALUES
-($1)
+($1, $2)
 RETURNING *
         "#,
-        t.description
+        t.description,
+        &split_tags(&t.tags)
     )
     .fetch_one(pool)
     .await?)
@@ -354,13 +356,6 @@ RETURNING *
 
 #[tracing::instrument(skip(pool))]
 async fn task_update(pool: &PgPool, id: i64, t: UpdateTaskForm) -> anyhow::Result<Task> {
-    let tags: Vec<String> = t
-        .tags
-        .split(",")
-        .map(|s| s.trim().to_string())
-        .filter(|s| !s.is_empty())
-        .collect();
-
     Ok(sqlx::query_as!(
         Task,
         r#"
@@ -372,7 +367,7 @@ RETURNING *
         "#,
         id,
         t.description,
-        &tags
+        &split_tags(&t.tags)
     )
     .fetch_one(pool)
     .await?)
@@ -391,4 +386,11 @@ WHERE id = $1
     .await?;
 
     Ok(())
+}
+
+fn split_tags(s: &str) -> Vec<String> {
+    s.split(",")
+        .map(|s| s.trim().to_string())
+        .filter(|s| !s.is_empty())
+        .collect()
 }
