@@ -1,4 +1,5 @@
 {
+  consul-services = ./consul-services.nix;
   ingress = ./ingress.nix;
   linkding = ./linkding.nix;
   nushell = ./nushell.nix;
