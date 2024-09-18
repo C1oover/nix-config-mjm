@@ -110,6 +110,7 @@ async fn main() {
         )
         .route("/tasks/:id/edit", get(tasks::edit_task))
         .route("/tasks/:id/toggle", post(tasks::toggle_task))
+        .route("/reminders", post(tasks::create_reminder))
         .with_state(app_state)
         .layer(TraceLayer::new_for_http());
 

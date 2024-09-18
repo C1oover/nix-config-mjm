@@ -1,0 +1,67 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\nSELECT id,\n       description,\n       tags,\n       state as \"state: _\",\n       remind_at,\n       snooze_minutes,\n       repeat_interval as \"repeat_interval: _\"\nFROM reminders\nORDER BY remind_at\n        ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 1,
+        "name": "description",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 2,
+        "name": "tags",
+        "type_info": "TextArray"
+      },
+      {
+        "ordinal": 3,
+        "name": "state: _",
+        "type_info": {
+          "Custom": {
+            "name": "reminder_state",
+            "kind": {
+              "Enum": [
+                "pending",
+                "firing",
+                "completed"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "remind_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 5,
+        "name": "snooze_minutes",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 6,
+        "name": "repeat_interval: _",
+        "type_info": "Jsonb"
+      }
+    ],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+    ]
+  },
+  "hash": "2f625a730d6c982382b11409fff41fba64aa78371a8f55e1afc2463f152ede0b"
+}
