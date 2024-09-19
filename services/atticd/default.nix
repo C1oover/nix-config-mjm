@@ -39,7 +39,7 @@ in
           type = "s3";
           region = "home";
           bucket = "attic-caches";
-          endpoint = "http://garage.service.consul:3902";
+          endpoint = "https://garage.midna.dev";
         };
         chunking = {
           nar-size-threshold = 65536;
