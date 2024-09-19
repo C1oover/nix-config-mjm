@@ -7,7 +7,6 @@
     ./features/email
     ./features/helix
     ./features/homelab
-    ./features/newsboat
     ./features/taskwarrior
   ];
 

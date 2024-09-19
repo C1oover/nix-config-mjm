@@ -1,7 +1,5 @@
 { pkgs, lib, ... }:
 {
-  imports = [ ../features/newsboat ];
-
   nixpkgs.config.allowUnfree = true;
 
   home.username = lib.mkDefault "matt";
