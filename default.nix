@@ -4,10 +4,7 @@ let
 
   isLinux = lib.hasSuffix "-linux" builtins.currentSystem;
   nixpkgs = sources.${if isLinux then "nixos" else "nixpkgs"};
-  pkgs = import nixpkgs {
-    config.allowUnfree = true;
-    config.permittedInsecurePackages = [ "nix-2.24.5" ];
-  };
+  pkgs = import nixpkgs { config.allowUnfree = true; };
 
   appsFromScripts =
     pkg:

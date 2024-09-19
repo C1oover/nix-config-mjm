@@ -1,9 +1,6 @@
 let
   inputs = import ./npins;
-  pkgs = import inputs.nixos {
-    config.allowUnfree = true;
-    config.permittedInsecurePackages = [ "nix-2.24.5" ];
-  };
+  pkgs = import inputs.nixos { config.allowUnfree = true; };
   devenv = import inputs.devenv;
 in
 devenv.lib.mkShell {
