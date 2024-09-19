@@ -139,7 +139,7 @@ in
                           {
                             source = "srv";
                             service = upstream.service.name;
-                            proto = "tcp";
+                            proto = if upstream.service.tag != null then upstream.service.tag else "tcp";
                             name = "service.consul";
                           }
                         else

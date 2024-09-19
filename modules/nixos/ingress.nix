@@ -38,6 +38,10 @@ let
               type = types.nullOr types.port;
               default = null;
             };
+            tag = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+            };
           };
         };
         enableAuthProxy = mkOption {

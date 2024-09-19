@@ -58,6 +58,14 @@ in
 
     mjm.state.directories = [ "/var/lib/private/garage/meta" ];
 
+    ingress.virtualHosts.garage = {
+      upstream.service = {
+        name = "garage";
+        tag = "s3";
+      };
+      enableAuthProxy = false;
+    };
+
     environment.systemPackages = builtins.attrValues {
       inherit (pkgs.callPackages ./scripts.nix { garage = config.services.garage.package; }) g;
     };
