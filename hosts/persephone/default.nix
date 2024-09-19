@@ -70,7 +70,7 @@ in
 
   boot.initrd.clevis = {
     enable = true;
-    devices."/dev/disk/by-label/persist".secretFile = "${./persist.jwe}";
+    devices."/dev/disk/by-partlabel/persist".secretFile = "${./persist.jwe}";
   };
 
   boot.extraModulePackages = [ config.boot.kernelPackages.framework-laptop-kmod ];

@@ -27,19 +27,19 @@
   };
 
   fileSystems."/persist" = {
-    device = "/dev/disk/by-label/persist";
+    device = "/dev/disk/by-partlabel/persist";
     fsType = "bcachefs";
     neededForBoot = true;
   };
 
   fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/B0EC-18F2";
+    device = "/dev/disk/by-partlabel/boot";
     fsType = "vfat";
   };
 
   swapDevices = [
     {
-      device = "/dev/disk/by-partuuid/e00f103c-a5f4-4156-a976-06f2138b9208";
+      device = "/dev/disk/by-partlabel/swap";
       randomEncryption.enable = true;
     }
   ];
