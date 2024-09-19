@@ -5,20 +5,20 @@
   olm,
 }:
 
-buildGoModule {
+buildGoModule rec {
   name = "mautrix-slack";
-  version = "0-unstable-2024-02-15";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "slack";
-    rev = "a9ba2f9249bdc5df69a1349122d1769e7e48c9e1";
-    hash = "sha256-NE/YsiYm6t/6LNilATIvk0CcOFiQAqgw533WyhMZgvQ=";
+    rev = "v${version}";
+    hash = "sha256-RCqCKu69wtgr8mCWbRWYhH9ZmiBC04kNPsfGxBS+E9w=";
   };
 
   buildInputs = [ olm ];
 
-  vendorHash = "sha256-FL0wObZIvGV9V7pLmrxTILQ/TGEMSH8/2wFPlu6idcA=";
+  vendorHash = "sha256-JUqSVFuCIlcjmvgho0lr2OWPM4gWN8rAukOcg9kKMlE=";
 
   meta = with lib; {
     description = " A Matrix-Slack puppeting bridge";

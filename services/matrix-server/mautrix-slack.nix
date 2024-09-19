@@ -21,21 +21,19 @@ let
       address = "http://127.0.0.1:29335";
       hostname = "127.0.0.1";
       port = 29335;
-      database = {
-        type = "postgres";
-        uri = "postgres:///mautrix-slack?host=/run/postgresql";
-      };
       id = "slack";
       bot.username = "slackbot";
       bot.displayname = "Slack Bridge Bot";
     };
-    bridge = {
-      backfill.enable = true;
-      permissions = {
-        "midna.dev" = "user";
-        "@mjm:midna.dev" = "admin";
-      };
+    database = {
+      type = "postgres";
+      uri = "postgres:///mautrix-slack?host=/run/postgresql";
     };
+    bridge.permissions = {
+      "midna.dev" = "user";
+      "@mjm:midna.dev" = "admin";
+    };
+    backfill.enabled = true;
   };
   settingsFile = "/var/lib/mautrix-slack/config.yml";
   registrationFile = "/var/lib/mautrix-slack/registration.yml";
