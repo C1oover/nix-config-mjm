@@ -16,6 +16,7 @@ in
 
     ../features/desktop
     ../features/emacs
+    ../features/email
     ../features/firefox
     ../features/git
     ../features/helix
