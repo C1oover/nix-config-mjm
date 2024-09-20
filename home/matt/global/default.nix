@@ -26,7 +26,6 @@ in
     ../features/shell
     ../features/syncthing
     ../features/terminal
-    ../features/xdg
   ] ++ (builtins.attrValues (import ../../../modules/home-manager));
 
   mjm.git.enable = mkDefault true;
@@ -63,10 +62,9 @@ in
   '';
 
   news.display = "silent";
-
   programs.home-manager.enable = true;
-
   programs.jq.enable = true;
+  xdg.enable = true;
 
   colorScheme = nix-colors.colorSchemes.catppuccin-macchiato;
   catppuccin.flavor = osConfig.catppuccin.flavor or "macchiato";
