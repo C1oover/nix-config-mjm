@@ -7,13 +7,10 @@
 }:
 let
   inherit (lib) mkDefault;
-
-  nix-colors = import inputs.nix-colors { };
 in
 {
   imports = [
     "${inputs.agenix}/modules/age-home.nix"
-    nix-colors.homeManagerModules.default
     "${inputs.catppuccin}/modules/home-manager"
 
     ../features/desktop
@@ -66,6 +63,5 @@ in
   programs.jq.enable = true;
   xdg.enable = true;
 
-  colorScheme = nix-colors.colorSchemes.catppuccin-macchiato;
   catppuccin.flavor = osConfig.catppuccin.flavor or "macchiato";
 }
