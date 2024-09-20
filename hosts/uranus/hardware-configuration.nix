@@ -62,7 +62,10 @@
   };
 
   swapDevices = [
-    { device = "/dev/disk/by-partlabel/swap"; }
+    {
+      device = "/dev/disk/by-partlabel/swap";
+      randomEncryption.enable = true;
+    }
   ];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
