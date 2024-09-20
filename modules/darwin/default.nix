@@ -1,1 +1,0 @@
-{ sketchybar = import ./sketchybar.nix; }

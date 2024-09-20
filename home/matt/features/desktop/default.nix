@@ -6,7 +6,12 @@
   ...
 }:
 let
-  inherit (lib) mkIf mkOption types;
+  inherit (lib)
+    mkDefault
+    mkIf
+    mkOption
+    types
+    ;
   cfg = config.mjm.desktop;
 in
 {
@@ -15,8 +20,6 @@ in
     ./firefox.nix
     ./games.nix
     ./kdeconfig.nix
-    ./syncthing.nix
-    ./terminal.nix
   ];
 
   options.mjm.desktop = {
@@ -27,10 +30,20 @@ in
   };
 
   config = mkIf cfg.enable {
+    # Enable some other features on all desktop machines by default
+    mjm.emacs.enable = mkDefault true;
+    mjm.email.enable = mkDefault true;
+    mjm.helix.enable = mkDefault true;
+    mjm.homelab.enable = mkDefault true;
+    mjm.syncthing.enable = mkDefault true;
+    mjm.terminal.enable = mkDefault true;
+
     home.packages = builtins.attrValues {
       inherit (pkgs)
         bitwarden
         element-desktop
+        discord
+        krita
         libreoffice-qt-fresh
         piper
         signal-desktop
@@ -38,6 +51,7 @@ in
         wl-clipboard
         xclip
         xdg-utils
+        yt-dlp
         # won't build currently
         # zeal-qt6
         ;
@@ -48,6 +62,20 @@ in
         ktorrent
         plasmatube
         ;
+    };
+
+    xdg.userDirs = {
+      enable = true;
+      createDirectories = true;
+
+      desktop = "${config.home.homeDirectory}/desktop";
+      documents = "${config.home.homeDirectory}/documents";
+      download = "${config.home.homeDirectory}/downloads";
+      music = null;
+      pictures = "${config.home.homeDirectory}/pictures";
+      publicShare = null;
+      templates = null;
+      videos = null;
     };
 
     programs.mpv.enable = true;

@@ -200,18 +200,6 @@
       "url": "https://api.github.com/repos/nix-community/lanzaboote/tarball/v0.4.1",
       "hash": "1hda4f0xx56r98kp5hy21f0802c0zf8n6g7li1yz183f1ynp49kr"
     },
-    "nix-colors": {
-      "type": "Git",
-      "repository": {
-        "type": "GitHub",
-        "owner": "Misterio77",
-        "repo": "nix-colors"
-      },
-      "branch": "main",
-      "revision": "b01f024090d2c4fc3152cd0cf12027a7b8453ba1",
-      "url": "https://github.com/Misterio77/nix-colors/archive/b01f024090d2c4fc3152cd0cf12027a7b8453ba1.tar.gz",
-      "hash": "0y9h042qrfjfys1gga65mkxd8j723xwivmcy94vfwnvnc9xy0dw5"
-    },
     "nixos": {
       "type": "Channel",
       "name": "nixos-unstable",

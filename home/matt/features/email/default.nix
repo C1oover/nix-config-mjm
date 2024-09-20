@@ -1,22 +1,33 @@
+{ lib, config, ... }:
+let
+  inherit (lib) mkEnableOption mkIf;
+  cfg = config.mjm.email;
+in
 {
-  accounts.email.accounts.fastmail = {
-    primary = true;
-    flavor = "fastmail.com";
-    address = "matt@mattmoriarity.com";
-    aliases = [
-      "mj@midna.dev"
-      "mjm@midna.dev"
-    ];
-    realName = "Matt Moriarity";
-
-    thunderbird.enable = true;
+  options.mjm.email = {
+    enable = mkEnableOption "email account config";
   };
 
-  programs.thunderbird = {
-    enable = true;
+  config = mkIf cfg.enable {
+    accounts.email.accounts.fastmail = {
+      primary = true;
+      flavor = "fastmail.com";
+      address = "matt@mattmoriarity.com";
+      aliases = [
+        "mj@midna.dev"
+        "mjm@midna.dev"
+      ];
+      realName = "Matt Moriarity";
 
-    profiles.matt = {
-      isDefault = true;
+      thunderbird.enable = true;
+    };
+
+    programs.thunderbird = {
+      enable = true;
+
+      profiles.matt = {
+        isDefault = true;
+      };
     };
   };
 }

@@ -6,25 +6,29 @@
   ...
 }:
 let
-  nix-colors = import inputs.nix-colors { };
+  inherit (lib) mkDefault;
 in
 {
   imports = [
     "${inputs.agenix}/modules/age-home.nix"
-    nix-colors.homeManagerModules.default
     "${inputs.catppuccin}/modules/home-manager"
 
     ../features/desktop
     ../features/emacs
+    ../features/email
     ../features/firefox
     ../features/git
+    ../features/helix
+    ../features/homelab
     ../features/shell
     ../features/syncthing
     ../features/terminal
-    ../features/xdg
   ] ++ (builtins.attrValues (import ../../../modules/home-manager));
 
-  home.stateVersion = lib.mkDefault "22.11";
+  mjm.git.enable = mkDefault true;
+  mjm.shell.enable = mkDefault true;
+
+  home.stateVersion = mkDefault "22.11";
 
   home.packages = builtins.attrValues (
     {
@@ -55,11 +59,9 @@ in
   '';
 
   news.display = "silent";
-
   programs.home-manager.enable = true;
-
   programs.jq.enable = true;
+  xdg.enable = true;
 
-  colorScheme = nix-colors.colorSchemes.catppuccin-macchiato;
   catppuccin.flavor = osConfig.catppuccin.flavor or "macchiato";
 }
