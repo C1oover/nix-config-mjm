@@ -39,7 +39,7 @@ in
 
   boot.initrd.luks.devices = {
     cryptroot = {
-      device = "/dev/disk/by-uuid/71a879cc-7f86-47c7-9dec-1978f0af0e66";
+      device = "/dev/disk/by-partlabel/root";
       preLVM = true;
     };
   };
