@@ -29,6 +29,7 @@ in
     ../features/xdg
   ] ++ (builtins.attrValues (import ../../../modules/home-manager));
 
+  mjm.git.enable = mkDefault true;
   mjm.shell.enable = mkDefault true;
 
   home.stateVersion = mkDefault "22.11";
