@@ -6,7 +6,12 @@
   ...
 }:
 let
-  inherit (lib) mkIf mkOption types;
+  inherit (lib)
+    mkDefault
+    mkIf
+    mkOption
+    types
+    ;
   cfg = config.mjm.desktop;
 in
 {
@@ -15,8 +20,6 @@ in
     ./firefox.nix
     ./games.nix
     ./kdeconfig.nix
-    ./syncthing.nix
-    ./terminal.nix
   ];
 
   options.mjm.desktop = {
@@ -27,6 +30,13 @@ in
   };
 
   config = mkIf cfg.enable {
+    # Enable some other features on all desktop machines by default
+    mjm.emacs.enable = mkDefault true;
+    mjm.email.enable = mkDefault true;
+    mjm.helix.enable = mkDefault true;
+    mjm.syncthing.enable = mkDefault true;
+    mjm.terminal.enable = mkDefault true;
+
     home.packages = builtins.attrValues {
       inherit (pkgs)
         bitwarden
