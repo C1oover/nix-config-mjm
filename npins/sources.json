@@ -209,14 +209,14 @@
     "nixos-small": {
       "type": "Channel",
       "name": "nixos-unstable-small",
-      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-24.11pre683550.e88358265511/nixexprs.tar.xz",
-      "hash": "1maa9byih3almk6gcip7xlcz8mq3c1nwa9dkymsw83p0zyq9sraa"
+      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-24.11pre683668.eb18392075c5/nixexprs.tar.xz",
+      "hash": "0hlpckdbg8x7av02v33m8n776c8pa9h1yzy995l64wz7484rw89y"
     },
     "nixpkgs": {
       "type": "Channel",
       "name": "nixpkgs-unstable",
-      "url": "https://releases.nixos.org/nixpkgs/nixpkgs-24.11pre682572.658e7223191d/nixexprs.tar.xz",
-      "hash": "05pxq7nhv78rb1gy7v73g962n4h6c81cybhzkg0j0h8hiki2s46c"
+      "url": "https://releases.nixos.org/nixpkgs/nixpkgs-24.11pre682941.294eb5975def/nixexprs.tar.xz",
+      "hash": "0wxvak7mpc9plvzvxkfzvf94gkpz26yn7pqqywfzkqxhvai53i43"
     },
     "nixpkgs-firefox-darwin": {
       "type": "Git",
@@ -238,9 +238,9 @@
         "repo": "NUR"
       },
       "branch": "master",
-      "revision": "b9b4b895af2c31618d81b490edbc2bacbfce494b",
-      "url": "https://github.com/nix-community/NUR/archive/b9b4b895af2c31618d81b490edbc2bacbfce494b.tar.gz",
-      "hash": "1wh46gdi6iysqllg6nyq5382hs1xkxa67sscbig1ajlyyrixrnkx"
+      "revision": "2597ab037012d24de6ad031261be3e26e762c3f9",
+      "url": "https://github.com/nix-community/NUR/archive/2597ab037012d24de6ad031261be3e26e762c3f9.tar.gz",
+      "hash": "0jingzb9wlqnl29x4nq7bk2sdwzj33yvx26dabzqafa311ghkvrp"
     },
     "terranix": {
       "type": "GitRelease",
