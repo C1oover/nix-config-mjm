@@ -51,10 +51,10 @@ in
         # use an official elixir-ls release so that it just runs with whatever elixir version
         # is in the environment. since we use asdf for the version, we can't ensure the elixir
         # version in nixpkgs matches.
-        version = "0.22.0";
+        version = "0.23.0";
         elixir-ls = pkgs.fetchzip {
           url = "https://github.com/elixir-lsp/elixir-ls/releases/download/v${version}/elixir-ls-v${version}.zip";
-          hash = "sha256-7gB82wcPRG2ydrfxO/GIY2oD4dP7BWSI/2ecjYSpGAs=";
+          hash = "sha256-bwYV2mgxgifZVX0qY2cl/gM/sWPCAGCrO3C/eKoTYV8=";
           stripRoot = false;
         };
       in
