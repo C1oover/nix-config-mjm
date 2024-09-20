@@ -52,8 +52,7 @@ in
         xclip
         xdg-utils
         yt-dlp
-        # won't build currently
-        # zeal-qt6
+        zeal-qt6
         ;
       inherit (pkgs.callPackages ./scripts.nix { }) night-mode;
       inherit (pkgs.kdePackages)
