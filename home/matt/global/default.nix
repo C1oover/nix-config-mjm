@@ -23,6 +23,7 @@ in
     ../features/shell
     ../features/syncthing
     ../features/terminal
+    ../features/work
   ] ++ (builtins.attrValues (import ../../../modules/home-manager));
 
   mjm.git.enable = mkDefault true;

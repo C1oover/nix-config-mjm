@@ -1,95 +1,105 @@
-{ pkgs, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 let
+  inherit (lib) mkIf;
+  cfg = config.mjm.work;
+
   yamlFormat = pkgs.formats.yaml { };
   tomlFormat = pkgs.formats.toml { };
 in
 {
-  imports = [ ../helix ];
+  config = mkIf cfg.enable {
+    mjm.helix.enable = true;
 
-  # cmake is needed to build some elixir deps
-  # if it's not in the path, elixir-ls might just not work
-  home.packages = with pkgs; [ cmake ];
+    # cmake is needed to build some elixir deps
+    # if it's not in the path, elixir-ls might just not work
+    home.packages = with pkgs; [ cmake ];
 
-  programs.helix =
-    let
-      efmConfig = yamlFormat.generate "efm-config.yml" {
-        version = 2;
-        root-markers = [ ".git/" ];
-        languages.elixir = [
-          {
-            lint-command = "mix credo suggest --format=flycheck --read-from-stdin";
-            lint-stdin = true;
-            lint-formats = [
-              "%f:%l:%c: %t: %m"
-              "%f:%l: %t: %m"
-            ];
-            root-markers = [
-              "mix.lock"
-              "mix.exs"
-            ];
-          }
-        ];
-      };
-    in
-    {
-      extraPackages = with pkgs; [ efm-langserver ];
-      languages = {
-        language-server.efm = {
-          command = "efm-langserver";
-          args = [
-            "-c"
-            "${efmConfig}"
+    programs.helix =
+      let
+        efmConfig = yamlFormat.generate "efm-config.yml" {
+          version = 2;
+          root-markers = [ ".git/" ];
+          languages.elixir = [
+            {
+              lint-command = "mix credo suggest --format=flycheck --read-from-stdin";
+              lint-stdin = true;
+              lint-formats = [
+                "%f:%l:%c: %t: %m"
+                "%f:%l: %t: %m"
+              ];
+              root-markers = [
+                "mix.lock"
+                "mix.exs"
+              ];
+            }
           ];
         };
-      };
-    };
-
-  # manually link this into ~/Projects/slab/.helix/languages.toml
-  xdg.configFile."helix/slab/languages.toml".source = tomlFormat.generate "slab-languages.toml" {
-    language-server.elixir-ls.command =
-      let
-        # use an official elixir-ls release so that it just runs with whatever elixir version
-        # is in the environment. since we use asdf for the version, we can't ensure the elixir
-        # version in nixpkgs matches.
-        version = "0.23.0";
-        elixir-ls = pkgs.fetchzip {
-          url = "https://github.com/elixir-lsp/elixir-ls/releases/download/v${version}/elixir-ls-v${version}.zip";
-          hash = "sha256-bwYV2mgxgifZVX0qY2cl/gM/sWPCAGCrO3C/eKoTYV8=";
-          stripRoot = false;
-        };
       in
-      "${elixir-ls}/language_server.sh";
+      {
+        extraPackages = with pkgs; [ efm-langserver ];
+        languages = {
+          language-server.efm = {
+            command = "efm-langserver";
+            args = [
+              "-c"
+              "${efmConfig}"
+            ];
+          };
+        };
+      };
 
-    language-server.typescript-language-server = {
-      config =
+    # manually link this into ~/Projects/slab/.helix/languages.toml
+    xdg.configFile."helix/slab/languages.toml".source = tomlFormat.generate "slab-languages.toml" {
+      language-server.elixir-ls.command =
         let
-          disableInlayHints = {
-            includeInlayEnumMemberValueHints = false;
-            includeInlayFunctionLikeReturnTypeHints = false;
-            includeInlayFunctionParameterTypeHints = false;
-            includeInlayParameterNameHints = "none";
-            includeInlayParameterNameHintsWhenArgumentMatchesName = false;
-            includeInlayPropertyDeclarationTypeHints = false;
-            includeInlayVariableTypeHints = false;
+          # use an official elixir-ls release so that it just runs with whatever elixir version
+          # is in the environment. since we use asdf for the version, we can't ensure the elixir
+          # version in nixpkgs matches.
+          version = "0.23.0";
+          elixir-ls = pkgs.fetchzip {
+            url = "https://github.com/elixir-lsp/elixir-ls/releases/download/v${version}/elixir-ls-v${version}.zip";
+            hash = "sha256-bwYV2mgxgifZVX0qY2cl/gM/sWPCAGCrO3C/eKoTYV8=";
+            stripRoot = false;
           };
         in
-        {
-          typescript.inlayHints = disableInlayHints;
-          javascript.inlayHints = disableInlayHints;
-        };
-    };
+        "${elixir-ls}/language_server.sh";
 
-    language = [
-      {
-        name = "elixir";
-        language-servers = [
+      language-server.typescript-language-server = {
+        config =
+          let
+            disableInlayHints = {
+              includeInlayEnumMemberValueHints = false;
+              includeInlayFunctionLikeReturnTypeHints = false;
+              includeInlayFunctionParameterTypeHints = false;
+              includeInlayParameterNameHints = "none";
+              includeInlayParameterNameHintsWhenArgumentMatchesName = false;
+              includeInlayPropertyDeclarationTypeHints = false;
+              includeInlayVariableTypeHints = false;
+            };
+          in
           {
-            name = "efm";
-            only-features = [ "diagnostics" ];
-          }
-          { name = "elixir-ls"; }
-        ];
-      }
-    ];
+            typescript.inlayHints = disableInlayHints;
+            javascript.inlayHints = disableInlayHints;
+          };
+      };
+
+      language = [
+        {
+          name = "elixir";
+          language-servers = [
+            {
+              name = "efm";
+              only-features = [ "diagnostics" ];
+            }
+            { name = "elixir-ls"; }
+          ];
+        }
+      ];
+    };
   };
 }

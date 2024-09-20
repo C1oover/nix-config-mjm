@@ -8,10 +8,10 @@ in
     ./global/darwin.nix
 
     ./features/taskwarrior
-    ./features/work
   ];
 
   mjm.helix.enable = true;
+  mjm.work.enable = true;
 
   programs.kitty.font.size = 13;
 
