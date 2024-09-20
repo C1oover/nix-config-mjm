@@ -41,6 +41,8 @@ in
       inherit (pkgs)
         bitwarden
         element-desktop
+        discord
+        krita
         libreoffice-qt-fresh
         piper
         signal-desktop
@@ -48,6 +50,7 @@ in
         wl-clipboard
         xclip
         xdg-utils
+        yt-dlp
         # won't build currently
         # zeal-qt6
         ;
