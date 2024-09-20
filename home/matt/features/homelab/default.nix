@@ -20,9 +20,7 @@ in
     inherit (pkgs)
       consul
       minio-client
-      tarsnap
       vault
-      wander
       ;
 
     homelab = pkgs.callPackage ./scripts.nix { inherit sshPublicKeyPath; };
