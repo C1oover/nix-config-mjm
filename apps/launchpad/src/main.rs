@@ -5,7 +5,7 @@ mod tasks;
 
 use axum::extract::State;
 use axum::response::IntoResponse;
-use axum::routing::{get, post, put};
+use axum::routing::get;
 use axum::{serve, Router};
 use config::Config;
 use maud::{html, Markup};
@@ -103,14 +103,7 @@ async fn main() {
         .route("/healthz", get(health))
         .route("/status-cards", get(status_cards))
         .route("/deploys", get(deploys::index))
-        .route("/tasks", get(tasks::index).post(tasks::create_task))
-        .route(
-            "/tasks/:id",
-            put(tasks::update_task).delete(tasks::delete_task),
-        )
-        .route("/tasks/:id/edit", get(tasks::edit_task))
-        .route("/tasks/:id/toggle", post(tasks::toggle_task))
-        .route("/reminders", post(tasks::create_reminder))
+        .merge(tasks::routes::router())
         .with_state(app_state)
         .layer(TraceLayer::new_for_http());
 
