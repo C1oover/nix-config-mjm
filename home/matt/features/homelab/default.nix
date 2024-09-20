@@ -1,14 +1,20 @@
 {
   pkgs,
+  lib,
   config,
   osConfig,
   ...
 }:
 let
-  useYubikey = if pkgs.stdenv.isLinux then osConfig.services.yubikey-agent.enable else true;
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    mkOption
+    types
+    ;
+  cfg = config.mjm.homelab;
 
-  sshPublicKeyName = if useYubikey then "yubikey.pub" else "id_ed25519.pub";
-  sshPublicKeyPath = "${config.home.homeDirectory}/.ssh/${sshPublicKeyName}";
+  sshPublicKeyPath = "${config.home.homeDirectory}/.ssh/${cfg.sshPublicKeyName}";
 
   envVars = {
     CONSUL_HTTP_ADDR = "http://consul.service.consul:8500";
@@ -16,28 +22,47 @@ let
   };
 in
 {
-  home.packages = builtins.attrValues {
-    inherit (pkgs)
-      consul
-      minio-client
-      vault
-      ;
+  options.mjm.homelab = {
+    enable = mkEnableOption "homelab client tools";
 
-    homelab = pkgs.callPackage ./scripts.nix { inherit sshPublicKeyPath; };
+    enableYubikey = mkOption {
+      type = types.bool;
+      default = if pkgs.stdenv.isLinux then osConfig.services.yubikey-agent.enable else true;
+    };
+
+    sshPublicKeyName = mkOption {
+      type = types.str;
+      default = if cfg.enableYubikey then "yubikey.pub" else "id_ed25519.pub";
+    };
   };
 
-  home.sessionVariables = envVars;
+  config = mkIf cfg.enable {
+    home.packages = builtins.attrValues {
+      inherit (pkgs)
+        consul
+        minio-client
+        vault
+        ;
 
-  programs.nushell.shellAliases = {
-    ",s" = "homelab ssh kitty";
-    ",vssh" = "homelab ssh vault";
-  };
+      homelab = pkgs.callPackage ./scripts.nix { inherit sshPublicKeyPath; };
+    };
 
-  programs.ssh = {
-    enable = true;
-    extraOptionOverrides = {
-      IdentityFile =
-        if useYubikey then sshPublicKeyPath else builtins.replaceStrings [ ".pub" ] [ "" ] sshPublicKeyPath;
+    home.sessionVariables = envVars;
+
+    programs.nushell.shellAliases = {
+      ",s" = "homelab ssh kitty";
+      ",vssh" = "homelab ssh vault";
+    };
+
+    programs.ssh = {
+      enable = true;
+      extraOptionOverrides = {
+        IdentityFile =
+          if cfg.enableYubikey then
+            sshPublicKeyPath
+          else
+            builtins.replaceStrings [ ".pub" ] [ "" ] sshPublicKeyPath;
+      };
     };
   };
 }

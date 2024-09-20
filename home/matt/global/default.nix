@@ -20,6 +20,7 @@ in
     ../features/firefox
     ../features/git
     ../features/helix
+    ../features/homelab
     ../features/shell
     ../features/syncthing
     ../features/terminal

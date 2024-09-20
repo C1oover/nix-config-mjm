@@ -34,6 +34,7 @@ in
     mjm.emacs.enable = mkDefault true;
     mjm.email.enable = mkDefault true;
     mjm.helix.enable = mkDefault true;
+    mjm.homelab.enable = mkDefault true;
     mjm.syncthing.enable = mkDefault true;
     mjm.terminal.enable = mkDefault true;
 
