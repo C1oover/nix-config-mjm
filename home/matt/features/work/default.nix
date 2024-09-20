@@ -27,7 +27,6 @@ let
 in
 {
   imports = [
-    ./git.nix
     ./helix.nix
     ./k9s.nix
   ];
@@ -37,6 +36,8 @@ in
   };
 
   config = mkIf cfg.enable {
+    programs.git.userEmail = "matt@slab.com";
+
     home.packages = builtins.attrValues {
       inherit slab-token;
       inherit (pkgs) cloudflared google-cloud-sdk;
