@@ -31,6 +31,7 @@ in
       role_type = "jwt";
       token_policies = [ "\${vault_policy.repo-nix-config.name}" ];
       user_claim = "user_email";
+      bound_audiences = [ "http://vault.service.consul:8200" ];
       bound_claims = {
         project_id = "30";
       };
