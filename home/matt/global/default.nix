@@ -18,6 +18,7 @@ in
     ../features/emacs
     ../features/firefox
     ../features/git
+    ../features/helix
     ../features/shell
     ../features/syncthing
     ../features/terminal

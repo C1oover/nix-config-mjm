@@ -7,10 +7,11 @@ in
     ./global
     ./global/darwin.nix
 
-    ./features/helix
     ./features/taskwarrior
     ./features/work
   ];
+
+  mjm.helix.enable = true;
 
   programs.kitty.font.size = 13;
 
