@@ -6,6 +6,8 @@
   ...
 }:
 let
+  inherit (lib) mkDefault;
+
   nix-colors = import inputs.nix-colors { };
 in
 {
@@ -27,7 +29,9 @@ in
     ../features/xdg
   ] ++ (builtins.attrValues (import ../../../modules/home-manager));
 
-  home.stateVersion = lib.mkDefault "22.11";
+  mjm.shell.enable = mkDefault true;
+
+  home.stateVersion = mkDefault "22.11";
 
   home.packages = builtins.attrValues (
     {
