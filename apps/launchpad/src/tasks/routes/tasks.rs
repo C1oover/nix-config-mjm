@@ -99,7 +99,9 @@ async fn create(
     let tasks = Task::list(&pool).await?;
 
     Ok(html! {
-        (partials::task_list(&tasks))
+        div hx-swap-oob="innerHTML:#task-list" {
+            (partials::task_list(&tasks))
+        }
 
         script type="text/javascript" {
             (PreEscaped(r##"
@@ -107,9 +109,7 @@ async fn create(
             "##))
         }
 
-        div hx-swap-oob="innerHTML:#new-task-modal" {
-            (partials::new_task_modal())
-        }
+        (partials::new_task_modal())
     })
 }
 

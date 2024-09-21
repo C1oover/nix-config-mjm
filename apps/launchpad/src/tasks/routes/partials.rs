@@ -107,7 +107,9 @@ pub fn new_task_modal() -> Markup {
                 .modal-content {
                     form
                         hx-post="/tasks"
-                        hx-target="#task-list" {
+                        hx-target="#new-task-modal"
+                        hx-swap="outerHTML" {
+
                         .modal-header {
                             h1 #new-task-modal-title .modal-title .fs-5 {
                                 "New task"
@@ -160,7 +162,9 @@ pub fn new_reminder_modal(tz: &Tz) -> Markup {
                 .modal-content {
                     form
                         hx-post="/reminders"
-                        hx-target="#reminder-list" {
+                        hx-target="#new-reminder-modal"
+                        hx-swap="outerHTML" {
+
                         .modal-header {
                             h1 #new-reminder-modal-title .modal-title .fs-5 {
                                 "New reminder"

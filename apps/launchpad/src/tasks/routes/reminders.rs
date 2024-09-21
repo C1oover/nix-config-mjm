@@ -53,7 +53,9 @@ async fn create(
     let reminders = Reminder::list(&pool).await?;
 
     Ok(html! {
-        (partials::reminder_list(&reminders))
+        div hx-swap-oob="innerHTML:#reminder-list" {
+            (partials::reminder_list(&reminders))
+        }
 
         script type="text/javascript" {
             (PreEscaped(r##"
@@ -61,8 +63,6 @@ async fn create(
             "##))
         }
 
-        div hx-swap-oob="innerHTML:#new-reminder-modal" {
-            (partials::new_reminder_modal())
-        }
+        (partials::new_reminder_modal(&tz))
     })
 }
