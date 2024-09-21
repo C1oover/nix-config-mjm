@@ -28,6 +28,15 @@ pub fn task_list(tasks: &[Task]) -> Markup {
                         (task.description)
                     }
 
+                    @if let Some(notify_at) = task.notify_at {
+                        div {
+                            small .text-body-secondary {
+                                "Snoozed until "
+                                (HumanTime::from(notify_at))
+                            }
+                        }
+                    }
+
                     @if !task.tags.is_empty() {
                         div {
                             @for tag in &task.tags {
