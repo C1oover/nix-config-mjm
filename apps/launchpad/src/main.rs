@@ -1,94 +1,20 @@
 mod app;
 mod config;
 mod deploys;
+mod home;
 mod tasks;
 
-use axum::extract::State;
 use axum::response::IntoResponse;
 use axum::routing::get;
 use axum::{serve, Router};
 use config::Config;
-use maud::{html, Markup};
 use opentelemetry::{global, trace::TracerProvider};
 use opentelemetry_sdk::runtime;
-use serde::{Deserialize, Serialize};
 use tokio::net::TcpListener;
-use tokio::try_join;
 use tower_http::trace::TraceLayer;
 use tracing::Level;
 use tracing_opentelemetry::OpenTelemetryLayer;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
-
-#[tracing::instrument(skip(config))]
-async fn index(State(config): State<Config>) -> Result<impl IntoResponse, app::Error> {
-    let status_cards = load_status_cards_context(&config).await?;
-
-    Ok(app::layout(
-        "Welcome!",
-        html! {
-            .row .gy-2 hx-get="/status-cards" hx-trigger="every 30s" {
-                (render_status_cards(status_cards))
-            }
-        },
-    ))
-}
-
-#[tracing::instrument(skip(config))]
-async fn status_cards(State(config): State<Config>) -> Result<impl IntoResponse, app::Error> {
-    let status_cards = load_status_cards_context(&config).await?;
-
-    Ok(render_status_cards(status_cards))
-}
-
-async fn health() -> impl IntoResponse {
-    "OK"
-}
-
-fn render_status_cards(status_cards: StatusCardsContext) -> Markup {
-    html! {
-        .col-sm {
-            .card {
-                .card-body {
-                    h5 .card-title { "Alerts firing" }
-                    p {
-                        (status_cards.num_alerts)
-                        " alert"
-                        @if status_cards.num_alerts == 1 { "" } @else { "s" }
-                    }
-                    a .btn .btn-primary href="https://graphs.midna.dev/alerting/list?search=state:firing" {
-                        "View firing alerts"
-                    }
-                }
-            }
-        }
-
-        .col-sm {
-            .card {
-                .card-body {
-                    h5 .card-title { "Paperless inbox" }
-                    p {
-                        (status_cards.num_inbox_docs)
-                        " document"
-                        @if status_cards.num_inbox_docs == 1 { "" } @else { "s" }
-                    }
-                    a .btn .btn-primary href="https://paper.midna.dev/view/1" {
-                        "View inbox documents"
-                    }
-                }
-            }
-        }
-    }
-}
-
-#[tracing::instrument(skip(config), ret, err)]
-async fn load_status_cards_context(config: &Config) -> anyhow::Result<StatusCardsContext> {
-    let alerts_fut = list_alerts();
-    let num_inbox_docs_fut = count_paperless_inbox_docs(&config.paperless_token);
-    try_join!(alerts_fut, num_inbox_docs_fut).map(|(alerts, num_inbox_docs)| StatusCardsContext {
-        num_alerts: alerts.len() as i32,
-        num_inbox_docs,
-    })
-}
 
 #[tokio::main]
 async fn main() {
@@ -99,9 +25,8 @@ async fn main() {
     sqlx::migrate!().run(&app_state.pool).await.unwrap();
 
     let app = Router::new()
-        .route("/", get(index))
         .route("/healthz", get(health))
-        .route("/status-cards", get(status_cards))
+        .merge(home::routes::router())
         .merge(deploys::routes::router())
         .merge(tasks::routes::router())
         .with_state(app_state)
@@ -137,51 +62,6 @@ fn init_tracing(config: &Config) {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug)]
-struct Alert {
-    #[serde(rename(deserialize = "startsAt"))]
-    starts_at: String,
-}
-
-#[derive(Deserialize, Serialize, Debug)]
-struct StatusCardsContext {
-    num_alerts: i32,
-    num_inbox_docs: i32,
-}
-
-#[tracing::instrument(ret, err)]
-async fn list_alerts() -> anyhow::Result<Vec<Alert>> {
-    let client = reqwest::Client::new();
-    let alerts = client
-        .get("http://alertmanager.service.consul:9093/api/v2/alerts")
-        .query(&[("silenced", "false")])
-        .send()
-        .await?
-        .json()
-        .await?;
-
-    Ok(alerts)
-}
-
-#[tracing::instrument(skip(token), ret, err)]
-async fn count_paperless_inbox_docs(token: &str) -> anyhow::Result<i32> {
-    let client = reqwest::Client::new();
-
-    let token_header = format!("Token {token}");
-
-    #[derive(Deserialize)]
-    struct DocsResponse {
-        count: i32,
-    }
-
-    let resp = client
-        .get("http://paperless.service.consul:28981/api/documents/")
-        .query(&[("tags__name__iexact", "inbox")])
-        .header("authorization", token_header)
-        .send()
-        .await?
-        .json::<DocsResponse>()
-        .await?;
-
-    Ok(resp.count)
+async fn health() -> impl IntoResponse {
+    "OK"
 }
