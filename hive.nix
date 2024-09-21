@@ -22,7 +22,7 @@ in
   meta = {
     nixpkgs = inputs.nixos-small;
     nodeNixpkgs = {
-      uranus = inputs.nixos;
+      uranus = inputs.nixos-plasma-beta;
       persephone = inputs.nixos;
     };
 
