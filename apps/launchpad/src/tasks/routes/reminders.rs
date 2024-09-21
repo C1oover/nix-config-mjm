@@ -6,7 +6,7 @@ use sqlx::PgPool;
 
 use crate::{
     app,
-    tasks::{reminder_insert, reminder_list, routes::partials, split_tags, ReminderInsertInput},
+    tasks::{routes::partials, split_tags, Reminder, ReminderInsertInput},
 };
 
 pub fn router() -> Router<app::State> {
@@ -45,9 +45,9 @@ async fn create(
     State(pool): State<PgPool>,
     Form(form): Form<CreateForm>,
 ) -> Result<impl IntoResponse, app::Error> {
-    reminder_insert(&pool, &form.as_input()?).await?;
+    Reminder::insert(&pool, &form.as_input()?).await?;
 
-    let reminders = reminder_list(&pool).await?;
+    let reminders = Reminder::list(&pool).await?;
 
     Ok(html! {
         (partials::reminder_list(&reminders))

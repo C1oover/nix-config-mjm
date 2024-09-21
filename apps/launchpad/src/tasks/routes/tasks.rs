@@ -11,10 +11,7 @@ use tokio::try_join;
 
 use crate::{
     app,
-    tasks::{
-        list_tasks, reminder_list, routes::partials, split_tags, task_delete, task_get,
-        task_toggle, task_update, Task, TaskInsertInput, TaskUpdateInput,
-    },
+    tasks::{routes::partials, split_tags, Reminder, Task, TaskInsertInput, TaskUpdateInput},
 };
 
 pub fn router() -> Router<app::State> {
@@ -27,7 +24,7 @@ pub fn router() -> Router<app::State> {
 
 #[tracing::instrument(skip(pool))]
 async fn index(State(pool): State<PgPool>) -> Result<impl IntoResponse, app::Error> {
-    let (tasks, reminders) = try_join!(list_tasks(&pool), reminder_list(&pool))?;
+    let (tasks, reminders) = try_join!(Task::list(&pool), Reminder::list(&pool))?;
 
     Ok(app::layout(
         "Tasks",
@@ -95,7 +92,7 @@ async fn create(
     // TODO better error handling/validation
     Task::insert(&pool, &form.as_input()).await?;
 
-    let tasks = list_tasks(&pool).await?;
+    let tasks = Task::list(&pool).await?;
 
     Ok(html! {
         (partials::task_list(&tasks))
@@ -117,7 +114,7 @@ async fn edit(
     State(pool): State<PgPool>,
     Path(id): Path<i64>,
 ) -> Result<impl IntoResponse, app::Error> {
-    let task = task_get(&pool, id).await?;
+    let task = Task::get(&pool, id).await?;
 
     Ok(app::layout(
         "Edit task",
@@ -197,7 +194,7 @@ async fn update(
     Path(id): Path<i64>,
     Form(form): Form<UpdateForm>,
 ) -> Result<impl IntoResponse, app::Error> {
-    task_update(&pool, id, &form.as_input()).await?;
+    Task::update(&pool, id, &form.as_input()).await?;
 
     Ok(Redirect::to("/tasks"))
 }
@@ -207,9 +204,8 @@ async fn toggle(
     State(pool): State<PgPool>,
     Path(id): Path<i64>,
 ) -> Result<impl IntoResponse, app::Error> {
-    task_toggle(&pool, id).await?;
-
-    let tasks = list_tasks(&pool).await?;
+    Task::toggle(&pool, id).await?;
+    let tasks = Task::list(&pool).await?;
 
     Ok(partials::task_list(&tasks))
 }
@@ -219,7 +215,7 @@ async fn delete(
     State(pool): State<PgPool>,
     Path(id): Path<i64>,
 ) -> Result<impl IntoResponse, app::Error> {
-    task_delete(&pool, id).await?;
+    Task::delete(&pool, id).await?;
 
     Ok(Redirect::to("/tasks"))
 }
