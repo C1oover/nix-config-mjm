@@ -4,6 +4,7 @@ use axum::{
     routing::{get, post, put},
     Form, Router,
 };
+use chrono_tz::Tz;
 use maud::{html, PreEscaped};
 use serde::Deserialize;
 use sqlx::PgPool;
@@ -23,7 +24,10 @@ pub fn router() -> Router<app::State> {
 }
 
 #[tracing::instrument(skip(pool))]
-async fn index(State(pool): State<PgPool>) -> Result<impl IntoResponse, app::Error> {
+async fn index(
+    State(pool): State<PgPool>,
+    State(tz): State<Tz>,
+) -> Result<impl IntoResponse, app::Error> {
     let (tasks, reminders) = try_join!(Task::list(&pool), Reminder::list(&pool))?;
 
     Ok(app::layout(
@@ -62,7 +66,7 @@ async fn index(State(pool): State<PgPool>) -> Result<impl IntoResponse, app::Err
             }
 
             (partials::new_task_modal())
-            (partials::new_reminder_modal())
+            (partials::new_reminder_modal(&tz))
         },
     ))
 }

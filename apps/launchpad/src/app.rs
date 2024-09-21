@@ -3,19 +3,21 @@ use anyhow::Result;
 use axum::extract::FromRef;
 use axum::http::StatusCode;
 use axum::response::{IntoResponse, Response};
+use chrono_tz::Tz;
 use maud::{html, Markup, DOCTYPE};
 use sqlx::PgPool;
 
 #[tracing::instrument(skip(config))]
 pub async fn new_state(config: Config) -> Result<State> {
     let gitlab_client = deploys::GitLabClient::new(config.gitlab_token.clone()).await;
-
     let pool = PgPool::connect(&config.database_url).await?;
+    let tz: Tz = config.local_time_zone.parse()?;
 
     Ok(State {
         config,
         pool,
         gitlab_client,
+        local_time_zone: tz,
     })
 }
 
@@ -24,6 +26,7 @@ pub struct State {
     pub config: Config,
     pub pool: PgPool,
     pub gitlab_client: deploys::GitLabClient,
+    pub local_time_zone: Tz,
 }
 
 pub struct Error(anyhow::Error);

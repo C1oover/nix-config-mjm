@@ -1,5 +1,6 @@
 use chrono::Utc;
 use chrono_humanize::HumanTime;
+use chrono_tz::Tz;
 use maud::{html, Markup};
 
 use crate::tasks::{Reminder, Task};
@@ -145,8 +146,8 @@ pub fn new_task_modal() -> Markup {
     }
 }
 
-pub fn new_reminder_modal() -> Markup {
-    let remind_at = Utc::now().format("%Y-%m-%dT%H:%M");
+pub fn new_reminder_modal(tz: &Tz) -> Markup {
+    let remind_at = Utc::now().with_timezone(tz).format("%Y-%m-%dT%H:%M");
 
     html! {
         #new-reminder-modal

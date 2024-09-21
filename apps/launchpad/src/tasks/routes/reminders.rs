@@ -1,5 +1,6 @@
 use axum::{extract::State, response::IntoResponse, routing::post, Form, Router};
 use chrono::{NaiveDateTime, Utc};
+use chrono_tz::Tz;
 use maud::{html, PreEscaped};
 use serde::Deserialize;
 use sqlx::PgPool;
@@ -23,11 +24,12 @@ struct CreateForm {
 }
 
 impl CreateForm {
-    fn as_input(self: &Self) -> anyhow::Result<ReminderInsertInput> {
+    fn as_input(self: &Self, tz: Tz) -> anyhow::Result<ReminderInsertInput> {
         let tags = split_tags(&self.tags);
         let remind_at = NaiveDateTime::parse_from_str(&self.remind_at, "%Y-%m-%dT%H:%M")?
-            .and_local_timezone(Utc)
-            .unwrap();
+            .and_local_timezone(tz)
+            .unwrap()
+            .with_timezone(&Utc);
 
         Ok(ReminderInsertInput {
             description: self.description.clone(),
@@ -43,9 +45,10 @@ impl CreateForm {
 #[tracing::instrument(skip(pool))]
 async fn create(
     State(pool): State<PgPool>,
+    State(tz): State<Tz>,
     Form(form): Form<CreateForm>,
 ) -> Result<impl IntoResponse, app::Error> {
-    Reminder::insert(&pool, &form.as_input()?).await?;
+    Reminder::insert(&pool, &form.as_input(tz)?).await?;
 
     let reminders = Reminder::list(&pool).await?;
 
