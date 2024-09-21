@@ -48,7 +48,7 @@ async fn index(State(pool): State<PgPool>) -> Result<impl IntoResponse, app::Err
                 }
             }
 
-            h1 { "Reminder" }
+            h1 { "Reminders" }
 
             ul #reminder-list .list-group .mb-2 {
                 (partials::reminder_list(&reminders))
