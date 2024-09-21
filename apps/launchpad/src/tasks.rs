@@ -178,6 +178,10 @@ pub struct RepeatInterval {
 }
 
 impl Reminder {
+    fn is_firing(self: &Self) -> bool {
+        self.state.is_firing()
+    }
+
     #[tracing::instrument(skip(pool), err)]
     pub async fn process_outstanding(pool: &PgPool) -> anyhow::Result<()> {
         let mut tx = pool.begin().await?;
@@ -247,6 +251,15 @@ id, description, tags, state as "state: _", remind_at, snooze_minutes, repeat_in
         )
         .fetch_one(e)
         .await?)
+    }
+}
+
+impl ReminderState {
+    fn is_firing(self: &Self) -> bool {
+        match self {
+            Self::Firing => true,
+            _ => false,
+        }
     }
 }
 

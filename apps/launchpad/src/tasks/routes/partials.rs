@@ -1,4 +1,5 @@
 use chrono::Utc;
+use chrono_humanize::HumanTime;
 use maud::{html, Markup};
 
 use crate::tasks::{Reminder, Task};
@@ -49,9 +50,22 @@ pub fn task_list(tasks: &[Task]) -> Markup {
 pub fn reminder_list(reminders: &[Reminder]) -> Markup {
     html! {
         @for reminder in reminders {
-            li .list-group-item .d-flex .justify-content-between .align-items-start {
-                div .me-auto {
+            li
+                .list-group-item
+                .d-flex.justify-content-between.align-items-start
+                .bg-info-subtle[reminder.is_firing()] {
+
+                .me-auto {
                     (reminder.description)
+
+                    div {
+                        small .text-body-secondary {
+                            @if reminder.is_firing() {
+                                "Firing since "
+                            }
+                            (HumanTime::from(reminder.remind_at))
+                        }
+                    }
 
                     @if !reminder.tags.is_empty() {
                         div {
