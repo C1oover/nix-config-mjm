@@ -13,7 +13,7 @@ use crate::{
     app,
     tasks::{
         list_tasks, reminder_list, routes::partials, split_tags, task_delete, task_get,
-        task_insert, task_toggle, task_update, TaskInsertInput, TaskUpdateInput,
+        task_toggle, task_update, Task, TaskInsertInput, TaskUpdateInput,
     },
 };
 
@@ -81,6 +81,8 @@ impl CreateForm {
         TaskInsertInput {
             description: self.description.clone(),
             tags: split_tags(&self.tags),
+            reminder_id: None,
+            notify_at: None,
         }
     }
 }
@@ -91,7 +93,7 @@ async fn create(
     Form(form): Form<CreateForm>,
 ) -> Result<impl IntoResponse, app::Error> {
     // TODO better error handling/validation
-    task_insert(&pool, &form.as_input()).await?;
+    Task::insert(&pool, &form.as_input()).await?;
 
     let tasks = list_tasks(&pool).await?;
 

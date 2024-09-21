@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "\nSELECT id, description, tags, completed_at, created_at, updated_at\nFROM tasks\nWHERE id = $1\n        ",
+  "query": "\nSELECT *\nFROM tasks\nWHERE id = $1\n        ",
   "describe": {
     "columns": [
       {
@@ -15,22 +15,32 @@
       },
       {
         "ordinal": 2,
-        "name": "tags",
-        "type_info": "TextArray"
-      },
-      {
-        "ordinal": 3,
-        "name": "completed_at",
-        "type_info": "Timestamptz"
-      },
-      {
-        "ordinal": 4,
         "name": "created_at",
         "type_info": "Timestamptz"
       },
       {
-        "ordinal": 5,
+        "ordinal": 3,
         "name": "updated_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 4,
+        "name": "completed_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 5,
+        "name": "tags",
+        "type_info": "TextArray"
+      },
+      {
+        "ordinal": 6,
+        "name": "reminder_id",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 7,
+        "name": "notify_at",
         "type_info": "Timestamptz"
       }
     ],
@@ -43,10 +53,12 @@
       false,
       false,
       false,
+      false,
       true,
       false,
-      false
+      true,
+      true
     ]
   },
-  "hash": "8bdcca493928a4743bc7c2ad32ec0197cd68998672a9ebca2a0f6c7fa873fd75"
+  "hash": "9f28a5ed1514b344e39abc329227edd18b896c1faacea48604c5daf95b05e018"
 }

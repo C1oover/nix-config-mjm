@@ -29,6 +29,9 @@ struct Cli {
 enum Command {
     #[command(about = "Start the HTTP server")]
     Serve,
+
+    #[command(about = "Process outstanding reminders and send notifications")]
+    ProcessReminders,
 }
 
 #[tokio::main]
@@ -53,6 +56,15 @@ async fn main() {
 
             let listener = TcpListener::bind(&config.bind_address).await.unwrap();
             serve(listener, app.into_make_service()).await.unwrap();
+        }
+        Command::ProcessReminders => {
+            let app_state = app::new_state(config.clone()).await.unwrap();
+
+            tasks::Reminder::process_outstanding(&app_state.pool)
+                .await
+                .expect("failed to process outstanding reminders");
+
+            global::shutdown_tracer_provider();
         }
     }
 }

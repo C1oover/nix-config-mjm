@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "\nINSERT INTO tasks\n(description, tags)\nVALUES\n($1, $2)\nRETURNING *\n        ",
+  "query": "\nINSERT INTO tasks\n(description, tags, reminder_id, notify_at)\nVALUES\n($1, $2, $3, $4)\nRETURNING *\n            ",
   "describe": {
     "columns": [
       {
@@ -32,12 +32,24 @@
         "ordinal": 5,
         "name": "tags",
         "type_info": "TextArray"
+      },
+      {
+        "ordinal": 6,
+        "name": "reminder_id",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 7,
+        "name": "notify_at",
+        "type_info": "Timestamptz"
       }
     ],
     "parameters": {
       "Left": [
         "Text",
-        "TextArray"
+        "TextArray",
+        "Int8",
+        "Timestamptz"
       ]
     },
     "nullable": [
@@ -46,8 +58,10 @@
       false,
       false,
       true,
-      false
+      false,
+      true,
+      true
     ]
   },
-  "hash": "123d35a15d91ca491955670a79b86de805e96395d7f581ff9c1358c124165bea"
+  "hash": "1023c72ed603a302cc505631ce3ca70f41742c5514b06c3341166a44f4e8007e"
 }

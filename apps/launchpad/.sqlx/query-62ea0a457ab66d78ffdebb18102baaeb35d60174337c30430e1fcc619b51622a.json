@@ -1,0 +1,70 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\nUPDATE reminders\nSET current_task_id = $2,\n    state = 'firing',\n    updated_at = current_timestamp\nWHERE id = $1\nRETURNING\nid, description, tags, state as \"state: _\", remind_at, snooze_minutes, repeat_interval as \"repeat_interval: _\"\n            ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 1,
+        "name": "description",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 2,
+        "name": "tags",
+        "type_info": "TextArray"
+      },
+      {
+        "ordinal": 3,
+        "name": "state: _",
+        "type_info": {
+          "Custom": {
+            "name": "reminder_state",
+            "kind": {
+              "Enum": [
+                "pending",
+                "firing",
+                "completed"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "name": "remind_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 5,
+        "name": "snooze_minutes",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 6,
+        "name": "repeat_interval: _",
+        "type_info": "Jsonb"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int8",
+        "Int8"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+    ]
+  },
+  "hash": "62ea0a457ab66d78ffdebb18102baaeb35d60174337c30430e1fcc619b51622a"
+}

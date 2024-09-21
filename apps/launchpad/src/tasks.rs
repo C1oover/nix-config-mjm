@@ -2,14 +2,16 @@ pub(crate) mod routes;
 
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
-use sqlx::{types::Json, PgPool};
+use sqlx::{types::Json, PgExecutor, PgPool};
 
-#[derive(Serialize)]
+#[derive(Serialize, Debug)]
 pub struct Task {
     pub id: i64,
     pub description: String,
     pub tags: Vec<String>,
     pub completed_at: Option<DateTime<Utc>>,
+    pub reminder_id: Option<i64>,
+    pub notify_at: Option<DateTime<Utc>>,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
 }
@@ -22,6 +24,26 @@ impl Task {
     pub fn tags_string(self: &Task) -> String {
         self.tags.join(", ")
     }
+
+    #[tracing::instrument(skip(e), ret, err)]
+    pub async fn insert<'e, E: PgExecutor<'e>>(e: E, t: &TaskInsertInput) -> anyhow::Result<Task> {
+        Ok(sqlx::query_as!(
+            Task,
+            r#"
+INSERT INTO tasks
+(description, tags, reminder_id, notify_at)
+VALUES
+($1, $2, $3, $4)
+RETURNING *
+            "#,
+            &t.description,
+            &t.tags,
+            t.reminder_id,
+            t.notify_at,
+        )
+        .fetch_one(e)
+        .await?)
+    }
 }
 
 #[tracing::instrument(skip(pool))]
@@ -29,7 +51,7 @@ pub async fn list_tasks(pool: &PgPool) -> anyhow::Result<Vec<Task>> {
     Ok(sqlx::query_as!(
         Task,
         r#"
-SELECT id, description, tags, completed_at, created_at, updated_at
+SELECT *
 FROM tasks
 WHERE (
     completed_at IS NULL OR completed_at > current_timestamp - interval '1 day'
@@ -47,24 +69,8 @@ ORDER BY
 pub struct TaskInsertInput {
     description: String,
     tags: Vec<String>,
-}
-
-#[tracing::instrument(skip(pool))]
-pub async fn task_insert(pool: &PgPool, t: &TaskInsertInput) -> anyhow::Result<Task> {
-    Ok(sqlx::query_as!(
-        Task,
-        r#"
-INSERT INTO tasks
-(description, tags)
-VALUES
-($1, $2)
-RETURNING *
-        "#,
-        t.description,
-        &t.tags,
-    )
-    .fetch_one(pool)
-    .await?)
+    reminder_id: Option<i64>,
+    notify_at: Option<DateTime<Utc>>,
 }
 
 #[tracing::instrument(skip(pool))]
@@ -72,7 +78,7 @@ async fn task_get(pool: &PgPool, id: i64) -> anyhow::Result<Task> {
     Ok(sqlx::query_as!(
         Task,
         r#"
-SELECT id, description, tags, completed_at, created_at, updated_at
+SELECT *
 FROM tasks
 WHERE id = $1
         "#,
@@ -169,6 +175,79 @@ pub struct RepeatInterval {
     pub months: i32,
     pub weeks: i32,
     pub days: i32,
+}
+
+impl Reminder {
+    #[tracing::instrument(skip(pool), err)]
+    pub async fn process_outstanding(pool: &PgPool) -> anyhow::Result<()> {
+        let mut tx = pool.begin().await?;
+
+        let reminders = Self::list_outstanding(&mut *tx).await?;
+
+        for reminder in reminders.iter() {
+            let task = Task::insert(
+                &mut *tx,
+                &TaskInsertInput {
+                    description: reminder.description.clone(),
+                    tags: reminder.tags.clone(),
+                    reminder_id: Some(reminder.id),
+                    notify_at: None,
+                },
+            )
+            .await?;
+
+            Self::set_current_task(&mut *tx, reminder.id, task.id).await?;
+        }
+
+        // TODO notify for reminder tasks
+
+        Ok(tx.commit().await?)
+    }
+
+    #[tracing::instrument(skip(e), ret, err)]
+    async fn list_outstanding<'e, E: PgExecutor<'e>>(e: E) -> anyhow::Result<Vec<Reminder>> {
+        Ok(sqlx::query_as!(
+            Reminder,
+            r#"
+SELECT id,
+       description,
+       tags,
+       state as "state: _",
+       remind_at,
+       snooze_minutes,
+       repeat_interval as "repeat_interval: _"
+FROM reminders
+WHERE state = 'pending'
+AND remind_at < current_timestamp
+            "#
+        )
+        .fetch_all(e)
+        .await?)
+    }
+
+    #[tracing::instrument(skip(e), ret, err)]
+    async fn set_current_task<'e, E: PgExecutor<'e>>(
+        e: E,
+        id: i64,
+        task_id: i64,
+    ) -> anyhow::Result<Reminder> {
+        Ok(sqlx::query_as!(
+            Reminder,
+            r#"
+UPDATE reminders
+SET current_task_id = $2,
+    state = 'firing',
+    updated_at = current_timestamp
+WHERE id = $1
+RETURNING
+id, description, tags, state as "state: _", remind_at, snooze_minutes, repeat_interval as "repeat_interval: _"
+            "#,
+            id,
+            task_id
+        )
+        .fetch_one(e)
+        .await?)
+    }
 }
 
 pub async fn reminder_list(pool: &PgPool) -> anyhow::Result<Vec<Reminder>> {
