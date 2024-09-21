@@ -102,7 +102,7 @@ async fn main() {
         .route("/", get(index))
         .route("/healthz", get(health))
         .route("/status-cards", get(status_cards))
-        .route("/deploys", get(deploys::index))
+        .merge(deploys::routes::router())
         .merge(tasks::routes::router())
         .with_state(app_state)
         .layer(TraceLayer::new_for_http());
