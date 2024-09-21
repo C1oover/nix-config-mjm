@@ -5,7 +5,7 @@ pg:
     pg start
 
 dev:
-    cargo watch -x run
+    cargo watch -x "run -- serve"
 
 migrate:
     sqlx migrate run

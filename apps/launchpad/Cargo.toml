@@ -8,6 +8,7 @@ anyhow = "1.0"
 axum = { version = "0.7.5", features = ["macros", "tokio"] }
 axum-template = { version = "2.4.0", features = ["tera"] }
 chrono = "0.4.38"
+clap = { version = "4.5.18", features = ["derive"] }
 figment = { version = "0.10", features = ["env"] }
 figment_file_provider_adapter = "0.1.1"
 gitlab = "0.1703.0"

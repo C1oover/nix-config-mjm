@@ -7,6 +7,7 @@ mod tasks;
 use axum::response::IntoResponse;
 use axum::routing::get;
 use axum::{serve, Router};
+use clap::{Parser, Subcommand};
 use config::Config;
 use opentelemetry::{global, trace::TracerProvider};
 use opentelemetry_sdk::runtime;
@@ -16,24 +17,44 @@ use tracing::Level;
 use tracing_opentelemetry::OpenTelemetryLayer;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
+#[derive(Parser)]
+#[command(name = "launchpad")]
+#[command(version, about, long_about = None)]
+struct Cli {
+    #[command(subcommand)]
+    command: Command,
+}
+
+#[derive(Subcommand)]
+enum Command {
+    #[command(about = "Start the HTTP server")]
+    Serve,
+}
+
 #[tokio::main]
 async fn main() {
+    let cli = Cli::parse();
+
     let config: Config = Config::figment().extract().unwrap();
     init_tracing(&config);
 
-    let app_state = app::new_state(config.clone()).await.unwrap();
-    sqlx::migrate!().run(&app_state.pool).await.unwrap();
+    match &cli.command {
+        Command::Serve => {
+            let app_state = app::new_state(config.clone()).await.unwrap();
+            sqlx::migrate!().run(&app_state.pool).await.unwrap();
 
-    let app = Router::new()
-        .route("/healthz", get(health))
-        .merge(home::routes::router())
-        .merge(deploys::routes::router())
-        .merge(tasks::routes::router())
-        .with_state(app_state)
-        .layer(TraceLayer::new_for_http());
+            let app = Router::new()
+                .route("/healthz", get(health))
+                .merge(home::routes::router())
+                .merge(deploys::routes::router())
+                .merge(tasks::routes::router())
+                .with_state(app_state)
+                .layer(TraceLayer::new_for_http());
 
-    let listener = TcpListener::bind(&config.bind_address).await.unwrap();
-    serve(listener, app.into_make_service()).await.unwrap();
+            let listener = TcpListener::bind(&config.bind_address).await.unwrap();
+            serve(listener, app.into_make_service()).await.unwrap();
+        }
+    }
 }
 
 fn init_tracing(config: &Config) {
