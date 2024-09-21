@@ -9,6 +9,7 @@ use axum::routing::get;
 use axum::{serve, Router};
 use clap::{Parser, Subcommand};
 use config::Config;
+use listenfd::ListenFd;
 use opentelemetry::{global, trace::TracerProvider};
 use opentelemetry_sdk::runtime;
 use tokio::net::TcpListener;
@@ -54,7 +55,15 @@ async fn main() {
                 .with_state(app_state)
                 .layer(TraceLayer::new_for_http());
 
-            let listener = TcpListener::bind(&config.bind_address).await.unwrap();
+            let mut listenfd = ListenFd::from_env();
+            let listener = match listenfd.take_tcp_listener(0).unwrap() {
+                Some(listener) => {
+                    listener.set_nonblocking(true).unwrap();
+                    TcpListener::from_std(listener).unwrap()
+                }
+                None => TcpListener::bind(&config.bind_address).await.unwrap(),
+            };
+
             serve(listener, app.into_make_service()).await.unwrap();
         }
         Command::ProcessReminders => {

@@ -20,9 +20,10 @@ pkgs.mkShell {
       rust-analyzer
       rustfmt
 
+      just
       postgresql_16
       sqlx-cli
-      just
+      systemfd
       ;
 
     pg = pkgs.writers.writeNuBin "pg" ''
