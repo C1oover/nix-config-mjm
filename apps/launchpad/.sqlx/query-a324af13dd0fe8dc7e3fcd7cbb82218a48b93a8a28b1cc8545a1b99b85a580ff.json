@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "\nSELECT *\nFROM tasks\nWHERE id = $1\n        ",
+  "query": "\nUPDATE tasks\nSET description = $2,\n    tags = $3\nWHERE id = $1\nRETURNING *\n            ",
   "describe": {
     "columns": [
       {
@@ -46,7 +46,9 @@
     ],
     "parameters": {
       "Left": [
-        "Int8"
+        "Int8",
+        "Text",
+        "TextArray"
       ]
     },
     "nullable": [
@@ -60,5 +62,5 @@
       true
     ]
   },
-  "hash": "9f28a5ed1514b344e39abc329227edd18b896c1faacea48604c5daf95b05e018"
+  "hash": "a324af13dd0fe8dc7e3fcd7cbb82218a48b93a8a28b1cc8545a1b99b85a580ff"
 }

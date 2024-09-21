@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "\nUPDATE tasks\nSET completed_at = (CASE WHEN completed_at IS NULL THEN current_timestamp ELSE NULL END)\nWHERE id = $1\nRETURNING *\n        ",
+  "query": "\nSELECT *\nFROM tasks\nWHERE id = $1\n            ",
   "describe": {
     "columns": [
       {
@@ -60,5 +60,5 @@
       true
     ]
   },
-  "hash": "75118ab3d94b2138162bfd34bf6d05b39ff260f87a88a3115640746b43eded3a"
+  "hash": "0ba5a340862cb521d9c9f3548a7d34b447217658df89f06c7b02a014ad1ffcd0"
 }

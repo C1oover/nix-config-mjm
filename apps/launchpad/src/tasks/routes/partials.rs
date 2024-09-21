@@ -15,6 +15,7 @@ pub fn task_list(tasks: &[Task]) -> Markup {
                     type="checkbox"
                     value=""
                     checked[task.is_completed()]
+                    autocomplete="off"
                     hx-post={ "/tasks/" (task.id) "/toggle"}
                     hx-target="#task-list";
 
@@ -28,11 +29,13 @@ pub fn task_list(tasks: &[Task]) -> Markup {
                         (task.description)
                     }
 
-                    @if let Some(notify_at) = task.notify_at {
-                        div {
-                            small .text-body-secondary {
-                                "Snoozed until "
-                                (HumanTime::from(notify_at))
+                    @if !task.is_completed() {
+                        @if let Some(notify_at) = task.notify_at {
+                            div {
+                                small .text-body-secondary {
+                                    "Snoozed until "
+                                    (HumanTime::from(notify_at))
+                                }
                             }
                         }
                     }
@@ -191,7 +194,8 @@ pub fn new_reminder_modal() -> Markup {
                                     .form-control
                                     name="remind_at"
                                     type="datetime-local"
-                                    value=(remind_at);
+                                    value=(remind_at)
+                                    autocomplete="off";
                             }
 
                             .mb-3 {

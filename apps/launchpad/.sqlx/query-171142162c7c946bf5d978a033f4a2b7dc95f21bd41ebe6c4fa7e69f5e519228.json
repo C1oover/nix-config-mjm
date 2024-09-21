@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "\nDELETE FROM tasks\nWHERE id = $1\n        ",
+  "query": "\nDELETE FROM tasks\nWHERE id = $1\n            ",
   "describe": {
     "columns": [],
     "parameters": {
@@ -10,5 +10,5 @@
     },
     "nullable": []
   },
-  "hash": "7f4340758ef10482faf735e555d050441fcd5e1cb21b8cd3a4831f1055bc5f78"
+  "hash": "171142162c7c946bf5d978a033f4a2b7dc95f21bd41ebe6c4fa7e69f5e519228"
 }

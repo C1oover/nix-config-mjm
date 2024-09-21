@@ -103,7 +103,7 @@ async fn create(
             "##))
         }
 
-        div hx-swap="innerHTML:#new-task-modal" {
+        div hx-swap-oob="innerHTML:#new-task-modal" {
             (partials::new_task_modal())
         }
     })
@@ -205,9 +205,15 @@ async fn toggle(
     Path(id): Path<i64>,
 ) -> Result<impl IntoResponse, app::Error> {
     Task::toggle(&pool, id).await?;
-    let tasks = Task::list(&pool).await?;
+    let (tasks, reminders) = try_join!(Task::list(&pool), Reminder::list(&pool))?;
 
-    Ok(partials::task_list(&tasks))
+    Ok(html! {
+        (partials::task_list(&tasks))
+
+        div hx-swap-oob="innerHTML:#reminder-list" {
+            (partials::reminder_list(&reminders))
+        }
+    })
 }
 
 #[tracing::instrument(skip(pool))]

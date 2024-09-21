@@ -1,9 +1,9 @@
 pub(crate) mod routes;
 
-use anyhow::Result;
+use anyhow::{bail, Result};
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
-use sqlx::{types::Json, PgExecutor, PgPool};
+use sqlx::{types::Json, Acquire, PgConnection, PgExecutor, PgPool, Postgres};
 
 #[derive(Serialize, Debug)]
 pub struct Task {
@@ -80,20 +80,82 @@ RETURNING *
         .await?)
     }
 
-    #[tracing::instrument(skip(e), ret, err)]
-    async fn toggle<'e, E: PgExecutor<'e>>(e: E, id: i64) -> Result<Task> {
+    #[tracing::instrument(skip(conn), ret, err)]
+    async fn toggle<'a, A: Acquire<'a, Database = Postgres>>(conn: A, id: i64) -> Result<Task> {
+        let mut tx = conn.begin().await?;
+
+        let task = Self::get(&mut *tx, id).await?;
+        let result = match task.reminder_id {
+            Some(reminder_id) => Self::toggle_reminder_task(&mut *tx, &task, reminder_id).await?,
+            None => Self::toggle_simple_task(&mut *tx, id).await?,
+        };
+
+        tx.commit().await?;
+
+        Ok(result)
+    }
+
+    #[tracing::instrument(skip(conn), ret, err)]
+    async fn toggle_simple_task(conn: &mut PgConnection, id: i64) -> Result<Task> {
         Ok(sqlx::query_as!(
             Task,
             r#"
 UPDATE tasks
-SET completed_at = (CASE WHEN completed_at IS NULL THEN current_timestamp ELSE NULL END)
+SET completed_at = (CASE WHEN completed_at IS NULL THEN current_timestamp ELSE NULL END),
+    updated_at = current_timestamp
 WHERE id = $1
 RETURNING *
             "#,
             id
         )
-        .fetch_one(e)
+        .fetch_one(&mut *conn)
         .await?)
+    }
+
+    #[tracing::instrument(skip(conn), ret, err)]
+    async fn toggle_reminder_task(
+        conn: &mut PgConnection,
+        task: &Task,
+        reminder_id: i64,
+    ) -> Result<Task> {
+        if task.is_completed() {
+            bail!("cannot uncomplete an already completed reminder");
+        }
+
+        let updated_task = sqlx::query_as!(
+            Task,
+            r#"
+UPDATE tasks
+SET completed_at = current_timestamp,
+    updated_at = current_timestamp
+WHERE id = $1
+RETURNING *
+            "#,
+            task.id
+        )
+        .fetch_one(&mut *conn)
+        .await?;
+
+        let reminder = Reminder::get(&mut *conn, reminder_id).await?;
+        match reminder.repeat_interval {
+            None => {
+                sqlx::query!(
+                    r#"
+UPDATE reminders
+SET state = 'completed',
+    updated_at = current_timestamp
+WHERE id = $1
+                    "#,
+                    reminder.id
+                )
+                .execute(&mut *conn)
+                .await?;
+            }
+            //   if repeat interval, advance remind_at and set back to pending
+            Some(_) => todo!("repeating reminders aren't implemented yet"),
+        }
+
+        Ok(updated_task)
     }
 
     #[tracing::instrument(skip(e), ret, err)]
@@ -196,6 +258,7 @@ SELECT id,
        snooze_minutes,
        repeat_interval as "repeat_interval: _"
 FROM reminders
+WHERE state IN ('pending', 'firing')
 ORDER BY remind_at
             "#
         )
@@ -221,6 +284,27 @@ AND remind_at < current_timestamp
             "#
         )
         .fetch_all(e)
+        .await?)
+    }
+
+    #[tracing::instrument(skip(e), ret, err)]
+    async fn get<'e, E: PgExecutor<'e>>(e: E, id: i64) -> Result<Reminder> {
+        Ok(sqlx::query_as!(
+            Reminder,
+            r#"
+SELECT id,
+       description,
+       tags,
+       state as "state: _",
+       remind_at,
+       snooze_minutes,
+       repeat_interval as "repeat_interval: _"
+FROM reminders
+WHERE id = $1
+            "#,
+            id
+        )
+        .fetch_one(e)
         .await?)
     }
 

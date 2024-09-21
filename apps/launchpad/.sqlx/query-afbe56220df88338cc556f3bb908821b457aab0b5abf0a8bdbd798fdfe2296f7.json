@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "\nUPDATE tasks\nSET description = $2,\n    tags = $3\nWHERE id = $1\nRETURNING *\n        ",
+  "query": "\nSELECT *\nFROM tasks\nWHERE (\n    completed_at IS NULL OR completed_at > current_timestamp - interval '1 day'\n)\nORDER BY\n    (CASE WHEN completed_at IS NULL THEN 0 ELSE 1 END),\n    (CASE WHEN completed_at IS NULL THEN created_at ELSE completed_at END)\n            ",
   "describe": {
     "columns": [
       {
@@ -45,11 +45,7 @@
       }
     ],
     "parameters": {
-      "Left": [
-        "Int8",
-        "Text",
-        "TextArray"
-      ]
+      "Left": []
     },
     "nullable": [
       false,
@@ -62,5 +58,5 @@
       true
     ]
   },
-  "hash": "1688111ab81cbc6be952d073869d00409a867f47058a2cfb7ca156c574e90cc5"
+  "hash": "afbe56220df88338cc556f3bb908821b457aab0b5abf0a8bdbd798fdfe2296f7"
 }

@@ -58,7 +58,7 @@ async fn create(
             "##))
         }
 
-        div hx-swap="innerHTML:#new-reminder-modal" {
+        div hx-swap-oob="innerHTML:#new-reminder-modal" {
             (partials::new_reminder_modal())
         }
     })

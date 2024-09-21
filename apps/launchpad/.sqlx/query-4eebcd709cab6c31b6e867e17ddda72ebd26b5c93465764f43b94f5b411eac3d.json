@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "\nSELECT id,\n       description,\n       tags,\n       state as \"state: _\",\n       remind_at,\n       snooze_minutes,\n       repeat_interval as \"repeat_interval: _\"\nFROM reminders\nORDER BY remind_at\n        ",
+  "query": "\nSELECT id,\n       description,\n       tags,\n       state as \"state: _\",\n       remind_at,\n       snooze_minutes,\n       repeat_interval as \"repeat_interval: _\"\nFROM reminders\nWHERE id = $1\n            ",
   "describe": {
     "columns": [
       {
@@ -51,7 +51,9 @@
       }
     ],
     "parameters": {
-      "Left": []
+      "Left": [
+        "Int8"
+      ]
     },
     "nullable": [
       false,
@@ -63,5 +65,5 @@
       true
     ]
   },
-  "hash": "2f625a730d6c982382b11409fff41fba64aa78371a8f55e1afc2463f152ede0b"
+  "hash": "4eebcd709cab6c31b6e867e17ddda72ebd26b5c93465764f43b94f5b411eac3d"
 }
