@@ -31,6 +31,9 @@ pub async fn list_tasks(pool: &PgPool) -> anyhow::Result<Vec<Task>> {
         r#"
 SELECT id, description, tags, completed_at, created_at, updated_at
 FROM tasks
+WHERE (
+    completed_at IS NULL OR completed_at > current_timestamp - interval '1 day'
+)
 ORDER BY
     (CASE WHEN completed_at IS NULL THEN 0 ELSE 1 END),
     (CASE WHEN completed_at IS NULL THEN created_at ELSE completed_at END)

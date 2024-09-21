@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "\nSELECT id, description, tags, completed_at, created_at, updated_at\nFROM tasks\nORDER BY\n    (CASE WHEN completed_at IS NULL THEN 0 ELSE 1 END),\n    (CASE WHEN completed_at IS NULL THEN created_at ELSE completed_at END)\n        ",
+  "query": "\nSELECT id, description, tags, completed_at, created_at, updated_at\nFROM tasks\nWHERE (\n    completed_at IS NULL OR completed_at > current_timestamp - interval '1 day'\n)\nORDER BY\n    (CASE WHEN completed_at IS NULL THEN 0 ELSE 1 END),\n    (CASE WHEN completed_at IS NULL THEN created_at ELSE completed_at END)\n        ",
   "describe": {
     "columns": [
       {
@@ -46,5 +46,5 @@
       false
     ]
   },
-  "hash": "b52b9b2e25d75c140f235fbf4fe86f7aa38f054e0174b6328e6efac01c359c0b"
+  "hash": "632d2a603ea5a1e41228e004c4be8f3e5daa4010526842b6a625d5b9339a000a"
 }
