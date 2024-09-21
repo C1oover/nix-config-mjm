@@ -9,6 +9,17 @@ let
 
   cfg = config.mjm.launchpad;
   pkg = import ../../apps/launchpad { inherit pkgs; };
+
+  serviceEnv = {
+    OTEL_SERVICE_NAME = "launchpad";
+    OTEL_EXPORTER_OTLP_ENDPOINT = "http://127.0.0.1:4317";
+    OTEL_RESOURCE_ATTRIBUTES = "deployment.environment.name=prod";
+    LAUNCHPAD_DATABASE_URL = "postgresql:///launchpad?host=/run/postgresql";
+    LAUNCHPAD_BIND_ADDRESS = "[::]:4100";
+    LAUNCHPAD_GITLAB_TOKEN_FILE = "%d/launchpad_gitlab_token";
+    LAUNCHPAD_PAPERLESS_TOKEN_FILE = "%d/launchpad_paperless_token";
+    LAUNCHPAD_ENABLE_PRETTY_OUTPUT = "false";
+  };
 in
 {
   options.mjm.launchpad = {
@@ -20,7 +31,10 @@ in
       postgresql.enable = true;
       vault = {
         enable = true;
-        loadedBy = [ "launchpad" ];
+        loadedBy = [
+          "launchpad"
+          "launchpad-reminders"
+        ];
         keys = {
           gitlab_token = { };
           paperless_token = { };
@@ -39,22 +53,34 @@ in
         "network.target"
         "postgresql.service"
       ];
-      environment = {
-        OTEL_SERVICE_NAME = "launchpad";
-        OTEL_EXPORTER_OTLP_ENDPOINT = "http://127.0.0.1:4317";
-        OTEL_RESOURCE_ATTRIBUTES = "deployment.environment.name=prod";
-        LAUNCHPAD_DATABASE_URL = "postgresql:///launchpad?host=/run/postgresql";
-        LAUNCHPAD_BIND_ADDRESS = "[::]:4100";
-        LAUNCHPAD_GITLAB_TOKEN_FILE = "%d/launchpad_gitlab_token";
-        LAUNCHPAD_PAPERLESS_TOKEN_FILE = "%d/launchpad_paperless_token";
-        LAUNCHPAD_ENABLE_PRETTY_OUTPUT = "false";
-      };
+      environment = serviceEnv;
 
       serviceConfig = {
-        ExecStart = "${pkg}/bin/launchpad";
+        ExecStart = "${pkg}/bin/launchpad serve";
         Restart = "always";
         DynamicUser = true;
         User = "launchpad";
+      };
+    };
+
+    systemd.services.launchpad-reminders = {
+      restartIfChanged = false;
+      environment = serviceEnv;
+
+      after = [ "postgresql.service" ];
+
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${pkg}/bin/launchpad process-reminders";
+        DynamicUser = true;
+        User = "launchpad";
+      };
+    };
+
+    systemd.timers.launchpad-reminders = {
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnCalendar = "*:0/5:00";
       };
     };
 
