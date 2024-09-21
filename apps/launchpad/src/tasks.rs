@@ -245,6 +245,10 @@ impl Reminder {
         self.state.is_firing()
     }
 
+    pub fn tags_string(self: &Self) -> String {
+        self.tags.join(", ")
+    }
+
     #[tracing::instrument(skip(e), ret, err)]
     pub async fn list<'e, E: PgExecutor<'e>>(e: E) -> Result<Vec<Reminder>> {
         Ok(sqlx::query_as!(
@@ -331,6 +335,31 @@ id, description, tags, state as "state: _", remind_at, snooze_minutes, repeat_in
         .await?)
     }
 
+    #[tracing::instrument(skip(conn), ret, err)]
+    async fn update(conn: &mut PgConnection, id: i64, r: &ReminderUpdateInput) -> Result<Reminder> {
+        // TODO repeat interval
+
+        Ok(sqlx::query_as!(
+            Reminder,
+            r#"
+UPDATE reminders
+SET description = $2,
+    tags = $3,
+    remind_at = $4,
+    snooze_minutes = $5
+WHERE id = $1
+RETURNING
+id, description, tags, state as "state: _", remind_at, snooze_minutes, repeat_interval as "repeat_interval: _"
+            "#,
+            id,
+            &r.description,
+            &r.tags,
+            &r.remind_at,
+            r.snooze_minutes
+        ).fetch_one(&mut *conn)
+        .await?)
+    }
+
     #[tracing::instrument(skip(e), ret, err)]
     async fn set_current_task<'e, E: PgExecutor<'e>>(
         e: E,
@@ -398,6 +427,15 @@ impl ReminderState {
 
 #[derive(Debug)]
 struct ReminderInsertInput {
+    description: String,
+    tags: Vec<String>,
+    remind_at: DateTime<Utc>,
+    snooze_minutes: i64,
+    repeat_interval: Option<RepeatInterval>,
+}
+
+#[derive(Debug)]
+struct ReminderUpdateInput {
     description: String,
     tags: Vec<String>,
     remind_at: DateTime<Utc>,

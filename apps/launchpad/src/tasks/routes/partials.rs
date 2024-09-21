@@ -90,6 +90,10 @@ pub fn reminder_list(reminders: &[Reminder]) -> Markup {
                         }
                     }
                 }
+
+                a .btn.btn-primary.btn-sm href={ "/reminders/" (reminder.id) "/edit" } {
+                    "Edit"
+                }
             }
         }
     }
