@@ -276,6 +276,11 @@ id, description, tags, state as "state: _", remind_at, snooze_minutes, repeat_in
         let mut tx = pool.begin().await?;
 
         let reminders = Self::list_outstanding(&mut *tx).await?;
+        if reminders.is_empty() {
+            return Ok(());
+        }
+
+        let now = Utc::now();
 
         for reminder in reminders.iter() {
             let task = Task::insert(
@@ -284,7 +289,7 @@ id, description, tags, state as "state: _", remind_at, snooze_minutes, repeat_in
                     description: reminder.description.clone(),
                     tags: reminder.tags.clone(),
                     reminder_id: Some(reminder.id),
-                    notify_at: None,
+                    notify_at: Some(now),
                 },
             )
             .await?;
