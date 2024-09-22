@@ -2,25 +2,28 @@ let
   inputs = import ./npins;
   lib = import "${inputs.nixpkgs}/lib";
 
+  pkgsForPatching = import inputs.nixos { };
+  inherit (pkgsForPatching) applyPatches fetchpatch;
+
+  patchNixpkgs =
+    {
+      src,
+      patches ? [ ],
+    }:
+    applyPatches {
+      name = "${src.name}-patched";
+      inherit src;
+      patches = [
+        (fetchpatch {
+          url = "https://github.com/NixOS/nixpkgs/pull/343744.diff";
+          hash = "sha256-rhbp64cHXmlxz9exElw+NEDah9/oHWBHdp8g4ImGysc=";
+        })
+      ] ++ patches;
+    };
 in
-# pkgsForPatching = import inputs.nixos { };
-# inherit (pkgsForPatching) applyPatches fetchpatch;
-#
-# patchNixpkgs =
-#   {
-#     src,
-#     patches ? [ ],
-#   }:
-#   applyPatches {
-#     name = "${src.name}-patched";
-#     inherit src;
-#     patches = [
-#
-#     ] ++ patches;
-#   };
 {
   meta = {
-    nixpkgs = inputs.nixos-small;
+    nixpkgs = patchNixpkgs { src = inputs.nixos-small; };
     nodeNixpkgs = {
       uranus = inputs.nixos-plasma-beta;
       persephone = inputs.nixos;
