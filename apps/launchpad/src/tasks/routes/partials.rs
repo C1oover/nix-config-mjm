@@ -220,13 +220,47 @@ pub fn new_reminder_modal(tz: &Tz) -> Markup {
 
                             .mb-3 {
                                 label .form-label for="new-reminder-repeat-interval" { "Repeat every" }
-                                input
-                                    #new-reminder-repeat-interval
-                                    .form-control
-                                    name="repeat_interval"
-                                    type="text"
-                                    value=""
-                                    autocomplete="off";
+
+                                .row {
+                                    .col-sm .mb-2 {
+                                        .input-group {
+                                            input
+                                                #new-reminder-repeat-days
+                                                .form-control
+                                                name="repeat_days"
+                                                type="number"
+                                                autocomplete="off";
+
+                                            span .input-group-text { "days" }
+                                        }
+                                    }
+
+                                    .col-sm .mb-2 {
+                                        .input-group {
+                                            input
+                                                #new-reminder-repeat-weeks
+                                                .form-control
+                                                name="repeat_weeks"
+                                                type="number"
+                                                autocomplete="off";
+
+                                            span .input-group-text { "weeks" }
+                                        }
+                                    }
+
+                                    .col-sm .mb-2 {
+                                        .input-group {
+                                            input
+                                                #new-reminder-repeat-months
+                                                .form-control
+                                                name="repeat_months"
+                                                type="number"
+                                                autocomplete="off";
+
+                                            span .input-group-text { "months" }
+                                        }
+                                    }
+                                }
                             }
                         }
                         .modal-footer {

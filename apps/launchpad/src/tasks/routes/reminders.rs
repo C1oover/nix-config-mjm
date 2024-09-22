@@ -7,7 +7,7 @@ use axum::{
 use chrono::{NaiveDateTime, Utc};
 use chrono_tz::Tz;
 use maud::{html, PreEscaped};
-use serde::{Deserialize, Deserializer};
+use serde::Deserialize;
 use serde_with::serde_as;
 use sqlx::PgPool;
 
@@ -26,13 +26,19 @@ pub fn router() -> Router<app::State> {
         .route("/reminders/:id/edit", get(edit))
 }
 
+#[serde_as]
 #[derive(Deserialize, Debug)]
 struct CreateForm {
     description: String,
     tags: String,
     remind_at: String,
     snooze_minutes: i64,
-    repeat_interval: String,
+    #[serde_as(as = "serde_with::NoneAsEmptyString")]
+    repeat_days: Option<i32>,
+    #[serde_as(as = "serde_with::NoneAsEmptyString")]
+    repeat_weeks: Option<i32>,
+    #[serde_as(as = "serde_with::NoneAsEmptyString")]
+    repeat_months: Option<i32>,
 }
 
 impl CreateForm {
@@ -48,8 +54,11 @@ impl CreateForm {
             tags,
             remind_at,
             snooze_minutes: self.snooze_minutes,
-            // TODO
-            repeat_interval: None,
+            repeat_interval: RepeatInterval::new(
+                self.repeat_days,
+                self.repeat_weeks,
+                self.repeat_months,
+            ),
         })
     }
 }

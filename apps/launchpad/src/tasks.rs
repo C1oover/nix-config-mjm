@@ -314,22 +314,21 @@ WHERE id = $1
 
     #[tracing::instrument(skip(e), ret, err)]
     async fn insert<'e, E: PgExecutor<'e>>(e: E, r: &ReminderInsertInput) -> Result<Reminder> {
-        // TODO repeat interval
-
         Ok(sqlx::query_as!(
             Reminder,
             r#"
 INSERT INTO reminders
-(description, tags, remind_at, snooze_minutes)
+(description, tags, remind_at, snooze_minutes, repeat_interval)
 VALUES
-($1, $2, $3, $4)
+($1, $2, $3, $4, $5)
 RETURNING
 id, description, tags, state as "state: _", remind_at, snooze_minutes, repeat_interval as "repeat_interval: _"
             "#,
             &r.description,
             &r.tags,
             &r.remind_at,
-            r.snooze_minutes
+            r.snooze_minutes,
+            r.repeat_interval.clone().map(|ri| Json(ri)) as _,
         )
         .fetch_one(e)
         .await?)
