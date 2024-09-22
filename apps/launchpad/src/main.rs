@@ -93,7 +93,7 @@ fn init_tracing(config: &Config) {
 
     let registry = tracing_subscriber::registry()
         .with(tracing_subscriber::filter::LevelFilter::from_level(
-            Level::DEBUG,
+            Level::INFO,
         ))
         .with(OpenTelemetryLayer::new(tracer));
 
