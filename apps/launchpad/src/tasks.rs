@@ -1,7 +1,7 @@
 pub(crate) mod routes;
 
 use anyhow::{bail, Result};
-use chrono::{DateTime, Days, Months, Utc};
+use chrono::{DateTime, Days, Months, TimeDelta, Utc};
 use core::ops::Add;
 use serde::{Deserialize, Serialize};
 use sqlx::{types::Json, Acquire, PgConnection, PgExecutor, PgPool, Postgres};
@@ -43,6 +43,23 @@ ORDER BY
             "#
         )
         .fetch_all(e)
+        .await?)
+    }
+
+    #[tracing::instrument(skip(conn), ret, err)]
+    async fn list_pending_notifications(conn: &mut PgConnection) -> Result<Vec<Task>> {
+        Ok(sqlx::query_as!(
+            Task,
+            r#"
+SELECT *
+FROM tasks
+WHERE completed_at IS NULL
+AND reminder_id IS NOT NULL
+AND notify_at IS NOT NULL
+AND notify_at <= current_timestamp
+            "#
+        )
+        .fetch_all(conn)
         .await?)
     }
 
@@ -149,7 +166,8 @@ RETURNING *
             r#"
 UPDATE tasks
 SET description = $2,
-    tags = $3
+    tags = $3,
+    updated_at = current_timestamp
 WHERE id = $1
 RETURNING *
             "#,
@@ -172,6 +190,60 @@ WHERE id = $1
         )
         .execute(e)
         .await?;
+
+        Ok(())
+    }
+
+    #[tracing::instrument(skip(conn, topic))]
+    async fn process_pending_notifications(conn: &mut PgConnection, topic: &str) -> Result<()> {
+        let tasks = Self::list_pending_notifications(conn).await?;
+
+        for task in &tasks {
+            task.send_notification(topic).await?;
+            task.snooze(conn).await?;
+        }
+
+        Ok(())
+    }
+
+    #[tracing::instrument(skip(conn), err)]
+    async fn snooze(self: &Self, conn: &mut PgConnection) -> Result<()> {
+        let reminder = Reminder::get(&mut *conn, self.reminder_id.unwrap()).await?;
+        let new_notify_at = advance_by_minutes(self.notify_at.unwrap(), reminder.snooze_minutes);
+
+        sqlx::query!(
+            r#"
+UPDATE tasks
+SET notify_at = $2,
+    updated_at = current_timestamp
+WHERE id = $1
+            "#,
+            self.id,
+            new_notify_at
+        )
+        .execute(conn)
+        .await?;
+
+        Ok(())
+    }
+
+    #[tracing::instrument(skip(topic), err)]
+    async fn send_notification(self: &Self, topic: &str) -> Result<()> {
+        #[derive(Serialize, Debug)]
+        struct NtfyMessage {
+            topic: String,
+            message: String,
+            title: String,
+        }
+
+        let msg = NtfyMessage {
+            topic: topic.to_string(),
+            message: self.description.to_string(),
+            title: "Hey! Listen!".to_string(),
+        };
+
+        let client = reqwest::Client::new();
+        client.post("https://ntfy.sh").json(&msg).send().await?;
 
         Ok(())
     }
@@ -422,35 +494,40 @@ WHERE id = $1
         Ok(())
     }
 
-    #[tracing::instrument(skip(pool), err)]
-    pub async fn process_outstanding(pool: &PgPool) -> Result<()> {
+    #[tracing::instrument(skip(pool, topic), err)]
+    pub async fn process_outstanding(pool: &PgPool, topic: &str) -> Result<()> {
         let mut tx = pool.begin().await?;
 
         let reminders = Self::list_outstanding(&mut *tx).await?;
-        if reminders.is_empty() {
-            return Ok(());
+        if !reminders.is_empty() {
+            let now = Utc::now();
+
+            for reminder in reminders.iter() {
+                let task = Task::insert(
+                    &mut *tx,
+                    &TaskInsertInput {
+                        description: reminder.description.clone(),
+                        tags: reminder.tags.clone(),
+                        reminder_id: Some(reminder.id),
+                        notify_at: Some(now),
+                    },
+                )
+                .await?;
+
+                Self::set_current_task(&mut *tx, reminder.id, task.id).await?;
+            }
         }
 
-        let now = Utc::now();
+        tx.commit().await?;
 
-        for reminder in reminders.iter() {
-            let task = Task::insert(
-                &mut *tx,
-                &TaskInsertInput {
-                    description: reminder.description.clone(),
-                    tags: reminder.tags.clone(),
-                    reminder_id: Some(reminder.id),
-                    notify_at: Some(now),
-                },
-            )
-            .await?;
+        // The task notifications mess with real-world state, so it doesn't really make
+        // sense to handle them in a DB transaction.
 
-            Self::set_current_task(&mut *tx, reminder.id, task.id).await?;
-        }
+        let mut conn = pool.acquire().await?;
 
-        // TODO notify for reminder tasks
+        Task::process_pending_notifications(&mut conn, topic).await?;
 
-        Ok(tx.commit().await?)
+        Ok(())
     }
 }
 
@@ -515,6 +592,18 @@ fn advance_by(dt: DateTime<Utc>, interval: &RepeatInterval) -> DateTime<Utc> {
 
     while new_dt < now {
         new_dt = new_dt + interval;
+    }
+
+    new_dt
+}
+
+fn advance_by_minutes(dt: DateTime<Utc>, minutes: i64) -> DateTime<Utc> {
+    let delta = TimeDelta::new(minutes * 60, 0).unwrap();
+    let now = Utc::now();
+    let mut new_dt = dt + delta;
+
+    while new_dt < now {
+        new_dt = new_dt + delta;
     }
 
     new_dt

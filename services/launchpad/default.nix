@@ -18,6 +18,7 @@ let
     LAUNCHPAD_BIND_ADDRESS = "[::]:4100";
     LAUNCHPAD_GITLAB_TOKEN_FILE = "%d/launchpad_gitlab_token";
     LAUNCHPAD_PAPERLESS_TOKEN_FILE = "%d/launchpad_paperless_token";
+    LAUNCHPAD_REMINDERS_TOPIC_FILE = "%d/launchpad_reminders_topic";
     LAUNCHPAD_ENABLE_PRETTY_OUTPUT = "false";
   };
 in
@@ -38,6 +39,7 @@ in
         keys = {
           gitlab_token = { };
           paperless_token = { };
+          reminders_topic = { };
         };
       };
     };

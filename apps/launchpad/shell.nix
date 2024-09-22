@@ -55,6 +55,7 @@ pkgs.mkShell {
     mkdir -p .secrets
     export LAUNCHPAD_PAPERLESS_TOKEN_FILE=".secrets/paperless_token"
     export LAUNCHPAD_GITLAB_TOKEN_FILE=".secrets/gitlab_token"
+    export LAUNCHPAD_REMINDERS_TOPIC_FILE=".secrets/reminders_topic"
 
     mkdir -p .pg
     export PGDATA="$PWD/.pg/data"

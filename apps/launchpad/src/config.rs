@@ -8,6 +8,7 @@ pub struct Config {
     pub bind_address: String,
     pub database_url: String,
     pub gitlab_token: String,
+    pub reminders_topic: String,
     pub paperless_token: String,
     #[serde(default = "default_local_time_zone")]
     pub local_time_zone: String,

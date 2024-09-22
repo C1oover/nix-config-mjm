@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "\nUPDATE tasks\nSET description = $2,\n    tags = $3\nWHERE id = $1\nRETURNING *\n            ",
+  "query": "\nSELECT *\nFROM tasks\nWHERE completed_at IS NULL\nAND reminder_id IS NOT NULL\nAND notify_at IS NOT NULL\nAND notify_at <= current_timestamp\n            ",
   "describe": {
     "columns": [
       {
@@ -45,11 +45,7 @@
       }
     ],
     "parameters": {
-      "Left": [
-        "Int8",
-        "Text",
-        "TextArray"
-      ]
+      "Left": []
     },
     "nullable": [
       false,
@@ -62,5 +58,5 @@
       true
     ]
   },
-  "hash": "a324af13dd0fe8dc7e3fcd7cbb82218a48b93a8a28b1cc8545a1b99b85a580ff"
+  "hash": "149ab7de3a47a5245e5726d9d75c760bb315a104077832dc019dcbf800381ac0"
 }

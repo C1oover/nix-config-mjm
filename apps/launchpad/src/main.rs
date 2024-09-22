@@ -69,7 +69,7 @@ async fn main() {
         Command::ProcessReminders => {
             let app_state = app::new_state(config.clone()).await.unwrap();
 
-            tasks::Reminder::process_outstanding(&app_state.pool)
+            tasks::Reminder::process_outstanding(&app_state.pool, &config.reminders_topic)
                 .await
                 .expect("failed to process outstanding reminders");
 
