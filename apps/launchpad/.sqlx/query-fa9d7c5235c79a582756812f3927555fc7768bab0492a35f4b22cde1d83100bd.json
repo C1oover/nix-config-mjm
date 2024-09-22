@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "\nINSERT INTO reminders\n(description, tags, remind_at, snooze_minutes)\nVALUES\n($1, $2, $3, $4)\nRETURNING\nid, description, tags, state as \"state: _\", remind_at, snooze_minutes, repeat_interval as \"repeat_interval: _\"\n            ",
+  "query": "\nINSERT INTO reminders\n(description, tags, remind_at, snooze_minutes, repeat_interval)\nVALUES\n($1, $2, $3, $4, $5)\nRETURNING\nid, description, tags, state as \"state: _\", remind_at, snooze_minutes, repeat_interval as \"repeat_interval: _\"\n            ",
   "describe": {
     "columns": [
       {
@@ -55,7 +55,8 @@
         "Text",
         "TextArray",
         "Timestamptz",
-        "Int8"
+        "Int8",
+        "Jsonb"
       ]
     },
     "nullable": [
@@ -68,5 +69,5 @@
       true
     ]
   },
-  "hash": "ba853f4d01a815316bdb7a8cfd6f7b9219ce8b7e3ae1cfa6ac2b69ce3af46adf"
+  "hash": "fa9d7c5235c79a582756812f3927555fc7768bab0492a35f4b22cde1d83100bd"
 }

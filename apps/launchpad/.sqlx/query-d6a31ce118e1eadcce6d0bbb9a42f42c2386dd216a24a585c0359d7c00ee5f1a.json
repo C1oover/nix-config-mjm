@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "\nUPDATE reminders\nSET description = $2,\n    tags = $3,\n    remind_at = $4,\n    snooze_minutes = $5\nWHERE id = $1\nRETURNING\nid, description, tags, state as \"state: _\", remind_at, snooze_minutes, repeat_interval as \"repeat_interval: _\"\n            ",
+  "query": "\nUPDATE reminders\nSET description = $2,\n    tags = $3,\n    remind_at = $4,\n    snooze_minutes = $5,\n    repeat_interval = $6\nWHERE id = $1\nRETURNING\nid, description, tags, state as \"state: _\", remind_at, snooze_minutes, repeat_interval as \"repeat_interval: _\"\n            ",
   "describe": {
     "columns": [
       {
@@ -56,7 +56,8 @@
         "Text",
         "TextArray",
         "Timestamptz",
-        "Int8"
+        "Int8",
+        "Jsonb"
       ]
     },
     "nullable": [
@@ -69,5 +70,5 @@
       true
     ]
   },
-  "hash": "3e48b6847a0c2bf2823eb39c52c4b2d7825dbf250369d0809f9ae91cb4648b73"
+  "hash": "d6a31ce118e1eadcce6d0bbb9a42f42c2386dd216a24a585c0359d7c00ee5f1a"
 }
