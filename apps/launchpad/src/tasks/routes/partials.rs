@@ -109,52 +109,57 @@ pub fn reminder_list(reminders: &[Reminder]) -> Markup {
     }
 }
 
-pub fn new_task_modal() -> Markup {
+pub fn modal_container(id: &str, body: Markup) -> Markup {
     html! {
-        #new-task-modal
+        #(id)
             .modal .fade
             aria-hidden="true"
-            aria-labelledby="new-task-modal-title"
-            tabindex="-1" {
+            aria-labelledby={(id) "-title"}
+            tabindex="-1"
+            "hx-on::before-cleanup-element"="console.log('disposing'); bootstrap.Modal.getInstance(this).dispose()" {
+            (body)
+        }
+    }
+}
 
-            .modal-dialog .modal-fullscreen-md-down {
-                .modal-content {
-                    form
-                        hx-post="/tasks"
-                        hx-target="#new-task-modal"
-                        hx-swap="outerHTML" {
+pub fn new_task_modal() -> Markup {
+    html! {
+        .modal-dialog .modal-fullscreen-md-down {
+            .modal-content {
+                form
+                    hx-post="/tasks"
+                    hx-target="#new-task-modal" {
 
-                        .modal-header {
-                            h1 #new-task-modal-title .modal-title .fs-5 {
-                                "New task"
-                            }
-                            button .btn-close type="button" data-bs-dismiss="modal" aria-label="Close" {}
+                    .modal-header {
+                        h1 #new-task-modal-title .modal-title .fs-5 {
+                            "New task"
                         }
-                        .modal-body {
-                            .mb-3 {
-                                label .form-label for="new-task-description" { "Description" }
-                                input
-                                    #new-task-description
-                                    .form-control
-                                    name="description"
-                                    type="text"
-                                    autocomplete="off";
-                            }
+                        button .btn-close type="button" data-bs-dismiss="modal" aria-label="Close" {}
+                    }
+                    .modal-body {
+                        .mb-3 {
+                            label .form-label for="new-task-description" { "Description" }
+                            input
+                                #new-task-description
+                                .form-control
+                                name="description"
+                                type="text"
+                                autocomplete="off";
+                        }
 
-                            .mb-3 {
-                                label .form-label for="new-task-tags" { "Tags" }
-                                input
-                                    #new-task-tags
-                                    .form-control
-                                    name="tags"
-                                    type="text"
-                                    autocomplete="off";
-                            }
+                        .mb-3 {
+                            label .form-label for="new-task-tags" { "Tags" }
+                            input
+                                #new-task-tags
+                                .form-control
+                                name="tags"
+                                type="text"
+                                autocomplete="off";
                         }
-                        .modal-footer {
-                            button .btn.btn-secondary type="button" data-bs-dismiss="modal" { "Close" }
-                            button .btn.btn-primary { "Save" }
-                        }
+                    }
+                    .modal-footer {
+                        button .btn.btn-secondary type="button" data-bs-dismiss="modal" { "Close" }
+                        button .btn.btn-primary { "Save" }
                     }
                 }
             }

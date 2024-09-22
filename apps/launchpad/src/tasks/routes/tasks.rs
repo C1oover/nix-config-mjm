@@ -65,7 +65,7 @@ async fn index(
                 }
             }
 
-            (partials::new_task_modal())
+            (partials::modal_container("new-task-modal", partials::new_task_modal()))
             (partials::new_reminder_modal(&tz))
         },
     ))
