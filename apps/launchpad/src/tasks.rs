@@ -1,7 +1,8 @@
 pub(crate) mod routes;
 
 use anyhow::{bail, Result};
-use chrono::{DateTime, Utc};
+use chrono::{DateTime, Days, Months, Utc};
+use core::ops::Add;
 use serde::{Deserialize, Serialize};
 use sqlx::{types::Json, Acquire, PgConnection, PgExecutor, PgPool, Postgres};
 
@@ -136,24 +137,7 @@ RETURNING *
         .fetch_one(&mut *conn)
         .await?;
 
-        let reminder = Reminder::get(&mut *conn, reminder_id).await?;
-        match reminder.repeat_interval {
-            None => {
-                sqlx::query!(
-                    r#"
-UPDATE reminders
-SET state = 'completed',
-    updated_at = current_timestamp
-WHERE id = $1
-                    "#,
-                    reminder.id
-                )
-                .execute(&mut *conn)
-                .await?;
-            }
-            //   if repeat interval, advance remind_at and set back to pending
-            Some(_) => todo!("repeating reminders aren't implemented yet"),
-        }
+        Reminder::complete(conn, reminder_id).await?;
 
         Ok(updated_task)
     }
@@ -359,6 +343,45 @@ id, description, tags, state as "state: _", remind_at, snooze_minutes, repeat_in
         .await?)
     }
 
+    #[tracing::instrument(skip(conn), err)]
+    async fn complete(conn: &mut PgConnection, id: i64) -> Result<()> {
+        let reminder = Reminder::get(&mut *conn, id).await?;
+        match reminder.repeat_interval {
+            None => {
+                sqlx::query!(
+                    r#"
+UPDATE reminders
+SET state = 'completed',
+    updated_at = current_timestamp
+WHERE id = $1
+                    "#,
+                    reminder.id
+                )
+                .execute(&mut *conn)
+                .await?;
+            }
+            Some(Json(ri)) => {
+                let new_remind_at = advance_by(reminder.remind_at, &ri);
+
+                sqlx::query!(
+                    r#"
+UPDATE reminders
+SET state = 'pending',
+    remind_at = $2,
+    updated_at = current_timestamp
+WHERE id = $1
+                    "#,
+                    id,
+                    new_remind_at
+                )
+                .execute(&mut *conn)
+                .await?;
+            }
+        };
+
+        Ok(())
+    }
+
     #[tracing::instrument(skip(e), ret, err)]
     async fn set_current_task<'e, E: PgExecutor<'e>>(
         e: E,
@@ -444,6 +467,14 @@ impl RepeatInterval {
     }
 }
 
+impl Add<&RepeatInterval> for DateTime<Utc> {
+    type Output = DateTime<Utc>;
+
+    fn add(self, rhs: &RepeatInterval) -> Self::Output {
+        self + Months::new(rhs.months as u32) + Days::new((rhs.days + (rhs.weeks * 7)) as u64)
+    }
+}
+
 #[derive(Debug)]
 struct ReminderInsertInput {
     description: String,
@@ -460,4 +491,15 @@ struct ReminderUpdateInput {
     remind_at: DateTime<Utc>,
     snooze_minutes: i64,
     repeat_interval: Option<RepeatInterval>,
+}
+
+fn advance_by(dt: DateTime<Utc>, interval: &RepeatInterval) -> DateTime<Utc> {
+    let now = Utc::now();
+    let mut new_dt = dt + interval;
+
+    while new_dt < now {
+        new_dt = new_dt + interval;
+    }
+
+    new_dt
 }
