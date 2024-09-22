@@ -406,6 +406,22 @@ id, description, tags, state as "state: _", remind_at, snooze_minutes, repeat_in
         .await?)
     }
 
+    #[tracing::instrument(skip(conn), err)]
+    async fn delete(conn: &mut PgConnection, id: i64) -> Result<()> {
+        // TODO consider what effect this should have on tasks
+        sqlx::query!(
+            r#"
+DELETE FROM reminders
+WHERE id = $1
+            "#,
+            id
+        )
+        .execute(conn)
+        .await?;
+
+        Ok(())
+    }
+
     #[tracing::instrument(skip(pool), err)]
     pub async fn process_outstanding(pool: &PgPool) -> Result<()> {
         let mut tx = pool.begin().await?;

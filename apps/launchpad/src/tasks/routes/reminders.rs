@@ -22,7 +22,7 @@ use crate::{
 pub fn router() -> Router<app::State> {
     Router::new()
         .route("/reminders", post(create))
-        .route("/reminders/:id", put(update))
+        .route("/reminders/:id", put(update).delete(delete))
         .route("/reminders/:id/edit", get(edit))
 }
 
@@ -222,7 +222,7 @@ async fn edit(
                     button
                         .btn.btn-outline-danger
                         type="button"
-                        hx-delete={ "/tasks/" (reminder.id) }
+                        hx-delete={ "/reminders/" (reminder.id) }
                         hx-confirm="Are you sure you want to delete this reminder?" {
                         "Delete"
                     }
@@ -280,6 +280,17 @@ async fn update(
 ) -> Result<impl IntoResponse, app::Error> {
     let mut conn = pool.acquire().await?;
     Reminder::update(&mut conn, id, &form.as_input(tz)?).await?;
+
+    Ok(Redirect::to("/tasks"))
+}
+
+#[tracing::instrument(skip(pool), err)]
+async fn delete(
+    State(pool): State<PgPool>,
+    Path(id): Path<i64>,
+) -> Result<impl IntoResponse, app::Error> {
+    let mut conn = pool.acquire().await?;
+    Reminder::delete(&mut conn, id).await?;
 
     Ok(Redirect::to("/tasks"))
 }
