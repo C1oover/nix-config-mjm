@@ -6,7 +6,7 @@ use axum::{
 };
 use chrono::{NaiveDateTime, Utc};
 use chrono_tz::Tz;
-use maud::{html, PreEscaped};
+use maud::html;
 use serde::Deserialize;
 use serde_with::serde_as;
 use sqlx::PgPool;
@@ -77,13 +77,7 @@ async fn create(
         div hx-swap-oob="innerHTML:#reminder-list" {
             (partials::reminder_list(&reminders))
         }
-
-        script type="text/javascript" {
-            (PreEscaped(r##"
-                bootstrap.Modal.getInstance("#new-reminder-modal").hide();
-            "##))
-        }
-
+        (partials::hide_modal("new-reminder-modal"))
         (partials::new_reminder_modal(&tz))
     })
 }

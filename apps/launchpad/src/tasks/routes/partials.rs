@@ -1,9 +1,19 @@
 use chrono::Utc;
 use chrono_humanize::HumanTime;
 use chrono_tz::Tz;
-use maud::{html, Markup};
+use maud::{html, Markup, PreEscaped};
 
 use crate::tasks::{Reminder, Task};
+
+pub fn hide_modal(id: &str) -> Markup {
+    html! {
+        script type="text/javascript" {
+            (PreEscaped(format!(r##"
+                bootstrap.Modal.getInstance("#{}").hide();
+            "##, id)))
+        }
+    }
+}
 
 pub fn task_list(tasks: &[Task]) -> Markup {
     html! {

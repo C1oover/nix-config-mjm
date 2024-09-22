@@ -5,7 +5,7 @@ use axum::{
     Form, Router,
 };
 use chrono_tz::Tz;
-use maud::{html, PreEscaped};
+use maud::html;
 use serde::Deserialize;
 use sqlx::PgPool;
 use tokio::try_join;
@@ -102,13 +102,7 @@ async fn create(
         div hx-swap-oob="innerHTML:#task-list" {
             (partials::task_list(&tasks))
         }
-
-        script type="text/javascript" {
-            (PreEscaped(r##"
-                bootstrap.Modal.getInstance("#new-task-modal").hide();
-            "##))
-        }
-
+        (partials::hide_modal("new-task-modal"))
         (partials::new_task_modal())
     })
 }
