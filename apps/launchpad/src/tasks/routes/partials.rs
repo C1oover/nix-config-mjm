@@ -44,7 +44,8 @@ pub fn task_list(tasks: &[Task]) -> Markup {
                         @if let Some(notify_at) = task.notify_at {
                             div {
                                 small .text-body-secondary {
-                                    "Snoozed until "
+                                    i .bi-bell {}
+                                    " Notifying "
                                     (HumanTime::from(notify_at))
                                 }
                             }
@@ -55,6 +56,8 @@ pub fn task_list(tasks: &[Task]) -> Markup {
                         div {
                             @for tag in &task.tags {
                                 span .badge .text-bg-secondary .me-1 {
+                                    i .bi-tag {}
+                                    " "
                                     (tag)
                                 }
                             }
@@ -63,7 +66,7 @@ pub fn task_list(tasks: &[Task]) -> Markup {
                 }
 
                 a .btn.btn-primary.btn-sm href={ "/tasks/" (task.id) "/edit" } {
-                    "Edit"
+                    i .bi-pencil {}
                 }
             }
         }
@@ -83,6 +86,8 @@ pub fn reminder_list(reminders: &[Reminder]) -> Markup {
 
                     div {
                         small .text-body-secondary {
+                            i .bi-clock {}
+                            " "
                             @if reminder.is_firing() {
                                 "Firing since "
                             }
@@ -94,6 +99,8 @@ pub fn reminder_list(reminders: &[Reminder]) -> Markup {
                         div {
                             @for tag in &reminder.tags {
                                 span .badge .text-bg-secondary .me-1 {
+                                    i .bi-tag {}
+                                    " "
                                     (tag)
                                 }
                             }
@@ -102,7 +109,7 @@ pub fn reminder_list(reminders: &[Reminder]) -> Markup {
                 }
 
                 a .btn.btn-primary.btn-sm href={ "/reminders/" (reminder.id) "/edit" } {
-                    "Edit"
+                    i .bi-pencil {}
                 }
             }
         }

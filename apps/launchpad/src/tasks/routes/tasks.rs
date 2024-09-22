@@ -45,7 +45,9 @@ async fn index(
                     type="button"
                     data-bs-toggle="modal"
                     data-bs-target="#new-task-modal" {
-                    "New task"
+
+                    i .bi-plus-circle-fill { }
+                    " New task"
                 }
             }
 
@@ -61,7 +63,9 @@ async fn index(
                     type="button"
                     data-bs-toggle="modal"
                     data-bs-target="#new-reminder-modal" {
-                    "New reminder"
+
+                    i .bi-plus-circle-fill { }
+                    " New reminder"
                 }
             }
 
