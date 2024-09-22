@@ -106,9 +106,9 @@
         "repo": "nix-darwin"
       },
       "branch": "master",
-      "revision": "c03f85fa42d68d1056ca1740f3113b04f3addff2",
-      "url": "https://github.com/LnL7/nix-darwin/archive/c03f85fa42d68d1056ca1740f3113b04f3addff2.tar.gz",
-      "hash": "0ry5wl8xfdqixmdxn4wl67wr2md7ii33jqk4ppr0y8h5n9d6kja1"
+      "revision": "bd7d1e3912d40f799c5c0f7e5820ec950f1e0b3d",
+      "url": "https://github.com/LnL7/nix-darwin/archive/bd7d1e3912d40f799c5c0f7e5820ec950f1e0b3d.tar.gz",
+      "hash": "1rx5kcqv9calmxn0jsj1abld3wc41k7gglqnlfyg63f0vxp6by89"
     },
     "devenv": {
       "type": "GitRelease",
@@ -169,9 +169,9 @@
         "repo": "home-manager"
       },
       "branch": "master",
-      "revision": "14929f7089268481d86b83ed31ffd88713dcd415",
-      "url": "https://github.com/nix-community/home-manager/archive/14929f7089268481d86b83ed31ffd88713dcd415.tar.gz",
-      "hash": "1pjf6h0qqkj8030imxjjqjbjryinaz5vgl9b3pwahb6m0jkkniqs"
+      "revision": "04213d1ce4221f5d9b40bcee30706ce9a91d148d",
+      "url": "https://github.com/nix-community/home-manager/archive/04213d1ce4221f5d9b40bcee30706ce9a91d148d.tar.gz",
+      "hash": "12pkv5mq167gnvqy6p6xnm2x1c51d0zqd0cm9s27lqzl9lmwd4rl"
     },
     "impermanence": {
       "type": "Git",
@@ -221,8 +221,8 @@
     "nixos-small": {
       "type": "Channel",
       "name": "nixos-unstable-small",
-      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-24.11pre684171.b8e6da32d920/nixexprs.tar.xz",
-      "hash": "1zxkhzrazw48c4l504awa1z0ry75sdr6rwgmrql374y9lks12mip"
+      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-24.11pre684379.179b6bce2152/nixexprs.tar.xz",
+      "hash": "07jgh58gah2zgkh8gkyq7fblfqz5r78kjyj4k24rpi979dkxf5q6"
     },
     "nixpkgs": {
       "type": "Channel",
@@ -250,9 +250,9 @@
         "repo": "NUR"
       },
       "branch": "master",
-      "revision": "bdd834037910acd7241cd7c7de108dea08874190",
-      "url": "https://github.com/nix-community/NUR/archive/bdd834037910acd7241cd7c7de108dea08874190.tar.gz",
-      "hash": "1ssshmpcxw2q48lyn4ysgrx84b600ngxkz2jn3g6fzxz1y03gym5"
+      "revision": "d65b8378613424be887a23730febc25a7a06c337",
+      "url": "https://github.com/nix-community/NUR/archive/d65b8378613424be887a23730febc25a7a06c337.tar.gz",
+      "hash": "1acw3d5zzkm7fqvkgmcrvl40dakd1i792s94dj6j51zlya4bazhb"
     },
     "terranix": {
       "type": "GitRelease",
