@@ -122,8 +122,7 @@ pub fn modal_container(id: &str, body: Markup) -> Markup {
             .modal .fade
             aria-hidden="true"
             aria-labelledby={(id) "-title"}
-            tabindex="-1"
-            "hx-on::before-cleanup-element"="console.log('disposing'); bootstrap.Modal.getInstance(this).dispose()" {
+            tabindex="-1" {
             (body)
         }
     }
