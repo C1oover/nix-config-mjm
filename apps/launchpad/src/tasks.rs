@@ -234,12 +234,18 @@ WHERE id = $1
             topic: String,
             message: String,
             title: String,
+            priority: u32,
+            tags: Vec<String>,
+            click: String,
         }
 
         let msg = NtfyMessage {
             topic: topic.to_string(),
             message: self.description.to_string(),
             title: "Hey! Listen!".to_string(),
+            priority: 5,
+            tags: self.tags.clone(),
+            click: "https://launch.midna.dev/tasks".to_string(),
         };
 
         let client = reqwest::Client::new();
