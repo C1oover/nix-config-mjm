@@ -233,7 +233,7 @@ pub enum ReminderState {
     Completed,
 }
 
-#[derive(Deserialize, Serialize, Debug)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct RepeatInterval {
     pub months: i32,
     pub weeks: i32,
@@ -337,8 +337,6 @@ id, description, tags, state as "state: _", remind_at, snooze_minutes, repeat_in
 
     #[tracing::instrument(skip(conn), ret, err)]
     async fn update(conn: &mut PgConnection, id: i64, r: &ReminderUpdateInput) -> Result<Reminder> {
-        // TODO repeat interval
-
         Ok(sqlx::query_as!(
             Reminder,
             r#"
@@ -346,7 +344,8 @@ UPDATE reminders
 SET description = $2,
     tags = $3,
     remind_at = $4,
-    snooze_minutes = $5
+    snooze_minutes = $5,
+    repeat_interval = $6
 WHERE id = $1
 RETURNING
 id, description, tags, state as "state: _", remind_at, snooze_minutes, repeat_interval as "repeat_interval: _"
@@ -355,7 +354,8 @@ id, description, tags, state as "state: _", remind_at, snooze_minutes, repeat_in
             &r.description,
             &r.tags,
             &r.remind_at,
-            r.snooze_minutes
+            r.snooze_minutes,
+            r.repeat_interval.clone().map(|ri| Json(ri)) as _,
         ).fetch_one(&mut *conn)
         .await?)
     }
@@ -422,6 +422,26 @@ impl ReminderState {
             Self::Firing => true,
             _ => false,
         }
+    }
+}
+
+impl RepeatInterval {
+    fn new(days: Option<i32>, weeks: Option<i32>, months: Option<i32>) -> Option<Self> {
+        let ri = RepeatInterval {
+            days: days.unwrap_or(0),
+            weeks: weeks.unwrap_or(0),
+            months: months.unwrap_or(0),
+        };
+
+        if ri.is_zero() {
+            None
+        } else {
+            Some(ri)
+        }
+    }
+
+    fn is_zero(self: &Self) -> bool {
+        self.days == 0 && self.weeks == 0 && self.months == 0
     }
 }
 

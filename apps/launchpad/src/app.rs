@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 use crate::{config::Config, deploys};
 use anyhow::Result;
 use axum::extract::FromRef;
@@ -37,6 +39,12 @@ where
 {
     fn from(value: E) -> Self {
         Self(value.into())
+    }
+}
+
+impl Display for Error {
+    fn fmt(self: &Self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        self.0.fmt(f)
     }
 }
 

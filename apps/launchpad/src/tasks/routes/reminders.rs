@@ -7,12 +7,16 @@ use axum::{
 use chrono::{NaiveDateTime, Utc};
 use chrono_tz::Tz;
 use maud::{html, PreEscaped};
-use serde::Deserialize;
+use serde::{Deserialize, Deserializer};
+use serde_with::serde_as;
 use sqlx::PgPool;
 
 use crate::{
     app,
-    tasks::{routes::partials, split_tags, Reminder, ReminderInsertInput, ReminderUpdateInput},
+    tasks::{
+        routes::partials, split_tags, Reminder, ReminderInsertInput, ReminderUpdateInput,
+        RepeatInterval,
+    },
 };
 
 pub fn router() -> Router<app::State> {
@@ -143,15 +147,60 @@ async fn edit(
                 }
 
                 .mb-3 {
-                    label .form-label for="edit-reminder-repeat-interval" { "Repeat every" }
-                    input
-                        #edit-reminder-repeat-interval
-                        .form-control
-                        name="repeat_interval"
-                        type="text"
-                        // TODO
-                        value=""
-                        autocomplete="off";
+                    label .form-label for="edit-reminder-repeat-days" { "Repeat every" }
+
+                    .row {
+                        .col-sm .mb-2 {
+                            .input-group {
+                                input
+                                    #edit-reminder-repeat-days
+                                    .form-control
+                                    name="repeat_days"
+                                    type="number"
+                                    value=(match &reminder.repeat_interval {
+                                        Some(ri) => if ri.days == 0 { "".to_string() } else { ri.days.to_string() },
+                                        None => "".to_string()
+                                    })
+                                    autocomplete="off";
+
+                                span .input-group-text { "days" }
+                            }
+                        }
+
+                        .col-sm .mb-2 {
+                            .input-group {
+                                input
+                                    #edit-reminder-repeat-weeks
+                                    .form-control
+                                    name="repeat_weeks"
+                                    type="number"
+                                    value=(match &reminder.repeat_interval {
+                                        Some(ri) => if ri.weeks == 0 { "".to_string() } else { ri.weeks.to_string() },
+                                        None => "".to_string()
+                                    })
+                                    autocomplete="off";
+
+                                span .input-group-text { "weeks" }
+                            }
+                        }
+
+                        .col-sm .mb-2 {
+                            .input-group {
+                                input
+                                    #edit-reminder-repeat-months
+                                    .form-control
+                                    name="repeat_months"
+                                    type="number"
+                                    value=(match &reminder.repeat_interval {
+                                        Some(ri) => if ri.months == 0 { "".to_string() } else { ri.months.to_string() },
+                                        None => "".to_string()
+                                    })
+                                    autocomplete="off";
+
+                                span .input-group-text { "months" }
+                            }
+                        }
+                    }
                 }
 
                 .d-grid .gap-2 .d-md-block {
@@ -174,13 +223,22 @@ async fn edit(
     ))
 }
 
+#[serde_as]
 #[derive(Deserialize, Debug)]
 struct UpdateForm {
     description: String,
     tags: String,
     remind_at: String,
     snooze_minutes: i64,
-    repeat_interval: String,
+    #[serde_as(as = "serde_with::NoneAsEmptyString")]
+    #[serde(default)]
+    repeat_days: Option<i32>,
+    #[serde_as(as = "serde_with::NoneAsEmptyString")]
+    #[serde(default)]
+    repeat_weeks: Option<i32>,
+    #[serde_as(as = "serde_with::NoneAsEmptyString")]
+    #[serde(default)]
+    repeat_months: Option<i32>,
 }
 
 impl UpdateForm {
@@ -195,12 +253,16 @@ impl UpdateForm {
             tags: split_tags(&self.tags),
             remind_at,
             snooze_minutes: self.snooze_minutes,
-            repeat_interval: None,
+            repeat_interval: RepeatInterval::new(
+                self.repeat_days,
+                self.repeat_weeks,
+                self.repeat_months,
+            ),
         })
     }
 }
 
-#[tracing::instrument(skip(pool, tz))]
+#[tracing::instrument(skip(pool, tz), err)]
 async fn update(
     State(pool): State<PgPool>,
     State(tz): State<Tz>,
