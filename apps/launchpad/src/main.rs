@@ -40,7 +40,7 @@ async fn main() {
     let cli = Cli::parse();
 
     let config: Config = Config::figment().extract().unwrap();
-    init_tracing(&config);
+    let tracer_provider = init_tracing(&config);
 
     match &cli.command {
         Command::Serve => {
@@ -65,6 +65,9 @@ async fn main() {
             };
 
             serve(listener, app.into_make_service()).await.unwrap();
+
+            global::shutdown_tracer_provider();
+            tracer_provider.shutdown().unwrap();
         }
         Command::ProcessReminders => {
             let app_state = app::new_state(config.clone()).await.unwrap();
@@ -74,11 +77,12 @@ async fn main() {
                 .expect("failed to process outstanding reminders");
 
             global::shutdown_tracer_provider();
+            tracer_provider.shutdown().unwrap();
         }
     }
 }
 
-fn init_tracing(config: &Config) {
+fn init_tracing(config: &Config) -> opentelemetry_sdk::trace::TracerProvider {
     let otlp_exporter = opentelemetry_otlp::new_exporter().tonic();
     let provider = opentelemetry_otlp::new_pipeline()
         .tracing()
@@ -86,8 +90,8 @@ fn init_tracing(config: &Config) {
         .install_batch(runtime::Tokio)
         .unwrap();
 
-    global::set_tracer_provider(provider.clone());
     let tracer = provider.tracer("launchpad");
+    global::set_tracer_provider(provider.clone());
 
     let fmt_layer = tracing_subscriber::fmt::layer();
 
@@ -102,6 +106,8 @@ fn init_tracing(config: &Config) {
     } else {
         registry.with(fmt_layer).init();
     }
+
+    provider
 }
 
 async fn health() -> impl IntoResponse {
