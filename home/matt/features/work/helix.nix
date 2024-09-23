@@ -28,6 +28,7 @@ in
             {
               lint-command = "mix credo suggest --format=flycheck --read-from-stdin";
               lint-stdin = true;
+              lint-ignore-exit-code = true;
               lint-formats = [
                 "%f:%l:%c: %t: %m"
                 "%f:%l: %t: %m"
