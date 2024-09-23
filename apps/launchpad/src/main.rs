@@ -92,10 +92,10 @@ fn init_tracing(config: &Config) {
     let fmt_layer = tracing_subscriber::fmt::layer();
 
     let registry = tracing_subscriber::registry()
+        .with(OpenTelemetryLayer::new(tracer))
         .with(tracing_subscriber::filter::LevelFilter::from_level(
-            Level::INFO,
-        ))
-        .with(OpenTelemetryLayer::new(tracer));
+            Level::DEBUG,
+        ));
 
     if config.enable_pretty_output {
         registry.with(fmt_layer.pretty()).init();
