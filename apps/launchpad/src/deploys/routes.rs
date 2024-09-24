@@ -32,10 +32,25 @@ async fn index(State(client): State<GitLabClient>) -> Result<impl IntoResponse, 
 
             ul .list-group {
                 @for deploy in &deploys {
-                    li .list-group-item {
-                        (deploy.deployable.name)
-                        " - "
-                        (deploy.deployable.commit.message)
+                    @let (title, _desc) = deploy.deployable.commit.split_message();
+                    li
+                        .list-group-item
+                        .list-group-item-danger[deploy.is_failed()]
+                        .list-group-item-secondary[deploy.is_blocked()] {
+
+                        a href=(deploy.deployable.web_url) target="_blank"
+                            .text-decoration-none .text-reset {
+
+                            div {
+                                span .fw-bold { (title) }
+                            }
+
+                            div {
+                                span .badge .text-bg-secondary {
+                                    (deploy.deployable.friendly_name())
+                                }
+                            }
+                        }
                     }
                 }
             }
