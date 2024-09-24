@@ -120,10 +120,10 @@
       "pre_releases": false,
       "version_upper_bound": null,
       "release_prefix": null,
-      "version": "v1.1",
-      "revision": "67c3622d93d9050da9167c5cdaf871e243f805c5",
-      "url": "https://api.github.com/repos/cachix/devenv/tarball/v1.1",
-      "hash": "1pllgxvr7skr8nrzpxl25vqmq11c76wf4h90616mdrq49h2qx3gf"
+      "version": "v1.2",
+      "revision": "e3f0b77d6c40b28f1bb3411387e314934092ec8e",
+      "url": "https://api.github.com/repos/cachix/devenv/tarball/v1.2",
+      "hash": "0ql8jsdgkibrv20zw5m6saws3xllm3ffy6l5mbh0x9c0v2aii4zp"
     },
     "firefox-csshacks": {
       "type": "Git",
@@ -221,8 +221,8 @@
     "nixos-small": {
       "type": "Channel",
       "name": "nixos-unstable-small",
-      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-24.11pre684779.d266adc5a77e/nixexprs.tar.xz",
-      "hash": "1qblc9g2vks75y50hkv59r7smkdwf2q5xpkq296al15z59zrldls"
+      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-24.11pre685070.5620491106cf/nixexprs.tar.xz",
+      "hash": "1dgcm7cxnl8dgvpwxgk490ygpcf10n9mr6qh6is6m6wl4qk6ach2"
     },
     "nixpkgs": {
       "type": "Channel",
@@ -250,9 +250,9 @@
         "repo": "NUR"
       },
       "branch": "master",
-      "revision": "49f4f2dd33246662db91301a6528a0c47954a784",
-      "url": "https://github.com/nix-community/NUR/archive/49f4f2dd33246662db91301a6528a0c47954a784.tar.gz",
-      "hash": "0cnakvvw0pk8icgwn7wg3j9imj2k3hyxdxrsym8m4mr2sra355qp"
+      "revision": "c7225411f6e9087829c3a120e2698867d1b05319",
+      "url": "https://github.com/nix-community/NUR/archive/c7225411f6e9087829c3a120e2698867d1b05319.tar.gz",
+      "hash": "0k1wp67nyrpx7p5nwymrdg84c9qh91sqlri5raqjw5ald32dd8cy"
     },
     "terranix": {
       "type": "GitRelease",
