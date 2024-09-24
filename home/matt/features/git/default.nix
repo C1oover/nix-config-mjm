@@ -178,12 +178,6 @@ in
       def --wrapped ,jr [...rest] {
         jj rebase -d (,jf) ...$rest
       }
-
-      source ${
-        pkgs.runCommand "jj-completions" { } ''
-          ${pkgs.jujutsu}/bin/jj util completion nushell > $out
-        ''
-      }
     '';
   };
 }
