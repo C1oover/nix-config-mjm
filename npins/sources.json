@@ -177,12 +177,12 @@
       "type": "Git",
       "repository": {
         "type": "GitHub",
-        "owner": "amarshall",
+        "owner": "nix-community",
         "repo": "impermanence"
       },
-      "branch": "fix-duplicate-def",
-      "revision": "7448d149b0489f709aa6841d5d2af0635f14d69f",
-      "url": "https://github.com/amarshall/impermanence/archive/7448d149b0489f709aa6841d5d2af0635f14d69f.tar.gz",
+      "branch": "master",
+      "revision": "8514fff0f048557723021ffeb31ca55f69b67de3",
+      "url": "https://github.com/nix-community/impermanence/archive/8514fff0f048557723021ffeb31ca55f69b67de3.tar.gz",
       "hash": "05vsdmmahfcm3p870ayxl0gh2bp3kdx3l1dl5phkpxw6whiib8zy"
     },
     "lanzaboote": {
