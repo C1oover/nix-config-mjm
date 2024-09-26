@@ -1,4 +1,4 @@
-use chrono::Utc;
+use chrono::{Months, Utc};
 use chrono_humanize::HumanTime;
 use chrono_tz::Tz;
 use maud::{html, Markup, PreEscaped};
@@ -74,12 +74,18 @@ pub fn task_list(tasks: &[Task]) -> Markup {
 }
 
 pub fn reminder_list(reminders: &[Reminder]) -> Markup {
+    let one_month = Utc::now() + Months::new(1);
+    let (upcoming, future) = match reminders.iter().position(|r| r.remind_at > one_month) {
+        None => (reminders, &[] as &[Reminder]),
+        Some(idx) => reminders.split_at(idx),
+    };
+
     html! {
-        @for reminder in reminders {
+        @for reminder in upcoming {
             li
                 .list-group-item
                 .d-flex.justify-content-between.align-items-start
-                .bg-info-subtle[reminder.is_firing()] {
+                .list-group-item-primary[reminder.is_firing()] {
 
                 .me-auto {
                     (reminder.description)
@@ -110,6 +116,19 @@ pub fn reminder_list(reminders: &[Reminder]) -> Markup {
 
                 a .btn.btn-primary.btn-sm href={ "/reminders/" (reminder.id) "/edit" } {
                     i .bi-pencil {}
+                }
+            }
+        }
+
+        @if !future.is_empty() {
+            li
+                .list-group-item
+                .list-group-item-info {
+                "Hiding "
+                (future.len())
+                " future reminder"
+                @if future.len() > 1 {
+                    "s"
                 }
             }
         }
