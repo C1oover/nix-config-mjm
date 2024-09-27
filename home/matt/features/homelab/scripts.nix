@@ -30,7 +30,7 @@ writers.writeNuBin "homelab"
         ssh-client-signer/sign/homelab-client
         public_key=@${sshPublicKeyPath}
         valid_principals=matt,root
-      ) o> "${sshCertPath}"
+      ) | save -f "${sshCertPath}"
     }
 
     def --wrapped "main ssh vault" [...args] {
