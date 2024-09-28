@@ -58,6 +58,21 @@ def with-colmena [block, --use-known-hosts] {
   }
 }
 
+def post-mr-comment [
+  --url: string
+  --project: string
+  --token: string
+  --mr: string
+  --body: string
+] {
+  let body = { body: $body };
+  (http post
+    --content-type application/json
+    --headers [Authorization $"Bearer ($token)"]
+    $"($url)/projects/($project)/merge_requests/($mr)/notes"
+    $body)
+}
+
 def --wrapped "darwin rebuild" [...args] {
   nom-build hosts/darwin.nix -A $'(scutil --get LocalHostName).system' ...$args
   nvd diff /run/current-system ./result
@@ -184,7 +199,27 @@ def "main ci diff" [] {
         colmena exec -v --on $host -- system-upgrade-check -n $system_path out+err> $'diffs/($host)'
         print $'($host): done'
       }
-      cat diffs/*
+
+      let comment_text = ls diffs/* | each {|row|
+        let content = open $row.name;
+        let name = $row.name | path basename;
+
+        $'<details><summary>($name)</summary>
+
+```
+($content)
+```
+  
+</details>' } | str join "\n\n"
+
+      (post-mr-comment
+        --url $env.CI_API_V4_URL
+        --token $env.PINS_UPDATE_TOKEN
+        --project $env.CI_PROJECT_ID
+        --mr $env.CI_MERGE_REQUEST_IID
+        --body $comment_text)
+
+      print "posted comment to merge request"
     }
   }
 }
