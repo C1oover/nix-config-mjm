@@ -7,7 +7,7 @@
 
   powerManagement.cpuFreqGovernor = "ondemand";
   nixpkgs.hostPlatform = "aarch64-linux";
-  boot.initrd.systemd.enableTpm2 = false;
+  boot.initrd.systemd.tpm2.enable = false;
 
   # they don't have a TPM, so we need this directory to be persistent
   # so we can use it for the key for systemd-creds
