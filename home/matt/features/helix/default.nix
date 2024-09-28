@@ -36,6 +36,7 @@ in
         elixir-ls
         marksman
         nil
+        nixd
         nixfmt-rfc-style
         racket
         shellcheck
@@ -90,6 +91,15 @@ in
               "-q"
             ];
           };
+          nixd = {
+            command = "nixd";
+            config.nixd = {
+              formatting.command = [
+                "nixfmt"
+                "-q"
+              ];
+            };
+          };
           yaml-language-server = {
             config.yaml = {
               format.enable = true;
@@ -134,6 +144,7 @@ in
           }
           {
             name = "nix";
+            language-servers = [ "nixd" ];
             auto-format = true;
           }
           {

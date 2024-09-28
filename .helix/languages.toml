@@ -1,0 +1,7 @@
+[language-server.nixd.config.nixd]
+nixpkgs = { expr = "import (import ./npins).nixos { config.allowUnfree = true; }" }
+
+[language-server.nixd.config.nixd.options]
+nixos = { expr = 'let sources = import ./npins; evalHive = import "${sources.colmena}/src/nix/hive/eval.nix"; hive = evalHive { rawHive = import ./hive.nix; }; in hive.nodes.uranus.options' }
+home-manager = { expr = 'let sources = import ./npins; in (import "${sources.home-manager}/modules" { configuration = { imports = [./home/matt/uranus.nix]; home.username = "matt"; home.homeDirectory = "/home/matt"; }; pkgs = import sources.nixos { config.allowUnfree = true; }; extraSpecialArgs = { inputs = sources; }; }).options' }
+
