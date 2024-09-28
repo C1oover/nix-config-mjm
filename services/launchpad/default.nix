@@ -82,7 +82,7 @@ in
     systemd.timers.launchpad-reminders = {
       wantedBy = [ "timers.target" ];
       timerConfig = {
-        OnCalendar = "*:0/5:00";
+        OnCalendar = "*:0/5:01";
       };
     };
 

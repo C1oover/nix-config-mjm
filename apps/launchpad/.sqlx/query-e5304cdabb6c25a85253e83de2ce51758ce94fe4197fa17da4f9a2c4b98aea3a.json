@@ -1,6 +1,6 @@
 {
   "db_name": "PostgreSQL",
-  "query": "\nSELECT id,\n       description,\n       tags,\n       state as \"state: _\",\n       remind_at,\n       snooze_minutes,\n       repeat_interval as \"repeat_interval: _\"\nFROM reminders\nWHERE state = 'pending'\nAND remind_at < current_timestamp\n            ",
+  "query": "\nSELECT id,\n       description,\n       tags,\n       state as \"state: _\",\n       remind_at,\n       snooze_minutes,\n       repeat_interval as \"repeat_interval: _\"\nFROM reminders\nWHERE state = 'pending'\nAND remind_at <= current_timestamp\n            ",
   "describe": {
     "columns": [
       {
@@ -63,5 +63,5 @@
       true
     ]
   },
-  "hash": "49549d87e7df828a22a394d5abe7e21715bd362c35d9493643570ddd84fe759e"
+  "hash": "e5304cdabb6c25a85253e83de2ce51758ce94fe4197fa17da4f9a2c4b98aea3a"
 }

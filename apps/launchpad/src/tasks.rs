@@ -346,7 +346,7 @@ SELECT id,
        repeat_interval as "repeat_interval: _"
 FROM reminders
 WHERE state = 'pending'
-AND remind_at < current_timestamp
+AND remind_at <= current_timestamp
             "#
         )
         .fetch_all(e)
