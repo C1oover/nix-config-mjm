@@ -17,8 +17,12 @@ async fn index(State(config): State<Config>) -> Result<impl IntoResponse, app::E
     Ok(app::layout(
         "Welcome!",
         html! {
-            .row .gy-2 hx-get="/status-cards" hx-trigger="every 30s" {
+            .row .gy-2 .mb-4 hx-get="/status-cards" hx-trigger="every 30s" {
                 (render_status_cards(status_cards))
+            }
+
+            .row .gy-2 {
+                (render_app_links())
             }
         },
     ))
@@ -63,6 +67,55 @@ fn render_status_cards(status_cards: StatusCards) -> Markup {
                     }
                 }
             }
+        }
+    }
+}
+
+fn render_app_links() -> Markup {
+    html! {
+        .col-sm {
+            .list-group {
+                (app_link("Consul", "boxes", "https://consul.midna.dev/"))
+                (app_link("Vault", "safe-fill", "https://vault.midna.dev/"))
+                (app_link("Proxmox", "motherboard-fill", "https://proxmox.midna.dev/"))
+                (app_link("GitLab", "code-slash", "https://git.midna.dev/"))
+                (app_link("NetBox", "diagram-3-fill", "https://netbox.midna.dev/"))
+            }
+        }
+
+        .col-sm {
+            .list-group {
+                (app_link("Grafana", "graph-up", "https://graphs.midna.dev/"))
+                (app_link("Prometheus", "rulers", "https://metrics.midna.dev/"))
+            }
+        }
+
+        .col-sm {
+            .list-group {
+                (app_link("Linkding", "bookmarks-fill", "https://links.midna.dev/"))
+                (app_link("Miniflux", "newspaper", "https://feeds.midna.dev/"))
+                (app_link("Vaultwarden", "lock-fill", "https://pass.midna.dev/"))
+                (app_link("Home Assistant", "house-gear-fill", "https://home.midna.dev/"))
+                (app_link("Music Assistant", "music-note-list", "https://tunes.midna.dev/"))
+                (app_link("Jellyfin", "film", "https://media.midna.dev/"))
+                (app_link("Peertube", "camera-reels-fill", "https://tube.midna.dev/"))
+                (app_link("Invidious", "collection-play-fill", "https://yt.midna.dev/"))
+            }
+        }
+    }
+}
+
+fn app_link(name: &str, icon: &str, href: &str) -> Markup {
+    html! {
+        a
+            .list-group-item
+            .list-group-item-action
+            href=(href)
+            target="_blank" {
+
+            i .me-2 .{ "bi-" (icon) } {}
+            " "
+            (name)
         }
     }
 }
