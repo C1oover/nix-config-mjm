@@ -34,8 +34,8 @@
 
   nix.package = pkgs.lix;
 
-  nix.nixPath = [ "nixpkgs=${pkgs.path}" ];
-  nix.registry.nixpkgs.flake.outPath = pkgs.path;
+  nix.nixPath = [ "nixpkgs=flake:nixpkgs" ];
+  nix.registry.nixpkgs.flake.outPath = toString pkgs.path;
 
   programs.nix-index.enable = true;
 }
