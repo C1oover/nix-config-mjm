@@ -133,9 +133,9 @@
         "repo": "firefox-csshacks"
       },
       "branch": "master",
-      "revision": "5051132cf35d7916b3f7b058951ef9dcbe29ae97",
-      "url": "https://github.com/MrOtherGuy/firefox-csshacks/archive/5051132cf35d7916b3f7b058951ef9dcbe29ae97.tar.gz",
-      "hash": "0c69fx5gwppwx6qw3zvqivhw5vlzqiq04spk6hhqwbkjnz5vfwmf"
+      "revision": "69e53df519a6254083970d3bc458ed1c8119ebc6",
+      "url": "https://github.com/MrOtherGuy/firefox-csshacks/archive/69e53df519a6254083970d3bc458ed1c8119ebc6.tar.gz",
+      "hash": "0s9p26pk9q05sx8g5mcr5zq8vm1klvjxfn89yh87dr23lrl4fiqa"
     },
     "hardware": {
       "type": "Git",
@@ -221,8 +221,8 @@
     "nixos-small": {
       "type": "Channel",
       "name": "nixos-unstable-small",
-      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-24.11pre687743.e277415cfed1/nixexprs.tar.xz",
-      "hash": "1shh22j1w5w1gn2ia8pgzw916a9vkfjqalwksv2ra1wqjxb2v0j7"
+      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-24.11pre687970.35d02934a17a/nixexprs.tar.xz",
+      "hash": "0qag2nzf27nbajlbakg7cjhnqqd66pljfr0j88pzcnaccb4h7mbg"
     },
     "nixpkgs": {
       "type": "Channel",
@@ -250,9 +250,9 @@
         "repo": "NUR"
       },
       "branch": "master",
-      "revision": "4d9f4dcec2598c8cf6878522b69e230086c2175a",
-      "url": "https://github.com/nix-community/NUR/archive/4d9f4dcec2598c8cf6878522b69e230086c2175a.tar.gz",
-      "hash": "06iidzx8mgxadb2jf8pjj7hn3w6p9swimxhdj1zhlhhzvphimgsy"
+      "revision": "8012c7894c396edc6fe0b791dceb53d57d1515d9",
+      "url": "https://github.com/nix-community/NUR/archive/8012c7894c396edc6fe0b791dceb53d57d1515d9.tar.gz",
+      "hash": "016lbhn379r0hagx1r5vnzn1pdhzarnds4y5lnq671nd32ax7a24"
     },
     "terranix": {
       "type": "GitRelease",
