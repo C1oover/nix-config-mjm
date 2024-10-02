@@ -120,10 +120,10 @@
       "pre_releases": false,
       "version_upper_bound": null,
       "release_prefix": null,
-      "version": "v1.2",
-      "revision": "e3f0b77d6c40b28f1bb3411387e314934092ec8e",
-      "url": "https://api.github.com/repos/cachix/devenv/tarball/v1.2",
-      "hash": "0ql8jsdgkibrv20zw5m6saws3xllm3ffy6l5mbh0x9c0v2aii4zp"
+      "version": "v1.3",
+      "revision": "a4d2abb0d6fb5a9733da981105b794bcf92a0874",
+      "url": "https://api.github.com/repos/cachix/devenv/tarball/v1.3",
+      "hash": "1p83nxqm82q3xd58wl34iwpzpxrip9rfqrz11kc6kvvjwl8nm26p"
     },
     "firefox-csshacks": {
       "type": "Git",
@@ -203,8 +203,8 @@
     "nixos": {
       "type": "Channel",
       "name": "nixos-unstable",
-      "url": "https://releases.nixos.org/nixos/unstable/nixos-24.11pre687049.06cf0e1da420/nixexprs.tar.xz",
-      "hash": "1qcylslxxfxv5fp1mq0vg64753h2x4prz3f971v4q4cal54xkjyg"
+      "url": "https://releases.nixos.org/nixos/unstable/nixos-24.11pre687768.27e30d177e57/nixexprs.tar.xz",
+      "hash": "17m6gfb9bwhdl679f1s2ish4j14q8m8c05c8gvzh7i5hcki51s1l"
     },
     "nixos-plasma-beta": {
       "type": "Git",
@@ -250,9 +250,9 @@
         "repo": "NUR"
       },
       "branch": "master",
-      "revision": "0773b6dd4cb24ce2538430344a874f0f32863e2a",
-      "url": "https://github.com/nix-community/NUR/archive/0773b6dd4cb24ce2538430344a874f0f32863e2a.tar.gz",
-      "hash": "0schkq1h6a3kq12j1vbnhbbv37i4lpnry16k7zf52f1jkz6jva6p"
+      "revision": "8ba8754d9cb32e45eb21643c03b87aeaef7d6c73",
+      "url": "https://github.com/nix-community/NUR/archive/8ba8754d9cb32e45eb21643c03b87aeaef7d6c73.tar.gz",
+      "hash": "1bl0fdswzfwksvhkglbbnr3xdpsz6vw8yi1bciihryzcajgamlyi"
     },
     "terranix": {
       "type": "GitRelease",
