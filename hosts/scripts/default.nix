@@ -1,4 +1,5 @@
 {
+  pkgs,
   lib,
   stdenvNoCC,
   nushell,
@@ -14,6 +15,10 @@
   nix,
   systemd,
 }:
+
+let
+  nvd-json = import ../../apps/nvd-json { inherit pkgs; };
+in
 
 stdenvNoCC.mkDerivation {
   pname = "host-scripts";
@@ -39,6 +44,7 @@ stdenvNoCC.mkDerivation {
             colmena
             nix-output-monitor
             nvd
+            nvd-json
             nix
           ]
           ++ lib.optionals stdenvNoCC.isLinux [

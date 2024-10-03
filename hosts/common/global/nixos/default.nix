@@ -104,4 +104,12 @@
       }
     '')
   ];
+
+  system.extraSystemBuilderCmds =
+    let
+      nvd-json = import ../../../../apps/nvd-json { inherit pkgs; };
+    in
+    ''
+      ln -s ${nvd-json}/bin/nvd-json $out/bin/nvd-json
+    '';
 }
