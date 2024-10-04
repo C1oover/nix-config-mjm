@@ -267,9 +267,6 @@ impl Package {
     fn from_store_path(path: &std::path::Path) -> Option<Self> {
         let basename = path.file_name()?.to_str()?;
 
-        let mut iter = basename.split('-');
-        iter.next()?;
-
         let chunks: Vec<&str> = basename.split('-').skip(1).collect();
         let (pname_chunks, version_chunks) = match chunks.iter().position(|chunk| {
             if let Some(c) = chunk.chars().nth(0) {
