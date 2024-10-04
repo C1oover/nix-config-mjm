@@ -203,6 +203,28 @@ def "main diff" [host: string] {
       }
     }
 
+    if ($results.reboot_packages | is-not-empty) {
+      print "Reboot needed:"
+
+      $results.reboot_packages | each {|it|
+        print $'- ($it.pname):'
+
+        $it.hosts | each {|it|
+          print -n $'    ($it.hostname): '
+          if ($it.old_versions? | is-not-empty) {
+            $it.old_versions | str join ", " | print -n
+            if ($it.new_versions? | is-not-empty) {
+              print -n " -> "
+            }
+          }
+          if ($it.new_versions? | is-not-empty) {
+            $it.new_versions | str join ", " | print -n
+          }
+          print ''
+        }
+      }
+    }
+
     print ''
   }
 }
@@ -280,9 +302,10 @@ def "main ci diff" [] {
 
       let results = nvd-json aggregate diffs/*.json | from json;
 
-      let keys = ['version_changes' 'added_packages' 'removed_packages']
+      let keys = ['reboot_packages' 'version_changes' 'added_packages' 'removed_packages']
       let comment_text = $keys | where {|key| $results | get $key | is-not-empty } | each {|key|
         let heading = match $key {
+          "reboot_packages" => "Changes requiring reboot"
           "version_changes" => "Version changes"
           "added_packages" => "Added"
           "removed_packages" => "Removed"
