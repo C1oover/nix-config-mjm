@@ -118,25 +118,16 @@ fn run_diff(left: &std::path::Path, right: &std::path::Path) -> Result<DiffResul
     changed_version_pnames.sort();
 
     let version_changes = changed_version_pnames
-        .iter()
-        .map(|pname| VersionChange {
-            pname: pname.clone(),
-            old_versions: Some(
-                left_closure
-                    .get_pname_versions(&pname)
-                    .unwrap()
-                    .iter()
-                    .map(|v| v.text.clone())
-                    .collect(),
-            ),
-            new_versions: Some(
-                right_closure
-                    .get_pname_versions(&pname)
-                    .unwrap()
-                    .iter()
-                    .map(|v| v.text.clone())
-                    .collect(),
-            ),
+        .into_iter()
+        .map(|pname| {
+            let old_versions = left_closure.get_pname_version_strings(&pname);
+            let new_versions = right_closure.get_pname_version_strings(&pname);
+
+            VersionChange {
+                pname,
+                old_versions,
+                new_versions,
+            }
         })
         .collect();
 
@@ -146,18 +137,11 @@ fn run_diff(left: &std::path::Path, right: &std::path::Path) -> Result<DiffResul
     added_package_pnames.sort();
 
     let added_packages = added_package_pnames
-        .iter()
+        .into_iter()
         .map(|pname| VersionChange {
             pname: pname.to_string(),
             old_versions: None,
-            new_versions: Some(
-                right_closure
-                    .get_pname_versions(&pname)
-                    .unwrap()
-                    .iter()
-                    .map(|v| v.text.clone())
-                    .collect(),
-            ),
+            new_versions: right_closure.get_pname_version_strings(pname),
         })
         .collect();
 
@@ -167,17 +151,10 @@ fn run_diff(left: &std::path::Path, right: &std::path::Path) -> Result<DiffResul
     removed_package_pnames.sort();
 
     let removed_packages = removed_package_pnames
-        .iter()
+        .into_iter()
         .map(|pname| VersionChange {
             pname: pname.to_string(),
-            old_versions: Some(
-                left_closure
-                    .get_pname_versions(&pname)
-                    .unwrap()
-                    .iter()
-                    .map(|v| v.text.clone())
-                    .collect(),
-            ),
+            old_versions: left_closure.get_pname_version_strings(pname),
             new_versions: None,
         })
         .collect();
@@ -394,6 +371,11 @@ impl PackageSet {
         self.packages_by_pname
             .get(pname)
             .map(|packages| packages.iter().map(|p| p.version.clone()).collect())
+    }
+
+    fn get_pname_version_strings(self: &Self, pname: &str) -> Option<Vec<String>> {
+        self.get_pname_versions(&pname)
+            .map(|vs| vs.into_iter().map(|v| v.text).collect())
     }
 }
 
