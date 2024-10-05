@@ -133,9 +133,9 @@
         "repo": "firefox-csshacks"
       },
       "branch": "master",
-      "revision": "13109b6d3de5aecc2da9eb9502a040e06e307b13",
-      "url": "https://github.com/MrOtherGuy/firefox-csshacks/archive/13109b6d3de5aecc2da9eb9502a040e06e307b13.tar.gz",
-      "hash": "1ddds63ifpcm5wzyqz2r0a7qc6zd2pxmmz6rwkwk4kcxvafn9jbl"
+      "revision": "4e6c1afd64e33794c21b6683ff1d9710a2424a49",
+      "url": "https://github.com/MrOtherGuy/firefox-csshacks/archive/4e6c1afd64e33794c21b6683ff1d9710a2424a49.tar.gz",
+      "hash": "1v5kl0alhpml66knkr3z32sj0ln55l3q89c1szpa4pi0ryxv5jlp"
     },
     "hardware": {
       "type": "Git",
@@ -227,8 +227,8 @@
     "nixpkgs": {
       "type": "Channel",
       "name": "nixpkgs-unstable",
-      "url": "https://releases.nixos.org/nixpkgs/nixpkgs-24.11pre688747.8bca501bf31b/nixexprs.tar.xz",
-      "hash": "10gzykf2kd82xf08blwlvcbndqb2bj3dw7slikp2bn6fxf3ip1sv"
+      "url": "https://releases.nixos.org/nixpkgs/nixpkgs-24.11pre688989.e2f08f4d8b3e/nixexprs.tar.xz",
+      "hash": "14hxnbnm41j3px7819dqzmfnqpalgxcnxy7gk8qi0lyyjgzjf103"
     },
     "nixpkgs-firefox-darwin": {
       "type": "Git",
@@ -250,9 +250,9 @@
         "repo": "NUR"
       },
       "branch": "master",
-      "revision": "0df7de2ca7fe908506a78442b688ef254d5de3e0",
-      "url": "https://github.com/nix-community/NUR/archive/0df7de2ca7fe908506a78442b688ef254d5de3e0.tar.gz",
-      "hash": "0z11qdsvmjh3f9hmj984dy42kx2m7wfxf0vzlcqazd3i0jkvirv4"
+      "revision": "df48b722316f5a0eab0cd7d8403dd2c82848e3a2",
+      "url": "https://github.com/nix-community/NUR/archive/df48b722316f5a0eab0cd7d8403dd2c82848e3a2.tar.gz",
+      "hash": "0a40zi7ndf18m7yxi7n3fa1psyywyqd7py96kh078n5wcxj30rjd"
     },
     "terranix": {
       "type": "GitRelease",
