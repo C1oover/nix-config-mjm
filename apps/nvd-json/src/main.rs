@@ -69,7 +69,7 @@ struct DiffResult {
     reboot_packages: Vec<VersionChange>,
 }
 
-#[derive(Deserialize, Serialize, Debug)]
+#[derive(Deserialize, Serialize, Debug, PartialEq, Eq)]
 struct VersionChange {
     pname: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -637,5 +637,154 @@ mod tests {
                 )
             })
         );
+    }
+
+    #[test]
+    fn package_set_from_store_paths() -> Result<()> {
+        use std::path::PathBuf;
+
+        let paths: Vec<PathBuf> = [
+            "/nix/store/0a79i6pyq37lychr3gigfz81rc9vcx5k-attr-2.5.2-man",
+            "/nix/store/0dnf7dm4lj3vn3y5bf0ayzkd1nh9wpvd-drkonqi-6.2.90",
+            "/nix/store/0gd6844hyw16f3y5lmq1jxpx97gs5gci-util-linux-2.39.4-man",
+            "/nix/store/0i443ipqsm3bdm8a93a8q1a9zg85fi3f-dbus-1.14.10-man",
+            "/nix/store/0llmawy8y19db713vg8q89zjp6askr26-pipewire-1.2.3-doc",
+            "/nix/store/0n2hzviid7chmcvii5swqivz385h9gfz-kio-6.7.0",
+            "/nix/store/0qhkv2iqmd04s2xjiqalp4xbxv2ij0js-kwallet-pam-6.1.90",
+            "/nix/store/0vlsqfyqd7brjqxb5ghawldr076zlqka-qqc2-desktop-style-6.6.0",
+        ]
+        .into_iter()
+        .map(PathBuf::from)
+        .collect();
+
+        let set = PackageSet::from_store_paths(paths)?;
+
+        let mut sorted_pnames = set.all_pnames();
+        sorted_pnames.sort();
+
+        assert_eq!(
+            sorted_pnames,
+            vec![
+                "attr",
+                "dbus",
+                "drkonqi",
+                "kio",
+                "kwallet-pam",
+                "pipewire",
+                "qqc2-desktop-style",
+                "util-linux",
+            ]
+        );
+
+        assert_eq!(
+            set.get_pname_versions("kio"),
+            Some(vec![Version::new("6.7.0")])
+        );
+        assert_eq!(
+            set.get_pname_version_strings("kio"),
+            Some(vec![String::from("6.7.0")])
+        );
+
+        assert_eq!(set.get_pname_versions("plasma-workspace"), None);
+        assert_eq!(set.get_pname_version_strings("plasma-workspace"), None);
+
+        Ok(())
+    }
+
+    #[test]
+    fn package_set_pair() -> Result<()> {
+        use std::path::PathBuf;
+
+        let left_paths: Vec<PathBuf> = [
+            "/nix/store/0a79i6pyq37lychr3gigfz81rc9vcx5k-attr-2.5.2-man",
+            "/nix/store/0dnf7dm4lj3vn3y5bf0ayzkd1nh9wpvd-drkonqi-6.2.90",
+            "/nix/store/0gd6844hyw16f3y5lmq1jxpx97gs5gci-util-linux-2.39.4-man",
+            "/nix/store/0i443ipqsm3bdm8a93a8q1a9zg85fi3f-dbus-1.14.10-man",
+            "/nix/store/0llmawy8y19db713vg8q89zjp6askr26-pipewire-1.2.3-doc",
+            "/nix/store/0n2hzviid7chmcvii5swqivz385h9gfz-kio-6.7.0",
+            "/nix/store/0qhkv2iqmd04s2xjiqalp4xbxv2ij0js-kwallet-pam-6.1.90",
+            "/nix/store/0vlsqfyqd7brjqxb5ghawldr076zlqka-qqc2-desktop-style-6.6.0",
+        ]
+        .into_iter()
+        .map(PathBuf::from)
+        .collect();
+
+        let right_paths: Vec<PathBuf> = [
+            "/nix/store/02mf752h7f5fn7989awzca4ygy94k7w7-xz-5.6.2-bin",
+            "/nix/store/03clq1961wa5g4dfdlr1qbwyi7p2rw99-ffmpegthumbs-24.08.1",
+            "/nix/store/0a79i6pyq37lychr3gigfz81rc9vcx5k-attr-2.5.2-man",
+            "/nix/store/0dnf7dm4lj3vn3y5bf0ayzkd1nh9wpvd-drkonqi-6.1.90",
+            "/nix/store/0gd6844hyw16f3y5lmq1jxpx97gs5gci-util-linux-2.39.4-man",
+            "/nix/store/0i443ipqsm3bdm8a93a8q1a9zg85fi3f-dbus-1.14.10-man",
+            "/nix/store/0llmawy8y19db713vg8q89zjp6askr26-pipewire-1.2.3-doc",
+            "/nix/store/0n2hzviid7chmcvii5swqivz385h9gfz-kio-6.6.0",
+        ]
+        .into_iter()
+        .map(PathBuf::from)
+        .collect();
+
+        let left = PackageSet::from_store_paths(left_paths)?;
+        let right = PackageSet::from_store_paths(right_paths)?;
+
+        let pair = PackageSetPair::new(&left, &right);
+
+        assert_eq!(
+            pair.get_version_changes(),
+            vec![
+                VersionChange {
+                    pname: String::from("drkonqi"),
+                    old_versions: Some(vec![String::from("6.2.90")]),
+                    new_versions: Some(vec![String::from("6.1.90")]),
+                },
+                VersionChange {
+                    pname: String::from("kio"),
+                    old_versions: Some(vec![String::from("6.7.0")]),
+                    new_versions: Some(vec![String::from("6.6.0")])
+                }
+            ]
+        );
+
+        assert_eq!(
+            pair.get_added_packages(),
+            vec![
+                VersionChange {
+                    pname: String::from("ffmpegthumbs"),
+                    old_versions: None,
+                    new_versions: Some(vec![String::from("24.08.1")])
+                },
+                VersionChange {
+                    pname: String::from("xz"),
+                    old_versions: None,
+                    new_versions: Some(vec![String::from("5.6.2-bin")])
+                }
+            ]
+        );
+
+        assert_eq!(
+            pair.get_removed_packages(),
+            vec![
+                VersionChange {
+                    pname: String::from("kwallet-pam"),
+                    old_versions: Some(vec![String::from("6.1.90")]),
+                    new_versions: None
+                },
+                VersionChange {
+                    pname: String::from("qqc2-desktop-style"),
+                    old_versions: Some(vec![String::from("6.6.0")]),
+                    new_versions: None
+                }
+            ]
+        );
+
+        assert_eq!(
+            pair.get_changes(["drkonqi", "util-linux"]),
+            vec![VersionChange {
+                pname: String::from("drkonqi"),
+                old_versions: Some(vec![String::from("6.2.90")]),
+                new_versions: Some(vec![String::from("6.1.90")]),
+            },]
+        );
+
+        Ok(())
     }
 }
