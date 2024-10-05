@@ -382,6 +382,75 @@ struct AggregatedDiffResult {
     reboot_packages: Vec<AggregatedVersionChange>,
 }
 
+impl AggregatedDiffResult {
+    fn from_diffs(diffs: impl IntoIterator<Item = (String, DiffResult)>) -> Self {
+        let mut version_changes_by_pname: HashMap<String, AggregatedVersionChange> = HashMap::new();
+        let mut added_packages_by_pname: HashMap<String, AggregatedVersionChange> = HashMap::new();
+        let mut removed_packages_by_pname: HashMap<String, AggregatedVersionChange> =
+            HashMap::new();
+        let mut reboot_packages_by_pname: HashMap<String, AggregatedVersionChange> = HashMap::new();
+
+        for (hostname, result) in diffs {
+            Self::aggregate_host_changes(
+                &mut version_changes_by_pname,
+                &hostname,
+                result.version_changes,
+            );
+            Self::aggregate_host_changes(
+                &mut added_packages_by_pname,
+                &hostname,
+                result.added_packages,
+            );
+            Self::aggregate_host_changes(
+                &mut removed_packages_by_pname,
+                &hostname,
+                result.removed_packages,
+            );
+            Self::aggregate_host_changes(
+                &mut reboot_packages_by_pname,
+                &hostname,
+                result.reboot_packages,
+            );
+        }
+
+        Self {
+            version_changes: Self::get_sorted_aggregated_changes(version_changes_by_pname),
+            added_packages: Self::get_sorted_aggregated_changes(added_packages_by_pname),
+            removed_packages: Self::get_sorted_aggregated_changes(removed_packages_by_pname),
+            reboot_packages: Self::get_sorted_aggregated_changes(reboot_packages_by_pname),
+        }
+    }
+
+    fn aggregate_host_changes(
+        changes_by_pname: &mut HashMap<String, AggregatedVersionChange>,
+        hostname: &str,
+        changes: Vec<VersionChange>,
+    ) {
+        for vc in changes {
+            changes_by_pname
+                .entry(vc.pname)
+                .or_insert_with_key(|pname| AggregatedVersionChange {
+                    pname: pname.clone(),
+                    hosts: Vec::new(),
+                })
+                .hosts
+                .push(PerHostVersionChange {
+                    hostname: hostname.to_string(),
+                    old_versions: vc.old_versions,
+                    new_versions: vc.new_versions,
+                })
+        }
+    }
+
+    fn get_sorted_aggregated_changes(
+        changes_by_pname: HashMap<String, AggregatedVersionChange>,
+    ) -> Vec<AggregatedVersionChange> {
+        let mut changes: Vec<_> = changes_by_pname.into_values().collect();
+        changes.sort_by_key(|avc| avc.pname.clone());
+        return changes;
+    }
+}
+
 #[derive(Serialize)]
 struct AggregatedVersionChange {
     pname: String,
@@ -410,69 +479,7 @@ fn run_aggregate(results: Vec<std::path::PathBuf>) -> Result<AggregatedDiffResul
         })
         .collect::<Result<Vec<_>>>()?;
 
-    let mut version_changes_by_pname: HashMap<String, AggregatedVersionChange> = HashMap::new();
-    let mut added_packages_by_pname: HashMap<String, AggregatedVersionChange> = HashMap::new();
-    let mut removed_packages_by_pname: HashMap<String, AggregatedVersionChange> = HashMap::new();
-    let mut reboot_packages_by_pname: HashMap<String, AggregatedVersionChange> = HashMap::new();
-
-    for (hostname, result) in loaded_results {
-        aggregate_host_changes(
-            &mut version_changes_by_pname,
-            &hostname,
-            result.version_changes,
-        );
-        aggregate_host_changes(
-            &mut added_packages_by_pname,
-            &hostname,
-            result.added_packages,
-        );
-        aggregate_host_changes(
-            &mut removed_packages_by_pname,
-            &hostname,
-            result.removed_packages,
-        );
-        aggregate_host_changes(
-            &mut reboot_packages_by_pname,
-            &hostname,
-            result.reboot_packages,
-        );
-    }
-
-    Ok(AggregatedDiffResult {
-        version_changes: get_sorted_aggregated_changes(version_changes_by_pname),
-        added_packages: get_sorted_aggregated_changes(added_packages_by_pname),
-        removed_packages: get_sorted_aggregated_changes(removed_packages_by_pname),
-        reboot_packages: get_sorted_aggregated_changes(reboot_packages_by_pname),
-    })
-}
-
-fn aggregate_host_changes(
-    changes_by_pname: &mut HashMap<String, AggregatedVersionChange>,
-    hostname: &str,
-    changes: Vec<VersionChange>,
-) {
-    for vc in changes {
-        changes_by_pname
-            .entry(vc.pname)
-            .or_insert_with_key(|pname| AggregatedVersionChange {
-                pname: pname.clone(),
-                hosts: Vec::new(),
-            })
-            .hosts
-            .push(PerHostVersionChange {
-                hostname: hostname.to_string(),
-                old_versions: vc.old_versions,
-                new_versions: vc.new_versions,
-            })
-    }
-}
-
-fn get_sorted_aggregated_changes(
-    changes_by_pname: HashMap<String, AggregatedVersionChange>,
-) -> Vec<AggregatedVersionChange> {
-    let mut changes: Vec<_> = changes_by_pname.into_values().collect();
-    changes.sort_by_key(|avc| avc.pname.clone());
-    return changes;
+    Ok(AggregatedDiffResult::from_diffs(loaded_results))
 }
 
 #[derive(Serialize)]
