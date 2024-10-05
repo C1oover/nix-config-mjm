@@ -20,6 +20,7 @@ struct Cli {
 #[derive(Subcommand)]
 enum Commands {
     Diff(DiffArgs),
+    RebootCheck(RebootCheckArgs),
     Aggregate(AggregateArgs),
 }
 
@@ -27,6 +28,11 @@ enum Commands {
 struct DiffArgs {
     left: std::path::PathBuf,
     right: std::path::PathBuf,
+}
+
+#[derive(Args)]
+struct RebootCheckArgs {
+    path: std::path::PathBuf,
 }
 
 #[derive(Args)]
@@ -40,6 +46,10 @@ fn main() {
     match args.command {
         Commands::Diff(diff_args) => {
             let result = run_diff(&diff_args.left, &diff_args.right).unwrap();
+            serde_json::to_writer_pretty(std::io::stdout(), &result).unwrap();
+        }
+        Commands::RebootCheck(reboot_check_args) => {
+            let result = run_reboot_check(&reboot_check_args.path).unwrap();
             serde_json::to_writer_pretty(std::io::stdout(), &result).unwrap();
         }
         Commands::Aggregate(aggregate_args) => {
@@ -475,4 +485,40 @@ fn get_sorted_aggregated_changes(
     let mut changes: Vec<_> = changes_by_pname.into_values().collect();
     changes.sort_by_key(|avc| avc.pname.clone());
     return changes;
+}
+
+#[derive(Serialize)]
+struct RebootCheckResult {
+    reboot_needed: bool,
+}
+
+fn run_reboot_check(path: &std::path::Path) -> Result<RebootCheckResult> {
+    let boot_canonical = std::path::Path::new("/run/booted-system").canonicalize()?;
+    let new_canonical = path.canonicalize()?;
+    let boot_closure = PackageSet::from_closure(&boot_canonical)?;
+    let new_closure = PackageSet::from_closure(&new_canonical)?;
+
+    // TODO dedup with similar logic in run_diff
+    let reboot_pnames = ["linux", "systemd"];
+    let reboot_packages: Vec<_> = reboot_pnames
+        .into_iter()
+        .filter_map(|pname| {
+            let old_versions = boot_closure.get_pname_versions(pname);
+            let new_versions = new_closure.get_pname_versions(pname);
+
+            if old_versions == new_versions {
+                None
+            } else {
+                Some(VersionChange {
+                    pname: pname.to_string(),
+                    old_versions: old_versions.map(|vs| vs.into_iter().map(|v| v.text).collect()),
+                    new_versions: new_versions.map(|vs| vs.into_iter().map(|v| v.text).collect()),
+                })
+            }
+        })
+        .collect();
+
+    Ok(RebootCheckResult {
+        reboot_needed: !reboot_packages.is_empty(),
+    })
 }

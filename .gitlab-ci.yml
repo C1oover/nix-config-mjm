@@ -56,12 +56,7 @@ deploy nixos hosts:
   # before_script: !reference [.snippets, setup_devenv]
   script:
     - nix run -f . host-scripts -- ci attic-login
-    - |
-      if [ -z "$REBOOT" ]; then
-        nix run -f . host-scripts -- ci deploy
-      else
-        nix run -f . host-scripts -- ci deploy --reboot
-      fi
+    - nix run -f . host-scripts -- ci deploy
 build tofu changes:
   tags: [nix]
   rules:

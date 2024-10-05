@@ -235,35 +235,59 @@ def --wrapped "main deploy" [...args] {
   }
 }
 
+def nodes-by-phase [--option: string] {
+  colmena eval -E $"{nodes,...}: builtins.groupBy \(n: let phase = nodes.${n}.config.deployment.($option); in if phase == null then \"\" else phase\) \(builtins.attrNames nodes\)" | from json
+}
+
+def apply-nodes [
+  --nodes: list
+  --reboot
+  reboot_needs: record
+] {
+  let actual_nodes = $nodes | where {|n| $reboot == ($reboot_needs | get $n) }
+  if ($actual_nodes | is-not-empty) {
+    let on_str = $actual_nodes | str join ","
+    if $reboot {
+      print $'Deploying to ($actual_nodes | str join ", ") by rebooting...'
+      colmena apply --on $on_str --reboot
+    } else {
+      print $'Deploying to ($actual_nodes | str join ", ")...'
+      colmena apply --on $on_str
+    }
+  }
+}
+
 def "main ci deploy" [--reboot] {
   with-vault {
     with-colmena {
-      if $reboot {
-        # deploy to vault hosts first, since other hosts will need them to be up
-        # and working to get their secrets
-        colmena apply --on @reboot-phase-vault --keep-result --reboot
-        # assuming the time to eval/build will generally be enough to let the
-        # vault hosts be alive.
-        #
-        # TODO actually check if vault is healthy
-        colmena apply --on @reboot-phase-main --keep-result --reboot
-        # deploy to ingress last, since it can disrupt the build
-        colmena apply --on @reboot-phase-ingress --keep-result --reboot
+      colmena apply --on @phase-main,@phase-ingress --keep-result push
 
-        # the attic, ingress, and garage hosts have been rebooted now, so there
-        # is possibly some big delay in attic being ready to receive things.
-        retry -n 60 {
-          sleep 5sec
-          attic push homelab .gcroots/node-*
-        }
-      } else {
-        colmena apply --on @phase-main --keep-result
-        # deploy to ingress last, since it can disrupt the build
-        colmena apply --on @phase-ingress --keep-result
+      let normal_phases = nodes-by-phase --option phase
+      let reboot_phases = nodes-by-phase --option rebootPhase
 
-        retry -n 5 {
-          attic push homelab .gcroots/node-*
-        }
+      let nodes = colmena eval -E '{ nodes, ... }: builtins.filter (n: nodes.${n}.config.deployment.phase != null) (builtins.attrNames nodes)' | from json | par-each {|host|
+        let system_path = readlink -f $'.gcroots/node-($host)'
+        print $'($host): checking if reboot is needed for ($system_path)'
+        let reboot_needed = (colmena-exec-raw $host
+          $'($system_path)/bin/nvd-json'
+          reboot-check
+          $system_path | from json | get reboot_needed)
+        print $'($host): done'
+
+        {name: $host, reboot_needed: $reboot_needed}
+      } | transpose -d -i -r
+
+      apply-nodes --nodes $normal_phases.main $nodes
+
+      apply-nodes --nodes $reboot_phases.vault --reboot $nodes
+      apply-nodes --nodes $reboot_phases.main --reboot $nodes
+
+      apply-nodes --nodes $normal_phases.ingress $nodes
+      apply-nodes --nodes $reboot_phases.ingress --reboot $nodes
+
+      retry -n 60 {
+        sleep 5sec
+        attic push homelab .gcroots/node-*
       }
     }
   }
