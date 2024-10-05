@@ -80,121 +80,31 @@ struct VersionChange {
 
 fn run_diff(left: &std::path::Path, right: &std::path::Path) -> Result<DiffResult> {
     if !left.try_exists()? {
-        bail!("path {} does not exist", left.display())
+        bail!("left path {} does not exist", left.display())
     }
 
     if !right.try_exists()? {
-        bail!("path {} does not exist", right.display())
+        bail!("right path {} does not exist", right.display())
     }
 
     let left_canonical = left.canonicalize()?;
     let right_canonical = right.canonicalize()?;
     let boot_canonical = std::path::Path::new("/run/booted-system").canonicalize()?;
 
-    // let left_sw = left_canonical.join("sw");
-    // let right_sw = right_canonical.join("sw");
-
-    // let (left_selected, right_selected) = if left_sw.exists() && right_sw.exists() {
-    //     (
-    //         PackageSet::from_direct_dependencies(&left_sw.canonicalize()?)?,
-    //         PackageSet::from_direct_dependencies(&right_sw.canonicalize()?)?,
-    //     )
-    // } else {
-    //     (
-    //         PackageSet::from_direct_dependencies(&left_canonical)?,
-    //         PackageSet::from_direct_dependencies(&right_canonical)?,
-    //     )
-    // };
-
     let left_closure = PackageSet::from_closure(&left_canonical)?;
     let right_closure = PackageSet::from_closure(&right_canonical)?;
     let boot_closure = PackageSet::from_closure(&boot_canonical)?;
 
-    // let left_selected_pnames = HashSet::<String>::from_iter(left_selected.all_pnames());
-    // let right_selected_pnames = HashSet::<String>::from_iter(right_selected.all_pnames());
-
-    let left_closure_pnames = HashSet::<String>::from_iter(left_closure.all_pnames());
-    let right_closure_pnames = HashSet::from_iter(right_closure.all_pnames());
-
-    // let selected_in_either = left_selected_pnames.union(&right_selected_pnames);
-    let present_in_both = left_closure_pnames.intersection(&right_closure_pnames);
-
-    let mut changed_version_pnames = Vec::new();
-    for pname in present_in_both {
-        if left_closure.get_pname_versions(pname) != right_closure.get_pname_versions(pname) {
-            changed_version_pnames.push(pname.to_string());
-        }
-    }
-    changed_version_pnames.sort();
-
-    let version_changes = changed_version_pnames
-        .into_iter()
-        .map(|pname| {
-            let old_versions = left_closure.get_pname_version_strings(&pname);
-            let new_versions = right_closure.get_pname_version_strings(&pname);
-
-            VersionChange {
-                pname,
-                old_versions,
-                new_versions,
-            }
-        })
-        .collect();
-
-    let mut added_package_pnames: Vec<&String> = right_closure_pnames
-        .difference(&left_closure_pnames)
-        .collect();
-    added_package_pnames.sort();
-
-    let added_packages = added_package_pnames
-        .into_iter()
-        .map(|pname| VersionChange {
-            pname: pname.to_string(),
-            old_versions: None,
-            new_versions: right_closure.get_pname_version_strings(pname),
-        })
-        .collect();
-
-    let mut removed_package_pnames: Vec<&String> = left_closure_pnames
-        .difference(&right_closure_pnames)
-        .collect();
-    removed_package_pnames.sort();
-
-    let removed_packages = removed_package_pnames
-        .into_iter()
-        .map(|pname| VersionChange {
-            pname: pname.to_string(),
-            old_versions: left_closure.get_pname_version_strings(pname),
-            new_versions: None,
-        })
-        .collect();
-
-    let reboot_pnames = ["linux", "systemd"];
-    let reboot_packages = reboot_pnames
-        .into_iter()
-        .filter_map(|pname| {
-            let old_versions = boot_closure.get_pname_versions(pname);
-            let new_versions = right_closure.get_pname_versions(pname);
-
-            if old_versions == new_versions {
-                None
-            } else {
-                Some(VersionChange {
-                    pname: pname.to_string(),
-                    old_versions: old_versions.map(|vs| vs.into_iter().map(|v| v.text).collect()),
-                    new_versions: new_versions.map(|vs| vs.into_iter().map(|v| v.text).collect()),
-                })
-            }
-        })
-        .collect();
+    let closure_pair = PackageSetPair::new(&left_closure, &right_closure);
+    let boot_pair = PackageSetPair::new(&boot_closure, &right_closure);
 
     Ok(DiffResult {
         left: left_canonical.to_string_lossy().to_string(),
         right: right_canonical.to_string_lossy().to_string(),
-        version_changes,
-        added_packages,
-        removed_packages,
-        reboot_packages,
+        version_changes: closure_pair.get_version_changes(),
+        added_packages: closure_pair.get_added_packages(),
+        removed_packages: closure_pair.get_removed_packages(),
+        reboot_packages: boot_pair.get_changes(["linux", "systemd"]),
     })
 }
 
@@ -266,7 +176,7 @@ impl Version {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 struct Package {
     pname: String,
     version: Version,
@@ -327,6 +237,20 @@ impl PackageSet {
         }
     }
 
+    fn from_store_paths(store_paths: Vec<std::path::PathBuf>) -> Result<Self> {
+        let packages = store_paths
+            .iter()
+            .map(|path| -> Result<Package> {
+                Ok(Package::from_store_path(path).ok_or(format_err!(
+                    "could not get package info from store path {}",
+                    path.display()
+                ))?)
+            })
+            .collect::<Result<_>>()?;
+
+        Ok(Self::new(packages, store_paths))
+    }
+
     // fn from_direct_dependencies(path: &std::path::Path) -> Result<Self> {
     //     Self::from_nix_query(&[OsStr::new("--references"), path.as_os_str()])
     // }
@@ -343,23 +267,13 @@ impl PackageSet {
             .stdout;
         let output_str = str::from_utf8(&output)?;
 
-        let paths: Vec<std::path::PathBuf> = output_str
+        let paths = output_str
             .trim_end()
             .lines()
             .map(|line| line.into())
             .collect();
 
-        let packages = paths
-            .iter()
-            .map(|path| -> Result<Package> {
-                Ok(Package::from_store_path(path).ok_or(format_err!(
-                    "could not get package info from store path {}",
-                    path.display()
-                ))?)
-            })
-            .collect::<Result<Vec<Package>>>()?;
-
-        Ok(Self::new(packages, paths))
+        Self::from_store_paths(paths)
     }
 
     // fn contains_pname(self: &Self, pname: &str) -> bool {
@@ -383,6 +297,80 @@ impl PackageSet {
     fn get_pname_version_strings(self: &Self, pname: &str) -> Option<Vec<String>> {
         self.get_pname_versions(&pname)
             .map(|vs| vs.into_iter().map(|v| v.text).collect())
+    }
+}
+
+struct PackageSetPair<'a> {
+    left: &'a PackageSet,
+    right: &'a PackageSet,
+    changed_pnames: Vec<String>,
+    added_pnames: Vec<String>,
+    removed_pnames: Vec<String>,
+}
+
+impl<'a> PackageSetPair<'a> {
+    fn new(left: &'a PackageSet, right: &'a PackageSet) -> PackageSetPair<'a> {
+        let left_pnames = HashSet::<String>::from_iter(left.all_pnames());
+        let right_pnames = HashSet::from_iter(right.all_pnames());
+
+        let present_in_both = left_pnames.intersection(&right_pnames);
+
+        let mut changed_pnames = Vec::new();
+        for pname in present_in_both {
+            if left.get_pname_versions(pname) != right.get_pname_versions(pname) {
+                changed_pnames.push(pname.to_string());
+            }
+        }
+        changed_pnames.sort();
+
+        let mut added_pnames: Vec<String> =
+            right_pnames.difference(&left_pnames).cloned().collect();
+        added_pnames.sort();
+
+        let mut removed_pnames: Vec<String> =
+            left_pnames.difference(&right_pnames).cloned().collect();
+        removed_pnames.sort();
+
+        PackageSetPair {
+            left,
+            right,
+            changed_pnames,
+            added_pnames,
+            removed_pnames,
+        }
+    }
+
+    fn get_version_changes(&self) -> Vec<VersionChange> {
+        self.get_changes(&self.changed_pnames)
+    }
+
+    fn get_added_packages(&self) -> Vec<VersionChange> {
+        self.get_changes(&self.added_pnames)
+    }
+
+    fn get_removed_packages(&self) -> Vec<VersionChange> {
+        self.get_changes(&self.removed_pnames)
+    }
+
+    fn get_changes(&self, pnames: impl IntoIterator<Item = impl AsRef<str>>) -> Vec<VersionChange> {
+        pnames
+            .into_iter()
+            .filter_map(|pname| {
+                let pname = pname.as_ref();
+                let old_versions = self.left.get_pname_version_strings(&pname);
+                let new_versions = self.right.get_pname_version_strings(&pname);
+
+                if old_versions == new_versions {
+                    None
+                } else {
+                    Some(VersionChange {
+                        pname: pname.to_string(),
+                        old_versions,
+                        new_versions,
+                    })
+                }
+            })
+            .collect()
     }
 }
 
@@ -420,7 +408,7 @@ fn run_aggregate(results: Vec<std::path::PathBuf>) -> Result<AggregatedDiffResul
                 serde_json::from_reader(reader)?,
             ))
         })
-        .collect::<Result<Vec<(String, DiffResult)>>>()?;
+        .collect::<Result<Vec<_>>>()?;
 
     let mut version_changes_by_pname: HashMap<String, AggregatedVersionChange> = HashMap::new();
     let mut added_packages_by_pname: HashMap<String, AggregatedVersionChange> = HashMap::new();
@@ -498,27 +486,149 @@ fn run_reboot_check(path: &std::path::Path) -> Result<RebootCheckResult> {
     let boot_closure = PackageSet::from_closure(&boot_canonical)?;
     let new_closure = PackageSet::from_closure(&new_canonical)?;
 
-    // TODO dedup with similar logic in run_diff
-    let reboot_pnames = ["linux", "systemd"];
-    let reboot_packages: Vec<_> = reboot_pnames
-        .into_iter()
-        .filter_map(|pname| {
-            let old_versions = boot_closure.get_pname_versions(pname);
-            let new_versions = new_closure.get_pname_versions(pname);
-
-            if old_versions == new_versions {
-                None
-            } else {
-                Some(VersionChange {
-                    pname: pname.to_string(),
-                    old_versions: old_versions.map(|vs| vs.into_iter().map(|v| v.text).collect()),
-                    new_versions: new_versions.map(|vs| vs.into_iter().map(|v| v.text).collect()),
-                })
-            }
-        })
-        .collect();
+    let closure_pair = PackageSetPair::new(&boot_closure, &new_closure);
+    let reboot_packages = closure_pair.get_changes(["linux", "systemd"]);
 
     Ok(RebootCheckResult {
         reboot_needed: !reboot_packages.is_empty(),
     })
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn version_chunk_sorting() {
+        use Ordering::*;
+        use VersionChunk::*;
+
+        assert_eq!(
+            Str(String::from("asdf")).cmp(&Str(String::from("asdf"))),
+            Equal
+        );
+        assert_eq!(Int(2).cmp(&Int(2)), Equal);
+        assert_eq!(Int(12).cmp(&Int(13)), Less);
+        assert_eq!(Int(12).cmp(&Int(11)), Greater);
+        assert_eq!(Str(String::from("")).cmp(&Int(24)), Less);
+        assert_eq!(
+            Str(String::from("pre")).cmp(&Str(String::from("asdf"))),
+            Less
+        );
+        assert_eq!(Str(String::from("pre")).cmp(&Int(24)), Less);
+        assert_eq!(Int(23).cmp(&Str(String::from(""))), Greater);
+        assert_eq!(
+            Str(String::from("asdf")).cmp(&Str(String::from("pre"))),
+            Greater
+        );
+        assert_eq!(Int(7).cmp(&Str(String::from("pre"))), Greater);
+        assert_eq!(Int(8).cmp(&Str(String::from("klwer"))), Greater);
+        assert_eq!(Str(String::from("jkew")).cmp(&Int(1)), Less);
+        assert_eq!(
+            Str(String::from("abc")).cmp(&Str(String::from("abd"))),
+            Less
+        );
+        assert_eq!(
+            Str(String::from("abd")).cmp(&Str(String::from("abc"))),
+            Greater
+        );
+    }
+
+    #[test]
+    fn version_parsing() {
+        use VersionChunk::*;
+
+        assert_eq!(
+            Version::new("12.3.4"),
+            Version {
+                text: String::from("12.3.4"),
+                chunks: vec![Int(12), Int(3), Int(4)]
+            }
+        );
+        assert_eq!(
+            Version::new("6.6.52-modules-shrunk"),
+            Version {
+                text: String::from("6.6.52-modules-shrunk"),
+                chunks: vec![
+                    Int(6),
+                    Int(6),
+                    Int(52),
+                    Str(String::from("modules")),
+                    Str(String::from("shrunk"))
+                ]
+            }
+        );
+        // this is kind of a whack way for this to parse
+        assert_eq!(
+            Version::new("24.11pre688350.e873268a358f"),
+            Version {
+                text: String::from("24.11pre688350.e873268a358f"),
+                chunks: vec![
+                    Int(24),
+                    Int(11),
+                    Str(String::from("pre")),
+                    Int(688350),
+                    Str(String::from("e")),
+                    Int(873268),
+                    Str(String::from("a")),
+                    Int(358),
+                    Str(String::from("f"))
+                ]
+            }
+        );
+    }
+
+    #[test]
+    fn package_from_store_path() {
+        use std::path::{Path, PathBuf};
+
+        assert_eq!(Package::from_store_path(Path::new("")), None);
+        assert_eq!(Package::from_store_path(Path::new("/")), None);
+        assert_eq!(
+            Package::from_store_path(Path::new(
+                "/nix/store/gmsnrmj9afqf1q0fksq6q0yxf4j5gz6f-source"
+            )),
+            Some(Package {
+                pname: String::from("source"),
+                version: Version::new(""),
+                store_path: PathBuf::from("/nix/store/gmsnrmj9afqf1q0fksq6q0yxf4j5gz6f-source")
+            })
+        );
+        assert_eq!(
+            Package::from_store_path(Path::new(
+                "/nix/store/y6dbsv4f9fap82877akbwbwmh7sg8vw9-linux-6.6.22-modules-shrunk"
+            )),
+            Some(Package {
+                pname: String::from("linux"),
+                version: Version::new("6.6.22-modules-shrunk"),
+                store_path: PathBuf::from(
+                    "/nix/store/y6dbsv4f9fap82877akbwbwmh7sg8vw9-linux-6.6.22-modules-shrunk"
+                )
+            })
+        );
+        assert_eq!(
+            Package::from_store_path(Path::new(
+                "/nix/store/7smdp6l51dl5242n9i4a394vriq4wmsx-nsncd-unstable-2024-01-16"
+            )),
+            Some(Package {
+                pname: String::from("nsncd-unstable"),
+                version: Version::new("2024-01-16"),
+                store_path: PathBuf::from(
+                    "/nix/store/7smdp6l51dl5242n9i4a394vriq4wmsx-nsncd-unstable-2024-01-16"
+                )
+            })
+        );
+        assert_eq!(
+            Package::from_store_path(Path::new(
+                "/nix/store/ci4y46j5xdjgrl8cyn6f46kz5h2lzxvx-publicsuffix-list-0-unstable-2024-01-07"
+            )),
+            Some(Package {
+                pname: String::from("publicsuffix-list"),
+                version: Version::new("0-unstable-2024-01-07"),
+                store_path: PathBuf::from(
+                    "/nix/store/ci4y46j5xdjgrl8cyn6f46kz5h2lzxvx-publicsuffix-list-0-unstable-2024-01-07"
+                )
+            })
+        );
+    }
 }
