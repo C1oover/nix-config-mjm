@@ -105,7 +105,11 @@ def --wrapped "linux rebuild" [...args] {
   colmena build --on (hostname) --keep-result -v ...$args
 
   let system_path = $'.gcroots/node-(hostname)' | path expand
-  system-upgrade-check $system_path
+  nvd diff /run/current-system $system_path
+  let result = ^($system_path | path join bin/nvd-json) reboot-check $system_path | from json
+  if $result.reboot_needed {
+    print 'Reboot needed.'
+  }
 }
 
 def "linux switch" [action: string = switch] {
