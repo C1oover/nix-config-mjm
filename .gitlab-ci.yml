@@ -43,8 +43,8 @@ build nixos hosts:
 deploy nixos hosts:
   tags: [nix-shell]
   rules:
-    - when: manual
-      if: $CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"
+    - if: $CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"
+      changes: !reference [.snippets, nixos_changes]
   stage: deploy
   needs: []
   environment:
