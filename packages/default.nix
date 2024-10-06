@@ -21,6 +21,8 @@ let
       vault = pkgs.vault-bin;
       inherit (tf) opentofu terraformConfiguration;
     };
+    writeNu = callPackage ./nu-lib/writer.nix { };
+    writeNuBin = callPackage ({ writeNu }: name: writeNu "/bin/${name}") { };
   };
 in
 packages
