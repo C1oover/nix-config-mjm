@@ -1,14 +1,16 @@
-export def latest-nixpkgs [name] {
+use nu-lib gitlab
+
+def latest-nixpkgs [name] {
   (http head -R m $"https://channels.nixos.org/($name)/nixexprs.tar.xz" |
     where name == location |
     get value.0)
 }
 
-export def get-pin [name] {
+def get-pin [name] {
   open npins/sources.json | get pins | get $name
 }
 
-export def is-current [name] {
+def is-current [name] {
   let pin = get-pin $name
   let latest = latest-nixpkgs $pin.name
   let mine = $pin.url
@@ -20,7 +22,7 @@ export def is-current [name] {
   $latest == $mine
 }
 
-export def existing-mrs [
+def existing-mrs [
   --url: string
   --project: string
   --token: string
@@ -29,11 +31,9 @@ export def existing-mrs [
     source_branch: npins-update
     target_branch: main
     state: opened
-  } | url build-query
+  }
 
-  (http get
-    --headers [Authorization $"Bearer ($token)"]
-    $"($url)/projects/($project)/merge_requests?($filters)")
+  gitlab mr list --url $url --project $project --token $token --filters $filters
 }
 
 export def create-mr [
@@ -53,20 +53,23 @@ export def create-mr [
     remove_source_branch: true
   }
 
-  let result = (http post
-    --content-type application/json
-    --headers [Authorization $"Bearer ($token)"]
-    $"($url)/projects/($project)/merge_requests"
+  let result = (gitlab mr create
+    --url $url
+    --project $project
+    --token $token
     $body)
 
-  if $auto_merge {
-    let body = {merge_when_pipeline_succeeds: true}
-    (http put
-      --content-type application/json
-      --headers [Authorization $"Bearer ($token)"]
-      $"($url)/projects/($project)/merge_requests/($result.iid)/merge"
-      $body)
-  }
+  # disable auto-merge for now, it seems like it doesn't work if
+  # when the pipeline hasn't been created yet
+  #
+  # if $auto_merge {
+  #   let body = {merge_when_pipeline_succeeds: true}
+  #   (http put
+  #     --content-type application/json
+  #     --headers [Authorization $"Bearer ($token)"]
+  #     $"($url)/projects/($project)/merge_requests/($result.iid)/merge"
+  #     $body)
+  # }
 }
 
 def "main ci update-pins" [] {
