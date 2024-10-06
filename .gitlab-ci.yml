@@ -97,4 +97,4 @@ check for flake updates:
   stage: check
   # before_script: !reference [.snippets, setup_devenv]
   script:
-    - nix run -f . ci-update-pins
+    - nix run -f . scripts -- ci update-pins

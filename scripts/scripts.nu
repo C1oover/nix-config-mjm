@@ -1,5 +1,3 @@
-#!/usr/bin/env nu
-
 export def latest-nixpkgs [name] {
   (http head -R m $"https://channels.nixos.org/($name)/nixexprs.tar.xz" |
     where name == location |
@@ -71,7 +69,7 @@ export def create-mr [
   }
 }
 
-def main [] {
+def "main ci update-pins" [] {
   let url = $env.CI_API_V4_URL
   let project = $env.CI_PROJECT_ID
   let token = $env.PINS_UPDATE_TOKEN
