@@ -42,10 +42,12 @@ export def create-mr [
   --url: string
   --project: string
   --token: string
+  --channels: list
   --description: string = ""
+  --auto-merge
 ] {
   let body = {
-    title: "npins update"
+    title: $"npins update: ($channels | str join ', ')"
     description: $description
     source_branch: "npins-update"
     target_branch: "main"
@@ -53,11 +55,20 @@ export def create-mr [
     remove_source_branch: true
   }
 
-  (http post
+  let result = (http post
     --content-type application/json
     --headers [Authorization $"Bearer ($token)"]
     $"($url)/projects/($project)/merge_requests"
     $body)
+
+  if $auto_merge {
+    let body = {merge_when_pipeline_succeeds: true}
+    (http put
+      --content-type application/json
+      --headers [Authorization $"Bearer ($token)"]
+      $"($url)/projects/($project)/merge_requests/($result.iid)/merge"
+      $body)
+  }
 }
 
 def main [] {
@@ -71,10 +82,13 @@ def main [] {
     return
   }
 
-  if (is-current nixpkgs) and (is-current nixos) and (is-current nixos-small) {
+  let outdated_channels = ["nixpkgs" "nixos" "nixos-small"] | where {|ch| not (is-current $ch) }
+  if ($outdated_channels | is-empty) {
     print "no updates: all done"
     return
   }
+
+  let auto_merge = "nixos-small" not-in $outdated_channels
 
   print "latest nixpkgs doesn't match my version. updating pinned sources..."
   let output = npins update o+e>| $in
@@ -88,5 +102,11 @@ def main [] {
   git push -f gitlab HEAD:refs/heads/npins-update
 
   print "creating merge request..."
-  create-mr --url $url --project $project --token $token --description $"```\n($output)\n```"
+  (create-mr
+    --url $url
+    --project $project
+    --token $token
+    --channels $outdated_channels
+    --auto-merge=$auto_merge
+    --description $"```\n($output)\n```")
 }
