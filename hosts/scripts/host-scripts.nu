@@ -283,7 +283,12 @@ def "main ci deploy" [--reboot] {
 
       apply-nodes --nodes $normal_phases.main $nodes
 
-      apply-nodes --nodes $reboot_phases.vault --reboot $nodes
+      # attempt to keep vault healthy while rebooting by only doing one at a time.
+      # this will hopefully allow them to render their secrets successfully and not
+      # have sshd start without its host certificate.
+      $reboot_phases.vault | each {|node|
+        apply-nodes --nodes [$node] --reboot $nodes
+      }
       apply-nodes --nodes $reboot_phases.main --reboot $nodes
 
       apply-nodes --nodes $normal_phases.ingress $nodes
