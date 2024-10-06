@@ -111,3 +111,5 @@ def "main ci update-pins" [] {
     --auto-merge=$auto_merge
     --description $"```\n($output)\n```")
 }
+
+def main [] {}
