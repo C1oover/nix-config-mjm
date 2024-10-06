@@ -6,7 +6,6 @@ in
 }:
 let
   inherit (pkgs) lib;
-  vault = pkgs.vault-bin;
   opentofu = pkgs.opentofu.withPlugins (p: [
     p.vault
     p.proxmox
@@ -46,9 +45,7 @@ let
         inherit inputs;
       };
     }).config.terraformConfig.json;
-
-  tofu-scripts = pkgs.callPackage ./scripts { inherit vault opentofu terraformConfiguration; };
 in
 {
-  inherit opentofu terraformConfiguration tofu-scripts;
+  inherit opentofu terraformConfiguration;
 }

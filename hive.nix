@@ -25,7 +25,7 @@ in
         patches = [
           (fetchpatch {
             url = "https://github.com/NixOS/nixpkgs/pull/345207.diff";
-            hash = "sha256-VE1iEmnYDJAGl+xp5S0dpTepKnKp/wrT5cA5lNW806E=";
+            hash = "sha256-a1QsPEbcNhjuZr57OyJb+SHhM8T1rNxNJ7L3J2gkbg8=";
           })
         ];
       };

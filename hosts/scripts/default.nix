@@ -1,9 +1,8 @@
 {
-  pkgs,
   lib,
   stdenvNoCC,
+  writers,
   nushell,
-  makeWrapper,
   coreutils,
   openssh,
   vault,
@@ -14,28 +13,20 @@
   nettools,
   nix,
   systemd,
+  nu-lib,
+  nvd-json,
 }:
 
 let
-  nvd-json = import ../../apps/nvd-json { inherit pkgs; };
-in
-
-stdenvNoCC.mkDerivation {
-  pname = "host-scripts";
-  version = "0.0.1";
-
-  src = ./.;
-
-  buildInputs = [ nushell ];
-
-  nativeBuildInputs = [ makeWrapper ];
-
-  installPhase = ''
-    install -Dv host-scripts.nu $out/bin/host-scripts
-
-    wrapProgram $out/bin/host-scripts \
-      --prefix PATH : ${
-        lib.makeBinPath (
+  writeNuBin =
+    name:
+    writers.makeScriptWriter {
+      interpreter = "${lib.getExe nushell} --no-config-file --include-path ${nu-lib}/share/nu";
+      makeWrapperArgs = [
+        "--prefix"
+        "PATH"
+        ":"
+        "${lib.makeBinPath (
           [
             coreutils
             openssh
@@ -51,9 +42,9 @@ stdenvNoCC.mkDerivation {
             nettools
             systemd
           ]
-        )
-      }
-  '';
+        )}"
+      ];
+    } "/bin/${name}";
+in
 
-  meta.mainProgram = "host-scripts";
-}
+writeNuBin "host-scripts" (builtins.readFile ./host-scripts.nu)
