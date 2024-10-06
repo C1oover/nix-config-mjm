@@ -32,9 +32,9 @@
         "repo": "attic"
       },
       "branch": "main",
-      "revision": "b4338a16706178caa8832f0c2937e6cffb0a809a",
-      "url": "https://github.com/zhaofengli/attic/archive/b4338a16706178caa8832f0c2937e6cffb0a809a.tar.gz",
-      "hash": "16dgiqnsc6x1mv1lq59p54q0s6c26m8hmk85qimmdwcg820q018w"
+      "revision": "1b29816235b7573fca7f964709fd201e1a187024",
+      "url": "https://github.com/zhaofengli/attic/archive/1b29816235b7573fca7f964709fd201e1a187024.tar.gz",
+      "hash": "04ahirvagk8nk7jxdkqzqm4j5sn8l843l0fq2khssv387pcnvhw9"
     },
     "catppuccin": {
       "type": "Git",
@@ -227,8 +227,8 @@
     "nixpkgs": {
       "type": "Channel",
       "name": "nixpkgs-unstable",
-      "url": "https://releases.nixos.org/nixpkgs/nixpkgs-24.11pre689466.7d49afd36b55/nixexprs.tar.xz",
-      "hash": "0r4zb6j8in4dk7gxciapfm49dqbdd0c7ajjzj9iy2xrrj5aj32qp"
+      "url": "https://releases.nixos.org/nixpkgs/nixpkgs-24.11pre689672.50b3bd3fed04/nixexprs.tar.xz",
+      "hash": "1892g2fqnc9lkcdbdmr9my38ry16a13ymxcb3b59hrxx84c7a5k0"
     },
     "nixpkgs-firefox-darwin": {
       "type": "Git",
