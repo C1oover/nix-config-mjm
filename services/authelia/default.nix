@@ -73,7 +73,7 @@ in
           {
             domain = "midna.dev";
             authelia_url = "https://auth.midna.dev";
-            default_redirection_url = "https://homelab.midna.dev";
+            default_redirection_url = "https://launch.midna.dev";
           }
         ];
         session.redis.host = "${config.services.redis.servers.authelia.unixSocket}";

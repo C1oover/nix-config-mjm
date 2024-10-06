@@ -43,7 +43,7 @@ in
           "0100" = {
             enable = true;
             "0102"."browser.startup.page".value = 3;
-            "0103"."browser.startup.homepage".value = "https://homelab.midna.dev/";
+            "0103"."browser.startup.homepage".value = "https://launch.midna.dev/";
           };
           "0200".enable = true;
           "0300".enable = true;
