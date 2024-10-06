@@ -1,5 +1,4 @@
 {
-  inputs,
   pkgs,
   config,
   lib,
@@ -8,10 +7,19 @@
 let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.mjm.atticd;
+
+  # on main, the attic module is updated to work with RS256 tokens instead of
+  # HS256, but I'm using the version in nixpkgs which doesn't have that, so I
+  # need to pin to an older module. it's kind of wild to me that there still
+  # isn't an attic module in nixpkgs.
+  attic = builtins.fetchTarball {
+    url = "https://github.com/zhaofengli/attic/archive/61ebdef2e263c091f24807b07701be5cb8068dea.tar.gz";
+    sha256 = "1b2k283wl6x1mnz1rs6arjr4gqx78fzxkchmvyragvf5h2732662";
+  };
 in
 {
   # TODO remove once a module for attic lands in nixpkgs
-  imports = [ "${inputs.attic}/nixos/atticd.nix" ];
+  imports = [ "${attic}/nixos/atticd.nix" ];
 
   options.mjm.atticd = {
     enable = mkEnableOption "atticd";
