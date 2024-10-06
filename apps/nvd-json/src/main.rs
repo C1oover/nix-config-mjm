@@ -59,7 +59,7 @@ fn main() {
     }
 }
 
-#[derive(Deserialize, Serialize, Debug)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 struct DiffResult {
     left: String,
     right: String,
@@ -69,7 +69,7 @@ struct DiffResult {
     reboot_packages: Vec<VersionChange>,
 }
 
-#[derive(Deserialize, Serialize, Debug, PartialEq, Eq)]
+#[derive(Deserialize, Serialize, Debug, PartialEq, Eq, Clone)]
 struct VersionChange {
     pname: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -374,7 +374,7 @@ impl<'a> PackageSetPair<'a> {
     }
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, Debug, PartialEq, Eq)]
 struct AggregatedDiffResult {
     version_changes: Vec<AggregatedVersionChange>,
     added_packages: Vec<AggregatedVersionChange>,
@@ -451,13 +451,13 @@ impl AggregatedDiffResult {
     }
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, Debug, PartialEq, Eq)]
 struct AggregatedVersionChange {
     pname: String,
     hosts: Vec<PerHostVersionChange>,
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, Debug, PartialEq, Eq)]
 struct PerHostVersionChange {
     hostname: String,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -786,5 +786,283 @@ mod tests {
         );
 
         Ok(())
+    }
+
+    #[test]
+    fn aggregate_diffs_empty() {
+        let result = DiffResult {
+            left: String::new(),
+            right: String::new(),
+            version_changes: Vec::new(),
+            added_packages: Vec::new(),
+            removed_packages: Vec::new(),
+            reboot_packages: Vec::new(),
+        };
+
+        let diffs = vec![
+            (String::from("bulbasaur"), result.clone()),
+            (String::from("charmander"), result.clone()),
+            (String::from("squirtle"), result.clone()),
+        ];
+
+        let agg = AggregatedDiffResult::from_diffs(diffs);
+        assert_eq!(
+            agg,
+            AggregatedDiffResult {
+                version_changes: Vec::new(),
+                added_packages: Vec::new(),
+                removed_packages: Vec::new(),
+                reboot_packages: Vec::new(),
+            }
+        );
+    }
+
+    #[test]
+    fn aggregate_diffs() {
+        let bulbasaur = DiffResult {
+            left: String::new(),
+            right: String::new(),
+            version_changes: vec![
+                VersionChange {
+                    pname: String::from("firefox"),
+                    old_versions: Some(vec![String::from("130.0")]),
+                    new_versions: Some(vec![String::from("130.0.1")]),
+                },
+                VersionChange {
+                    pname: String::from("jujutsu"),
+                    old_versions: Some(vec![String::from("0.21.0")]),
+                    new_versions: Some(vec![String::from("0.22.0")]),
+                },
+            ],
+            added_packages: vec![VersionChange {
+                pname: String::from("signal-desktop"),
+                old_versions: None,
+                new_versions: Some(vec![String::from("7.25.0")]),
+            }],
+            removed_packages: vec![VersionChange {
+                pname: String::from("discord"),
+                old_versions: Some(vec![String::from("0.0.67")]),
+                new_versions: None,
+            }],
+            reboot_packages: vec![],
+        };
+        let charmander = DiffResult {
+            left: String::new(),
+            right: String::new(),
+            version_changes: vec![VersionChange {
+                pname: String::from("jujutsu"),
+                old_versions: Some(vec![String::from("0.21.0")]),
+                new_versions: Some(vec![String::from("0.22.0")]),
+            }],
+            added_packages: vec![
+                VersionChange {
+                    pname: String::from("element-desktop"),
+                    old_versions: None,
+                    new_versions: Some(vec![String::from("1.11.77")]),
+                },
+                VersionChange {
+                    pname: String::from("signal-desktop"),
+                    old_versions: None,
+                    new_versions: Some(vec![String::from("7.25.0")]),
+                },
+            ],
+            removed_packages: vec![VersionChange {
+                pname: String::from("emacs-pgtk"),
+                old_versions: Some(vec![String::from("29.4")]),
+                new_versions: None,
+            }],
+            reboot_packages: vec![VersionChange {
+                pname: String::from("linux"),
+                old_versions: Some(vec![String::from("6.6.52"), String::from("6.6.52-modules")]),
+                new_versions: Some(vec![String::from("6.6.53"), String::from("6.6.53-modules")]),
+            }],
+        };
+        let squirtle = DiffResult {
+            left: String::new(),
+            right: String::new(),
+            version_changes: vec![VersionChange {
+                pname: String::from("firefox"),
+                old_versions: Some(vec![String::from("128.0")]),
+                new_versions: Some(vec![String::from("130.0.1")]),
+            }],
+            added_packages: vec![VersionChange {
+                pname: String::from("element-desktop"),
+                old_versions: None,
+                new_versions: Some(vec![String::from("1.11.77")]),
+            }],
+            removed_packages: vec![
+                VersionChange {
+                    pname: String::from("discord"),
+                    old_versions: Some(vec![String::from("0.0.67")]),
+                    new_versions: None,
+                },
+                VersionChange {
+                    pname: String::from("emacs-pgtk"),
+                    old_versions: Some(vec![String::from("29.4")]),
+                    new_versions: None,
+                },
+            ],
+            reboot_packages: vec![
+                VersionChange {
+                    pname: String::from("linux"),
+                    old_versions: Some(vec![String::from("6.11"), String::from("6.11-modules")]),
+                    new_versions: Some(vec![
+                        String::from("6.11.1"),
+                        String::from("6.11.1-modules"),
+                    ]),
+                },
+                VersionChange {
+                    pname: String::from("systemd"),
+                    old_versions: Some(vec![String::from("254.2")]),
+                    new_versions: Some(vec![String::from("256.0")]),
+                },
+            ],
+        };
+
+        let diffs = vec![
+            (String::from("bulbasaur"), bulbasaur),
+            (String::from("charmander"), charmander),
+            (String::from("squirtle"), squirtle),
+        ];
+
+        let agg = AggregatedDiffResult::from_diffs(diffs);
+        assert_eq!(
+            agg,
+            AggregatedDiffResult {
+                version_changes: vec![
+                    AggregatedVersionChange {
+                        pname: String::from("firefox"),
+                        hosts: vec![
+                            PerHostVersionChange {
+                                hostname: String::from("bulbasaur"),
+                                old_versions: Some(vec![String::from("130.0")]),
+                                new_versions: Some(vec![String::from("130.0.1")]),
+                            },
+                            PerHostVersionChange {
+                                hostname: String::from("squirtle"),
+                                old_versions: Some(vec![String::from("128.0")]),
+                                new_versions: Some(vec![String::from("130.0.1")]),
+                            }
+                        ]
+                    },
+                    AggregatedVersionChange {
+                        pname: String::from("jujutsu"),
+                        hosts: vec![
+                            PerHostVersionChange {
+                                hostname: String::from("bulbasaur"),
+                                old_versions: Some(vec![String::from("0.21.0")]),
+                                new_versions: Some(vec![String::from("0.22.0")]),
+                            },
+                            PerHostVersionChange {
+                                hostname: String::from("charmander"),
+                                old_versions: Some(vec![String::from("0.21.0")]),
+                                new_versions: Some(vec![String::from("0.22.0")]),
+                            }
+                        ]
+                    }
+                ],
+                added_packages: vec![
+                    AggregatedVersionChange {
+                        pname: String::from("element-desktop"),
+                        hosts: vec![
+                            PerHostVersionChange {
+                                hostname: String::from("charmander"),
+                                old_versions: None,
+                                new_versions: Some(vec![String::from("1.11.77")]),
+                            },
+                            PerHostVersionChange {
+                                hostname: String::from("squirtle"),
+                                old_versions: None,
+                                new_versions: Some(vec![String::from("1.11.77")]),
+                            }
+                        ]
+                    },
+                    AggregatedVersionChange {
+                        pname: String::from("signal-desktop"),
+                        hosts: vec![
+                            PerHostVersionChange {
+                                hostname: String::from("bulbasaur"),
+                                old_versions: None,
+                                new_versions: Some(vec![String::from("7.25.0")]),
+                            },
+                            PerHostVersionChange {
+                                hostname: String::from("charmander"),
+                                old_versions: None,
+                                new_versions: Some(vec![String::from("7.25.0")]),
+                            }
+                        ]
+                    }
+                ],
+                removed_packages: vec![
+                    AggregatedVersionChange {
+                        pname: String::from("discord"),
+                        hosts: vec![
+                            PerHostVersionChange {
+                                hostname: String::from("bulbasaur"),
+                                old_versions: Some(vec![String::from("0.0.67")]),
+                                new_versions: None
+                            },
+                            PerHostVersionChange {
+                                hostname: String::from("squirtle"),
+                                old_versions: Some(vec![String::from("0.0.67")]),
+                                new_versions: None
+                            }
+                        ]
+                    },
+                    AggregatedVersionChange {
+                        pname: String::from("emacs-pgtk"),
+                        hosts: vec![
+                            PerHostVersionChange {
+                                hostname: String::from("charmander"),
+                                old_versions: Some(vec![String::from("29.4")]),
+                                new_versions: None
+                            },
+                            PerHostVersionChange {
+                                hostname: String::from("squirtle"),
+                                old_versions: Some(vec![String::from("29.4")]),
+                                new_versions: None
+                            }
+                        ]
+                    }
+                ],
+                reboot_packages: vec![
+                    AggregatedVersionChange {
+                        pname: String::from("linux"),
+                        hosts: vec![
+                            PerHostVersionChange {
+                                hostname: String::from("charmander"),
+                                old_versions: Some(vec![
+                                    String::from("6.6.52"),
+                                    String::from("6.6.52-modules")
+                                ]),
+                                new_versions: Some(vec![
+                                    String::from("6.6.53"),
+                                    String::from("6.6.53-modules")
+                                ]),
+                            },
+                            PerHostVersionChange {
+                                hostname: String::from("squirtle"),
+                                old_versions: Some(vec![
+                                    String::from("6.11"),
+                                    String::from("6.11-modules")
+                                ]),
+                                new_versions: Some(vec![
+                                    String::from("6.11.1"),
+                                    String::from("6.11.1-modules")
+                                ]),
+                            }
+                        ]
+                    },
+                    AggregatedVersionChange {
+                        pname: String::from("systemd"),
+                        hosts: vec![PerHostVersionChange {
+                            hostname: String::from("squirtle"),
+                            old_versions: Some(vec![String::from("254.2")]),
+                            new_versions: Some(vec![String::from("256.0")]),
+                        },]
+                    }
+                ],
+            }
+        );
     }
 }
