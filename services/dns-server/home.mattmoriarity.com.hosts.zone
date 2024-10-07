@@ -16,12 +16,6 @@ tisiphone             IN  A     10.0.2.42
 alecto                IN  A     10.0.2.43
 rhea                  IN  A     10.0.2.47
 cronus                IN  A     10.0.2.48
-rhea                  IN  AAAA  2601:282:167f:3eec:b0c5:55ff:fe20:9218
-helios                IN  AAAA  2601:282:167f:3eec:bcf8:67ff:fecc:c859
-chaos                 IN  AAAA  2601:282:167f:3eec:be24:11ff:fee8:9f09
-steropes              IN  AAAA  2601:282:167f:3eec:dea6:32ff:fe96:bc05
-brontes               IN  AAAA  2601:282:167f:3eec:dea6:32ff:fed5:d840
-arges                 IN  AAAA  2601:282:167f:3eec:dea6:32ff:fedb:3987
 cronus                IN  AAAA  2601:282:167f:4e46:1097:8cff:fe6a:b260
 megaera               IN  AAAA  2601:282:167f:4e46:140b:14ff:fe41:31e1
 atlas                 IN  AAAA  2601:282:167f:4e46:1490:acff:fec0:6cb7
@@ -30,3 +24,9 @@ alecto                IN  AAAA  2601:282:167f:4e46:4cf1:b1ff:fe14:7141
 hypnos                IN  AAAA  2601:282:167f:4e46:6042:3ff:fef5:f1e3
 tisiphone             IN  AAAA  2601:282:167f:4e46:8c8d:b9ff:fe40:fcd
 leto                  IN  AAAA  2601:282:167f:4e46:acf4:f0ff:feb0:3126
+rhea                  IN  AAAA  2601:282:167f:4e46:b0c5:55ff:fe20:9218
+helios                IN  AAAA  2601:282:167f:4e46:bcf8:67ff:fecc:c859
+chaos                 IN  AAAA  2601:282:167f:4e46:be24:11ff:fee8:9f09
+steropes              IN  AAAA  2601:282:167f:4e46:dea6:32ff:fe96:bc05
+brontes               IN  AAAA  2601:282:167f:4e46:dea6:32ff:fed5:d840
+arges                 IN  AAAA  2601:282:167f:4e46:dea6:32ff:fedb:3987
