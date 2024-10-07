@@ -27,7 +27,6 @@ cronus                IN  A     10.0.2.48
 phoebe                IN  A     10.0.2.49
 themis                IN  A     10.0.2.50
 thanatos              IN  A     10.0.2.51
-cronus                IN  AAAA  2601:282:167f:3eec:1097:8cff:fe6a:b260
 megaera               IN  AAAA  2601:282:167f:3eec:140b:14ff:fe41:31e1
 atlas                 IN  AAAA  2601:282:167f:3eec:1490:acff:fec0:6cb7
 phoebe                IN  AAAA  2601:282:167f:3eec:20c3:30ff:fea2:6c1a
@@ -49,3 +48,4 @@ steropes              IN  AAAA  2601:282:167f:3eec:dea6:32ff:fe96:bc05
 brontes               IN  AAAA  2601:282:167f:3eec:dea6:32ff:fed5:d840
 arges                 IN  AAAA  2601:282:167f:3eec:dea6:32ff:fedb:3987
 aion                  IN  AAAA  2601:282:167f:3eec:e0d9:aeff:fe55:b2d
+cronus                IN  AAAA  2601:282:167f:4e46:1097:8cff:fe6a:b260
