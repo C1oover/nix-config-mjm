@@ -1,10 +1,12 @@
 # first tab: slab work
 new_tab slab
-layout tall:bias=55;full_size=1
+layout splits
 cd ~/Projects/slab
-launch
-launch
-launch
+launch --var window=editor
+launch --location=hsplit --bias=25
+focus_matching_window var:window=editor
+launch --location=vsplit --bias=40
+launch --location=hsplit
 
 # second tab: nix-config
 new_tab nix-config
