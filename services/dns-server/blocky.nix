@@ -54,7 +54,7 @@ in
           mapping = {
             # make invidious work at home even without ipv6
             # stupid roku tv
-            "tube.midna.dev" = "10.0.0.3,10.0.0.4,2601:282:167f:3eec:dea6:32ff:fe96:bc05,2601:282:167f:3eec:dea6:32ff:fed5:d840";
+            "yt.midna.dev" = "10.0.0.3,10.0.0.4,2601:282:167f:4e46:dea6:32ff:fe96:bc05,2601:282:167f:4e46:dea6:32ff:fed5:d840";
           };
         };
       };

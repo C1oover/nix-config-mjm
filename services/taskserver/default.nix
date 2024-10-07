@@ -37,7 +37,7 @@ in
         domain = "\${desec_domain.midna-dev.id}";
         type = "AAAA";
         subname = "tasks";
-        records = [ "2601:282:167f:3eec:acf4:f0ff:feb0:3126" ];
+        records = [ "2601:282:167f:4e46:acf4:f0ff:feb0:3126" ];
         ttl = 3600;
       };
     };
