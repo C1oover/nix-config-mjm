@@ -2,18 +2,15 @@ arges                 IN  A     10.0.0.2
 brontes               IN  A     10.0.0.3
 steropes              IN  A     10.0.0.4
 unifi                 IN  A     10.0.0.5
-nas                   IN  A     10.0.0.10
 artemis               IN  A     10.0.2.10
 apollo                IN  A     10.0.2.11
 hades                 IN  A     10.0.2.12
 demeter               IN  A     10.0.2.13
-hermes                IN  A     10.0.2.30
 daedalus              IN  A     10.0.2.31
 chaos                 IN  A     10.0.2.31
 atlas                 IN  A     10.0.2.32
 aion                  IN  A     10.0.2.34
 helios                IN  A     10.0.2.35
-selene                IN  A     10.0.2.36
 hypnos                IN  A     10.0.2.38
 megaera               IN  A     10.0.2.40
 leto                  IN  A     10.0.2.41
@@ -27,9 +24,6 @@ cronus                IN  A     10.0.2.48
 phoebe                IN  A     10.0.2.49
 themis                IN  A     10.0.2.50
 thanatos              IN  A     10.0.2.51
-megaera               IN  AAAA  2601:282:167f:3eec:140b:14ff:fe41:31e1
-atlas                 IN  AAAA  2601:282:167f:3eec:1490:acff:fec0:6cb7
-phoebe                IN  AAAA  2601:282:167f:3eec:20c3:30ff:fea2:6c1a
 nemesis               IN  AAAA  2601:282:167f:3eec:2cef:6fff:fee3:5381
 apollo                IN  AAAA  2601:282:167f:3eec:4a4d:7eff:fef8:c186
 alecto                IN  AAAA  2601:282:167f:3eec:4cf1:b1ff:fe14:7141
@@ -49,3 +43,5 @@ brontes               IN  AAAA  2601:282:167f:3eec:dea6:32ff:fed5:d840
 arges                 IN  AAAA  2601:282:167f:3eec:dea6:32ff:fedb:3987
 aion                  IN  AAAA  2601:282:167f:3eec:e0d9:aeff:fe55:b2d
 cronus                IN  AAAA  2601:282:167f:4e46:1097:8cff:fe6a:b260
+megaera               IN  AAAA  2601:282:167f:4e46:140b:14ff:fe41:31e1
+atlas                 IN  AAAA  2601:282:167f:4e46:1490:acff:fec0:6cb7
