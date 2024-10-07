@@ -59,17 +59,21 @@ export def create-mr [
     --token $token
     $body)
 
-  # disable auto-merge for now, it seems like it doesn't work if
-  # when the pipeline hasn't been created yet
-  #
-  # if $auto_merge {
-  #   let body = {merge_when_pipeline_succeeds: true}
-  #   (http put
-  #     --content-type application/json
-  #     --headers [Authorization $"Bearer ($token)"]
-  #     $"($url)/projects/($project)/merge_requests/($result.iid)/merge"
-  #     $body)
-  # }
+  if $auto_merge {
+    # Auto-merging requires that the pipeline exists and that the MR
+    # is "mergable", which is checked asynchronously. I could poll
+    # to check those things, and maybe I will if this still has
+    # issues, but there's no rush so we'll just wait a reasonably
+    # long time before trying.
+    sleep 20sec
+
+    let body = {merge_when_pipeline_succeeds: true}
+    (http put
+      --content-type application/json
+      --headers [Authorization $"Bearer ($token)"]
+      $"($url)/projects/($project)/merge_requests/($result.iid)/merge"
+      $body)
+  }
 }
 
 def "main ci update-pins" [] {
