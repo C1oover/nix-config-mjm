@@ -203,13 +203,12 @@ def "main ci build" [] {
 def "main ci diff" [] {
   with-vault {
     with-colmena {
-      colmena build --keep-result
+      colmena apply --on @phase-main,@phase-ingress --keep-result push
+      colmena build --on persephone --keep-result
 
       retry -n 5 {
         attic push homelab .gcroots/node-*
       }
-
-      colmena apply --on @phase-main,@phase-ingress --keep-result push
 
       mkdir diffs
       colmena eval -E '{ nodes, ... }: builtins.filter (n: nodes.${n}.config.deployment.phase != null) (builtins.attrNames nodes)' | from json | par-each {|host|
