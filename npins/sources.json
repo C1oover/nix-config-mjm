@@ -203,8 +203,8 @@
     "nixos": {
       "type": "Channel",
       "name": "nixos-unstable",
-      "url": "https://releases.nixos.org/nixos/unstable/nixos-24.11pre688563.bc947f541ae5/nixexprs.tar.xz",
-      "hash": "1jsaxwi128fiach3dj8rdj5agqivsr4sidb8lmdnl7g07fl9x0kj"
+      "url": "https://releases.nixos.org/nixos/unstable/nixos-24.11pre689866.c31898adf5a8/nixexprs.tar.xz",
+      "hash": "0k9xxn1kz32jbjzgcqxmh7czx0mrpq6zais5pzd86bii50cl40c7"
     },
     "nixos-plasma-beta": {
       "type": "Git",
@@ -221,14 +221,14 @@
     "nixos-small": {
       "type": "Channel",
       "name": "nixos-unstable-small",
-      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-24.11pre689991.dbddb7982786/nixexprs.tar.xz",
-      "hash": "0nb9anz3nk9vxazs5789310qbiblq4iy3zx0ansg971a4pwbv48i"
+      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-24.11pre690295.f6f24b0bbb04/nixexprs.tar.xz",
+      "hash": "0i74vr0chh2xhy5h6qc1521l1khiq7rbaxgvwhs74vbfd1d513yn"
     },
     "nixpkgs": {
       "type": "Channel",
       "name": "nixpkgs-unstable",
-      "url": "https://releases.nixos.org/nixpkgs/nixpkgs-24.11pre689910.c8a17040be4a/nixexprs.tar.xz",
-      "hash": "016wny862qh4mvb28xmi6gkw25ly3a95qja3k0d0xwza40ha4dsw"
+      "url": "https://releases.nixos.org/nixpkgs/nixpkgs-24.11pre690004.f85a2d005e83/nixexprs.tar.xz",
+      "hash": "0yqp3n1hhh4b11cjhl685fd7ziwf1q42kz1q6zbj3cjyfydch7ha"
     },
     "nixpkgs-firefox-darwin": {
       "type": "Git",
@@ -250,9 +250,9 @@
         "repo": "NUR"
       },
       "branch": "master",
-      "revision": "a5022d2d6ee79bde479f1da9aff464e6ed34833b",
-      "url": "https://github.com/nix-community/NUR/archive/a5022d2d6ee79bde479f1da9aff464e6ed34833b.tar.gz",
-      "hash": "0mh2l8gvknsh98rrh6w9hk0bbcanz9ynk9yzj03n311l3kw8ziil"
+      "revision": "26e1a9f8a343114d9504d1e241e620a7f8a4ebbb",
+      "url": "https://github.com/nix-community/NUR/archive/26e1a9f8a343114d9504d1e241e620a7f8a4ebbb.tar.gz",
+      "hash": "1q5ygw0p33xkc6narbnbd376vbadr0a6ij3pw3n84c0fl33xx75n"
     },
     "terranix": {
       "type": "GitRelease",
