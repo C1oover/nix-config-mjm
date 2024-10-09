@@ -5,6 +5,7 @@
   nushell = ./nushell.nix;
   services = ./services.nix;
   terraform = ./terraform.nix;
+  userborn = ./userborn.nix;
   vault = ./vault.nix;
   vault-agent = ./vault-agent.nix;
   vault-secrets = ./vault-secrets.nix;

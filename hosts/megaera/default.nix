@@ -48,6 +48,7 @@
       }
     ];
   };
+  mjm.userborn.enable = true;
   mjm.vault = {
     enable = true;
     encryptedUnsealTokens = [

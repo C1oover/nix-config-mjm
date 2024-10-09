@@ -95,7 +95,10 @@ in
     {
       mjm.state.directories = [
         # important for uids/gids to stay consistent
-        "/var/lib/nixos"
+        {
+          directory = "/var/lib/nixos";
+          inInitrd = config.mjm.userborn.enable;
+        }
         {
           directory = "/var/log";
           inInitrd = true;
