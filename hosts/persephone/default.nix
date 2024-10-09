@@ -27,7 +27,6 @@ in
     directories = [
       "/home"
       "/nix"
-      "/var/log"
       "/var/lib/fprint"
       "/var/lib/NetworkManager"
       "/var/lib/iwd"
