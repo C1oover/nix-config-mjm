@@ -50,7 +50,7 @@
     description = "MJ";
     extraGroups = [ "wheel" ];
     shell = config.programs.nushell.wrappedPackage;
-    hashedPassword = "$6$JhSUuIask83mtadB$iV5I3SmQE13rVV08RpCN4Ho09VvpmCm6xouZ2o7/1rhR63YFh/WtLAdM1f2P4hgJrxi.ss2zh53xpbSqx/zy9/";
+    hashedPassword = "$y$j9T$tM/RKSjlb5ljgtpGT/Y8N1$3oXxWQh/q.KKCcJKoyVeIUVqjjt76EWX.uNEJRASt04";
   };
 
   security.sudo.wheelNeedsPassword = false;
