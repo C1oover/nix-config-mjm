@@ -39,9 +39,14 @@
   };
   mjm.server.enable = true;
   mjm.state = {
-    enableImpermanence = true;
+    enablePreservation = true;
     persistDir = "/persist";
-    directories = [ "/nix" ];
+    directories = [
+      {
+        directory = "/nix";
+        inInitrd = true;
+      }
+    ];
   };
   mjm.vault = {
     enable = true;

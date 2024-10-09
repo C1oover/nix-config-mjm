@@ -43,7 +43,7 @@
   mjm.gitlab-runner.enable = true;
   mjm.server.enable = true;
   mjm.state = {
-    enableImpermanence = true;
+    enablePreservation = true;
     persistDir = "/nix/persist";
   };
 

@@ -254,6 +254,18 @@
       "url": "https://github.com/nix-community/NUR/archive/21e1688c47a3d33a47159352236a9176fdefb507.tar.gz",
       "hash": "0hfj1c6a5dg9q8mmqgkx7clpnzkcrg97ri9657qbnv0glsp2d505"
     },
+    "preservation": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "WilliButz",
+        "repo": "preservation"
+      },
+      "branch": "main",
+      "revision": "02e731a820d05107bc648460f8630d0d80a5ffd4",
+      "url": "https://github.com/WilliButz/preservation/archive/02e731a820d05107bc648460f8630d0d80a5ffd4.tar.gz",
+      "hash": "10f6lmj7qa7040g3wjzfk4ph87nq8v5z6hszdkljfc5mss15hzzn"
+    },
     "terranix": {
       "type": "GitRelease",
       "repository": {
