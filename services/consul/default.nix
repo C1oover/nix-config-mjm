@@ -56,7 +56,7 @@ in
 
           # Determine interface addresses
           getAddrOnce () {
-            ip -6 addr show scope global primary \
+            ip -6 addr show scope global primary mngtmpaddr \
               | awk -F '[ /\t]*' '/inet/ {print $3}' | head -n 1
           }
           getAddr () {
