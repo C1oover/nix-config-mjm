@@ -77,6 +77,10 @@ in
     1aR3MGeXdUopZYMq/O7UD1QweqeNePHO4CiaB9Uwdn1+ey8xUUCmFnwHHal5sgDryt/BfB2fna8K0YS
     BC5qn4eyZb0vNWLJvX7cHuCEq9DbjEOQN4e
   '';
+  boot.initrd.systemd.services."bcachefs-unlock@" = {
+    overrideStrategy = "asDropin";
+    serviceConfig.ExecCondition = "";
+  };
 
   boot.extraModulePackages = [ config.boot.kernelPackages.framework-laptop-kmod ];
 
