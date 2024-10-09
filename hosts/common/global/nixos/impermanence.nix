@@ -17,6 +17,7 @@ let
   cfg = config.mjm.state;
 
   isValidForImpermanence = k: v: k != "inInitrd" && v != null;
+  isValidForImpermanenceFile = k: v: isValidForImpermanence k v && k != "mode";
   isValidForPreservation = _: v: v != null;
 in
 {
@@ -142,7 +143,7 @@ in
     (mkIf cfg.enableImpermanence {
       environment.persistence.${cfg.persistDir} = {
         directories = map (filterAttrs isValidForImpermanence) cfg.directories;
-        files = map (filterAttrs isValidForImpermanence) cfg.files;
+        files = map (filterAttrs isValidForImpermanenceFile) cfg.files;
 
         # TODO abstract this
         users.matt.directories = [ ".local/share/atuin" ];
