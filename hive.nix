@@ -81,6 +81,7 @@ in
       "brontes"
       "chaos"
       "cronus"
+      "erebus"
       "helios"
       "hypnos"
       "leto"
