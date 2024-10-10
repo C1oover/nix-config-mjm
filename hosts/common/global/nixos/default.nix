@@ -60,7 +60,10 @@
 
   catppuccin.flavor = "macchiato";
 
-  environment.systemPackages = [ pkgs.nvd ];
+  environment.systemPackages = [
+    pkgs.nvd
+    pkgs.kitty.terminfo
+  ];
 
   system.extraSystemBuilderCmds =
     let
