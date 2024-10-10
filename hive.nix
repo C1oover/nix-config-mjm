@@ -74,6 +74,7 @@ in
 //
   lib.genAttrs
     [
+      "aether"
       "aion"
       "alecto"
       "arges"
