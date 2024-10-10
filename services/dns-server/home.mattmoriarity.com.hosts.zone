@@ -8,6 +8,7 @@ hades                 IN  A     10.0.2.12
 demeter               IN  A     10.0.2.13
 chaos                 IN  A     10.0.2.31
 atlas                 IN  A     10.0.2.32
+erebus                IN  A     10.0.2.34
 helios                IN  A     10.0.2.35
 aether                IN  A     10.0.2.37
 hypnos                IN  A     10.0.2.38
