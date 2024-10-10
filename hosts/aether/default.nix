@@ -6,8 +6,6 @@
     ../common/optional/proxmox-vm.nix
   ];
 
-  boot.initrd.systemd.emergencyAccess = true;
-
   networking.hostName = "aether";
 
   fileSystems."/" = {
