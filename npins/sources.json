@@ -206,23 +206,23 @@
       "url": "https://releases.nixos.org/nixos/unstable/nixos-24.11pre690827.5633bcff0c61/nixexprs.tar.xz",
       "hash": "09vghfcvmics34y6n2m7adn41y423i40ir4y63bq8jn7i5g70fwy"
     },
-    "nixos-plasma-beta": {
-      "type": "Git",
-      "repository": {
-        "type": "GitHub",
-        "owner": "K900",
-        "repo": "nixpkgs"
-      },
-      "branch": "plasma-6.2",
-      "revision": "bf21badcacab94a1744b86715ef48c6e91d61fd7",
-      "url": "https://github.com/K900/nixpkgs/archive/bf21badcacab94a1744b86715ef48c6e91d61fd7.tar.gz",
-      "hash": "1rafnn417zdwaklk9iacc7b8xg12shn4zq470vjbypv3p181q9kr"
-    },
     "nixos-small": {
       "type": "Channel",
       "name": "nixos-unstable-small",
       "url": "https://releases.nixos.org/nixos/unstable-small/nixos-24.11pre691407.0b4d07d75e3b/nixexprs.tar.xz",
       "hash": "1q7s7hjlnpph2jljcl74jbnxmlcilng645kgyl4402jlhs2fsmm5"
+    },
+    "nixos-staging": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "NixOS",
+        "repo": "nixpkgs"
+      },
+      "branch": "staging-next",
+      "revision": "b415f9c282b3cefa67706ab9e4f6d82e73e14f17",
+      "url": "https://github.com/NixOS/nixpkgs/archive/b415f9c282b3cefa67706ab9e4f6d82e73e14f17.tar.gz",
+      "hash": "01r710pawc3dp1jv4z9a0jyygf4zbav0cngw6ijqkmfjvp80drl4"
     },
     "nixpkgs": {
       "type": "Channel",

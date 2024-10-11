@@ -19,7 +19,7 @@ in
   meta = {
     nixpkgs = inputs.nixos-small;
     nodeNixpkgs = {
-      uranus = inputs.nixos-plasma-beta;
+      uranus = inputs.nixos-staging;
       persephone = patchNixpkgs {
         src = inputs.nixos;
         patches = [
