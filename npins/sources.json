@@ -169,9 +169,9 @@
         "repo": "home-manager"
       },
       "branch": "master",
-      "revision": "342a1d682386d3a1d74f9555cb327f2f311dda6e",
-      "url": "https://github.com/nix-community/home-manager/archive/342a1d682386d3a1d74f9555cb327f2f311dda6e.tar.gz",
-      "hash": "10cys4mcgsbmzjfm532cpfijy5zyd6lqgrkidk7727vixv4fy9xi"
+      "revision": "65ae9c147349829d3df0222151f53f79821c5134",
+      "url": "https://github.com/nix-community/home-manager/archive/65ae9c147349829d3df0222151f53f79821c5134.tar.gz",
+      "hash": "1i8aac2ad8w98d4phq3d00d23j7szd58r5jy6v3bkj0ivflv6qlq"
     },
     "impermanence": {
       "type": "Git",
@@ -221,8 +221,8 @@
     "nixos-small": {
       "type": "Channel",
       "name": "nixos-unstable-small",
-      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-24.11pre691312.7045aa75c71e/nixexprs.tar.xz",
-      "hash": "0g1cavhwh0gn8z2mymshrka64yr84jrp5and5la25j78gph0sccq"
+      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-24.11pre691407.0b4d07d75e3b/nixexprs.tar.xz",
+      "hash": "1q7s7hjlnpph2jljcl74jbnxmlcilng645kgyl4402jlhs2fsmm5"
     },
     "nixpkgs": {
       "type": "Channel",
@@ -250,9 +250,9 @@
         "repo": "NUR"
       },
       "branch": "master",
-      "revision": "fc80a73f0318005f8f9c9193a6c62ea0469276d1",
-      "url": "https://github.com/nix-community/NUR/archive/fc80a73f0318005f8f9c9193a6c62ea0469276d1.tar.gz",
-      "hash": "1g0wrgywx7qfzkh4hwqbdg5xv7myqgrah43q1miiiw59dzsf559g"
+      "revision": "7bdbe27588a3338324806750628048d2e5f68f35",
+      "url": "https://github.com/nix-community/NUR/archive/7bdbe27588a3338324806750628048d2e5f68f35.tar.gz",
+      "hash": "18knbpm6jfmckml2f7kd5hlinprff46mrg8l50bshw7r2dq8hsqz"
     },
     "preservation": {
       "type": "Git",
