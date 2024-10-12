@@ -22,6 +22,7 @@ in
   environment.systemPackages = [ pkgs.sbctl ];
 
   mjm.desktop.enable = true;
+  mjm.userborn.enable = true;
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
