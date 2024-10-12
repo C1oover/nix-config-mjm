@@ -80,7 +80,7 @@ in
           unpushed = [
             "log"
             "-r"
-            "branches() & ~(main | remote_branches())"
+            "bookmarks() & ~(main | remote_bookmarks())"
           ];
           history = [
             "log"
@@ -138,13 +138,6 @@ in
       };
     };
 
-    home.shellAliases = {
-      ",jp" = "jj git push";
-      ",jpc" = "jj git push --change @-";
-      ",jpm" = "jj branch set main -r @- && jj git push";
-      ",jum" = "jj git fetch && jj rebase -d main";
-      ",jrm" = "jj rebase -d main";
-    };
     programs.nushell.shellAliases = {
       ",jp" = "jj git push";
       ",jpc" = "jj git push --change @-";
@@ -152,7 +145,7 @@ in
     };
     programs.nushell.extraConfig = ''
       def ,jpm [] {
-        jj branch set main -r @-
+        jj bookmark set main -r @-
         try {
           jj git push
         } catch {
@@ -161,8 +154,8 @@ in
       }
 
       def ,jpb [] {
-        let branch = jj log -r '::@ & branches()' --no-graph -T local_branches -n 1 | str trim -r -c '*'
-        jj branch set $branch -r @-
+        let bookmark = jj log -r '::@ & bookmarks()' --no-graph -T local_bookmarks -n 1 | str trim -r -c '*'
+        jj bookmark set $bookmark -r @-
         try {
           jj git push
         } catch {
