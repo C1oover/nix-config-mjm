@@ -11,6 +11,7 @@ let
     mkIf
     mkMerge
     mkOption
+    optionalAttrs
     types
     ;
 
@@ -89,6 +90,11 @@ in
       );
       default = [ ];
     };
+
+    services = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+    };
   };
 
   config = mkMerge [
@@ -121,6 +127,33 @@ in
         "/etc/ssh/ssh_host_ed25519_key.pub"
         "/etc/ssh/ssh_host_rsa_key.pub"
       ];
+    }
+    {
+      assertions = [
+        {
+          assertion = cfg.enableImpermanence -> (cfg.services == [ ]);
+          message = "using mjm.state.services is not supported with impermanence, only with preservation";
+        }
+      ];
+
+      mjm.state.directories =
+        let
+          mkDirectory =
+            svcName:
+            let
+              svc = config.systemd.services.${svcName};
+              stateDir = svc.serviceConfig.StateDirectory;
+              isDynamic = svc.serviceConfig.DynamicUser or false;
+              user = svc.serviceConfig.User or null;
+              group = svc.serviceConfig.Group or null;
+            in
+            {
+              directory = if isDynamic then "/var/lib/private/${stateDir}" else "/var/lib/${stateDir}";
+            }
+            // optionalAttrs (!isDynamic && user != null) { inherit user; }
+            // optionalAttrs (!isDynamic && group != null) { inherit group; };
+        in
+        map mkDirectory cfg.services;
     }
     (mkIf (cfg.enableImpermanence || cfg.enablePreservation) {
       age.identityPaths = [ "${cfg.persistDir}/etc/ssh/ssh_host_ed25519_key" ];

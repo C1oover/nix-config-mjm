@@ -20,13 +20,7 @@ in
         keys.backup_password = { };
       };
     };
-    mjm.state.directories = [
-      {
-        directory = "/var/lib/bitwarden_rs";
-        user = "vaultwarden";
-        group = "vaultwarden";
-      }
-    ];
+    mjm.state.services = [ "vaultwarden" ];
 
     ingress.virtualHosts.pass = {
       upstream.service.name = "vaultwarden";

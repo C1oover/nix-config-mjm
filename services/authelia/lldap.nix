@@ -6,7 +6,7 @@ in
 {
   config = mkIf cfg.enable {
     mjm.services.authelia.postgresql.databases = [ "lldap" ];
-    mjm.state.directories = [ "/var/lib/private/lldap" ];
+    mjm.state.services = [ "lldap" ];
 
     services.lldap = {
       enable = true;

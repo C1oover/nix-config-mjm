@@ -30,13 +30,7 @@ in
         };
       };
     };
-    mjm.state.directories = [
-      {
-        directory = "/var/lib/redis-authelia";
-        user = "redis-authelia";
-        group = "redis-authelia";
-      }
-    ];
+    mjm.state.services = [ "redis-authelia" ];
 
     services.authelia.instances.main = {
       enable = true;

@@ -17,13 +17,7 @@ in
     mjm.services.linkding = {
       postgresql.enable = true;
     };
-    mjm.state.directories = [
-      {
-        directory = "/var/lib/linkding";
-        user = "linkding";
-        group = "linkding";
-      }
-    ];
+    mjm.state.services = [ "linkding" ];
 
     ingress.virtualHosts.links = {
       upstream.service.name = "linkding";

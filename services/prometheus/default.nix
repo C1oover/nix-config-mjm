@@ -17,13 +17,7 @@ in
 
   config = mkIf cfg.enable {
     mjm.services.prometheus = { };
-    mjm.state.directories = [
-      {
-        directory = "/var/lib/prometheus2";
-        user = "prometheus";
-        group = "prometheus";
-      }
-    ];
+    mjm.state.services = [ "prometheus" ];
 
     ingress.virtualHosts = {
       alerts = {
