@@ -49,9 +49,10 @@
   mjm.media-server.enable = true;
   mjm.server.enable = true;
   mjm.state = {
-    enableImpermanence = true;
+    enablePreservation = true;
     persistDir = "/nix/persist";
   };
+  mjm.userborn.enable = true;
 
   vault-secrets.roleId = "a87469f6-a653-37ab-8aa4-2a1adeed567f";
   vault-secrets.encryptedSecretId = ''
