@@ -23,6 +23,7 @@ in
 
   mjm.desktop.enable = true;
   mjm.userborn.enable = true;
+  system.etc.overlay.enable = lib.mkForce false;
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
