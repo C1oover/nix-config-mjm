@@ -17,18 +17,12 @@ let
 
   cfg = config.mjm.state;
 
-  isValidForImpermanence = k: v: k != "inInitrd" && v != null;
-  isValidForImpermanenceFile = k: v: isValidForImpermanence k v && k != "mode";
   isValidForPreservation = _: v: v != null;
 in
 {
-  imports = [
-    "${inputs.impermanence}/nixos.nix"
-    "${inputs.preservation}/module.nix"
-  ];
+  imports = [ "${inputs.preservation}/module.nix" ];
 
   options.mjm.state = {
-    enableImpermanence = mkEnableOption "impermanence";
     enablePreservation = mkEnableOption "preservation";
 
     persistDir = mkOption { type = types.path; };
@@ -129,13 +123,6 @@ in
       ];
     }
     {
-      assertions = [
-        {
-          assertion = cfg.enableImpermanence -> (cfg.services == [ ]);
-          message = "using mjm.state.services is not supported with impermanence, only with preservation";
-        }
-      ];
-
       mjm.state.directories =
         let
           mkDirectory =
@@ -155,38 +142,6 @@ in
         in
         map mkDirectory cfg.services;
     }
-    (mkIf (cfg.enableImpermanence || cfg.enablePreservation) {
-      age.identityPaths = [ "${cfg.persistDir}/etc/ssh/ssh_host_ed25519_key" ];
-
-      security.sudo.extraConfig = ''
-        Defaults lecture = never
-      '';
-
-      # point directly at the keys on the persist path, to avoid a race where sshd
-      # starts before the host keys are mounted into place
-      services.openssh.hostKeys = [
-        {
-          bits = 4096;
-          path = "${cfg.persistDir}/etc/ssh/ssh_host_rsa_key";
-          type = "rsa";
-        }
-        {
-          path = "${cfg.persistDir}/etc/ssh/ssh_host_ed25519_key";
-          type = "ed25519";
-        }
-      ];
-    })
-    (mkIf cfg.enableImpermanence {
-      environment.persistence.${cfg.persistDir} = {
-        directories = map (filterAttrs isValidForImpermanence) cfg.directories;
-        files = map (filterAttrs isValidForImpermanenceFile) cfg.files;
-
-        # TODO abstract this
-        users.matt.directories = [ ".local/share/atuin" ];
-
-        hideMounts = mkIf config.mjm.desktop.enable true;
-      };
-    })
     (mkIf cfg.enablePreservation {
       preservation = {
         enable = true;
@@ -211,6 +166,26 @@ in
           mode = "0755";
         };
       };
+
+      age.identityPaths = [ "${cfg.persistDir}/etc/ssh/ssh_host_ed25519_key" ];
+
+      security.sudo.extraConfig = ''
+        Defaults lecture = never
+      '';
+
+      # point directly at the keys on the persist path, to avoid a race where sshd
+      # starts before the host keys are mounted into place
+      services.openssh.hostKeys = [
+        {
+          bits = 4096;
+          path = "${cfg.persistDir}/etc/ssh/ssh_host_rsa_key";
+          type = "rsa";
+        }
+        {
+          path = "${cfg.persistDir}/etc/ssh/ssh_host_ed25519_key";
+          type = "ed25519";
+        }
+      ];
     })
   ];
 }
