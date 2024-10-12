@@ -34,6 +34,14 @@
     fsType = "xfs";
   };
 
+  fileSystems."/nix" = {
+    device = "/persist/nix";
+    options = [
+      "bind"
+      "X-fstrim.notrim"
+    ];
+  };
+
   swapDevices = [ { device = "/dev/disk/by-label/swap"; } ];
 
   boot.loader.systemd-boot.enable = true;
@@ -56,11 +64,11 @@
   mjm.prometheus.enable = true;
   mjm.server.enable = true;
   mjm.state = {
-    enableImpermanence = true;
+    enablePreservation = true;
     persistDir = "/persist";
-    directories = [ "/nix" ];
   };
   mjm.taskserver.enable = true;
+  mjm.userborn.enable = true;
   mjm.vaultwarden.enable = true;
 
   vault-secrets.roleId = "29829ea8-3eb2-b3d6-8aab-d150dbb48e3d";
