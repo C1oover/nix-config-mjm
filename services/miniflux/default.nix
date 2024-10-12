@@ -19,6 +19,7 @@ in
 
     ingress.virtualHosts.feeds = {
       upstream.service.name = "miniflux";
+      useIPv4Proxy = true;
     };
 
     services.miniflux = {

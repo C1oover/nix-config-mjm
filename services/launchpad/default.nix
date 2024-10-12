@@ -47,6 +47,7 @@ in
 
     ingress.virtualHosts.launch = {
       upstream.service.name = "launchpad";
+      useIPv4Proxy = true;
     };
 
     systemd.services.launchpad = {

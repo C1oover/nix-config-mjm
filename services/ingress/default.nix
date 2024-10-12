@@ -244,6 +244,7 @@ in
             "midna.dev"
           ];
           enableAuthProxy = false;
+          useIPv4Proxy = true;
 
           extraRoutes = [
             {

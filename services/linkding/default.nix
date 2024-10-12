@@ -21,6 +21,7 @@ in
 
     ingress.virtualHosts.links = {
       upstream.service.name = "linkding";
+      useIPv4Proxy = true;
     };
 
     services.linkding = {

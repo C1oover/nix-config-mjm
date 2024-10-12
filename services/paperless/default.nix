@@ -28,6 +28,7 @@ in
 
     ingress.virtualHosts.paper = {
       upstream.service.name = "paperless";
+      useIPv4Proxy = true;
     };
 
     services.paperless = {

@@ -20,6 +20,7 @@ in
 
     ingress.virtualHosts.graphs = {
       upstream.service.name = "grafana";
+      useIPv4Proxy = true;
     };
 
     vault.services.grafana = { };
