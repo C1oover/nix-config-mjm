@@ -35,6 +35,7 @@
     enableNodeExporter = false;
     enableSSHHostCert = false;
   };
+  mjm.userborn.enable = true;
 
   system.stateVersion = "23.11";
 }
