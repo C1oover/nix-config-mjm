@@ -68,7 +68,6 @@
     persistDir = "/persist";
   };
   mjm.taskserver.enable = true;
-  mjm.userborn.enable = true;
   mjm.vaultwarden.enable = true;
 
   vault-secrets.roleId = "29829ea8-3eb2-b3d6-8aab-d150dbb48e3d";

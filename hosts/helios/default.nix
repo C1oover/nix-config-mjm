@@ -52,7 +52,6 @@
     enablePreservation = true;
     persistDir = "/nix/persist";
   };
-  mjm.userborn.enable = true;
 
   vault-secrets.roleId = "61d175e1-7a2e-4554-2cca-cff48c926b82";
   vault-secrets.encryptedSecretId = ''

@@ -97,7 +97,7 @@ in
         # important for uids/gids to stay consistent
         {
           directory = "/var/lib/nixos";
-          inInitrd = config.mjm.userborn.enable;
+          inInitrd = true;
         }
         {
           directory = "/var/log";

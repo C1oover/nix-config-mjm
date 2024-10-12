@@ -48,7 +48,6 @@
       }
     ];
   };
-  mjm.userborn.enable = true;
 
   vault-secrets.roleId = "db2e0376-0645-c858-80b5-2b5b29476c24";
   vault-secrets.encryptedSecretId = ''

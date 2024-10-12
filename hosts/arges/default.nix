@@ -51,7 +51,6 @@
     persistDir = "/persist";
     directories = [ "/boot" ];
   };
-  mjm.userborn.enable = true;
 
   # TODO consider if this should be in services/
   # remote builder key

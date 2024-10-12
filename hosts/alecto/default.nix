@@ -50,7 +50,6 @@
     enablePreservation = true;
     persistDir = "/persist";
   };
-  mjm.userborn.enable = true;
   mjm.vault = {
     enable = true;
     encryptedUnsealTokens = [

@@ -50,7 +50,6 @@
     persistDir = "/persist";
     directories = [ "/boot" ];
   };
-  mjm.userborn.enable = true;
 
   vault-secrets.roleId = "61445b18-4ebe-027e-7bb9-2c4f6711d408";
   vault-secrets.encryptedSecretId = ''

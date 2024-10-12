@@ -33,7 +33,6 @@ in
       "/etc/secureboot"
     ];
   };
-  mjm.userborn.enable = true;
   mjm.wireless.enable = true;
 
   preservation.preserveAt."/persist".users.matt.directories = lib.mkForce [ ];
