@@ -26,6 +26,14 @@
     neededForBoot = true;
   };
 
+  fileSystems."/nix" = {
+    device = "/persist/nix";
+    options = [
+      "bind"
+      "X-fstrim.notrim"
+    ];
+  };
+
   swapDevices = [
     {
       device = "/persist/swap";
@@ -38,13 +46,11 @@
   mjm.nut.enable = true;
   mjm.server.enable = true;
   mjm.state = {
-    enableImpermanence = true;
+    enablePreservation = true;
     persistDir = "/persist";
-    directories = [
-      "/nix"
-      "/boot"
-    ];
+    directories = [ "/boot" ];
   };
+  mjm.userborn.enable = true;
 
   vault-secrets.roleId = "3c25aad2-394f-9d07-2885-ebe80f05e9db";
   vault-secrets.encryptedSecretId = ''

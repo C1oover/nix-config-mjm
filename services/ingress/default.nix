@@ -39,7 +39,12 @@ in
         };
       };
       vault-secrets.wantedBy = [ "caddy.service" ];
-      mjm.state.directories = [ "/var/lib/caddy" ];
+      mjm.state.directories = [
+        {
+          directory = "/var/lib/caddy";
+          inherit (config.services.caddy) user group;
+        }
+      ];
 
       services.caddy = {
         enable = true;
