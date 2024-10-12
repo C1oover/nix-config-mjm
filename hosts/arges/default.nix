@@ -25,6 +25,14 @@
     neededForBoot = true;
   };
 
+  fileSystems."/nix" = {
+    device = "/persist/nix";
+    options = [
+      "bind"
+      "X-fstrim.notrim"
+    ];
+  };
+
   swapDevices = [
     {
       device = "/persist/swap";
@@ -39,13 +47,11 @@
   };
   mjm.server.enable = true;
   mjm.state = {
-    enableImpermanence = true;
+    enablePreservation = true;
     persistDir = "/persist";
-    directories = [
-      "/nix"
-      "/boot"
-    ];
+    directories = [ "/boot" ];
   };
+  mjm.userborn.enable = true;
 
   # TODO consider if this should be in services/
   # remote builder key
