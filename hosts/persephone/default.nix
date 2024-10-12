@@ -22,11 +22,10 @@ in
 
   mjm.desktop.enable = true;
   mjm.state = {
-    enableImpermanence = true;
+    enablePreservation = true;
     persistDir = "/persist";
     directories = [
       "/home"
-      "/nix"
       "/var/lib/fprint"
       "/var/lib/NetworkManager"
       "/var/lib/iwd"
@@ -34,9 +33,10 @@ in
       "/etc/secureboot"
     ];
   };
+  mjm.userborn.enable = true;
   mjm.wireless.enable = true;
 
-  environment.persistence."/persist".users.matt.directories = lib.mkForce [ ];
+  preservation.preserveAt."/persist".users.matt.directories = lib.mkForce [ ];
 
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 

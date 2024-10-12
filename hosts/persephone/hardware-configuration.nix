@@ -37,6 +37,14 @@
     fsType = "vfat";
   };
 
+  fileSystems."/nix" = {
+    device = "/persist/nix";
+    options = [
+      "bind"
+      "X-fstrim.notrim"
+    ];
+  };
+
   swapDevices = [
     {
       device = "/dev/disk/by-partlabel/swap";
