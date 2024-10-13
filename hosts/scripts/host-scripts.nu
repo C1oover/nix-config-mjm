@@ -156,10 +156,9 @@ def "main ci deploy" [--reboot] {
     with-colmena {
       colmena apply --on @phase-main,@phase-ingress --keep-result push
 
-      let normal_phases = nodes-by-phase --option phase
-      let reboot_phases = nodes-by-phase --option rebootPhase
-
-      let nodes = colmena eval -E '{ nodes, ... }: builtins.filter (n: nodes.${n}.config.deployment.phase != null) (builtins.attrNames nodes)' | from json | par-each {|host|
+      let phases = nodes-by-phase
+      let node_names = $phases.normal | items {|k, v| if $k != "" { $v } } | compact | flatten
+      let nodes = $node_names | par-each {|host|
         let system_path = readlink -f $'.gcroots/node-($host)'
         print $'($host): checking if reboot is needed for ($system_path)'
         let reboot_needed = (colmena-exec-raw $host
@@ -171,18 +170,18 @@ def "main ci deploy" [--reboot] {
         {name: $host, reboot_needed: $reboot_needed}
       } | transpose -d -i -r
 
-      apply-nodes --nodes $normal_phases.main $nodes
+      apply-nodes --nodes $phases.normal.main $nodes
 
       # attempt to keep vault healthy while rebooting by only doing one at a time.
       # this will hopefully allow them to render their secrets successfully and not
       # have sshd start without its host certificate.
-      $reboot_phases.vault | each {|node|
+      $phases.reboot.vault | each {|node|
         apply-nodes --nodes [$node] --reboot $nodes
       }
-      apply-nodes --nodes $reboot_phases.main --reboot $nodes
+      apply-nodes --nodes $phases.reboot.main --reboot $nodes
 
-      apply-nodes --nodes $normal_phases.ingress $nodes
-      apply-nodes --nodes $reboot_phases.ingress --reboot $nodes
+      apply-nodes --nodes $phases.normal.ingress $nodes
+      apply-nodes --nodes $phases.reboot.ingress --reboot $nodes
 
       retry -n 60 {
         sleep 5sec

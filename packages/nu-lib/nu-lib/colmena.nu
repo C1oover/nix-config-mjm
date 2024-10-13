@@ -56,8 +56,8 @@ export def --wrapped "colmena-exec-raw" [host ...args] {
   }
 }
 
-export def nodes-by-phase [--option: string] {
-  colmena eval -E $"{nodes,...}: builtins.groupBy \(n: let phase = nodes.${n}.config.deployment.($option); in if phase == null then \"\" else phase\) \(builtins.attrNames nodes\)" | from json
+export def nodes-by-phase [] {
+  colmena eval -E '{nodes,lib,...}: lib.genAttrs ["normal" "reboot"] (k: let phaseKey = { normal = "phase"; reboot = "rebootPhase"; }.${k}; in builtins.groupBy (n: let phase = nodes.${n}.config.deployment.${phaseKey}; in if phase == null then "" else phase) (lib.attrNames nodes))' | from json
 }
 
 export def apply-nodes [
