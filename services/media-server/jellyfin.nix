@@ -63,16 +63,13 @@ in
     services.consul.services.jellyfin = {
       port = 8096;
 
-      checks = [
-        {
-          name = "jellyfin is ready";
-          http = "http://localhost:8096/health";
-          interval = "15s";
-          timeout = "10s";
+      checks.up = {
+        http.path = "/health";
+        checkConfig = {
           failures_before_warning = 2;
           failures_before_critical = 6;
-        }
-      ];
+        };
+      };
     };
 
     mjm.backups.mediaserver = {

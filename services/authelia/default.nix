@@ -119,19 +119,13 @@ in
     services.consul.services.authelia = {
       port = 9091;
 
-      meta = {
-        metrics_path = "/metrics";
-        metrics_port = "9959";
-      };
+      metrics.enable = true;
+      metrics.port = 9959;
 
-      checks = [
-        {
-          name = "authelia is ready";
-          http = "http://localhost:9091/api/health";
-          interval = "30s";
-          timeout = "5s";
-        }
-      ];
+      checks.up = {
+        http.path = "/api/health";
+        intervalSeconds = 30;
+      };
     };
 
     ingress.virtualHosts = {

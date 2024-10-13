@@ -106,23 +106,16 @@ in
         extraFlags = [ "--log.level=debug" ];
       };
 
-      services.consul.services.nut-exporter =
-        let
-          inherit (config.services.prometheus.exporters.nut) port;
-        in
-        {
-          inherit port;
-          meta.metrics_path = "/ups_metrics";
+      services.consul.services.nut-exporter = {
+        inherit (config.services.prometheus.exporters.nut) port;
 
-          checks = [
-            {
-              name = "nut-exporter is ready";
-              http = "http://localhost:${toString port}/";
-              interval = "15s";
-              timeout = "10s";
-            }
-          ];
+        metrics.enable = true;
+        metrics.path = "/ups_metrics";
+
+        checks.up = {
+          http.path = "/";
         };
+      };
 
       vault.services.nut = { };
       vault-secrets.wantedBy = [ "upsd.service" ];

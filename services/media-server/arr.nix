@@ -113,91 +113,70 @@ in
       sonarr = {
         port = 8989;
 
-        meta = {
-          metrics_path = "/metrics";
-          metrics_port = toString config.services.prometheus.exporters.exportarr-sonarr.port;
-        };
+        metrics.enable = true;
+        metrics.port = config.services.prometheus.exporters.exportarr-sonarr.port;
 
-        checks = [
-          {
-            name = "sonarr is ready";
-            http = "http://localhost:8989/";
-            interval = "15s";
-            timeout = "10s";
+        checks.up = {
+          http.path = "/";
+          checkConfig = {
             failures_before_warning = 2;
             failures_before_critical = 6;
-          }
-        ];
+          };
+        };
       };
 
       radarr = {
         port = 7878;
 
-        meta = {
-          metrics_path = "/metrics";
-          metrics_port = toString config.services.prometheus.exporters.exportarr-radarr.port;
-        };
+        metrics.enable = true;
+        metrics.port = config.services.prometheus.exporters.exportarr-radarr.port;
 
-        checks = [
-          {
-            name = "radarr is ready";
-            http = "http://localhost:7878/";
-            interval = "15s";
-            timeout = "10s";
+        checks.up = {
+          http.path = "/";
+          checkConfig = {
             failures_before_warning = 2;
             failures_before_critical = 6;
-          }
-        ];
+          };
+        };
       };
 
       lidarr = {
         port = 8686;
 
-        checks = [
-          {
-            name = "lidarr is ready";
-            http = "http://localhost:8686/";
-            interval = "15s";
-            timeout = "10s";
+        checks.up = {
+          http.path = "/";
+          checkConfig = {
             failures_before_warning = 2;
             failures_before_critical = 6;
-          }
-        ];
+          };
+        };
       };
 
       readarr = {
         port = 8787;
 
-        meta = {
-          metrics_path = "/metrics";
-          metrics_port = toString config.services.prometheus.exporters.exportarr-readarr.port;
-        };
+        metrics.enable = true;
+        metrics.port = config.services.prometheus.exporters.exportarr-readarr.port;
 
-        checks = [
-          {
-            name = "readarr is ready";
-            http = "http://localhost:8787/";
-            interval = "15s";
-            timeout = "10s";
+        checks.up = {
+          http.path = "/";
+          checkConfig = {
             failures_before_warning = 2;
             failures_before_critical = 6;
-          }
-        ];
+          };
+        };
       };
 
       readarr-audio = {
         port = 8788;
 
-        checks = [
-          {
-            name = "readarr is ready";
-            http = "http://localhost:8788/";
-            interval = "15s";
-            timeout = "10s";
+        checks.up = {
+          http.path = "/";
+          checkConfig = {
             failures_before_warning = 2;
             failures_before_critical = 6;
-          }
-        ];
+          };
+        };
       };
     };
 

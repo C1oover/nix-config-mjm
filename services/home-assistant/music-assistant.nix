@@ -68,14 +68,9 @@ in
     services.consul.services.music-assistant = {
       port = 8095;
 
-      checks = [
-        {
-          name = "music-assistant is ready";
-          http = "http://localhost:8095/";
-          interval = "15s";
-          timeout = "10s";
-        }
-      ];
+      checks.up = {
+        http.path = "/";
+      };
     };
   };
 }

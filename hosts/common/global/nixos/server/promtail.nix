@@ -44,16 +44,12 @@ in
 
     services.consul.services.promtail = {
       port = 3101;
-      meta.metrics_path = "/metrics";
+      metrics.enable = true;
 
-      checks = [
-        {
-          name = "promtail is ready";
-          http = "http://localhost:3101/";
-          interval = "30s";
-          timeout = "5s";
-        }
-      ];
+      checks.up = {
+        http.path = "/";
+        intervalSeconds = 30;
+      };
     };
 
     # expose port for metrics

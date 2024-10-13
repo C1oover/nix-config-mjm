@@ -198,17 +198,12 @@ in
       services.consul.services.caddy = {
         port = 443;
 
-        meta.metrics_path = "/metrics";
-        meta.metrics_port = "2020";
+        metrics.enable = true;
+        metrics.port = 2020;
 
-        checks = [
-          {
-            name = "caddy is healthy";
-            http = "http://localhost:2019/reverse_proxy/upstreams";
-            interval = "15s";
-            timeout = "3s";
-          }
-        ];
+        checks.up = {
+          http.url = "http://localhost:2019/reverse_proxy/upstreams";
+        };
       };
 
       # vhosts for things that aren't running on NixOS machines
