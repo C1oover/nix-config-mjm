@@ -20,12 +20,12 @@
   };
 
   fileSystems."/boot" = {
-    device = "/dev/disk/by-label/boot";
+    device = "/dev/disk/by-partlabel/boot";
     fsType = "vfat";
   };
 
   fileSystems."/persist" = {
-    device = "/dev/disk/by-label/nixos";
+    device = "/dev/disk/by-partlabel/persist";
     fsType = "ext4";
     neededForBoot = true;
   };

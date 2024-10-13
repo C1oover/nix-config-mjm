@@ -21,19 +21,19 @@
   };
 
   fileSystems."/nix" = {
-    device = "/dev/disk/by-label/nixos";
+    device = "/dev/disk/by-partlabel/nix";
     fsType = "ext4";
     neededForBoot = true;
   };
 
   fileSystems."/boot" = {
-    device = "/dev/disk/by-label/boot";
+    device = "/dev/disk/by-partlabel/boot";
     fsType = "vfat";
   };
 
   swapDevices = [
-    { device = "/dev/disk/by-label/swap"; }
-    { device = "/dev/disk/by-label/swap2"; }
+    { device = "/dev/disk/by-partlabel/swap"; }
+    { device = "/dev/disk/by-partlabel/swap2"; }
   ];
 
   boot.loader.systemd-boot.enable = true;
