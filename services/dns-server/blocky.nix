@@ -63,18 +63,14 @@ in
     networking.firewall.allowedTCPPorts = [ 4000 ];
 
     services.consul.services.blocky = {
-      tags = [ "http" ];
       port = 4000;
+      metrics.enable = true;
+      serviceConfig.tags = [ "http" ];
 
-      meta.metrics_path = "/metrics";
-
-      checks = [
-        {
-          http = "http://localhost:4000/";
-          interval = "30s";
-          timeout = "5s";
-        }
-      ];
+      checks.up = {
+        http.path = "/";
+        intervalSeconds = 30;
+      };
     };
   };
 }

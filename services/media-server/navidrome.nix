@@ -43,17 +43,11 @@ in
 
     services.consul.services.navidrome = {
       port = config.services.navidrome.settings.Port;
+      metrics.enable = true;
 
-      meta.metrics_path = "/metrics";
-
-      checks = [
-        {
-          name = "navidrome is ready";
-          http = "http://localhost:${toString config.services.navidrome.settings.Port}/ping";
-          interval = "15s";
-          timeout = "10s";
-        }
-      ];
+      checks.up = {
+        http.path = "/ping";
+      };
     };
 
     mjm.backups.mediaserver = {

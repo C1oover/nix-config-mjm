@@ -42,14 +42,9 @@ in
     services.consul.services.vaultwarden = {
       port = 8222;
 
-      checks = [
-        {
-          name = "vaultwarden is alive";
-          http = "http://localhost:8222/alive";
-          interval = "15s";
-          timeout = "10s";
-        }
-      ];
+      checks.up = {
+        http.path = "/alive";
+      };
     };
 
     mjm.backups.vaultwarden = {

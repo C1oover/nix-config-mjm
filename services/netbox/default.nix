@@ -95,7 +95,7 @@ in
 
     services.consul.services.netbox = {
       port = 8000;
-      meta.metrics_path = "/metrics";
+      metrics.enable = true;
     };
   };
 }

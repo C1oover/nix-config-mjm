@@ -50,14 +50,9 @@ in
     services.consul.services.linkding = {
       inherit (config.services.linkding) port;
 
-      checks = [
-        {
-          name = "linkding is ready";
-          http = "http://localhost:${toString config.services.linkding.port}/health";
-          interval = "15s";
-          timeout = "5s";
-        }
-      ];
+      checks.up = {
+        http.path = "/health";
+      };
     };
   };
 }

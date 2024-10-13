@@ -71,21 +71,14 @@ in
     services.consul.services.garage = {
       port = 3902;
 
-      tags = [ "s3" ];
+      metrics.enable = true;
+      metrics.port = 3903;
 
-      meta = {
-        metrics_path = "/metrics";
-        metrics_port = "3903";
+      serviceConfig.tags = [ "s3" ];
+
+      checks.up = {
+        http.url = "http://localhost:3903/health";
       };
-
-      checks = [
-        {
-          name = "garage is ready";
-          http = "http://localhost:3903/health";
-          interval = "15s";
-          timeout = "10s";
-        }
-      ];
     };
   };
 }

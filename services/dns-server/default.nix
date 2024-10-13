@@ -87,21 +87,15 @@ in
       openFirewall = true;
     };
 
-    services.consul.services.bind-exporter =
-      let
-        inherit (config.services.prometheus.exporters.bind) port;
-      in
-      {
-        inherit port;
-        meta.metrics_path = "/metrics";
+    services.consul.services.bind-exporter = {
+      inherit (config.services.prometheus.exporters.bind) port;
 
-        checks = [
-          {
-            http = "http://localhost:${toString port}/";
-            interval = "30s";
-            timeout = "5s";
-          }
-        ];
+      metrics.enable = true;
+
+      checks.up = {
+        http.path = "/";
+        intervalSeconds = 30;
       };
+    };
   };
 }

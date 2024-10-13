@@ -51,17 +51,11 @@ in
 
     services.consul.services.grafana = {
       port = 3000;
+      metrics.enable = true;
 
-      meta.metrics_path = "/metrics";
-
-      checks = [
-        {
-          name = "grafana is ready";
-          http = "http://localhost:3000/api/health";
-          interval = "15s";
-          timeout = "10s";
-        }
-      ];
+      checks.up = {
+        http.path = "/api/health";
+      };
     };
   };
 }

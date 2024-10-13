@@ -29,14 +29,9 @@ in
     services.consul.services.invidious = {
       inherit (config.services.invidious) port;
 
-      checks = [
-        {
-          name = "invidious is ready";
-          http = "http://localhost:${toString config.services.invidious.port}/";
-          interval = "15s";
-          timeout = "10s";
-        }
-      ];
+      checks.up = {
+        http.path = "/";
+      };
     };
   };
 }

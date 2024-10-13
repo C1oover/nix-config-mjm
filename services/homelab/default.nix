@@ -102,17 +102,11 @@ in
 
     services.consul.services.homelab = {
       port = 4000;
+      metrics.enable = true;
 
-      meta.metrics_path = "/metrics";
-
-      checks = [
-        {
-          name = "homelab is ready";
-          http = "http://localhost:4000/healthz";
-          interval = "15s";
-          timeout = "5s";
-        }
-      ];
+      checks.up = {
+        http.path = "/healthz";
+      };
     };
   };
 }

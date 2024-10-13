@@ -42,21 +42,16 @@ in
     services.consul.services.sabnzbd = {
       port = 8080;
 
-      meta = {
-        metrics_path = "/metrics";
-        metrics_port = toString config.services.prometheus.exporters.sabnzbd.port;
-      };
+      metrics.enable = true;
+      metrics.port = config.services.prometheus.exporters.sabnzbd.port;
 
-      checks = [
-        {
-          name = "sabnzbd is ready";
-          http = "http://localhost:8080/";
-          interval = "15s";
-          timeout = "10s";
+      checks.up = {
+        http.path = "/";
+        checkConfig = {
           failures_before_warning = 2;
           failures_before_critical = 6;
-        }
-      ];
+        };
+      };
     };
 
     mjm.backups.mediaserver.paths = [

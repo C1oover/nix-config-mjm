@@ -55,22 +55,14 @@ in
 
     networking.firewall.allowedTCPPorts = [ config.services.paperless.port ];
 
-    services.consul.services.paperless =
-      let
-        inherit (config.services.paperless) port;
-      in
-      {
-        inherit port;
+    services.consul.services.paperless = {
+      inherit (config.services.paperless) port;
 
-        checks = [
-          {
-            name = "paperless is up";
-            http = "http://localhost:${toString port}/";
-            interval = "30s";
-            timeout = "5s";
-          }
-        ];
+      checks.up = {
+        http.path = "/";
+        intervalSeconds = 30;
       };
+    };
 
     users.users.paperless.openssh.authorizedKeys.keys = [ scannerPublicKey ];
 

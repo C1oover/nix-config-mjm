@@ -97,41 +97,25 @@ in
     networking.firewall.allowedTCPPorts = [ config.services.prometheus.port ];
 
     services.consul.services = {
-      prometheus =
-        let
-          inherit (config.services.prometheus) port;
-        in
-        {
-          inherit port;
-          meta.metrics_path = "/metrics";
+      prometheus = {
+        inherit (config.services.prometheus) port;
+        metrics.enable = true;
 
-          checks = [
-            {
-              name = "prometheus is ready";
-              http = "http://localhost:${toString port}/-/ready";
-              interval = "30s";
-              timeout = "5s";
-            }
-          ];
+        checks.up = {
+          http.path = "/-/ready";
+          intervalSeconds = 30;
         };
+      };
 
-      alertmanager =
-        let
-          inherit (config.services.prometheus.alertmanager) port;
-        in
-        {
-          inherit port;
-          meta.metrics_path = "/metrics";
+      alertmanager = {
+        inherit (config.services.prometheus.alertmanager) port;
+        metrics.enable = true;
 
-          checks = [
-            {
-              name = "alertmanager is ready";
-              http = "http://localhost:${toString port}/-/ready";
-              interval = "30s";
-              timeout = "5s";
-            }
-          ];
+        checks.up = {
+          http.path = "/-/ready";
+          intervalSeconds = 30;
         };
+      };
     };
   };
 }

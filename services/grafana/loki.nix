@@ -118,17 +118,11 @@ in
 
     services.consul.services.loki = {
       port = 3100;
+      metrics.enable = true;
 
-      meta.metrics_path = "/metrics";
-
-      checks = [
-        {
-          name = "loki is ready";
-          http = "http://localhost:3100/ready";
-          interval = "15s";
-          timeout = "5s";
-        }
-      ];
+      checks.up = {
+        http.path = "/ready";
+      };
     };
   };
 }

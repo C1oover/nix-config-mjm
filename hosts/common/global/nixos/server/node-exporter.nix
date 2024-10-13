@@ -19,22 +19,14 @@ in
       ];
     };
 
-    services.consul.services.node-exporter =
-      let
-        inherit (config.services.prometheus.exporters.node) port;
-      in
-      {
-        inherit port;
-        meta.metrics_path = "/metrics";
+    services.consul.services.node-exporter = {
+      inherit (config.services.prometheus.exporters.node) port;
+      metrics.enable = true;
 
-        checks = [
-          {
-            name = "node-exporter HTTP";
-            http = "http://localhost:${toString port}/";
-            interval = "30s";
-            timeout = "5s";
-          }
-        ];
+      checks.up = {
+        http.path = "/";
+        intervalSeconds = 30;
       };
+    };
   };
 }

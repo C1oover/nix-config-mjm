@@ -76,14 +76,9 @@ in
     services.consul.services.attic = {
       port = 8100;
 
-      checks = [
-        {
-          name = "attic is ready";
-          http = "http://localhost:8100/";
-          interval = "15s";
-          timeout = "10s";
-        }
-      ];
+      checks.up = {
+        http.path = "/";
+      };
     };
   };
 }

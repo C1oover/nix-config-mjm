@@ -27,14 +27,10 @@ in
     services.consul.services.lldap = {
       port = 17170;
 
-      checks = [
-        {
-          name = "lldap HTTP API";
-          http = "http://localhost:17170/health";
-          interval = "30s";
-          timeout = "5s";
-        }
-      ];
+      checks.up = {
+        http.path = "/health";
+        intervalSeconds = 30;
+      };
     };
   };
 }

@@ -61,17 +61,12 @@ in
 
     networking.firewall.allowedTCPPorts = [ config.services.matrix-conduit.settings.global.port ];
 
-    services.consul.services.conduit = rec {
+    services.consul.services.conduit = {
       inherit (config.services.matrix-conduit.settings.global) port;
 
-      checks = [
-        {
-          name = "conduit is ready";
-          http = "http://localhost:${toString port}/_matrix/client/versions";
-          interval = "15s";
-          timeout = "10s";
-        }
-      ];
+      checks.up = {
+        http.path = "/_matrix/client/versions";
+      };
     };
   };
 }

@@ -39,17 +39,11 @@ in
 
     services.consul.services.miniflux = {
       port = 9999;
+      metrics.enable = true;
 
-      meta.metrics_path = "/metrics";
-
-      checks = [
-        {
-          name = "miniflux is ready";
-          http = "http://localhost:9999/healthcheck";
-          interval = "15s";
-          timeout = "5s";
-        }
-      ];
+      checks.up = {
+        http.path = "/healthcheck";
+      };
     };
   };
 }
