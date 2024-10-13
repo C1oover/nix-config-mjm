@@ -62,6 +62,7 @@ in
 
             checks =
               let
+                svcId = config.id;
                 svcName = config.name;
                 svcPort = config.port;
               in
@@ -78,7 +79,7 @@ in
                         };
                         id = mkOption {
                           type = types.str;
-                          default = name;
+                          default = "${svcId}:${name}";
                         };
                         name = mkOption {
                           type = types.str;
