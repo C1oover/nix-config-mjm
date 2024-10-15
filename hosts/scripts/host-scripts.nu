@@ -203,7 +203,7 @@ def "main ci diff" [] {
   with-vault {
     with-colmena {
       colmena apply --on @phase-main,@phase-ingress --keep-result push
-      colmena build --on persephone --keep-result
+      colmena build --on persephone,uranus --keep-result
 
       retry -n 5 {
         attic push homelab .gcroots/node-*
