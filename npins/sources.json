@@ -200,18 +200,6 @@
       "url": "https://releases.nixos.org/nixos/unstable-small/nixos-24.11pre693359.b7f91a266c75/nixexprs.tar.xz",
       "hash": "123zdkimbr0f3plc81fw7ay8g3qpilsr6m882lhy44ji7jk40s7q"
     },
-    "nixos-staging": {
-      "type": "Git",
-      "repository": {
-        "type": "GitHub",
-        "owner": "NixOS",
-        "repo": "nixpkgs"
-      },
-      "branch": "staging-next",
-      "revision": "cb3c030f74194c1186b641299f30aeff22cdd504",
-      "url": "https://github.com/NixOS/nixpkgs/archive/cb3c030f74194c1186b641299f30aeff22cdd504.tar.gz",
-      "hash": "0ic6qg8gaqnjgppwzlc82b2aqjj517wvxgvli4rggwwwzg34iwjk"
-    },
     "nixpkgs": {
       "type": "Channel",
       "name": "nixpkgs-unstable",
