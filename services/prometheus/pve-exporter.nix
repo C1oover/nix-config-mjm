@@ -5,6 +5,20 @@ let
 in
 {
   config = mkIf cfg.enable {
+    nixpkgs.overlays = [
+      (final: prev: {
+        pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
+          (pythonFinal: pythonPrev: {
+            proxmoxer = pythonPrev.proxmoxer.overridePythonAttrs (oldAttrs: {
+              nativeCheckInputs = oldAttrs.nativeCheckInputs ++ [
+                pythonFinal.pynacl
+              ];
+            });
+          })
+        ];
+      })
+    ];
+
     services.prometheus.exporters.pve = {
       enable = true;
       environmentFile = config.vault-secrets.templates.pve-env.path;
