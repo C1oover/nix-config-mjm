@@ -2,6 +2,7 @@
   pkgs,
   config,
   lib,
+  modulesPath,
   ...
 }:
 let
@@ -19,6 +20,7 @@ let
 in
 {
   # TODO remove once a module for attic lands in nixpkgs
+  disabledModules = [ "${modulesPath}/services/networking/atticd.nix" ];
   imports = [ "${attic}/nixos/atticd.nix" ];
 
   options.mjm.atticd = {
