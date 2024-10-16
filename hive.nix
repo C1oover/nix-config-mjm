@@ -18,19 +18,28 @@ in
 {
   meta = {
     nixpkgs = inputs.nixos-small;
-    nodeNixpkgs = {
-      uranus = inputs.nixos;
-      persephone = patchNixpkgs {
-        src = inputs.nixos;
-        patches = [
-          # bcachefs-unlock-generator
-          (fetchpatch {
-            url = "https://github.com/NixOS/nixpkgs/pull/345207.diff";
-            hash = "sha256-a1QsPEbcNhjuZr57OyJb+SHhM8T1rNxNJ7L3J2gkbg8=";
-          })
-        ];
+    nodeNixpkgs =
+      let
+        patchedNixos = patchNixpkgs {
+          src = inputs.nixos;
+          patches = [
+            # bcachefs-unlock-generator
+            (fetchpatch {
+              url = "https://github.com/NixOS/nixpkgs/pull/345207.diff";
+              hash = "sha256-a1QsPEbcNhjuZr57OyJb+SHhM8T1rNxNJ7L3J2gkbg8=";
+            })
+            # atticd module
+            (fetchpatch {
+              url = "https://github.com/NixOS/nixpkgs/pull/347749.diff";
+              hash = "sha256-FgxL1l3MWJirHD9kKpnYTzGUXRd+IAcCsYcmTFSeMLQ=";
+            })
+          ];
+        };
+      in
+      {
+        uranus = patchedNixos;
+        persephone = patchedNixos;
       };
-    };
 
     specialArgs = {
       inherit inputs;
