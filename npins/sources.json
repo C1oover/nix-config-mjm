@@ -24,18 +24,6 @@
       "url": "https://github.com/dwarfmaster/arkenfox-nixos/archive/72addd96455cce49c0c8524c53aecd02cf20adec.tar.gz",
       "hash": "108y21dbqjd3jwq92i4k19pkb0pqm83yj3999b144jhmryx668rr"
     },
-    "attic": {
-      "type": "Git",
-      "repository": {
-        "type": "GitHub",
-        "owner": "zhaofengli",
-        "repo": "attic"
-      },
-      "branch": "main",
-      "revision": "e5c8d2d50981a34602358d917e7be011b2c397a8",
-      "url": "https://github.com/zhaofengli/attic/archive/e5c8d2d50981a34602358d917e7be011b2c397a8.tar.gz",
-      "hash": "074acdfpcr2bs8g14jg8ak74pyxzqr2fx1sk7xgdvrhma5rclxkz"
-    },
     "catppuccin": {
       "type": "Git",
       "repository": {
