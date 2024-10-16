@@ -8,7 +8,6 @@
 {
   imports = [
     "${inputs.home-manager}/nixos"
-    "${inputs.agenix}/modules/age.nix"
     "${inputs.catppuccin}/modules/nixos"
 
     ../home-manager.nix

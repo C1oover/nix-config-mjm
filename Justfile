@@ -34,9 +34,3 @@ tf-plan:
 
 tf-apply:
   nix run -f . tofu-scripts -- apply
-
-edit-secret file:
-  cd secrets && agenix -e {{file}}
-
-rekey:
-  cd secrets && agenix -r

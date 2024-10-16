@@ -1,17 +1,5 @@
 {
   "pins": {
-    "agenix": {
-      "type": "Git",
-      "repository": {
-        "type": "GitHub",
-        "owner": "ryantm",
-        "repo": "agenix"
-      },
-      "branch": "main",
-      "revision": "f6291c5935fdc4e0bef208cfc0dcab7e3f7a1c41",
-      "url": "https://github.com/ryantm/agenix/archive/f6291c5935fdc4e0bef208cfc0dcab7e3f7a1c41.tar.gz",
-      "hash": "1x8nd8hvsq6mvzig122vprwigsr3z2skanig65haqswn7z7amsvg"
-    },
     "arkenfox": {
       "type": "Git",
       "repository": {

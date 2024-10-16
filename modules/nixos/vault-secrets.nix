@@ -173,7 +173,7 @@ let
   serviceType =
     namespace:
     types.submodule (
-      { name, config, ... }:
+      { name, ... }:
       {
         options = {
           name = mkOption {
@@ -222,10 +222,6 @@ in
         Path to a file that contains the secret ID for the AppRole to use to log in to Vault.
       '';
     };
-    secretIdAgeFile = mkOption {
-      type = types.nullOr types.str;
-      default = "${config.networking.hostName}-approle-secret-id.age";
-    };
     vaultAddress = mkOption {
       type = types.str;
       default = "http://vault.service.consul:8200";
@@ -262,10 +258,6 @@ in
 
   config = mkMerge [
     (mkIf (cfg.templates != { }) (mkMerge [
-      (mkIf (cfg.encryptedSecretId == null && cfg.secretIdAgeFile != null) {
-        age.secrets.vault-secrets-approle-secret-id.file = ../../secrets/${cfg.secretIdAgeFile};
-        vault-secrets.secretIdFile = config.age.secrets.vault-secrets-approle-secret-id.path;
-      })
       (mkIf (cfg.encryptedSecretId != null) {
         systemd.services.render-vault-secrets.serviceConfig.LoadCredentialEncrypted = [
           "secret-id:${pkgs.writeText "vault-secret-id" cfg.encryptedSecretId}"

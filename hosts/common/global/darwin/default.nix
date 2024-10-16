@@ -2,7 +2,6 @@
 {
   imports = [
     "${inputs.home-manager}/nix-darwin"
-    "${inputs.agenix}/modules/age.nix"
 
     ../../../../modules/nixos/nushell.nix
 

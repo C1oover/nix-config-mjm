@@ -10,7 +10,6 @@ let
 in
 {
   imports = [
-    "${inputs.agenix}/modules/age-home.nix"
     "${inputs.catppuccin}/modules/home-manager"
 
     ../features/desktop
@@ -46,8 +45,6 @@ in
         unzip
         wget
         ;
-
-      agenix = pkgs.callPackage "${inputs.agenix}/pkgs/agenix.nix" { };
     }
     // lib.optionalAttrs pkgs.stdenv.isLinux { inherit (pkgs) attic-client; }
   );

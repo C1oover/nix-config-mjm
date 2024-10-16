@@ -167,8 +167,6 @@ in
         };
       };
 
-      age.identityPaths = [ "${cfg.persistDir}/etc/ssh/ssh_host_ed25519_key" ];
-
       security.sudo.extraConfig = ''
         Defaults lecture = never
       '';
