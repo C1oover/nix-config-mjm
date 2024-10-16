@@ -12,8 +12,8 @@ let
   pkg = (import ../../packages { inherit pkgs; }).homelab;
   taskRc = pkgs.writeText "homelab-taskrc" ''
     data.location=$STATE_DIRECTORY/task
-    taskd.ca=${../../home/matt/features/taskwarrior/ca.crt}
-    taskd.certificate=${../../home/matt/features/taskwarrior/cert.crt}
+    taskd.ca=${./ca.crt}
+    taskd.certificate=${./cert.crt}
     taskd.credentials=home/mjm/335503bd-9888-481a-b3e9-7d0c54e0b8bc
     taskd.key=$CREDENTIALS_DIRECTORY/homelab_taskwarrior_key
     taskd.server=tasks.midna.dev:53589

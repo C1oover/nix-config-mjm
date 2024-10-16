@@ -6,8 +6,6 @@ in
   imports = [
     ./global
     ./global/darwin.nix
-
-    ./features/taskwarrior
   ];
 
   mjm.helix.enable = true;

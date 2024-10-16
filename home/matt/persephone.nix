@@ -1,9 +1,5 @@
 {
-  imports = [
-    ./global
-
-    ./features/taskwarrior
-  ];
+  imports = [ ./global ];
 
   programs.kitty.font.size = 15;
 
