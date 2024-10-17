@@ -1,41 +1,22 @@
 let
   inputs = import ./npins;
   pkgs = import inputs.nixos { config.allowUnfree = true; };
-  devenv = import inputs.devenv;
 in
-devenv.lib.mkShell {
-  inherit pkgs;
-  inputs = {
-    inherit devenv;
-    nixpkgs = {
-      lib = import "${inputs.nixos}/lib";
-    };
-    self = ./.;
+pkgs.mkShell {
+  packages = builtins.attrValues {
+    inherit (pkgs)
+      colmena
+      just
+      npins
+      terraform-ls
+      vault-bin
+      ;
+
+    inherit (import ./terraform { inherit pkgs; }) opentofu;
   };
-  modules = [
-    (
-      { pkgs, lib, ... }:
-      let
-        # TODO patch upstream
-        npins = pkgs.npins.overrideAttrs (oldAttrs: {
-          buildInputs =
-            oldAttrs.buildInputs
-            ++ lib.optional pkgs.stdenv.isDarwin pkgs.darwin.apple_sdk.frameworks.SystemConfiguration;
-        });
-      in
-      {
-        imports = [
-          ./hosts/devenv.nix
-          ./terraform/devenv.nix
-        ];
 
-        packages = [
-          pkgs.just
-          npins
-        ];
-
-        dotenv.disableHint = true;
-      }
-    )
-  ];
+  env = {
+    CONSUL_HTTP_ADDR = "consul.service.consul:8500";
+    VAULT_ADDR = "http://vault.service.consul:8200";
+  };
 }
