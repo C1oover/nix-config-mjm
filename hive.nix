@@ -28,11 +28,6 @@ in
               url = "https://github.com/NixOS/nixpkgs/pull/345207.diff";
               hash = "sha256-a1QsPEbcNhjuZr57OyJb+SHhM8T1rNxNJ7L3J2gkbg8=";
             })
-            # atticd module
-            (fetchpatch {
-              url = "https://github.com/NixOS/nixpkgs/pull/347749.diff";
-              hash = "sha256-FgxL1l3MWJirHD9kKpnYTzGUXRd+IAcCsYcmTFSeMLQ=";
-            })
             # lutris libjansson
             (fetchpatch {
               url = "https://github.com/NixOS/nixpkgs/pull/348533.diff";
