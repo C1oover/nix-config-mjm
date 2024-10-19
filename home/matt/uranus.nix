@@ -1,1 +1,5 @@
-{ imports = [ ./global ]; }
+{
+  imports = [ ./global ];
+
+  mjm.homelab.enableYubikey = false;
+}
