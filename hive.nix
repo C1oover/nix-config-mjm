@@ -28,11 +28,6 @@ in
               url = "https://github.com/NixOS/nixpkgs/pull/345207.diff";
               hash = "sha256-a1QsPEbcNhjuZr57OyJb+SHhM8T1rNxNJ7L3J2gkbg8=";
             })
-            # lutris libjansson
-            (fetchpatch {
-              url = "https://github.com/NixOS/nixpkgs/pull/348533.diff";
-              hash = "sha256-EGX109tC1klpDxKHgcaPB8dok3WZTZAVzVDtld1ldMg=";
-            })
           ];
         };
       in
