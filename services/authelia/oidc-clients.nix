@@ -40,6 +40,8 @@
     secret = "$pbkdf2-sha512$310000$jSR5KT8pbsKrYovaP0RYhA$pt40j9SHmF3SfZPgxGfmQZKfS.07Zks7MkmCHuAzJaEOY0Gca1CzvFwczMWhFHiRTd1tOsLzKY1yGAdYb1Q9sA";
     public = false;
     authorization_policy = "two_factor";
+    require_pkce = true;
+    pkce_challenge_method = "S256";
     redirect_uris = [
       "https://10.0.2.10:8006"
       "https://10.0.2.11:8006"
@@ -52,7 +54,7 @@
       "profile"
       "email"
     ];
-    userinfo_signing_algorithm = "none";
+    userinfo_signed_response_alg = "none";
   }
   {
     id = "peertube";
