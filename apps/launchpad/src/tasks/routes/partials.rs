@@ -65,8 +65,20 @@ pub fn task_list(tasks: &[Task]) -> Markup {
                     }
                 }
 
-                a .btn.btn-primary.btn-sm href={ "/tasks/" (task.id) "/edit" } {
-                    i .bi-pencil {}
+                .btn-group {
+                    @if !task.is_completed() {
+                        @if let Some(_) = task.notify_at {
+                            button .btn.btn-primary.btn-sm type="button"
+                                hx-get={ "/tasks/" (task.id) "/snooze" }
+                                hx-target="body"
+                                hx-swap="beforeend" {
+                                i .bi-bell {}
+                            }
+                        }
+                    }
+                    a .btn.btn-primary.btn-sm href={ "/tasks/" (task.id) "/edit" } {
+                        i .bi-pencil {}
+                    }
                 }
             }
         }

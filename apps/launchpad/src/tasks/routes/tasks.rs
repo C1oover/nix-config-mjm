@@ -5,7 +5,7 @@ use axum::{
     Form, Router,
 };
 use chrono_tz::Tz;
-use maud::html;
+use maud::{html, PreEscaped};
 use serde::Deserialize;
 use sqlx::PgPool;
 use tokio::try_join;
@@ -20,6 +20,7 @@ pub fn router() -> Router<app::State> {
         .route("/tasks", get(index).post(create))
         .route("/tasks/:id", put(update).delete(delete))
         .route("/tasks/:id/edit", get(edit))
+        .route("/tasks/:id/snooze", get(snooze_form).post(snooze))
         .route("/tasks/:id/toggle", post(toggle))
 }
 
@@ -199,6 +200,86 @@ async fn update(
     Task::update(&pool, id, &form.as_input()).await?;
 
     Ok(Redirect::to("/tasks"))
+}
+
+#[tracing::instrument(skip(pool))]
+async fn snooze_form(
+    State(pool): State<PgPool>,
+    Path(id): Path<i64>,
+) -> Result<impl IntoResponse, app::Error> {
+    let task = Task::get(&pool, id).await?;
+
+    Ok(html! {
+        (partials::modal_container("snooze-task-modal", html! {
+            .modal-dialog .modal-fullscreen-md-down {
+                .modal-content {
+                    form hx-post={ "/tasks/" (task.id) "/snooze" } {
+                        .modal-header {
+                            h1 #snooze-task-modal-title .modal-title .fs-5 {
+                                "Snooze task"
+                            }
+                            button .btn-close type="button" data-bs-dismiss="modal" aria-label="Close" {}
+                        }
+
+                        .modal-body {
+                            .mb-3 {
+                                label .form-label for="snooze-task-minutes" { "Minutes" }
+                                input
+                                    #snooze-task-minutes
+                                    .form-control
+                                    name="minutes"
+                                    type="number"
+                                    value="10"
+                                    step="5"
+                                    autocomplete="off";
+                            }
+                        }
+
+                        .modal-footer {
+                            button .btn.btn-secondary type="button" data-bs-dismiss="modal" { "Close" }
+                            button .btn.btn-primary { "Snooze" }
+                        }
+                    }
+                }
+            }
+        }))
+
+        script type="text/javascript" {
+            (PreEscaped(r##"
+                bootstrap.Modal.getOrCreateInstance("#snooze-task-modal").show();
+            "##))
+        }
+    })
+}
+
+#[derive(Deserialize, Debug)]
+struct SnoozeForm {
+    minutes: i64,
+}
+
+#[tracing::instrument(skip(pool))]
+async fn snooze(
+    State(pool): State<PgPool>,
+    Path(id): Path<i64>,
+    Form(form): Form<SnoozeForm>,
+) -> Result<impl IntoResponse, app::Error> {
+    let mut conn = pool.acquire().await?;
+    Task::snooze(&mut conn, id, form.minutes).await?;
+
+    let tasks = Task::list(&pool).await?;
+
+    Ok(html! {
+        div hx-swap-oob="innerHTML:#task-list" {
+            (partials::task_list(&tasks))
+        }
+
+        (partials::hide_modal("snooze-task-modal"))
+        script type="text/javascript" {
+            (PreEscaped(r##"
+                htmx.remove(htmx.find("#snooze-task-modal"), 1000);
+            "##))
+        }
+    })
 }
 
 #[tracing::instrument(skip(pool))]

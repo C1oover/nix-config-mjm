@@ -159,6 +159,25 @@ RETURNING *
         Ok(updated_task)
     }
 
+    #[tracing::instrument(skip(conn), ret, err)]
+    async fn snooze(conn: &mut PgConnection, id: i64, minutes: i64) -> Result<Task> {
+        let updated_task = sqlx::query_as!(
+            Task,
+            r#"
+UPDATE tasks
+SET notify_at = notify_at + $2
+WHERE id = $1
+RETURNING *
+        "#,
+            id,
+            TimeDelta::minutes(minutes) as TimeDelta
+        )
+        .fetch_one(&mut *conn)
+        .await?;
+
+        Ok(updated_task)
+    }
+
     #[tracing::instrument(skip(e), ret, err)]
     async fn update<'e, E: PgExecutor<'e>>(e: E, id: i64, t: &TaskUpdateInput) -> Result<Task> {
         Ok(sqlx::query_as!(
@@ -200,14 +219,14 @@ WHERE id = $1
 
         for task in &tasks {
             task.send_notification(topic).await?;
-            task.snooze(conn).await?;
+            task.auto_snooze(conn).await?;
         }
 
         Ok(())
     }
 
     #[tracing::instrument(skip(conn), err)]
-    async fn snooze(self: &Self, conn: &mut PgConnection) -> Result<()> {
+    async fn auto_snooze(self: &Self, conn: &mut PgConnection) -> Result<()> {
         let reminder = Reminder::get(&mut *conn, self.reminder_id.unwrap()).await?;
         let new_notify_at = advance_by_minutes(self.notify_at.unwrap(), reminder.snooze_minutes);
 
