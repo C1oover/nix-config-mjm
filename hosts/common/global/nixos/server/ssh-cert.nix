@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 let
   inherit (lib) mkIf;
   cfg = config.mjm.server;
@@ -19,5 +24,26 @@ in
     };
 
     services.openssh.settings.HostCertificate = config.vault-secrets.templates.ssh-host-cert.path;
+
+    # If vault is not available when the machine starts, then rendering vault secrets may
+    # fail, causing the host certificate to not be present when sshd starts. It's not great
+    # to block sshd from start because of this, as it might be the only way to easily
+    # access the machine, so let's at least detect the situation and alert on it.
+    services.consul.services.sshd = {
+      port = 22;
+
+      checks.host-cert = {
+        name = "sshd host certificate is being used";
+        script.args =
+          let
+            script = pkgs.writeScript "ssh-host-cert-check" ''
+              #!/bin/sh
+              ${pkgs.openssh}/bin/ssh-keyscan -c ${config.networking.hostName}.home.mattmoriarity.com || exit 2
+            '';
+          in
+          [ "${script}" ];
+        intervalSeconds = 30;
+      };
+    };
   };
 }

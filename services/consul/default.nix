@@ -45,6 +45,8 @@ in
 
           ports.grpc = 8502;
 
+          enable_local_script_checks = true;
+
           node_meta = mkIf (cfg.tailscaleIp != null) { tailscale_ip = cfg.tailscaleIp; };
         };
       };

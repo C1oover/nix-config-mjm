@@ -105,6 +105,13 @@ in
                           };
                         };
 
+                        script = {
+                          args = mkOption {
+                            type = types.nullOr (types.listOf types.str);
+                            default = null;
+                          };
+                        };
+
                         checkConfig = mkOption {
                           type = types.submodule { freeformType = jsonFormat.type; };
                         };
@@ -118,6 +125,7 @@ in
                             (mkIf (config.http.path != null) "http://localhost:${toString svcPort}${config.http.path}")
                             (mkIf (config.http.url != null) config.http.url)
                           ];
+                          args = mkIf (config.script.args != null) config.script.args;
                           interval = mkDefault "${toString config.intervalSeconds}s";
                           timeout = mkDefault "${toString config.timeoutSeconds}s";
                         };
