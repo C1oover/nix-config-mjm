@@ -13,11 +13,6 @@ let
     types
     ;
   cfg = config.mjm.desktop;
-
-  bitwarden = pkgs.bitwarden.overrideAttrs {
-    dontCargoCheck = true;
-    checkPhase = "";
-  };
 in
 {
   imports = [
@@ -44,8 +39,8 @@ in
     mjm.terminal.enable = mkDefault true;
 
     home.packages = builtins.attrValues {
-      inherit bitwarden;
       inherit (pkgs)
+        bitwarden
         element-desktop
         discord
         krita
