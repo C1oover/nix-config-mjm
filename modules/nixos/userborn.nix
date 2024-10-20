@@ -5,7 +5,9 @@ let
 in
 {
   options.mjm.userborn = {
-    enable = mkEnableOption "userborn";
+    enable = mkEnableOption "userborn" // {
+      default = true;
+    };
   };
 
   config = mkIf cfg.enable {
