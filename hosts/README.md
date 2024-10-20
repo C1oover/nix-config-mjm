@@ -11,6 +11,7 @@ Each system has its own directory with at minimum a `default.nix`
   - [athena](athena/): Work 16-inch MacBook Pro M2
 - Proxmox VMs, all running on a cluster of 3 Proxmox VE hosts built from various Dell OptiPlex SFF machines I bought on craigslist
   - [megaera](megaera/), [tisiphone](tisiphone/), [alecto](alecto/): 3 node Consul and Vault cluster
+  - [aether](aether/), [megaera](megaera/): DNS servers
   - [leto](leto/): Runs majority of my self-hosted services
   - [chaos](chaos/): Media server
   - [helio](helios/): Matrix homeserver and various bridges
