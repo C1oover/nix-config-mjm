@@ -46,6 +46,7 @@
 
   mjm.consul.enable = true;
   mjm.garage.enable = true;
+  mjm.icloudpd.enable = true;
   mjm.media-server.enable = true;
   mjm.server.enable = true;
   mjm.state = {
