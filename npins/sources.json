@@ -101,6 +101,18 @@
       "url": "https://api.github.com/repos/cachix/devenv/tarball/v1.3.1",
       "hash": "03bc61v6k49wf74yk68da35jff03qmvsm72b53mvs89cmffn868n"
     },
+    "devshell": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "numtide",
+        "repo": "devshell"
+      },
+      "branch": "main",
+      "revision": "dd6b80932022cea34a019e2bb32f6fa9e494dfef",
+      "url": "https://github.com/numtide/devshell/archive/dd6b80932022cea34a019e2bb32f6fa9e494dfef.tar.gz",
+      "hash": "1a3hmyj1lpx98znkdgjsazkfzkp8z4rrr09nsvpgyvwpyff7c4n5"
+    },
     "firefox-csshacks": {
       "type": "Git",
       "repository": {
