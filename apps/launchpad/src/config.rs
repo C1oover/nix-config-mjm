@@ -10,6 +10,7 @@ pub struct Config {
     pub gitlab_token: String,
     pub reminders_topic: String,
     pub paperless_token: String,
+    pub netbox_token: String,
     #[serde(default = "default_local_time_zone")]
     pub local_time_zone: String,
     #[serde(default = "default_enable_pretty_output")]

@@ -83,7 +83,28 @@ in
     systemd.timers.launchpad-reminders = {
       wantedBy = [ "timers.target" ];
       timerConfig = {
-        OnCalendar = "*:0/5:01";
+        OnCalendar = "*:0/5:05";
+      };
+    };
+
+    systemd.services.launchpad-dns = {
+      restartIfChanged = false;
+      environment = serviceEnv;
+
+      after = [ "network.target" ];
+
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${pkgs}/bin/launchpad update-dns";
+        DynamicUser = true;
+        User = "launchpad";
+      };
+    };
+
+    systemd.timers.launchpad-dns = {
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnCalendar = "minutely";
       };
     };
 

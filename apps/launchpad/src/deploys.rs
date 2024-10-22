@@ -5,9 +5,11 @@ use chrono::{DateTime, Utc};
 use gitlab::api::common::SortOrder;
 use gitlab::api::projects::merge_requests::MergeRequestState;
 use gitlab::api::projects::{self, deployments::DeploymentOrderBy};
-use gitlab::api::AsyncQuery;
+use gitlab::api::{raw, AsyncQuery};
 use gitlab::AsyncGitlab;
 use serde::{Deserialize, Serialize};
+
+const GITLAB_PROJECT: &str = "mjm/nix-config";
 
 #[derive(Clone, Debug)]
 pub struct GitLabClient {
@@ -26,7 +28,7 @@ impl GitLabClient {
     #[tracing::instrument(skip(self))]
     pub async fn get_update_merge_request(self: &Self) -> Result<Option<MergeRequest>> {
         let endpoint = projects::merge_requests::MergeRequests::builder()
-            .project("mjm/nix-config")
+            .project(GITLAB_PROJECT)
             .source_branch("npins-update")
             .target_branch("main")
             .state(MergeRequestState::Opened)
@@ -39,9 +41,36 @@ impl GitLabClient {
     #[tracing::instrument(skip(self), ret)]
     pub async fn list_deployments(self: &Self) -> Result<Vec<Deployment>> {
         let endpoint = projects::deployments::Deployments::builder()
-            .project("mjm/nix-config")
+            .project(GITLAB_PROJECT)
             .order_by(DeploymentOrderBy::CreatedAt)
             .sort(SortOrder::Descending)
+            .build()?;
+
+        Ok(endpoint.query_async(&self.client).await?)
+    }
+
+    #[tracing::instrument(skip(self), ret)]
+    pub async fn get_hosts_file(self: &Self) -> Result<String> {
+        let endpoint = projects::repository::files::FileRaw::builder()
+            .project(GITLAB_PROJECT)
+            .file_path("services/dns-server/hosts.json")
+            .build()?;
+
+        Ok(String::from_utf8(
+            raw(endpoint).query_async(&self.client).await?,
+        )?)
+    }
+
+    #[tracing::instrument(skip(self))]
+    pub async fn update_hosts_file(self: &Self, content: &str) -> Result<()> {
+        let endpoint = projects::repository::files::UpdateFile::builder()
+            .project(GITLAB_PROJECT)
+            .file_path("services/dns-server/hosts.json")
+            .content(content.as_bytes())
+            .branch("main")
+            .commit_message("dns-server: update host records")
+            .author_name("Homelab Automation")
+            .author_email("homelab@matt.mattmoriarity.com")
             .build()?;
 
         Ok(endpoint.query_async(&self.client).await?)

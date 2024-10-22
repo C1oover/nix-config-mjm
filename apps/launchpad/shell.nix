@@ -36,6 +36,7 @@ devshell.mkShell (
         cargo-watch
         rust-analyzer
 
+        graphql-client
         just
         sqlx-cli
         systemfd
@@ -45,6 +46,7 @@ devshell.mkShell (
     env = [
       (nameEvalPair "SECRETS_DIR" "$PRJ_DATA_DIR/secrets")
       (nameEvalPair "LAUNCHPAD_PAPERLESS_TOKEN_FILE" "$SECRETS_DIR/paperless_token")
+      (nameEvalPair "LAUNCHPAD_NETBOX_TOKEN_FILE" "$SECRETS_DIR/netbox_token")
       (nameEvalPair "LAUNCHPAD_GITLAB_TOKEN_FILE" "$SECRETS_DIR/gitlab_token")
       (nameEvalPair "LAUNCHPAD_REMINDERS_TOPIC_FILE" "$SECRETS_DIR/reminders_topic")
 

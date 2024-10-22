@@ -1425,6 +1425,7 @@ dependencies = [
  "figment",
  "figment_file_provider_adapter",
  "gitlab",
+ "graphql_client",
  "listenfd",
  "maud",
  "opentelemetry",
