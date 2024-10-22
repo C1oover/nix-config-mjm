@@ -133,9 +133,9 @@
         "repo": "nixos-hardware"
       },
       "branch": "master",
-      "revision": "7495e877539919988c9ebe4ae0f47343982da0e5",
-      "url": "https://github.com/NixOS/nixos-hardware/archive/7495e877539919988c9ebe4ae0f47343982da0e5.tar.gz",
-      "hash": "0616pv4bwf1gbz7wskyfq0wan1vf96wvpazg5pk5zgxkx86izamb"
+      "revision": "cc2d3c0e060f981905d52337340ee6ec8b8eb037",
+      "url": "https://github.com/NixOS/nixos-hardware/archive/cc2d3c0e060f981905d52337340ee6ec8b8eb037.tar.gz",
+      "hash": "1iqkfikfpzpgmr23lcwcrz14yccbhzqy6q3qhysqs5md7ymy1qgh"
     },
     "helix": {
       "type": "Git",
@@ -157,9 +157,9 @@
         "repo": "home-manager"
       },
       "branch": "master",
-      "revision": "1e27f213d77fc842603628bcf2df6681d7d08f7e",
-      "url": "https://github.com/nix-community/home-manager/archive/1e27f213d77fc842603628bcf2df6681d7d08f7e.tar.gz",
-      "hash": "1r2ndxnfs3jv8mlyrmm2k6qkx7z80jvmzw3biiycrs5azwk9a4w0"
+      "revision": "5ec753a1fc4454df9285d8b3ec0809234defb975",
+      "url": "https://github.com/nix-community/home-manager/archive/5ec753a1fc4454df9285d8b3ec0809234defb975.tar.gz",
+      "hash": "0jygm1vsfp10fylmxg8qfss01zfz72iwnxqaal75x5wpgmihdc7c"
     },
     "lanzaboote": {
       "type": "GitRelease",
@@ -185,8 +185,8 @@
     "nixos-small": {
       "type": "Channel",
       "name": "nixos-unstable-small",
-      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-24.11pre695482.a5e6a9e97936/nixexprs.tar.xz",
-      "hash": "050hdb0kdykmzbpqpvjw6w3qc9xsz7nfv5ns4dwxs70cjkxkpc68"
+      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-24.11pre695727.2d88282897c0/nixexprs.tar.xz",
+      "hash": "0lnkkil91mg8rhs0yqwvxd5j8axbwpi9ib0ps41rkk1arxpk91kh"
     },
     "nixpkgs": {
       "type": "Channel",
@@ -214,9 +214,9 @@
         "repo": "NUR"
       },
       "branch": "master",
-      "revision": "41ca6cfe238fdfab2831386c5a65f5c0a01e1cfd",
-      "url": "https://github.com/nix-community/NUR/archive/41ca6cfe238fdfab2831386c5a65f5c0a01e1cfd.tar.gz",
-      "hash": "0i3ylz5c6kgrpyiwy4mib12dda12bzniz6n54qzlmgmj1zir2sck"
+      "revision": "2bba790d4660e07cd15abbce59dc59e25d9e10ff",
+      "url": "https://github.com/nix-community/NUR/archive/2bba790d4660e07cd15abbce59dc59e25d9e10ff.tar.gz",
+      "hash": "0skp4jlihyvnp2a250k731vzdrvxk0vzjwkhxwkf8y97y24ihcgd"
     },
     "preservation": {
       "type": "Git",
