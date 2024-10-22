@@ -14,6 +14,17 @@ let
     ;
 
   cfg = config.mjm.dns-server;
+
+  familyToRecordType = family: if family == 4 then "A" else "AAAA";
+  hostToRecord =
+    {
+      name,
+      family,
+      address,
+    }:
+    "${name}  IN  ${familyToRecordType family}  ${address}";
+
+  hostsToRecords = concatMapStringsSep "\n" hostToRecord;
 in
 {
   imports = [ ./blocky.nix ];
@@ -72,7 +83,7 @@ in
                            1h )   ; Negative Cache TTL
           @   IN  NS  localhost.
 
-          $INCLUDE ${./home.mattmoriarity.com.hosts.zone}
+          ${hostsToRecords (builtins.fromJSON (builtins.readFile ./hosts.json))}
         '';
       };
     };
