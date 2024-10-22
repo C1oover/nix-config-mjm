@@ -17,7 +17,7 @@
 ;;@doc
 ;; Run all tests
 (define (test-all)
-  (run-mix "test.all"))
+  (run-mix "test"))
 
 ;;@doc
 ;; Run tests in the current file
