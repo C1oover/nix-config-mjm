@@ -185,14 +185,14 @@
     "nixos-small": {
       "type": "Channel",
       "name": "nixos-unstable-small",
-      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-24.11pre695994.70e46c586fc3/nixexprs.tar.xz",
-      "hash": "01b7gm16lm3kw227jg9bdilzrzb49vaw6snfh4pkzmwvmbhk22vg"
+      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-24.11pre696178.c0915172d935/nixexprs.tar.xz",
+      "hash": "13alrgzvhkvmssiyys8zhc6gixxnb577nnjdfzx4cyzak2mn7alj"
     },
     "nixpkgs": {
       "type": "Channel",
       "name": "nixpkgs-unstable",
-      "url": "https://releases.nixos.org/nixpkgs/nixpkgs-24.11pre695900.782740762fb2/nixexprs.tar.xz",
-      "hash": "0gg9jkp7iq531m8520ldnng2731s3ab3wdw34yb7rw0fsg4ncxz0"
+      "url": "https://releases.nixos.org/nixpkgs/nixpkgs-24.11pre696114.dfffb2e7a52d/nixexprs.tar.xz",
+      "hash": "15dj4hcx5wqcnxwfhh1gx2rpcwyip794bkmv0vpz4f01hibr7wd2"
     },
     "nixpkgs-firefox-darwin": {
       "type": "Git",
