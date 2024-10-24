@@ -191,8 +191,8 @@
     "nixpkgs": {
       "type": "Channel",
       "name": "nixpkgs-unstable",
-      "url": "https://releases.nixos.org/nixpkgs/nixpkgs-24.11pre696292.be79af5ec63f/nixexprs.tar.xz",
-      "hash": "0i9463gxk5ddsgiykafk3120k89aj15d3gq9rkwd6dns48i0wmmc"
+      "url": "https://releases.nixos.org/nixpkgs/nixpkgs-24.11pre696416.6301495959cf/nixexprs.tar.xz",
+      "hash": "0gjclpf0m604nx48gvz516lw9iczmj1l9s4v63pgzypb49k5w67w"
     },
     "nixpkgs-firefox-darwin": {
       "type": "Git",
