@@ -23,10 +23,13 @@ let
       npm run docker:ssh ...$rest
     }
 
-    def "main restart" [] {
-      npm run docker:down
-      docker compose up -d
-      npm run docker:logs -- --no-log-prefix
+    def "main start" [] {
+      docker compose up --no-log-prefix
+    }
+
+    def "main restart" [name: string = "slab_1"] {
+      docker compose down $name
+      docker compose up -d $name
     }
 
     def --wrapped "main up" [...rest] {
