@@ -28,10 +28,6 @@ in
               url = "https://github.com/NixOS/nixpkgs/pull/345207.diff";
               hash = "sha256-a1QsPEbcNhjuZr57OyJb+SHhM8T1rNxNJ7L3J2gkbg8=";
             })
-            (fetchpatch {
-              url = "https://github.com/NixOS/nixpkgs/pull/349783.diff";
-              hash = "sha256-cEaZTYY3TGltcUzhOZ8dIXrNuouVblwPr1kwWoRq3M0=";
-            })
           ];
         };
       in
