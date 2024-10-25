@@ -41,7 +41,7 @@ in
 
     services.netbox = {
       enable = true;
-      package = pkgs.netbox_3_7;
+      package = pkgs.netbox_4_1;
       listenAddress = "[::]";
       settings = {
         ALLOWED_HOSTS = [
