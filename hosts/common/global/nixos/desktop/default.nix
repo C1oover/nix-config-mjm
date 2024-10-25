@@ -7,8 +7,6 @@
 let
   inherit (lib) mkEnableOption mkForce mkIf;
   cfg = config.mjm.desktop;
-
-  inherit (import ../../../../../packages { inherit pkgs; }) pragmata-pro;
 in
 {
   options.mjm.desktop = {

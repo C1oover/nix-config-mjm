@@ -29,6 +29,7 @@
           pkgs = prev;
         };
       })
+      (import ../../../overlay.nix)
     ];
   };
 

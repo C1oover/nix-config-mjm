@@ -26,7 +26,6 @@ in
 
     services.linkding = {
       enable = true;
-      package = (import ../../packages { inherit pkgs; }).linkding;
 
       address = "";
       port = 7090;

@@ -24,11 +24,6 @@
     ../../../../services
   ] ++ (builtins.attrValues (import ../../../../modules/nixos));
 
-  # hash mismatch in the go modules for vault rn
-  nixpkgs.overlays = [
-    (final: prev: { vault = prev.vault-bin; })
-  ];
-
   nix.channel.enable = true;
   nix.settings.trusted-users = [
     "root"
@@ -64,11 +59,7 @@
     pkgs.kitty.terminfo
   ];
 
-  system.extraSystemBuilderCmds =
-    let
-      nvd-json = import ../../../../apps/nvd-json { inherit pkgs; };
-    in
-    ''
-      ln -s ${nvd-json}/bin/nvd-json $out/bin/nvd-json
-    '';
+  system.extraSystemBuilderCmds = ''
+    ln -s ${pkgs.nvd-json}/bin/nvd-json $out/bin/nvd-json
+  '';
 }
