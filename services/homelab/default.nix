@@ -9,7 +9,6 @@ let
 
   cfg = config.mjm.homelab;
 
-  pkg = (import ../../packages { inherit pkgs; }).homelab;
   taskRc = pkgs.writeText "homelab-taskrc" ''
     data.location=$STATE_DIRECTORY/task
     taskd.ca=${./ca.crt}
@@ -88,7 +87,7 @@ in
       '';
 
       serviceConfig = {
-        ExecStart = "${pkg}/bin/server";
+        ExecStart = "${pkgs.homelab}/bin/server";
         Restart = "always";
         DynamicUser = true;
         User = "homelab";

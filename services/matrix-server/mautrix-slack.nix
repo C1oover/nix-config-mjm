@@ -8,8 +8,7 @@ let
   inherit (lib) mkEnableOption mkIf;
 
   cfg = config.mjm.matrix-server;
-
-  pkg = (import ../../packages { inherit pkgs; }).mautrix-slack;
+  pkg = pkgs.mautrix-slack;
 
   configFormat = pkgs.formats.yaml { };
   configFile = configFormat.generate "mautrix-slack-config.yaml" {

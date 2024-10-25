@@ -7,8 +7,6 @@
 let
   inherit (lib) mkIf;
   cfg = config.mjm.home-assistant;
-
-  inherit (import ../../packages { inherit pkgs; }) cliraop;
 in
 {
   config = mkIf cfg.enable {
@@ -20,11 +18,6 @@ in
 
     services.music-assistant = {
       enable = true;
-      package = pkgs.music-assistant.overrideAttrs (oldAttrs: {
-        preBuild = ''
-          ln -sf ${cliraop}/bin/cliraop music_assistant/server/providers/airplay/bin/cliraop-linux-x86_64
-        '';
-      });
       providers = [
         # "airplay"
         # "builtin"

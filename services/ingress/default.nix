@@ -18,8 +18,6 @@ let
   cfg = config.ingress;
 
   vhosts = cfg.virtualHosts;
-
-  caddy = (import ../../packages { inherit pkgs; }).caddy-desec;
 in
 {
   imports = [ ./dns.nix ];
@@ -48,7 +46,7 @@ in
 
       services.caddy = {
         enable = true;
-        package = caddy;
+        package = pkgs.caddy-desec;
         settings = {
           apps.tls = {
             certificates.automate = [
