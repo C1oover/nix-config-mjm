@@ -10,14 +10,14 @@ let
   cfg = config.mjm.icloudpd;
 
   icloudpd = pkgs.icloudpd.overridePythonAttrs (oldAttrs: {
-    version = "1.23.4";
+    version = "1.24.0";
 
     # iowk's commit with the authentication fix
     src = pkgs.fetchFromGitHub {
       owner = "icloud-photos-downloader";
       repo = "icloud_photos_downloader";
-      rev = "4bcb2ac46a585205cbf3886b3df78179b34b18b1";
-      hash = "sha256-uc93aKt/4oGwY9HByw2u08pBIhHcplEhzu6W8RJ33ts=";
+      rev = "v1.24.0";
+      hash = "sha256-IP5bjRmHlVKYmcsR1g9B/p4KzVpCyBomwznPwjay4wA=";
     };
 
     propagatedBuildInputs =
