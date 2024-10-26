@@ -8,26 +8,6 @@
 let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.mjm.icloudpd;
-
-  icloudpd = pkgs.icloudpd.overridePythonAttrs (oldAttrs: {
-    version = "1.24.0";
-
-    # iowk's commit with the authentication fix
-    src = pkgs.fetchFromGitHub {
-      owner = "icloud-photos-downloader";
-      repo = "icloud_photos_downloader";
-      rev = "v1.24.0";
-      hash = "sha256-IP5bjRmHlVKYmcsR1g9B/p4KzVpCyBomwznPwjay4wA=";
-    };
-
-    propagatedBuildInputs =
-      oldAttrs.propagatedBuildInputs
-      ++ (builtins.attrValues {
-        inherit (pkgs.python3Packages) flask srp waitress;
-      });
-
-    doCheck = false;
-  });
 in
 {
   options.mjm.icloudpd = {
@@ -48,7 +28,7 @@ in
       serviceConfig = {
         Type = "simple";
         ExecStart = utils.escapeSystemdExecArgs [
-          (lib.getExe icloudpd)
+          (lib.getExe pkgs.icloudpd)
           "--directory"
           "/videos/photos"
           "--username"
@@ -75,7 +55,7 @@ in
           --wait \
           -qt \
           --collect \
-          ${lib.getExe icloudpd} \
+          ${lib.getExe pkgs.icloudpd} \
           "$@"
       '')
     ];
