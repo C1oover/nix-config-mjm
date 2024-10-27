@@ -17,16 +17,7 @@ let
 in
 {
   meta = {
-    nixpkgs = patchNixpkgs {
-      src = inputs.nixos-small;
-      patches = [
-        # icloudpd 1.24.0
-        (fetchpatch {
-          url = "https://github.com/NixOS/nixpkgs/pull/351484.diff";
-          hash = "sha256-oADYBN+pudGAsCzyDSelUcwwZDiZBJmh/mxn/1oP4mk=";
-        })
-      ];
-    };
+    nixpkgs = inputs.nixos-small;
     nodeNixpkgs =
       let
         patchedNixos = patchNixpkgs {
