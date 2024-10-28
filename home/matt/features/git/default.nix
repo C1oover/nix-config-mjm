@@ -89,6 +89,23 @@ in
           ];
           hist = [ "history" ];
           h = [ "history" ];
+          wc = [
+            "log"
+            "-r"
+            "trunk()..@"
+          ];
+          dc = [
+            "diff"
+            "--from"
+            "trunk()"
+            "--to"
+            "@-"
+          ];
+          di = [
+            "diff"
+            "--from"
+            "trunk()"
+          ];
         };
         revsets = {
           log = "@ | trunk() | ancestors(trunk()..(visible_heads() & mine() & ~tags()), 2)";
