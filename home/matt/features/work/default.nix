@@ -32,6 +32,11 @@ let
       docker compose up -d $name
     }
 
+    def "main rebuild" [name: string = "slab_1"] {
+      docker compose build $name
+      docker compose up -d $name
+    }
+
     def --wrapped "main up" [...rest] {
       docker compose up -d ...$rest
     }
