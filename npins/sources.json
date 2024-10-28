@@ -145,9 +145,9 @@
         "repo": "helix"
       },
       "branch": "steel-event-system",
-      "revision": "29ce6fffda1854fbe224fd657b6eac52187dad36",
-      "url": "https://github.com/mattwparas/helix/archive/29ce6fffda1854fbe224fd657b6eac52187dad36.tar.gz",
-      "hash": "1afyn5kgxklimxvv0ghk2134x94lnq338q25fv1j5l1s2ssd2sk9"
+      "revision": "7d4f9183e69eda17627e9b6cd9cf32c0b63aeda0",
+      "url": "https://github.com/mattwparas/helix/archive/7d4f9183e69eda17627e9b6cd9cf32c0b63aeda0.tar.gz",
+      "hash": "1wbvplckzv96cynib6lvcb6d4phbadxfhviy2gp05k527khjvycj"
     },
     "home-manager": {
       "type": "Git",
@@ -185,8 +185,8 @@
     "nixos-small": {
       "type": "Channel",
       "name": "nixos-unstable-small",
-      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-24.11pre697993.e4735dbdda82/nixexprs.tar.xz",
-      "hash": "09dsgg3jvb16r5rqlb06v4q1s2rakns1nkpq2j0wjvjx1z9j8aa7"
+      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-24.11pre698183.79e953a9d8cc/nixexprs.tar.xz",
+      "hash": "1gszy4z1ziwig4sg12nc8j032h96z54rnqnqzwcj4qjdd7kjgcz0"
     },
     "nixpkgs": {
       "type": "Channel",
@@ -214,9 +214,9 @@
         "repo": "NUR"
       },
       "branch": "master",
-      "revision": "917fe0f398348a7a3aec3336b07a35d4cbc2d604",
-      "url": "https://github.com/nix-community/NUR/archive/917fe0f398348a7a3aec3336b07a35d4cbc2d604.tar.gz",
-      "hash": "15gix2liblsbchzg05drilbyiv1iq9hsrpn1h4j6icznf87p1gxc"
+      "revision": "622fa8916ebe8f2dfc95f4bfb92ada3cf242a0c8",
+      "url": "https://github.com/nix-community/NUR/archive/622fa8916ebe8f2dfc95f4bfb92ada3cf242a0c8.tar.gz",
+      "hash": "00r2zfipwplgjgkjwh3277v85pr74ffmsj2sgz7mc02f9cgjii5h"
     },
     "preservation": {
       "type": "Git",
