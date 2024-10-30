@@ -41,6 +41,10 @@ let
       docker compose up -d ...$rest
     }
 
+    def "main iex" [] {
+      docker compose exec slab_1 iex --sname iex --cookie dev-cookie --remsh slab@slab_1
+    }
+
     def "main token" [] {
       cd (mktemp -d)
       cp `~/Library/Application Support/Firefox/Profiles/matt/storage/default/https+++matt.slabdev.com/ls/data.sqlite` data.sqlite
