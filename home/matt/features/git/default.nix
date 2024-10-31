@@ -76,6 +76,11 @@ in
 
         core.fsmonitor = "watchman";
 
+        revset-aliases = {
+          "merge_base(x)" = "merge_base(trunk(), x)";
+          "merge_base(a, b)" = "heads(..a & ..b)";
+        };
+
         aliases = {
           unpushed = [
             "log"
@@ -97,14 +102,16 @@ in
           dc = [
             "diff"
             "--from"
-            "trunk()"
+            "merge_base(@-)"
             "--to"
             "@-"
           ];
           di = [
             "diff"
             "--from"
-            "trunk()"
+            "merge_base(@)"
+            "--to"
+            "@"
           ];
         };
         revsets = {
