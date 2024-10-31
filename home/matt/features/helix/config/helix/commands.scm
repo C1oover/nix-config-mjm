@@ -508,7 +508,7 @@
 (provide tree-sitter-subtree)
 
 ;;@doc
-;;Display tree sitter subtree under cursor, primarily for debugging queries.
+;;Display the smallest tree-sitter subtree that spans the primary selection, primarily for debugging queries.
 (define (tree-sitter-subtree . args)
     (helix.tree-sitter-subtree *helix.cx* args))
 

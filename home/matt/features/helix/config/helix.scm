@@ -61,15 +61,11 @@
   (let ([url (string-append "dash://?query=" (helix.static.current-highlighted-text!))])
     (helix.run-shell-command "open" url)))
 
-(define (editor-get-doc-if-exists doc-id)
-  (if (editor-doc-exists? doc-id) (editor->get-document doc-id) #f))
-
 (define (current-path)
   (let* ([focus (editor-focus)]
-         [focus-doc-id (editor->doc-id focus)]
-         [document (editor-get-doc-if-exists focus-doc-id)])
+         [focus-doc-id (editor->doc-id focus)])
 
-    (if document (Document-path document) #f)))
+    (if (editor-doc-exists? focus-doc-id) (editor-document->path focus-doc-id) #f)))
 
 (define (current-relative-path)
   (let* ([workspace-path (helix-find-workspace)] [file-path (to-string (current-path))])

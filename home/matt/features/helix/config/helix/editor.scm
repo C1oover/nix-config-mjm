@@ -63,9 +63,29 @@
 (define (editor-doc-exists? arg)
     (helix.editor-doc-exists? *helix.cx* arg))
 
-(provide editor->get-document)
-(define (editor->get-document arg)
-    (helix.editor->get-document *helix.cx* arg))
+(provide editor->text)
+(define (editor->text arg)
+    (helix.editor->text *helix.cx* arg))
+
+(provide editor-document->path)
+(define (editor-document->path arg)
+    (helix.editor-document->path *helix.cx* arg))
+
+(provide set-editor-clip-top!)
+(define (set-editor-clip-top! arg)
+    (helix.set-editor-clip-top! *helix.cx* arg))
+
+(provide set-editor-clip-right!)
+(define (set-editor-clip-right! arg)
+    (helix.set-editor-clip-right! *helix.cx* arg))
+
+(provide set-editor-clip-left!)
+(define (set-editor-clip-left! arg)
+    (helix.set-editor-clip-left! *helix.cx* arg))
+
+(provide set-editor-clip-bottom!)
+(define (set-editor-clip-bottom! arg)
+    (helix.set-editor-clip-bottom! *helix.cx* arg))
 
 (provide editor-switch-action!)
 (define (editor-switch-action! arg1 arg2)
