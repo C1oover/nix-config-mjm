@@ -5,36 +5,48 @@ let
   pkgsForPatching = import inputs.nixos { };
   inherit (pkgsForPatching) applyPatches fetchpatch;
 
+  patches = import ./hosts/patches.nix;
+  mkPatches =
+    kind:
+    lib.mapAttrsToList (
+      name: value: fetchpatch ({ url = "https://github.com/NixOS/nixpkgs/pull/${name}.diff"; } // value)
+    ) (patches.${kind});
+  globalPatches = mkPatches "global";
+
   patchNixpkgs =
     {
       src,
-      patches ? [ ],
+      kind,
+      extraPatches ? [ ],
     }:
-    applyPatches {
-      name = "${src.name}-patched";
-      inherit src patches;
-    };
+    let
+      allPatches = globalPatches ++ mkPatches kind ++ extraPatches;
+    in
+    if allPatches == [ ] then
+      src
+    else
+      applyPatches {
+        name = "${src.name}-patched";
+        patches = allPatches;
+        inherit src;
+      };
+
+  serverNixpkgs = patchNixpkgs {
+    src = inputs.nixos-small;
+    kind = "servers";
+  };
+  desktopNixpkgs = patchNixpkgs {
+    src = inputs.nixos;
+    kind = "desktops";
+  };
 in
 {
   meta = {
-    nixpkgs = inputs.nixos-small;
-    nodeNixpkgs =
-      let
-        patchedNixos = patchNixpkgs {
-          src = inputs.nixos;
-          patches = [
-            # bcachefs-unlock-generator
-            (fetchpatch {
-              url = "https://github.com/NixOS/nixpkgs/pull/345207.diff";
-              hash = "sha256-a1QsPEbcNhjuZr57OyJb+SHhM8T1rNxNJ7L3J2gkbg8=";
-            })
-          ];
-        };
-      in
-      {
-        uranus = patchedNixos;
-        persephone = patchedNixos;
-      };
+    nixpkgs = serverNixpkgs;
+    nodeNixpkgs = {
+      uranus = desktopNixpkgs;
+      persephone = desktopNixpkgs;
+    };
 
     specialArgs = {
       inherit inputs;
