@@ -4,6 +4,7 @@
   ...
 }@args:
 let
+  inherit (pkgs) lib;
   tf = import ../terraform { inherit pkgs; };
 
   outpkgs = if (args ? outpkgs) then args.outpkgs else pkgs // packages;
@@ -38,6 +39,7 @@ let
       (pythonFinal: pythonPrev: {
         strawberry-graphql = pythonPrev.strawberry-graphql.overridePythonAttrs (oldAttrs: {
           patches = [ ];
+          disabledTestPaths = lib.remove "tests/starlite/" oldAttrs.disabledTestPaths;
         });
       })
     ];
