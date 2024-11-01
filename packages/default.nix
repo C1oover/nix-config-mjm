@@ -33,6 +33,14 @@ let
       '';
     });
     vault = pkgs.vault-bin;
+
+    pythonPackagesExtensions = pkgs.pythonPackagesExtensions ++ [
+      (pythonFinal: pythonPrev: {
+        strawberry-graphql = pythonPrev.strawberry-graphql.overridePythonAttrs (oldAttrs: {
+          patches = [ ];
+        });
+      })
+    ];
   };
 in
 packages
