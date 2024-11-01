@@ -119,7 +119,12 @@ in
 
     virtualisation.libvirtd.enable = true;
     programs.virt-manager.enable = true;
-    users.users.matt.extraGroups = [ "libvirtd" ];
     mjm.state.directories = [ "/var/lib/libvirt" ];
+    virtualisation.docker.enable = true;
+
+    users.users.matt.extraGroups = [
+      "libvirtd"
+      "docker"
+    ];
   };
 }
