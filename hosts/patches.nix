@@ -4,5 +4,5 @@
   # fix lldap
   servers."352840".hash = "sha256-O4zxn4AgUrggCkqUEkmVsUAbMTL/Jhki6Q+j1mhHWLw=";
   # bcachefs-fstab-generator
-  desktops."345207".hash = "sha256-a1QsPEbcNhjuZr57OyJb+SHhM8T1rNxNJ7L3J2gkbg8=";
+  desktops."345207".hash = "sha256-fSuTIECQKnQ0ntgcIm9zRD64EvhcU+8bLJ8kOlh7QsQ=";
 }
