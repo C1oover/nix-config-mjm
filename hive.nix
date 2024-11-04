@@ -10,7 +10,7 @@ let
     kind:
     lib.mapAttrsToList (
       name: value: fetchpatch ({ url = "https://github.com/NixOS/nixpkgs/pull/${name}.diff"; } // value)
-    ) (patches.${kind});
+    ) (patches.${kind} or { });
   globalPatches = mkPatches "global";
 
   patchNixpkgs =
