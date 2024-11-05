@@ -2,17 +2,11 @@
 
 buildGoModule rec {
   pname = "caddy";
-  version = "2.8.4";
+  version = "2.9.0-beta.3";
 
   src = ./.;
 
-  vendorHash = "sha256-153v07SsO2zf0mwUZInm1R7RuNu8We1U1jQXGT+XvhU=";
-
-  overrideModAttrs = _: {
-    postBuild = ''
-      sed -i -e '392i if rec.Name == "" {\nrec.Name = "@"\n}' vendor/github.com/caddyserver/certmagic/solvers.go
-    '';
-  };
+  vendorHash = "sha256-EK+DIC6VPTwlBuXJhie4Kyh1MFZWpmiXv3X7jqCviAI=";
 
   ldflags = [
     "-s"
