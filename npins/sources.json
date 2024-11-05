@@ -82,9 +82,9 @@
         "repo": "nix-darwin"
       },
       "branch": "master",
-      "revision": "189d2d422c773fa065cc9c72e6806f007ebb9be0",
-      "url": "https://github.com/LnL7/nix-darwin/archive/189d2d422c773fa065cc9c72e6806f007ebb9be0.tar.gz",
-      "hash": "04cd9g9ic8zqid6jl9cbjhhs1y4rc89s2hny9abx1qm455nbrbmj"
+      "revision": "2f05a8101927c156004abc7d88a0e26f68ebd5c6",
+      "url": "https://github.com/LnL7/nix-darwin/archive/2f05a8101927c156004abc7d88a0e26f68ebd5c6.tar.gz",
+      "hash": "0pb36l0rjxy6xixd75d48vqvgpkl6aan302z89xvcm76hkfk10ys"
     },
     "devenv": {
       "type": "GitRelease",
@@ -121,9 +121,9 @@
         "repo": "firefox-csshacks"
       },
       "branch": "master",
-      "revision": "ec1aede46c2640d4daff491539c2637e27b07bdc",
-      "url": "https://github.com/MrOtherGuy/firefox-csshacks/archive/ec1aede46c2640d4daff491539c2637e27b07bdc.tar.gz",
-      "hash": "0v6c672c5m4x6xdl0qd3kzcfs5snmjix6vrdx7xkf8q7bx8miy4z"
+      "revision": "36be28e7d26e53d0c098691acb3b7633bb3840b5",
+      "url": "https://github.com/MrOtherGuy/firefox-csshacks/archive/36be28e7d26e53d0c098691acb3b7633bb3840b5.tar.gz",
+      "hash": "1nz08m202r5q8sdqv5y42wiml3qi1sbqana5h53pjj2ygrlpch2q"
     },
     "hardware": {
       "type": "Git",
@@ -145,9 +145,9 @@
         "repo": "helix"
       },
       "branch": "steel-event-system",
-      "revision": "68d090c2a7556bc1fcc3a202cee2f76342b7c962",
-      "url": "https://github.com/mattwparas/helix/archive/68d090c2a7556bc1fcc3a202cee2f76342b7c962.tar.gz",
-      "hash": "06f0rc01hgalkj1z9f22818x7dijb3ak7s70zxjl3ji2v25zsgvi"
+      "revision": "8ba225ff32ad232fae4f53aa9c18109a285a3ffd",
+      "url": "https://github.com/mattwparas/helix/archive/8ba225ff32ad232fae4f53aa9c18109a285a3ffd.tar.gz",
+      "hash": "175rs58awx8jicpnvx65b7g4vzg8bmcvqvcys828f0bdwzv0p74p"
     },
     "home-manager": {
       "type": "Git",
@@ -191,8 +191,8 @@
     "nixpkgs": {
       "type": "Channel",
       "name": "nixpkgs-unstable",
-      "url": "https://releases.nixos.org/nixpkgs/nixpkgs-24.11pre699031.2d2a9ddbe3f2/nixexprs.tar.xz",
-      "hash": "1vx044c8gdg1c8zmabzbi9xrgjgaz2bfqbl47xsgh517f580bycx"
+      "url": "https://releases.nixos.org/nixpkgs/nixpkgs-24.11pre703290.4ae2e647537b/nixexprs.tar.xz",
+      "hash": "1cly02c0gipd6649bi1xv4mz2bxgdkfmyg7ri3595gf5cma7hj0b"
     },
     "nixpkgs-firefox-darwin": {
       "type": "Git",
@@ -202,9 +202,9 @@
         "repo": "nixpkgs-firefox-darwin"
       },
       "branch": "main",
-      "revision": "cdc7199e096e630128531dddaac6d91e8d5454cb",
-      "url": "https://github.com/bandithedoge/nixpkgs-firefox-darwin/archive/cdc7199e096e630128531dddaac6d91e8d5454cb.tar.gz",
-      "hash": "1bva44r1j16pjw1wn05krfkx7w591hmhrsjra7231wkncipp2y66"
+      "revision": "4eb20be71869d6314ce7b383b63064140851d87a",
+      "url": "https://github.com/bandithedoge/nixpkgs-firefox-darwin/archive/4eb20be71869d6314ce7b383b63064140851d87a.tar.gz",
+      "hash": "0f2bcw1llxfa4g72fxxg8cvxfsiwk0g8j1cq9fmy1qxj1zbj1c85"
     },
     "nur": {
       "type": "Git",
@@ -214,9 +214,9 @@
         "repo": "NUR"
       },
       "branch": "master",
-      "revision": "a893a2fe687bb69c267d5ae7fa3f42b8d735ecbd",
-      "url": "https://github.com/nix-community/NUR/archive/a893a2fe687bb69c267d5ae7fa3f42b8d735ecbd.tar.gz",
-      "hash": "0jnf8va3k373hz53cyp3bc7r3wzh248d6xddwz58lnlxk8gq5ppx"
+      "revision": "ec55b248ec616c3546ff6b84e559fe48efde0ca5",
+      "url": "https://github.com/nix-community/NUR/archive/ec55b248ec616c3546ff6b84e559fe48efde0ca5.tar.gz",
+      "hash": "0jyidphn6hr6hp463p2zddz09scjiggcawzyvf9lvidqkmnjqil8"
     },
     "preservation": {
       "type": "Git",
