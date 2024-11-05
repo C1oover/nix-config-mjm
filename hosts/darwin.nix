@@ -1,8 +1,8 @@
 let
-  inputs = import ../npins;
-  lib = import "${inputs.nixpkgs}/lib";
+  sources = import ../npins/patched.nix;
+  lib = import "${sources.nixpkgs}/lib";
 
-  evalConfig = import "${inputs.darwin}/eval-config.nix";
+  evalConfig = import "${sources.darwin}/eval-config.nix";
   mkDarwin =
     arch: modules:
     evalConfig {
@@ -10,12 +10,12 @@ let
       modules = modules ++ [
         {
           nixpkgs.system = "${arch}-darwin";
-          nixpkgs.source = inputs.nixpkgs;
+          nixpkgs.source = sources.nixpkgs;
           system.checks.verifyNixPath = false;
         }
       ];
       specialArgs = {
-        inherit inputs;
+        inputs = sources;
       };
     };
 in

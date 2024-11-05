@@ -1,55 +1,17 @@
 let
-  inputs = import ./npins;
-  lib = import "${inputs.nixpkgs}/lib";
-
-  pkgsForPatching = import inputs.nixos { };
-  inherit (pkgsForPatching) applyPatches fetchpatch;
-
-  patches = import ./hosts/patches.nix;
-  mkPatches =
-    kind:
-    lib.mapAttrsToList (
-      name: value: fetchpatch ({ url = "https://github.com/NixOS/nixpkgs/pull/${name}.diff"; } // value)
-    ) (patches.${kind} or { });
-  globalPatches = mkPatches "global";
-
-  patchNixpkgs =
-    {
-      src,
-      kind,
-      extraPatches ? [ ],
-    }:
-    let
-      allPatches = globalPatches ++ mkPatches kind ++ extraPatches;
-    in
-    if allPatches == [ ] then
-      src
-    else
-      applyPatches {
-        name = "${src.name}-patched";
-        patches = allPatches;
-        inherit src;
-      };
-
-  serverNixpkgs = patchNixpkgs {
-    src = inputs.nixos-small;
-    kind = "servers";
-  };
-  desktopNixpkgs = patchNixpkgs {
-    src = inputs.nixos;
-    kind = "desktops";
-  };
+  sources = import ./npins/patched.nix;
+  lib = import "${sources.nixos}/lib";
 in
 {
   meta = {
-    nixpkgs = serverNixpkgs;
+    nixpkgs = sources.nixos-small;
     nodeNixpkgs = {
-      uranus = desktopNixpkgs;
-      persephone = desktopNixpkgs;
+      uranus = sources.nixos;
+      persephone = sources.nixos;
     };
 
     specialArgs = {
-      inherit inputs;
+      inputs = sources;
     };
   };
 
@@ -97,14 +59,12 @@ in
       "arges"
       "brontes"
       "chaos"
-      # "cronus"
       "erebus"
       "helios"
       "hypnos"
       "leto"
       "megaera"
       "persephone"
-      # "rhea"
       "steropes"
       "tisiphone"
       "uranus"
