@@ -25,14 +25,6 @@
     neededForBoot = true;
   };
 
-  fileSystems."/nix" = {
-    device = "/persist/nix";
-    options = [
-      "bind"
-      "X-fstrim.notrim"
-    ];
-  };
-
   swapDevices = [
     {
       device = "/persist/swap";
@@ -49,7 +41,13 @@
   mjm.state = {
     enablePreservation = true;
     persistDir = "/persist";
-    directories = [ "/boot" ];
+    directories = [
+      "/boot"
+      {
+        directory = "/nix";
+        inInitrd = true;
+      }
+    ];
   };
 
   # TODO consider if this should be in services/

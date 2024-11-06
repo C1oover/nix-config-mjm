@@ -30,14 +30,6 @@
     neededForBoot = true;
   };
 
-  fileSystems."/nix" = {
-    device = "/persist/nix";
-    options = [
-      "bind"
-      "X-fstrim.notrim"
-    ];
-  };
-
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
@@ -49,6 +41,12 @@
   mjm.state = {
     enablePreservation = true;
     persistDir = "/persist";
+    directories = [
+      {
+        directory = "/nix";
+        inInitrd = true;
+      }
+    ];
   };
   mjm.vault = {
     enable = true;

@@ -34,14 +34,6 @@
     fsType = "xfs";
   };
 
-  fileSystems."/nix" = {
-    device = "/persist/nix";
-    options = [
-      "bind"
-      "X-fstrim.notrim"
-    ];
-  };
-
   swapDevices = [ { device = "/dev/disk/by-partlabel/swap"; } ];
 
   boot.loader.systemd-boot.enable = true;
@@ -66,6 +58,12 @@
   mjm.state = {
     enablePreservation = true;
     persistDir = "/persist";
+    directories = [
+      {
+        directory = "/nix";
+        inInitrd = true;
+      }
+    ];
   };
   mjm.vaultwarden.enable = true;
 
