@@ -50,6 +50,8 @@ let
       };
 in
 overlayPatches {
+  # py-opensonic 5.2.1
+  servers."354131".hash = "sha256-QE4Se2aerBVCvXBOM3WhpIcPb4o/01SR/sEWoyCziSg=";
   # bcachefs-fstab-generator
   desktops."345207".hash = "sha256-fSuTIECQKnQ0ntgcIm9zRD64EvhcU+8bLJ8kOlh7QsQ=";
   # fix less

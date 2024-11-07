@@ -1,6 +1,6 @@
 {
-  inputs ? import ../npins,
-  pkgs ? import inputs.nixos { config.allowUnfree = true; },
+  sources ? import ../npins/patched.nix,
+  pkgs ? import sources.nixos-small { config.allowUnfree = true; },
   ...
 }@args:
 let
@@ -27,29 +27,27 @@ let
     writeNu = callPackage ./nu-lib/writer.nix { };
     writeNuBin = callPackage ({ writeNu }: name: writeNu "/bin/${name}") { };
 
-    music-assistant =
-      (pkgs.music-assistant.overrideAttrs (oldAttrs: {
-        preBuild = ''
-          ln -sf ${outpkgs.cliraop}/bin/cliraop music_assistant/server/providers/airplay/bin/cliraop-linux-x86_64
-        '';
-        patches = oldAttrs.patches ++ [ ./ma-no-install.patch ];
-      })).override
-        { python3 = outpkgs.python3; };
+    music-assistant = pkgs.music-assistant.overrideAttrs (oldAttrs: {
+      preBuild = ''
+        ln -sf ${outpkgs.cliraop}/bin/cliraop music_assistant/server/providers/airplay/bin/cliraop-linux-x86_64
+      '';
+      patches = oldAttrs.patches ++ [ ./ma-no-install.patch ];
+    });
     vault = pkgs.vault-bin;
 
-    pythonPackagesExtensions = pkgs.pythonPackagesExtensions ++ [
-      (pythonFinal: pythonPrev: {
-        py-opensonic = pythonPrev.py-opensonic.overridePythonAttrs {
-          version = "5.2.1";
-          src = pkgs.fetchFromGitHub {
-            owner = "khers";
-            repo = "py-opensonic";
-            rev = "v5.2.1";
-            hash = "sha256-lVErs5f2LoCrMNr+f8Bm2Q6xQRNuisloqyRHchYTukk=";
-          };
-        };
-      })
-    ];
+    # pythonPackagesExtensions = pkgs.pythonPackagesExtensions ++ [
+    #   (pythonFinal: pythonPrev: {
+    #     py-opensonic = pythonPrev.py-opensonic.overridePythonAttrs {
+    #       version = "5.2.1";
+    #       src = pkgs.fetchFromGitHub {
+    #         owner = "khers";
+    #         repo = "py-opensonic";
+    #         rev = "v5.2.1";
+    #         hash = "sha256-lVErs5f2LoCrMNr+f8Bm2Q6xQRNuisloqyRHchYTukk=";
+    #       };
+    #     };
+    #   })
+    # ];
   };
 in
 packages
