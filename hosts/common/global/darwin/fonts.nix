@@ -9,5 +9,6 @@
     (input-fonts.override { acceptLicense = true; })
     departure-mono
     noto-fonts
+    monaspace
   ];
 }

@@ -79,19 +79,20 @@
 (define (slab-workspace?)
   (equal? "slab" (file-name (helix-find-workspace))))
 
-(define (kitty-run . args)
+(define (kitty-run name . args)
   (let ([cmd (string-join args " ")])
-    (helix.run-shell-command "kitty @"
-                             (string-append "--to=" (env-var "KITTY_LISTEN_ON"))
-                             "launch"
-                             "--type=overlay"
-                             "--cwd=current"
+    (helix.run-shell-command "zellij"
+                             "run"
+                             "--floating"
+                             (string-append "--name='" name "'")
+                             "--"
                              "`which nu`"
                              "-li"
                              "-c"
-                             (string-append "'try { " cmd "}; input -n 1'")
+                             (string-append "'" cmd "'")
                              ">/dev/null")))
 
 (define (run-mix . args)
-  (let ([mix (if (slab-workspace?) "docker compose exec slab_1 mix" "mix")])
-    (apply kitty-run (cons mix args))))
+  (let ([mix (if (slab-workspace?) "docker compose exec slab_1 mix" "mix")]
+        [name (string-append "mix " (string-join args " "))])
+    (apply kitty-run (cons name (cons mix args)))))

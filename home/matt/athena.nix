@@ -12,6 +12,7 @@ in
   mjm.work.enable = true;
 
   programs.kitty.font.size = 13;
+  programs.alacritty.settings.font.size = 13;
 
   home.dock.entries = [
     {
@@ -36,6 +37,10 @@ in
     {
       app = "kitty";
       package = config.programs.kitty.package;
+    }
+    {
+      app = "Alacritty";
+      package = config.programs.alacritty.package;
     }
     { app = "Dash"; }
     { app = "Postico 2"; }
