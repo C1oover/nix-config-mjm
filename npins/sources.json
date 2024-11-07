@@ -185,8 +185,8 @@
     "nixos-small": {
       "type": "Channel",
       "name": "nixos-unstable-small",
-      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-24.11pre704770.0093b93ec307/nixexprs.tar.xz",
-      "hash": "16q734ba7wgjn4cj2x3pf8z7gdxl5sj1nnis7jq6a6x17lwj34yi"
+      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-24.11pre704912.3aea494127aa/nixexprs.tar.xz",
+      "hash": "1fyizxjmg0b05r0d2bzxc5vyw2rnzm9j2s3nagp8cpyb4bqr3rfj"
     },
     "nixpkgs": {
       "type": "Channel",
