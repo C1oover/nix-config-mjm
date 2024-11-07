@@ -50,12 +50,8 @@ let
       };
 in
 overlayPatches {
-  # py-opensonic 5.2.1
-  servers."354131".hash = "sha256-QE4Se2aerBVCvXBOM3WhpIcPb4o/01SR/sEWoyCziSg=";
   # bcachefs-fstab-generator
   desktops."345207".hash = "sha256-fSuTIECQKnQ0ntgcIm9zRD64EvhcU+8bLJ8kOlh7QsQ=";
   # fix less
   desktops."352298".hash = "sha256-skk+ldAKK+zthgNpXNj6eF59P1uzsFPqKaSNIIxZIlg=";
-  # fix vte build on darwin
-  darwin."353204".hash = "sha256-dAOW9qErQE0yLhoL9iifhXv8v4v4UWs6FnF9R8Ap4ZY=";
 }
