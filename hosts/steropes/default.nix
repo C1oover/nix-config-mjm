@@ -1,10 +1,5 @@
 {
-  imports = [
-    ../common/global/nixos
-    ../common/users/matt
-
-    ../common/optional/raspberry-pi.nix
-  ];
+  imports = [ ../common/optional/raspberry-pi.nix ];
 
   networking.hostName = "steropes";
 

@@ -10,11 +10,7 @@ in
 {
   imports = [
     lanzaboote.nixosModules.lanzaboote
-
     ./hardware-configuration.nix
-
-    ../common/global/nixos
-    ../common/users/matt
   ];
 
   deployment.phase = null;

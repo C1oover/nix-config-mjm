@@ -13,9 +13,6 @@ in
     lanzaboote.nixosModules.lanzaboote
     "${inputs.hardware}/framework/13-inch/13th-gen-intel"
     ./hardware-configuration.nix
-
-    ../common/global/nixos
-    ../common/users/matt
   ];
 
   deployment.phase = null;

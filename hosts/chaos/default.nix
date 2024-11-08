@@ -1,10 +1,5 @@
 {
-  imports = [
-    ../common/global/nixos
-    ../common/users/matt
-
-    ../common/optional/proxmox-vm.nix
-  ];
+  imports = [ ../common/optional/proxmox-vm.nix ];
 
   networking.hostName = "chaos";
 

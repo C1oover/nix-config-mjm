@@ -1,10 +1,5 @@
 {
-  imports = [
-    ./hardware-configuration.nix
-
-    ../common/global/nixos
-    ../common/users/matt
-  ];
+  imports = [ ./hardware-configuration.nix ];
 
   deployment.targetHost = "5.78.46.61";
 
