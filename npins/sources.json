@@ -56,9 +56,9 @@
         "repo": "colmena"
       },
       "branch": "main",
-      "revision": "03f1a18a6fba9ad9c4edb1cc7cf394390c304198",
-      "url": "https://github.com/zhaofengli/colmena/archive/03f1a18a6fba9ad9c4edb1cc7cf394390c304198.tar.gz",
-      "hash": "0cfqnpk1ks8mhwhkbalyydgd7h8jblazva1b3c7w9077jrbimj1p"
+      "revision": "3d9d22bd7b390fa5b8434af7e5276fe87023f594",
+      "url": "https://github.com/zhaofengli/colmena/archive/3d9d22bd7b390fa5b8434af7e5276fe87023f594.tar.gz",
+      "hash": "0h7pp98jf2qnbsq48wm01y45yiqylp2cxinrybl0z3sfrbxdyczg"
     },
     "conduit": {
       "type": "GitRelease",
@@ -185,8 +185,8 @@
     "nixos-small": {
       "type": "Channel",
       "name": "nixos-unstable-small",
-      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-24.11pre705160.6405455a9d1f/nixexprs.tar.xz",
-      "hash": "0dri73zrcc16axh19r8nmz7br6mlq1j0m5rpq450pkx1hmv0rwj3"
+      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-24.11pre705351.50f7983ec7f5/nixexprs.tar.xz",
+      "hash": "1phnx35mljjqkgnl16dh39d59h5waw9ck4xmmp1fql1p7f1lrl8q"
     },
     "nixpkgs": {
       "type": "Channel",
@@ -214,9 +214,9 @@
         "repo": "NUR"
       },
       "branch": "master",
-      "revision": "52598f7f9f9fac06c47150a19550fb7fea88346d",
-      "url": "https://github.com/nix-community/NUR/archive/52598f7f9f9fac06c47150a19550fb7fea88346d.tar.gz",
-      "hash": "140b89x1na1zq3z0w6yl1y801ddvkz36wkfmj32hyysac59gsppb"
+      "revision": "b016b006a07be73115fbebba5e96225fb497804b",
+      "url": "https://github.com/nix-community/NUR/archive/b016b006a07be73115fbebba5e96225fb497804b.tar.gz",
+      "hash": "1r40a6hxsibq0kwkkjvxix98brz3migmwbgqq061i84k78ixvbym"
     },
     "preservation": {
       "type": "Git",
