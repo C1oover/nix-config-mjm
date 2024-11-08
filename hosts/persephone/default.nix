@@ -5,12 +5,8 @@
   config,
   ...
 }:
-let
-  lanzaboote = import inputs.lanzaboote;
-in
 {
   imports = [
-    lanzaboote.nixosModules.lanzaboote
     "${inputs.hardware}/framework/13-inch/13th-gen-intel"
     ./hardware-configuration.nix
   ];

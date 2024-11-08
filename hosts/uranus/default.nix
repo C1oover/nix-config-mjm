@@ -1,17 +1,10 @@
 {
   pkgs,
   lib,
-  inputs,
   ...
 }:
-let
-  lanzaboote = import inputs.lanzaboote;
-in
 {
-  imports = [
-    lanzaboote.nixosModules.lanzaboote
-    ./hardware-configuration.nix
-  ];
+  imports = [ ./hardware-configuration.nix ];
 
   deployment.phase = null;
 

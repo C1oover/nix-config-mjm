@@ -5,10 +5,14 @@
   inputs,
   ...
 }:
+let
+  lanzaboote = import inputs.lanzaboote;
+in
 {
   imports = [
     "${inputs.home-manager}/nixos"
     "${inputs.catppuccin}/modules/nixos"
+    lanzaboote.nixosModules.lanzaboote
 
     ../home-manager.nix
     ../nix.nix
