@@ -96,5 +96,7 @@ in
       "--session"
       "${./kitty-session-slab}"
     ];
+
+    xdg.configFile."zellij/layouts/slab.kdl".source = ./work.kdl;
   };
 }
