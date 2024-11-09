@@ -95,7 +95,7 @@ in
 
       serviceConfig = {
         Type = "oneshot";
-        ExecStart = "${pkgs}/bin/launchpad update-dns";
+        ExecStart = "${pkg}/bin/launchpad update-dns";
         DynamicUser = true;
         User = "launchpad";
       };
