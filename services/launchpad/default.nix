@@ -36,6 +36,7 @@ in
         loadedBy = [
           "launchpad"
           "launchpad-reminders"
+          "launchpad-dns"
         ];
         keys = {
           gitlab_token = { };
