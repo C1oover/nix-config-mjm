@@ -50,8 +50,13 @@ let
       };
 in
 overlayPatches {
+  # zellij 0.41.1
+  desktops."353630".hash = "sha256-AAmWSZU5nMriyndtPs9xugJE7nVn0DlYdfdtvsqL9o8=";
+  darwin."353630".hash = "sha256-AAmWSZU5nMriyndtPs9xugJE7nVn0DlYdfdtvsqL9o8=";
+
   # bcachefs-fstab-generator
   desktops."345207".hash = "sha256-fSuTIECQKnQ0ntgcIm9zRD64EvhcU+8bLJ8kOlh7QsQ=";
+
   # fix less
   desktops."352298".hash = "sha256-skk+ldAKK+zthgNpXNj6eF59P1uzsFPqKaSNIIxZIlg=";
 }
