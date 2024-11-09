@@ -39,6 +39,7 @@ in
         ];
         keys = {
           gitlab_token = { };
+          netbox_token = { };
           paperless_token = { };
           reminders_topic = { };
         };
