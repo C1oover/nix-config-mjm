@@ -74,8 +74,6 @@
     serviceConfig.ExecCondition = "";
   };
 
-  boot.extraModulePackages = [ config.boot.kernelPackages.framework-laptop-kmod ];
-
   boot.swraid.enable = false;
 
   # Allow desktop mouse and keyboard to wake the system
