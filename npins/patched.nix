@@ -51,7 +51,6 @@ let
 in
 overlayPatches {
   # zellij 0.41.1
-  desktops."353630".hash = "sha256-AAmWSZU5nMriyndtPs9xugJE7nVn0DlYdfdtvsqL9o8=";
   darwin."353630".hash = "sha256-AAmWSZU5nMriyndtPs9xugJE7nVn0DlYdfdtvsqL9o8=";
 
   # bcachefs-fstab-generator
