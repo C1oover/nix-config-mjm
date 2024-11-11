@@ -12,6 +12,7 @@ in
   imports = [
     "${inputs.catppuccin}/modules/home-manager"
 
+    ../features/aerospace
     ../features/desktop
     ../features/emacs
     ../features/email
