@@ -36,6 +36,7 @@ in
           fonts = [
             "NerdFontsSymbolsOnly"
             "Agave"
+            "Monaspace"
           ];
         })
         font-awesome

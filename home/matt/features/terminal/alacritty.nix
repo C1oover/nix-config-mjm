@@ -27,7 +27,7 @@ in
       enable = true;
       catppuccin.enable = true;
       settings = {
-        font.normal.family = "Monaspace Xenon";
+        font.normal.family = "MonaspiceXe Nerd Font";
         font.size = mkDefault 14;
         terminal.shell.program = getExe nu;
         terminal.shell.args = [
