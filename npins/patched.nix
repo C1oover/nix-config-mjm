@@ -50,6 +50,9 @@ let
       };
 in
 overlayPatches {
+  # invidious update to fix subscriptions/channels
+  servers."355279".hash = "sha256-uN4FXoe7d6WU6habECrYlAi+NqweFNsiB6xkBPn0HGM=";
+
   # zellij 0.41.1
   darwin."353630".hash = "sha256-AAmWSZU5nMriyndtPs9xugJE7nVn0DlYdfdtvsqL9o8=";
 
