@@ -74,14 +74,14 @@ in
           domain = "\${desec_domain.midna-dev.id}";
           type = "CNAME";
           subname = "*.pages";
-          records = [ "ingress.midna.dev." ];
+          records = [ "ingress4.midna.dev." ];
           ttl = 3600;
         };
         www = {
           domain = "\${desec_domain.midna-dev.id}";
           type = "CNAME";
           subname = "www";
-          records = [ "ingress.midna.dev." ];
+          records = [ "ingress4.midna.dev." ];
           ttl = 3600;
         };
 
