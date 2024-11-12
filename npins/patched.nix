@@ -50,9 +50,6 @@ let
       };
 in
 overlayPatches {
-  # invidious update to fix subscriptions/channels
-  servers."355279".hash = "sha256-uN4FXoe7d6WU6habECrYlAi+NqweFNsiB6xkBPn0HGM=";
-
   # bcachefs-fstab-generator
   desktops."345207".hash = "sha256-fSuTIECQKnQ0ntgcIm9zRD64EvhcU+8bLJ8kOlh7QsQ=";
 
