@@ -124,42 +124,54 @@ in
       git_branch.only_attached = true;
       git_commit.disabled = true;
       git_status.disabled = true;
-      custom.jj = {
-        command = ''
-          jj log -r@ -l1 --ignore-working-copy --no-graph --color always  -T '
-            separate(" ",
-              branches.map(|x| if(
-                  x.name().substr(0, 10).starts_with(x.name()),
-                  x.name().substr(0, 10),
-                  x.name().substr(0, 9) ++ "…")
-                ).join(" "),
-              tags.map(|x| if(
-                  x.name().substr(0, 10).starts_with(x.name()),
-                  x.name().substr(0, 10),
-                  x.name().substr(0, 9) ++ "…")
-                ).join(" "),
-              surround("\"","\"",
-                if(
-                   description.first_line().substr(0, 24).starts_with(description.first_line()),
-                   description.first_line().substr(0, 24),
-                   description.first_line().substr(0, 23) ++ "…"
+      custom =
+        let
+          sd = lib.getExe pkgs.sd;
+          mkStatusModule =
+            {
+              variable,
+              style,
+              symbol,
+            }:
+            {
+              command = ''
+                jj log -r@ -n 1 --no-graph -T "" --stat | tail -n1 | ${sd} "(\\d+) files? changed, (\\d+) insertions?\\(\\+\\), (\\d+) deletions?\\(-\\)" "''${${variable}}" | ${sd} "0" ""
+              '';
+              format = "[( ${symbol}$output)]($style)";
+              style = "italic dimmed ${style}";
+              detect_folders = [ ".jj" ];
+            };
+        in
+        {
+          jj = {
+            command = ''
+              jj log -r@ --no-graph --color always -T '
+                label("working_copy",
+                  concat(
+                    separate(" ",
+                      if(conflict, label("conflict", "conflict")),
+                      if(empty, label("empty", "(empty)")),
+                      if(description, description.first_line(), label(if(empty, "empty"), description_placeholder))
+                    )
+                  )
                 )
-              ),
-              if(conflict, "conflict"),
-              if(divergent, "divergent"),
-              if(hidden, "hidden"),
-            )
-          '
-        '';
-        detect_folders = [ ".jj" ];
-        symbol = "@ ";
-      };
-      custom.jjstate = {
-        command = ''
-          jj log -r@ -l1 --no-graph -T "" --stat | tail -n1 | sd "(\d+) files? changed, (\d+) insertions?\(\+\), (\d+) deletions?\(-\)" " ''${1}m ''${2}+ ''${3}-" | sd " 0." ""
-        '';
-        detect_folders = [ ".jj" ];
-      };
+              '
+            '';
+            style = "";
+            detect_folders = [ ".jj" ];
+            symbol = " @ ";
+          };
+          jj_added = mkStatusModule {
+            variable = "2";
+            style = "green";
+            symbol = "▴";
+          };
+          jj_removed = mkStatusModule {
+            variable = "3";
+            style = "red";
+            symbol = "▿";
+          };
+        };
     };
 
     programs.nushell.shellAliases = {

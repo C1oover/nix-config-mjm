@@ -1,11 +1,18 @@
 {
+  pkgs,
   lib,
   inputs,
   config,
   ...
 }:
 let
-  inherit (lib) mkEnableOption mkIf mkMerge;
+  inherit (lib)
+    importTOML
+    mkEnableOption
+    mkForce
+    mkIf
+    mkMerge
+    ;
   cfg = config.mjm.shell;
 in
 {
@@ -58,12 +65,14 @@ in
           gcloud.disabled = true;
           docker_context.disabled = true;
           terraform.disabled = true;
-
+          git_metrics.disabled = mkForce true;
+          sudo.disabled = mkForce true;
           nix_shell.heuristic = true;
 
-          format = "$username$hostname$localip$shlvl$directory$vcsh\${custom.jj}\${custom.jjstate}$all";
+          format = mkForce "($nix_shell$container\${custom.jj}\${custom.jj_added}\${custom.jj_removed}\n)$cmd_duration$hostname$localip$shlvl$shell$env_var$jobs$sudo$username$character";
         }
-        (builtins.fromTOML (builtins.readFile ./nerd-font-symbols.toml))
+        (importTOML ./jetpack.toml)
+        # (builtins.fromTOML (builtins.readFile ./nerd-font-symbols.toml))
       ];
     };
 
