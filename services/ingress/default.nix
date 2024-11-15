@@ -84,21 +84,35 @@ in
                     handle_response = [
                       {
                         match.status_code = [ 2 ];
-                        routes = [
-                          {
-                            handle = [
-                              {
-                                handler = "headers";
-                                request.set = {
-                                  Remote-Email = [ "{http.reverse_proxy.header.Remote-Email}" ];
-                                  Remote-Groups = [ "{http.reverse_proxy.header.Remote-Groups}" ];
-                                  Remote-Name = [ "{http.reverse_proxy.header.Remote-Name}" ];
-                                  Remote-User = [ "{http.reverse_proxy.header.Remote-User}" ];
-                                };
-                              }
-                            ];
-                          }
-                        ];
+                        routes =
+                          let
+                            setHeader = name: {
+                              handle = [
+                                {
+                                  handler = "headers";
+                                  request.set.${name} = [ "{http.reverse_proxy.header.${name}}" ];
+                                }
+                              ];
+                              match = [
+                                {
+                                  not = [
+                                    { vars."{http.reverse_proxy.header.${name}}" = [ "" ]; }
+                                  ];
+                                }
+                              ];
+                            };
+                          in
+                          [
+                            {
+                              handle = [ { handler = "vars"; } ];
+                            }
+                          ]
+                          ++ map setHeader [
+                            "Remote-User"
+                            "Remote-Groups"
+                            "Remote-Name"
+                            "Remote-Email"
+                          ];
                       }
                     ];
                     handler = "reverse_proxy";
