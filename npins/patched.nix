@@ -3,7 +3,7 @@ let
   lib = import "${inputs.nixos}/lib";
 
   pkgsForPatching = import inputs.nixos { };
-  inherit (pkgsForPatching) applyPatches fetchpatch;
+  inherit (pkgsForPatching) applyPatches fetchpatch2;
 
   nameToKind = {
     nixpkgs = "darwin";
@@ -27,7 +27,14 @@ let
   mkPatches =
     patches: kind:
     lib.mapAttrsToList (
-      name: value: fetchpatch ({ url = "https://github.com/NixOS/nixpkgs/pull/${name}.diff"; } // value)
+      name: value:
+      fetchpatch2 (
+        {
+          name = "nixpkgs-pr-${name}";
+          url = "https://github.com/NixOS/nixpkgs/pull/${name}.diff?full_index=1";
+        }
+        // value
+      )
     ) (patches.${kind} or { });
 
   patchNixpkgs =
@@ -51,8 +58,8 @@ let
 in
 overlayPatches {
   # bcachefs-fstab-generator
-  desktops."345207".hash = "sha256-fSuTIECQKnQ0ntgcIm9zRD64EvhcU+8bLJ8kOlh7QsQ=";
+  desktops."345207".hash = "sha256-tI+wlhyC2e63NirN2kgg1I4GMPvMwFTIFFyo2nR1MDQ=";
 
   # fix less
-  desktops."352298".hash = "sha256-skk+ldAKK+zthgNpXNj6eF59P1uzsFPqKaSNIIxZIlg=";
+  desktops."352298".hash = "sha256-URqUQe1f6lyOtYsbYy0jrFRmYtQ4R4D/7sCo5G1Fpis=";
 }
