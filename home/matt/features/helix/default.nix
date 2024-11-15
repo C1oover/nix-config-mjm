@@ -10,7 +10,10 @@ let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.mjm.helix;
 
-  inherit (pkgs) applyPatches;
+  # why do this if we already have pkgs? because it lets us evaluate
+  # the config on a system different from the one that is building.
+  pkgsForPatching = import pkgs.path { };
+  inherit (pkgsForPatching) applyPatches;
   helixSrc = applyPatches {
     name = "helix-patched";
     src = inputs.helix;
