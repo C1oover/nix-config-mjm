@@ -29,7 +29,7 @@ in
       power.ups = {
         enable = true;
         mode = if cfg.mode == "client" then "netclient" else "netserver";
-        upsmon.monitor.tripplite.system = "tripplite@10.0.0.2";
+        upsmon.monitor.or500.system = "or500@10.0.0.2";
       };
 
       vault.policies.common-nut = {
@@ -44,7 +44,7 @@ in
     (mkIf (cfg.mode == "client") {
       power.ups = {
         mode = "netclient";
-        upsmon.monitor.tripplite = {
+        upsmon.monitor.or500 = {
           user = "upsmon_secondary";
           type = "secondary";
           passwordFile = config.vault-secrets.common.nut.keys.secondary_password.path;
@@ -59,12 +59,12 @@ in
         mode = "netserver";
         openFirewall = true;
 
-        ups.tripplite = {
+        ups.or500 = {
           driver = "usbhid-ups";
           port = "auto";
           directives = [
-            ''vendorid = "09ae"''
-            ''productid = "3024"''
+            ''vendorid = "0764"''
+            ''productid = "0601"''
           ];
         };
 
@@ -83,7 +83,7 @@ in
           listen = [ { address = "0.0.0.0"; } ];
         };
 
-        upsmon.monitor.tripplite = {
+        upsmon.monitor.or500 = {
           user = "upsmon";
           type = "primary";
           passwordFile = config.vault-secrets.services.nut.keys.primary_password.path;
