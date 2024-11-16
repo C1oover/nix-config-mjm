@@ -59,7 +59,4 @@ in
 overlayPatches {
   # bcachefs-fstab-generator
   desktops."345207".hash = "sha256-tI+wlhyC2e63NirN2kgg1I4GMPvMwFTIFFyo2nR1MDQ=";
-
-  # fix less
-  desktops."352298".hash = "sha256-URqUQe1f6lyOtYsbYy0jrFRmYtQ4R4D/7sCo5G1Fpis=";
 }
