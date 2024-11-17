@@ -100,36 +100,6 @@
     "address": "10.0.2.48"
   },
   {
-    "name": "leto",
-    "family": 6,
-    "address": "2601:282:167f:4e46:acf4:f0ff:feb0:3126"
-  },
-  {
-    "name": "rhea",
-    "family": 6,
-    "address": "2601:282:167f:4e46:b0c5:55ff:fe20:9218"
-  },
-  {
-    "name": "helios",
-    "family": 6,
-    "address": "2601:282:167f:4e46:bcf8:67ff:fecc:c859"
-  },
-  {
-    "name": "aether",
-    "family": 6,
-    "address": "2601:282:167f:4e46:be24:11ff:fea7:3684"
-  },
-  {
-    "name": "erebus",
-    "family": 6,
-    "address": "2601:282:167f:4e46:be24:11ff:fec9:d5c9"
-  },
-  {
-    "name": "chaos",
-    "family": 6,
-    "address": "2601:282:167f:4e46:be24:11ff:fee8:9f09"
-  },
-  {
     "name": "steropes",
     "family": 6,
     "address": "2601:282:167f:4e46:dea6:32ff:fe96:bc05"
@@ -178,5 +148,35 @@
     "name": "tisiphone",
     "family": 6,
     "address": "2601:282:167f:f0ec:8c8d:b9ff:fe40:fcd"
+  },
+  {
+    "name": "leto",
+    "family": 6,
+    "address": "2601:282:167f:f0ec:acf4:f0ff:feb0:3126"
+  },
+  {
+    "name": "rhea",
+    "family": 6,
+    "address": "2601:282:167f:f0ec:b0c5:55ff:fe20:9218"
+  },
+  {
+    "name": "helios",
+    "family": 6,
+    "address": "2601:282:167f:f0ec:bcf8:67ff:fecc:c859"
+  },
+  {
+    "name": "aether",
+    "family": 6,
+    "address": "2601:282:167f:f0ec:be24:11ff:fea7:3684"
+  },
+  {
+    "name": "erebus",
+    "family": 6,
+    "address": "2601:282:167f:f0ec:be24:11ff:fec9:d5c9"
+  },
+  {
+    "name": "chaos",
+    "family": 6,
+    "address": "2601:282:167f:f0ec:be24:11ff:fee8:9f09"
   }
 ]
