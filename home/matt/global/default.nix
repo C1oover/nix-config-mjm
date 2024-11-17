@@ -31,6 +31,10 @@ in
 
   home.stateVersion = mkDefault "22.11";
 
+  # thanks HM, but I know what I'm doing here.
+  # this check always gets weird when a new stable release branches off.
+  home.enableNixpkgsReleaseCheck = false;
+
   home.packages = builtins.attrValues (
     {
       inherit (pkgs)
