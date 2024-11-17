@@ -100,21 +100,6 @@
     "address": "10.0.2.48"
   },
   {
-    "name": "steropes",
-    "family": 6,
-    "address": "2601:282:167f:4e46:dea6:32ff:fe96:bc05"
-  },
-  {
-    "name": "brontes",
-    "family": 6,
-    "address": "2601:282:167f:4e46:dea6:32ff:fed5:d840"
-  },
-  {
-    "name": "arges",
-    "family": 6,
-    "address": "2601:282:167f:4e46:dea6:32ff:fedb:3987"
-  },
-  {
     "name": "cronus",
     "family": 6,
     "address": "2601:282:167f:f0ec:1097:8cff:fe6a:b260"
@@ -178,5 +163,20 @@
     "name": "chaos",
     "family": 6,
     "address": "2601:282:167f:f0ec:be24:11ff:fee8:9f09"
+  },
+  {
+    "name": "steropes",
+    "family": 6,
+    "address": "2601:282:167f:f0ec:dea6:32ff:fe96:bc05"
+  },
+  {
+    "name": "brontes",
+    "family": 6,
+    "address": "2601:282:167f:f0ec:dea6:32ff:fed5:d840"
+  },
+  {
+    "name": "arges",
+    "family": 6,
+    "address": "2601:282:167f:f0ec:dea6:32ff:fedb:3987"
   }
 ]
