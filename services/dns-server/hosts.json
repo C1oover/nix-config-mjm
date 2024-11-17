@@ -100,21 +100,6 @@
     "address": "10.0.2.48"
   },
   {
-    "name": "cronus",
-    "family": 6,
-    "address": "2601:282:167f:4e46:1097:8cff:fe6a:b260"
-  },
-  {
-    "name": "megaera",
-    "family": 6,
-    "address": "2601:282:167f:4e46:140b:14ff:fe41:31e1"
-  },
-  {
-    "name": "atlas",
-    "family": 6,
-    "address": "2601:282:167f:4e46:1490:acff:fec0:6cb7"
-  },
-  {
     "name": "apollo",
     "family": 6,
     "address": "2601:282:167f:4e46:4a4d:7eff:fef8:c186"
@@ -178,5 +163,20 @@
     "name": "arges",
     "family": 6,
     "address": "2601:282:167f:4e46:dea6:32ff:fedb:3987"
+  },
+  {
+    "name": "cronus",
+    "family": 6,
+    "address": "2601:282:167f:f0ec:1097:8cff:fe6a:b260"
+  },
+  {
+    "name": "megaera",
+    "family": 6,
+    "address": "2601:282:167f:f0ec:140b:14ff:fe41:31e1"
+  },
+  {
+    "name": "atlas",
+    "family": 6,
+    "address": "2601:282:167f:f0ec:1490:acff:fec0:6cb7"
   }
 ]
