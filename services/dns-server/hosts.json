@@ -100,26 +100,6 @@
     "address": "10.0.2.48"
   },
   {
-    "name": "apollo",
-    "family": 6,
-    "address": "2601:282:167f:4e46:4a4d:7eff:fef8:c186"
-  },
-  {
-    "name": "alecto",
-    "family": 6,
-    "address": "2601:282:167f:4e46:4cf1:b1ff:fe14:7141"
-  },
-  {
-    "name": "hypnos",
-    "family": 6,
-    "address": "2601:282:167f:4e46:6042:3ff:fef5:f1e3"
-  },
-  {
-    "name": "tisiphone",
-    "family": 6,
-    "address": "2601:282:167f:4e46:8c8d:b9ff:fe40:fcd"
-  },
-  {
     "name": "leto",
     "family": 6,
     "address": "2601:282:167f:4e46:acf4:f0ff:feb0:3126"
@@ -178,5 +158,25 @@
     "name": "atlas",
     "family": 6,
     "address": "2601:282:167f:f0ec:1490:acff:fec0:6cb7"
+  },
+  {
+    "name": "apollo",
+    "family": 6,
+    "address": "2601:282:167f:f0ec:4a4d:7eff:fef8:c186"
+  },
+  {
+    "name": "alecto",
+    "family": 6,
+    "address": "2601:282:167f:f0ec:4cf1:b1ff:fe14:7141"
+  },
+  {
+    "name": "hypnos",
+    "family": 6,
+    "address": "2601:282:167f:f0ec:6042:3ff:fef5:f1e3"
+  },
+  {
+    "name": "tisiphone",
+    "family": 6,
+    "address": "2601:282:167f:f0ec:8c8d:b9ff:fe40:fcd"
   }
 ]
