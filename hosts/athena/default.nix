@@ -12,6 +12,7 @@
     "loom"
     "nikitabobko/tap/aerospace"
     "notunes"
+    "orbstack"
     "postico"
     "rectangle-pro"
     "slab"
