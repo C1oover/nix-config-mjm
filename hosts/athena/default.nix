@@ -14,7 +14,6 @@
     "notunes"
     "orbstack"
     "postico"
-    "rectangle-pro"
     "slab"
     "teleport-connect"
   ];
