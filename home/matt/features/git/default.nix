@@ -175,19 +175,11 @@ in
     };
 
     programs.nushell.shellAliases = {
+      ",jgf" = "jj git fetch";
       ",jp" = "jj git push";
       ",jrm" = "jj rebase -d main";
     };
     programs.nushell.extraConfig = ''
-      def ,jpm [] {
-        jj bookmark set main -r @-
-        try {
-          jj git push
-        } catch {
-          jj undo
-        }
-      }
-
       def ,jpc [] {
         let has_changes = (jj log -r@ -n 1 --no-graph -T 'if(!empty, "has changes")') != ""
         let has_description = (jj log -r@ -n 1 --no-graph -T 'if(description, "has description")') != ""
@@ -213,9 +205,9 @@ in
         }
       }
 
-      def ,jum [] {
+      def ,ju [] {
         jj git fetch
-        jj rebase -d main
+        jj rebase -d 'trunk()'
       }
 
       def --wrapped ,jr [...rest] {
