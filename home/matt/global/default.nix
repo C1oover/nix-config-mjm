@@ -41,6 +41,7 @@ in
         fx
         gh
         httpie
+        hydra-check
         nix-output-monitor
         nix-tree
         pstree
