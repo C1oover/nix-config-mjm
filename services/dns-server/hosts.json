@@ -100,11 +100,6 @@
     "address": "10.0.2.48"
   },
   {
-    "name": "cronus",
-    "family": 6,
-    "address": "2601:282:167f:f0ec:1097:8cff:fe6a:b260"
-  },
-  {
     "name": "megaera",
     "family": 6,
     "address": "2601:282:167f:f0ec:140b:14ff:fe41:31e1"
@@ -138,11 +133,6 @@
     "name": "leto",
     "family": 6,
     "address": "2601:282:167f:f0ec:acf4:f0ff:feb0:3126"
-  },
-  {
-    "name": "rhea",
-    "family": 6,
-    "address": "2601:282:167f:f0ec:b0c5:55ff:fe20:9218"
   },
   {
     "name": "helios",
