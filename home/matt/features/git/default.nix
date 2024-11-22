@@ -213,6 +213,10 @@ in
       def --wrapped ,jr [...rest] {
         jj rebase -d (,jf) ...$rest
       }
+
+      def --wrapped ,je [...rest] {
+        jj edit (,jf ...$rest)
+      }
     '';
   };
 }
