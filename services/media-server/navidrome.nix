@@ -25,7 +25,7 @@ in
         BaseUrl = "https://music.midna.dev";
         MusicFolder = "/videos/music";
         "Prometheus.Enabled" = true;
-        ReverseProxyWhitelist = "10.0.0.3/32,10.0.0.4/32,2601:282:167f:f0ec:dea6:32ff:fed5:d840/64,2601:282:167f:f0ec:dea6:32ff:fe96:bc05/64";
+        ReverseProxyWhitelist = "10.0.0.3/32,10.0.0.4/32,2601:282:167f:d062:dea6:32ff:fed5:d840/64,2601:282:167f:d062:dea6:32ff:fe96:bc05/64";
       };
     };
 
