@@ -3,8 +3,6 @@
 
   networking.hostName = "steropes";
 
-  deployment.phase = "ingress";
-
   fileSystems."/" = {
     device = "none";
     fsType = "tmpfs";

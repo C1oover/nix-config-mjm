@@ -85,6 +85,8 @@ in
       '';
     };
 
+    deployment.consulChecks = [ "vault" ];
+
     networking.firewall.allowedTCPPorts = [
       8200
       8201

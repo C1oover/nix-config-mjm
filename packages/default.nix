@@ -17,6 +17,7 @@ let
     host-scripts = callPackage ../hosts/scripts { };
     linkding = callPackage ./linkding.nix { };
     mautrix-slack = callPackage ./mautrix-slack.nix { };
+    nixos-deploy = callPackage ../apps/nixos_deploy/package.nix { };
     nu-lib = callPackage ./nu-lib { };
     nvd-json = callPackage ../apps/nvd-json/package.nix { };
     pragmata-pro = callPackage ./pragmata-pro.nix { };

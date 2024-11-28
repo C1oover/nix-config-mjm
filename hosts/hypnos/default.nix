@@ -1,7 +1,9 @@
 {
   imports = [ ../common/optional/proxmox-vm.nix ];
 
-  deployment.rebootPhase = null;
+  # hypnos is the one running the deploy, so we don't want to reboot in
+  # the middle of the job.
+  deployment.rebootAutomatically = false;
 
   networking.hostName = "hypnos";
 

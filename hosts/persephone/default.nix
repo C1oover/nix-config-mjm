@@ -11,7 +11,7 @@
     ./hardware-configuration.nix
   ];
 
-  deployment.phase = null;
+  deployment.targetHost = null;
 
   mjm.desktop.enable = true;
   mjm.state = {
