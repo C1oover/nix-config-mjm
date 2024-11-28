@@ -6,12 +6,12 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "pragmata-pro";
-  version = "0.829";
+  version = "0.830";
 
   src = requireFile {
-    name = "PragmataPro0.829-ptikme.zip";
+    name = "PP-ep6wq.zip";
     url = "https://fsd.it/shop/fonts/pragmatapro/";
-    hash = "sha256-/DgsOMHi/bAE55SDgf5f59q81yvuVERSn/K5Y+D3Pyw=";
+    sha256 = "0cna4wavnhnb8j8vg119ap8mqkckx04z2gms2hsz4daywc51ghr8";
   };
 
   sourceRoot = "PragmataPro${version}";
