@@ -1,4 +1,5 @@
 {
+  pkgs,
   config,
   lib,
   osConfig,
@@ -42,6 +43,9 @@ in
       enable = true;
     };
 
-    xdg.configFile."zellij/config.kdl".source = ./zellij.kdl;
+    xdg.configFile."zellij/config.kdl".source = pkgs.substituteAll {
+      src = ./zellij.kdl;
+      copy_command = if pkgs.stdenv.isDarwin then "pbcopy" else "wl-copy";
+    };
   };
 }

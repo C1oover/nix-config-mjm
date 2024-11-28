@@ -1,4 +1,5 @@
 default_mode "locked"
+copy_command "@copy_command@"
 theme "catppuccin-macchiato"
 
 keybinds clear-defaults=true {
