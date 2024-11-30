@@ -121,9 +121,9 @@
         "repo": "firefox-csshacks"
       },
       "branch": "master",
-      "revision": "def4b49d6be4197b7e171f8b06081a7c984dff73",
-      "url": "https://github.com/MrOtherGuy/firefox-csshacks/archive/def4b49d6be4197b7e171f8b06081a7c984dff73.tar.gz",
-      "hash": "1xkr6rd80af5dc78fmwpvgqzgy3s7l3w8ghdj61n2sjzqxjwd9ip"
+      "revision": "35f29fd1cb3f1bba012d26ae3d88c7ac1b23b188",
+      "url": "https://github.com/MrOtherGuy/firefox-csshacks/archive/35f29fd1cb3f1bba012d26ae3d88c7ac1b23b188.tar.gz",
+      "hash": "0174f69jmgibdjh9g4gj80vyy9zqyzjbm8nmqp4f8wpq45m14sgk"
     },
     "hardware": {
       "type": "Git",
@@ -185,14 +185,14 @@
     "nixos-small": {
       "type": "Channel",
       "name": "nixos-unstable-small",
-      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-25.05beta713936.564e219aa5ca/nixexprs.tar.xz",
-      "hash": "09qypb4kiikcgmxyvaxvc0lmgxiwqgc1c9j0j7mn7dvab8pvyb4n"
+      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-25.05beta714517.57feb2a16f70/nixexprs.tar.xz",
+      "hash": "1k2aab119cknsz4pr51kbgvliq71kdx9g42lwcffri7nlq0ykh6q"
     },
     "nixpkgs": {
       "type": "Channel",
       "name": "nixpkgs-unstable",
-      "url": "https://releases.nixos.org/nixpkgs/nixpkgs-25.05pre713661.226216574ada/nixexprs.tar.xz",
-      "hash": "1395imd9kbngmmj20wk9s8wyiadyd33y1w1m0agwlxsw9abddrpw"
+      "url": "https://releases.nixos.org/nixpkgs/nixpkgs-25.05pre713814.581d7e4d23b9/nixexprs.tar.xz",
+      "hash": "1896z2zgxznnmravahdh0l7xk0nr2sl53y5qr063n8759pjkmcvz"
     },
     "nixpkgs-firefox-darwin": {
       "type": "Git",
@@ -214,9 +214,9 @@
         "repo": "NUR"
       },
       "branch": "master",
-      "revision": "fc6d92b2cd8d719fd8645291845d07bb1fb79407",
-      "url": "https://github.com/nix-community/NUR/archive/fc6d92b2cd8d719fd8645291845d07bb1fb79407.tar.gz",
-      "hash": "13mzayana5ib0ar63q5pws93aamr0g7rgcj409v20zw04rzbrsrc"
+      "revision": "3bf72a07ced4187061498ef42dc6cfa901e80194",
+      "url": "https://github.com/nix-community/NUR/archive/3bf72a07ced4187061498ef42dc6cfa901e80194.tar.gz",
+      "hash": "1bdxd3f0fqw89l73y9k881qgn8waiqxwy0zm4ga9si8xadw56y34"
     },
     "preservation": {
       "type": "Git",
