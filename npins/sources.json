@@ -20,9 +20,9 @@
         "repo": "nix"
       },
       "branch": "main",
-      "revision": "85f8c7784e8be03d12846cea35738be181e09497",
-      "url": "https://github.com/catppuccin/nix/archive/85f8c7784e8be03d12846cea35738be181e09497.tar.gz",
-      "hash": "0j9vgs8wc93p50nzqxyzrbkmpy965c4f7nnj5zhd7cmjg660g8jb"
+      "revision": "7a6e695bbf6220af2b1a6941613d9df1160a32cd",
+      "url": "https://github.com/catppuccin/nix/archive/7a6e695bbf6220af2b1a6941613d9df1160a32cd.tar.gz",
+      "hash": "00nd0gq0x87yh8y1iixbb2q3sqgynspsaw36swlq1p7vh5mm5i80"
     },
     "catppuccin-home-assistant": {
       "type": "Git",
@@ -179,8 +179,8 @@
     "nixos": {
       "type": "Channel",
       "name": "nixos-unstable",
-      "url": "https://releases.nixos.org/nixos/unstable/nixos-25.05beta712559.4633a7c72337/nixexprs.tar.xz",
-      "hash": "0wik0fq8qzyn4lyjq4q1vaghyc68xp8sxjajxfa5rqkgs54zrs3x"
+      "url": "https://releases.nixos.org/nixos/unstable/nixos-25.05beta713604.fa42b5a5f401/nixexprs.tar.xz",
+      "hash": "1pis9kzcyz5nh8d46r3iy9gy3z9fbbgydgicivnsj591vxzshy2d"
     },
     "nixos-small": {
       "type": "Channel",
@@ -214,9 +214,9 @@
         "repo": "NUR"
       },
       "branch": "master",
-      "revision": "a8a3b162b2d2fd1766859e5896a9f27e5dc56cdc",
-      "url": "https://github.com/nix-community/NUR/archive/a8a3b162b2d2fd1766859e5896a9f27e5dc56cdc.tar.gz",
-      "hash": "1rj5k6r62nxpr99pps9hc25rqabisl5m1jrm44v9nfv95y764rb4"
+      "revision": "fc6d92b2cd8d719fd8645291845d07bb1fb79407",
+      "url": "https://github.com/nix-community/NUR/archive/fc6d92b2cd8d719fd8645291845d07bb1fb79407.tar.gz",
+      "hash": "13mzayana5ib0ar63q5pws93aamr0g7rgcj409v20zw04rzbrsrc"
     },
     "preservation": {
       "type": "Git",
