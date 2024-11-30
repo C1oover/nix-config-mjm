@@ -32,13 +32,9 @@ in
         open-sans
         noto-fonts
         noto-fonts-emoji
-        (nerdfonts.override {
-          fonts = [
-            "NerdFontsSymbolsOnly"
-            "Agave"
-            "Monaspace"
-          ];
-        })
+        nerd-fonts.symbols-only
+        nerd-fonts.agave
+        nerd-fonts.monaspace
         font-awesome
         cascadia-code
         ibm-plex
