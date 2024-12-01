@@ -1,5 +1,5 @@
 let
-  sources = import ./npins;
+  sources = import ./npins/patched.nix;
   lib = import "${sources.nixos}/lib";
 
   isLinux = lib.hasSuffix "-linux" builtins.currentSystem;
