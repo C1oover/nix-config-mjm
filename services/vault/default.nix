@@ -142,7 +142,7 @@ in
     };
 
     terraform.terraform.required_providers.vault = {
-      source = "registry.terraform.io/hashicorp/vault";
+      source = "registry.opentofu.org/hashicorp/vault";
       version = ">= 3.0.0";
     };
 

@@ -1,5 +1,5 @@
 let
-  inputs = import ./npins;
+  inputs = import ./npins/patched.nix;
   pkgs = import inputs.nixos { config.allowUnfree = true; };
   devshell = import inputs.devshell { nixpkgs = pkgs; };
 in

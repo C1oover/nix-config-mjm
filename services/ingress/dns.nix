@@ -16,7 +16,7 @@ in
 {
   config = mkIf config.mjm.ingress.enable {
     terraform.terraform.required_providers.desec = {
-      source = "registry.terraform.io/Valodim/desec";
+      source = "registry.opentofu.org/Valodim/desec";
       version = ">= 0.5.0";
     };
 

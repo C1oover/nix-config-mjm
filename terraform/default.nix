@@ -1,5 +1,5 @@
 let
-  inputs = import ../npins;
+  inputs = import ../npins/patched.nix;
 in
 {
   pkgs ? import inputs.nixos { config.allowUnfree = true; },
@@ -16,7 +16,7 @@ let
       spdx = "MIT";
       hash = "sha256-t+hpNI1Id8DrtQWuDj9OSdKkKMo/b1O2ViCSXjDxSlQ=";
       vendorHash = "sha256-Dcs1R3smMIRnjiGpt6ML1lsfYYl4ne8gK+BwDravhVI=";
-      homepage = "https://registry.terraform.io/providers/Valodim/desec";
+      homepage = "https://registry.opentofu.org/Valodim/desec";
     })
   ]);
   evalHive = import "${inputs.colmena}/src/nix/hive/eval.nix";
