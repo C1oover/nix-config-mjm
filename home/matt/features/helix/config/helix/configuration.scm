@@ -3,6 +3,10 @@
 (define (update-configuration!)
     (helix.update-configuration! *helix.config*))
 
+(provide get-config-option-value)
+(define (get-config-option-value arg)
+    (helix.get-config-option-value *helix.cx* arg))
+
 (provide get-keybindings)
 (define (get-keybindings)
     (helix.get-keybindings *helix.config*))

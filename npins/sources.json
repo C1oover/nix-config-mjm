@@ -133,9 +133,9 @@
         "repo": "nixos-hardware"
       },
       "branch": "master",
-      "revision": "fe01780d356d70fd119a19277bff71d3e78dad00",
-      "url": "https://github.com/NixOS/nixos-hardware/archive/fe01780d356d70fd119a19277bff71d3e78dad00.tar.gz",
-      "hash": "1ifsvsbqby6s7g3fz2a9sgssvhdxaixc4m6ysgdywrnphic2n2k9"
+      "revision": "c6c90887f84c02ce9ebf33b95ca79ef45007bf88",
+      "url": "https://github.com/NixOS/nixos-hardware/archive/c6c90887f84c02ce9ebf33b95ca79ef45007bf88.tar.gz",
+      "hash": "12bn409a8jnakqmlmhdfaw7rsq948nwb4hp8hrdj5l78igv1cm1x"
     },
     "helix": {
       "type": "Git",
@@ -157,9 +157,9 @@
         "repo": "home-manager"
       },
       "branch": "master",
-      "revision": "c1fee8d4a60b89cae12b288ba9dbc608ff298163",
-      "url": "https://github.com/nix-community/home-manager/archive/c1fee8d4a60b89cae12b288ba9dbc608ff298163.tar.gz",
-      "hash": "1gyjiphl7n9iqmpa6sl7s002s56lcrk43hbwl1y4v7d38swqsnbm"
+      "revision": "873e39d5f4437d2f3ab06881fea8e63e45e1d011",
+      "url": "https://github.com/nix-community/home-manager/archive/873e39d5f4437d2f3ab06881fea8e63e45e1d011.tar.gz",
+      "hash": "0lb3gh4vaicagim7f0w4zz2lfzf87j1rxd5ggbw8m90zs2pk8kl1"
     },
     "lanzaboote": {
       "type": "GitRelease",
@@ -185,8 +185,8 @@
     "nixos-small": {
       "type": "Channel",
       "name": "nixos-unstable-small",
-      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-25.05beta714777.767b0e3398fb/nixexprs.tar.xz",
-      "hash": "0kr6b27yz2ws3ww1s6bs48fsg2pym1ljj4mwl2x9pmx7rkrsncnx"
+      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-25.05beta715325.b9ffe0d2ef58/nixexprs.tar.xz",
+      "hash": "1lbam199m9vm0p1a8rmykz7h88hg6hvw8nb7qrl40x7av56pjimf"
     },
     "nixpkgs": {
       "type": "Channel",
@@ -214,9 +214,9 @@
         "repo": "NUR"
       },
       "branch": "master",
-      "revision": "c9e5dec149daabcae8d723122085771696c8a804",
-      "url": "https://github.com/nix-community/NUR/archive/c9e5dec149daabcae8d723122085771696c8a804.tar.gz",
-      "hash": "13wirijf1k7s3yl83ahj8fnvc6cybr5gbg6kmr76l2s7f0qp14l9"
+      "revision": "e73a3cfea5a1e8a516fc36927a1db4983012decb",
+      "url": "https://github.com/nix-community/NUR/archive/e73a3cfea5a1e8a516fc36927a1db4983012decb.tar.gz",
+      "hash": "1sivq98yrg9pfzpfx321x76jhw7a952wg2h0p7xf2fy48cb6dqa3"
     },
     "preservation": {
       "type": "Git",
