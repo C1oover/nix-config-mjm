@@ -58,7 +58,6 @@ let
 in
 overlayPatches {
   # opentofu: fix mkProvider
-  servers."360647".hash = "sha256-OIbrP0WybgD+JWsnaUq953zo7iKxJzvkOBlL83bhFcQ=";
   desktops."360647".hash = "sha256-OIbrP0WybgD+JWsnaUq953zo7iKxJzvkOBlL83bhFcQ=";
 
   # bcachefs-fstab-generator
