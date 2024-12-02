@@ -1,12 +1,8 @@
 { pkgs, ... }:
 {
   fonts.packages = with pkgs; [
-    (nerdfonts.override {
-      fonts = [
-        "NerdFontsSymbolsOnly"
-        "Monaspace"
-      ];
-    })
+    nerd-fonts.monaspace
+    nerd-fonts.symbols-only
     pragmata-pro
     cascadia-code
     ibm-plex
