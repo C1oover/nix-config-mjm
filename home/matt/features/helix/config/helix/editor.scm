@@ -35,6 +35,10 @@
 (define (cx->cursor)
     (helix.cx->cursor *helix.cx*))
 
+(provide editor-focused-buffer-area)
+(define (editor-focused-buffer-area)
+    (helix.editor-focused-buffer-area *helix.cx*))
+
 (provide editor->doc-id)
 (define (editor->doc-id arg)
     (helix.editor->doc-id *helix.cx* arg))
