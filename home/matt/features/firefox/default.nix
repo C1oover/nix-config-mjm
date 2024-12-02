@@ -111,13 +111,7 @@ in
               ;
           };
         userChrome = ''
-          ${builtins.readFile (inputs.firefox-csshacks + /chrome/window_control_placeholder_support.css)}
-          ${optionalString pkgs.stdenv.isDarwin (
-            builtins.readFile (inputs.firefox-csshacks + /chrome/hide_tabs_toolbar_osx.css)
-          )}
-          ${optionalString pkgs.stdenv.isLinux (
-            builtins.readFile (inputs.firefox-csshacks + /chrome/hide_tabs_toolbar.css)
-          )}
+          ${builtins.readFile "${inputs.firefox-csshacks}/chrome/hide_tabs_toolbar_v2.css"}
         '';
         search.force = true;
         search.default = "SearXNG";
