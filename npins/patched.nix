@@ -57,9 +57,6 @@ let
       };
 in
 overlayPatches {
-  # opentofu: fix mkProvider
-  desktops."360647".hash = "sha256-OIbrP0WybgD+JWsnaUq953zo7iKxJzvkOBlL83bhFcQ=";
-
   # bcachefs-fstab-generator
   desktops."345207".hash = "sha256-tI+wlhyC2e63NirN2kgg1I4GMPvMwFTIFFyo2nR1MDQ=";
 }
