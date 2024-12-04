@@ -10,7 +10,7 @@
   mjm.work.enable = true;
 
   programs.kitty.font.size = 13;
-  programs.alacritty.settings.font.size = 13;
+  programs.alacritty.settings.font.size = 16;
 
   home.dock.entries = [
     {

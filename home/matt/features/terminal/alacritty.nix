@@ -27,7 +27,7 @@ in
       enable = true;
       catppuccin.enable = true;
       settings = {
-        font.normal.family = "MonaspiceXe Nerd Font";
+        font.normal.family = "PragmataPro Mono Liga";
         font.size = mkDefault 14;
         terminal.shell.program = getExe nu;
         terminal.shell.args = [
