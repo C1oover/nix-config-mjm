@@ -3,27 +3,57 @@ let
   inherit (lib)
     mkDefault
     mkOption
-    optional
     types
     ;
-  cfg = config.deployment;
-
-  phases = [
-    null
-    "main"
-    "ingress"
-  ];
-  rebootPhases = phases ++ [ "vault" ];
 in
 {
   options.deployment = {
-    phase = mkOption {
-      type = types.enum phases;
-      default = "main";
+    # copied from colmena's module
+    targetHost = lib.mkOption {
+      description = ''
+        The target SSH node for deployment.
+
+        By default, the node's attribute name will be used.
+        If set to null, only local deployment will be supported.
+      '';
+      type = types.nullOr types.str;
+      default = config.networking.hostName;
     };
-    rebootPhase = mkOption {
-      type = types.enum rebootPhases;
-      default = cfg.phase;
+    targetUser = lib.mkOption {
+      description = ''
+        The user to use to log into the remote node. If set to null, the
+        target user will not be specified in SSH invocations.
+      '';
+      type = types.nullOr types.str;
+      default = "root";
+    };
+    tags = lib.mkOption {
+      description = ''
+        A list of tags for the node.
+
+        Can be used to select a group of nodes for deployment.
+      '';
+      type = types.listOf types.str;
+      default = [ ];
+    };
+
+    consulChecks = mkOption {
+      description = ''
+        The names of Consul services that must be passing health checks in order for
+        deploying this host to be considered successful.
+      '';
+      type = types.listOf types.str;
+      default = [ ];
+    };
+    rebootAutomatically = mkOption {
+      description = ''
+        Whether this host can be rebooted automatically during a deploy.
+
+        If not, then when a reboot is determined to be necessary, the `boot` goal
+        will be used, but then the host will need to rebooted manually to apply it.
+      '';
+      type = types.bool;
+      default = true;
     };
   };
 
@@ -31,9 +61,6 @@ in
     deployment = {
       targetHost = mkDefault "${config.networking.hostName}.home.mattmoriarity.com";
       targetUser = "matt";
-      tags =
-        optional (cfg.phase != null) "phase-${cfg.phase}"
-        ++ optional (cfg.rebootPhase != null) "reboot-phase-${cfg.rebootPhase}";
     };
   };
 }

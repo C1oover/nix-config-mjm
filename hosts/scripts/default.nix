@@ -13,6 +13,7 @@
   nix,
   systemd,
   nvd-json,
+  nixos-deploy,
 }:
 
 writeNuBin "host-scripts" {
@@ -31,6 +32,7 @@ writeNuBin "host-scripts" {
         nvd
         nvd-json
         nix
+        nixos-deploy
       ]
       ++ lib.optionals stdenvNoCC.isLinux [
         nettools

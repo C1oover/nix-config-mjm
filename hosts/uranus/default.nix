@@ -6,7 +6,7 @@
 {
   imports = [ ./hardware-configuration.nix ];
 
-  deployment.phase = null;
+  deployment.targetHost = null;
 
   environment.systemPackages = [ pkgs.sbctl ];
 
