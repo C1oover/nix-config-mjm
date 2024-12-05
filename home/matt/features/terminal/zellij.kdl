@@ -1,6 +1,7 @@
 default_mode "locked"
 copy_command "@copy_command@"
 theme "catppuccin-macchiato"
+pane_frames false
 
 keybinds clear-defaults=true {
 
