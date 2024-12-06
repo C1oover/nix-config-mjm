@@ -31,6 +31,18 @@ def "main switch" [action: string = switch] {
   }
 }
 
+def "main deploy" [...hosts] {
+  with-temp-key {|key|
+    nixos-deploy deploy --ssh-identity-file $key ...$hosts
+  }
+}
+
+def "main diff" [...hosts] {
+  with-temp-key {|key|
+    nixos-deploy diff --ssh-identity-file $key ...$hosts
+  }
+}
+
 def "main ci deploy" [] {
   with-vault {
     with-temp-key {|key|

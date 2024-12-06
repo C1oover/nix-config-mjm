@@ -26,10 +26,10 @@ defmodule NixosDeploy do
     handle_command(command, args, options)
   end
 
-  def handle_command("deploy", _args, opts) do
+  def handle_command("deploy", args, opts) do
     plans_file = Keyword.get(opts, :plans, "plans.nix")
 
-    {plan, evaled_nodes} = eval_nodes(plans_file, opts)
+    {plan, evaled_nodes} = eval_nodes(plans_file, args, opts)
 
     pushed_nodes =
       evaled_nodes
@@ -48,10 +48,10 @@ defmodule NixosDeploy do
     Logger.info("deploy completed")
   end
 
-  def handle_command("diff", _args, opts) do
+  def handle_command("diff", args, opts) do
     plans_file = Keyword.get(opts, :plans, "plans.nix")
 
-    {plan, evaled_nodes} = eval_nodes(plans_file, opts)
+    {plan, evaled_nodes} = eval_nodes(plans_file, args, opts)
 
     evaled_nodes
     |> Task.async_stream(__MODULE__, :build_node, [], timeout: :infinity, ordered: false)
@@ -76,7 +76,7 @@ defmodule NixosDeploy do
     |> apply_local_node()
   end
 
-  def eval_nodes(plans_file, opts) do
+  def eval_nodes(plans_file, hostnames, opts) do
     Logger.info("evaluating plans")
 
     ssh_opts =
@@ -85,26 +85,21 @@ defmodule NixosDeploy do
         :error -> []
       end ++ ["-o", "BatchMode=yes", "-T"]
 
-    # TODO this should only eval the nodes that will actually be deployed
-    eval_expr =
-      "let cfg = import ./#{plans_file}; in cfg.toplevel // { planConfig = cfg.plansJson.default; deploymentConfig = cfg.deploymentConfigJson; }"
+    names_to_include =
+      "builtins.fromJSON #{inspect(hostnames |> :json.encode() |> IO.iodata_to_binary())}"
 
-    {:ok, paths} = Nix.eval_jobs(expr: eval_expr)
+    {:ok, paths} = Nix.eval_jobs(file: plans_file, args: [namesToInclude: names_to_include])
     paths_by_attr = Map.new(paths, &{&1["attr"], &1["drvPath"]})
+    {config_drv, paths_by_attr} = Map.pop(paths_by_attr, "configJson")
+    {:ok, config_path} = Nix.realise(config_drv)
 
-    {plan_config_drv, paths_by_attr} = Map.pop(paths_by_attr, "planConfig")
-    {deploy_config_drv, paths_by_attr} = Map.pop(paths_by_attr, "deploymentConfig")
-
-    {:ok, plan_config_path} = Nix.realise(plan_config_drv)
-    plan_config = plan_config_path |> File.read!() |> :json.decode()
-
-    {:ok, deploy_config_path} = Nix.realise(deploy_config_drv)
-    deploy_config = deploy_config_path |> File.read!() |> :json.decode()
+    %{"phases" => phases, "deployment" => deploy_config} =
+      config_path |> File.read!() |> :json.decode()
 
     paths_by_attr
-    |> Enum.filter(fn {name, _} -> Enum.any?(plan_config, &(name in &1["nodes"])) end)
+    |> Enum.filter(fn {name, _} -> Enum.any?(phases, &(name in &1["nodes"])) end)
     |> Enum.map(fn {name, drv_path} ->
-      kind = if deploy_config[name]["targetHost"] == nil, do: Host.Local, else: Host.SSH
+      kind = if deploy_config[name]["targetHost"] == :null, do: Host.Local, else: Host.SSH
 
       %Host{
         name: name,
@@ -114,7 +109,7 @@ defmodule NixosDeploy do
         opts: [ssh_opts: ssh_opts]
       }
     end)
-    |> then(&{plan_config, &1})
+    |> then(&{phases, &1})
   end
 
   def eval_local_node(plans_file, _opts) do
@@ -122,7 +117,7 @@ defmodule NixosDeploy do
     hostname = to_string(hostname)
 
     eval_expr =
-      "let cfg = import ./#{plans_file}; config = cfg.toplevel.#{hostname}; in { drv = config.drvPath; out = config.outPath; }"
+      "let config = (import ./#{plans_file} {}).#{hostname}; in { drv = config.drvPath; out = config.outPath; }"
 
     {:ok, %{"drv" => drv_path, "out" => out_path}} = Nix.eval(expr: eval_expr)
 

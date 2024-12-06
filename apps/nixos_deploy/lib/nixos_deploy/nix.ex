@@ -5,6 +5,9 @@ defmodule NixosDeploy.Nix do
         Enum.flat_map(opts, fn
           {:expr, expr} ->
             ["--expr", expr]
+
+          {:file, path} ->
+            ["--file", path]
         end)
 
     case System.cmd("nix", args) do
@@ -21,6 +24,14 @@ defmodule NixosDeploy.Nix do
       Enum.flat_map(opts, fn
         {:expr, expr} ->
           ["--expr", expr]
+
+        {:file, path} ->
+          [path]
+
+        {:args, args} ->
+          Enum.flat_map(args, fn {key, value} ->
+            ["--arg", to_string(key), value]
+          end)
       end)
 
     case System.cmd("nix-eval-jobs", ["--workers", "4"] ++ args, into: [], lines: 1024) do

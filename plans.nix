@@ -4,11 +4,57 @@ let
 
   inherit (lib)
     attrNames
+    elem
+    filterAttrs
+    findFirst
     genAttrs
     groupBy
-    findFirst
     mapAttrs
+    pipe
     ;
+
+  plans = {
+    meta = {
+      nixpkgs = {
+        default = "nixos-small";
+        persephone = "nixos";
+        uranus = "nixos";
+      };
+
+      specialArgs = {
+        inputs = sources;
+      };
+    };
+
+    defaults = {
+      imports = [
+        ./modules/nixos/deployment.nix
+        ./hosts/common/global/nixos
+        ./hosts/common/users/matt
+      ];
+    };
+
+    inherit hosts;
+
+    plans.default = {
+      defaultPhase = "main";
+      phases = [
+        { name = "main"; }
+        {
+          name = "dns";
+          includeIf = _name: config: config.mjm.dns-server.enable;
+        }
+        {
+          name = "vault";
+          includeIf = _name: config: config.mjm.vault.enable;
+        }
+        {
+          name = "ingress";
+          includeIf = _name: config: config.mjm.ingress.enable;
+        }
+      ];
+    };
+  };
 
   hostNames = [
     "aether"
@@ -30,8 +76,11 @@ let
   mkHost = name: { imports = [ ./hosts/${name} ]; };
   hosts = genAttrs hostNames mkHost;
 
-  evalPlans =
-    plans:
+  evalPlan =
+    {
+      plan ? "default",
+      namesToInclude ? [ ],
+    }:
     let
       allPkgs = lib.mapAttrs (_name: path: import path { }) sources;
       json = allPkgs.nixos-small.formats.json { };
@@ -60,7 +109,10 @@ let
           value
         ]
       ) plans.hosts;
-      nodes = mapAttrs (name: value: evalNode name [ value ]) plans.hosts;
+      nodes = pipe plans.hosts [
+        (filterAttrs (name: _value: if namesToInclude == [ ] then true else elem name namesToInclude))
+        (mapAttrs (name: value: evalNode name [ value ]))
+      ];
       deploymentConfig = mapAttrs (_: v: v.config.deployment) nodes;
 
       phasesWithNodes =
@@ -89,56 +141,11 @@ let
         ) defaultPhase plan.phases).name;
     in
     {
-      inherit nodes deploymentConfig;
-      toplevel = mapAttrs (_: v: v.config.system.build.toplevel) nodes;
-      deploymentConfigJson = json.generate "deployment.json" deploymentConfig;
-      plansJson = mapAttrs (
-        name: plan: json.generate "plan-${name}.json" (phasesWithNodes plan)
-      ) plans.plans;
-    };
+      configJson = json.generate "plan-config.json" {
+        deployment = deploymentConfig;
+        phases = phasesWithNodes plans.plans.${plan};
+      };
+    }
+    // (mapAttrs (_: v: v.config.system.build.toplevel) nodes);
 in
-evalPlans {
-  meta = {
-    nixpkgs = {
-      default = "nixos-small";
-      persephone = "nixos";
-      uranus = "nixos";
-    };
-
-    specialArgs = {
-      inputs = sources;
-    };
-  };
-
-  defaults = {
-    imports = [
-      ./modules/nixos/deployment.nix
-      ./hosts/common/global/nixos
-      ./hosts/common/users/matt
-    ];
-  };
-
-  inherit hosts;
-
-  plans.default = {
-    defaultPhase = "main";
-    phases = [
-      {
-        name = "main";
-        excludeIf = _name: config: config.mjm.desktop.enable;
-      }
-      {
-        name = "dns";
-        includeIf = _name: config: config.mjm.dns-server.enable;
-      }
-      {
-        name = "vault";
-        includeIf = _name: config: config.mjm.vault.enable;
-      }
-      {
-        name = "ingress";
-        includeIf = _name: config: config.mjm.ingress.enable;
-      }
-    ];
-  };
-}
+evalPlan
