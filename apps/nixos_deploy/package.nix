@@ -1,8 +1,6 @@
 {
   lib,
-  beamPackages,
-  elixir,
-  erlang,
+  beam,
   nix-eval-jobs,
   nix-output-monitor,
   makeWrapper,
@@ -10,6 +8,10 @@
   nvd-json,
   attic-client,
 }:
+
+let
+  beamPackages = beam.packages.erlang_27;
+in
 
 beamPackages.mixRelease rec {
   pname = "nixos-deploy";
@@ -42,8 +44,8 @@ beamPackages.mixRelease rec {
     wrapProgram $out/bin/nixos-deploy \
       --prefix PATH : ${
         lib.makeBinPath [
-          elixir
-          erlang
+          beamPackages.elixir_1_17
+          beamPackages.erlang
           nix-eval-jobs
           nix-output-monitor
           nvd-json

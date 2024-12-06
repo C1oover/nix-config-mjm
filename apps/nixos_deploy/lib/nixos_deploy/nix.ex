@@ -9,7 +9,7 @@ defmodule NixosDeploy.Nix do
 
     case System.cmd("nix", args) do
       {output, 0} ->
-        {:ok, Jason.decode!(output)}
+        {:ok, :json.decode(output)}
 
       {output, exit_code} ->
         {:error, {:exit, exit_code, output}}
@@ -25,7 +25,7 @@ defmodule NixosDeploy.Nix do
 
     case System.cmd("nix-eval-jobs", ["--workers", "4"] ++ args, into: [], lines: 1024) do
       {result, 0} ->
-        {:ok, Enum.map(result, &Jason.decode!/1)}
+        {:ok, Enum.map(result, &:json.decode/1)}
 
       {output, exit_code} ->
         {:error, {:exit, exit_code, Enum.join(output, "\n")}}

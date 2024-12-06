@@ -11,7 +11,8 @@ devshell.mkShell (
   in
   {
     packages = attrValues {
-      inherit (pkgs) erlang elixir nix-eval-jobs;
+      inherit (pkgs.beam.packages.erlang_27) erlang elixir_1_17;
+      inherit (pkgs) nix-eval-jobs;
     };
   }
 )

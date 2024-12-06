@@ -62,7 +62,7 @@ defmodule NixosDeploy do
     |> Task.async_stream(__MODULE__, :diff_node, [], timeout: 60_000, ordered: false)
     |> Enum.map(fn {:ok, result} -> result end)
     |> aggregate_diffs()
-    |> Jason.encode!(pretty: true)
+    |> :json.encode()
     |> IO.write()
   end
 
@@ -96,10 +96,10 @@ defmodule NixosDeploy do
     {deploy_config_drv, paths_by_attr} = Map.pop(paths_by_attr, "deploymentConfig")
 
     {:ok, plan_config_path} = Nix.realise(plan_config_drv)
-    plan_config = plan_config_path |> File.read!() |> Jason.decode!()
+    plan_config = plan_config_path |> File.read!() |> :json.decode()
 
     {:ok, deploy_config_path} = Nix.realise(deploy_config_drv)
-    deploy_config = deploy_config_path |> File.read!() |> Jason.decode!()
+    deploy_config = deploy_config_path |> File.read!() |> :json.decode()
 
     paths_by_attr
     |> Enum.filter(fn {name, _} -> Enum.any?(plan_config, &(name in &1["nodes"])) end)
@@ -230,7 +230,7 @@ defmodule NixosDeploy do
            ["reboot-check", node.out_path]
          ) do
       {:ok, output} ->
-        %{"reboot_needed" => reboot_needed} = Jason.decode!(output)
+        %{"reboot_needed" => reboot_needed} = :json.decode(output)
         %{node | reboot_needed: reboot_needed}
 
       {:error, {:exit, exit_code, output}} ->
@@ -430,7 +430,7 @@ defmodule NixosDeploy do
     case System.cmd("nvd-json", ["aggregate" | paths]) do
       {output, 0} ->
         File.rm_rf!(dir)
-        Jason.decode!(output)
+        :json.decode(output)
 
       {output, exit_code} ->
         File.rm_rf!(dir)
