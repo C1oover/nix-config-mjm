@@ -237,7 +237,12 @@ defmodule NixosDeploy do
     nodes_by_name = Map.new(nodes, &{&1.name, &1})
 
     Enum.each(plan, fn phase ->
-      deploy_phase(phase["name"], Enum.map(phase["nodes"], &nodes_by_name[&1]))
+      nodes =
+        phase["nodes"]
+        |> Enum.map(&nodes_by_name[&1])
+        |> Enum.reject(&is_nil/1)
+
+      deploy_phase(phase["name"], nodes)
     end)
   end
 
