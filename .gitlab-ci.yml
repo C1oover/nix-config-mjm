@@ -4,7 +4,7 @@
   nixos_changes:
     - .gitlab-ci.yml
     - default.nix
-    - hive.nix
+    - plans.nix
     - apps/**/*
     - home/**/*
     - hosts/**/*
@@ -15,11 +15,8 @@
     - services/**/*
   tofu_changes:
     - .gitlab-ci.yml
-    - apps/**/*
-    - modules/apps/**/*
     - npins/*
-    - services/*/service.nix
-    - services/*/service/**/*
+    - services/**/*
     - terraform/**/*
 stages:
   - check
