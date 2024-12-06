@@ -1,6 +1,14 @@
 let
   sources = import ./npins/patched.nix;
-  lib = import "${sources.nixos}/lib";
+  lib = import "${sources.nixos-small}/lib";
+
+  inherit (lib)
+    attrNames
+    genAttrs
+    groupBy
+    findFirst
+    mapAttrs
+    ;
 
   hostNames = [
     "aether"
@@ -20,29 +28,19 @@ let
     "uranus"
   ];
   mkHost = name: { imports = [ ./hosts/${name} ]; };
-  hosts = lib.genAttrs hostNames mkHost;
+  hosts = genAttrs hostNames mkHost;
 
   evalPlans =
     plans:
     let
-      pkgs = import plans.meta.nixpkgs { };
-      lib = pkgs.lib;
-      inherit (lib)
-        attrNames
-        groupBy
-        findFirst
-        hasAttr
-        mapAttrs
-        ;
-
-      json = pkgs.formats.json { };
+      allPkgs = lib.mapAttrs (_name: path: import path { }) sources;
+      json = allPkgs.nixos-small.formats.json { };
 
       evalNode =
         name: configs:
         let
-          # TODO avoid importing the same nixpkgs multiple times
-          npkgs =
-            if hasAttr name plans.meta.nodeNixpkgs then import plans.meta.nodeNixpkgs.${name} { } else pkgs;
+          nixpkgsKey = plans.meta.nixpkgs.${name} or plans.meta.nixpkgs.default;
+          npkgs = allPkgs.${nixpkgsKey};
           evalConfig = import (npkgs.path + "/nixos/lib/eval-config.nix");
         in
         evalConfig {
@@ -101,10 +99,10 @@ let
 in
 evalPlans {
   meta = {
-    nixpkgs = sources.nixos-small;
-    nodeNixpkgs = {
-      uranus = sources.nixos;
-      persephone = sources.nixos;
+    nixpkgs = {
+      default = "nixos-small";
+      persephone = "nixos";
+      uranus = "nixos";
     };
 
     specialArgs = {
