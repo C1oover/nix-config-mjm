@@ -80,5 +80,7 @@ in
         http.url = "http://localhost:3903/health";
       };
     };
+
+    deployment.consulChecks = [ "garage" ];
   };
 }
