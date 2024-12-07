@@ -1,7 +1,7 @@
 defmodule NixosDeploy.Nix do
   def eval(opts) do
     args =
-      ["eval", "--impure", "--json"] ++
+      ["nix", "eval", "--impure", "--json"] ++
         Enum.flat_map(opts, fn
           {:expr, expr} ->
             ["--expr", expr]
@@ -10,7 +10,7 @@ defmodule NixosDeploy.Nix do
             ["--file", path]
         end)
 
-    case System.cmd("nix", args) do
+    case System.cmd("wrap-command", args) do
       {output, 0} ->
         {:ok, :json.decode(output)}
 
@@ -34,7 +34,10 @@ defmodule NixosDeploy.Nix do
           end)
       end)
 
-    case System.cmd("nix-eval-jobs", ["--workers", "4"] ++ args, into: [], lines: 1024) do
+    case System.cmd("wrap-command", ["nix-eval-jobs", "--workers", "4"] ++ args,
+           into: [],
+           lines: 1024
+         ) do
       {result, 0} ->
         {:ok, Enum.map(result, &:json.decode/1)}
 
@@ -48,10 +51,10 @@ defmodule NixosDeploy.Nix do
 
     if use_nom do
       System.shell(
-        "nix-store --no-gc-warning --realise #{drv_path} --log-format internal-json -v |& nom --json"
+        "wrap-command nix-store --no-gc-warning --realise #{drv_path} --log-format internal-json -v |& nom --json"
       )
     else
-      System.cmd("nix-store", ["--no-gc-warning", "--realise", drv_path])
+      System.cmd("wrap-command", ["nix-store", "--no-gc-warning", "--realise", drv_path])
     end
     |> case do
       {output, 0} ->
@@ -66,8 +69,9 @@ defmodule NixosDeploy.Nix do
     ssh_opts = opts |> Keyword.get(:ssh_options, []) |> Enum.join(" ")
 
     case System.cmd(
-           "nix",
+           "wrap-command",
            [
+             "nix",
              "copy",
              "--no-check-sigs",
              "--to",

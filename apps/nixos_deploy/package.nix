@@ -7,10 +7,12 @@
   nix-gitignore,
   nvd-json,
   attic-client,
+  writeShellScriptBin,
 }:
 
 let
   beamPackages = beam.packages.erlang_27;
+  wrap-command = writeShellScriptBin "wrap-command" (builtins.readFile ./wrap_command.sh);
 in
 
 beamPackages.mixRelease rec {
@@ -50,6 +52,7 @@ beamPackages.mixRelease rec {
           nix-output-monitor
           nvd-json
           attic-client
+          wrap-command
         ]
       }
 

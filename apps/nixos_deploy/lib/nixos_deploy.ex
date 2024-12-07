@@ -160,7 +160,7 @@ defmodule NixosDeploy do
     Logger.info("pushing #{node.name} to attic cache")
 
     # TODO retry this multiple times
-    case System.cmd("attic", ["push", "homelab", node.out_path]) do
+    case System.cmd("wrap-command", ["attic", "push", "homelab", node.out_path]) do
       {_, 0} ->
         node
 
