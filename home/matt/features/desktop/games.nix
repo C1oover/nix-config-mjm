@@ -17,7 +17,12 @@ in
 
   config = mkIf (cfg.enable && cfg.games.enable) {
     home.packages = builtins.attrValues {
-      inherit (pkgs) chiaki lutris xivlauncher;
+      inherit (pkgs)
+        chiaki
+        lutris
+        wago
+        xivlauncher
+        ;
       inherit (pkgs.kdePackages)
         kbreakout
         kmahjongg
