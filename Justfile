@@ -13,9 +13,6 @@ gc:
   -nix-collect-garbage --delete-older-than 7d
   -sudo nix-collect-garbage --delete-older-than 7d
 
-# build target *flags:
-#   colmena build --on {{target}} --keep-result {{flags}}
-
 deploy target *flags:
   nix run -f . host-scripts -- deploy {{target}} {{flags}}
 

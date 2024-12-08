@@ -6,7 +6,6 @@
   openssh,
   vault,
   attic-client,
-  colmena,
   nix-output-monitor,
   nvd,
   nettools,
@@ -27,7 +26,6 @@ writeNuBin "host-scripts" {
         openssh
         vault
         attic-client
-        colmena
         nix-output-monitor
         nvd
         nvd-json
