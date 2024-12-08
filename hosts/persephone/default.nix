@@ -92,7 +92,6 @@
 
   services.fwupd.enable = true;
   services.hardware.bolt.enable = true;
-  hardware.bluetooth.enable = true;
 
   virtualisation.podman.enable = true;
 
