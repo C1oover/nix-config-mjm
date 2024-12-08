@@ -1,8 +1,6 @@
-let
-  inputs = import ../npins/patched.nix;
-in
 {
-  pkgs ? import inputs.nixos { config.allowUnfree = true; },
+  sources ? import ../npins/patched.nix,
+  pkgs ? import sources.nixos { config.allowUnfree = true; },
 }:
 let
   inherit (pkgs) lib;
@@ -19,17 +17,11 @@ let
       homepage = "https://registry.opentofu.org/Valodim/desec";
     })
   ]);
-  evalHive = import "${inputs.colmena}/src/nix/hive/eval.nix";
-  hive = evalHive { rawHive = import ../hive.nix; };
+  nodes = import ../plans.nix { tofuNodes = true; };
   terraformConfiguration =
     (lib.evalModules {
       modules = [
-        {
-          _module.args = {
-            inherit pkgs;
-            inherit (hive) nodes;
-          };
-        }
+        { _module.args = { inherit pkgs nodes; }; }
         {
           terraform.terraform.backend.consul = {
             scheme = "http";
@@ -42,7 +34,7 @@ let
         ./terraform.nix
       ];
       specialArgs = {
-        inherit inputs;
+        inputs = sources;
       };
     }).config.terraformConfig.json;
 in

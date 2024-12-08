@@ -11,13 +11,11 @@ Each system has its own directory with at minimum a `default.nix`
   - [athena](athena/): Work 16-inch MacBook Pro M2
 - Proxmox VMs, all running on a cluster of 3 Proxmox VE hosts built from various Dell OptiPlex SFF machines I bought on craigslist
   - [megaera](megaera/), [tisiphone](tisiphone/), [alecto](alecto/): 3 node Consul and Vault cluster
-  - [aether](aether/), [megaera](megaera/): DNS servers
+  - [aether](aether/), [erebus](erebus/): DNS servers
   - [leto](leto/): Runs majority of my self-hosted services
   - [chaos](chaos/): Media server
   - [helio](helios/): Matrix homeserver and various bridges
   - [hypnos](hypnos/): GitLab CI runner
-- Proxmox LXC containers, which are a bad idea (with NixOS at least) that I don't recommend:
-  - [rhea](rhea/), [cronus](cronus/): DNS servers
 - Raspberry Pi 4B's
   - [arges](arges/): NUT server, remote builder for aarch64 in CI
   - [brontes](brontes/), [steropes](steropes/): Ingress reverse proxy with Nginx for all self-hosted services
@@ -26,19 +24,15 @@ Each system has its own directory with at minimum a `default.nix`
 
 ## Deploying changes
 
-Every hour, [a CI job](../.gitlab-ci.yml#L64) runs that [checks for updates](../flake-update.sh) in either the `nixos` or `nixpkgs` (for Darwin) flake inputs, which target `nixos-unstable` and `nixpkgs-unstable` respectively.
-If either channel has updates, then all flake inputs are updated, and the updated lock file is committed by the CI job.
+Every half hour, [a CI job](../.gitlab-ci.yml#L64) runs that [checks for updates](../packages/scripts/scripts.nu) in either the `nixos`, `nixos-small` or `nixpkgs` (for Darwin) npins sources, which target the various unstable channels.
+If either channel has updates, then all pinned sources are updated, and the updated sources are committed by the CI job.
 
-Each commit (including the automatic lock file updates) to the `main` branch will trigger a deploy job to all NixOS servers.
-Deploys are done with [Colmena](https://github.com/zhaofengli/colmena).
-The hive configuration for Colmena can be found in [default.nix](./default.nix).
+Each commit (including the automatic source updates) to the `main` branch will trigger a deploy job to all NixOS servers.
+Deploys are done with a bespoke deployment tool called [nixos-deploy](../packages/nixos-deploy).
+The deploy plan configuration can be found in [plans.nix](../plans.nix).
 
-Workstations are updated by hand.
-Updating a workstation is done in two steps:
-
-1.  `just rebuild`: Builds configuration for the current system with [nom](https://github.com/maralorn/nix-output-monitor),
-    and uses [nvd](https://gitlab.com/khumba/nvd) to print which package versions were changed.
-2.  `just switch`: Switch to the newly-built configuration.
-    This is done with a small script that skips rebuilding (more importantly, reevaluating), as it assumes `just rebuild` was already run.
-    If the kernel, systemd, or DE have been updated, I'll likely run `just boot` to switch on reboot.
+Workstations are updated manually, still using `nixos-deploy`.
+By running `just rebuild`, it will build the configuration for the current system with [nom](https://github.com/maralorn/nix-output-monitor), and then use [nvd](https://gitlab.com/khumba/nvd) to print which package versions were changed.
+Then it will check if the kernel or systemd versions have changed, and will decide whether the changes should be applied in-place or by rebooting.
+Either way, it will prompt for confirmation and then apply the changes.
 

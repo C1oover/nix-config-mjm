@@ -10,7 +10,6 @@ devshell.mkShell (
   in
   {
     commands = [
-      { package = pkgs.colmena; }
       { package = pkgs.just; }
       { package = pkgs.npins; }
     ];

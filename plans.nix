@@ -80,6 +80,7 @@ let
     {
       plan ? "default",
       namesToInclude ? [ ],
+      tofuNodes ? false,
     }:
     let
       allPkgs = lib.mapAttrs (_name: path: import path { }) sources;
@@ -140,12 +141,15 @@ let
           p: (!(p ? excludeIf && p.excludeIf name config)) && (p ? includeIf && p.includeIf name config)
         ) defaultPhase plan.phases).name;
     in
-    {
-      configJson = json.generate "plan-config.json" {
-        deployment = deploymentConfig;
-        phases = phasesWithNodes plans.plans.${plan};
-      };
-    }
-    // (mapAttrs (_: v: v.config.system.build.toplevel) nodes);
+    if tofuNodes then
+      nodes
+    else
+      {
+        configJson = json.generate "plan-config.json" {
+          deployment = deploymentConfig;
+          phases = phasesWithNodes plans.plans.${plan};
+        };
+      }
+      // (mapAttrs (_: v: v.config.system.build.toplevel) nodes);
 in
 evalPlan
