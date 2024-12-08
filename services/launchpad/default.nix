@@ -8,7 +8,7 @@ let
   inherit (lib) mkEnableOption mkIf;
 
   cfg = config.mjm.launchpad;
-  pkg = import ../../apps/launchpad { inherit pkgs; };
+  pkg = pkgs.launchpad;
 
   serviceEnv = {
     OTEL_SERVICE_NAME = "launchpad";
