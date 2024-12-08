@@ -1,0 +1,1 @@
+{ vault-bin }: vault-bin

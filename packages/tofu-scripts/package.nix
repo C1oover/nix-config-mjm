@@ -1,11 +1,14 @@
 {
   lib,
+  oldpkgs,
   writeNuBin,
   coreutils,
   vault,
-  opentofu,
-  terraformConfiguration,
 }:
+
+let
+  inherit (import ../../terraform { pkgs = oldpkgs; }) opentofu terraformConfiguration;
+in
 
 writeNuBin "tofu-scripts" {
   makeWrapperArgs = [
