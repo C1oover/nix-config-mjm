@@ -4,7 +4,9 @@
   nushell,
   nu-lib,
 }:
+
 name: argsOrScript:
+
 let
   interpreter = "${lib.getExe nushell} --no-config-file --include-path ${nu-lib}/share/nu";
 in
