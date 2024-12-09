@@ -98,15 +98,33 @@ in
       openFirewall = true;
     };
 
-    services.consul.services.bind-exporter = {
-      inherit (config.services.prometheus.exporters.bind) port;
+    services.consul.services = {
+      bind = {
+        port = 53;
 
-      metrics.enable = true;
+        checks.up = {
+          script.args = [
+            (lib.getExe pkgs.dig)
+            "@127.0.0.1"
+            "google.com"
+          ];
+          intervalSeconds = 10;
+          timeoutSeconds = 5;
+        };
+      };
 
-      checks.up = {
-        http.path = "/";
-        intervalSeconds = 30;
+      bind-exporter = {
+        inherit (config.services.prometheus.exporters.bind) port;
+
+        metrics.enable = true;
+
+        checks.up = {
+          http.path = "/";
+          intervalSeconds = 30;
+        };
       };
     };
+
+    deployment.consulChecks = [ "bind" ];
   };
 }
