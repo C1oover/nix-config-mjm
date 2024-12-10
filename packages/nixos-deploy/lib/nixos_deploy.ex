@@ -302,7 +302,7 @@ defmodule NixosDeploy do
 
       node.deploy_config["consulChecks"]
       |> Task.async_stream(__MODULE__, :wait_for_consul_check, [node],
-        timeout: 600_000,
+        timeout: to_timeout(minute: 30),
         max_concurrency: consul_check_count
       )
       |> Stream.run()
