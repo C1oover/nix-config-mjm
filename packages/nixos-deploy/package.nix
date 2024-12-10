@@ -28,7 +28,7 @@ beamPackages.mixRelease rec {
   mixFodDeps = beamPackages.fetchMixDeps {
     inherit version src;
     pname = "nixos-deploy-deps";
-    hash = "sha256-BEWkuXh1fTrCBBTCFBloSHHA83YtHF2znOaLIdL14Xk=";
+    hash = "sha256-d2VZ5uAzxK9xvC29zBsC4lyB+Yza21BKJvs494Vs50E=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
