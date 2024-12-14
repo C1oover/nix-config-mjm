@@ -94,7 +94,10 @@ in
       restartIfChanged = false;
       environment = serviceEnv;
 
-      after = [ "network.target" ];
+      after = [
+        "network.target"
+        "netbox.service"
+      ];
 
       serviceConfig = {
         Type = "oneshot";
