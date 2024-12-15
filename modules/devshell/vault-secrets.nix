@@ -9,14 +9,15 @@ let
     attrValues
     concatMap
     concatMapStringsSep
+    filter
     getExe
     mkIf
     mkOption
+    pipe
     types
     ;
 
   cfg = config.vault-secrets;
-  secretsDir = config.env.DEVENV_SECRETS;
 
   allServices = (attrValues cfg.services) ++ (attrValues cfg.common);
   allKeys = concatMap (svc: attrValues svc.keys) allServices;
@@ -35,6 +36,10 @@ let
             type = types.str;
             default = name;
           };
+          envVarName = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+          };
           namespace = mkOption {
             type = types.str;
             default = opts.namespace;
@@ -47,7 +52,7 @@ let
           };
           path = mkOption {
             type = types.str;
-            default = "${secretsDir}/${config.serviceName}_${config.name}";
+            default = "$SECRETS_DIR/${config.serviceName}_${config.name}";
             readOnly = true;
           };
           vaultPath = mkOption {
@@ -86,16 +91,34 @@ let
 in
 {
   options.vault-secrets = {
-    services = mkOption { type = types.attrsOf (serviceType "services"); };
-    common = mkOption { type = types.attrsOf (serviceType "common"); };
+    services = mkOption {
+      type = types.attrsOf (serviceType "services");
+      default = { };
+    };
+    common = mkOption {
+      type = types.attrsOf (serviceType "common");
+      default = { };
+    };
   };
 
   config = mkIf (allKeys != [ ]) {
-    env.DEVENV_SECRETS = "${config.env.DEVENV_STATE}/secrets";
-    env.CREDENTIALS_DIRECTORY = config.env.DEVENV_SECRETS;
+    env =
+      [
+        {
+          name = "SECRETS_DIR";
+          eval = "$PRJ_DATA_DIR/secrets";
+        }
+      ]
+      ++ pipe allKeys [
+        (filter (key: key.envVarName != null))
+        (map (key: {
+          name = key.envVarName;
+          eval = key.path;
+        }))
+      ];
 
-    enterShell = ''
-      mkdir -p $DEVENV_SECRETS
+    devshell.startup.secrets.text = ''
+      mkdir -p $SECRETS_DIR
       ${concatMapStringsSep "\n" writeSecret allKeys}
     '';
   };

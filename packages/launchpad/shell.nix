@@ -1,6 +1,6 @@
 let
   sources = import ../../npins;
-  pkgs = import sources.nixos-small { };
+  pkgs = import sources.nixos-small { config.allowUnfree = true; };
   devshell = import sources.devshell { nixpkgs = pkgs; };
 in
 devshell.mkShell (
@@ -18,6 +18,7 @@ devshell.mkShell (
   in
   {
     imports = [
+      ../../modules/devshell/vault-secrets.nix
       "${extraModulesPath}/services/postgres.nix"
       "${extraModulesPath}/language/c.nix"
       "${extraModulesPath}/language/rust.nix"
@@ -43,11 +44,13 @@ devshell.mkShell (
         ;
     };
 
+    vault-secrets.services.launchpad.keys = {
+      paperless_token.envVarName = "LAUNCHPAD_PAPERLESS_TOKEN_FILE";
+      netbox_token.envVarName = "LAUNCHPAD_NETBOX_TOKEN_FILE";
+      gitlab_token.envVarName = "LAUNCHPAD_GITLAB_TOKEN_FILE";
+    };
+
     env = [
-      (nameEvalPair "SECRETS_DIR" "$PRJ_DATA_DIR/secrets")
-      (nameEvalPair "LAUNCHPAD_PAPERLESS_TOKEN_FILE" "$SECRETS_DIR/paperless_token")
-      (nameEvalPair "LAUNCHPAD_NETBOX_TOKEN_FILE" "$SECRETS_DIR/netbox_token")
-      (nameEvalPair "LAUNCHPAD_GITLAB_TOKEN_FILE" "$SECRETS_DIR/gitlab_token")
       (nameEvalPair "LAUNCHPAD_REMINDERS_TOPIC_FILE" "$SECRETS_DIR/reminders_topic")
 
       (nameEvalPair "DATABASE_URL" "postgresql:///$USER?host=$PGHOST")
@@ -57,9 +60,5 @@ devshell.mkShell (
       (nameValuePair "OTEL_RESOURCE_ATTRIBUTES" "deployment.environment.name=dev")
       (nameValuePair "OTEL_EXPORTER_OTLP_ENDPOINT" "http://tempo.service.consul:14317")
     ];
-
-    devshell.startup.secrets.text = ''
-      mkdir -p $SECRETS_DIR
-    '';
   }
 )
