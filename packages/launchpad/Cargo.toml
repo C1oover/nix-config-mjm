@@ -13,6 +13,7 @@ chrono-tz = "0.10.0"
 clap = { version = "4.5.18", features = ["derive"] }
 figment = { version = "0.10", features = ["env"] }
 figment_file_provider_adapter = "0.1.1"
+futures = "0.3.31"
 gitlab = "0.1703.0"
 graphql_client = "0.14.0"
 listenfd = "1.0.1"
