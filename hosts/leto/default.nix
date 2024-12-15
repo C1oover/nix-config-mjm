@@ -42,7 +42,6 @@
   mjm.garage.enable = true;
   mjm.grafana.enable = true;
   mjm.home-assistant.enable = true;
-  mjm.homelab.enable = true;
   mjm.launchpad.enable = true;
   mjm.linkding.enable = true;
   mjm.miniflux.enable = true;

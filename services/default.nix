@@ -10,7 +10,6 @@
     ./gitlab-runner
     ./grafana
     ./home-assistant
-    ./homelab
     ./icloudpd
     ./ingress
     ./ipv4-proxy
