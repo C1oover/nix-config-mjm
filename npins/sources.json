@@ -13,16 +13,19 @@
       "hash": "108y21dbqjd3jwq92i4k19pkb0pqm83yj3999b144jhmryx668rr"
     },
     "catppuccin": {
-      "type": "Git",
+      "type": "GitRelease",
       "repository": {
         "type": "GitHub",
         "owner": "catppuccin",
         "repo": "nix"
       },
-      "branch": "main",
-      "revision": "20b6328df20ae45752c81311d225fd47cba32483",
-      "url": "https://github.com/catppuccin/nix/archive/20b6328df20ae45752c81311d225fd47cba32483.tar.gz",
-      "hash": "06s4ggr8b2cjj072m9z8y724d7fln04npwvdj1w749gxipcpz8f1"
+      "pre_releases": false,
+      "version_upper_bound": null,
+      "release_prefix": null,
+      "version": "v1.1.1",
+      "revision": "34467ac16c05ce04d4cede653c3ef21360fbd912",
+      "url": "https://api.github.com/repos/catppuccin/nix/tarball/v1.1.1",
+      "hash": "1brbmaawvp9pv7m93jkhyzzxjqxd19yclw4s23xs1v1v1a1qj9d4"
     },
     "catppuccin-home-assistant": {
       "type": "Git",
