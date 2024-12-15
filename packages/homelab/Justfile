@@ -1,2 +1,0 @@
-dev:
-    $(nix-build shell.nix -A config.procfileScript --no-out-link)
