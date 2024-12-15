@@ -1,0 +1,20 @@
+meta {
+  name: List Deployment Pipelines
+  type: http
+  seq: 1
+}
+
+get {
+  url: https://git.midna.dev/api/v4/projects/:project/pipelines?source=push&ref=main
+  body: none
+  auth: none
+}
+
+params:query {
+  source: push
+  ref: main
+}
+
+params:path {
+  project: {{project}}
+}

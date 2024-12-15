@@ -4,11 +4,13 @@ use anyhow::Result;
 use chrono::{DateTime, Utc};
 use futures::future::try_join_all;
 use gitlab::api::common::SortOrder;
+use gitlab::api::projects::repository::commits;
 use gitlab::api::projects::{self, deployments::DeploymentOrderBy};
 use gitlab::api::projects::{merge_requests, pipelines};
 use gitlab::api::{raw, AsyncQuery};
 use gitlab::AsyncGitlab;
 use serde::{Deserialize, Serialize};
+use tokio::try_join;
 
 const GITLAB_PROJECT: &str = "mjm/nix-config";
 
@@ -48,15 +50,73 @@ impl GitLabClient {
             .build()?;
 
         let mut mr: MergeRequest = endpoint.query_async(&self.client).await?;
+        mr.head_pipeline = self.load_pipeline_jobs(mr.head_pipeline).await?;
+        Ok(mr)
+    }
 
-        let jobs_endpoint = pipelines::PipelineJobs::builder()
+    #[tracing::instrument(skip(self), ret, err)]
+    pub async fn list_deployment_pipelines(self: &Self) -> Result<Vec<AnnotatedPipeline>> {
+        let endpoint = pipelines::Pipelines::builder()
             .project(GITLAB_PROJECT)
-            .pipeline(mr.head_pipeline.id)
+            .source(pipelines::PipelineSource::Push)
+            .ref_("main")
             .build()?;
 
-        mr.head_pipeline.jobs = jobs_endpoint.query_async(&self.client).await?;
+        let pipelines: Vec<Pipeline> = endpoint.query_async(&self.client).await?;
 
-        Ok(mr)
+        Ok(try_join_all(
+            pipelines
+                .into_iter()
+                .map(|pipeline| self.annotate_pipeline(pipeline)),
+        )
+        .await?)
+    }
+
+    async fn annotate_pipeline(self: &Self, pipeline: Pipeline) -> Result<AnnotatedPipeline> {
+        let sha = pipeline.sha.clone();
+        let (commit, merge_request, pipeline) = try_join!(
+            self.get_commit_details(&sha),
+            self.get_commit_merge_request(&sha),
+            self.load_pipeline_jobs(pipeline)
+        )?;
+
+        Ok(AnnotatedPipeline {
+            pipeline,
+            commit,
+            merge_request,
+        })
+    }
+
+    #[tracing::instrument(skip(self), ret, err)]
+    async fn get_commit_details(self: &Self, sha: &str) -> Result<Commit> {
+        let endpoint = commits::Commit::builder()
+            .project(GITLAB_PROJECT)
+            .commit(sha)
+            .build()?;
+
+        Ok(endpoint.query_async(&self.client).await?)
+    }
+
+    #[tracing::instrument(skip(self), ret, err)]
+    async fn get_commit_merge_request(self: &Self, sha: &str) -> Result<Option<MergeRequestBasic>> {
+        let endpoint = commits::MergeRequests::builder()
+            .project(GITLAB_PROJECT)
+            .sha(sha)
+            .build()?;
+
+        let mut mrs: Vec<_> = endpoint.query_async(&self.client).await?;
+        Ok(mrs.pop())
+    }
+
+    #[tracing::instrument(skip(self), ret, err)]
+    async fn load_pipeline_jobs(self: &Self, mut pipeline: Pipeline) -> Result<Pipeline> {
+        let endpoint = pipelines::PipelineJobs::builder()
+            .project(GITLAB_PROJECT)
+            .pipeline(pipeline.id)
+            .build()?;
+
+        pipeline.jobs = endpoint.query_async(&self.client).await?;
+        Ok(pipeline)
     }
 
     #[tracing::instrument(skip(self), ret, err)]
@@ -103,6 +163,16 @@ struct MergeRequestSimple {
     iid: u64,
 }
 
+#[derive(Deserialize, Debug, PartialEq, Eq)]
+struct MergeRequestBasic {
+    id: u64,
+    iid: u64,
+    title: String,
+    state: MergeRequestState,
+    web_url: String,
+    created_at: DateTime<Utc>,
+}
+
 #[derive(Deserialize, Serialize, Debug)]
 struct MergeRequest {
     id: i64,
@@ -127,8 +197,27 @@ enum MergeRequestState {
 struct Pipeline {
     id: u64,
     iid: u64,
+    sha: String,
+    web_url: String,
+    created_at: DateTime<Utc>,
     #[serde(skip)]
     jobs: Vec<Job>,
+}
+
+#[derive(Debug)]
+struct AnnotatedPipeline {
+    pipeline: Pipeline,
+    commit: Commit,
+    merge_request: Option<MergeRequestBasic>,
+}
+
+impl AnnotatedPipeline {
+    fn title(self: &Self) -> String {
+        match &self.merge_request {
+            Some(mr) => mr.title.clone(),
+            None => self.commit.title.clone(),
+        }
+    }
 }
 
 #[derive(Deserialize, Serialize, Debug)]
@@ -139,19 +228,6 @@ struct Deployment {
     created_at: DateTime<Utc>,
     updated_at: DateTime<Utc>,
     deployable: Job,
-}
-
-impl Deployment {
-    fn is_failed(self: &Self) -> bool {
-        match self.status {
-            DeploymentStatus::Failed | DeploymentStatus::Canceled => true,
-            _ => false,
-        }
-    }
-
-    fn is_blocked(self: &Self) -> bool {
-        self.status == DeploymentStatus::Blocked
-    }
 }
 
 #[derive(Deserialize, Serialize, Debug, PartialEq, Eq)]
@@ -211,19 +287,6 @@ enum JobStatus {
 #[derive(Deserialize, Serialize, Debug, PartialEq, Eq)]
 struct Commit {
     id: String,
+    title: String,
     message: String,
-}
-
-impl Commit {
-    fn split_message(self: &Self) -> (String, Option<String>) {
-        match self.message.bytes().position(|c| c == b'\n') {
-            None => (self.message.clone(), None),
-            Some(idx) => {
-                let (first, rest) = self.message.split_at(idx);
-                // it's possible for the trimmed last component to be an empty string,
-                // which should probably be None rather than Some("")
-                (first.to_string(), Some(rest.trim().to_string()))
-            }
-        }
-    }
 }

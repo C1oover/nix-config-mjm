@@ -1,0 +1,16 @@
+meta {
+  name: Get Commit
+  type: http
+  seq: 2
+}
+
+get {
+  url: https://git.midna.dev/api/v4/projects/:project/repository/commits/:sha
+  body: none
+  auth: none
+}
+
+params:path {
+  project: {{project}}
+  sha: bcf395f7e7d5a8829e41e234baaf809023933e99
+}
