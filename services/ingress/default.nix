@@ -191,6 +191,30 @@ in
                 metrics = { };
                 automatic_https.disable_certificates = true;
                 routes = map mkVhostRoute (attrValues vhosts);
+                errors.routes = [
+                  {
+                    match = [
+                      {
+                        vars."{http.error.status_code}" = [ "503" ];
+                        vars."{http.error.message}" = [ "no upstreams available" ];
+                      }
+                    ];
+                    handle = [
+                      {
+                        handler = "static_response";
+                        body = "Sorry, no proxy upstreams are available. This means either the service you're accessing or Authelia have no healthy backends right now.";
+                      }
+                    ];
+                  }
+                  {
+                    handle = [
+                      {
+                        handler = "static_response";
+                        body = "Sorry, something went wrong: {http.error.message}\n\nThe error came from {http.error.trace}";
+                      }
+                    ];
+                  }
+                ];
               };
               servers.metrics = {
                 listen = [ ":2020" ];
