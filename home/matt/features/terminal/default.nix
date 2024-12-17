@@ -1,25 +1,16 @@
-{
-  pkgs,
-  lib,
-  config,
-  ...
-}:
+{ lib, ... }:
 let
-  inherit (lib) mkEnableOption mkIf;
-  cfg = config.mjm.terminal;
+  inherit (lib) mkEnableOption;
 in
 {
   imports = [
     ./alacritty.nix
     ./kitty.nix
     ./wezterm.nix
+    ./zellij.nix
   ];
 
   options.mjm.terminal = {
     enable = mkEnableOption "terminal";
-  };
-
-  config = mkIf cfg.enable {
-    home.packages = builtins.attrValues { inherit (pkgs.callPackages ./scripts.nix { }) tt; };
   };
 }

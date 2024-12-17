@@ -1,5 +1,4 @@
 {
-  pkgs,
   config,
   lib,
   osConfig,
@@ -37,15 +36,6 @@ in
         ];
         window.option_as_alt = "Both";
       };
-    };
-
-    programs.zellij = {
-      enable = true;
-    };
-
-    xdg.configFile."zellij/config.kdl".source = pkgs.substituteAll {
-      src = ./zellij.kdl;
-      copy_command = if pkgs.stdenv.isDarwin then "pbcopy" else "wl-copy";
     };
   };
 }
