@@ -136,6 +136,11 @@ in
 
       networking.firewall.allowedUDPPorts = [ 8302 ];
 
+      networking.firewall.extraCommands = ''
+        iptables -t nat -A PREROUTING -p udp --dport 53 -j REDIRECT --to-ports 8600
+        iptables -t nat -A PREROUTING -p tcp --dport 53 -j REDIRECT --to-ports 8600
+      '';
+
       mjm.state.directories = [
         {
           directory = "/var/lib/consul";
