@@ -8,10 +8,13 @@ use crate::{app, deploys::JobStatus};
 use super::{AnnotatedPipeline, GitLabClient, Job, MergeRequest};
 
 pub fn router() -> Router<app::State> {
-    Router::new().route("/deploys", get(index))
+    Router::new()
+        .route("/deploys", get(index))
+        .route("/deploys/merge-requests", get(merge_requests))
+        .route("/deploys/recent", get(recent_deployments))
 }
 
-#[tracing::instrument(skip(client))]
+#[tracing::instrument(skip(client), err)]
 async fn index(State(client): State<GitLabClient>) -> Result<impl IntoResponse, app::Error> {
     let (mrs, deploys) = try_join!(
         client.list_open_merge_requests(),
@@ -23,25 +26,47 @@ async fn index(State(client): State<GitLabClient>) -> Result<impl IntoResponse, 
         html! {
             h1 .mb-4 { "Deploys" }
 
-            @if !mrs.is_empty() {
-                h2 .mb-3 { "Open merge requests"}
-
-                ul .list-group .mb-4 {
-                    @for mr in &mrs {
-                        (merge_request_row(&mr))
-                    }
-                }
+            div hx-get="/deploys/merge-requests" hx-trigger="every 1m" {
+                (render_merge_requests(mrs))
             }
 
             h2 .mb-3 { "Recent deployments" }
 
-            ul .list-group {
-                @for deploy in &deploys {
-                    (deployment_row(deploy))
-                }
+            div hx-get="/deploys/recent" hx-trigger="every 1m" {
+                (render_deployments(deploys))
             }
         },
     ))
+}
+
+#[tracing::instrument(skip(client), err)]
+async fn merge_requests(
+    State(client): State<GitLabClient>,
+) -> Result<impl IntoResponse, app::Error> {
+    let mrs = client.list_open_merge_requests().await?;
+    Ok(render_merge_requests(mrs))
+}
+
+#[tracing::instrument(skip(client), err)]
+async fn recent_deployments(
+    State(client): State<GitLabClient>,
+) -> Result<impl IntoResponse, app::Error> {
+    let deploys = client.list_deployment_pipelines().await?;
+    Ok(render_deployments(deploys))
+}
+
+fn render_merge_requests(mrs: Vec<MergeRequest>) -> Markup {
+    html! {
+        @if !mrs.is_empty() {
+            h2 .mb-3 { "Open merge requests"}
+
+            ul .list-group .mb-4 {
+                @for mr in &mrs {
+                    (merge_request_row(&mr))
+                }
+            }
+        }
+    }
 }
 
 fn merge_request_row(mr: &MergeRequest) -> Markup {
@@ -64,6 +89,16 @@ fn merge_request_row(mr: &MergeRequest) -> Markup {
                 }
 
                 (pipeline_jobs_list(&mr.head_pipeline.jobs))
+            }
+        }
+    }
+}
+
+fn render_deployments(deploys: Vec<AnnotatedPipeline>) -> Markup {
+    html! {
+        ul .list-group .mb-5 {
+            @for deploy in &deploys {
+                (deployment_row(deploy))
             }
         }
     }
