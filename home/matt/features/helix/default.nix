@@ -30,10 +30,6 @@ in
     programs.helix = {
       enable = true;
       defaultEditor = true;
-      catppuccin = {
-        enable = true;
-        useItalics = true;
-      };
       package = helix;
       extraPackages = with pkgs; [
         elixir-ls
@@ -174,6 +170,11 @@ in
           }
         ];
       };
+    };
+
+    catppuccin.helix = {
+      enable = true;
+      useItalics = true;
     };
 
     xdg.configFile."helix" = {

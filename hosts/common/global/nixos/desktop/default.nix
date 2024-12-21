@@ -94,17 +94,15 @@ in
     };
 
     boot.consoleLogLevel = 3;
-    boot.plymouth = {
-      enable = true;
-      catppuccin.enable = true;
-    };
+    boot.plymouth.enable = true;
     boot.kernelParams = [ "quiet" ];
     console = {
       earlySetup = true;
       font = "${pkgs.terminus_font}/share/consolefonts/ter-u32n.psf.gz";
       keyMap = "us";
-      catppuccin.enable = true;
     };
+    catppuccin.plymouth.enable = true;
+    catppuccin.tty.enable = true;
 
     services.resolved.enable = true;
     services.avahi.enable = true;

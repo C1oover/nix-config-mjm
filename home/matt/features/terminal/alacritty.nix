@@ -25,7 +25,6 @@ in
   config = mkIf (cfg.enable && cfg.alacritty.enable) {
     programs.alacritty = {
       enable = true;
-      catppuccin.enable = true;
       settings = {
         font.normal.family = "PragmataPro Mono Liga";
         font.size = mkDefault 14;
@@ -37,5 +36,7 @@ in
         window.option_as_alt = "Both";
       };
     };
+
+    catppuccin.alacritty.enable = true;
   };
 }

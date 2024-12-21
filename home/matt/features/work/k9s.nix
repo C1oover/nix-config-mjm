@@ -5,10 +5,8 @@ let
 in
 {
   config = mkIf cfg.enable {
-    programs.k9s = {
-      enable = true;
-      catppuccin.enable = true;
-    };
+    programs.k9s.enable = true;
+    catppuccin.k9s.enable = true;
 
     programs.nushell.extraConfig = ''
       def --wrapped k9s [...args] {

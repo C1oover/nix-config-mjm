@@ -1,5 +1,4 @@
 {
-  pkgs,
   lib,
   inputs,
   config,
@@ -24,10 +23,7 @@ in
     programs.zsh = {
       enable = true;
       enableCompletion = true;
-      syntaxHighlighting = {
-        enable = true;
-        catppuccin.enable = true;
-      };
+      syntaxHighlighting.enable = true;
       enableVteIntegration = true;
       autosuggestion.enable = true;
       defaultKeymap = "emacs";
@@ -53,11 +49,8 @@ in
       '';
     };
 
-    programs.carapace.enable = true;
-
     programs.starship = {
       enable = true;
-      catppuccin.enable = true;
       settings = mkMerge [
         {
           command_timeout = 2000;
@@ -85,12 +78,6 @@ in
       };
     };
 
-    programs.fzf = {
-      enable = true;
-      enableZshIntegration = true;
-      catppuccin.enable = true;
-    };
-
     programs.atuin = {
       enable = true;
       settings = {
@@ -98,12 +85,8 @@ in
       };
     };
 
-    programs.dircolors.enable = true;
-    programs.zoxide.enable = true;
-
     programs.eza = {
       enable = true;
-      # enableNushellIntegration = true;
       git = true;
       icons = "auto";
       extraOptions = [
@@ -114,23 +97,24 @@ in
       ];
     };
 
-    programs.bat = {
-      enable = true;
-      catppuccin.enable = true;
+    programs.bat.enable = true;
+    programs.btop.enable = true;
+    programs.carapace.enable = true;
+    programs.dircolors.enable = true;
+    programs.fzf.enable = true;
+    programs.yazi.enable = true;
+    programs.zoxide.enable = true;
+
+    catppuccin = {
+      bat.enable = true;
+      btop.enable = true;
+      fzf.enable = true;
+      starship.enable = true;
+      yazi.enable = true;
+      zsh-syntax-highlighting.enable = true;
     };
 
-    programs.yazi = {
-      enable = true;
-      catppuccin.enable = true;
-      enableZshIntegration = true;
-      enableNushellIntegration = true;
-    };
-
-    programs.btop = {
-      enable = true;
-      catppuccin.enable = true;
-    };
-
-    xdg.configFile."process-compose/theme.yaml".source = "${inputs.catppuccin-process-compose}/themes/catppuccin-${config.catppuccin.flavor}.yaml";
+    xdg.configFile."process-compose/theme.yaml".source =
+      "${inputs.catppuccin-process-compose}/themes/catppuccin-${config.catppuccin.flavor}.yaml";
   };
 }

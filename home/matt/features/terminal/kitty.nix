@@ -20,7 +20,6 @@ in
   config = mkIf (cfg.enable && cfg.kitty.enable) {
     programs.kitty = {
       enable = true;
-      catppuccin.enable = true;
       font.name = "Noto Sans Mono";
       font.size = mkDefault 14;
       settings = {
@@ -60,5 +59,7 @@ in
       };
       darwinLaunchOptions = [ "--listen-on=unix:kitty.sock" ];
     };
+
+    catppuccin.kitty.enable = true;
   };
 }
