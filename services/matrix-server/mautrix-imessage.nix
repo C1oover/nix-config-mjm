@@ -53,7 +53,7 @@ let
   # ideally I can eventually get it to run as a launchd agent
   script = pkgs.writeShellScriptBin "run-mautrix-imessage" ''
     cd /Users/mjm/matrix
-    umask 0177
+    umask 0077
 
     test -f config.yaml && rm -f config.yaml
     cp '${configFile}' config.yaml
