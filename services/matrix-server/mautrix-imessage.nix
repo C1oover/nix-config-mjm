@@ -40,7 +40,7 @@ let
       user = "@mjm:midna.dev";
       username_template = "imessage_{{.}}";
       displayname_template = "{{.}} (iMessage)";
-      # personal_filtering_spaces = true;
+      personal_filtering_spaces = true;
       convert_heif = true;
       convert_tiff = true;
       backfill.enable = true;
