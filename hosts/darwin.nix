@@ -21,4 +21,5 @@ let
 in
 {
   athena = mkDarwin "aarch64" [ ./athena ];
+  mars = mkDarwin "x86_64" [ ./mars ];
 }

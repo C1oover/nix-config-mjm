@@ -21,7 +21,7 @@ let
       ${optionalString pkgs.stdenv.isLinux ''[ -z "$__NIXOS_SET_ENVIRONMENT_DONE" ] && . /etc/set-environment''}
       ${optionalString pkgs.stdenv.isDarwin ''
         [ -z "$__NIX_DARWIN_SET_ENVIRONMENT_DONE" ] && . ${config.system.build.setEnvironment}
-        eval "$(/opt/homebrew/bin/brew shellenv)"
+        ${optionalString config.homebrew.enable ''eval "$(${config.homebrew.brewPrefix}/brew shellenv)"''}
       ''}
       HM_VARS=/etc/profiles/per-user/$USER/etc/profile.d/hm-session-vars.sh
       [ -f "$HM_VARS" ] && . "$HM_VARS"

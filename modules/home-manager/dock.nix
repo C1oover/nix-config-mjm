@@ -7,6 +7,7 @@
 let
   inherit (lib)
     concatMapStrings
+    elem
     hasSuffix
     mkIf
     mkMerge
@@ -16,6 +17,11 @@ let
 
   cfg = config.home.dock;
   stdenv = pkgs.stdenv;
+
+  systemApps = [
+    "Mail"
+    "Messages"
+  ];
 in
 {
   options = {
@@ -61,7 +67,7 @@ in
                   path =
                     let
                       prefix =
-                        if config.app == "Mail" then
+                        if elem config.app systemApps then
                           "/System"
                         else if config.package != null then
                           "${config.package}"

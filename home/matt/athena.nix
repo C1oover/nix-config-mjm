@@ -12,6 +12,13 @@
   programs.kitty.font.size = 13;
   programs.alacritty.settings.font.size = 16;
 
+  home.packages = builtins.attrValues {
+    inherit (pkgs)
+      discord
+      shortcat
+      ;
+  };
+
   home.dock.entries = [
     {
       app = "Firefox";
@@ -50,4 +57,10 @@
       options = "--sort dateadded --view grid --display folder";
     }
   ];
+
+  targets.darwin.defaults = {
+    "com.tinyspeck.slackmacgap" = {
+      SlackNoAutoUpdates = true;
+    };
+  };
 }
