@@ -1,16 +1,7 @@
-{ pkgs, lib, ... }:
+{ pkgs, ... }:
 {
-  nixpkgs.config.allowUnfree = true;
-
-  home.username = lib.mkDefault "matt";
-  home.homeDirectory = lib.mkDefault "/Users/matt";
-
   home.packages = with pkgs; [
-    colima
     dockutil
-
-    discord
-    shortcat
   ];
 
   mjm.firefox = {
@@ -18,10 +9,4 @@
     package = pkgs.firefox-bin;
   };
   mjm.terminal.enable = true;
-
-  targets.darwin.defaults = {
-    "com.tinyspeck.slackmacgap" = {
-      SlackNoAutoUpdates = true;
-    };
-  };
 }

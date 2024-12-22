@@ -26,10 +26,6 @@
 
   security.pam.enableSudoTouchIdAuth = true;
 
-  users.users.matt = {
-    home = "/Users/matt";
-  };
-
   environment.etc."sudoers.d/admin-no-passwd".text = ''
     %admin ALL = (ALL) NOPASSWD: ALL
   '';

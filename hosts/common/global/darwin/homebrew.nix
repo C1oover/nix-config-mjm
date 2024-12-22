@@ -1,6 +1,7 @@
+{ lib, ... }:
 {
   homebrew = {
-    enable = true;
+    enable = lib.mkDefault true;
     casks = [
       "1password"
       "1password/tap/1password-cli"

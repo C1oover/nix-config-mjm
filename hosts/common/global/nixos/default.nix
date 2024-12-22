@@ -1,5 +1,4 @@
 {
-  config,
   pkgs,
   lib,
   inputs,
@@ -43,14 +42,6 @@ in
   time.timeZone = lib.mkDefault "Etc/UTC";
 
   users.mutableUsers = false;
-  users.users.matt = {
-    isNormalUser = true;
-    description = "MJ";
-    extraGroups = [ "wheel" ];
-    shell = config.programs.nushell.wrappedPackage;
-    hashedPassword = "$y$j9T$tM/RKSjlb5ljgtpGT/Y8N1$3oXxWQh/q.KKCcJKoyVeIUVqjjt76EWX.uNEJRASt04";
-  };
-
   security.sudo.wheelNeedsPassword = false;
 
   programs.nushell.enable = true;
