@@ -8,7 +8,9 @@
 
   deployment.targetHost = null;
 
-  environment.systemPackages = [ pkgs.sbctl ];
+  environment.systemPackages = lib.attrValues {
+    inherit (pkgs) chrysalis sbctl;
+  };
 
   mjm.desktop.enable = true;
 
@@ -38,6 +40,7 @@
     ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="046d", ATTRS{idProduct}=="c24a", ATTR{power/wakeup}="enabled"
     ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="3496", ATTRS{idProduct}=="0006", ATTR{power/wakeup}="enabled"
   '';
+  services.udev.packages = [ pkgs.chrysalis ];
 
   services.openssh.enable = true;
 
