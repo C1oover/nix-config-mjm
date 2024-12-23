@@ -26,6 +26,7 @@ let
     vacuum = True
     buffer-size = 8192
     die-on-term = true
+    mime-file = ${pkgs.mailcap}/etc/mime.types
 
     if-env = LD_CONTEXT_PATH
     static-map = /%(_)static=static
