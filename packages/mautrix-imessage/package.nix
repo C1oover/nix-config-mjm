@@ -17,6 +17,11 @@ let
       hash = "sha256-damlKiv5a1qxRr8YGK+WCrOwYet9PI3nHv7hnFErm0I=";
     };
   };
+
+  olm' = olm.overrideAttrs {
+    patches = [ ./list.patch ];
+    patchFlags = [ "-p0" ];
+  };
 in
 
 buildGoModule {
@@ -34,7 +39,7 @@ buildGoModule {
 
   buildInputs = [
     libheif'
-    olm
+    olm'
   ];
 
   tags = [ "libheif" ];

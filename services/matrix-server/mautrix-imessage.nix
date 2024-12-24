@@ -5,7 +5,12 @@
   ...
 }:
 let
-  inherit (lib) mkEnableOption mkIf;
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    mkOption
+    types
+    ;
 
   cfg = config.mjm.matrix-server;
   pkg = pkgs.mautrix-imessage;
@@ -18,7 +23,7 @@ let
       websocket_proxy = null;
     };
     appservice = {
-      hostname = "10.0.0.50";
+      hostname = "${config.networking.hostName}.home.mattmoriarity.com";
       port = 29400;
       database = {
         type = "sqlite3-fk-wal";
@@ -32,7 +37,7 @@ let
     imessage = {
       platform = "mac-nosip";
       # TODO package with Nix
-      imessage_rest_path = "/Users/mjm/matrix/barcelona-mautrix";
+      imessage_rest_path = cfg.bridges.imessage.barcelonaMautrixPath;
       contacts_mode = "mac";
       unix_socket = "mautrix-imessage.sock";
     };
@@ -52,7 +57,7 @@ let
   #
   # ideally I can eventually get it to run as a launchd agent
   script = pkgs.writeShellScriptBin "run-mautrix-imessage" ''
-    cd /Users/mjm/matrix
+    cd '${cfg.bridges.imessage.dataPath}'
     umask 0077
 
     test -f config.yaml && rm -f config.yaml
@@ -81,6 +86,14 @@ in
 {
   options.mjm.matrix-server.bridges.imessage = {
     enable = mkEnableOption "iMessage bridge";
+    dataPath = mkOption {
+      type = types.path;
+      default = "/Users/mjm/Library/Application Support/mautrix-imessage";
+    };
+    barcelonaMautrixPath = mkOption {
+      type = types.path;
+      default = "/usr/local/bin/barcelona-mautrix";
+    };
   };
 
   config = mkIf cfg.bridges.imessage.enable {

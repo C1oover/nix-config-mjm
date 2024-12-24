@@ -10,6 +10,7 @@ let
     mkDefault
     mkEnableOption
     mkIf
+    optional
     ;
   cfg = config.mjm.git;
 
@@ -18,18 +19,23 @@ in
 {
   options.mjm.git = {
     enable = mkEnableOption "Git configuration";
+
+    enableWatchman = mkEnableOption "watchman for jujutsu" // {
+      default = true;
+    };
   };
 
   config = mkIf cfg.enable {
-    home.packages = attrValues {
-      inherit git-scripts;
-      inherit (pkgs)
-        glab
-        git-credential-manager
-        meld
-        watchman
-        ;
-    };
+    home.packages =
+      attrValues {
+        inherit git-scripts;
+        inherit (pkgs)
+          glab
+          git-credential-manager
+          meld
+          ;
+      }
+      ++ optional cfg.enableWatchman pkgs.watchman;
 
     programs.git = {
       enable = true;
@@ -74,7 +80,7 @@ in
           merge-editor = "meld";
         };
 
-        core.fsmonitor = "watchman";
+        core.fsmonitor = mkIf cfg.enableWatchman "watchman";
 
         revset-aliases = {
           "merge_base(x)" = "merge_base(trunk(), x)";

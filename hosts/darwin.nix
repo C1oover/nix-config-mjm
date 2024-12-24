@@ -22,4 +22,5 @@ in
 {
   athena = mkDarwin "aarch64" [ ./athena ];
   mars = mkDarwin "x86_64" [ ./mars ];
+  talos = mkDarwin "x86_64" [ ./talos ];
 }
