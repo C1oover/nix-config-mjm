@@ -60,6 +60,11 @@
     "address": "10.0.2.35"
   },
   {
+    "name": "talos",
+    "family": 4,
+    "address": "10.0.2.36"
+  },
+  {
     "name": "aether",
     "family": 4,
     "address": "10.0.2.37"
