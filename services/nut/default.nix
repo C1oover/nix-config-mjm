@@ -1,6 +1,7 @@
 { config, lib, ... }:
 let
   inherit (lib)
+    genAttrs
     mkEnableOption
     mkIf
     mkMerge
@@ -8,6 +9,11 @@ let
     types
     ;
   cfg = config.mjm.nut;
+
+  upsNames = [
+    "or500"
+    "smart500"
+  ];
 in
 {
   options.mjm.nut = {
@@ -20,6 +26,15 @@ in
       ];
       default = "client";
     };
+
+    connectedUPSName = mkOption {
+      type = types.enum upsNames;
+    };
+
+    serverHostname = mkOption {
+      type = types.str;
+      default = "10.0.0.2";
+    };
   };
 
   config = mkIf cfg.enable (mkMerge [
@@ -29,7 +44,6 @@ in
       power.ups = {
         enable = true;
         mode = if cfg.mode == "client" then "netclient" else "netserver";
-        upsmon.monitor.or500.system = "or500@10.0.0.2";
       };
 
       vault.policies.common-nut = {
@@ -44,7 +58,8 @@ in
     (mkIf (cfg.mode == "client") {
       power.ups = {
         mode = "netclient";
-        upsmon.monitor.or500 = {
+        upsmon.monitor.${cfg.connectedUPSName} = {
+          system = "${cfg.connectedUPSName}@${cfg.serverHostname}";
           user = "upsmon_secondary";
           type = "secondary";
           passwordFile = config.vault-secrets.common.nut.keys.secondary_password.path;
@@ -67,6 +82,14 @@ in
             ''productid = "0601"''
           ];
         };
+        ups.smart500 = {
+          driver = "tripplite_usb";
+          port = "auto";
+          directives = [
+            ''vendorid = "09ae"''
+            ''productid = "0001"''
+          ];
+        };
 
         users = {
           upsmon = {
@@ -83,11 +106,13 @@ in
           listen = [ { address = "0.0.0.0"; } ];
         };
 
-        upsmon.monitor.or500 = {
+        upsmon.monitor = genAttrs upsNames (name: {
+          system = "${name}@${cfg.serverHostname}";
           user = "upsmon";
           type = "primary";
           passwordFile = config.vault-secrets.services.nut.keys.primary_password.path;
-        };
+        });
+
       };
 
       services.prometheus.exporters.nut = {

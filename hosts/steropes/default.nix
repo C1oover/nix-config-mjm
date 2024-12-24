@@ -28,7 +28,10 @@
 
   mjm.consul.enable = true;
   mjm.ingress.enable = true;
-  mjm.nut.enable = true;
+  mjm.nut = {
+    enable = true;
+    connectedUPSName = "or500";
+  };
   mjm.server.enable = true;
   mjm.state = {
     enablePreservation = true;
