@@ -47,6 +47,8 @@ in
   config = mkIf cfg.enable {
     programs.nushell.wrappedPackage = wrappedPkg;
 
+    environment.systemPackages = [ wrappedPkg ];
+
     environment.shells = [
       "/run/current-system/sw/bin/nu"
       "${wrappedPkg}/bin/nu"
