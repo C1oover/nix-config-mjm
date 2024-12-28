@@ -184,6 +184,20 @@ in
               ];
               definedAliases = [ "@l" ];
             };
+            "WowHead Classic" = {
+              urls = [
+                {
+                  template = "https://www.wowhead.com/classic/search";
+                  params = [
+                    {
+                      name = "q";
+                      value = "{searchTerms}";
+                    }
+                  ];
+                }
+              ];
+              definedAliases = [ "@wh" ];
+            };
             "Bing".metadata.hidden = true;
             "Google".metadata.alias = "@g";
           };
