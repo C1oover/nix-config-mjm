@@ -1,10 +1,8 @@
-{ inputs, ... }:
+{ inputs, localModulesPath, ... }:
 {
   imports = [
     "${inputs.home-manager}/nix-darwin"
-
-    ../../../../modules/nixos/nushell.nix
-    ../../../../modules/darwin/ssh.nix
+    "${localModulesPath}/darwin"
 
     ./dock.nix
     ./fonts.nix

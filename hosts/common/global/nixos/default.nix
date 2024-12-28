@@ -2,6 +2,7 @@
   pkgs,
   lib,
   inputs,
+  localModulesPath,
   ...
 }:
 let
@@ -24,7 +25,7 @@ in
     ./wireless.nix
 
     ../../../../services
-  ] ++ (builtins.attrValues (import ../../../../modules/nixos));
+  ] ++ (builtins.attrValues (import "${localModulesPath}/nixos"));
 
   nix.channel.enable = true;
   nix.settings.trusted-users = [
