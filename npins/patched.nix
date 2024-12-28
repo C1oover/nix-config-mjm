@@ -4,7 +4,4 @@ import ../lib/overlay-patches.nix {
 
   # netbox: 4.1.3 -> 4.1.10
   nixos-small."368036".hash = "sha256-IYad1H2y8VOvVrpolPEAiZ+R2RVCozZtuGHOC8E/ZFA=";
-
-  # python312Packages.debugpy: fix hash due to .gitattributes
-  nixos-small."368643".hash = "sha256-jXFdW7+rgUVaJRHAbY0j2LWTAYxh4eBNnl/fzn+WT+g=";
 }

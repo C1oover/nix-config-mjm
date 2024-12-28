@@ -109,9 +109,9 @@
         "repo": "nixos-hardware"
       },
       "branch": "master",
-      "revision": "def1d472c832d77885f174089b0d34854b007198",
-      "url": "https://github.com/NixOS/nixos-hardware/archive/def1d472c832d77885f174089b0d34854b007198.tar.gz",
-      "hash": "1ygr4myfrlghhpnlrl4hmfa4rdwyh1c17i65pw24iprizprmv220"
+      "revision": "7c674c6734f61157e321db595dbfcd8523e04e19",
+      "url": "https://github.com/NixOS/nixos-hardware/archive/7c674c6734f61157e321db595dbfcd8523e04e19.tar.gz",
+      "hash": "1a6wihld450lhj9f5a3j4a039hmf0q1zw5912if2dl8z6j10x4kv"
     },
     "helix": {
       "type": "Git",
@@ -133,9 +133,9 @@
         "repo": "home-manager"
       },
       "branch": "master",
-      "revision": "b7a7cd5dd1a74a9fe86ed4e016f91c78483b527a",
-      "url": "https://github.com/nix-community/home-manager/archive/b7a7cd5dd1a74a9fe86ed4e016f91c78483b527a.tar.gz",
-      "hash": "06h1mzn8dc4bgz6vir25i7i7741cyra9y0hczxd9gk3vzwzhkcm7"
+      "revision": "10e99c43cdf4a0713b4e81d90691d22c6a58bdf2",
+      "url": "https://github.com/nix-community/home-manager/archive/10e99c43cdf4a0713b4e81d90691d22c6a58bdf2.tar.gz",
+      "hash": "1vklmr0vzhplcjcqg19v66c1swg3xcgw96ry90dyd4hl2cb9j80b"
     },
     "lanzaboote": {
       "type": "GitRelease",
@@ -161,8 +161,8 @@
     "nixos-small": {
       "type": "Channel",
       "name": "nixos-unstable-small",
-      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-25.05beta729285.c0b0a559cfda/nixexprs.tar.xz",
-      "hash": "1wnx60jcvcqp368sz4346bqwxs3yb5gfjq4h4hhppz6qqmhkf94a"
+      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-25.05beta729413.eda595acd85d/nixexprs.tar.xz",
+      "hash": "19v9fkb7axdsb0z192kxj69jdrf9m2xzb8ciz4my55pdc8hp9vzc"
     },
     "nixpkgs": {
       "type": "Channel",
@@ -190,9 +190,9 @@
         "repo": "NUR"
       },
       "branch": "master",
-      "revision": "719cef123ff784ef8f4dfcbd896d8785e6ed184c",
-      "url": "https://github.com/nix-community/NUR/archive/719cef123ff784ef8f4dfcbd896d8785e6ed184c.tar.gz",
-      "hash": "1cislxqsdazjnz1rcnmq0dqf6cz6wg9gz2bx0sanbyjih94nmhk6"
+      "revision": "6aeb3a89dc2a80a71fc2908129b36a2108d0e157",
+      "url": "https://github.com/nix-community/NUR/archive/6aeb3a89dc2a80a71fc2908129b36a2108d0e157.tar.gz",
+      "hash": "0wq8fwfjna3grxq2f8qs81f60j9fpprkdlibi3m58ck6g2r97qwz"
     },
     "preservation": {
       "type": "Git",
