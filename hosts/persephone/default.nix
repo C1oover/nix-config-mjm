@@ -17,6 +17,10 @@
   mjm.state = {
     enablePreservation = true;
     persistDir = "/persist";
+    tmpfsRoot = {
+      enable = true;
+      size = "32G";
+    };
     directories = [
       "/home"
       "/var/lib/fprint"

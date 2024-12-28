@@ -4,16 +4,6 @@
 
   networking.hostName = "arges";
 
-  fileSystems."/" = {
-    device = "none";
-    fsType = "tmpfs";
-    options = [
-      "defaults"
-      "mode=755"
-      "size=20G"
-    ];
-  };
-
   fileSystems."/persist" = {
     device = "/dev/disk/by-label/NIXOS_SD";
     fsType = "ext4";
@@ -37,6 +27,10 @@
   mjm.state = {
     enablePreservation = true;
     persistDir = "/persist";
+    tmpfsRoot = {
+      enable = true;
+      size = "20G";
+    };
     directories = [
       "/boot"
       {

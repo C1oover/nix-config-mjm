@@ -4,15 +4,6 @@
 
   networking.hostName = "brontes";
 
-  fileSystems."/" = {
-    device = "none";
-    fsType = "tmpfs";
-    options = [
-      "defaults"
-      "mode=755"
-    ];
-  };
-
   fileSystems."/persist" = {
     device = "/dev/disk/by-label/NIXOS_SD";
     fsType = "ext4";
@@ -37,6 +28,7 @@
   mjm.state = {
     enablePreservation = true;
     persistDir = "/persist";
+    tmpfsRoot.enable = true;
     directories = [
       "/boot"
       {

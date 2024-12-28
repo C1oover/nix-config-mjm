@@ -4,15 +4,6 @@
 
   networking.hostName = "erebus";
 
-  fileSystems."/" = {
-    device = "none";
-    fsType = "tmpfs";
-    options = [
-      "defaults"
-      "mode=755"
-    ];
-  };
-
   fileSystems."/boot" = {
     device = "/dev/disk/by-partlabel/boot";
     fsType = "vfat";
@@ -37,6 +28,7 @@
   mjm.state = {
     enablePreservation = true;
     persistDir = "/persist";
+    tmpfsRoot.enable = true;
     directories = [
       {
         directory = "/nix";

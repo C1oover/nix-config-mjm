@@ -4,16 +4,6 @@
 
   networking.hostName = "chaos";
 
-  fileSystems."/" = {
-    device = "none";
-    fsType = "tmpfs";
-    options = [
-      "defaults"
-      "mode=755"
-      "size=8G"
-    ];
-  };
-
   fileSystems."/nix" = {
     device = "/dev/disk/by-partlabel/nix";
     fsType = "ext4";
@@ -48,6 +38,10 @@
   mjm.state = {
     enablePreservation = true;
     persistDir = "/nix/persist";
+    tmpfsRoot = {
+      enable = true;
+      size = "8G";
+    };
   };
 
   vault-secrets.roleId = "a87469f6-a653-37ab-8aa4-2a1adeed567f";

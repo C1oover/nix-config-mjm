@@ -16,16 +16,6 @@
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
-  fileSystems."/" = {
-    device = "none";
-    fsType = "tmpfs";
-    options = [
-      "defaults"
-      "mode=755"
-      "size=32G"
-    ];
-  };
-
   fileSystems."/persist" = {
     device = "/dev/disk/by-partlabel/persist";
     fsType = "bcachefs";

@@ -4,16 +4,6 @@
 
   networking.hostName = "leto";
 
-  fileSystems."/" = {
-    device = "none";
-    fsType = "tmpfs";
-    options = [
-      "defaults"
-      "mode=755"
-      "size=8G"
-    ];
-  };
-
   fileSystems."/persist" = {
     device = "/dev/disk/by-partlabel/persist";
     fsType = "ext4";
@@ -53,6 +43,10 @@
   mjm.state = {
     enablePreservation = true;
     persistDir = "/persist";
+    tmpfsRoot = {
+      enable = true;
+      size = "8G";
+    };
     directories = [
       {
         directory = "/nix";

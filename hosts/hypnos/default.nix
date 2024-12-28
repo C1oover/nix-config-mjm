@@ -8,16 +8,6 @@
 
   networking.hostName = "hypnos";
 
-  fileSystems."/" = {
-    device = "none";
-    fsType = "tmpfs";
-    options = [
-      "defaults"
-      "mode=755"
-      "size=24G"
-    ];
-  };
-
   fileSystems."/nix" = {
     device = "/dev/disk/by-partlabel/nix";
     fsType = "ext4";
@@ -43,6 +33,10 @@
   mjm.state = {
     enablePreservation = true;
     persistDir = "/nix/persist";
+    tmpfsRoot = {
+      enable = true;
+      size = "24G";
+    };
   };
 
   vault-secrets.roleId = "70016bfc-5625-b729-f6f2-f08693e12c02";
