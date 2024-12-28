@@ -1,5 +1,6 @@
+{ localModulesPath, ... }:
 {
-  imports = [ ../common/optional/proxmox-vm.nix ];
+  imports = [ "${localModulesPath}/nixos/profiles/proxmox-vm.nix" ];
 
   networking.hostName = "aether";
 

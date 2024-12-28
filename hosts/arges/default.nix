@@ -1,5 +1,6 @@
+{ localModulesPath, ... }:
 {
-  imports = [ ../common/optional/raspberry-pi.nix ];
+  imports = [ "${localModulesPath}/nixos/profiles/raspberry-pi.nix" ];
 
   networking.hostName = "arges";
 

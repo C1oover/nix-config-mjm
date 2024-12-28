@@ -1,5 +1,6 @@
+{ localModulesPath, ... }:
 {
-  imports = [ ../common/optional/proxmox-vm.nix ];
+  imports = [ "${localModulesPath}/nixos/profiles/proxmox-vm.nix" ];
 
   # hypnos is the one running the deploy, so we don't want to reboot in
   # the middle of the job.
