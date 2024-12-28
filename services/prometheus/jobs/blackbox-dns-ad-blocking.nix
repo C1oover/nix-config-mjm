@@ -1,3 +1,7 @@
+{ config, ... }:
+let
+  cfg = config.mjm.prometheus;
+in
 {
   services.prometheus.scrapeConfigs = [
     {
@@ -6,10 +10,7 @@
       params.module = [ "dns_ad_blocking" ];
       static_configs = [
         {
-          targets = [
-            "10.0.2.34"
-            "10.0.2.37"
-          ];
+          targets = cfg.dnsServers;
           labels = {
             probe_type = "dns";
             probe_scope = "ad-blocking";

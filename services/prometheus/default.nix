@@ -1,11 +1,22 @@
 { config, lib, ... }:
 let
-  inherit (lib) mkEnableOption mkIf;
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    mkOption
+    types
+    ;
+
   cfg = config.mjm.prometheus;
 in
 {
   options.mjm.prometheus = {
     enable = mkEnableOption "prometheus";
+
+    dnsServers = mkOption {
+      type = types.listOf types.str;
+      default = [ "10.0.0.5" ];
+    };
   };
 
   imports = [

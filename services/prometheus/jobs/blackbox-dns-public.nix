@@ -1,3 +1,7 @@
+{ config, ... }:
+let
+  cfg = config.mjm.prometheus;
+in
 {
   services.prometheus.scrapeConfigs = [
     {
@@ -11,9 +15,7 @@
             "8.8.8.8"
             "1.0.0.1"
             "1.1.1.1"
-            "10.0.2.34"
-            "10.0.2.37"
-          ];
+          ] ++ cfg.dnsServers;
           labels = {
             probe_type = "dns";
             probe_scope = "public";
