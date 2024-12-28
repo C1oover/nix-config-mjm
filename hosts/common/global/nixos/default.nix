@@ -22,7 +22,6 @@ in
     ./impermanence.nix
     ./networkd.nix
     ./server
-    ./wireless.nix
 
     ../../../../services
   ] ++ (builtins.attrValues (import "${localModulesPath}/nixos"));
