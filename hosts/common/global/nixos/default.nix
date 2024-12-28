@@ -17,11 +17,7 @@ in
     ../home-manager.nix
     ../nix.nix
     ./attic.nix
-    ./backup.nix
-    ./desktop
-    ./impermanence.nix
     ./networkd.nix
-    ./server
 
     ../../../../services
   ] ++ (builtins.attrValues (import "${localModulesPath}/nixos"));
