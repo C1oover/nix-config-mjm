@@ -4,6 +4,7 @@
   linkding = ./linkding.nix;
   nushell = ./nushell.nix;
   services = ./services.nix;
+  ssh = ./ssh.nix;
   terraform = ./terraform.nix;
   userborn = ./userborn.nix;
   vault = ./vault.nix;

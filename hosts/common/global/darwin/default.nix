@@ -4,6 +4,7 @@
     "${inputs.home-manager}/nix-darwin"
 
     ../../../../modules/nixos/nushell.nix
+    ../../../../modules/darwin/ssh.nix
 
     ./dock.nix
     ./fonts.nix

@@ -21,7 +21,6 @@ in
     ./impermanence.nix
     ./networkd.nix
     ./server
-    ./ssh.nix
     ./wireless.nix
 
     ../../../../services

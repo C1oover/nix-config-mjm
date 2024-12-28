@@ -29,7 +29,7 @@ writers.writeNuBin "homelab"
         -field=signed_key
         ssh-client-signer/sign/homelab-client
         public_key=@${sshPublicKeyPath}
-        valid_principals=matt,root
+        valid_principals=matt,mjm,root
       ) | save -f "${sshCertPath}"
     }
 
