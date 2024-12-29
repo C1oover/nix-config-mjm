@@ -4,6 +4,7 @@ let
 in
 {
   imports = [
+    ./gc.nix
     ./node-exporter.nix
   ];
 
