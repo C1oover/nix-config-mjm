@@ -32,6 +32,8 @@ in
         enable = true;
 
         extraConfig = {
+          auto_reload_config = true;
+
           retry_join = lib.mkDefault [
             "10.0.2.40"
             "10.0.2.42"
