@@ -8,6 +8,7 @@ let
     evalConfig {
       inherit lib;
       modules = modules ++ [
+        ../modules/darwin
         {
           nixpkgs.system = "${arch}-darwin";
           nixpkgs.source = sources.nixpkgs;

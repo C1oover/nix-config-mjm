@@ -1,9 +1,7 @@
-{ inputs, localModulesPath, ... }:
+{ inputs, ... }:
 {
   imports = [
-    "${inputs.home-manager}/nix-darwin"
-    "${localModulesPath}/darwin"
-    ../../../../services/darwin.nix
+    ../../common/base
 
     ./dock.nix
     ./fonts.nix

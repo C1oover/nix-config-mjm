@@ -1,8 +1,5 @@
 {
-  imports = [
-    ../common/global/darwin
-    ../common/users/mjm
-  ];
+  imports = [ ../common/users/mjm ];
 
   networking.computerName = "Talos";
   networking.hostName = "talos";
