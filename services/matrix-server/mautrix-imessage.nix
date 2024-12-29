@@ -23,7 +23,7 @@ let
       websocket_proxy = null;
     };
     appservice = {
-      hostname = "${config.networking.hostName}.home.mattmoriarity.com";
+      hostname = "0.0.0.0";
       port = port;
       database = {
         type = "sqlite3-fk-wal";
