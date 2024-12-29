@@ -3,6 +3,7 @@
   imports = [
     "${inputs.home-manager}/nix-darwin"
     "${localModulesPath}/darwin"
+    ../../../../services/darwin.nix
 
     ./dock.nix
     ./fonts.nix

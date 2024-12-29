@@ -24,6 +24,14 @@ in
       disabledCollectors = [ "thermal" ];
     };
 
-    # TODO set up consul service once that's possible
+    services.consul.services.node-exporter = {
+      inherit (config.services.prometheus.exporters.node) port;
+      metrics.enable = true;
+
+      checks.up = {
+        http.path = "/";
+        intervalSeconds = 30;
+      };
+    };
   };
 }

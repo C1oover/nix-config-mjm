@@ -2,8 +2,6 @@
   imports = [
     ../common/global/darwin
     ../common/users/mjm
-
-    ../../services/matrix-server/mautrix-imessage.nix
   ];
 
   networking.computerName = "Talos";
@@ -11,6 +9,7 @@
 
   homebrew.enable = false;
 
+  mjm.consul.enable = true;
   mjm.matrix-server.bridges.imessage.enable = true;
   mjm.server.enable = true;
 
