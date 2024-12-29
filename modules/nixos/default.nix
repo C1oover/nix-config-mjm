@@ -1,6 +1,7 @@
 {
   imports = [
     ../common/nushell.nix
+    ../common/base
 
     ./backups.nix
     ./consul-services.nix

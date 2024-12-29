@@ -9,8 +9,6 @@
     ./fonts.nix
     ./homebrew.nix
     ./keyboard.nix
-    ../home-manager.nix
-    ../nix.nix
   ];
 
   nixpkgs.overlays = [ (import "${inputs.nixpkgs-firefox-darwin}/overlay.nix") ];

@@ -16,7 +16,7 @@ let
       ];
       specialArgs = {
         inputs = sources;
-        localModulesPath = ../modules;
+        localModulesPath = toString ../modules;
       };
     };
 in

@@ -15,8 +15,6 @@ in
     lanzaboote.nixosModules.lanzaboote
     "${localModulesPath}/nixos"
 
-    ../home-manager.nix
-    ../nix.nix
     ./attic.nix
     ./networkd.nix
 
