@@ -13,6 +13,7 @@ in
     "${inputs.home-manager}/nixos"
     "${inputs.catppuccin}/modules/nixos"
     lanzaboote.nixosModules.lanzaboote
+    "${localModulesPath}/nixos"
 
     ../home-manager.nix
     ../nix.nix
@@ -20,7 +21,7 @@ in
     ./networkd.nix
 
     ../../../../services
-  ] ++ (builtins.attrValues (import "${localModulesPath}/nixos"));
+  ];
 
   nix.channel.enable = true;
   nix.settings.trusted-users = [

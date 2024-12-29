@@ -1,18 +1,20 @@
 {
-  nushell = ../common/nushell.nix;
+  imports = [
+    ../common/nushell.nix
 
-  backups = ./backups.nix;
-  consul-services = ./consul-services.nix;
-  desktop = ./desktop;
-  ingress = ./ingress.nix;
-  linkding = ./linkding.nix;
-  server = ./server;
-  services = ./services.nix;
-  ssh = ./ssh.nix;
-  state = ./state.nix;
-  terraform = ./terraform.nix;
-  userborn = ./userborn.nix;
-  vault = ./vault.nix;
-  vault-agent = ./vault-agent.nix;
-  vault-secrets = ./vault-secrets.nix;
+    ./backups.nix
+    ./consul-services.nix
+    ./desktop
+    ./ingress.nix
+    ./linkding.nix
+    ./server
+    ./services.nix
+    ./ssh.nix
+    ./state.nix
+    ./terraform.nix
+    ./userborn.nix
+    ./vault.nix
+    ./vault-agent.nix
+    ./vault-secrets.nix
+  ];
 }
