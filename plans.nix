@@ -2,6 +2,8 @@ let
   evalPlan = import ./lib/deploy.nix;
   sources = import ./npins/patched.nix;
 
+  localModulesPath = toString ./modules;
+
   hostNames = [
     "aether"
     "aion"
@@ -30,14 +32,13 @@ let
 
       specialArgs = {
         inputs = sources;
-        localModulesPath = toString ./modules;
+        inherit localModulesPath;
       };
     };
 
     defaults = {
       imports = [
-        ./modules/nixos/deployment.nix
-        ./hosts/common/global/nixos
+        "${localModulesPath}/nixos"
         ./hosts/common/users/matt
       ];
     };

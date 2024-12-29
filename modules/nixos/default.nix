@@ -1,10 +1,18 @@
+{ inputs, ... }:
 {
   imports = [
+    "${inputs.home-manager}/nixos"
+    "${inputs.catppuccin}/modules/nixos"
+    (import inputs.lanzaboote).nixosModules.lanzaboote
+
     ../common/nushell.nix
-    ../common/base
+
+    ../../services
 
     ./backups.nix
+    ./base
     ./consul-services.nix
+    ./deployment.nix
     ./desktop
     ./ingress.nix
     ./linkding.nix
