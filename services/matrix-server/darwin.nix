@@ -1,0 +1,5 @@
+{
+  imports = [
+    ./mautrix-imessage.nix
+  ];
+}
