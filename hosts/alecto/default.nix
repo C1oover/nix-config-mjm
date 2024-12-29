@@ -1,16 +1,8 @@
+{ localModulesPath, ... }:
 {
-  imports = [ ../common/optional/proxmox-vm.nix ];
+  imports = [ "${localModulesPath}/nixos/profiles/proxmox-vm.nix" ];
 
   networking.hostName = "alecto";
-
-  fileSystems."/" = {
-    device = "none";
-    fsType = "tmpfs";
-    options = [
-      "defaults"
-      "mode=755"
-    ];
-  };
 
   fileSystems."/boot" = {
     device = "/dev/disk/by-partlabel/boot";
@@ -34,6 +26,7 @@
   mjm.state = {
     enablePreservation = true;
     persistDir = "/persist";
+    tmpfsRoot.enable = true;
     directories = [
       {
         directory = "/nix";

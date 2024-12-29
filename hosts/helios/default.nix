@@ -1,17 +1,8 @@
+{ localModulesPath, ... }:
 {
-  imports = [ ../common/optional/proxmox-vm.nix ];
+  imports = [ "${localModulesPath}/nixos/profiles/proxmox-vm.nix" ];
 
   networking.hostName = "helios";
-
-  fileSystems."/" = {
-    device = "none";
-    fsType = "tmpfs";
-    options = [
-      "defaults"
-      "mode=755"
-      "size=8G"
-    ];
-  };
 
   fileSystems."/nix" = {
     # not using by-partlabel because this disk doesn't have a GPT partition
@@ -48,6 +39,10 @@
   mjm.state = {
     enablePreservation = true;
     persistDir = "/nix/persist";
+    tmpfsRoot = {
+      enable = true;
+      size = "8G";
+    };
   };
 
   vault-secrets.roleId = "61d175e1-7a2e-4554-2cca-cff48c926b82";

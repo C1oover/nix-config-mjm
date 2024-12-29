@@ -12,6 +12,7 @@
   homebrew.enable = false;
 
   mjm.matrix-server.bridges.imessage.enable = true;
+  mjm.server.enable = true;
 
   system.stateVersion = 5;
 }

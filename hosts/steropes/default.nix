@@ -1,16 +1,8 @@
+{ localModulesPath, ... }:
 {
-  imports = [ ../common/optional/raspberry-pi.nix ];
+  imports = [ "${localModulesPath}/nixos/profiles/raspberry-pi.nix" ];
 
   networking.hostName = "steropes";
-
-  fileSystems."/" = {
-    device = "none";
-    fsType = "tmpfs";
-    options = [
-      "defaults"
-      "mode=755"
-    ];
-  };
 
   fileSystems."/persist" = {
     device = "/dev/disk/by-label/NIXOS_SD";
@@ -36,6 +28,7 @@
   mjm.state = {
     enablePreservation = true;
     persistDir = "/persist";
+    tmpfsRoot.enable = true;
     directories = [
       "/boot"
       {

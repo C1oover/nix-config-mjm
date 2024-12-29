@@ -1,21 +1,12 @@
+{ localModulesPath, ... }:
 {
-  imports = [ ../common/optional/proxmox-vm.nix ];
+  imports = [ "${localModulesPath}/nixos/profiles/proxmox-vm.nix" ];
 
   # hypnos is the one running the deploy, so we don't want to reboot in
   # the middle of the job.
   deployment.rebootAutomatically = false;
 
   networking.hostName = "hypnos";
-
-  fileSystems."/" = {
-    device = "none";
-    fsType = "tmpfs";
-    options = [
-      "defaults"
-      "mode=755"
-      "size=24G"
-    ];
-  };
 
   fileSystems."/nix" = {
     device = "/dev/disk/by-partlabel/nix";
@@ -42,6 +33,10 @@
   mjm.state = {
     enablePreservation = true;
     persistDir = "/nix/persist";
+    tmpfsRoot = {
+      enable = true;
+      size = "24G";
+    };
   };
 
   vault-secrets.roleId = "70016bfc-5625-b729-f6f2-f08693e12c02";

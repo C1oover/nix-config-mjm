@@ -2,6 +2,7 @@
   pkgs,
   lib,
   inputs,
+  localModulesPath,
   ...
 }:
 let
@@ -16,15 +17,10 @@ in
     ../home-manager.nix
     ../nix.nix
     ./attic.nix
-    ./backup.nix
-    ./desktop
-    ./impermanence.nix
     ./networkd.nix
-    ./server
-    ./wireless.nix
 
     ../../../../services
-  ] ++ (builtins.attrValues (import ../../../../modules/nixos));
+  ] ++ (builtins.attrValues (import "${localModulesPath}/nixos"));
 
   nix.channel.enable = true;
   nix.settings.trusted-users = [

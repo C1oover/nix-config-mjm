@@ -1,17 +1,8 @@
+{ localModulesPath, ... }:
 {
-  imports = [ ../common/optional/proxmox-vm.nix ];
+  imports = [ "${localModulesPath}/nixos/profiles/proxmox-vm.nix" ];
 
   networking.hostName = "leto";
-
-  fileSystems."/" = {
-    device = "none";
-    fsType = "tmpfs";
-    options = [
-      "defaults"
-      "mode=755"
-      "size=8G"
-    ];
-  };
 
   fileSystems."/persist" = {
     device = "/dev/disk/by-partlabel/persist";
@@ -52,6 +43,10 @@
   mjm.state = {
     enablePreservation = true;
     persistDir = "/persist";
+    tmpfsRoot = {
+      enable = true;
+      size = "8G";
+    };
     directories = [
       {
         directory = "/nix";

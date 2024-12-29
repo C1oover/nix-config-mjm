@@ -11,6 +11,7 @@ let
     mkIf
     mkMerge
     mkOption
+    optional
     optionalAttrs
     types
     ;
@@ -88,6 +89,15 @@ in
     services = mkOption {
       type = types.listOf types.str;
       default = [ ];
+    };
+
+    tmpfsRoot = {
+      enable = mkEnableOption "root FS using tmpfs";
+
+      size = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+      };
     };
   };
 
@@ -187,6 +197,15 @@ in
 
       boot.initrd.systemd.suppressedUnits = [ "systemd-machine-id-commit.service" ];
       systemd.suppressedSystemUnits = [ "systemd-machine-id-commit.service" ];
+
+      fileSystems."/" = mkIf cfg.tmpfsRoot.enable {
+        device = "none";
+        fsType = "tmpfs";
+        options = [
+          "defaults"
+          "mode=755"
+        ] ++ optional (cfg.tmpfsRoot.size != null) "size=${cfg.tmpfsRoot.size}";
+      };
     })
   ];
 }
