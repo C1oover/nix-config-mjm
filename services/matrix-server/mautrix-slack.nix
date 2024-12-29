@@ -19,7 +19,7 @@ let
     appservice = {
       address = "http://127.0.0.1:29335";
       hostname = "127.0.0.1";
-      port = 29335;
+      port = port;
       id = "slack";
       bot.username = "slackbot";
       bot.displayname = "Slack Bridge Bot";
@@ -36,6 +36,8 @@ let
   };
   settingsFile = "/var/lib/mautrix-slack/config.yml";
   registrationFile = "/var/lib/mautrix-slack/registration.yml";
+
+  port = 29335;
 in
 {
   options.mjm.matrix-server.bridges.slack = {
@@ -130,5 +132,13 @@ in
       home = "/var/lib/mautrix-slack";
     };
     users.groups.mautrix-slack = { };
+
+    services.consul.services.mautrix-slack = {
+      inherit port;
+
+      checks.up = {
+        http.path = "/_matrix/mau/ready";
+      };
+    };
   };
 }

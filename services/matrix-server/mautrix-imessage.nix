@@ -24,7 +24,7 @@ let
     };
     appservice = {
       hostname = "${config.networking.hostName}.home.mattmoriarity.com";
-      port = 29400;
+      port = port;
       database = {
         type = "sqlite3-fk-wal";
         uri = "file:mautrix-imessage.db?_txlock=immediate";
@@ -82,6 +82,8 @@ let
       ${pkg}/bin/mautrix-imessage -c config.yaml -r registration.yaml
     done
   '';
+
+  port = 29400;
 in
 {
   options.mjm.matrix-server.bridges.imessage = {
@@ -99,5 +101,13 @@ in
   config = mkIf cfg.bridges.imessage.enable {
     nixpkgs.config.permittedInsecurePackages = [ "olm-3.2.16" ];
     environment.systemPackages = [ script ];
+
+    services.consul.services.mautrix-imessage = {
+      inherit port;
+
+      checks.up = {
+        http.path = "/_matrix/mau/ready";
+      };
+    };
   };
 }

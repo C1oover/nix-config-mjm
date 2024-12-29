@@ -19,7 +19,7 @@ let
     appservice = {
       address = "http://127.0.0.1:29334";
       hostname = "127.0.0.1";
-      port = 29334;
+      port = port;
       database = {
         type = "postgres";
         uri = "postgres:///mautrix-discord?host=/run/postgresql";
@@ -38,6 +38,8 @@ let
   };
   settingsFile = "/var/lib/mautrix-discord/config.yml";
   registrationFile = "/var/lib/mautrix-discord/registration.yml";
+
+  port = 29334;
 in
 {
   options.mjm.matrix-server.bridges.discord = {
@@ -131,5 +133,13 @@ in
       home = "/var/lib/mautrix-discord";
     };
     users.groups.mautrix-discord = { };
+
+    services.consul.services.mautrix-discord = {
+      inherit port;
+
+      checks.up = {
+        http.path = "/_matrix/mau/ready";
+      };
+    };
   };
 }
