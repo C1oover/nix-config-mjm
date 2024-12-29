@@ -4,13 +4,12 @@ let
 
   evalConfig = import "${sources.darwin}/eval-config.nix";
   mkDarwin =
-    arch: modules:
+    modules:
     evalConfig {
       inherit lib;
       modules = modules ++ [
         ../modules/darwin
         {
-          nixpkgs.system = "${arch}-darwin";
           nixpkgs.source = sources.nixpkgs;
           system.checks.verifyNixPath = false;
         }
@@ -22,7 +21,7 @@ let
     };
 in
 {
-  athena = mkDarwin "aarch64" [ ./athena ];
-  mars = mkDarwin "x86_64" [ ./mars ];
-  talos = mkDarwin "x86_64" [ ./talos ];
+  athena = mkDarwin [ ./athena ];
+  mars = mkDarwin [ ./mars ];
+  talos = mkDarwin [ ./talos ];
 }

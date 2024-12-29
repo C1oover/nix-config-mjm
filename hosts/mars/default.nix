@@ -11,4 +11,5 @@
   mjm.matrix-server.bridges.imessage.enable = true;
 
   system.stateVersion = 5;
+  nixpkgs.system = "x86_64-darwin";
 }
