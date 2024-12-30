@@ -1,7 +1,5 @@
 { config, ... }:
 {
-  imports = [ ./global ];
-
   mjm.terminal.kitty.enable = false;
   mjm.git.enableWatchman = false;
 

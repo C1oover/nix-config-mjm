@@ -1,7 +1,5 @@
 { pkgs, config, ... }:
 {
-  imports = [ ./global ];
-
   mjm.aerospace.enable = true;
   mjm.work.enable = true;
 

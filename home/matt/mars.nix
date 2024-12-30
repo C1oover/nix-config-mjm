@@ -1,7 +1,5 @@
 { config, ... }:
 {
-  imports = [ ./global ];
-
   home.dock.entries = [
     {
       app = "Firefox";

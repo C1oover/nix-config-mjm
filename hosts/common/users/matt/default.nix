@@ -5,7 +5,7 @@
   ...
 }:
 let
-  inherit (lib) mkIf mkMerge;
+  inherit (lib) mkIf mkMerge optional;
 in
 {
   users.users.matt = mkMerge [
@@ -21,5 +21,12 @@ in
     })
   ];
 
-  home-manager.users.matt = ../../../../home/matt/${config.networking.hostName}.nix;
+  home-manager.users.matt.imports =
+    let
+      machineSpecificConfig = ../../../../home/matt/${config.networking.hostName}.nix;
+    in
+    [
+      ../../../../home/matt/global
+    ]
+    ++ optional (builtins.pathExists machineSpecificConfig) machineSpecificConfig;
 }
