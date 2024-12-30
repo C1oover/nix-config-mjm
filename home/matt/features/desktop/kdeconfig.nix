@@ -9,7 +9,7 @@ let
   cfg = config.mjm.desktop;
 in
 {
-  config = mkIf cfg.enable {
+  config = mkIf (cfg.enable && pkgs.stdenv.isLinux) {
     xdg.configFile.kdeconfig.source = pkgs.linkFarm "kdeconfig" {
       kdeglobals = pkgs.writeText "kdeglobals" ''
         [General]

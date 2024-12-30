@@ -1,11 +1,6 @@
 { config, ... }:
 {
-  imports = [
-    ./global
-    ./global/darwin.nix
-  ];
-
-  mjm.helix.enable = true;
+  imports = [ ./global ];
 
   home.dock.entries = [
     {

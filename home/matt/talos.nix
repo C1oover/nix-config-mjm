@@ -1,19 +1,11 @@
 { config, ... }:
 {
-  imports = [
-    ./global
-    ./global/darwin.nix
-  ];
+  imports = [ ./global ];
 
-  # mjm.helix.enable = true;
   mjm.terminal.kitty.enable = false;
   mjm.git.enableWatchman = false;
 
   home.dock.entries = [
-    {
-      app = "Firefox";
-      package = config.programs.firefox.package;
-    }
     { app = "Messages"; }
     {
       app = "Alacritty";

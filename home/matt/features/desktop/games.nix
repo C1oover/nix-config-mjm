@@ -5,18 +5,18 @@
   ...
 }:
 let
-  inherit (lib) mkEnableOption mkIf;
+  inherit (lib) attrValues mkEnableOption mkIf;
   cfg = config.mjm.desktop;
 in
 {
   options.mjm.desktop.games = {
     enable = mkEnableOption "games" // {
-      default = true;
+      default = pkgs.stdenv.isLinux;
     };
   };
 
   config = mkIf (cfg.enable && cfg.games.enable) {
-    home.packages = builtins.attrValues {
+    home.packages = attrValues {
       inherit (pkgs)
         chiaki
         lutris

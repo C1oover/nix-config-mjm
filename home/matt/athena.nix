@@ -1,12 +1,8 @@
 { pkgs, config, ... }:
 {
-  imports = [
-    ./global
-    ./global/darwin.nix
-  ];
+  imports = [ ./global ];
 
   mjm.aerospace.enable = true;
-  mjm.helix.enable = true;
   mjm.work.enable = true;
 
   programs.kitty.font.size = 13;

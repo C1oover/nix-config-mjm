@@ -11,7 +11,7 @@ in
 {
   options.mjm.desktop.controku = {
     enable = mkEnableOption "controku" // {
-      default = true;
+      default = pkgs.stdenv.isLinux;
     };
   };
 

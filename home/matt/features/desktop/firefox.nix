@@ -5,12 +5,19 @@
   ...
 }:
 let
-  inherit (lib) mkDefault mkIf;
+  inherit (lib) mkDefault mkIf mkMerge;
   cfg = config.mjm.desktop;
 in
 {
-  config = mkIf cfg.enable {
-    mjm.firefox.enable = mkDefault true;
-    programs.firefox.nativeMessagingHosts = [ pkgs.kdePackages.plasma-browser-integration ];
-  };
+  config = mkIf cfg.enable (mkMerge [
+    {
+      mjm.firefox.enable = mkDefault true;
+    }
+    (mkIf pkgs.stdenv.isLinux {
+      programs.firefox.nativeMessagingHosts = [ pkgs.kdePackages.plasma-browser-integration ];
+    })
+    (mkIf pkgs.stdenv.isDarwin {
+      mjm.firefox.package = pkgs.firefox-bin;
+    })
+  ]);
 }
