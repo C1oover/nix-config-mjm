@@ -8,7 +8,6 @@
     ../../services/darwin.nix
 
     ./base
-    ./consul.nix
     ./consul-services.nix
     ./server
     ./ssh.nix

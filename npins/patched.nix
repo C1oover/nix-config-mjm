@@ -4,4 +4,7 @@ import ../lib/overlay-patches.nix {
 
   # netbox: 4.1.3 -> 4.1.10
   nixos-small."368036".hash = "sha256-IYad1H2y8VOvVrpolPEAiZ+R2RVCozZtuGHOC8E/ZFA=";
+
+  # consul: init
+  darwin."1245".hash = "sha256-JqxFVDVTJIUVADbXgulIenqZeknxahZvQ7hb554Tkzs=";
 }
