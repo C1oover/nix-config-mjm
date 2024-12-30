@@ -9,6 +9,7 @@
 
     ./base
     ./consul-services.nix
+    ./desktop
     ./server
     ./ssh.nix
   ];

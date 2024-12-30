@@ -4,8 +4,6 @@
     ../../common/base
 
     ./dock.nix
-    ./fonts.nix
-    ./homebrew.nix
     ./keyboard.nix
   ];
 

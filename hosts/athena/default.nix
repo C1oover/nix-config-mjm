@@ -4,6 +4,8 @@
   networking.computerName = "Athena";
   networking.hostName = "athena";
 
+  mjm.desktop.enable = true;
+
   homebrew.casks = [
     "cleanshot"
     "loom"
