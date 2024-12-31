@@ -35,6 +35,7 @@
 
   environment.systemPackages = [
     pkgs.nvd
+    pkgs.ghostty.terminfo
     pkgs.kitty.terminfo
   ];
 
