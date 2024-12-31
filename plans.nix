@@ -5,13 +5,13 @@ let
   localModulesPath = toString ./modules;
 
   hostNames = [
-    "aether"
+    # "aether"
     "aion"
     "alecto"
     "arges"
     "brontes"
     "chaos"
-    "erebus"
+    # "erebus"
     "helios"
     "hypnos"
     "leto"
