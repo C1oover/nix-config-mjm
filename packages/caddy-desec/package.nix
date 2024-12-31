@@ -2,11 +2,11 @@
 
 buildGoModule rec {
   pname = "caddy";
-  version = "2.9.0-beta.3";
+  version = "2.9.0";
 
   src = ./.;
 
-  vendorHash = "sha256-EK+DIC6VPTwlBuXJhie4Kyh1MFZWpmiXv3X7jqCviAI=";
+  vendorHash = "sha256-2dFg5EIMiyMzVHvyU5YisCZYa6hXKrZ4I1REnpkCQcI=";
 
   ldflags = [
     "-s"
