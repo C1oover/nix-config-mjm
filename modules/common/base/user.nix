@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  localModulesPath,
   ...
 }:
 let
@@ -24,7 +25,7 @@ in
         machineSpecificConfig = ../../../home/matt/${config.networking.hostName}.nix;
       in
       [
-        ../../../home/matt/global
+        "${localModulesPath}/home-manager"
       ]
       ++ optional (builtins.pathExists machineSpecificConfig) machineSpecificConfig;
   };

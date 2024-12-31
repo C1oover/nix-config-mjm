@@ -1,7 +1,6 @@
 {
   pkgs,
   lib,
-  inputs,
   osConfig,
   ...
 }:
@@ -9,23 +8,6 @@ let
   inherit (lib) mkDefault;
 in
 {
-  imports = [
-    "${inputs.catppuccin}/modules/home-manager"
-
-    ../features/aerospace
-    ../features/desktop
-    ../features/emacs
-    ../features/email
-    ../features/firefox
-    ../features/git
-    ../features/helix
-    ../features/homelab
-    ../features/shell
-    ../features/syncthing
-    ../features/terminal
-    ../features/work
-  ] ++ (builtins.attrValues (import ../../../modules/home-manager));
-
   mjm.git.enable = mkDefault true;
   mjm.shell.enable = mkDefault true;
 
