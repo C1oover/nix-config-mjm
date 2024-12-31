@@ -37,10 +37,7 @@ let
     };
 
     defaults = {
-      imports = [
-        "${localModulesPath}/nixos"
-        ./hosts/common/users/matt
-      ];
+      imports = [ "${localModulesPath}/nixos" ];
     };
 
     inherit hosts;

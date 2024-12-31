@@ -1,6 +1,4 @@
 {
-  imports = [ ../common/users/matt ];
-
   networking.computerName = "Athena";
   networking.hostName = "athena";
 

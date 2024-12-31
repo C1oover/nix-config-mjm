@@ -1,6 +1,4 @@
 {
-  imports = [ ../common/users/matt ];
-
   mjm.username = "mjm";
 
   networking.computerName = "Talos";

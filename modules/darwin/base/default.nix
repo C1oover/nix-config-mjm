@@ -5,6 +5,7 @@
 
     ./dock.nix
     ./keyboard.nix
+    ./user.nix
   ];
 
   nixpkgs.overlays = [ (import "${inputs.nixpkgs-firefox-darwin}/overlay.nix") ];

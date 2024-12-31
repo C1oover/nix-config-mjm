@@ -8,6 +8,7 @@
     ../../common/base
     ./attic.nix
     ./networkd.nix
+    ./user.nix
   ];
 
   nix.channel.enable = true;
