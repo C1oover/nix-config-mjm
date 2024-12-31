@@ -8,6 +8,7 @@ let
     # "aether"
     "aion"
     "alecto"
+    "apollo"
     "arges"
     "brontes"
     "chaos"

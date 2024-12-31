@@ -101,6 +101,18 @@
       "url": "https://github.com/MrOtherGuy/firefox-csshacks/archive/8957a709e3abb7242fa89339c684f8027e66774c.tar.gz",
       "hash": "0f5prr6gbf9y3vmrzxgk74wlp2qxlpp3gm2brqdy3n1zij3p0z9v"
     },
+    "freenas-proxmox": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "TheGrandWazoo",
+        "repo": "freenas-proxmox"
+      },
+      "branch": "master",
+      "revision": "29b110f5e2f37a3bf6154a01948bb40261ddc93e",
+      "url": "https://github.com/TheGrandWazoo/freenas-proxmox/archive/29b110f5e2f37a3bf6154a01948bb40261ddc93e.tar.gz",
+      "hash": "11w1gj62gw6vy71z48rx2vdrbrzl0z65bpsh59fs9ygg7k2aijdv"
+    },
     "hardware": {
       "type": "Git",
       "repository": {
@@ -205,6 +217,18 @@
       "revision": "089ffe54b44db2b6418dd024a7266c8c9343f805",
       "url": "https://github.com/WilliButz/preservation/archive/089ffe54b44db2b6418dd024a7266c8c9343f805.tar.gz",
       "hash": "12zbljpd53678z1aiiqzrsy6l7kknawxvz99crl447q6lwbysivg"
+    },
+    "proxmox": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "SaumonNet",
+        "repo": "proxmox-nixos"
+      },
+      "branch": "main",
+      "revision": "4ad21ba619d779b229e308b58066bafd65d5153d",
+      "url": "https://github.com/SaumonNet/proxmox-nixos/archive/4ad21ba619d779b229e308b58066bafd65d5153d.tar.gz",
+      "hash": "1h9an32xg8mg2f67h34b02zmdaffgvmbxp8h86wm04wnjdrzfxcj"
     },
     "terranix": {
       "type": "GitRelease",

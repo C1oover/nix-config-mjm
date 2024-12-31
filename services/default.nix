@@ -24,6 +24,7 @@
     ./paperless
     ./postgresql
     ./prometheus
+    ./proxmox
     ./tailscale
     ./vault
     ./vaultwarden

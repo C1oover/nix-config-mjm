@@ -1,4 +1,5 @@
 {
+  config,
   pkgs,
   lib,
   ...
@@ -14,7 +15,7 @@
   nix.channel.enable = true;
   nix.settings.trusted-users = [
     "root"
-    "matt"
+    config.mjm.username
   ];
 
   zramSwap.enable = true;

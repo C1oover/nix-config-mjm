@@ -7,4 +7,9 @@ import ../lib/overlay-patches.nix {
 
   # consul: init
   darwin."1245".hash = "sha256-JqxFVDVTJIUVADbXgulIenqZeknxahZvQ7hb554Tkzs=";
+
+  # Add TPM support
+  proxmox."111".hash = "sha256-RXrtvvM3AYRB4lotkHSdmN7reKycGJWIlUL5gI3NAuE=";
+  # pve-storage: add XML::LibXML dep
+  proxmox."112".hash = "sha256-LnyOOCnIvqVHw1i+R+b/ahkjccm8WdYhv3O3od5aS64=";
 }
