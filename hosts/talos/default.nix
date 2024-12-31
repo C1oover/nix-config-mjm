@@ -1,5 +1,7 @@
 {
-  imports = [ ../common/users/mjm ];
+  imports = [ ../common/users/matt ];
+
+  mjm.username = "mjm";
 
   networking.computerName = "Talos";
   networking.hostName = "talos";
