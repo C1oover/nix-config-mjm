@@ -1,5 +1,7 @@
 { config, ... }:
 {
+  mjm.terminal.enable = true;
+
   home.dock.entries = [
     {
       app = "Firefox";

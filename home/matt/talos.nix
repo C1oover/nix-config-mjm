@@ -1,5 +1,6 @@
 { config, ... }:
 {
+  mjm.terminal.enable = true;
   mjm.terminal.kitty.enable = false;
   mjm.git.enableWatchman = false;
 
