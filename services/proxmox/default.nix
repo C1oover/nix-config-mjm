@@ -15,6 +15,43 @@ let
     types
     ;
   cfg = config.mjm.proxmox;
+
+  # Overrides to include the freenas-proxmox plugin patches
+  pve-storage = pkgs.pve-storage.overrideAttrs (oldAttrs: {
+    postPatch =
+      oldAttrs.postPatch
+      + ''
+        patch PVE/Storage/ZFSPlugin.pm ${inputs.freenas-proxmox}/perl5/PVE/Storage/ZFSPlugin.pm.patch
+      '';
+
+    postInstall =
+      oldAttrs.postInstall
+      + ''
+        cp ${inputs.freenas-proxmox}/perl5/PVE/Storage/LunCmd/FreeNAS.pm $out/${pkgs.perl538.libPrefix}/${pkgs.perl538.version}/PVE/Storage/LunCmd/FreeNAS.pm
+        mkdir $out/${pkgs.perl538.libPrefix}/${pkgs.perl538.version}/REST
+        cp ${inputs.freenas-proxmox}/perl5/REST/Client.pm $out/${pkgs.perl538.libPrefix}/${pkgs.perl538.version}/REST/Client.pm
+      '';
+  });
+
+  pve-ha-manager = pkgs.pve-ha-manager.override { inherit pve-storage; };
+  pve-manager = (pkgs.pve-manager.override { inherit pve-ha-manager; }).overrideAttrs (oldAttrs: {
+    # get templates to install to $out/share instead of $out/usr/share
+    postPatch =
+      oldAttrs.postPatch
+      + ''
+        sed -i templates/Makefile -e "s,/usr,,"
+      '';
+
+    postFixup =
+      oldAttrs.postFixup
+      + ''
+        patch $out/share/pve-manager/js/pvemanagerlib.js ${inputs.freenas-proxmox}/pve-manager/js/pvemanagerlib.js.patch
+
+        # needed for vzdump to be able to find its plugins
+        find $out/lib -type f | xargs sed -i \
+          -e "s|/usr/share/perl5|/run/current-system/sw/${pkgs.perl538.libPrefix}/${pkgs.perl538.version}|"
+      '';
+  });
 in
 {
   options.mjm.proxmox = {
@@ -44,41 +81,9 @@ in
     services.proxmox-ve = {
       enable = true;
 
-      # Overrides to include the freenas-proxmox plugin patches
-      package =
-        let
-          pve-storage = pkgs.pve-storage.overrideAttrs (oldAttrs: {
-            postPatch =
-              oldAttrs.postPatch
-              + ''
-                patch PVE/Storage/ZFSPlugin.pm ${inputs.freenas-proxmox}/perl5/PVE/Storage/ZFSPlugin.pm.patch
-              '';
-
-            postInstall =
-              oldAttrs.postInstall
-              + ''
-                cp ${inputs.freenas-proxmox}/perl5/PVE/Storage/LunCmd/FreeNAS.pm $out/${pkgs.perl538.libPrefix}/${pkgs.perl538.version}/PVE/Storage/LunCmd/FreeNAS.pm
-                mkdir $out/${pkgs.perl538.libPrefix}/${pkgs.perl538.version}/REST
-                cp ${inputs.freenas-proxmox}/perl5/REST/Client.pm $out/${pkgs.perl538.libPrefix}/${pkgs.perl538.version}/REST/Client.pm
-              '';
-          });
-
-          pve-ha-manager = pkgs.pve-ha-manager.override { inherit pve-storage; };
-          pve-manager = (pkgs.pve-manager.override { inherit pve-ha-manager; }).overrideAttrs (oldAttrs: {
-            postFixup =
-              oldAttrs.postFixup
-              + ''
-                patch $out/share/pve-manager/js/pvemanagerlib.js ${inputs.freenas-proxmox}/pve-manager/js/pvemanagerlib.js.patch
-
-                # needed for vzdump to be able to find its plugins
-                find $out/lib -type f | xargs sed -i \
-                  -e "s|/usr/share/perl5|/run/current-system/sw/${pkgs.perl538.libPrefix}/${pkgs.perl538.version}|"
-              '';
-          });
-        in
-        pkgs.proxmox-ve.override {
-          inherit pve-ha-manager pve-manager pve-storage;
-        };
+      package = pkgs.proxmox-ve.override {
+        inherit pve-ha-manager pve-manager pve-storage;
+      };
 
       inherit (cfg) ipAddress;
     };
@@ -117,10 +122,13 @@ in
     # PVE needs a root account with a proper password to work right
     users.users.root.hashedPassword = config.users.users.mjm.hashedPassword;
 
-    # TODO: remove these once all Proxmox hosts are on NixOS
     systemd.tmpfiles.settings."50-proxmox" = {
+      # TODO: remove these once all Proxmox hosts are on NixOS
       "/bin/true"."L+".argument = getExe' pkgs.coreutils "true";
       "/usr/sbin/qm"."L+".argument = "/run/current-system/sw/bin/qm";
+
+      # patching rust dependencies is hard, so for now just symlink this into place
+      "/usr/share/pve-manager/templates"."L+".argument = "${pve-manager}/share/pve-manager/templates";
     };
 
     # TODO: remove once PR #111 does this
