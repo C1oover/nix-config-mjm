@@ -8,7 +8,7 @@ export def with-temp-key [block] {
     -field=signed_key
     ssh-client-signer/sign/homelab-client
     $"public_key=@($key_path).pub"
-    valid_principals=matt) | save $"($key_path)-cert.pub"
+    valid_principals=matt,mjm) | save $"($key_path)-cert.pub"
 
   try {
     do -c $block $key_path
