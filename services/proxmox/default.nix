@@ -7,7 +7,6 @@
 }:
 let
   inherit (lib)
-    attrValues
     getExe'
     mkEnableOption
     mkIf
@@ -46,10 +45,6 @@ let
       oldAttrs.postFixup
       + ''
         patch $out/share/pve-manager/js/pvemanagerlib.js ${inputs.freenas-proxmox}/pve-manager/js/pvemanagerlib.js.patch
-
-        # needed for vzdump to be able to find its plugins
-        find $out/lib -type f | xargs sed -i \
-          -e "s|/usr/share/perl5|/run/current-system/sw/${pkgs.perl538.libPrefix}/${pkgs.perl538.version}|"
       '';
   });
 in
@@ -134,23 +129,5 @@ in
     # TODO: remove once PR #111 does this
     environment.systemPackages = [ pkgs.swtpm ];
     systemd.services.pve-guests.path = [ pkgs.swtpm ];
-
-    # TODO: upstream these things that are needed for backups to work
-    systemd.services.pvedaemon.path = attrValues {
-      inherit (pkgs)
-        gnutar
-        lvm2
-        lxc
-        msmtp
-        nettools
-        rsync
-        zstd
-        ;
-
-      # dummy cstream package to appease check_bin in vzdump
-      cstream = pkgs.writeShellScriptBin "cstream" ''
-        exit 0
-      '';
-    };
   };
 }
