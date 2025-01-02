@@ -179,8 +179,8 @@
     "nixpkgs": {
       "type": "Channel",
       "name": "nixpkgs-unstable",
-      "url": "https://releases.nixos.org/nixpkgs/nixpkgs-25.05pre730508.69b9a8c860bd/nixexprs.tar.xz",
-      "hash": "0sdq390gkkda3pgmbj986f4h2mcyy1hl8x49gz2fdrd2bz1ryv92"
+      "url": "https://releases.nixos.org/nixpkgs/nixpkgs-25.05pre731244.81934660d6e9/nixexprs.tar.xz",
+      "hash": "1a83rvx08ip3z1xdsimqs97j5x1zf0v590lz1llcksa2m6hfj0im"
     },
     "nixpkgs-firefox-darwin": {
       "type": "Git",
@@ -202,9 +202,9 @@
         "repo": "NUR"
       },
       "branch": "master",
-      "revision": "4e3fd24e6df52edbea65d11b19763adc3dad3009",
-      "url": "https://github.com/nix-community/NUR/archive/4e3fd24e6df52edbea65d11b19763adc3dad3009.tar.gz",
-      "hash": "14s0byn1mk4jmndg3ndh2s862i5kkm5idlkpw6sclajikk18h760"
+      "revision": "bf1b24c1625de090cb6eafef8c3ce9bbc4a8e27f",
+      "url": "https://github.com/nix-community/NUR/archive/bf1b24c1625de090cb6eafef8c3ce9bbc4a8e27f.tar.gz",
+      "hash": "0y2bwwcmfwlkalkzgirdpf48jx08i165715zrj4fwh4j8mxbjmpz"
     },
     "preservation": {
       "type": "Git",
