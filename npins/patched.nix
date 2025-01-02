@@ -13,5 +13,5 @@ import ../lib/overlay-patches.nix {
   # pve-storage: add XML::LibXML dep
   proxmox."112".hash = "sha256-LnyOOCnIvqVHw1i+R+b/ahkjccm8WdYhv3O3od5aS64=";
   # Get backups working
-  proxmox."113".hash = "sha256-oUNaZtZIP94tYJrZ/pn2/CoFOdQBDRVWAwF23IMxzNg=";
+  proxmox."113".hash = "sha256-gyFxI+UaxLGTVUgMESKVDl8OsMxm4UXz1nAglVQgeU8=";
 }
