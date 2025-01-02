@@ -13,6 +13,7 @@ let
     "brontes"
     "chaos"
     # "erebus"
+    "hades"
     "helios"
     "hypnos"
     "leto"
