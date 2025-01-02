@@ -59,13 +59,13 @@ in
       CanonicalizeHostname yes
       CanonicalDomains home.mattmoriarity.com
 
-      Host artemis.home.mattmoriarity.com hades.home.mattmoriarity.com
+      Host artemis.home.mattmoriarity.com
         User root
 
       Host aion
         Hostname 5.78.46.61
 
-      Host apollo.home.mattmoriarity.com talos.home.mattmoriarity.com
+      Host apollo.home.mattmoriarity.com hades.home.mattmoriarity.com talos.home.mattmoriarity.com
         User mjm
     '';
   };
