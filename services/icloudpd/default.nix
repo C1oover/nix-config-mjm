@@ -27,6 +27,7 @@ in
       };
       serviceConfig = {
         Type = "simple";
+        Restart = "always";
         ExecStart = utils.escapeSystemdExecArgs [
           (lib.getExe pkgs.icloudpd)
           "--directory"
