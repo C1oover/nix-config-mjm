@@ -10,6 +10,7 @@ let
     "alecto"
     "apollo"
     "arges"
+    "artemis"
     "brontes"
     "chaos"
     # "erebus"
