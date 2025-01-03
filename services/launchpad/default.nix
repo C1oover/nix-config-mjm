@@ -36,7 +36,6 @@ in
         loadedBy = [
           "launchpad"
           "launchpad-reminders"
-          "launchpad-dns"
         ];
         keys = {
           gitlab_token = { };
@@ -87,30 +86,6 @@ in
       wantedBy = [ "timers.target" ];
       timerConfig = {
         OnCalendar = "*:0/5:10";
-      };
-    };
-
-    systemd.services.launchpad-dns = {
-      restartIfChanged = false;
-      environment = serviceEnv;
-
-      after = [
-        "network.target"
-        "netbox.service"
-      ];
-
-      serviceConfig = {
-        Type = "oneshot";
-        ExecStart = "${pkg}/bin/launchpad update-dns";
-        DynamicUser = true;
-        User = "launchpad";
-      };
-    };
-
-    systemd.timers.launchpad-dns = {
-      wantedBy = [ "timers.target" ];
-      timerConfig = {
-        OnCalendar = "minutely";
       };
     };
 
