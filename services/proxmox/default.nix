@@ -117,6 +117,8 @@ in
       };
     };
 
+    hardware.ksm.enable = true;
+
     # PVE needs a root account with a proper password to work right
     users.users.root.hashedPassword = config.users.users.mjm.hashedPassword;
 
