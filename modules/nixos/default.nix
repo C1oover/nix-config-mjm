@@ -17,6 +17,7 @@
     ./desktop
     ./ingress.nix
     ./linkding.nix
+    ./raspberrypi
     ./server
     ./services.nix
     ./ssh.nix

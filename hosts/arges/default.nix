@@ -1,7 +1,4 @@
-{ localModulesPath, ... }:
 {
-  imports = [ "${localModulesPath}/nixos/profiles/raspberry-pi.nix" ];
-
   networking.hostName = "arges";
 
   fileSystems."/persist" = {
@@ -23,6 +20,7 @@
     enable = true;
     mode = "server";
   };
+  mjm.raspberrypi.enable = true;
   mjm.server.enable = true;
   mjm.state = {
     enablePreservation = true;
