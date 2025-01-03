@@ -93,6 +93,9 @@ in
 
     deployment.consulChecks = [ "proxmox" ];
 
+    # really don't want an entire VM host rebooting automatically
+    deployment.rebootAutomatically = false;
+
     systemd.network.networks = {
       "10-lan" = {
         matchConfig.Name = cfg.managementInterface;
