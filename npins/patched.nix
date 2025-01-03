@@ -14,4 +14,6 @@ import ../lib/overlay-patches.nix {
   proxmox."112".hash = "sha256-LnyOOCnIvqVHw1i+R+b/ahkjccm8WdYhv3O3od5aS64=";
   # Get backups working
   proxmox."113".hash = "sha256-gyFxI+UaxLGTVUgMESKVDl8OsMxm4UXz1nAglVQgeU8=";
+  # ssh: add explicit host filter before SendEnv
+  proxmox."115".hash = "sha256-qvO0CJ0r1fyQSJFxNTzgPL1QKVvqkMtYTVfuSARhZLs=";
 }
