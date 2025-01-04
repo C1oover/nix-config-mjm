@@ -1,9 +1,0 @@
-query HostnamesQuery($domain: String) {
-  ip_address_list(filters: { dns_name: { i_ends_with: $domain }}) {
-    address
-    dns_name
-    family {
-      value
-    }
-  }
-}

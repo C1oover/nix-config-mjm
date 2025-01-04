@@ -46,7 +46,6 @@ devshell.mkShell (
 
     vault-secrets.services.launchpad.keys = {
       paperless_token.envVarName = "LAUNCHPAD_PAPERLESS_TOKEN_FILE";
-      netbox_token.envVarName = "LAUNCHPAD_NETBOX_TOKEN_FILE";
       gitlab_token.envVarName = "LAUNCHPAD_GITLAB_TOKEN_FILE";
     };
 

@@ -1,9 +1,7 @@
 mod app;
 mod config;
 mod deploys;
-mod dns;
 mod home;
-mod netbox;
 mod tasks;
 
 use axum::response::IntoResponse;
@@ -35,9 +33,6 @@ enum Command {
 
     #[command(about = "Process outstanding reminders and send notifications")]
     ProcessReminders,
-
-    #[command(about = "Updates DNS records in NixOS configuration")]
-    UpdateDns,
 }
 
 #[tokio::main]
@@ -80,16 +75,6 @@ async fn main() {
             tasks::Reminder::process_outstanding(&app_state.pool, &config.reminders_topic)
                 .await
                 .expect("failed to process outstanding reminders");
-
-            global::shutdown_tracer_provider();
-            tracer_provider.shutdown().unwrap();
-        }
-        Command::UpdateDns => {
-            let app_state = app::new_state(config.clone()).await.unwrap();
-
-            dns::update_dns_records(&app_state.gitlab_client, &config.netbox_token)
-                .await
-                .expect("failed to update dns records");
 
             global::shutdown_tracer_provider();
             tracer_provider.shutdown().unwrap();

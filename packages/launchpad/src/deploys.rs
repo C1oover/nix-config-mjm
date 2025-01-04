@@ -7,7 +7,7 @@ use gitlab::api::common::SortOrder;
 use gitlab::api::projects::repository::commits;
 use gitlab::api::projects::{self, deployments::DeploymentOrderBy};
 use gitlab::api::projects::{merge_requests, pipelines};
-use gitlab::api::{raw, AsyncQuery};
+use gitlab::api::AsyncQuery;
 use gitlab::AsyncGitlab;
 use serde::{Deserialize, Serialize};
 use tokio::try_join;
@@ -125,33 +125,6 @@ impl GitLabClient {
             .project(GITLAB_PROJECT)
             .order_by(DeploymentOrderBy::CreatedAt)
             .sort(SortOrder::Descending)
-            .build()?;
-
-        Ok(endpoint.query_async(&self.client).await?)
-    }
-
-    #[tracing::instrument(skip(self), ret, err)]
-    pub async fn get_hosts_file(self: &Self) -> Result<String> {
-        let endpoint = projects::repository::files::FileRaw::builder()
-            .project(GITLAB_PROJECT)
-            .file_path("services/dns-server/hosts.json")
-            .build()?;
-
-        Ok(String::from_utf8(
-            raw(endpoint).query_async(&self.client).await?,
-        )?)
-    }
-
-    #[tracing::instrument(skip(self), err)]
-    pub async fn update_hosts_file(self: &Self, content: &str) -> Result<()> {
-        let endpoint = projects::repository::files::UpdateFile::builder()
-            .project(GITLAB_PROJECT)
-            .file_path("services/dns-server/hosts.json")
-            .content(content.as_bytes())
-            .branch("main")
-            .commit_message("dns-server: update host records")
-            .author_name("Homelab Automation")
-            .author_email("homelab@matt.mattmoriarity.com")
             .build()?;
 
         Ok(endpoint.query_async(&self.client).await?)
