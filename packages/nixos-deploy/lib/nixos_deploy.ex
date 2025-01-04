@@ -89,6 +89,11 @@ defmodule NixosDeploy do
       "builtins.fromJSON #{inspect(hostnames |> :json.encode() |> IO.iodata_to_binary())}"
 
     {:ok, paths} = Nix.eval_jobs(file: plans_file, args: [namesToInclude: names_to_include])
+
+    if Enum.any?(paths, &Map.has_key?(&1, "error")) do
+      raise "Evaluation failed for one or more nodes"
+    end
+
     paths_by_attr = Map.new(paths, &{&1["attr"], &1["drvPath"]})
     {config_drv, paths_by_attr} = Map.pop(paths_by_attr, "configJson")
     {:ok, config_path} = Nix.realise(config_drv)
