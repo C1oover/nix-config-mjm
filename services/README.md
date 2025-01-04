@@ -22,7 +22,7 @@ The [ingress](ingress/) service will use the `nodes` parameter Colmena provides 
 It will then use that to generate the Caddy configuration.
 Similarly, when creating the OpenTofu configuration, OpenTofu resources and Vault services and policies are merged together to produce the full configuration.
 
-The [Vault support](../terraform/vault.nix) is particularly nice, as it's smart about assigning policies to the hosts running the corresponding services, without having to explicitly declare which hosts those are.
+The [Vault support](../modules/tofu/vault.nix) is particularly nice, as it's smart about assigning policies to the hosts running the corresponding services, without having to explicitly declare which hosts those are.
 
 ## State and impermanence
 

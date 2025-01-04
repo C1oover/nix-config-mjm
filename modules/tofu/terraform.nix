@@ -24,10 +24,10 @@ let
 in
 {
   # need this to be able to define non-host-specific terraform resources
-  imports = [ ../modules/nixos/terraform.nix ];
+  imports = [ ../nixos/terraform.nix ];
 
   options = {
-    terraformConfig = {
+    tofuConfig = {
       sanitized = mkOption {
         type = types.raw;
         readOnly = true;
@@ -44,7 +44,7 @@ in
   };
 
   config = {
-    terraformConfig.sanitized =
+    tofuConfig.sanitized =
       let
         strip_nulls = true;
         sanitize =
@@ -70,12 +70,12 @@ in
       in
       sanitize cfg;
 
-    terraformConfig.final =
+    tofuConfig.final =
       let
         genericWhitelist =
           f: key:
           let
-            attr = f config.terraformConfig.sanitized.${key};
+            attr = f config.tofuConfig.sanitized.${key};
           in
           if attr == { } || attr == null then { } else { ${key} = attr; };
         whitelist = genericWhitelist id;
@@ -91,8 +91,6 @@ in
       // (whitelist "terraform")
       // (whitelist "variable");
 
-    terraformConfig.json =
-      (pkgs.formats.json { }).generate "config.tf.json"
-        config.terraformConfig.final;
+    tofuConfig.json = (pkgs.formats.json { }).generate "config.tf.json" config.tofuConfig.final;
   };
 }

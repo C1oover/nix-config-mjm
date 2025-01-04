@@ -19,9 +19,6 @@ deploy target *flags:
 diff host:
   nix run -f . host-scripts -- diff {{host}}
 
-tf-clean:
-  cd terraform && rm -rf .terraform.lock.hcl .terraform
-
 tf-plan:
   nix run -f . tofu-scripts -- plan
 

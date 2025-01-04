@@ -1,5 +1,5 @@
 {
-  terraform.backend.consul = {
+  terraform.terraform.backend.consul = {
     scheme = "http";
     access_token = "";
     datacenter = "dc1";

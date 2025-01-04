@@ -17,7 +17,6 @@ Anyway, thanks Gabriel for the helpful inspiration!
 - [hosts](hosts/): NixOS/nix-darwin configurations for each host
 - [home](home/): Home Manager configuration
 - [services](services/): Modules for setting up NixOS services, which can be enabled in individual host configs
-- [terraform](terraform/): OpenTofu config generated with Terranix (kind of)
 - [modules](modules/): Custom modules for extending various things that use the NixOS module system
 - [packages](packages/): Nix packages that for whatever reason aren't upstreamed to Nixpkgs
 

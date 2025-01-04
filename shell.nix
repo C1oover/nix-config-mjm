@@ -1,12 +1,15 @@
 let
   inputs = import ./npins/patched.nix;
-  pkgs = import inputs.nixos { config.allowUnfree = true; };
+  pkgs = import inputs.nixos {
+    config.allowUnfree = true;
+    overlays = [ (import ./overlay.nix) ];
+  };
   devshell = import inputs.devshell { nixpkgs = pkgs; };
 in
 devshell.mkShell (
   { lib, pkgs, ... }:
   let
-    inherit (lib) nameValuePair;
+    inherit (lib) attrValues nameValuePair;
   in
   {
     commands = [
@@ -14,13 +17,12 @@ devshell.mkShell (
       { package = pkgs.npins; }
     ];
 
-    devshell.packages = builtins.attrValues {
+    devshell.packages = attrValues {
       inherit (pkgs)
+        opentofu
         terraform-ls
         vault-bin
         ;
-
-      inherit (import ./terraform { inherit pkgs; }) opentofu;
     };
 
     env = [
