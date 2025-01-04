@@ -5,7 +5,6 @@
     ./atuin
     ./authelia
     ./consul
-    ./dns-server
     ./garage
     ./gitlab-runner
     ./grafana
