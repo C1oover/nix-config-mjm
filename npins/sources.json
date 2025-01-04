@@ -133,9 +133,9 @@
         "repo": "helix"
       },
       "branch": "steel-event-system",
-      "revision": "fb91ecefb9afb73cfd3c64db8e74a7d89dd6f3e9",
-      "url": "https://github.com/mattwparas/helix/archive/fb91ecefb9afb73cfd3c64db8e74a7d89dd6f3e9.tar.gz",
-      "hash": "07bfxij55bpw3gm9v68qi2g4y62cizbgnqfrb21hixziw5n459jg"
+      "revision": "e11ba2b76255e4cbb53aba93136d48c0d1914493",
+      "url": "https://github.com/mattwparas/helix/archive/e11ba2b76255e4cbb53aba93136d48c0d1914493.tar.gz",
+      "hash": "08jmmm3h3xwk4w25i5caq1bw6p6zzw1k4g5z78x2nlqncai0rws8"
     },
     "home-manager": {
       "type": "Git",
@@ -145,9 +145,9 @@
         "repo": "home-manager"
       },
       "branch": "master",
-      "revision": "11ab08541e61ac3bbf2ab27229f68622629401df",
-      "url": "https://github.com/nix-community/home-manager/archive/11ab08541e61ac3bbf2ab27229f68622629401df.tar.gz",
-      "hash": "06qhzf30g3hg7wf9h65596jfm57mpb6ykz7x20skyl5wmyvn74as"
+      "revision": "0d7908bd09165db6699908b7e3970f137327cbf0",
+      "url": "https://github.com/nix-community/home-manager/archive/0d7908bd09165db6699908b7e3970f137327cbf0.tar.gz",
+      "hash": "1xsxbd18ri1q7gin8758grqjwqf5zz85x7y31dgk06rrcr5nr29z"
     },
     "lanzaboote": {
       "type": "GitRelease",
@@ -173,8 +173,8 @@
     "nixos-small": {
       "type": "Channel",
       "name": "nixos-unstable-small",
-      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-25.05beta733017.44e31f952846/nixexprs.tar.xz",
-      "hash": "0hh0xigjk0aazi9r6zapiimwhawja0h6hzb3n2hj121qcns7bqrb"
+      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-25.05beta733430.14c58c591842/nixexprs.tar.xz",
+      "hash": "0xzh9qc4jfykb4aaa69i66ign9czyi5ny520zvhjb7cicbvgjp74"
     },
     "nixpkgs": {
       "type": "Channel",
@@ -202,9 +202,9 @@
         "repo": "NUR"
       },
       "branch": "master",
-      "revision": "867df4df63ec4f24b79aa6ea97805e2d5efd376a",
-      "url": "https://github.com/nix-community/NUR/archive/867df4df63ec4f24b79aa6ea97805e2d5efd376a.tar.gz",
-      "hash": "150llfkkjdjb12jzmxszm96hczacs6ycmksnd8gv0jfh8hapm671"
+      "revision": "782119f4b55be55f6578f8387c1b9a8017719997",
+      "url": "https://github.com/nix-community/NUR/archive/782119f4b55be55f6578f8387c1b9a8017719997.tar.gz",
+      "hash": "09cgz54b9s1h6bl9s3w4yb2fvabjxy4jjdi3qj9c9hvxwlv5i7h1"
     },
     "nurl": {
       "type": "Git",
