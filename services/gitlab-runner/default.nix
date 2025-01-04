@@ -128,24 +128,12 @@ in
       "127.0.0.1:2375"
     ];
 
-    services.openssh.knownHosts =
-      let
-        inherit (import ../../secrets/keys.nix) servers;
-      in
-      {
-        aion = {
-          extraHostNames = [ "5.78.46.61" ];
-          publicKey = servers.aion;
-        };
-        rhea = {
-          extraHostNames = [ "rhea.home.mattmoriarity.com" ];
-          publicKey = servers.rhea;
-        };
-        cronus = {
-          extraHostNames = [ "cronus.home.mattmoriarity.com" ];
-          publicKey = servers.cronus;
-        };
+    services.openssh.knownHosts = {
+      aion = {
+        extraHostNames = [ "5.78.46.61" ];
+        publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDUWju/ZTNyivso/yzx6RFE/9D50qTiWVXDvITrkyEVh";
       };
+    };
 
     programs.ssh.extraConfig = mkAfter ''
       Host arges.home.mattmoriarity.com
