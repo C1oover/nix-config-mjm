@@ -206,6 +206,18 @@
       "url": "https://github.com/nix-community/NUR/archive/867df4df63ec4f24b79aa6ea97805e2d5efd376a.tar.gz",
       "hash": "150llfkkjdjb12jzmxszm96hczacs6ycmksnd8gv0jfh8hapm671"
     },
+    "nurl": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "mjm",
+        "repo": "nurl"
+      },
+      "branch": "fetchpatch",
+      "revision": "0e9e893f278dde8ad42fea0fd33e8b66783a0485",
+      "url": "https://github.com/mjm/nurl/archive/0e9e893f278dde8ad42fea0fd33e8b66783a0485.tar.gz",
+      "hash": "09039qkvqjb9c7ymi6vafzvsn7dkjsf0mx26wchs97ri9jszkhq0"
+    },
     "preservation": {
       "type": "Git",
       "repository": {

@@ -20,6 +20,7 @@ devshell.mkShell (
     devshell.packages = attrValues {
       inherit (pkgs)
         opentofu
+        patch-scripts
         terraform-ls
         vault-bin
         ;
