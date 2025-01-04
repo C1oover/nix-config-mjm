@@ -50,6 +50,10 @@ in
         def --env td [] {
           cd (mktemp -d)
         }
+
+        def without-cache [block] {
+          with-env { NIX_CONFIG: "substituters = https://cache.nixos.org" } $block
+        }
       '';
     };
 
