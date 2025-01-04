@@ -48,10 +48,6 @@ let
       phases = [
         { name = "main"; }
         {
-          name = "dns";
-          includeIf = _name: config: config.mjm.dns-server.enable;
-        }
-        {
           name = "vault";
           includeIf = _name: config: config.mjm.vault.enable;
         }
