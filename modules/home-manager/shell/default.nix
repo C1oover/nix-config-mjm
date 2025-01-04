@@ -46,6 +46,10 @@ in
           osc633: true
           reset_application_mode: true
         }
+
+        def --env td [] {
+          cd (mktemp -d)
+        }
       '';
     };
 

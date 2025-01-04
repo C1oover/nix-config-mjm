@@ -5,7 +5,7 @@
   ...
 }:
 let
-  inherit (lib) mkDefault;
+  inherit (lib) attrValues mkDefault;
 in
 {
   mjm.git.enable = mkDefault true;
@@ -17,7 +17,7 @@ in
   # this check always gets weird when a new stable release branches off.
   home.enableNixpkgsReleaseCheck = false;
 
-  home.packages = builtins.attrValues (
+  home.packages = attrValues (
     {
       inherit (pkgs)
         fx
@@ -36,13 +36,6 @@ in
     }
     // lib.optionalAttrs pkgs.stdenv.isLinux { inherit (pkgs) attic-client; }
   );
-
-  home.shellAliases = {
-    td = "cd $(mktemp -d)";
-  };
-  programs.nushell.extraConfig = ''
-    def --env td [] { cd (mktemp -d) }
-  '';
 
   news.display = "silent";
   programs.home-manager.enable = true;
