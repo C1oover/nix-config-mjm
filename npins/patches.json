@@ -4,11 +4,7 @@
       "hash": "sha256-tI+wlhyC2e63NirN2kgg1I4GMPvMwFTIFFyo2nR1MDQ="
     }
   },
-  "nixos-small": {
-    "370809": {
-      "hash": "sha256-53722incjW1yUqUP5rF1apoIB+s3HCBZ13xBbY1hxWg="
-    }
-  },
+  "nixos-small": {},
   "darwin": {
     "1245": {
       "hash": "sha256-JqxFVDVTJIUVADbXgulIenqZeknxahZvQ7hb554Tkzs="
