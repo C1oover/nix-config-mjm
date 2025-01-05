@@ -68,7 +68,7 @@ in
         "gitlab_ci"
         "homekit_controller"
         "hue"
-        "icloud"
+        # "icloud"
         "imap"
         "jellyfin"
         "lidarr"
