@@ -37,7 +37,7 @@ in
         nil
         nixd
         nixfmt-rfc-style
-        racket
+        # racket
         shellcheck
         shfmt
         vscode-langservers-extracted
