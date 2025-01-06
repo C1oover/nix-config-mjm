@@ -1,4 +1,4 @@
-let $terminal = 'org.alacritty'
+let $terminal = 'com.mitchellh.ghostty'
 let $slack = 'com.tinyspeck.slackmacgap'
 
 def get-window-id-for-app [app_id: string] {
