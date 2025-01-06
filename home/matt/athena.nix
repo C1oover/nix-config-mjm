@@ -34,14 +34,7 @@
     { app = "1Password"; }
     { app = "Bitwarden"; }
     { app = "Slab"; }
-    {
-      app = "kitty";
-      package = config.programs.kitty.package;
-    }
-    {
-      app = "Alacritty";
-      package = config.programs.alacritty.package;
-    }
+    { app = "Ghostty"; }
     { app = "Dash"; }
     { app = "Postico 2"; }
     { app = "Teleport Connect"; }
