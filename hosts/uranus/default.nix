@@ -10,8 +10,6 @@
 
   environment.systemPackages = lib.attrValues {
     inherit (pkgs) chrysalis sbctl;
-
-    fix-audio = pkgs.writeNuBin "fix-audio" ./fix-audio.nu;
   };
 
   mjm.desktop.enable = true;
@@ -45,6 +43,42 @@
   services.udev.packages = [ pkgs.chrysalis ];
 
   services.openssh.enable = true;
+
+  services.pipewire.wireplumber = {
+    extraScripts."mjm/select-correct-profile.lua" = builtins.readFile ./select-correct-profile.lua;
+    extraConfig.dell-monitor = {
+      # prioritize the displayport audio over the yeti mic,
+      # so that we stay on the DP audio device even when switching
+      # between profiles (which changes the node name, so the
+      # remembered default node gets ignored)
+      "monitor.alsa.rules" = [
+        {
+          matches = [
+            { "api.alsa.card.name" = "HDA ATI HDMI"; }
+          ];
+          actions = {
+            update-props = {
+              "priority.session" = "1200";
+            };
+          };
+        }
+      ];
+
+      # add a custom hook before the existing profile selection
+      # logic that figures out which profile matches the main
+      # monitor, and chooses that one.
+      "wireplumber.components" = [
+        {
+          name = "mjm/select-correct-profile.lua";
+          type = "script/lua";
+          provides = "hooks.mjm.select-correct-profile";
+        }
+      ];
+      "wireplumber.profiles".main = {
+        "hooks.mjm.select-correct-profile" = "required";
+      };
+    };
+  };
 
   system.stateVersion = "24.05";
 }
