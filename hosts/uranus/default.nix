@@ -10,6 +10,8 @@
 
   environment.systemPackages = lib.attrValues {
     inherit (pkgs) chrysalis sbctl;
+
+    fix-audio = pkgs.writeNuBin "fix-audio" ./fix-audio.nu;
   };
 
   mjm.desktop.enable = true;
