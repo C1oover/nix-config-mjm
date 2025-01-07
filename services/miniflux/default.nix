@@ -28,6 +28,7 @@ in
         LISTEN_ADDR = "[::]:9999";
         BASE_URL = "https://feeds.midna.dev/";
         METRICS_COLLECTOR = 1;
+        METRICS_ALLOWED_NETWORKS = "127.0.0.1/8,10.0.0.0/16,2601:282:167f:d062::/64";
         AUTH_PROXY_HEADER = "Remote-User";
         AUTH_PROXY_USER_CREATION = 1;
         CREATE_ADMIN = mkForce 0;
