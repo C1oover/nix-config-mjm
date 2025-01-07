@@ -134,9 +134,6 @@ in
       services.consul.services.nut-exporter = {
         inherit (config.services.prometheus.exporters.nut) port;
 
-        metrics.enable = true;
-        metrics.path = "/ups_metrics";
-
         checks.up = {
           http.path = "/";
         };
