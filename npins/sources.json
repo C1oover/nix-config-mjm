@@ -173,8 +173,8 @@
     "nixos-small": {
       "type": "Channel",
       "name": "nixos-unstable-small",
-      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-25.05beta734918.664f4619297c/nixexprs.tar.xz",
-      "hash": "04319zgiqn5wikyhqn00ablf4pjywzlippmk8nv83265yhblyb74"
+      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-25.05beta735179.da76b6311eb1/nixexprs.tar.xz",
+      "hash": "194935xi65n9igl8qpgw9jin6wn0m1szyknmikpswdlbas9znarh"
     },
     "nixpkgs": {
       "type": "Channel",
@@ -202,9 +202,9 @@
         "repo": "NUR"
       },
       "branch": "master",
-      "revision": "587c37a7830efa636cae937252d0e6fe594f173d",
-      "url": "https://github.com/nix-community/NUR/archive/587c37a7830efa636cae937252d0e6fe594f173d.tar.gz",
-      "hash": "0gp8wi4sihpk8iycagvf64fnqi24skzwmdlxh3glfp4k7ajn9gf0"
+      "revision": "dc668949931b281d4d203695bcea5dae1430e4d9",
+      "url": "https://github.com/nix-community/NUR/archive/dc668949931b281d4d203695bcea5dae1430e4d9.tar.gz",
+      "hash": "1g4fjylavs41lpsfpdf6w323jx91i1gvxyrf904sfqk3v2qkww75"
     },
     "nurl": {
       "type": "Git",
