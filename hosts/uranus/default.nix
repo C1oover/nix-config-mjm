@@ -47,6 +47,10 @@
   services.pipewire.wireplumber = {
     extraScripts."mjm/select-correct-profile.lua" = builtins.readFile ./select-correct-profile.lua;
     extraConfig.dell-monitor = {
+      "context.properties" = {
+        "log.level" = "I";
+      };
+
       "monitor.alsa.rules" = [
         # prioritize the displayport audio over the yeti mic,
         # so that we stay on the DP audio device even when switching

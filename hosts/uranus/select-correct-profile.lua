@@ -20,6 +20,10 @@ function is_main_monitor(route)
   return get_product_name(route["info"]) == "DELL U2723QE"
 end
 
+function is_gpu_card(device)
+  return device.properties["alsa.id"] == "HDMI"
+end
+
 SimpleEventHook {
   name = "mjm/choose-profile",
   before = "device/find-stored-profile",
@@ -35,7 +39,7 @@ SimpleEventHook {
     end
 
     local device = event:get_subject()
-    if device.properties["alsa.id"] ~= "HDMI" then
+    if not is_gpu_card(device) then
       return
     end
 
@@ -73,5 +77,27 @@ SimpleEventHook {
         end
       end
     end
+  end
+}:register()
+
+-- the above hook relies on information in the routes, which isn't yet
+-- updated when EnumProfile changes. so we need to wait for EnumRoute
+-- to change as well, and then go through the select-profile logic again
+SimpleEventHook {
+  name = "mjm/select-profile-for-route-change",
+  interests = {
+    EventInterest {
+      Constraint { "event.type", "=", "device-params-changed" },
+      Constraint { "event.subject.param-id", "c", "EnumRoute" },
+    },
+  },
+  execute = function (event)
+    local source = event:get_source()
+    local device = event:get_subject()
+    if not is_gpu_card(device) then
+      return
+    end
+
+    source:call("push-event", "select-profile", device, nil)
   end
 }:register()
