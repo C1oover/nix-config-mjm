@@ -6,6 +6,7 @@
     ./authelia
     ./consul
     ./garage
+    ./gitlab
     ./gitlab-runner
     ./grafana
     ./home-assistant
