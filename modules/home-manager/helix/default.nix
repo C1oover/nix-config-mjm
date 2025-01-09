@@ -10,16 +10,7 @@ let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.mjm.helix;
 
-  # why do this if we already have pkgs? because it lets us evaluate
-  # the config on a system different from the one that is building.
-  pkgsForPatching = import pkgs.path { };
-  inherit (pkgsForPatching) applyPatches;
-  helixSrc = applyPatches {
-    name = "helix-patched";
-    src = inputs.helix;
-    patches = [ ./jujutsu.diff ];
-  };
-  helix = (import helixSrc).packages.${pkgs.system}.default;
+  helix = (import inputs.helix).packages.${pkgs.system}.default;
 in
 {
   options.mjm.helix = {

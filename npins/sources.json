@@ -129,13 +129,13 @@
       "type": "Git",
       "repository": {
         "type": "GitHub",
-        "owner": "mattwparas",
+        "owner": "mjm",
         "repo": "helix"
       },
-      "branch": "steel-event-system",
-      "revision": "e11ba2b76255e4cbb53aba93136d48c0d1914493",
-      "url": "https://github.com/mattwparas/helix/archive/e11ba2b76255e4cbb53aba93136d48c0d1914493.tar.gz",
-      "hash": "08jmmm3h3xwk4w25i5caq1bw6p6zzw1k4g5z78x2nlqncai0rws8"
+      "branch": "mega",
+      "revision": "ff89bd24f88c53b541d4bd763b67f2e07230d5cc",
+      "url": "https://github.com/mjm/helix/archive/ff89bd24f88c53b541d4bd763b67f2e07230d5cc.tar.gz",
+      "hash": "1293fkmcl8l6imrvkna2lpapzwcrbfw02g9bbbpj1vl4fqasqdwg"
     },
     "home-manager": {
       "type": "Git",
