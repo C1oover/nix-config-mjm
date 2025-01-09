@@ -134,5 +134,6 @@ in
     # TODO: remove once PR #111 does this
     environment.systemPackages = [ pkgs.swtpm ];
     systemd.services.pve-guests.path = [ pkgs.swtpm ];
+    systemd.services.qmeventsd.path = [ pkgs.swtpm ];
   };
 }
