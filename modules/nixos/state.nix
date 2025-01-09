@@ -160,18 +160,18 @@ in
           files = map (filterAttrs isValidForPreservation) cfg.files;
 
           # TODO abstract this
-          users.matt.directories = [ ".local/share/atuin" ];
+          users.${config.mjm.username}.directories = [ ".local/share/atuin" ];
         };
       };
 
       systemd.tmpfiles.settings.preservation = {
-        "/home/matt/.local".d = {
-          user = "matt";
+        "/home/${config.mjm.username}/.local".d = {
+          user = config.mjm.username;
           group = "users";
           mode = "0755";
         };
-        "/home/matt/.local/share".d = {
-          user = "matt";
+        "/home/${config.mjm.username}/.local/share".d = {
+          user = config.mjm.username;
           group = "users";
           mode = "0755";
         };
