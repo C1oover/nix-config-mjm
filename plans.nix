@@ -29,7 +29,7 @@ let
       nixpkgs = {
         default = "nixos-small";
         persephone = "nixos";
-        uranus = "nixos";
+        uranus = "nixos-plasma";
       };
 
       specialArgs = {

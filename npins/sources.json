@@ -170,6 +170,18 @@
       "url": "https://releases.nixos.org/nixos/unstable/nixos-25.05beta735357.bffc22eb1217/nixexprs.tar.xz",
       "hash": "03xs2grfqcr63cjpwa6ahisq57akq95qk1c2hmc1zb8k6aqjmgid"
     },
+    "nixos-plasma": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "mjm",
+        "repo": "nixpkgs"
+      },
+      "branch": "plasma-6.3",
+      "revision": "222f6e1198ae0fd5d43f2eca8ef132c3da8f50bd",
+      "url": "https://github.com/mjm/nixpkgs/archive/222f6e1198ae0fd5d43f2eca8ef132c3da8f50bd.tar.gz",
+      "hash": "1996infffxin0i2q9145jhpz303yprvbk0nw811kxy4m54xw2z6z"
+    },
     "nixos-small": {
       "type": "Channel",
       "name": "nixos-unstable-small",
