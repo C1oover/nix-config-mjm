@@ -66,6 +66,18 @@ in
   };
 
   config = mkIf cfg.enable {
+    mjm.services.proxmox = { };
+
+    ingress.virtualHosts.proxmox = {
+      upstream = {
+        service.name = "proxmox";
+        useSSL = true;
+        ipHash = true;
+      };
+
+      enableAuthProxy = false;
+    };
+
     # TODO parameterize if I ever have uneven hosts
     boot.kernelParams = [ "zfs.zfs_arc_max=7516192768" ];
 
