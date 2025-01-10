@@ -2,6 +2,7 @@
 let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.mjm.media-server;
+  secrets = config.mjm.services.media-server.vault.keys;
 in
 {
   options.mjm.media-server = {
@@ -27,7 +28,7 @@ in
 
     mjm.backups.mediaserver = {
       repositoryName = "mediaserver";
-      passwordFile = config.mjm.services.media-server.vault.keys.backup_password.path;
+      passwordFile = secrets.backup_password.path;
     };
   };
 }

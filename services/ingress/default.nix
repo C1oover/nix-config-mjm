@@ -16,6 +16,7 @@ let
     pipe
     ;
   cfg = config.ingress;
+  secrets = config.mjm.services.ingress.vault.keys;
 
   vhosts = cfg.virtualHosts;
 in
@@ -63,7 +64,7 @@ in
                     propagation_timeout = "30m";
                     provider = {
                       name = "desec";
-                      token = "{file.${config.mjm.services.ingress.vault.keys.desec_api_token.path}}";
+                      token = "{file.${secrets.desec_api_token.path}}";
                     };
                     resolvers = [
                       "1.1.1.1"

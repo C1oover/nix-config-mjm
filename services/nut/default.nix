@@ -9,6 +9,8 @@ let
     types
     ;
   cfg = config.mjm.nut;
+  secrets.common = config.vault-secrets.common.nut.keys;
+  secrets.server = config.vault-secrets.services.nut.keys;
 
   upsNames = [
     "or500"
@@ -62,7 +64,7 @@ in
           system = "${cfg.connectedUPSName}@${cfg.serverHostname}";
           user = "upsmon_secondary";
           type = "secondary";
-          passwordFile = config.vault-secrets.common.nut.keys.secondary_password.path;
+          passwordFile = secrets.common.secondary_password.path;
         };
       };
     })
@@ -94,11 +96,11 @@ in
         users = {
           upsmon = {
             upsmon = "primary";
-            passwordFile = config.vault-secrets.services.nut.keys.primary_password.path;
+            passwordFile = secrets.server.primary_password.path;
           };
           upsmon_secondary = {
             upsmon = "secondary";
-            passwordFile = config.vault-secrets.common.nut.keys.secondary_password.path;
+            passwordFile = secrets.common.secondary_password.path;
           };
         };
 
@@ -110,7 +112,7 @@ in
           system = "${name}@${cfg.serverHostname}";
           user = "upsmon";
           type = "primary";
-          passwordFile = config.vault-secrets.services.nut.keys.primary_password.path;
+          passwordFile = secrets.server.primary_password.path;
         });
 
       };

@@ -2,6 +2,7 @@
 let
   inherit (lib) mkIf;
   cfg = config.mjm.media-server;
+  secrets = config.mjm.services.media-server.vault.keys;
 in
 {
   config = mkIf cfg.enable {
@@ -32,7 +33,7 @@ in
       servers = [
         {
           baseUrl = "http://localhost:8080/sabnzbd";
-          apiKeyFile = config.mjm.services.media-server.vault.keys.sabnzbd_api_key.path;
+          apiKeyFile = secrets.sabnzbd_api_key.path;
         }
       ];
     };

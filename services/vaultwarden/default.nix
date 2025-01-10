@@ -7,6 +7,7 @@
 let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.mjm.vaultwarden;
+  secrets = config.mjm.services.vaultwarden.vault.keys;
 in
 {
   options.mjm.vaultwarden = {
@@ -48,7 +49,7 @@ in
     };
 
     mjm.backups.vaultwarden = {
-      passwordFile = config.mjm.services.vaultwarden.vault.keys.backup_password.path;
+      passwordFile = secrets.backup_password.path;
       paths = [
         "/var/lib/bitwarden_rs/attachments"
         "/var/lib/bitwarden_rs/db-backup.sqlite3"

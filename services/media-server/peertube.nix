@@ -2,6 +2,7 @@
 let
   inherit (lib) mkIf;
   cfg = config.mjm.media-server;
+  secrets = config.mjm.services.media-server.vault.keys;
 in
 {
   config = mkIf cfg.enable {
@@ -34,8 +35,8 @@ in
       database.createLocally = true;
       redis.createLocally = true;
 
-      secrets.secretsFile = config.mjm.services.media-server.vault.keys.peertube_secrets.path;
-      smtp.passwordFile = config.mjm.services.media-server.vault.keys.fastmail_password.path;
+      secrets.secretsFile = secrets.peertube_secrets.path;
+      smtp.passwordFile = secrets.fastmail_password.path;
 
       dataDirs = [ "/videos/peertube" ];
 

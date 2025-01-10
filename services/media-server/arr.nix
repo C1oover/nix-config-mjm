@@ -7,6 +7,7 @@
 let
   inherit (lib) mkIf;
   cfg = config.mjm.media-server;
+  secrets = config.mjm.services.media-server.vault.keys;
 in
 {
   config = mkIf cfg.enable {
@@ -97,21 +98,21 @@ in
       exportarr-sonarr = {
         enable = true;
         openFirewall = true;
-        apiKeyFile = config.mjm.services.media-server.vault.keys.sonarr_api_key.path;
+        apiKeyFile = secrets.sonarr_api_key.path;
         url = "http://127.0.0.1:8989";
       };
       exportarr-radarr = {
         enable = true;
         port = 9707;
         openFirewall = true;
-        apiKeyFile = config.mjm.services.media-server.vault.keys.radarr_api_key.path;
+        apiKeyFile = secrets.radarr_api_key.path;
         url = "http://127.0.0.1:7878";
       };
       exportarr-readarr = {
         enable = true;
         port = 9706;
         openFirewall = true;
-        apiKeyFile = config.mjm.services.media-server.vault.keys.readarr_api_key.path;
+        apiKeyFile = secrets.readarr_api_key.path;
         url = "http://127.0.0.1:8787";
       };
     };

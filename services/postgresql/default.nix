@@ -8,6 +8,7 @@ let
   inherit (lib) mkEnableOption mkIf;
 
   cfg = config.mjm.postgresql;
+  secrets = config.vault-secrets.services.postgresql.keys;
 in
 {
   options.mjm.postgresql = {
@@ -35,7 +36,7 @@ in
         pg = config.services.postgresql.package;
       in
       {
-        passwordFile = config.vault-secrets.services.postgresql.keys.backup_password.path;
+        passwordFile = secrets.backup_password.path;
         paths = [ "/tmp/pgbackup" ];
         user = "postgres";
         backupPrepareCommand = ''

@@ -7,6 +7,7 @@
 let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.mjm.netbox;
+  secrets = config.mjm.services.netbox.vault.keys;
 in
 {
   options.mjm.netbox = {
@@ -67,7 +68,7 @@ in
         REMOTE_AUTH_SUPERUSER_GROUPS = [ "admins" ];
         REMOTE_AUTH_STAFF_GROUPS = [ "admins" ];
       };
-      secretKeyFile = config.mjm.services.netbox.vault.keys.secret_key.path;
+      secretKeyFile = secrets.secret_key.path;
     };
 
     services.caddy = {
