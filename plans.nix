@@ -33,7 +33,7 @@ let
 
         helios = "nixos-staging";
         chaos = "nixos-staging";
-        # leto = "nixos-staging";
+        leto = "nixos-staging";
       };
 
       specialArgs = {

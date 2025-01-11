@@ -26,11 +26,11 @@ in
         # "hass_players"
         "opensubsonic"
         "slimproto"
-        "snapcast"
+        # "snapcast"
       ];
     };
 
-    systemd.services.music-assistant.path = [ pkgs.snapcast ];
+    # systemd.services.music-assistant.path = [ pkgs.snapcast ];
 
     networking.firewall.allowedTCPPorts = [
       1704

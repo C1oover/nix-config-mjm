@@ -196,9 +196,9 @@
         "repo": "nixpkgs"
       },
       "branch": "staging-next",
-      "revision": "564dc4b92662dbbeff0a0fb0208216e055cfd9f8",
-      "url": "https://github.com/NixOS/nixpkgs/archive/564dc4b92662dbbeff0a0fb0208216e055cfd9f8.tar.gz",
-      "hash": "159zlzlqbddqdrilicd3sbmanw097db0bchy4718r09id5372s1q"
+      "revision": "d63e09014e8b2524fcd6c338b52fab4605da8f42",
+      "url": "https://github.com/NixOS/nixpkgs/archive/d63e09014e8b2524fcd6c338b52fab4605da8f42.tar.gz",
+      "hash": "08vh6cxg8sx60vk7j18acqxj1i6lw4cskzjh9g2rncp9knylhh3j"
     },
     "nixpkgs": {
       "type": "Channel",
