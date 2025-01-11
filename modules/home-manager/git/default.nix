@@ -83,8 +83,7 @@ in
         core.fsmonitor = mkIf cfg.enableWatchman "watchman";
 
         revset-aliases = {
-          "merge_base(x)" = "merge_base(trunk(), x)";
-          "merge_base(a, b)" = "heads(..a & ..b)";
+          "merge_base(x)" = "fork_point(trunk() | x)";
         };
 
         aliases = {
