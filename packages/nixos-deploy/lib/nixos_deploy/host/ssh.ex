@@ -10,7 +10,7 @@ defmodule NixosDeploy.Host.SSH do
   end
 
   @impl true
-  def run_command(host, command, args, opts \\ []) do
+  def run_command(host, command, args, opts) do
     ssh_args = [ssh_target(host)] ++ host.opts[:ssh_opts] ++ ["--", "sudo", command] ++ args
 
     case Rambo.run("ssh", ssh_args, opts) do
@@ -19,6 +19,9 @@ defmodule NixosDeploy.Host.SSH do
 
       {:error, %{status: exit_code, out: output}} ->
         {:error, {:exit, exit_code, output}}
+
+      {:killed, _} ->
+        {:error, :timeout}
     end
   end
 

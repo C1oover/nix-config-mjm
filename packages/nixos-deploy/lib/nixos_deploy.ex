@@ -191,11 +191,16 @@ defmodule NixosDeploy do
   def diff_node({:ok, node}) do
     Logger.info("diffing #{node.name} against current system")
 
-    case Host.run_command(node, "#{node.out_path}/bin/nvd-json", [
-           "diff",
-           "/run/current-system",
-           node.out_path
-         ]) do
+    case Host.run_command(
+           node,
+           "#{node.out_path}/bin/nvd-json",
+           [
+             "diff",
+             "/run/current-system",
+             node.out_path
+           ],
+           timeout: 10_000
+         ) do
       {:ok, output} ->
         {node, output}
 
@@ -447,7 +452,7 @@ defmodule NixosDeploy do
 
   defp get_boot_id(node) do
     with {:ok, output} <-
-           Host.run_command(node, "cat", ["/proc/sys/kernel/random/boot_id"]) do
+           Host.run_command(node, "cat", ["/proc/sys/kernel/random/boot_id"], timeout: 10_000) do
       {:ok, String.trim(output)}
     end
   end

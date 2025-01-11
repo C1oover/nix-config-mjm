@@ -20,13 +20,14 @@ defmodule NixosDeploy.Host do
         }
 
   @callback copy_closure(t(), String.t()) :: :ok | {:error, term()}
-  @callback run_command(t(), String.t(), [String.t()]) :: {:ok, String.t()} | {:error, term()}
+  @callback run_command(t(), String.t(), [String.t()], keyword()) ::
+              {:ok, String.t()} | {:error, term()}
 
   def copy_closure(host, path) do
     host.kind.copy_closure(host, path)
   end
 
-  def run_command(host, command, args) do
-    host.kind.run_command(host, command, args)
+  def run_command(host, command, args, opts \\ []) do
+    host.kind.run_command(host, command, args, opts)
   end
 end
