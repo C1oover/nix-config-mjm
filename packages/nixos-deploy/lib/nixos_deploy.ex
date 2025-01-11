@@ -65,8 +65,8 @@ defmodule NixosDeploy do
     |> Task.async_stream(__MODULE__, :diff_node, [], timeout: 60_000, ordered: false)
     |> Enum.map(fn {:ok, result} -> result end)
     |> aggregate_diffs()
-    |> :json.encode()
-    |> IO.write()
+    |> JSON.encode_to_iodata!()
+    |> IO.binwrite()
   end
 
   def handle_command("apply-local", _args, opts) do
@@ -88,8 +88,7 @@ defmodule NixosDeploy do
         :error -> []
       end ++ ["-o", "BatchMode=yes", "-T"]
 
-    names_to_include =
-      "builtins.fromJSON #{inspect(hostnames |> :json.encode() |> IO.iodata_to_binary())}"
+    names_to_include = "builtins.fromJSON #{hostnames |> JSON.encode!() |> inspect()}"
 
     {:ok, paths} = Nix.eval_jobs(file: plans_file, args: [namesToInclude: names_to_include])
 
@@ -102,12 +101,12 @@ defmodule NixosDeploy do
     {:ok, config_path} = Nix.realise(config_drv)
 
     %{"phases" => phases, "deployment" => deploy_config} =
-      config_path |> File.read!() |> :json.decode()
+      config_path |> File.read!() |> JSON.decode!()
 
     paths_by_attr
     |> Enum.filter(fn {name, _} -> Enum.any?(phases, &(name in &1["nodes"])) end)
     |> Enum.map(fn {name, drv_path} ->
-      kind = if deploy_config[name]["targetHost"] == :null, do: Host.Local, else: Host.SSH
+      kind = if deploy_config[name]["targetHost"], do: Host.SSH, else: Host.Local
 
       %Host{
         name: name,
@@ -233,7 +232,7 @@ defmodule NixosDeploy do
            ["reboot-check", node.out_path]
          ) do
       {:ok, output} ->
-        %{"reboot_needed" => reboot_needed} = :json.decode(output)
+        %{"reboot_needed" => reboot_needed} = JSON.decode!(output)
         %{node | reboot_needed: reboot_needed}
 
       {:error, {:exit, exit_code, output}} ->
@@ -438,7 +437,7 @@ defmodule NixosDeploy do
     case Rambo.run("nvd-json", ["aggregate" | paths]) do
       {:ok, %{out: output}} ->
         File.rm_rf!(dir)
-        :json.decode(output)
+        JSON.decode!(output)
 
       {:error, %{status: exit_code, out: output}} ->
         File.rm_rf!(dir)

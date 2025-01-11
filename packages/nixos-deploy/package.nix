@@ -80,7 +80,7 @@ beamPackages.mixRelease {
     wrapProgram $out/bin/nixos-deploy \
       --prefix PATH : ${
         lib.makeBinPath [
-          beamPackages.elixir_1_17
+          beamPackages.elixir_1_18
           beamPackages.erlang
           nix-eval-jobs
           nix-output-monitor

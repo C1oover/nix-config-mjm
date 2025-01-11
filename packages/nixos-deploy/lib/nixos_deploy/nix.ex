@@ -12,7 +12,7 @@ defmodule NixosDeploy.Nix do
 
     case Rambo.run("nix", args) do
       {:ok, %{out: output}} ->
-        {:ok, :json.decode(output)}
+        {:ok, JSON.decode!(output)}
 
       {:error, %{status: exit_code, out: output}} ->
         {:error, {:exit, exit_code, output}}
@@ -38,7 +38,7 @@ defmodule NixosDeploy.Nix do
       {:ok, %{out: result}} ->
         result
         |> String.split("\n", trim: true)
-        |> Enum.map(&:json.decode/1)
+        |> Enum.map(&JSON.decode!/1)
         |> then(&{:ok, &1})
 
       {:error, %{status: exit_code, out: output}} ->
