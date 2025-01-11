@@ -12,6 +12,9 @@ defmodule NixosDeploy do
       formatter: Logger.default_formatter()
     })
 
+    :io.setopts(:standard_io, encoding: :latin1)
+    :io.setopts(:standard_error, encoding: :latin1)
+
     {options, [command | args]} =
       OptionParser.parse!(args,
         strict: [
@@ -51,7 +54,7 @@ defmodule NixosDeploy do
   def handle_command("diff", args, opts) do
     plans_file = Keyword.get(opts, :plans, "plans.nix")
 
-    {plan, evaled_nodes} = eval_nodes(plans_file, args, opts)
+    {_plan, evaled_nodes} = eval_nodes(plans_file, args, opts)
 
     evaled_nodes
     |> Task.async_stream(__MODULE__, :build_node, [], timeout: :infinity, ordered: false)
@@ -165,11 +168,11 @@ defmodule NixosDeploy do
     Logger.info("pushing #{node.name} to attic cache")
 
     # TODO retry this multiple times
-    case System.cmd("wrap-command", ["attic", "push", "homelab", node.out_path]) do
-      {_, 0} ->
+    case Rambo.run("attic", ["push", "homelab", node.out_path]) do
+      {:ok, _} ->
         node
 
-      {output, exit_code} ->
+      {:error, %{status: exit_code, out: output}} ->
         raise "Pushing #{node.name} to attic cache failed with exit code #{exit_code}: #{output}"
     end
   end
@@ -432,12 +435,12 @@ defmodule NixosDeploy do
         path
       end
 
-    case System.cmd("nvd-json", ["aggregate" | paths]) do
-      {output, 0} ->
+    case Rambo.run("nvd-json", ["aggregate" | paths]) do
+      {:ok, %{out: output}} ->
         File.rm_rf!(dir)
         :json.decode(output)
 
-      {output, exit_code} ->
+      {:error, %{status: exit_code, out: output}} ->
         File.rm_rf!(dir)
         raise "Aggregating diffs failed with exit code #{exit_code}: #{output}"
     end

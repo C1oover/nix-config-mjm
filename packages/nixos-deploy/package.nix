@@ -1,5 +1,7 @@
 {
   lib,
+  stdenv,
+  fetchFromGitHub,
   beam,
   nix-eval-jobs,
   nix-output-monitor,
@@ -7,31 +9,63 @@
   nix-gitignore,
   nvd-json,
   attic-client,
-  writeShellScriptBin,
+  rustPlatform,
 }:
 
 let
   beamPackages = beam.packages.erlang_27;
-  wrap-command = writeShellScriptBin "wrap-command" (builtins.readFile ./wrap_command.sh);
-in
 
-beamPackages.mixRelease rec {
-  pname = "nixos-deploy";
   version = "0.1.0";
-
   src = nix-gitignore.gitignoreSource ''
     /.*
     /README.md
     /*.nix
   '' ./.;
 
+  ramboShim = stdenv.mkDerivation (finalAttrs: {
+    name = "rambo-shim";
+    version = "0.3.4";
+
+    src = fetchFromGitHub {
+      owner = "jayjun";
+      repo = "rambo";
+      tag = finalAttrs.version;
+      hash = "sha256-L3yM3KCbYWw4HPmP7WLQoQlHwuvLWEUyHwy+/MR2Z7w=";
+    };
+
+    sourceRoot = "${finalAttrs.src.name}/priv";
+
+    cargoDeps = rustPlatform.fetchCargoTarball {
+      inherit (finalAttrs) src sourceRoot;
+      hash = "sha256-nqfNpS+phDk0B8Padfo30xJmFx5yzS24osv6VHBF23o=";
+    };
+
+    nativeBuildInputs = with rustPlatform; [
+      cargoSetupHook
+      cargoBuildHook
+      cargoInstallHook
+    ];
+
+    cargoBuildType = "release";
+  });
+
   mixFodDeps = beamPackages.fetchMixDeps {
     inherit version src;
     pname = "nixos-deploy-deps";
-    hash = "sha256-d2VZ5uAzxK9xvC29zBsC4lyB+Yza21BKJvs494Vs50E=";
+    hash = "sha256-3dKULPoXslMeq7tm58TaoUpOKufSrCYtMujjyu+Q1lA=";
   };
+in
+
+beamPackages.mixRelease {
+  pname = "nixos-deploy";
+  inherit version src mixFodDeps;
 
   nativeBuildInputs = [ makeWrapper ];
+
+  postUnpack = ''
+    substituteInPlace $MIX_DEPS_PATH/rambo/lib/mix/tasks/compile.rambo.ex \
+      --replace-fail 'Path.join(:code.priv_dir(:rambo), @filename)' "\"${ramboShim}/bin/rambo\""
+  '';
 
   postBuild = ''
     mix escript.build
@@ -52,7 +86,6 @@ beamPackages.mixRelease rec {
           nix-output-monitor
           nvd-json
           attic-client
-          wrap-command
         ]
       }
 

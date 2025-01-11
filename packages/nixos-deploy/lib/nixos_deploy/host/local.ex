@@ -9,12 +9,12 @@ defmodule NixosDeploy.Host.Local do
   end
 
   @impl true
-  def run_command(_host, command, args) do
-    case System.cmd("sudo", [command | args]) do
-      {output, 0} ->
+  def run_command(_host, command, args, opts \\ []) do
+    case Rambo.run("sudo", [command | args], opts) do
+      {:ok, %{out: output}} ->
         {:ok, output}
 
-      {output, exit_code} ->
+      {:error, %{status: exit_code, out: output}} ->
         {:error, {:exit, exit_code, output}}
     end
   end

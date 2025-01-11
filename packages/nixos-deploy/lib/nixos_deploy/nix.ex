@@ -1,7 +1,7 @@
 defmodule NixosDeploy.Nix do
   def eval(opts) do
     args =
-      ["nix", "eval", "--impure", "--json"] ++
+      ["eval", "--impure", "--json"] ++
         Enum.flat_map(opts, fn
           {:expr, expr} ->
             ["--expr", expr]
@@ -10,11 +10,11 @@ defmodule NixosDeploy.Nix do
             ["--file", path]
         end)
 
-    case System.cmd("wrap-command", args) do
-      {output, 0} ->
+    case Rambo.run("nix", args) do
+      {:ok, %{out: output}} ->
         {:ok, :json.decode(output)}
 
-      {output, exit_code} ->
+      {:error, %{status: exit_code, out: output}} ->
         {:error, {:exit, exit_code, output}}
     end
   end
@@ -34,33 +34,38 @@ defmodule NixosDeploy.Nix do
           end)
       end)
 
-    case System.cmd("wrap-command", ["nix-eval-jobs", "--workers", "4"] ++ args,
-           into: [],
-           lines: 1024
-         ) do
-      {result, 0} ->
-        {:ok, Enum.map(result, &:json.decode/1)}
+    case Rambo.run("nix-eval-jobs", ["--workers", "4"] ++ args) do
+      {:ok, %{out: result}} ->
+        result
+        |> String.split("\n", trim: true)
+        |> Enum.map(&:json.decode/1)
+        |> then(&{:ok, &1})
 
-      {output, exit_code} ->
-        {:error, {:exit, exit_code, Enum.join(output, "\n")}}
+      {:error, %{status: exit_code, out: output}} ->
+        {:error, {:exit, exit_code, output}}
     end
   end
 
   def realise(drv_path, opts \\ []) do
     use_nom = Keyword.get(opts, :nom, false)
 
-    if use_nom do
-      System.shell(
-        "wrap-command nix-store --no-gc-warning --realise #{drv_path} --log-format internal-json -v |& nom --json"
-      )
-    else
-      System.cmd("wrap-command", ["nix-store", "--no-gc-warning", "--realise", drv_path])
-    end
-    |> case do
-      {output, 0} ->
+    {cmd, args} =
+      if use_nom do
+        # TODO maybe stream this via Rambo?
+        {"/bin/sh",
+         [
+           "-c",
+           "nix-store --no-gc-warning --realise #{drv_path} --log-format internal-json -v |& nom --json"
+         ]}
+      else
+        {"nix-store", ["--no-gc-warning", "--realise", drv_path]}
+      end
+
+    case Rambo.run(cmd, args) do
+      {:ok, %{out: output}} ->
         {:ok, String.trim(output)}
 
-      {output, exit_code} ->
+      {:error, %{status: exit_code, out: output}} ->
         {:error, {:exit, exit_code, output}}
     end
   end
@@ -68,10 +73,9 @@ defmodule NixosDeploy.Nix do
   def copy_closure(path, opts) do
     ssh_opts = opts |> Keyword.get(:ssh_options, []) |> Enum.join(" ")
 
-    case System.cmd(
-           "wrap-command",
+    case Rambo.run(
+           "nix",
            [
-             "nix",
              "copy",
              "--no-check-sigs",
              "--to",
@@ -80,21 +84,21 @@ defmodule NixosDeploy.Nix do
            ],
            env: %{"NIX_SSHOPTS" => ssh_opts}
          ) do
-      {_output, 0} ->
+      {:ok, _} ->
         :ok
 
-      {output, exit_code} ->
+      {:error, %{status: exit_code, out: output}} ->
         {:error, {:exit, exit_code, output}}
     end
   end
 
   def diff(old_path, new_path) do
-    case System.cmd("nvd", ["--color=always", "diff", old_path, new_path], into: IO.stream()) do
-      {_output, 0} ->
+    case Rambo.run("nvd", ["--color=always", "diff", old_path, new_path], log: true) do
+      {:ok, _} ->
         :ok
 
-      {_, exit_code} ->
-        {:error, {:exit, exit_code, ""}}
+      {:error, %{status: exit_code, out: output}} ->
+        {:error, {:exit, exit_code, output}}
     end
   end
 end

@@ -22,6 +22,7 @@ defmodule NixosDeploy.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:rambo, "~> 0.3"},
       {:req, "~> 0.5"}
     ]
   end
