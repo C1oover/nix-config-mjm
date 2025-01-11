@@ -5,7 +5,7 @@
   ...
 }:
 let
-  inherit (lib) mkEnableOption mkIf;
+  inherit (lib) mkEnableOption mkForce mkIf;
 in
 {
   options.mjm.garage = {
@@ -67,6 +67,8 @@ in
       3902
       3903
     ];
+
+    systemd.services.garage.serviceConfig.StateDirectory = mkForce "garage/meta garage/data";
 
     services.consul.services.garage = {
       port = 3902;

@@ -188,6 +188,18 @@
       "url": "https://releases.nixos.org/nixos/unstable-small/nixos-25.05beta736143.e6752bc1ad9f/nixexprs.tar.xz",
       "hash": "0s10mjyfbq7di01rb4l2iv77maj3c9qk855vgpab7p9ggfx78s52"
     },
+    "nixos-staging": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "NixOS",
+        "repo": "nixpkgs"
+      },
+      "branch": "staging-next",
+      "revision": "564dc4b92662dbbeff0a0fb0208216e055cfd9f8",
+      "url": "https://github.com/NixOS/nixpkgs/archive/564dc4b92662dbbeff0a0fb0208216e055cfd9f8.tar.gz",
+      "hash": "159zlzlqbddqdrilicd3sbmanw097db0bchy4718r09id5372s1q"
+    },
     "nixpkgs": {
       "type": "Channel",
       "name": "nixpkgs-unstable",
