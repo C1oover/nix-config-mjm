@@ -33,20 +33,20 @@ def "main switch" [action: string = switch] {
 
 def "main deploy" [...hosts] {
   with-temp-key {|key|
-    nixos-deploy deploy --ssh-identity-file $key ...$hosts
+    nixos-deploy --ssh-identity-file $key deploy ...$hosts
   }
 }
 
 def "main diff" [...hosts] {
   with-temp-key {|key|
-    nixos-deploy diff --ssh-identity-file $key ...$hosts
+    nixos-deploy --ssh-identity-file $key diff ...$hosts
   }
 }
 
 def "main ci deploy" [] {
   with-vault {
     with-temp-key {|key|
-      nixos-deploy deploy --ssh-identity-file $key
+      nixos-deploy --ssh-identity-file $key deploy
     }
   }
 }
@@ -54,7 +54,7 @@ def "main ci deploy" [] {
 def "main ci diff" [] {
   with-vault {
     with-temp-key {|ssh_key|
-      let results = nixos-deploy diff --ssh-identity-file $ssh_key | from json
+      let results = nixos-deploy --ssh-identity-file $ssh_key diff | from json
 
       let keys = ['reboot_packages' 'version_changes' 'added_packages' 'removed_packages']
       let comment_text = $keys | where {|key| $results | get $key | is-not-empty } | each {|key|

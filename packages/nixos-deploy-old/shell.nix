@@ -1,6 +1,6 @@
 {
   sources ? import ../../npins/patched.nix,
-  pkgs ? import sources.nixos-small { overlays = [ (import ../../overlay.nix) ]; },
+  pkgs ? import sources.nixos-small { },
   devshell ? import sources.devshell { nixpkgs = pkgs; },
 }:
 
@@ -11,12 +11,8 @@ devshell.mkShell (
   in
   {
     packages = attrValues {
-      inherit (pkgs)
-        go
-        gopls
-        nix-eval-jobs
-        nvd-json
-        ;
+      inherit (pkgs.beam.packages.erlang_27) erlang elixir_1_18;
+      inherit (pkgs) nix-eval-jobs;
     };
   }
 )

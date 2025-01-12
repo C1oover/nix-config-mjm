@@ -1,0 +1,410 @@
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"flag"
+	"fmt"
+	"log"
+	"os"
+	"os/exec"
+	"path"
+	"runtime"
+	"slices"
+	"strings"
+
+	"git.midna.dev/mjm/nix-config/packages/nixos-deploy/nix"
+	"golang.org/x/sync/errgroup"
+)
+
+var (
+	plansFile       = flag.String("plans", "plans.nix", "File to evaluate for deploy plans")
+	sshIdentityFile = flag.String("ssh-identity-file", "", "SSH key to use")
+	concurrency     = flag.Int("concurrency", runtime.NumCPU(), "Number of nodes to evaluate/build concurrently")
+)
+
+func main() {
+	flag.Parse()
+	ctx := context.Background()
+
+	switch flag.Arg(0) {
+	case "deploy":
+		if err := handleDeploy(ctx); err != nil {
+			log.Fatalf("deploy failed: %v", err)
+		}
+	case "diff":
+		if err := handleDiff(ctx); err != nil {
+			log.Fatalf("diff failed: %v", err)
+		}
+	case "reboot":
+		if err := handleReboot(ctx); err != nil {
+			log.Fatalf("reboot failed: %v", err)
+		}
+	case "apply-local":
+		if err := handleApplyLocal(ctx); err != nil {
+			log.Fatalf("apply failed: %v", err)
+		}
+	default:
+		log.Fatalf("unexpected command %s", flag.Arg(0))
+	}
+}
+
+func sshOpts() []string {
+	args := []string{
+		"-o",
+		"BatchMode=yes",
+		"-T",
+	}
+
+	if *sshIdentityFile != "" {
+		args = append(args, "-o", fmt.Sprintf("IdentityFile=%s", *sshIdentityFile))
+	}
+
+	log.Print(args)
+	return args
+}
+
+func handleDeploy(ctx context.Context) error {
+	hostnames := flag.Args()
+	hostnames = hostnames[1:]
+
+	plan, err := evalNodes(ctx, *plansFile, hostnames)
+	if err != nil {
+		return fmt.Errorf("evaluating nodes: %w", err)
+	}
+
+	// remove any local hosts, we don't want to deploy to those
+	plan.Hosts = slices.DeleteFunc(plan.Hosts, func(h *Host) bool {
+		return h.Kind != HostKindSSH
+	})
+
+	sshOpts := sshOpts()
+
+	g, childCtx := errgroup.WithContext(ctx)
+	g.SetLimit(*concurrency)
+
+	for _, h := range plan.Hosts {
+		g.Go(func() error {
+			if err := h.Build(childCtx, false); err != nil {
+				return fmt.Errorf("building node %s: %w", h.Name, err)
+			}
+			if err := h.Push(childCtx, sshOpts); err != nil {
+				return fmt.Errorf("pushing node %s: %w", h.Name, err)
+			}
+			if err := h.PushToAttic(childCtx); err != nil {
+				return fmt.Errorf("pushing node %s to attic: %w", h.Name, err)
+			}
+			if err := h.CheckRebootNeeded(childCtx, sshOpts); err != nil {
+				return fmt.Errorf("checking if reboot is needed on %s: %w", h.Name, err)
+			}
+			return nil
+		})
+	}
+	if err := g.Wait(); err != nil {
+		return fmt.Errorf("building nodes: %w", err)
+	}
+
+	if err := plan.deploy(ctx, sshOpts); err != nil {
+		return fmt.Errorf("deploying plan: %w", err)
+	}
+
+	log.Print("deploy completed")
+	return nil
+}
+
+func handleDiff(ctx context.Context) error {
+	hostnames := flag.Args()
+	hostnames = hostnames[1:]
+
+	plan, err := evalNodes(ctx, *plansFile, hostnames)
+	if err != nil {
+		return fmt.Errorf("evaluating nodes: %w", err)
+	}
+
+	diffsDir, err := os.MkdirTemp("", "nixos-deploy-diffs")
+	if err != nil {
+		return fmt.Errorf("creating temp dir: %w", err)
+	}
+	defer os.RemoveAll(diffsDir)
+
+	sshOpts := sshOpts()
+
+	g, childCtx := errgroup.WithContext(ctx)
+	g.SetLimit(*concurrency)
+
+	for _, h := range plan.Hosts {
+		g.Go(func() error {
+			if err := h.Build(childCtx, false); err != nil {
+				return fmt.Errorf("building node %s: %w", h.Name, err)
+			}
+			if err := h.PushToAttic(childCtx); err != nil {
+				return fmt.Errorf("pushing node %s to attic: %w", h.Name, err)
+			}
+
+			if h.Kind == HostKindSSH {
+				if err := h.Push(childCtx, sshOpts); err != nil {
+					return fmt.Errorf("pushing node %s: %w", h.Name, err)
+				}
+				diff, err := h.Diff(ctx, sshOpts)
+				if err != nil {
+					return fmt.Errorf("diffing node %s: %w", h.Name, err)
+				}
+
+				f, err := os.Create(path.Join(diffsDir, fmt.Sprintf("%s.json", h.Name)))
+				if err != nil {
+					return fmt.Errorf("opening file to write diff: %w", err)
+				}
+				defer f.Close()
+
+				if _, err := f.Write(diff); err != nil {
+					return fmt.Errorf("writing diff to %s: %w", f.Name(), err)
+				}
+			}
+			return nil
+		})
+	}
+	if err := g.Wait(); err != nil {
+		return fmt.Errorf("building nodes: %w", err)
+	}
+
+	aggregated, err := aggregateDiffs(ctx, diffsDir)
+	if err != nil {
+		return fmt.Errorf("aggregating diffs: %w", err)
+	}
+
+	os.Stdout.Write(aggregated)
+	return nil
+}
+
+func handleReboot(ctx context.Context) error {
+	hostnames := flag.Args()
+	hostnames = hostnames[1:]
+
+	if len(hostnames) != 1 {
+		return fmt.Errorf("reboot command requires exactly one host")
+	}
+
+	plan, err := evalNodes(ctx, *plansFile, hostnames)
+	if err != nil {
+		return fmt.Errorf("evaluating nodes: %w", err)
+	}
+
+	sshOpts := sshOpts()
+
+	if err := plan.Hosts[0].Reboot(ctx, sshOpts); err != nil {
+		return fmt.Errorf("rebooting node: %w", err)
+	}
+
+	if err := plan.Hosts[0].WaitUntilHealthy(ctx); err != nil {
+		return fmt.Errorf("waiting for node to be healthy: %w", err)
+	}
+
+	return nil
+}
+
+func handleApplyLocal(ctx context.Context) error {
+	h, err := evalLocalNode(ctx, *plansFile)
+	if err != nil {
+		return fmt.Errorf("evaluating node: %w", err)
+	}
+
+	if err := h.Build(ctx, true); err != nil {
+		return fmt.Errorf("building node: %w", err)
+	}
+
+	if err := h.DiffLocal(ctx); err != nil {
+		return fmt.Errorf("diffing node: %v", err)
+	}
+
+	if err := h.ApplyLocal(ctx); err != nil {
+		return fmt.Errorf("applying to local node: %v", err)
+	}
+
+	return nil
+}
+
+func evalNodes(ctx context.Context, path string, hostnames []string) (*deployPlan, error) {
+	log.Println("evaluating plans")
+
+	hostnamesBytes, err := json.Marshal(hostnames)
+	if err != nil {
+		return nil, fmt.Errorf("serializing hostnames to json: %w", err)
+	}
+
+	namesToInclude := fmt.Sprintf("builtins.fromJSON %q", string(hostnamesBytes))
+
+	workers := *concurrency
+	if len(hostnames) > 0 && len(hostnames) < workers-1 {
+		workers = len(hostnames) + 1
+	}
+	paths, err := nix.EvalJobs(ctx, nix.EvalJobsOptions{
+		Path: path,
+		Args: map[string]string{
+			"namesToInclude": namesToInclude,
+		},
+		Workers: workers,
+	})
+	if err != nil {
+		return nil, fmt.Errorf("running eval: %w", err)
+	}
+
+	var configDrv string
+	var errorAttrs []string
+	pathsByAttrs := map[string]string{}
+	for _, p := range paths {
+		if p.Error != "" {
+			errorAttrs = append(errorAttrs, p.Attr)
+		} else if p.Attr == "configJson" {
+			configDrv = p.DrvPath
+		} else {
+			pathsByAttrs[p.Attr] = p.DrvPath
+		}
+	}
+	if len(errorAttrs) > 0 {
+		return nil, fmt.Errorf("evaluation failed for one or more nodes (%s): %w", strings.Join(errorAttrs, ", "), err)
+	}
+
+	configOut, err := nix.Realise(ctx, configDrv, false)
+	if err != nil {
+		return nil, fmt.Errorf("realising config json: %w", err)
+	}
+
+	configFile, err := os.Open(configOut)
+	if err != nil {
+		return nil, fmt.Errorf("opening %q: %w", configOut, err)
+	}
+	defer configFile.Close()
+
+	var plan planConfig
+	if err := json.NewDecoder(configFile).Decode(&plan); err != nil {
+		return nil, fmt.Errorf("decoding plan json: %w", err)
+	}
+
+	var hosts []*Host
+	for name, drvPath := range pathsByAttrs {
+		if !slices.ContainsFunc(plan.Phases, func(p deployPhase) bool { return slices.Contains(p.Nodes, name) }) {
+			continue
+		}
+
+		deployConfig := plan.Deployment[name]
+		kind := HostKindSSH
+		if deployConfig.TargetHost == nil {
+			kind = HostKindLocal
+		}
+
+		hosts = append(hosts, &Host{
+			Name:         name,
+			Kind:         kind,
+			DrvPath:      drvPath,
+			DeployConfig: deployConfig,
+		})
+	}
+
+	return &deployPlan{
+		Phases: plan.Phases,
+		Hosts:  hosts,
+	}, nil
+}
+
+func evalLocalNode(ctx context.Context, path string) (*Host, error) {
+	name, err := os.Hostname()
+	if err != nil {
+		return nil, fmt.Errorf("getting hostname: %w", err)
+	}
+
+	evalExpr := fmt.Sprintf("let config = (import ./%s {}).%s; in { drv = config.drvPath; out = config.outPath; }", path, name)
+
+	var result struct {
+		DrvPath string `json:"drv"`
+		OutPath string `json:"out"`
+	}
+
+	log.Printf("evaluating %s", name)
+	if err := nix.EvalJSON(ctx, &result, nix.EvalOptions{Expr: evalExpr}); err != nil {
+		return nil, fmt.Errorf("evaluating node: %w", err)
+	}
+
+	return &Host{
+		Name:    name,
+		Kind:    HostKindLocal,
+		DrvPath: result.DrvPath,
+		OutPath: result.OutPath,
+	}, nil
+}
+
+type deployPlan struct {
+	Phases []deployPhase
+	Hosts  []*Host
+}
+
+type planConfig struct {
+	Phases     []deployPhase           `json:"phases"`
+	Deployment map[string]DeployConfig `json:"deployment"`
+}
+
+type deployPhase struct {
+	Name  string   `json:"name"`
+	Nodes []string `json:"nodes"`
+}
+
+func (p *deployPlan) deploy(ctx context.Context, sshOpts []string) error {
+	nodesByName := map[string]*Host{}
+	for _, h := range p.Hosts {
+		nodesByName[h.Name] = h
+	}
+
+	for _, phase := range p.Phases {
+		var phaseNodes []*Host
+		for _, name := range phase.Nodes {
+			if h, ok := nodesByName[name]; ok {
+				phaseNodes = append(phaseNodes, h)
+			}
+		}
+
+		if err := deployPhaseNodes(ctx, phase.Name, phaseNodes, sshOpts); err != nil {
+			return fmt.Errorf("deploying phase %s: %w", phase.Name, err)
+		}
+	}
+
+	return nil
+}
+
+func deployPhaseNodes(ctx context.Context, name string, hosts []*Host, sshOpts []string) error {
+	if len(hosts) == 0 {
+		return nil
+	}
+
+	log.Printf("deploying %s phase", name)
+
+	for _, h := range hosts {
+		if err := h.Deploy(ctx, sshOpts); err != nil {
+			return fmt.Errorf("deploying %s: %w", h.Name, err)
+		}
+	}
+
+	log.Printf("deployed %s phase", name)
+	return nil
+}
+
+func aggregateDiffs(ctx context.Context, dir string) ([]byte, error) {
+	entries, err := os.ReadDir(dir)
+	if err != nil {
+		return nil, fmt.Errorf("reading entries from diffs dir: %w", err)
+	}
+
+	var paths []string
+	for _, e := range entries {
+		paths = append(paths, path.Join(dir, e.Name()))
+	}
+
+	args := append([]string{"aggregate"}, paths...)
+	cmd := exec.CommandContext(ctx, "nvd-json", args...)
+	cmd.Stderr = os.Stderr
+
+	output, err := cmd.Output()
+	if err != nil {
+		return nil, fmt.Errorf("running nvd-json: %w", err)
+	}
+
+	return output, nil
+}
