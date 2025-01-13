@@ -264,5 +264,11 @@ in
         };
       };
     };
+
+    deployment.rebootAutomatically = false;
+    deployment.consulChecks = [
+      "gitlab"
+      "gitlab-pages"
+    ];
   };
 }
