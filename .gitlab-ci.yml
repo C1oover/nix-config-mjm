@@ -31,6 +31,7 @@ build nixos hosts:
       changes: !reference [.snippets, nixos_changes]
   stage: check
   needs: []
+  resource_group: production/nixos
   id_tokens:
     VAULT_ID_TOKEN:
       aud: http://vault.service.consul:8200
