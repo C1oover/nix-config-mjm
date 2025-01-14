@@ -11,6 +11,6 @@ oldpkgs.opentofu.withPlugins (p: [
     spdx = "MIT";
     hash = "sha256-t+hpNI1Id8DrtQWuDj9OSdKkKMo/b1O2ViCSXjDxSlQ=";
     vendorHash = "sha256-Dcs1R3smMIRnjiGpt6ML1lsfYYl4ne8gK+BwDravhVI=";
-    homepage = "https://registry.opentofu.org/Valodim/desec";
+    homepage = "registry.opentofu.org/Valodim/desec";
   })
 ])
