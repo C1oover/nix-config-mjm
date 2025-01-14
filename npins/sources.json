@@ -167,8 +167,8 @@
     "nixos": {
       "type": "Channel",
       "name": "nixos-unstable",
-      "url": "https://releases.nixos.org/nixos/unstable/nixos-25.05beta737298.ed4a395ea001/nixexprs.tar.xz",
-      "hash": "1ifvf8csc98mfjbdp97dd2ynczqsj6ylpynss5y4j7nql8wa55pg"
+      "url": "https://releases.nixos.org/nixos/unstable/nixos-25.05beta737779.9abb87b552b7/nixexprs.tar.xz",
+      "hash": "0vjcyxzyiryspx8k1h7xsw0j9gcb4hs5wihhng64l9sqdf0b3kwp"
     },
     "nixos-plasma": {
       "type": "Git",
@@ -196,15 +196,15 @@
         "repo": "nixpkgs"
       },
       "branch": "staging-next",
-      "revision": "b9d8928838d4eb8f72054b74ef0c909fafa04a8b",
-      "url": "https://github.com/NixOS/nixpkgs/archive/b9d8928838d4eb8f72054b74ef0c909fafa04a8b.tar.gz",
-      "hash": "0ghspamkfy0admi8vhagc9pd7vgzxb1d0fbmjri35afxx85wxcgw"
+      "revision": "1c7f731c6de427c51879ad79ad0ad9f456c54115",
+      "url": "https://github.com/NixOS/nixpkgs/archive/1c7f731c6de427c51879ad79ad0ad9f456c54115.tar.gz",
+      "hash": "0n953biis9z8bw034labra9r5zkl5rfikbfd5m3ixp05ill0wblv"
     },
     "nixpkgs": {
       "type": "Channel",
       "name": "nixpkgs-unstable",
-      "url": "https://releases.nixos.org/nixpkgs/nixpkgs-25.05pre737462.ef56e777feda/nixexprs.tar.xz",
-      "hash": "07drvpqzfjgxncfgfh1vpsxf0gcprq1x2wmbvsavj84a46a0xj9k"
+      "url": "https://releases.nixos.org/nixpkgs/nixpkgs-25.05pre737872.2b1fca3296dd/nixexprs.tar.xz",
+      "hash": "0y9q0k8hiwrp2ngs5j2g41jkyl6jskzlk6rjkmynmxyvgfsrwcsk"
     },
     "nixpkgs-firefox-darwin": {
       "type": "Git",
@@ -226,9 +226,9 @@
         "repo": "NUR"
       },
       "branch": "master",
-      "revision": "a0fb5ef0f7228f0c10dd070d3778616e083aada1",
-      "url": "https://github.com/nix-community/NUR/archive/a0fb5ef0f7228f0c10dd070d3778616e083aada1.tar.gz",
-      "hash": "0mkai19d7kddm03crrc1k4zzm3hkjf7c3wqpa45facblv1q47xbf"
+      "revision": "d619a894bcebc84c4d4020644ac276ae8334a4c5",
+      "url": "https://github.com/nix-community/NUR/archive/d619a894bcebc84c4d4020644ac276ae8334a4c5.tar.gz",
+      "hash": "060nh1ggr433r0jp248yca00r4nb6m1v3xam880wjjwv3ixhmwpm"
     },
     "nurl": {
       "type": "Git",
