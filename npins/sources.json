@@ -185,8 +185,8 @@
     "nixos-small": {
       "type": "Channel",
       "name": "nixos-unstable-small",
-      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-25.05beta737898.629ab9db28ab/nixexprs.tar.xz",
-      "hash": "01grbw9pri5fflis59czic1lyhs6fzyah8s70k08klvslwhyfz5p"
+      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-25.05beta738138.be96678fad9c/nixexprs.tar.xz",
+      "hash": "1bm8b4qw3p9xwzkpfjim19bv0kcfdhd0m6hz72zxqamf67cpl6v4"
     },
     "nixos-staging": {
       "type": "Git",
@@ -196,9 +196,9 @@
         "repo": "nixpkgs"
       },
       "branch": "staging-next",
-      "revision": "4de88b4823c912967cb11e10caa7d150f72cbfdc",
-      "url": "https://github.com/NixOS/nixpkgs/archive/4de88b4823c912967cb11e10caa7d150f72cbfdc.tar.gz",
-      "hash": "1dk4w5n4sckr1xr3zgh99s657c30mg0lc5s5q6i4gxn4llf2x5sv"
+      "revision": "44e4abfaf6d17733e28d41adee9b28bc29e9613c",
+      "url": "https://github.com/NixOS/nixpkgs/archive/44e4abfaf6d17733e28d41adee9b28bc29e9613c.tar.gz",
+      "hash": "0lpwlzfilhbaw464hzdfcdnmccp0c1fcvzj0xz7aj4s8xia05rsr"
     },
     "nixpkgs": {
       "type": "Channel",
@@ -226,9 +226,9 @@
         "repo": "NUR"
       },
       "branch": "master",
-      "revision": "b48f4234ff5426b253119a4fc9d5a7b90e011187",
-      "url": "https://github.com/nix-community/NUR/archive/b48f4234ff5426b253119a4fc9d5a7b90e011187.tar.gz",
-      "hash": "0pdmvxzy72zgwkyp9rh3mqxpxxkxgvkjpkwa86zxv1izaay19zb7"
+      "revision": "f3cb6346287b6e8d470257145edd115f5e181691",
+      "url": "https://github.com/nix-community/NUR/archive/f3cb6346287b6e8d470257145edd115f5e181691.tar.gz",
+      "hash": "03k8vdvwpk4vlk6xh37467hxb6adqlj655mfajjwyiixjcq5r7ck"
     },
     "nurl": {
       "type": "Git",
