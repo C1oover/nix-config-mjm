@@ -25,7 +25,7 @@ type EvalJobResult struct {
 }
 
 func EvalJobs(ctx context.Context, opts EvalJobsOptions) ([]EvalJobResult, error) {
-	var args []string
+	args := []string{"--max-memory-size", "2048"}
 	if opts.Workers != 0 {
 		args = append(args, "--workers", strconv.Itoa(opts.Workers))
 	}
