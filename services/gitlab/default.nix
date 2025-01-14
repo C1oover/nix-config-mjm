@@ -10,6 +10,8 @@ let
   secrets = config.mjm.services.gitlab.vault.keys;
 in
 {
+  imports = [ ./vault.nix ];
+
   options.mjm.gitlab = {
     enable = mkEnableOption "GitLab";
   };

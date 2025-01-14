@@ -36,7 +36,6 @@ in
   imports = [
     ./admin.nix
     ./auth.nix
-    ./gitlab.nix
     ./mounts.nix
     ./unseal.nix
   ];
