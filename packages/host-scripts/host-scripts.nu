@@ -2,6 +2,37 @@ use nu-lib *
 use nu-lib/deploy.nu *
 use nu-lib/vault.nu *
 
+def render-aggregated-diff [] {
+  let results = $in
+
+  let keys = ['reboot_packages' 'version_changes' 'added_packages' 'removed_packages']
+  $keys | where {|key| $results | get $key | is-not-empty } | each {|key|
+    let heading = match $key {
+      'reboot_packages' => 'Changes requiring reboot'
+      'version_changes' => 'Version changes'
+      'added_packages' => 'Added'
+      'removed_packages' => 'Removed'
+    }
+
+    let changes_list = $results | get $key | each {|change|
+      let hosts_list = $change.hosts | each {|host|
+        let versions = ['old_versions' 'new_versions'] | each {|key|
+          $host | get -i $key
+        } | each {|list| $list | str join ", " } | str join " -> "
+
+        $'  - `($host.hostname)`: ($versions)'
+      } | str join "\n"
+
+      $'- **($change.pname)**
+  ($hosts_list)'
+    } | str join "\n"
+
+    $'## ($heading)
+
+  ($changes_list)'
+  } | str join "\n\n"
+}
+
 def --wrapped "darwin rebuild" [...args] {
   nom-build hosts/darwin.nix -A $'(scutil --get LocalHostName).system' ...$args
   nvd diff /run/current-system ./result
@@ -39,7 +70,12 @@ def "main deploy" [...hosts] {
 
 def "main diff" [...hosts] {
   with-temp-key {|key|
-    nixos-deploy --ssh-identity-file $key diff ...$hosts
+    let text = nixos-deploy --ssh-identity-file $key diff ...$hosts | from json | render-aggregated-diff
+    if ($text | is-empty) {
+      print "No changes."
+    } else {
+      print $text
+    }
   }
 }
 
@@ -54,35 +90,7 @@ def "main ci deploy" [] {
 def "main ci diff" [] {
   with-vault {
     with-temp-key {|ssh_key|
-      let results = nixos-deploy --ssh-identity-file $ssh_key diff | from json
-
-      let keys = ['reboot_packages' 'version_changes' 'added_packages' 'removed_packages']
-      let comment_text = $keys | where {|key| $results | get $key | is-not-empty } | each {|key|
-        let heading = match $key {
-          'reboot_packages' => 'Changes requiring reboot'
-          'version_changes' => 'Version changes'
-          'added_packages' => 'Added'
-          'removed_packages' => 'Removed'
-        }
-
-        let changes_list = $results | get $key | each {|change|
-          let hosts_list = $change.hosts | each {|host|
-            let versions = ['old_versions' 'new_versions'] | each {|key|
-              $host | get -i $key
-            } | each {|list| $list | str join ", " } | str join " -> "
-
-            $'  - `($host.hostname)`: ($versions)'
-          } | str join "\n"
-
-          $'- **($change.pname)**
-($hosts_list)'
-        } | str join "\n"
-
-        $'## ($heading)
-
-($changes_list)'
-      } | str join "\n\n"
-
+      let comment_text = nixos-deploy --ssh-identity-file $ssh_key diff | from json | render-aggregated-diff
       let body = if ($comment_text | is-empty) {
         "No package changes for server hosts."
       } else {
