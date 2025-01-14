@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ inputs, config, ... }:
 {
   imports = [
     ../../common/base
@@ -15,6 +15,8 @@
   services.nix-daemon.enable = true;
 
   time.timeZone = "America/Denver";
+
+  environment.etc."set-environment".source = config.system.build.setEnvironment;
 
   programs.nushell.enable = true;
   programs.zsh.enable = true;

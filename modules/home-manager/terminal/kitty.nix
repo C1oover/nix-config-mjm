@@ -1,14 +1,11 @@
 {
   lib,
   config,
-  osConfig,
   ...
 }:
 let
   inherit (lib) mkDefault mkEnableOption mkIf;
   cfg = config.mjm.terminal;
-
-  nu = osConfig.programs.nushell.wrappedPackage;
 in
 {
   options.mjm.terminal.kitty = {
@@ -24,7 +21,6 @@ in
       font.size = mkDefault 14;
       settings = {
         # modify_font = "baseline 1";
-        shell = "${lib.getExe nu} --login --interactive";
         shell_integration = "enabled";
         tab_bar_style = "powerline";
         macos_option_as_alt = "both";

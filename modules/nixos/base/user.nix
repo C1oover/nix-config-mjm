@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 let
   username = config.mjm.username;
 in
@@ -7,7 +7,7 @@ in
     isNormalUser = true;
     description = "MJ";
     extraGroups = [ "wheel" ];
-    shell = config.programs.nushell.wrappedPackage;
+    shell = pkgs.nushell;
     hashedPassword = "$y$j9T$tM/RKSjlb5ljgtpGT/Y8N1$3oXxWQh/q.KKCcJKoyVeIUVqjjt76EWX.uNEJRASt04";
   };
 }
