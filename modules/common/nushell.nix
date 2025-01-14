@@ -14,24 +14,9 @@ let
     ;
 
   cfg = config.programs.nushell;
-  wrappedPkg =
-    pkgs.writeShellScriptBin "nu" ''
-      set +u
 
-      ${optionalString pkgs.stdenv.isLinux ''[ -z "$__NIXOS_SET_ENVIRONMENT_DONE" ] && . /etc/set-environment''}
-      ${optionalString pkgs.stdenv.isDarwin ''
-        [ -z "$__NIX_DARWIN_SET_ENVIRONMENT_DONE" ] && . ${config.system.build.setEnvironment}
-        ${optionalString config.homebrew.enable ''eval "$(${config.homebrew.brewPrefix}/brew shellenv)"''}
-      ''}
-      HM_VARS=/etc/profiles/per-user/$USER/etc/profile.d/hm-session-vars.sh
-      [ -f "$HM_VARS" ] && . "$HM_VARS"
-
-      export SHELL=${lib.getExe cfg.package}
-      exec $SHELL "$@"
-    ''
-    // {
-      shellPath = "/bin/nu";
-    };
+  loadBashEnv =
+    path: "${pkgs.bash-env-json}/bin/bash-env-json ${path} | from json | get env | load-env";
 in
 {
   options.programs.nushell = {
@@ -41,17 +26,35 @@ in
     };
 
     package = mkPackageOption pkgs "nushell" { };
-    wrappedPackage = mkOption { type = types.package; };
+
+    setEnvironment = mkOption {
+      type = types.lines;
+      readOnly = true;
+    };
   };
 
   config = mkIf cfg.enable {
-    programs.nushell.wrappedPackage = wrappedPkg;
-
-    environment.systemPackages = [ wrappedPkg ];
+    environment.systemPackages = [ pkgs.nushell ];
 
     environment.shells = [
       "/run/current-system/sw/bin/nu"
-      "${wrappedPkg}/bin/nu"
+      "${pkgs.nushell}/bin/nu"
     ];
+
+    programs.nushell.setEnvironment = ''
+      ${optionalString pkgs.stdenv.isLinux ''
+        if '__NIXOS_SET_ENVIRONMENT_DONE' not-in $env {
+          ${loadBashEnv "/etc/set-environment"}
+        }
+      ''}
+      ${optionalString pkgs.stdenv.isDarwin ''
+        if '__NIX_DARWIN_SET_ENVIRONMENT_DONE' not-in $env {
+          ${loadBashEnv "/etc/set-environment"}
+        }
+        ${optionalString config.homebrew.enable ''
+          ${config.homebrew.brewPrefix}/brew shellenv | ${pkgs.bash-env-json}/bin/bash-env-json | from json | get env | load-env
+        ''}
+      ''}
+    '';
   };
 }

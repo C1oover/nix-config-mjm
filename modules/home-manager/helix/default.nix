@@ -36,7 +36,6 @@ in
         nodePackages.prettier
         nodePackages.typescript-language-server
         nodePackages.yaml-language-server
-        osConfig.programs.nushell.wrappedPackage
       ];
       settings = {
         editor = {
