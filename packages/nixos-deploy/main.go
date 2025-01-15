@@ -5,15 +5,17 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"log"
+	"log/slog"
 	"os"
 	"os/exec"
 	"path"
 	"runtime"
 	"slices"
 	"strings"
+	"time"
 
 	"git.midna.dev/mjm/nix-config/packages/nixos-deploy/nix"
+	"github.com/lmittmann/tint"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -27,25 +29,30 @@ func main() {
 	flag.Parse()
 	ctx := context.Background()
 
+	logger := slog.New(tint.NewHandler(os.Stderr, &tint.Options{
+		TimeFormat: time.Kitchen,
+	}))
+	slog.SetDefault(logger)
+
 	switch flag.Arg(0) {
 	case "deploy":
 		if err := handleDeploy(ctx); err != nil {
-			log.Fatalf("deploy failed: %v", err)
+			slog.ErrorContext(ctx, "deploy failed", "error", err)
 		}
 	case "diff":
 		if err := handleDiff(ctx); err != nil {
-			log.Fatalf("diff failed: %v", err)
+			slog.ErrorContext(ctx, "diff failed", "error", err)
 		}
 	case "reboot":
 		if err := handleReboot(ctx); err != nil {
-			log.Fatalf("reboot failed: %v", err)
+			slog.ErrorContext(ctx, "reboot failed", "error", err)
 		}
 	case "apply-local":
 		if err := handleApplyLocal(ctx); err != nil {
-			log.Fatalf("apply failed: %v", err)
+			slog.ErrorContext(ctx, "apply failed", "error", err)
 		}
 	default:
-		log.Fatalf("unexpected command %s", flag.Arg(0))
+		slog.ErrorContext(ctx, "unexpected command", "command", flag.Arg(0))
 	}
 }
 
@@ -60,7 +67,6 @@ func sshOpts() []string {
 		args = append(args, "-o", fmt.Sprintf("IdentityFile=%s", *sshIdentityFile))
 	}
 
-	log.Print(args)
 	return args
 }
 
@@ -108,7 +114,7 @@ func handleDeploy(ctx context.Context) error {
 		return fmt.Errorf("deploying plan: %w", err)
 	}
 
-	log.Print("deploy completed")
+	slog.InfoContext(ctx, "deploy completed")
 	return nil
 }
 
@@ -224,7 +230,12 @@ func handleApplyLocal(ctx context.Context) error {
 }
 
 func evalNodes(ctx context.Context, path string, hostnames []string) (*deployPlan, error) {
-	log.Println("evaluating plans")
+	workers := *concurrency
+	if len(hostnames) > 0 && len(hostnames) < workers-1 {
+		workers = len(hostnames) + 1
+	}
+
+	slog.InfoContext(ctx, "evaluating plans", "file", path, "hosts", hostnames, "workers", workers)
 
 	hostnamesBytes, err := json.Marshal(hostnames)
 	if err != nil {
@@ -232,11 +243,6 @@ func evalNodes(ctx context.Context, path string, hostnames []string) (*deployPla
 	}
 
 	namesToInclude := fmt.Sprintf("builtins.fromJSON %q", string(hostnamesBytes))
-
-	workers := *concurrency
-	if len(hostnames) > 0 && len(hostnames) < workers-1 {
-		workers = len(hostnames) + 1
-	}
 	paths, err := nix.EvalJobs(ctx, nix.EvalJobsOptions{
 		Path: path,
 		Args: map[string]string{
@@ -292,11 +298,13 @@ func evalNodes(ctx context.Context, path string, hostnames []string) (*deployPla
 			kind = HostKindLocal
 		}
 
+		logger := slog.Default().WithGroup("host").With("name", name)
 		hosts = append(hosts, &Host{
 			Name:         name,
 			Kind:         kind,
 			DrvPath:      drvPath,
 			DeployConfig: deployConfig,
+			log:          logger,
 		})
 	}
 
@@ -319,16 +327,18 @@ func evalLocalNode(ctx context.Context, path string) (*Host, error) {
 		OutPath string `json:"out"`
 	}
 
-	log.Printf("evaluating %s", name)
+	slog.InfoContext(ctx, "evaluating local host", "name", name)
 	if err := nix.EvalJSON(ctx, &result, nix.EvalOptions{Expr: evalExpr}); err != nil {
 		return nil, fmt.Errorf("evaluating node: %w", err)
 	}
+	logger := slog.Default().WithGroup("host").With("name", name)
 
 	return &Host{
 		Name:    name,
 		Kind:    HostKindLocal,
 		DrvPath: result.DrvPath,
 		OutPath: result.OutPath,
+		log:     logger,
 	}, nil
 }
 
@@ -374,7 +384,8 @@ func deployPhaseNodes(ctx context.Context, name string, hosts []*Host, sshOpts [
 		return nil
 	}
 
-	log.Printf("deploying %s phase", name)
+	l := slog.Default().WithGroup("phase").With("name", name)
+	l.InfoContext(ctx, "deploying phase", "host_count", len(hosts))
 
 	for _, h := range hosts {
 		if err := h.Deploy(ctx, sshOpts); err != nil {
@@ -382,7 +393,7 @@ func deployPhaseNodes(ctx context.Context, name string, hosts []*Host, sshOpts [
 		}
 	}
 
-	log.Printf("deployed %s phase", name)
+	l.InfoContext(ctx, "deployed phase")
 	return nil
 }
 

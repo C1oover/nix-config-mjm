@@ -5,7 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"log"
+	"log/slog"
 	"os"
 	"os/exec"
 	"path"
@@ -30,6 +30,7 @@ type Host struct {
 	OutPath      string
 	DeployConfig DeployConfig
 	RebootNeeded bool
+	log          *slog.Logger
 }
 
 type DeployConfig struct {
@@ -68,7 +69,8 @@ func (h *Host) Build(ctx context.Context, useNom bool) error {
 		return fmt.Errorf("building with nom requires the out path to already be set, but it is empty")
 	}
 
-	log.Printf("building %s from %s", h.Name, h.DrvPath)
+	l := h.log.With("drv_path", h.DrvPath)
+	l.InfoContext(ctx, "building host")
 
 	outPath, err := nix.Realise(ctx, h.DrvPath, useNom)
 	if err != nil {
@@ -78,23 +80,25 @@ func (h *Host) Build(ctx context.Context, useNom bool) error {
 	if !useNom {
 		h.OutPath = outPath
 	}
-	log.Printf("built %s to %s", h.Name, h.OutPath)
+	l.InfoContext(ctx, "finished building host", "out_path", h.OutPath)
 	return nil
 }
 
 func (h *Host) Push(ctx context.Context, sshOpts []string) error {
-	log.Printf("pushing %s to %s", h.Name, *h.DeployConfig.TargetHost)
+	l := h.log.With("out_path", h.OutPath, "target", h.sshTarget())
+	l.InfoContext(ctx, "pushing system")
 
 	if err := h.CopyClosure(ctx, h.OutPath, sshOpts); err != nil {
 		return fmt.Errorf("copying closure for %s: %w", h.Name, err)
 	}
 
-	log.Printf("pushed %s", h.Name)
+	l.InfoContext(ctx, "pushed system")
 	return nil
 }
 
 func (h *Host) PushToAttic(ctx context.Context) error {
-	log.Printf("pushing %s to attic cache", h.Name)
+	l := h.log.With("out_path", h.OutPath)
+	l.InfoContext(ctx, "pushing to attic cache")
 
 	cmd := exec.CommandContext(ctx, "attic", "push", "homelab", h.OutPath)
 	cmd.Stdout = os.Stdout
@@ -103,11 +107,12 @@ func (h *Host) PushToAttic(ctx context.Context) error {
 		return fmt.Errorf("running attic push: %w", err)
 	}
 
+	l.InfoContext(ctx, "pushed to attic cache")
 	return nil
 }
 
 func (h *Host) CheckRebootNeeded(ctx context.Context, sshOpts []string) error {
-	log.Printf("checking if %s requires a reboot", h.Name)
+	h.log.InfoContext(ctx, "checking if reboot is needed")
 
 	output, err := h.runCommand(ctx, sshOpts, path.Join(h.OutPath, "bin/nvd-json"), "reboot-check", h.OutPath)
 	if err != nil {
@@ -126,7 +131,7 @@ func (h *Host) CheckRebootNeeded(ctx context.Context, sshOpts []string) error {
 }
 
 func (h *Host) Diff(ctx context.Context, sshOpts []string) ([]byte, error) {
-	log.Printf("diffing %s against current system", h.Name)
+	h.log.InfoContext(ctx, "diffing against current system", "out_path", h.OutPath)
 
 	output, err := h.runCommand(ctx, sshOpts, path.Join(h.OutPath, "bin/nvd-json"), "diff", "/run/current-system", h.OutPath)
 	if err != nil {
@@ -154,7 +159,7 @@ func (h *Host) DiffLocal(ctx context.Context) error {
 const systemProfile = "/nix/var/nix/profiles/system"
 
 func (h *Host) Deploy(ctx context.Context, sshOpts []string) error {
-	log.Printf("deploying %s", h.Name)
+	h.log.InfoContext(ctx, "deploying")
 
 	goal := "switch"
 	if h.RebootNeeded {
@@ -178,7 +183,7 @@ func (h *Host) Deploy(ctx context.Context, sshOpts []string) error {
 		}
 	}
 
-	log.Printf("deployed %s successfully", h.Name)
+	h.log.InfoContext(ctx, "deployed")
 	return nil
 }
 
@@ -210,18 +215,18 @@ func (h *Host) ApplyLocal(ctx context.Context) error {
 	}
 
 	if h.RebootNeeded {
-		log.Print("reboot to apply changes")
+		fmt.Fprintln(os.Stderr, "Reboot to apply changes.")
 	}
 	return nil
 }
 
 func (h *Host) apply(ctx context.Context, sshOpts []string, goal string) error {
-	log.Printf("setting new system profile for %s", h.Name)
+	h.log.InfoContext(ctx, "setting system profile", "out_path", h.OutPath)
 	if _, err := h.runCommand(ctx, sshOpts, "nix-env", "--profile", systemProfile, "--set", h.OutPath); err != nil {
 		return fmt.Errorf("setting system profile: %w", err)
 	}
 
-	log.Printf("activating new system for %s via %s", h.Name, goal)
+	h.log.InfoContext(ctx, "activating system", "goal", goal)
 	if _, err := h.runCommand(ctx, sshOpts, path.Join(systemProfile, "bin/switch-to-configuration"), goal); err != nil {
 		return fmt.Errorf("activating system: %w", err)
 	}
@@ -234,7 +239,7 @@ func (h *Host) WaitUntilHealthy(ctx context.Context) error {
 		return nil
 	}
 
-	log.Printf("waiting for %s to be healthy", h.Name)
+	h.log.InfoContext(ctx, "waiting for healthy host", "checks", h.DeployConfig.ConsulChecks)
 	// delay a bit at the start to be sure the state in Consul reflects the deploy
 	time.Sleep(20 * time.Second)
 
@@ -264,20 +269,20 @@ func (h *Host) WaitUntilHealthy(ctx context.Context) error {
 				}
 
 				anyFound = true
-				log.Printf("%s: %s", check.Name, check.Status)
+				h.log.InfoContext(ctx, "health check result", slog.Group("check", "name", check.Name, "status", check.Status))
 				if check.Status != consulapi.HealthPassing {
 					anyFailing = true
 				}
 			}
 
 			if !anyFound {
-				log.Printf("no checks found for service %s", svcName)
+				h.log.InfoContext(ctx, "no checks found", "service", svcName)
 				anyFailing = true
 			}
 		}
 
 		if anyFailing {
-			log.Printf("at least one required service is unhealthy, continuing to wait")
+			h.log.InfoContext(ctx, "host is unhealthy")
 		} else {
 			break
 		}
@@ -285,12 +290,12 @@ func (h *Host) WaitUntilHealthy(ctx context.Context) error {
 		waitIndex = meta.LastIndex
 	}
 
-	log.Printf("%s is healthy", h.Name)
+	h.log.InfoContext(ctx, "host is healthy")
 	return nil
 }
 
 func (h *Host) Reboot(ctx context.Context, sshOpts []string) error {
-	log.Printf("rebooting %s", h.Name)
+	h.log.InfoContext(ctx, "rebooting")
 
 	oldID, err := h.getBootID(ctx, sshOpts)
 	if err != nil {
@@ -301,7 +306,7 @@ func (h *Host) Reboot(ctx context.Context, sshOpts []string) error {
 		return fmt.Errorf("initiating reboot: %w", err)
 	}
 
-	log.Printf("waiting for %s to reboot", h.Name)
+	h.log.InfoContext(ctx, "waiting for reboot")
 
 	for {
 		newID, err := h.getBootID(ctx, sshOpts)
@@ -312,7 +317,7 @@ func (h *Host) Reboot(ctx context.Context, sshOpts []string) error {
 		time.Sleep(2 * time.Second)
 	}
 
-	log.Printf("rebooted %s", h.Name)
+	h.log.InfoContext(ctx, "rebooted")
 	return nil
 }
 
