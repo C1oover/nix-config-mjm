@@ -1,97 +1,25 @@
 {
-  pkgs,
   lib,
   inputs,
   config,
-  osConfig,
   ...
 }:
 let
-  inherit (lib)
-    importTOML
-    mkBefore
-    mkEnableOption
-    mkForce
-    mkIf
-    mkMerge
-    ;
+  inherit (lib) mkEnableOption mkIf;
   cfg = config.mjm.shell;
 in
 {
+  imports = [
+    ./nushell.nix
+    ./starship.nix
+    ./zsh.nix
+  ];
+
   options.mjm.shell = {
     enable = mkEnableOption "shell config";
   };
 
   config = mkIf cfg.enable {
-    programs.zsh = {
-      enable = true;
-      enableCompletion = true;
-      syntaxHighlighting.enable = true;
-      enableVteIntegration = true;
-      autosuggestion.enable = true;
-      defaultKeymap = "emacs";
-      initExtra = ''
-        if [ -f "$HOME/.asdf/asdf.sh" ]; then . "$HOME/.asdf/asdf.sh"; fi
-        bindkey -- "''${terminfo[kdch1]}" delete-char
-      '';
-    };
-
-    programs.nushell = {
-      enable = true;
-      extraConfig = mkBefore ''
-        ${osConfig.programs.nushell.setEnvironment}
-
-        let hm_vars = $"/etc/profiles/per-user/($env.USER)/etc/profile.d/hm-session-vars.sh"
-        if ($hm_vars | path exists) {
-          ${pkgs.bash-env-json}/bin/bash-env-json $hm_vars | from json | get env | load-env
-        }
-
-        $env.config.show_banner = false
-        $env.config.shell_integration = {
-          osc2: true
-          osc7: true
-          osc8: true
-          osc9_9: false
-          osc133: true
-          osc633: true
-          reset_application_mode: true
-        }
-
-        def --env td [] {
-          cd (mktemp -d)
-        }
-
-        def without-cache [block] {
-          with-env { NIX_CONFIG: "substituters = https://cache.nixos.org" } $block
-        }
-      '';
-    };
-
-    home.file = mkIf pkgs.stdenv.isDarwin {
-      "Library/Application Support/nushell".source =
-        config.lib.file.mkOutOfStoreSymlink "${config.xdg.configHome}/nushell";
-    };
-
-    programs.starship = {
-      enable = true;
-      settings = mkMerge [
-        {
-          command_timeout = 2000;
-          os.disabled = true;
-          gcloud.disabled = true;
-          docker_context.disabled = true;
-          terraform.disabled = true;
-          git_metrics.disabled = mkForce true;
-          sudo.disabled = mkForce true;
-          nix_shell.heuristic = true;
-
-          format = mkForce "($nix_shell$container\${custom.jj}\${custom.jj_added}\${custom.jj_removed}\n)$cmd_duration$hostname$localip$shlvl$shell$env_var$jobs$sudo$username$character";
-        }
-        (importTOML ./jetpack.toml)
-        # (builtins.fromTOML (builtins.readFile ./nerd-font-symbols.toml))
-      ];
-    };
-
     programs.direnv = {
       enable = true;
       nix-direnv.enable = true;
@@ -132,9 +60,7 @@ in
       bat.enable = true;
       btop.enable = true;
       fzf.enable = true;
-      starship.enable = true;
       yazi.enable = true;
-      zsh-syntax-highlighting.enable = true;
     };
 
     xdg.configFile."process-compose/theme.yaml".source =

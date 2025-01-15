@@ -1,0 +1,27 @@
+{
+  config,
+  lib,
+  ...
+}:
+let
+  inherit (lib) mkIf;
+  cfg = config.mjm.shell;
+in
+{
+  config = mkIf cfg.enable {
+    programs.zsh = {
+      enable = true;
+      enableCompletion = true;
+      syntaxHighlighting.enable = true;
+      enableVteIntegration = true;
+      autosuggestion.enable = true;
+      defaultKeymap = "emacs";
+      initExtra = ''
+        if [ -f "$HOME/.asdf/asdf.sh" ]; then . "$HOME/.asdf/asdf.sh"; fi
+        bindkey -- "''${terminfo[kdch1]}" delete-char
+      '';
+    };
+
+    catppuccin.zsh-syntax-highlighting.enable = true;
+  };
+}
