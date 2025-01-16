@@ -11,6 +11,15 @@ let
     optional
     ;
   cfg = config.mjm.git;
+
+  jm = pkgs.writeNuBin ",jm" {
+    makeWrapperArgs = [
+      "--prefix"
+      ":"
+      "PATH"
+      (lib.makeBinPath [ pkgs.jujutsu ])
+    ];
+  } ./scripts/jm.nu;
 in
 {
   options.mjm.git = {
@@ -24,7 +33,8 @@ in
   };
 
   config = mkIf cfg.enable {
-    home.packages = optional cfg.enableMeld pkgs.meld ++ optional cfg.enableWatchman pkgs.watchman;
+    home.packages =
+      [ jm ] ++ optional cfg.enableMeld pkgs.meld ++ optional cfg.enableWatchman pkgs.watchman;
 
     programs.jujutsu = {
       enable = true;
@@ -126,27 +136,6 @@ in
 
       def --wrapped ,je [...rest] {
         jj edit (,jf ...$rest)
-      }
-
-      def ",jm list" [] {
-        jj log --no-graph -r mega-
-      }
-
-      def ",jm rebase" [] {
-        jj rebase -b mega -d 'trunk()'
-      }
-
-      def ",jm up" [] {
-        jj git fetch
-        ,jm rebase
-      }
-
-      def ",jm add" [revision] {
-        jj rebase -r $revision --after 'trunk()' --before mega
-      }
-
-      def ",jm remove" [revision] {
-        jj rebase -s mega -d $'all:mega- ~ ($revision)'
       }
     '';
   };
