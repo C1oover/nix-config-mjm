@@ -31,7 +31,6 @@ in
       inherit (pkgs)
         glab
         git-credential-manager
-        meld
         ;
     };
 
