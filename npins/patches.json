@@ -29,5 +29,9 @@
       "hash": "sha256-t3PASY0oa2XPAs2tG+nYDISFqiMTXTgLVq+Yb0QrAtw="
     }
   },
-  "nixos-staging": {}
+  "nixos-staging": {
+    "374179": {
+      "hash": "sha256-HgTwsnq4F/U2afPt/rBBcsffpiWmbHmtiy26CsWjL8I="
+    }
+  }
 }
