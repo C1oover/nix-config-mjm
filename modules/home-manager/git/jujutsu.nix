@@ -127,6 +127,27 @@ in
       def --wrapped ,je [...rest] {
         jj edit (,jf ...$rest)
       }
+
+      def ",jm list" [] {
+        jj log --no-graph -r mega-
+      }
+
+      def ",jm rebase" [] {
+        jj rebase -b mega -d 'trunk()'
+      }
+
+      def ",jm up" [] {
+        jj git fetch
+        ,jm rebase
+      }
+
+      def ",jm add" [revision] {
+        jj rebase -r $revision --after 'trunk()' --before mega
+      }
+
+      def ",jm remove" [revision] {
+        jj rebase -s mega -d $'all:mega- ~ ($revision)'
+      }
     '';
   };
 }
