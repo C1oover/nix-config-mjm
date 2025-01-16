@@ -178,15 +178,15 @@
         "repo": "nixpkgs"
       },
       "branch": "plasma-6.3",
-      "revision": "39f07bb0231c71cad0820f18052517add0903ba7",
-      "url": "https://github.com/mjm/nixpkgs/archive/39f07bb0231c71cad0820f18052517add0903ba7.tar.gz",
-      "hash": "1lbrmg9fjb3arnd06i5d27zym8yy47f5f870b7mw2js5ify3ksri"
+      "revision": "14d91db8bde73a0846cb4962ea59de1f5c7837ae",
+      "url": "https://github.com/mjm/nixpkgs/archive/14d91db8bde73a0846cb4962ea59de1f5c7837ae.tar.gz",
+      "hash": "0sw0m0abbm22ihxr03k21bd18kxcy74dddahg02pf5520hxrgas7"
     },
     "nixos-small": {
       "type": "Channel",
       "name": "nixos-unstable-small",
-      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-25.05beta738157.733994ea0658/nixexprs.tar.xz",
-      "hash": "1xajjy71jga3v7qaism2b6f4lpx9zdmwc4rr6h0bgn8rbcfjr4pb"
+      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-25.05beta738283.79fb36c527a2/nixexprs.tar.xz",
+      "hash": "1ixq0z125yd6g1lba9yh7afps565gdkfx24f1fm130hm1zgd3x79"
     },
     "nixos-staging": {
       "type": "Git",
@@ -196,9 +196,9 @@
         "repo": "nixpkgs"
       },
       "branch": "staging-next",
-      "revision": "44e4abfaf6d17733e28d41adee9b28bc29e9613c",
-      "url": "https://github.com/NixOS/nixpkgs/archive/44e4abfaf6d17733e28d41adee9b28bc29e9613c.tar.gz",
-      "hash": "0lpwlzfilhbaw464hzdfcdnmccp0c1fcvzj0xz7aj4s8xia05rsr"
+      "revision": "4083f92be8357dbc5e0e2a513541aa77c0d1e73b",
+      "url": "https://github.com/NixOS/nixpkgs/archive/4083f92be8357dbc5e0e2a513541aa77c0d1e73b.tar.gz",
+      "hash": "1sd2wy07d94plgcj6ldv7pk2aaryai90nr3qldk3igryiik04087"
     },
     "nixpkgs": {
       "type": "Channel",
@@ -214,9 +214,9 @@
         "repo": "nixpkgs-firefox-darwin"
       },
       "branch": "main",
-      "revision": "59e32476a7937a820fe35b50bf68dc085be8d959",
-      "url": "https://github.com/bandithedoge/nixpkgs-firefox-darwin/archive/59e32476a7937a820fe35b50bf68dc085be8d959.tar.gz",
-      "hash": "0av9zcjllwm5cpj2v34j614lsbmwjlgla4kc7kdngf5ivaxxnpbq"
+      "revision": "9a99589883a66c4967a757f81791d66e2581c87c",
+      "url": "https://github.com/bandithedoge/nixpkgs-firefox-darwin/archive/9a99589883a66c4967a757f81791d66e2581c87c.tar.gz",
+      "hash": "0f7vgcrggqww6nr88673p50n8cq6j7wrwvdvdxr4cpa5cghxbmwd"
     },
     "nur": {
       "type": "Git",
@@ -226,9 +226,9 @@
         "repo": "NUR"
       },
       "branch": "master",
-      "revision": "3a65a10385feb20b4f01e2220d84c4b053512a41",
-      "url": "https://github.com/nix-community/NUR/archive/3a65a10385feb20b4f01e2220d84c4b053512a41.tar.gz",
-      "hash": "0h9iq426l4is7av8pyayjij3mcyqacxfbmc5qqb95zpl8924wl9b"
+      "revision": "a0194337bf20730deab4a7e893010cb98abac745",
+      "url": "https://github.com/nix-community/NUR/archive/a0194337bf20730deab4a7e893010cb98abac745.tar.gz",
+      "hash": "1n3gsx93z0flnzwrsf6q7md6sybqxls8f752qxbkqj3iv7430g8y"
     },
     "nurl": {
       "type": "Git",
