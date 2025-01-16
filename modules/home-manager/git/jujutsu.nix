@@ -101,23 +101,11 @@ in
     };
     programs.nushell.extraConfig = ''
       def ,jpc [] {
-        let has_changes = (jj log -r@ -n 1 --no-graph -T 'if(!empty, "has changes")') != ""
-        let has_description = (jj log -r@ -n 1 --no-graph -T 'if(description, "has description")') != ""
-        if not $has_changes {
-          jj git push --change @-
-        } else if $has_description {
-          jj git push --change @
-        } else {
-          error make {
-            msg: "not pushing because the working copy has undescribed changes"
-            help: "Either use 'jj describe' to describe the changes, or 'jj squash' them into a previous change."
-          }
-        }
+        jj git push --change 'heads(description(glob:"?*") & ::@)'
       }
 
       def ,jpb [] {
-        let bookmark = jj log -r '::@ & bookmarks()' --no-graph -T local_bookmarks -n 1 | str trim -r -c '*'
-        jj bookmark set $bookmark -r @-
+        jj bookmark move --from 'heads(::@ & bookmarks())' --to 'heads(description(glob:"?*") & ::@)'
         try {
           jj git push
         } catch {
