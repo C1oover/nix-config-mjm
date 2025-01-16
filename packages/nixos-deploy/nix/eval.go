@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log/slog"
 	"os"
 	"os/exec"
 	"strconv"
@@ -39,6 +40,7 @@ func EvalJobs(ctx context.Context, opts EvalJobsOptions) ([]EvalJobResult, error
 		args = append(args, opts.Path)
 	}
 
+	slog.DebugContext(ctx, "running nix-eval-jobs", "args", args)
 	cmd := exec.CommandContext(ctx, "nix-eval-jobs", args...)
 	cmd.Stderr = os.Stderr
 	output, err := cmd.Output()
@@ -59,6 +61,7 @@ func EvalJobs(ctx context.Context, opts EvalJobsOptions) ([]EvalJobResult, error
 		results = append(results, result)
 	}
 
+	slog.DebugContext(ctx, "finished nix-eval-jobs", "result_count", len(results))
 	return results, nil
 }
 
@@ -76,6 +79,7 @@ func EvalJSON(ctx context.Context, dst interface{}, opts EvalOptions) error {
 		args = append(args, "--file", opts.Path)
 	}
 
+	slog.DebugContext(ctx, "running nix", "args", args)
 	cmd := exec.CommandContext(ctx, "nix", args...)
 	cmd.Stderr = os.Stderr
 	output, err := cmd.Output()
@@ -87,5 +91,6 @@ func EvalJSON(ctx context.Context, dst interface{}, opts EvalOptions) error {
 		return fmt.Errorf("unmarshalling json: %v", err)
 	}
 
+	slog.DebugContext(ctx, "finished nix")
 	return nil
 }

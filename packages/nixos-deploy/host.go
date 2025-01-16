@@ -301,6 +301,7 @@ func (h *Host) Reboot(ctx context.Context, sshOpts []string) error {
 	if err != nil {
 		return fmt.Errorf("getting original boot id: %w", err)
 	}
+	h.log.DebugContext(ctx, "got original boot id", "boot_id", oldID)
 
 	if _, err := h.runCommand(ctx, sshOpts, "reboot"); err != nil && err.(*exec.ExitError).ExitCode() != 255 {
 		return fmt.Errorf("initiating reboot: %w", err)
@@ -310,6 +311,7 @@ func (h *Host) Reboot(ctx context.Context, sshOpts []string) error {
 
 	for {
 		newID, err := h.getBootID(ctx, sshOpts)
+		h.log.DebugContext(ctx, "check for new boot id", slog.Group("boot_id", "old", oldID, "new", newID), "err", err)
 		if err == nil && newID != oldID {
 			break
 		}

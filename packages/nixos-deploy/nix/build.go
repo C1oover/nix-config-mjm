@@ -3,6 +3,7 @@ package nix
 import (
 	"context"
 	"fmt"
+	"log/slog"
 	"os"
 	"os/exec"
 	"strings"
@@ -28,9 +29,11 @@ func Realise(ctx context.Context, drvPath string, useNom bool) (string, error) {
 		cmd.Stdout = nomIn
 		cmd.Stderr = nomIn
 
+		slog.DebugContext(ctx, "running nom")
 		if err := nomCmd.Start(); err != nil {
 			return "", fmt.Errorf("starting nom: %w", err)
 		}
+		slog.DebugContext(ctx, "running nix-store", "args", args)
 		if err := cmd.Start(); err != nil {
 			return "", fmt.Errorf("starting nix-store: %w", err)
 		}
@@ -38,19 +41,24 @@ func Realise(ctx context.Context, drvPath string, useNom bool) (string, error) {
 			return "", fmt.Errorf("running nix-store: %w", err)
 		}
 
+		slog.DebugContext(ctx, "finished nix-store")
 		nomIn.Close()
 		if err := nomCmd.Wait(); err != nil {
 			return "", fmt.Errorf("running nom: %w", err)
 		}
 
+		slog.DebugContext(ctx, "finished nom")
 		return "", nil
 	} else {
 		cmd.Stderr = os.Stderr
+		slog.DebugContext(ctx, "running nix-store", "args", args)
 		output, err := cmd.Output()
 		if err != nil {
 			return "", fmt.Errorf("running nix-store: %w", err)
 		}
 
-		return strings.TrimSpace(string(output)), nil
+		result := strings.TrimSpace(string(output))
+		slog.DebugContext(ctx, "finished nix-store", "out", result)
+		return result, nil
 	}
 }

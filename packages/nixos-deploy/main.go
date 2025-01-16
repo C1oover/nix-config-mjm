@@ -23,13 +23,17 @@ var (
 	plansFile       = flag.String("plans", "plans.nix", "File to evaluate for deploy plans")
 	sshIdentityFile = flag.String("ssh-identity-file", "", "SSH key to use")
 	concurrency     = flag.Int("concurrency", runtime.NumCPU(), "Number of nodes to evaluate/build concurrently")
+
+	logLevel slog.Level
 )
 
 func main() {
+	flag.TextVar(&logLevel, "log-level", slog.LevelInfo, "Minimum log level to output")
 	flag.Parse()
 	ctx := context.Background()
 
 	logger := slog.New(tint.NewHandler(os.Stderr, &tint.Options{
+		Level:      logLevel,
 		TimeFormat: time.Kitchen,
 	}))
 	slog.SetDefault(logger)
@@ -85,6 +89,7 @@ func handleDeploy(ctx context.Context) error {
 	})
 
 	sshOpts := sshOpts()
+	slog.DebugContext(ctx, "ssh options", "opts", sshOpts)
 
 	g, childCtx := errgroup.WithContext(ctx)
 	g.SetLimit(*concurrency)
@@ -127,13 +132,16 @@ func handleDiff(ctx context.Context) error {
 		return fmt.Errorf("evaluating nodes: %w", err)
 	}
 
+	slog.DebugContext(ctx, "creating temp dir for diffs")
 	diffsDir, err := os.MkdirTemp("", "nixos-deploy-diffs")
 	if err != nil {
 		return fmt.Errorf("creating temp dir: %w", err)
 	}
 	defer os.RemoveAll(diffsDir)
+	slog.DebugContext(ctx, "created temp dir for diffs", "path", diffsDir)
 
 	sshOpts := sshOpts()
+	slog.DebugContext(ctx, "ssh options", "opts", sshOpts)
 
 	g, childCtx := errgroup.WithContext(ctx)
 	g.SetLimit(*concurrency)
@@ -173,6 +181,7 @@ func handleDiff(ctx context.Context) error {
 		return fmt.Errorf("building nodes: %w", err)
 	}
 
+	slog.DebugContext(ctx, "aggregating diffs", "path", diffsDir)
 	aggregated, err := aggregateDiffs(ctx, diffsDir)
 	if err != nil {
 		return fmt.Errorf("aggregating diffs: %w", err)
@@ -196,6 +205,7 @@ func handleReboot(ctx context.Context) error {
 	}
 
 	sshOpts := sshOpts()
+	slog.DebugContext(ctx, "ssh options", "opts", sshOpts)
 
 	if err := plan.Hosts[0].Reboot(ctx, sshOpts); err != nil {
 		return fmt.Errorf("rebooting node: %w", err)
