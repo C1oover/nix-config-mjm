@@ -22,7 +22,7 @@ in
         # "airplay"
         # "builtin"
         "dlna"
-        # "hass"
+        "hass"
         # "hass_players"
         "opensubsonic"
         "slimproto"

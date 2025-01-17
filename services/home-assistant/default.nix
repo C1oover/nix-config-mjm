@@ -74,6 +74,7 @@ in
         "lidarr"
         # not using yet, and it uses olm
         # "matrix"
+        "music_assistant"
         "nut"
         "openweathermap"
         "radarr"
