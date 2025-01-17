@@ -47,8 +47,20 @@ def "main advance" [
 
 # Add a revision to the megamerge
 #
-# Inserts the revision between trunk and the megamerge.
+# The revision will keep its existing parents but will be made a child
+# of the megamerge.
 def "main add" [
+  revision: string             # the revision to add to the megamerge
+  --mega (-m): string = "mega" # the revision of the megamerge
+] {
+  jj rebase -s $mega -d $'all:($mega)-' -d $revision
+}
+
+# Insert a revision to the megamerge
+#
+# Inserts the revision between trunk and the megamerge. Don't use this
+# if you need to preserve the parents of the revision.
+def "main insert" [
   revision: string             # the revision to add to the megamerge
   --mega (-m): string = "mega" # the revision of the megamerge
 ] {
