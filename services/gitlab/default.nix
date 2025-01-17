@@ -186,7 +186,7 @@ in
 
         omniauth = {
           enabled = true;
-          # auto_sign_in_with_provider = "openid_connect";
+          auto_sign_in_with_provider = "openid_connect";
           allow_single_sign_on = [ "openid_connect" ];
           auto_link_user = [ "openid_connect" ];
           providers = [
