@@ -31,7 +31,9 @@ type Host struct {
 	OutPath      string
 	DeployConfig DeployConfig
 	RebootNeeded bool
+	cfg          Config
 	log          *slog.Logger
+	sshTarget    string
 }
 
 type DeployConfig struct {
@@ -42,21 +44,43 @@ type DeployConfig struct {
 	ConsulChecks []string `json:"consulChecks"`
 }
 
-func (h *Host) sshTarget() string {
-	return fmt.Sprintf("%s@%s", *h.DeployConfig.TargetUser, *h.DeployConfig.TargetHost)
+func NewHost(cfg Config, name string, drvPath string, deployConfig DeployConfig) *Host {
+	kind := HostKindLocal
+	var sshTarget string
+	if deployConfig.TargetHost != nil {
+		kind = HostKindLocal
+		sshTarget = fmt.Sprintf("%s@%s", *deployConfig.TargetUser, *deployConfig.TargetHost)
+	}
+
+	logger := slog.Default().WithGroup("host").With("name", name)
+	return &Host{
+		Name:         name,
+		Kind:         kind,
+		DrvPath:      drvPath,
+		DeployConfig: deployConfig,
+		log:          logger,
+		sshTarget:    sshTarget,
+	}
 }
 
-func (h *Host) CopyClosure(ctx context.Context, p string, sshOpts []string) error {
+func NewLocalHost(name string, drvPath string, outPath string) *Host {
+	h := NewHost(Config{}, name, drvPath, DeployConfig{})
+	h.Kind = HostKindLocal
+	h.OutPath = outPath
+	return h
+}
+
+func (h *Host) CopyClosure(ctx context.Context, p string) error {
 	if h.Kind == HostKindLocal {
 		return nil
 	}
 
-	toUrl := fmt.Sprintf("ssh-ng://%s", h.sshTarget())
+	toUrl := fmt.Sprintf("ssh-ng://%s", h.sshTarget)
 	cmd := exec.CommandContext(ctx, "nix", "copy", "--no-check-sigs", "--to", toUrl, p)
 	cmd.Stderr = os.Stderr
 	cmd.Stdout = os.Stdout
 
-	sshOptsStr := strings.Join(sshOpts, " ")
+	sshOptsStr := strings.Join(h.cfg.SSHOpts, " ")
 	cmd.Env = append(os.Environ(), fmt.Sprintf("NIX_SSHOPTS=%s", sshOptsStr))
 
 	if err := cmd.Run(); err != nil {
@@ -85,11 +109,11 @@ func (h *Host) Build(ctx context.Context, useNom bool) error {
 	return nil
 }
 
-func (h *Host) Push(ctx context.Context, sshOpts []string) error {
-	l := h.log.With("out_path", h.OutPath, "target", h.sshTarget())
+func (h *Host) Push(ctx context.Context) error {
+	l := h.log.With("out_path", h.OutPath, "target", h.sshTarget)
 	l.InfoContext(ctx, "pushing system")
 
-	if err := h.CopyClosure(ctx, h.OutPath, sshOpts); err != nil {
+	if err := h.CopyClosure(ctx, h.OutPath); err != nil {
 		return fmt.Errorf("copying closure for %s: %w", h.Name, err)
 	}
 
@@ -112,10 +136,10 @@ func (h *Host) PushToAttic(ctx context.Context) error {
 	return nil
 }
 
-func (h *Host) CheckRebootNeeded(ctx context.Context, sshOpts []string) error {
+func (h *Host) CheckRebootNeeded(ctx context.Context) error {
 	h.log.InfoContext(ctx, "checking if reboot is needed")
 
-	output, err := h.runCommand(ctx, sshOpts, path.Join(h.OutPath, "bin/nvd-json"), "reboot-check", h.OutPath)
+	output, err := h.runCommand(ctx, path.Join(h.OutPath, "bin/nvd-json"), "reboot-check", h.OutPath)
 	if err != nil {
 		return fmt.Errorf("running nvd-json: %w", err)
 	}
@@ -131,10 +155,10 @@ func (h *Host) CheckRebootNeeded(ctx context.Context, sshOpts []string) error {
 	return nil
 }
 
-func (h *Host) Diff(ctx context.Context, sshOpts []string) ([]byte, error) {
+func (h *Host) Diff(ctx context.Context) ([]byte, error) {
 	h.log.InfoContext(ctx, "diffing against current system", "out_path", h.OutPath)
 
-	output, err := h.runCommand(ctx, sshOpts, path.Join(h.OutPath, "bin/nvd-json"), "diff", "/run/current-system", h.OutPath)
+	output, err := h.runCommand(ctx, path.Join(h.OutPath, "bin/nvd-json"), "diff", "/run/current-system", h.OutPath)
 	if err != nil {
 		return nil, fmt.Errorf("running nvd-json: %w", err)
 	}
@@ -150,7 +174,7 @@ func (h *Host) DiffLocal(ctx context.Context) error {
 		return fmt.Errorf("running nvd: %w", err)
 	}
 
-	if err := h.CheckRebootNeeded(ctx, nil); err != nil {
+	if err := h.CheckRebootNeeded(ctx); err != nil {
 		return fmt.Errorf("checking if reboot is needed: %w", err)
 	}
 
@@ -159,7 +183,7 @@ func (h *Host) DiffLocal(ctx context.Context) error {
 
 const systemProfile = "/nix/var/nix/profiles/system"
 
-func (h *Host) Deploy(ctx context.Context, sshOpts []string) error {
+func (h *Host) Deploy(ctx context.Context) error {
 	h.log.InfoContext(ctx, "deploying")
 
 	goal := "switch"
@@ -167,12 +191,12 @@ func (h *Host) Deploy(ctx context.Context, sshOpts []string) error {
 		goal = "boot"
 	}
 
-	if err := h.apply(ctx, sshOpts, goal); err != nil {
+	if err := h.apply(ctx, goal); err != nil {
 		return fmt.Errorf("applying: %w", err)
 	}
 
 	if h.RebootNeeded && h.DeployConfig.AutoReboot {
-		if err := h.Reboot(ctx, sshOpts); err != nil {
+		if err := h.Reboot(ctx); err != nil {
 			return fmt.Errorf("rebooting: %w", err)
 		}
 	}
@@ -211,7 +235,7 @@ func (h *Host) ApplyLocal(ctx context.Context) error {
 		}
 	}
 
-	if err := h.apply(ctx, nil, goal); err != nil {
+	if err := h.apply(ctx, goal); err != nil {
 		return fmt.Errorf("applying: %w", err)
 	}
 
@@ -221,14 +245,14 @@ func (h *Host) ApplyLocal(ctx context.Context) error {
 	return nil
 }
 
-func (h *Host) apply(ctx context.Context, sshOpts []string, goal string) error {
+func (h *Host) apply(ctx context.Context, goal string) error {
 	h.log.InfoContext(ctx, "setting system profile", "out_path", h.OutPath)
-	if _, err := h.runCommand(ctx, sshOpts, "nix-env", "--profile", systemProfile, "--set", h.OutPath); err != nil {
+	if _, err := h.runCommand(ctx, "nix-env", "--profile", systemProfile, "--set", h.OutPath); err != nil {
 		return fmt.Errorf("setting system profile: %w", err)
 	}
 
 	h.log.InfoContext(ctx, "activating system", "goal", goal)
-	if _, err := h.runCommand(ctx, sshOpts, path.Join(systemProfile, "bin/switch-to-configuration"), goal); err != nil {
+	if _, err := h.runCommand(ctx, path.Join(systemProfile, "bin/switch-to-configuration"), goal); err != nil {
 		return fmt.Errorf("activating system: %w", err)
 	}
 
@@ -295,16 +319,16 @@ func (h *Host) WaitUntilHealthy(ctx context.Context) error {
 	return nil
 }
 
-func (h *Host) Reboot(ctx context.Context, sshOpts []string) error {
+func (h *Host) Reboot(ctx context.Context) error {
 	h.log.InfoContext(ctx, "rebooting")
 
-	oldID, err := h.getBootID(ctx, sshOpts)
+	oldID, err := h.getBootID(ctx)
 	if err != nil {
 		return fmt.Errorf("getting original boot id: %w", err)
 	}
 	h.log.DebugContext(ctx, "got original boot id", "boot_id", oldID)
 
-	_, err = h.runCommand(ctx, sshOpts, "reboot")
+	_, err = h.runCommand(ctx, "reboot")
 	if err != nil {
 		var exitError *exec.ExitError
 		if !errors.As(err, &exitError) || exitError.ExitCode() != 255 {
@@ -315,7 +339,7 @@ func (h *Host) Reboot(ctx context.Context, sshOpts []string) error {
 	h.log.InfoContext(ctx, "waiting for reboot")
 
 	for {
-		newID, err := h.getBootID(ctx, sshOpts)
+		newID, err := h.getBootID(ctx)
 		h.log.DebugContext(ctx, "check for new boot id", slog.Group("boot_id", "old", oldID, "new", newID), "err", err)
 		if err == nil && newID != oldID {
 			break
@@ -328,11 +352,11 @@ func (h *Host) Reboot(ctx context.Context, sshOpts []string) error {
 	return nil
 }
 
-func (h *Host) getBootID(ctx context.Context, sshOpts []string) (string, error) {
+func (h *Host) getBootID(ctx context.Context) (string, error) {
 	ctx, cancel := context.WithTimeoutCause(ctx, 10*time.Second, fmt.Errorf("timeout checking boot ID"))
 	defer cancel()
 
-	output, err := h.runCommand(ctx, sshOpts, "cat", "/proc/sys/kernel/random/boot_id")
+	output, err := h.runCommand(ctx, "cat", "/proc/sys/kernel/random/boot_id")
 	if err != nil {
 		return "", fmt.Errorf("getting boot id: %w", err)
 	}
@@ -342,13 +366,13 @@ func (h *Host) getBootID(ctx context.Context, sshOpts []string) (string, error) 
 
 // TODO consider doing SSH from Go
 // would require reimplementing some things to get it to read keys like ssh does
-func (h *Host) runCommand(ctx context.Context, sshOpts []string, name string, args ...string) ([]byte, error) {
+func (h *Host) runCommand(ctx context.Context, name string, args ...string) ([]byte, error) {
 	var cmd *exec.Cmd
 
 	switch h.Kind {
 	case HostKindSSH:
-		sshArgs := []string{h.sshTarget()}
-		sshArgs = append(sshArgs, sshOpts...)
+		sshArgs := []string{h.sshTarget}
+		sshArgs = append(sshArgs, h.cfg.SSHOpts...)
 		sshArgs = append(sshArgs, "--", "sudo", name)
 		sshArgs = append(sshArgs, args...)
 

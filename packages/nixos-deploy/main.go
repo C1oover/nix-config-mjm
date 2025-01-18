@@ -60,7 +60,7 @@ func main() {
 	}
 }
 
-func sshOpts() []string {
+func newConfig() Config {
 	args := []string{
 		"-o",
 		"BatchMode=yes",
@@ -71,7 +71,11 @@ func sshOpts() []string {
 		args = append(args, "-o", fmt.Sprintf("IdentityFile=%s", *sshIdentityFile))
 	}
 
-	return args
+	slog.Debug("ssh options", "opts", args)
+
+	return Config{
+		SSHOpts: args,
+	}
 }
 
 func handleDeploy(ctx context.Context) error {
@@ -88,9 +92,6 @@ func handleDeploy(ctx context.Context) error {
 		return h.Kind != HostKindSSH
 	})
 
-	sshOpts := sshOpts()
-	slog.DebugContext(ctx, "ssh options", "opts", sshOpts)
-
 	g, childCtx := errgroup.WithContext(ctx)
 	g.SetLimit(*concurrency)
 
@@ -99,13 +100,13 @@ func handleDeploy(ctx context.Context) error {
 			if err := h.Build(childCtx, false); err != nil {
 				return fmt.Errorf("building node %s: %w", h.Name, err)
 			}
-			if err := h.Push(childCtx, sshOpts); err != nil {
+			if err := h.Push(childCtx); err != nil {
 				return fmt.Errorf("pushing node %s: %w", h.Name, err)
 			}
 			if err := h.PushToAttic(childCtx); err != nil {
 				return fmt.Errorf("pushing node %s to attic: %w", h.Name, err)
 			}
-			if err := h.CheckRebootNeeded(childCtx, sshOpts); err != nil {
+			if err := h.CheckRebootNeeded(childCtx); err != nil {
 				return fmt.Errorf("checking if reboot is needed on %s: %w", h.Name, err)
 			}
 			return nil
@@ -115,7 +116,7 @@ func handleDeploy(ctx context.Context) error {
 		return fmt.Errorf("building nodes: %w", err)
 	}
 
-	if err := plan.deploy(ctx, sshOpts); err != nil {
+	if err := plan.deploy(ctx); err != nil {
 		return fmt.Errorf("deploying plan: %w", err)
 	}
 
@@ -140,9 +141,6 @@ func handleDiff(ctx context.Context) error {
 	defer os.RemoveAll(diffsDir)
 	slog.DebugContext(ctx, "created temp dir for diffs", "path", diffsDir)
 
-	sshOpts := sshOpts()
-	slog.DebugContext(ctx, "ssh options", "opts", sshOpts)
-
 	g, childCtx := errgroup.WithContext(ctx)
 	g.SetLimit(*concurrency)
 
@@ -156,10 +154,10 @@ func handleDiff(ctx context.Context) error {
 			}
 
 			if h.Kind == HostKindSSH {
-				if err := h.Push(childCtx, sshOpts); err != nil {
+				if err := h.Push(childCtx); err != nil {
 					return fmt.Errorf("pushing node %s: %w", h.Name, err)
 				}
-				diff, err := h.Diff(ctx, sshOpts)
+				diff, err := h.Diff(ctx)
 				if err != nil {
 					return fmt.Errorf("diffing node %s: %w", h.Name, err)
 				}
@@ -204,10 +202,7 @@ func handleReboot(ctx context.Context) error {
 		return fmt.Errorf("evaluating nodes: %w", err)
 	}
 
-	sshOpts := sshOpts()
-	slog.DebugContext(ctx, "ssh options", "opts", sshOpts)
-
-	if err := plan.Hosts[0].Reboot(ctx, sshOpts); err != nil {
+	if err := plan.Hosts[0].Reboot(ctx); err != nil {
 		return fmt.Errorf("rebooting node: %w", err)
 	}
 
@@ -296,26 +291,14 @@ func evalNodes(ctx context.Context, path string, hostnames []string) (*deployPla
 		return nil, fmt.Errorf("decoding plan json: %w", err)
 	}
 
+	cfg := newConfig()
 	var hosts []*Host
 	for name, drvPath := range pathsByAttrs {
 		if !slices.ContainsFunc(plan.Phases, func(p deployPhase) bool { return slices.Contains(p.Nodes, name) }) {
 			continue
 		}
 
-		deployConfig := plan.Deployment[name]
-		kind := HostKindSSH
-		if deployConfig.TargetHost == nil {
-			kind = HostKindLocal
-		}
-
-		logger := slog.Default().WithGroup("host").With("name", name)
-		hosts = append(hosts, &Host{
-			Name:         name,
-			Kind:         kind,
-			DrvPath:      drvPath,
-			DeployConfig: deployConfig,
-			log:          logger,
-		})
+		hosts = append(hosts, NewHost(cfg, name, drvPath, plan.Deployment[name]))
 	}
 
 	return &deployPlan{
@@ -341,15 +324,7 @@ func evalLocalNode(ctx context.Context, path string) (*Host, error) {
 	if err := nix.EvalJSON(ctx, &result, nix.EvalOptions{Expr: evalExpr}); err != nil {
 		return nil, fmt.Errorf("evaluating node: %w", err)
 	}
-	logger := slog.Default().WithGroup("host").With("name", name)
-
-	return &Host{
-		Name:    name,
-		Kind:    HostKindLocal,
-		DrvPath: result.DrvPath,
-		OutPath: result.OutPath,
-		log:     logger,
-	}, nil
+	return NewLocalHost(name, result.DrvPath, result.OutPath), nil
 }
 
 type deployPlan struct {
@@ -367,7 +342,7 @@ type deployPhase struct {
 	Nodes []string `json:"nodes"`
 }
 
-func (p *deployPlan) deploy(ctx context.Context, sshOpts []string) error {
+func (p *deployPlan) deploy(ctx context.Context) error {
 	nodesByName := map[string]*Host{}
 	for _, h := range p.Hosts {
 		nodesByName[h.Name] = h
@@ -381,7 +356,7 @@ func (p *deployPlan) deploy(ctx context.Context, sshOpts []string) error {
 			}
 		}
 
-		if err := deployPhaseNodes(ctx, phase.Name, phaseNodes, sshOpts); err != nil {
+		if err := deployPhaseNodes(ctx, phase.Name, phaseNodes); err != nil {
 			return fmt.Errorf("deploying phase %s: %w", phase.Name, err)
 		}
 	}
@@ -389,7 +364,7 @@ func (p *deployPlan) deploy(ctx context.Context, sshOpts []string) error {
 	return nil
 }
 
-func deployPhaseNodes(ctx context.Context, name string, hosts []*Host, sshOpts []string) error {
+func deployPhaseNodes(ctx context.Context, name string, hosts []*Host) error {
 	if len(hosts) == 0 {
 		return nil
 	}
@@ -398,7 +373,7 @@ func deployPhaseNodes(ctx context.Context, name string, hosts []*Host, sshOpts [
 	l.InfoContext(ctx, "deploying phase", "host_count", len(hosts))
 
 	for _, h := range hosts {
-		if err := h.Deploy(ctx, sshOpts); err != nil {
+		if err := h.Deploy(ctx); err != nil {
 			return fmt.Errorf("deploying %s: %w", h.Name, err)
 		}
 	}
