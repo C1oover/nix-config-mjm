@@ -9,7 +9,7 @@
   deployment.targetHost = null;
 
   environment.systemPackages = lib.attrValues {
-    inherit (pkgs) chrysalis sbctl;
+    inherit (pkgs) chrysalis unofficial-homestuck-collection sbctl;
   };
 
   mjm.desktop.enable = true;
