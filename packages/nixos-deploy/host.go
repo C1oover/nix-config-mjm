@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log/slog"
 	"os"
@@ -303,8 +304,12 @@ func (h *Host) Reboot(ctx context.Context, sshOpts []string) error {
 	}
 	h.log.DebugContext(ctx, "got original boot id", "boot_id", oldID)
 
-	if _, err := h.runCommand(ctx, sshOpts, "reboot"); err != nil && err.(*exec.ExitError).ExitCode() != 255 {
-		return fmt.Errorf("initiating reboot: %w", err)
+	_, err = h.runCommand(ctx, sshOpts, "reboot")
+	if err != nil {
+		var exitError *exec.ExitError
+		if !errors.As(err, &exitError) || exitError.ExitCode() != 255 {
+			return fmt.Errorf("initiating reboot: %w", err)
+		}
 	}
 
 	h.log.InfoContext(ctx, "waiting for reboot")
