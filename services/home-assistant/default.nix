@@ -89,7 +89,7 @@ in
       config = {
         default_config = { };
         homeassistant = {
-          unit_system = "imperial"; # i'm sorry
+          unit_system = "us_customary"; # i'm sorry
           latitude = "!secret latitude_home";
           longitude = "!secret longitude_home";
           country = "US";
