@@ -29,7 +29,7 @@ def render-aggregated-diff [] {
 
     $'## ($heading)
 
-  ($changes_list)'
+($changes_list)'
   } | str join "\n\n"
 }
 
