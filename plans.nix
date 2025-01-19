@@ -30,10 +30,6 @@ let
         default = "nixos-small";
         persephone = "nixos";
         uranus = "nixos-plasma";
-
-        helios = "nixos-staging";
-        chaos = "nixos-staging";
-        leto = "nixos-staging";
       };
 
       specialArgs = {
