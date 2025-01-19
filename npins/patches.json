@@ -4,7 +4,11 @@
       "hash": "sha256-tI+wlhyC2e63NirN2kgg1I4GMPvMwFTIFFyo2nR1MDQ="
     }
   },
-  "nixos-small": {},
+  "nixos-small": {
+    "374179": {
+      "hash": "sha256-HgTwsnq4F/U2afPt/rBBcsffpiWmbHmtiy26CsWjL8I="
+    }
+  },
   "darwin": {
     "1245": {
       "hash": "sha256-JqxFVDVTJIUVADbXgulIenqZeknxahZvQ7hb554Tkzs="
@@ -27,11 +31,6 @@
   "lanzaboote": {
     "423": {
       "hash": "sha256-t3PASY0oa2XPAs2tG+nYDISFqiMTXTgLVq+Yb0QrAtw="
-    }
-  },
-  "nixos-staging": {
-    "374179": {
-      "hash": "sha256-HgTwsnq4F/U2afPt/rBBcsffpiWmbHmtiy26CsWjL8I="
     }
   }
 }

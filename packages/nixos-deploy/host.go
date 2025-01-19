@@ -48,7 +48,7 @@ func NewHost(cfg Config, name string, drvPath string, deployConfig DeployConfig)
 	kind := HostKindLocal
 	var sshTarget string
 	if deployConfig.TargetHost != nil {
-		kind = HostKindLocal
+		kind = HostKindSSH
 		sshTarget = fmt.Sprintf("%s@%s", *deployConfig.TargetUser, *deployConfig.TargetHost)
 	}
 
@@ -58,6 +58,7 @@ func NewHost(cfg Config, name string, drvPath string, deployConfig DeployConfig)
 		Kind:         kind,
 		DrvPath:      drvPath,
 		DeployConfig: deployConfig,
+		cfg:          cfg,
 		log:          logger,
 		sshTarget:    sshTarget,
 	}
