@@ -52,6 +52,7 @@
   # );
 
   environment.systemPackages = [
+    pkgs.unofficial-homestuck-collection
     pkgs.sbctl
     config.boot.kernelPackages.perf
   ];
