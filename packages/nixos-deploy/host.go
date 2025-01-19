@@ -58,6 +58,7 @@ func NewHost(cfg Config, name string, drvPath string, deployConfig DeployConfig)
 		Kind:         kind,
 		DrvPath:      drvPath,
 		DeployConfig: deployConfig,
+		cfg:          cfg,
 		log:          logger,
 		sshTarget:    sshTarget,
 	}
