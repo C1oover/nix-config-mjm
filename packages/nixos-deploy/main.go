@@ -190,8 +190,7 @@ func handleDiff(ctx context.Context) error {
 		return fmt.Errorf("aggregating diffs: %w", err)
 	}
 
-	os.Stdout.Write(aggregated)
-	return nil
+	return aggregated.Write(os.Stdout)
 }
 
 func handleReboot(ctx context.Context) error {
@@ -387,7 +386,7 @@ func deployPhaseNodes(ctx context.Context, name string, hosts []*Host) error {
 	return nil
 }
 
-func aggregateDiffs(ctx context.Context, dir string) ([]byte, error) {
+func aggregateDiffs(ctx context.Context, dir string) (*AggregatedDiff, error) {
 	entries, err := os.ReadDir(dir)
 	if err != nil {
 		return nil, fmt.Errorf("reading entries from diffs dir: %w", err)
@@ -402,10 +401,24 @@ func aggregateDiffs(ctx context.Context, dir string) ([]byte, error) {
 	cmd := exec.CommandContext(ctx, "nvd-json", args...)
 	cmd.Stderr = os.Stderr
 
-	output, err := cmd.Output()
+	out, err := cmd.StdoutPipe()
 	if err != nil {
-		return nil, fmt.Errorf("running nvd-json: %w", err)
+		return nil, fmt.Errorf("creating stdout pipe for nvd-json: %w", err)
+	}
+	defer out.Close()
+
+	if err := cmd.Start(); err != nil {
+		return nil, fmt.Errorf("starting nvd-json: %w", err)
 	}
 
-	return output, nil
+	var d AggregatedDiff
+	if err := json.NewDecoder(out).Decode(&d); err != nil {
+		return nil, fmt.Errorf("decoding diff from nvd-json: %w", err)
+	}
+
+	if err := cmd.Wait(); err != nil {
+		return nil, fmt.Errorf("waiting for nvd-json to finish: %w", err)
+	}
+
+	return &d, nil
 }

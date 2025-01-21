@@ -1,0 +1,23 @@
+{{ define "hostVersions" -}}
+{{- .OldVersionsString -}}
+{{- if (and .OldVersions .NewVersions) }} -> {{ end -}}
+{{- .NewVersionsString -}}
+{{- end -}}
+
+{{ define "change" -}}
+- **{{ .Pname }}**
+{{ range .Hosts }}  - `{{ .Hostname }}`: {{ template "hostVersions" . }}
+{{ end -}}
+{{ end -}}
+
+{{ define "changesSection" -}}
+## {{ .Heading }}
+
+{{ range .Changes -}}
+{{ template "change" . -}}
+{{ end -}}
+{{ end -}}
+
+{{ range .Sections -}}
+{{ template "changesSection" . }}
+{{ end -}}
