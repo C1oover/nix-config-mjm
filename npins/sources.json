@@ -73,9 +73,9 @@
         "repo": "nix-darwin"
       },
       "branch": "master",
-      "revision": "87131f51f8256952d1a306b5521cedc2dc61aa08",
-      "url": "https://github.com/LnL7/nix-darwin/archive/87131f51f8256952d1a306b5521cedc2dc61aa08.tar.gz",
-      "hash": "1rddnasfc1zll3r0hzjawgn4x7g10d4dxqaakf8ncc4kif98fgz5"
+      "revision": "46d0fa4ded0a7532f19870f9bbedaf62269fe3f7",
+      "url": "https://github.com/LnL7/nix-darwin/archive/46d0fa4ded0a7532f19870f9bbedaf62269fe3f7.tar.gz",
+      "hash": "0665b088xadldcxw4xl7z042c5k39xnik1rdbyg5d6hwd4va4hsq"
     },
     "devshell": {
       "type": "Git",
@@ -185,8 +185,8 @@
     "nixos-small": {
       "type": "Channel",
       "name": "nixos-unstable-small",
-      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-25.05beta741950.7ceed4f800be/nixexprs.tar.xz",
-      "hash": "19rqx0jn9kiss6ks2p7cjqqgg7pzmnx13z345dmxz659xjm3z3g8"
+      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-25.05beta742004.886a2858d362/nixexprs.tar.xz",
+      "hash": "1v56j7iaz643sbnnzivfkhvs1h68wrgkhzm7hnhy3511ssmph7vk"
     },
     "nixpkgs": {
       "type": "Channel",
@@ -202,9 +202,9 @@
         "repo": "nixpkgs-firefox-darwin"
       },
       "branch": "main",
-      "revision": "c84c7b78d807f0eac65c8fcabd044b4dd77fac37",
-      "url": "https://github.com/bandithedoge/nixpkgs-firefox-darwin/archive/c84c7b78d807f0eac65c8fcabd044b4dd77fac37.tar.gz",
-      "hash": "15icy8wkgs9n0pqva9d4z8xllrd66qp4nyb845y2kkprf4im33cn"
+      "revision": "8e9965c903e39aa478abe25e6f0a3a89370277a2",
+      "url": "https://github.com/bandithedoge/nixpkgs-firefox-darwin/archive/8e9965c903e39aa478abe25e6f0a3a89370277a2.tar.gz",
+      "hash": "1v81ihxihgd076vq1pc4qmy3f39v7mfif1siqqqzvhs95zk1nph6"
     },
     "nur": {
       "type": "Git",
@@ -214,9 +214,9 @@
         "repo": "NUR"
       },
       "branch": "master",
-      "revision": "2a1db46a5c59c4e367483fb159ef0ac429c40551",
-      "url": "https://github.com/nix-community/NUR/archive/2a1db46a5c59c4e367483fb159ef0ac429c40551.tar.gz",
-      "hash": "12drzmnj2ywdhl8a0q5cvbhxxw8s15zx8msmsgcr3wd1sqgzb413"
+      "revision": "a37f4f3a868b82d8626d577d105c9652c379c80b",
+      "url": "https://github.com/nix-community/NUR/archive/a37f4f3a868b82d8626d577d105c9652c379c80b.tar.gz",
+      "hash": "1a0shy1v5rxsbiya5isv908pfql9k8sc8bkk8sps44vg4cbsw927"
     },
     "nurl": {
       "type": "Git",
