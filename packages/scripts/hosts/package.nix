@@ -15,7 +15,7 @@
   nixos-deploy,
 }:
 
-writeNuBin "host-scripts" {
+writeNuBin ",hosts" {
   makeWrapperArgs = [
     "--prefix"
     "PATH"
@@ -38,4 +38,4 @@ writeNuBin "host-scripts" {
       ]
     )}"
   ];
-} ./host-scripts.nu
+} ./hosts.nu

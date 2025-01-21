@@ -5,7 +5,7 @@
 }:
 
 let
-  sources = import ../../npins/patched.nix;
+  sources = import ../../../npins/patched.nix;
   nurl = (import sources.nurl).packages.${stdenvNoCC.hostPlatform.system}.default;
 in
 
@@ -16,4 +16,4 @@ writeNuBin ",patch" {
     ":"
     "${lib.makeBinPath [ nurl ]}"
   ];
-} ./patch-scripts.nu
+} ./patch.nu

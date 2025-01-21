@@ -36,8 +36,8 @@ build nixos hosts:
     VAULT_ID_TOKEN:
       aud: http://vault.service.consul:8200
   script:
-    - nix run -f . host-scripts -- ci attic-login
-    - nix run -f . host-scripts -- ci diff
+    - nix run -f . scripts.hosts -- ci attic-login
+    - nix run -f . scripts.hosts -- ci diff
 deploy nixos hosts:
   tags: [nix-shell]
   rules:
@@ -53,8 +53,8 @@ deploy nixos hosts:
       aud: http://vault.service.consul:8200
   # before_script: !reference [.snippets, setup_devenv]
   script:
-    - nix run -f . host-scripts -- ci attic-login
-    - nix run -f . host-scripts -- ci deploy
+    - nix run -f . scripts.hosts -- ci attic-login
+    - nix run -f . scripts.hosts -- ci deploy
 build tofu changes:
   tags: [nix]
   rules:
@@ -69,7 +69,7 @@ build tofu changes:
       aud: http://vault.service.consul:8200
   before_script: !reference [.snippets, setup_devenv]
   script:
-    - nix run -f . tofu-scripts -- ci plan
+    - nix run -f . scripts.tofu -- ci plan
 apply terranix changes:
   tags: [nix]
   rules:
@@ -87,7 +87,7 @@ apply terranix changes:
       aud: http://vault.service.consul:8200
   before_script: !reference [.snippets, setup_devenv]
   script:
-    - nix run -f . tofu-scripts -- ci apply
+    - nix run -f . scripts.tofu -- ci apply
 check for flake updates:
   tags: [nix-shell]
   rules:
@@ -95,4 +95,4 @@ check for flake updates:
   stage: check
   # before_script: !reference [.snippets, setup_devenv]
   script:
-    - nix run -f . scripts -- ci update-pins
+    - nix run -f . scripts.update -- ci update-pins

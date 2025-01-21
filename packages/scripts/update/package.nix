@@ -5,7 +5,7 @@
   git,
 }:
 
-writeNuBin "scripts" {
+writeNuBin ",update" {
   makeWrapperArgs = [
     "--prefix"
     "PATH"
@@ -15,4 +15,4 @@ writeNuBin "scripts" {
       git
     ]}"
   ];
-} ./scripts.nu
+} ./update.nu

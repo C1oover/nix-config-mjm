@@ -7,7 +7,7 @@
   tofu-config,
 }:
 
-writeNuBin "tofu-scripts" {
+writeNuBin ",tofu" {
   makeWrapperArgs = [
     "--set"
     "TF_CONFIG"
@@ -22,4 +22,4 @@ writeNuBin "tofu-scripts" {
       vault
     ]}"
   ];
-} ./tofu-scripts.nu
+} ./tofu.nu
