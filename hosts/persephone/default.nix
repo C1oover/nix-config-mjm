@@ -35,7 +35,8 @@
 
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  # can't run latest for now, since the framework kmod doesn't build on 6.13 yet
+  boot.kernelPackages = pkgs.linuxPackages;
 
   # boot.kernelPackages = pkgs.linuxPackagesFor (
   #   pkgs.linux_testing.override {
