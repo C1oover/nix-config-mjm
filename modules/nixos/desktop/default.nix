@@ -5,13 +5,11 @@
   ...
 }:
 let
-  inherit (lib) mkEnableOption mkForce mkIf;
+  inherit (lib) mkForce mkIf;
   cfg = config.mjm.desktop;
 in
 {
-  options.mjm.desktop = {
-    enable = mkEnableOption "desktop environment";
-  };
+  imports = [ ../../common/desktop.nix ];
 
   config = mkIf cfg.enable {
     services.displayManager.sddm.enable = true;
@@ -30,20 +28,9 @@ in
       packages = with pkgs; [
         public-sans
         open-sans
-        noto-fonts
         noto-fonts-emoji
-        nerd-fonts.symbols-only
         nerd-fonts.agave
-        nerd-fonts.monaspace
         font-awesome
-        cascadia-code
-        ibm-plex
-        iosevka
-        agave
-        monaspace
-        (input-fonts.override { acceptLicense = true; })
-        pragmata-pro
-        departure-mono
       ];
 
       fontconfig = {
