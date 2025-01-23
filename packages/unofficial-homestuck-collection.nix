@@ -2,6 +2,9 @@
   stdenvNoCC,
   appimageTools,
   fetchurl,
+  makeWrapper,
+  writeText,
+  corefonts,
 }:
 
 let
@@ -24,6 +27,8 @@ stdenvNoCC.mkDerivation {
 
   src = appimage;
 
+  nativeBuildInputs = [ makeWrapper ];
+
   installPhase = ''
     runHook preInstall
 
@@ -39,6 +44,17 @@ stdenvNoCC.mkDerivation {
     substituteInPlace $out/share/applications/unofficial-homestuck-collection.desktop \
       --replace-fail "AppRun" "${pname}" \
       --replace-fail "Categories=game;" "Categories=Game;"
+
+    # homestuck uses a lot of corefonts but i don't want to install them system-wide
+    wrapProgram $out/bin/${pname} \
+      --set FONTCONFIG_FILE ${writeText "fonts.conf" ''
+        <?xml version="1.0" encoding="UTF-8"?>
+        <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
+        <fontconfig>
+          <dir>${corefonts}</dir>
+          <include ignore_missing="yes">/etc/fonts/conf.d</include>
+        </fontconfig>
+      ''}
 
     runHook postInstall
   '';
