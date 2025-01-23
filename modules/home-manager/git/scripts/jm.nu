@@ -20,10 +20,13 @@ def "main log" [
 }
 
 # Rebase each change in the megamerge on top of trunk
+#
+# Also removes any changes that have been merged into trunk.
 def "main rebase" [
   --mega (-m): string = "mega" # the revision of the megamerge
 ] {
   jj rebase -b $mega -d 'trunk()'
+  jj rebase -s $mega -d $"all:($mega)- ~ ::trunk\()"
 }
 
 # Update the changes in the megamerge to be on top of the latest trunk
