@@ -4,7 +4,7 @@
   ...
 }:
 let
-  inherit (lib) mkDefault mkEnableOption mkIf;
+  inherit (lib) mkEnableOption mkIf;
   cfg = config.mjm.terminal;
 in
 {
@@ -17,8 +17,7 @@ in
   config = mkIf (cfg.enable && cfg.kitty.enable) {
     programs.kitty = {
       enable = true;
-      font.name = "Noto Sans Mono";
-      font.size = mkDefault 14;
+      inherit (cfg) font;
       settings = {
         # modify_font = "baseline 1";
         shell_integration = "enabled";

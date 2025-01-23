@@ -1,6 +1,6 @@
 { lib, ... }:
 let
-  inherit (lib) mkEnableOption;
+  inherit (lib) mkEnableOption mkOption types;
 in
 {
   imports = [
@@ -13,5 +13,16 @@ in
 
   options.mjm.terminal = {
     enable = mkEnableOption "terminal";
+
+    font = {
+      family = mkOption {
+        type = types.str;
+        default = "PragmataPro Mono Liga";
+      };
+      size = mkOption {
+        type = types.int;
+        default = 14;
+      };
+    };
   };
 }

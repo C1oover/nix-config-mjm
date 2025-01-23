@@ -3,9 +3,7 @@
   mjm.aerospace.enable = true;
   mjm.work.enable = true;
 
-  programs.kitty.font.size = 13;
-  programs.alacritty.settings.font.size = 16;
-  mjm.terminal.ghostty.fontSize = 15;
+  mjm.terminal.font.size = 15;
 
   home.packages = builtins.attrValues {
     inherit (pkgs)

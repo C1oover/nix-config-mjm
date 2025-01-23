@@ -4,11 +4,7 @@
   ...
 }:
 let
-  inherit (lib)
-    mkDefault
-    mkIf
-    mkEnableOption
-    ;
+  inherit (lib) mkIf mkEnableOption;
   cfg = config.mjm.terminal;
 in
 {
@@ -22,8 +18,8 @@ in
     programs.alacritty = {
       enable = true;
       settings = {
-        font.normal.family = "PragmataPro Mono Liga";
-        font.size = mkDefault 14;
+        font.normal.family = cfg.font.family;
+        font.size = cfg.font.size;
         window.option_as_alt = "Both";
       };
     };
