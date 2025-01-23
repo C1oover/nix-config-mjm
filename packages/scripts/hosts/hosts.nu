@@ -3,14 +3,19 @@ use nu-lib/deploy.nu *
 use nu-lib/vault.nu *
 
 def --wrapped "darwin rebuild" [...args] {
-  nom-build hosts/darwin.nix -A $'(scutil --get LocalHostName).system' ...$args
-  nvd diff /run/current-system ./result
-}
+  let out_path = nom-build hosts/darwin.nix -A $'(scutil --get LocalHostName).system' ...$args
+  nvd diff /run/current-system $out_path
 
-def "darwin switch" [] {
-  sudo -H --preserve-env=PATH env nix-env -p /nix/var/nix/profiles/system --set (readlink -f result)
-  ./result/activate-user
-  sudo -H --preserve-env=PATH ./result/activate
+  loop {
+    match (input "Apply these changes with switch goal? " | str downcase) {
+      "y" | "yes" => { break }
+      "n" | "no" => { return null }
+    }
+  }
+
+  sudo -H --preserve-env=PATH env nix-env -p /nix/var/nix/profiles/system --set $out_path
+  /nix/var/nix/profiles/system/activate-user
+  sudo -H --preserve-env=PATH /nix/var/nix/profiles/system/activate
 }
 
 def --wrapped "linux rebuild" [...args] {
@@ -22,12 +27,6 @@ def --wrapped "main rebuild" [...args] {
     darwin rebuild ...$args
   } else {
     linux rebuild ...$args
-  }
-}
-
-def "main switch" [action: string = switch] {
-  if (uname).operating-system == "Darwin" {
-    darwin switch
   }
 }
 
