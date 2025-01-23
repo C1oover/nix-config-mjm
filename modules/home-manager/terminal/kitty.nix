@@ -17,7 +17,10 @@ in
   config = mkIf (cfg.enable && cfg.kitty.enable) {
     programs.kitty = {
       enable = true;
-      inherit (cfg) font;
+      font = {
+        name = cfg.font.family;
+        inherit (cfg.font) size;
+      };
       settings = {
         # modify_font = "baseline 1";
         shell_integration = "enabled";
