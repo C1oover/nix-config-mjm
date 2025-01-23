@@ -78,4 +78,7 @@ def "main remove" [
   jj rebase -s $mega -d $'all:($mega)- ~ ($revision)'
 }
 
-def main [] {}
+# Manage megamerges with Jujutsu
+def main [] {
+  help main
+}
