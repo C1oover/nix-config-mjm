@@ -227,6 +227,10 @@ func handleApplyLocal(ctx context.Context) error {
 		return fmt.Errorf("building node: %w", err)
 	}
 
+	if err := h.PushToAttic(ctx); err != nil {
+		return fmt.Errorf("pushing to attic: %w", err)
+	}
+
 	if err := h.DiffLocal(ctx); err != nil {
 		return fmt.Errorf("diffing node: %v", err)
 	}
