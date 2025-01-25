@@ -99,27 +99,21 @@ func handleDeploy(ctx context.Context) error {
 		return h.Kind != HostKindSSH
 	})
 
-	g, childCtx := errgroup.WithContext(ctx)
-	g.SetLimit(*concurrency)
-
-	for _, h := range plan.Hosts {
-		g.Go(func() error {
-			if err := h.Build(childCtx, false); err != nil {
-				return fmt.Errorf("building node %s: %w", h.Name, err)
-			}
-			if err := h.Push(childCtx); err != nil {
-				return fmt.Errorf("pushing node %s: %w", h.Name, err)
-			}
-			if err := h.PushToAttic(childCtx); err != nil {
-				return fmt.Errorf("pushing node %s to attic: %w", h.Name, err)
-			}
-			if err := h.CheckRebootNeeded(childCtx); err != nil {
-				return fmt.Errorf("checking if reboot is needed on %s: %w", h.Name, err)
-			}
-			return nil
-		})
-	}
-	if err := g.Wait(); err != nil {
+	if err := plan.EachHost(ctx, func(ctx context.Context, h *Host) error {
+		if err := h.Build(ctx, false); err != nil {
+			return fmt.Errorf("building node %s: %w", h.Name, err)
+		}
+		if err := h.Push(ctx); err != nil {
+			return fmt.Errorf("pushing node %s: %w", h.Name, err)
+		}
+		if err := h.PushToAttic(ctx); err != nil {
+			return fmt.Errorf("pushing node %s to attic: %w", h.Name, err)
+		}
+		if err := h.CheckRebootNeeded(ctx); err != nil {
+			return fmt.Errorf("checking if reboot is needed on %s: %w", h.Name, err)
+		}
+		return nil
+	}); err != nil {
 		return fmt.Errorf("building nodes: %w", err)
 	}
 
@@ -148,41 +142,35 @@ func handleDiff(ctx context.Context) error {
 	defer os.RemoveAll(diffsDir)
 	slog.DebugContext(ctx, "created temp dir for diffs", "path", diffsDir)
 
-	g, childCtx := errgroup.WithContext(ctx)
-	g.SetLimit(*concurrency)
+	if err := plan.EachHost(ctx, func(ctx context.Context, h *Host) error {
+		if err := h.Build(ctx, false); err != nil {
+			return fmt.Errorf("building node %s: %w", h.Name, err)
+		}
+		if err := h.PushToAttic(ctx); err != nil {
+			return fmt.Errorf("pushing node %s to attic: %w", h.Name, err)
+		}
 
-	for _, h := range plan.Hosts {
-		g.Go(func() error {
-			if err := h.Build(childCtx, false); err != nil {
-				return fmt.Errorf("building node %s: %w", h.Name, err)
+		if h.Kind == HostKindSSH {
+			if err := h.Push(ctx); err != nil {
+				return fmt.Errorf("pushing node %s: %w", h.Name, err)
 			}
-			if err := h.PushToAttic(childCtx); err != nil {
-				return fmt.Errorf("pushing node %s to attic: %w", h.Name, err)
+			diff, err := h.Diff(ctx)
+			if err != nil {
+				return fmt.Errorf("diffing node %s: %w", h.Name, err)
 			}
 
-			if h.Kind == HostKindSSH {
-				if err := h.Push(childCtx); err != nil {
-					return fmt.Errorf("pushing node %s: %w", h.Name, err)
-				}
-				diff, err := h.Diff(ctx)
-				if err != nil {
-					return fmt.Errorf("diffing node %s: %w", h.Name, err)
-				}
-
-				f, err := os.Create(path.Join(diffsDir, fmt.Sprintf("%s.json", h.Name)))
-				if err != nil {
-					return fmt.Errorf("opening file to write diff: %w", err)
-				}
-				defer f.Close()
-
-				if _, err := f.Write(diff); err != nil {
-					return fmt.Errorf("writing diff to %s: %w", f.Name(), err)
-				}
+			f, err := os.Create(path.Join(diffsDir, fmt.Sprintf("%s.json", h.Name)))
+			if err != nil {
+				return fmt.Errorf("opening file to write diff: %w", err)
 			}
-			return nil
-		})
-	}
-	if err := g.Wait(); err != nil {
+			defer f.Close()
+
+			if _, err := f.Write(diff); err != nil {
+				return fmt.Errorf("writing diff to %s: %w", f.Name(), err)
+			}
+		}
+		return nil
+	}); err != nil {
 		return fmt.Errorf("building nodes: %w", err)
 	}
 
@@ -350,6 +338,18 @@ type planConfig struct {
 type deployPhase struct {
 	Name  string   `json:"name"`
 	Nodes []string `json:"nodes"`
+}
+
+func (p *deployPlan) EachHost(ctx context.Context, f func(context.Context, *Host) error) error {
+	g, childCtx := errgroup.WithContext(ctx)
+	g.SetLimit(*concurrency)
+
+	for _, h := range p.Hosts {
+		g.Go(func() error {
+			return f(childCtx, h)
+		})
+	}
+	return g.Wait()
 }
 
 func (p *deployPlan) deploy(ctx context.Context) error {
