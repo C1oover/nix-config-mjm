@@ -14,6 +14,7 @@ import (
 	"strings"
 	"time"
 
+	"git.midna.dev/mjm/nix-config/packages/nixos-deploy/cmd"
 	"git.midna.dev/mjm/nix-config/packages/nixos-deploy/nix"
 	"github.com/lmittmann/tint"
 	"golang.org/x/sync/errgroup"
@@ -79,6 +80,7 @@ func newConfig() Config {
 	slog.Debug("ssh options", "opts", args)
 
 	return Config{
+		Runner:  cmd.LocalRunner{},
 		SSHOpts: args,
 	}
 }
@@ -332,7 +334,7 @@ func evalLocalNode(ctx context.Context, path string) (*Host, error) {
 	if err := nix.EvalJSON(ctx, &result, nix.EvalOptions{Expr: evalExpr}); err != nil {
 		return nil, fmt.Errorf("evaluating node: %w", err)
 	}
-	return NewLocalHost(name, result.DrvPath, result.OutPath), nil
+	return NewLocalHost(newConfig(), name, result.DrvPath, result.OutPath), nil
 }
 
 type deployPlan struct {

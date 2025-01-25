@@ -64,8 +64,8 @@ func NewHost(cfg Config, name string, drvPath string, deployConfig DeployConfig)
 	}
 }
 
-func NewLocalHost(name string, drvPath string, outPath string) *Host {
-	h := NewHost(Config{}, name, drvPath, DeployConfig{})
+func NewLocalHost(cfg Config, name string, drvPath string, outPath string) *Host {
+	h := NewHost(cfg, name, drvPath, DeployConfig{})
 	h.Kind = HostKindLocal
 	h.OutPath = outPath
 	return h
@@ -126,10 +126,7 @@ func (h *Host) PushToAttic(ctx context.Context) error {
 	l := h.log.With("out_path", h.OutPath)
 	l.InfoContext(ctx, "pushing to attic cache")
 
-	cmd := exec.CommandContext(ctx, "attic", "push", "homelab", h.OutPath)
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	if err := cmd.Run(); err != nil {
+	if err := h.cfg.Runner.Execute(ctx, "attic", "push", "homelab", h.OutPath); err != nil {
 		return fmt.Errorf("running attic push: %w", err)
 	}
 
@@ -168,10 +165,7 @@ func (h *Host) Diff(ctx context.Context) ([]byte, error) {
 }
 
 func (h *Host) DiffLocal(ctx context.Context) error {
-	cmd := exec.CommandContext(ctx, "nvd", "diff", "/run/current-system", h.OutPath)
-	cmd.Stderr = os.Stderr
-	cmd.Stdout = os.Stdout
-	if err := cmd.Run(); err != nil {
+	if err := h.cfg.Runner.Execute(ctx, "nvd", "diff", "/run/current-system", h.OutPath); err != nil {
 		return fmt.Errorf("running nvd: %w", err)
 	}
 
@@ -368,25 +362,23 @@ func (h *Host) getBootID(ctx context.Context) (string, error) {
 // TODO consider doing SSH from Go
 // would require reimplementing some things to get it to read keys like ssh does
 func (h *Host) runCommand(ctx context.Context, name string, args ...string) ([]byte, error) {
-	var cmd *exec.Cmd
+	var cName string
+	var cArgs []string
 
 	switch h.Kind {
 	case HostKindSSH:
-		sshArgs := []string{h.sshTarget}
-		sshArgs = append(sshArgs, h.cfg.SSHOpts...)
-		sshArgs = append(sshArgs, "--", "sudo", name)
-		sshArgs = append(sshArgs, args...)
-
-		cmd = exec.CommandContext(ctx, "ssh", sshArgs...)
+		cName = "ssh"
+		cArgs = []string{h.sshTarget}
+		cArgs = append(cArgs, h.cfg.SSHOpts...)
+		cArgs = append(cArgs, "--", "sudo", name)
+		cArgs = append(cArgs, args...)
 	case HostKindLocal:
-		cmdArgs := []string{name}
-		cmdArgs = append(cmdArgs, args...)
-
-		cmd = exec.CommandContext(ctx, "sudo", cmdArgs...)
+		cName = "sudo"
+		cArgs = []string{name}
+		cArgs = append(cArgs, args...)
 	}
 
-	cmd.Stderr = os.Stderr
-	output, err := cmd.Output()
+	output, err := h.cfg.Runner.ExecuteOutput(ctx, cName, cArgs...)
 	if err != nil {
 		return nil, fmt.Errorf("running command on %s: %w", h.Name, err)
 	}

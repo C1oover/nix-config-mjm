@@ -1,9 +1,12 @@
 package main
 
 import (
+	"context"
 	"testing"
 
+	"git.midna.dev/mjm/nix-config/packages/nixos-deploy/cmd"
 	"github.com/shoenig/test"
+	"github.com/shoenig/test/must"
 )
 
 func TestNewHostSSH(t *testing.T) {
@@ -44,6 +47,7 @@ func TestNewHostLocal(t *testing.T) {
 
 func TestNewLocalHost(t *testing.T) {
 	h := NewLocalHost(
+		Config{},
 		"uranus",
 		"/nix/store/g5dyb9016k8fnz3ng6k50jc7nc5zqhf3-nixos-system-uranus-25.05pre-git.drv",
 		"/nix/store/h3big3vbjnk32vf0nb5vi80yq0l9ivxb-nixos-system-uranus-25.05pre-git")
@@ -57,4 +61,84 @@ func TestNewLocalHost(t *testing.T) {
 	test.False(t, h.RebootNeeded)
 	test.Nil(t, h.cfg.SSHOpts)
 	test.Eq(t, "", h.sshTarget)
+}
+
+func TestPushToAttic(t *testing.T) {
+	r := &cmd.MockRunner{}
+	cfg := Config{Runner: r}
+	h := NewHost(cfg, "uranus", "/nix/store/g5dyb9016k8fnz3ng6k50jc7nc5zqhf3-nixos-system-uranus-25.05pre-git.drv", DeployConfig{})
+	h.OutPath = "/nix/store/h3big3vbjnk32vf0nb5vi80yq0l9ivxb-nixos-system-uranus-25.05pre-git"
+	ctx := context.Background()
+
+	must.NoError(t, h.PushToAttic(ctx))
+	test.Eq(t, [][]string{{
+		"attic", "push", "homelab", "/nix/store/h3big3vbjnk32vf0nb5vi80yq0l9ivxb-nixos-system-uranus-25.05pre-git",
+	}}, r.History)
+}
+
+func TestCheckRebootNeeded(t *testing.T) {
+	t.Run("ssh host", func(t *testing.T) {
+		r := &cmd.MockRunner{}
+		cfg := Config{Runner: r, SSHOpts: []string{"-o", "Foo=Bar"}}
+		user := "mjm"
+		host := "uranus.home.mattmoriarity.com"
+		h := NewHost(cfg, "uranus", "/nix/store/g5dyb9016k8fnz3ng6k50jc7nc5zqhf3-nixos-system-uranus-25.05pre-git.drv", DeployConfig{
+			TargetUser: &user,
+			TargetHost: &host,
+		})
+		h.OutPath = "/nix/store/h3big3vbjnk32vf0nb5vi80yq0l9ivxb-nixos-system-uranus-25.05pre-git"
+		ctx := context.Background()
+
+		r.Outputs = [][]byte{
+			[]byte(`{"reboot_needed": true}`),
+		}
+		must.NoError(t, h.CheckRebootNeeded(ctx))
+		test.Eq(t, [][]string{{
+			"ssh", "mjm@uranus.home.mattmoriarity.com",
+			"-o", "Foo=Bar", "--", "sudo",
+			"/nix/store/h3big3vbjnk32vf0nb5vi80yq0l9ivxb-nixos-system-uranus-25.05pre-git/bin/nvd-json",
+			"reboot-check",
+			"/nix/store/h3big3vbjnk32vf0nb5vi80yq0l9ivxb-nixos-system-uranus-25.05pre-git",
+		}}, r.History)
+		test.True(t, h.RebootNeeded)
+	})
+
+	t.Run("ssh host not needed", func(t *testing.T) {
+		r := &cmd.MockRunner{}
+		cfg := Config{Runner: r, SSHOpts: []string{"-o", "Foo=Bar"}}
+		user := "mjm"
+		host := "uranus.home.mattmoriarity.com"
+		h := NewHost(cfg, "uranus", "/nix/store/g5dyb9016k8fnz3ng6k50jc7nc5zqhf3-nixos-system-uranus-25.05pre-git.drv", DeployConfig{
+			TargetUser: &user,
+			TargetHost: &host,
+		})
+		h.OutPath = "/nix/store/h3big3vbjnk32vf0nb5vi80yq0l9ivxb-nixos-system-uranus-25.05pre-git"
+		ctx := context.Background()
+
+		r.Outputs = [][]byte{
+			[]byte(`{"reboot_needed": false}`),
+		}
+		must.NoError(t, h.CheckRebootNeeded(ctx))
+		test.False(t, h.RebootNeeded)
+	})
+
+	t.Run("local host", func(t *testing.T) {
+		r := &cmd.MockRunner{}
+		cfg := Config{Runner: r, SSHOpts: []string{"-o", "Foo=Bar"}}
+		h := NewHost(cfg, "uranus", "/nix/store/g5dyb9016k8fnz3ng6k50jc7nc5zqhf3-nixos-system-uranus-25.05pre-git.drv", DeployConfig{})
+		h.OutPath = "/nix/store/h3big3vbjnk32vf0nb5vi80yq0l9ivxb-nixos-system-uranus-25.05pre-git"
+		ctx := context.Background()
+
+		r.Outputs = [][]byte{
+			[]byte(`{"reboot_needed": true}`),
+		}
+		must.NoError(t, h.CheckRebootNeeded(ctx))
+		test.Eq(t, [][]string{{
+			"sudo",
+			"/nix/store/h3big3vbjnk32vf0nb5vi80yq0l9ivxb-nixos-system-uranus-25.05pre-git/bin/nvd-json",
+			"reboot-check",
+			"/nix/store/h3big3vbjnk32vf0nb5vi80yq0l9ivxb-nixos-system-uranus-25.05pre-git",
+		}}, r.History)
+		test.True(t, h.RebootNeeded)
+	})
 }
