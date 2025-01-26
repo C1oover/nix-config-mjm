@@ -16,16 +16,8 @@ import (
 	consulapi "github.com/hashicorp/consul/api"
 )
 
-type HostKind int
-
-const (
-	HostKindLocal HostKind = iota
-	HostKindSSH
-)
-
 type Host struct {
 	Name         string
-	Kind         HostKind
 	DrvPath      string
 	OutPath      string
 	DeployConfig DeployConfig
@@ -44,21 +36,23 @@ type DeployConfig struct {
 }
 
 func NewHost(cfg Config, name string, drvPath string, outPath string, deployConfig DeployConfig) *Host {
-	kind := HostKindLocal
-	if deployConfig.TargetHost != nil {
-		kind = HostKindSSH
-	}
-
 	logger := slog.Default().WithGroup("host").With("name", name)
 	return &Host{
 		Name:         name,
-		Kind:         kind,
 		DrvPath:      drvPath,
 		OutPath:      outPath,
 		DeployConfig: deployConfig,
 		cfg:          cfg,
 		log:          logger,
 	}
+}
+
+func (h *Host) IsLocal() bool {
+	return h.DeployConfig.TargetHost == nil
+}
+
+func (h *Host) IsRemote() bool {
+	return !h.IsLocal()
 }
 
 func (h *Host) Build(ctx context.Context, useNom bool) error {
@@ -74,7 +68,7 @@ func (h *Host) Build(ctx context.Context, useNom bool) error {
 }
 
 func (h *Host) Push(ctx context.Context) error {
-	if h.Kind == HostKindLocal {
+	if h.IsLocal() {
 		return nil
 	}
 
@@ -330,7 +324,7 @@ func (h *Host) getBootID(ctx context.Context) (string, error) {
 
 func (h *Host) runCommand(ctx context.Context, name string, args ...string) ([]byte, error) {
 	r := h.cfg.Runner
-	if h.Kind == HostKindSSH {
+	if h.IsRemote() {
 		r = h.remoteRunner
 		if r == nil {
 			h.log.DebugContext(ctx, "creating new remote runner")

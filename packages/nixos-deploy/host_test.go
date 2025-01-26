@@ -27,10 +27,11 @@ func TestNewHostSSH(t *testing.T) {
 	test.Eq(t, "uranus", h.Name)
 	test.Eq(t, "/nix/store/g5dyb9016k8fnz3ng6k50jc7nc5zqhf3-nixos-system-uranus-25.05pre-git.drv", h.DrvPath)
 	test.Eq(t, "/nix/store/h3big3vbjnk32vf0nb5vi80yq0l9ivxb-nixos-system-uranus-25.05pre-git", h.OutPath)
-	test.Eq(t, HostKindSSH, h.Kind)
 	test.Eq(t, "mjm", *h.DeployConfig.TargetUser)
 	test.Eq(t, "uranus.home.mattmoriarity.com", *h.DeployConfig.TargetHost)
 	test.False(t, h.RebootNeeded)
+	test.False(t, h.IsLocal())
+	test.True(t, h.IsRemote())
 }
 
 func TestNewHostLocal(t *testing.T) {
@@ -45,10 +46,11 @@ func TestNewHostLocal(t *testing.T) {
 	test.Eq(t, "uranus", h.Name)
 	test.Eq(t, "/nix/store/g5dyb9016k8fnz3ng6k50jc7nc5zqhf3-nixos-system-uranus-25.05pre-git.drv", h.DrvPath)
 	test.Eq(t, "/nix/store/h3big3vbjnk32vf0nb5vi80yq0l9ivxb-nixos-system-uranus-25.05pre-git", h.OutPath)
-	test.Eq(t, HostKindLocal, h.Kind)
 	test.Nil(t, h.DeployConfig.TargetHost)
 	test.Nil(t, h.DeployConfig.TargetUser)
 	test.False(t, h.RebootNeeded)
+	test.True(t, h.IsLocal())
+	test.False(t, h.IsRemote())
 }
 
 func TestPushToAttic(t *testing.T) {

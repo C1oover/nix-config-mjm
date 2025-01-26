@@ -81,7 +81,7 @@ func handleDeploy(ctx context.Context) error {
 
 	// remove any local hosts, we don't want to deploy to those
 	plan.Hosts = slices.DeleteFunc(plan.Hosts, func(h *Host) bool {
-		return h.Kind != HostKindSSH
+		return h.IsLocal()
 	})
 
 	if err := plan.EachHost(ctx, func(ctx context.Context, h *Host) error {
@@ -141,7 +141,7 @@ func handleDiff(ctx context.Context) error {
 			return fmt.Errorf("pushing node %s to attic: %w", h.Name, err)
 		}
 
-		if h.Kind == HostKindSSH {
+		if h.IsRemote() {
 			if err := h.Push(ctx); err != nil {
 				return fmt.Errorf("pushing node %s: %w", h.Name, err)
 			}
