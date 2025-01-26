@@ -14,7 +14,6 @@ import (
 	"strings"
 	"time"
 
-	"git.midna.dev/mjm/nix-config/packages/nixos-deploy/cmd"
 	"git.midna.dev/mjm/nix-config/packages/nixos-deploy/nix"
 	"github.com/lmittmann/tint"
 	"golang.org/x/sync/errgroup"
@@ -65,36 +64,17 @@ func main() {
 	}
 }
 
-func newConfig(keyPath string) Config {
-	args := []string{
-		"-o",
-		"BatchMode=yes",
-		"-T",
-	}
-
-	if keyPath != "" {
-		args = append(args, "-o", fmt.Sprintf("IdentityFile=%s", keyPath))
-	}
-
-	slog.Debug("ssh options", "opts", args)
-
-	return Config{
-		Runner:  cmd.LocalRunner{},
-		SSHOpts: args,
-	}
-}
-
 func handleDeploy(ctx context.Context) error {
 	hostnames := flag.Args()
 	hostnames = hostnames[1:]
 
-	keyPath, err := generateAndWriteSSHKey(ctx)
+	cfg, err := GenerateConfig(ctx)
 	if err != nil {
-		return fmt.Errorf("generating ssh key: %w", err)
+		return fmt.Errorf("generating config: %w", err)
 	}
-	defer os.RemoveAll(path.Dir(keyPath))
+	defer cfg.Cleanup()
 
-	plan, err := evalNodes(ctx, newConfig(keyPath), *plansFile, hostnames)
+	plan, err := evalNodes(ctx, cfg, *plansFile, hostnames)
 	if err != nil {
 		return fmt.Errorf("evaluating nodes: %w", err)
 	}
@@ -134,13 +114,13 @@ func handleDiff(ctx context.Context) error {
 	hostnames := flag.Args()
 	hostnames = hostnames[1:]
 
-	keyPath, err := generateAndWriteSSHKey(ctx)
+	cfg, err := GenerateConfig(ctx)
 	if err != nil {
-		return fmt.Errorf("generating ssh key: %w", err)
+		return fmt.Errorf("generating config: %w", err)
 	}
-	defer os.RemoveAll(path.Dir(keyPath))
+	defer cfg.Cleanup()
 
-	plan, err := evalNodes(ctx, newConfig(keyPath), *plansFile, hostnames)
+	plan, err := evalNodes(ctx, cfg, *plansFile, hostnames)
 	if err != nil {
 		return fmt.Errorf("evaluating nodes: %w", err)
 	}
@@ -202,13 +182,13 @@ func handleReboot(ctx context.Context) error {
 		return fmt.Errorf("reboot command requires exactly one host")
 	}
 
-	keyPath, err := generateAndWriteSSHKey(ctx)
+	cfg, err := GenerateConfig(ctx)
 	if err != nil {
-		return fmt.Errorf("generating ssh key: %w", err)
+		return fmt.Errorf("generating config: %w", err)
 	}
-	defer os.RemoveAll(path.Dir(keyPath))
+	defer cfg.Cleanup()
 
-	plan, err := evalNodes(ctx, newConfig(keyPath), *plansFile, hostnames)
+	plan, err := evalNodes(ctx, cfg, *plansFile, hostnames)
 	if err != nil {
 		return fmt.Errorf("evaluating nodes: %w", err)
 	}
@@ -338,7 +318,7 @@ func evalLocalNode(ctx context.Context, path string) (*Host, error) {
 	if err := nix.EvalJSON(ctx, &result, nix.EvalOptions{Expr: evalExpr}); err != nil {
 		return nil, fmt.Errorf("evaluating node: %w", err)
 	}
-	return NewLocalHost(newConfig(""), name, result.DrvPath, result.OutPath), nil
+	return NewLocalHost(NewLocalConfig(), name, result.DrvPath, result.OutPath), nil
 }
 
 type deployPlan struct {

@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"log/slog"
 	"os"
@@ -13,6 +12,7 @@ import (
 	"strings"
 	"time"
 
+	"git.midna.dev/mjm/nix-config/packages/nixos-deploy/cmd"
 	"git.midna.dev/mjm/nix-config/packages/nixos-deploy/nix"
 	consulapi "github.com/hashicorp/consul/api"
 )
@@ -34,6 +34,7 @@ type Host struct {
 	cfg          Config
 	log          *slog.Logger
 	sshTarget    string
+	remoteRunner cmd.Runner
 }
 
 type DeployConfig struct {
@@ -325,10 +326,8 @@ func (h *Host) Reboot(ctx context.Context) error {
 
 	_, err = h.runCommand(ctx, "reboot")
 	if err != nil {
-		var exitError *exec.ExitError
-		if !errors.As(err, &exitError) || exitError.ExitCode() != 255 {
-			return fmt.Errorf("initiating reboot: %w", err)
-		}
+		// TODO figure out if there's an error that can happen here because of the reboot
+		return fmt.Errorf("initiating reboot: %w", err)
 	}
 
 	h.log.InfoContext(ctx, "waiting for reboot")
@@ -359,26 +358,27 @@ func (h *Host) getBootID(ctx context.Context) (string, error) {
 	return strings.TrimSpace(string(output)), nil
 }
 
-// TODO consider doing SSH from Go
-// would require reimplementing some things to get it to read keys like ssh does
 func (h *Host) runCommand(ctx context.Context, name string, args ...string) ([]byte, error) {
-	var cName string
-	var cArgs []string
+	r := h.cfg.Runner
+	if h.Kind == HostKindSSH {
+		r = h.remoteRunner
+		if r == nil {
+			h.log.DebugContext(ctx, "creating new remote runner")
 
-	switch h.Kind {
-	case HostKindSSH:
-		cName = "ssh"
-		cArgs = []string{h.sshTarget}
-		cArgs = append(cArgs, h.cfg.SSHOpts...)
-		cArgs = append(cArgs, "--", "sudo", name)
-		cArgs = append(cArgs, args...)
-	case HostKindLocal:
-		cName = "sudo"
-		cArgs = []string{name}
-		cArgs = append(cArgs, args...)
+			var err error
+			if r, err = h.cfg.RemoteRunner(*h.DeployConfig.TargetHost, *h.DeployConfig.TargetUser); err != nil {
+				return nil, fmt.Errorf("creating remote runner for %s: %w", h.Name, err)
+			}
+			h.remoteRunner = r
+		} else {
+			h.log.DebugContext(ctx, "reusing existing remote runner")
+		}
 	}
 
-	output, err := h.cfg.Runner.ExecuteOutput(ctx, cName, cArgs...)
+	cArgs := []string{name}
+	cArgs = append(cArgs, args...)
+
+	output, err := r.ExecuteOutput(ctx, "sudo", cArgs...)
 	if err != nil {
 		return nil, fmt.Errorf("running command on %s: %w", h.Name, err)
 	}
