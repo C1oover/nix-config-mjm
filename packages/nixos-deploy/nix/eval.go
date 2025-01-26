@@ -11,21 +11,7 @@ import (
 	"strings"
 )
 
-type EvalJobsOptions struct {
-	Path    string
-	Expr    string
-	Args    map[string]string
-	Workers int
-}
-
-type EvalJobResult struct {
-	Attr    string            `json:"attr"`
-	DrvPath string            `json:"drvPath"`
-	Outputs map[string]string `json:"outputs"`
-	Error   string            `json:"error"`
-}
-
-func EvalJobs(ctx context.Context, opts EvalJobsOptions) ([]EvalJobResult, error) {
+func (_ Real) EvalJobs(ctx context.Context, opts EvalJobsOptions) ([]EvalJobResult, error) {
 	args := []string{"--max-memory-size", "2048"}
 	if opts.Workers != 0 {
 		args = append(args, "--workers", strconv.Itoa(opts.Workers))
@@ -65,12 +51,7 @@ func EvalJobs(ctx context.Context, opts EvalJobsOptions) ([]EvalJobResult, error
 	return results, nil
 }
 
-type EvalOptions struct {
-	Path string
-	Expr string
-}
-
-func EvalJSON(ctx context.Context, dst interface{}, opts EvalOptions) error {
+func (_ Real) EvalJSON(ctx context.Context, dst interface{}, opts EvalOptions) error {
 	args := []string{"eval", "--impure", "--json"}
 	if opts.Expr != "" {
 		args = append(args, "--expr", opts.Expr)

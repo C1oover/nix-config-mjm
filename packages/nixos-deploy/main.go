@@ -243,7 +243,7 @@ func evalNodes(ctx context.Context, cfg Config, path string, hostnames []string)
 	}
 
 	namesToInclude := fmt.Sprintf("builtins.fromJSON %q", string(hostnamesBytes))
-	paths, err := nix.EvalJobs(ctx, nix.EvalJobsOptions{
+	paths, err := cfg.Nix.EvalJobs(ctx, nix.EvalJobsOptions{
 		Path: path,
 		Args: map[string]string{
 			"namesToInclude": namesToInclude,
@@ -270,7 +270,7 @@ func evalNodes(ctx context.Context, cfg Config, path string, hostnames []string)
 		return nil, fmt.Errorf("evaluation failed for one or more nodes (%s): %w", strings.Join(errorAttrs, ", "), err)
 	}
 
-	configOut, err := nix.Realise(ctx, configDrv, false)
+	configOut, err := cfg.Nix.Realise(ctx, configDrv, false)
 	if err != nil {
 		return nil, fmt.Errorf("realising config json: %w", err)
 	}
@@ -314,11 +314,13 @@ func evalLocalNode(ctx context.Context, path string) (*Host, error) {
 		OutPath string `json:"out"`
 	}
 
+	cfg := NewLocalConfig()
+
 	slog.InfoContext(ctx, "evaluating local host", "name", name)
-	if err := nix.EvalJSON(ctx, &result, nix.EvalOptions{Expr: evalExpr}); err != nil {
+	if err := cfg.Nix.EvalJSON(ctx, &result, nix.EvalOptions{Expr: evalExpr}); err != nil {
 		return nil, fmt.Errorf("evaluating node: %w", err)
 	}
-	return NewLocalHost(NewLocalConfig(), name, result.DrvPath, result.OutPath), nil
+	return NewLocalHost(cfg, name, result.DrvPath, result.OutPath), nil
 }
 
 type deployPlan struct {

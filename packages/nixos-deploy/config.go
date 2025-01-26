@@ -8,11 +8,13 @@ import (
 	"path"
 
 	"git.midna.dev/mjm/nix-config/packages/nixos-deploy/cmd"
+	"git.midna.dev/mjm/nix-config/packages/nixos-deploy/nix"
 	"golang.org/x/crypto/ssh"
 	"golang.org/x/crypto/ssh/knownhosts"
 )
 
 type Config struct {
+	Nix          nix.Nix
 	Runner       cmd.Runner
 	RemoteRunner func(host, user string) (cmd.Runner, error)
 	SSHOpts      []string
@@ -55,6 +57,7 @@ func GenerateConfig(ctx context.Context) (Config, error) {
 	}
 
 	return Config{
+		Nix:    nix.Real{},
 		Runner: cmd.LocalRunner{},
 		RemoteRunner: func(host, user string) (cmd.Runner, error) {
 			return cmd.NewSSHRunner(host, user, signer, hostKeyCallback)
@@ -66,6 +69,7 @@ func GenerateConfig(ctx context.Context) (Config, error) {
 
 func NewLocalConfig() Config {
 	return Config{
+		Nix:    nix.Real{},
 		Runner: cmd.LocalRunner{},
 		RemoteRunner: func(host, user string) (cmd.Runner, error) {
 			return nil, fmt.Errorf("remote runner not supported in this config")

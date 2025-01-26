@@ -13,7 +13,6 @@ import (
 	"time"
 
 	"git.midna.dev/mjm/nix-config/packages/nixos-deploy/cmd"
-	"git.midna.dev/mjm/nix-config/packages/nixos-deploy/nix"
 	consulapi "github.com/hashicorp/consul/api"
 )
 
@@ -99,7 +98,7 @@ func (h *Host) Build(ctx context.Context, useNom bool) error {
 	l := h.log.With("drv_path", h.DrvPath)
 	l.InfoContext(ctx, "building host")
 
-	outPath, err := nix.Realise(ctx, h.DrvPath, useNom)
+	outPath, err := h.cfg.Nix.Realise(ctx, h.DrvPath, useNom)
 	if err != nil {
 		return fmt.Errorf("realising node %s: %w", h.Name, err)
 	}

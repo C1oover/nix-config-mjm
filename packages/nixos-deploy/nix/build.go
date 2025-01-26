@@ -10,7 +10,7 @@ import (
 )
 
 // Realise builds a derivation from an evaluated .drv file and returns the path to the output.
-func Realise(ctx context.Context, drvPath string, useNom bool) (string, error) {
+func (_ Real) Realise(ctx context.Context, drvPath string, useNom bool) (string, error) {
 	args := []string{"--no-gc-warning", "--realise", drvPath}
 	if useNom {
 		args = append(args, "--log-format", "internal-json", "-v")
