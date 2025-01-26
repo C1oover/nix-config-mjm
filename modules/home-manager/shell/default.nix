@@ -10,6 +10,7 @@ let
 in
 {
   imports = [
+    ./fish.nix
     ./nushell.nix
     ./starship.nix
     ./zsh.nix

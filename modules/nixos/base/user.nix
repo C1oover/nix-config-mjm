@@ -7,7 +7,7 @@ in
     isNormalUser = true;
     description = "MJ";
     extraGroups = [ "wheel" ];
-    shell = pkgs.nushell;
+    shell = pkgs.fish;
     hashedPassword = "$y$j9T$tM/RKSjlb5ljgtpGT/Y8N1$3oXxWQh/q.KKCcJKoyVeIUVqjjt76EWX.uNEJRASt04";
   };
 }

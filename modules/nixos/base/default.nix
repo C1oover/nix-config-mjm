@@ -31,6 +31,7 @@
 
   programs.nushell.enable = true;
   programs.zsh.enable = true;
+  programs.fish.enable = true;
 
   catppuccin.flavor = "macchiato";
 

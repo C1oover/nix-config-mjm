@@ -94,6 +94,23 @@ in
       };
     };
 
+    programs.fish.shellAliases = {
+      ",jp" = "jj git push";
+      ",jpc" = "jj git push -c 'heads(description(glob:\"?*\") & ::@)'";
+    };
+    programs.fish.functions = {
+      ",jpb" = ''
+        jj bookmark move --from 'heads(::@ & bookmarks())' --to 'heads(description(glob:"?*") & ::@)'
+        jj git push
+        or jj undo
+      '';
+
+      ",ju" = ''
+        jj git fetch
+        jj rebase -d 'trunk()'
+      '';
+    };
+
     programs.nushell.shellAliases = {
       ",jgf" = "jj git fetch";
       ",jp" = "jj git push";

@@ -49,6 +49,7 @@ in
 
     home.sessionVariables = envVars;
 
+    programs.fish.shellAliases.",s" = "homelab ssh vault";
     programs.nushell.shellAliases = {
       ",s" = "homelab ssh kitty";
       ",vssh" = "homelab ssh vault";
