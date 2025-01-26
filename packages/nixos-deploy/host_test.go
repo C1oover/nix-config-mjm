@@ -79,7 +79,12 @@ func TestPushToAttic(t *testing.T) {
 func TestCheckRebootNeeded(t *testing.T) {
 	t.Run("ssh host", func(t *testing.T) {
 		r := &cmd.MockRunner{}
-		cfg := Config{Runner: r, SSHOpts: []string{"-o", "Foo=Bar"}}
+		cfg := Config{
+			Runner: &cmd.MockRunner{},
+			RemoteRunner: func(host, user string) (cmd.Runner, error) {
+				return r, nil
+			},
+		}
 		user := "mjm"
 		host := "uranus.home.mattmoriarity.com"
 		h := NewHost(cfg, "uranus", "/nix/store/g5dyb9016k8fnz3ng6k50jc7nc5zqhf3-nixos-system-uranus-25.05pre-git.drv", DeployConfig{
@@ -94,8 +99,7 @@ func TestCheckRebootNeeded(t *testing.T) {
 		}
 		must.NoError(t, h.CheckRebootNeeded(ctx))
 		test.Eq(t, [][]string{{
-			"ssh", "mjm@uranus.home.mattmoriarity.com",
-			"-o", "Foo=Bar", "--", "sudo",
+			"sudo",
 			"/nix/store/h3big3vbjnk32vf0nb5vi80yq0l9ivxb-nixos-system-uranus-25.05pre-git/bin/nvd-json",
 			"reboot-check",
 			"/nix/store/h3big3vbjnk32vf0nb5vi80yq0l9ivxb-nixos-system-uranus-25.05pre-git",
@@ -105,7 +109,12 @@ func TestCheckRebootNeeded(t *testing.T) {
 
 	t.Run("ssh host not needed", func(t *testing.T) {
 		r := &cmd.MockRunner{}
-		cfg := Config{Runner: r, SSHOpts: []string{"-o", "Foo=Bar"}}
+		cfg := Config{
+			Runner: &cmd.MockRunner{},
+			RemoteRunner: func(host, user string) (cmd.Runner, error) {
+				return r, nil
+			},
+		}
 		user := "mjm"
 		host := "uranus.home.mattmoriarity.com"
 		h := NewHost(cfg, "uranus", "/nix/store/g5dyb9016k8fnz3ng6k50jc7nc5zqhf3-nixos-system-uranus-25.05pre-git.drv", DeployConfig{
