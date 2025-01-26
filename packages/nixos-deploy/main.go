@@ -16,7 +16,6 @@ import (
 
 	"git.midna.dev/mjm/nix-config/packages/nixos-deploy/nix"
 	"github.com/lmittmann/tint"
-	"golang.org/x/sync/errgroup"
 )
 
 var (
@@ -102,7 +101,7 @@ func handleDeploy(ctx context.Context) error {
 		return fmt.Errorf("building nodes: %w", err)
 	}
 
-	if err := plan.deploy(ctx); err != nil {
+	if err := plan.Deploy(ctx); err != nil {
 		return fmt.Errorf("deploying plan: %w", err)
 	}
 
@@ -229,7 +228,7 @@ func handleApplyLocal(ctx context.Context) error {
 	return nil
 }
 
-func evalNodes(ctx context.Context, cfg Config, path string, hostnames []string) (*deployPlan, error) {
+func evalNodes(ctx context.Context, cfg Config, path string, hostnames []string) (*DeployPlan, error) {
 	workers := *concurrency
 	if len(hostnames) > 0 && len(hostnames) < workers-1 {
 		workers = len(hostnames) + 1
@@ -285,19 +284,15 @@ func evalNodes(ctx context.Context, cfg Config, path string, hostnames []string)
 		return nil, fmt.Errorf("decoding plan json: %w", err)
 	}
 
-	var hosts []*Host
+	dp := &DeployPlan{Phases: plan.Phases}
 	for name, r := range resultsByAttrs {
-		if !slices.ContainsFunc(plan.Phases, func(p deployPhase) bool { return slices.Contains(p.Nodes, name) }) {
+		if !dp.ContainsHost(name) {
 			continue
 		}
 
-		hosts = append(hosts, NewHost(cfg, name, r.DrvPath, r.OutPath(), plan.Deployment[name]))
+		dp.Hosts = append(dp.Hosts, NewHost(cfg, name, r.DrvPath, r.OutPath(), plan.Deployment[name]))
 	}
-
-	return &deployPlan{
-		Phases: plan.Phases,
-		Hosts:  hosts,
-	}, nil
+	return dp, nil
 }
 
 func evalLocalNode(ctx context.Context, path string) (*Host, error) {
@@ -320,73 +315,6 @@ func evalLocalNode(ctx context.Context, path string) (*Host, error) {
 		return nil, fmt.Errorf("evaluating node: %w", err)
 	}
 	return NewHost(cfg, name, result.DrvPath, result.OutPath, DeployConfig{}), nil
-}
-
-type deployPlan struct {
-	Phases []deployPhase
-	Hosts  []*Host
-}
-
-type planConfig struct {
-	Phases     []deployPhase           `json:"phases"`
-	Deployment map[string]DeployConfig `json:"deployment"`
-}
-
-type deployPhase struct {
-	Name  string   `json:"name"`
-	Nodes []string `json:"nodes"`
-}
-
-func (p *deployPlan) EachHost(ctx context.Context, f func(context.Context, *Host) error) error {
-	g, childCtx := errgroup.WithContext(ctx)
-	g.SetLimit(*concurrency)
-
-	for _, h := range p.Hosts {
-		g.Go(func() error {
-			return f(childCtx, h)
-		})
-	}
-	return g.Wait()
-}
-
-func (p *deployPlan) deploy(ctx context.Context) error {
-	nodesByName := map[string]*Host{}
-	for _, h := range p.Hosts {
-		nodesByName[h.Name] = h
-	}
-
-	for _, phase := range p.Phases {
-		var phaseNodes []*Host
-		for _, name := range phase.Nodes {
-			if h, ok := nodesByName[name]; ok {
-				phaseNodes = append(phaseNodes, h)
-			}
-		}
-
-		if err := deployPhaseNodes(ctx, phase.Name, phaseNodes); err != nil {
-			return fmt.Errorf("deploying phase %s: %w", phase.Name, err)
-		}
-	}
-
-	return nil
-}
-
-func deployPhaseNodes(ctx context.Context, name string, hosts []*Host) error {
-	if len(hosts) == 0 {
-		return nil
-	}
-
-	l := slog.Default().WithGroup("phase").With("name", name)
-	l.InfoContext(ctx, "deploying phase", "host_count", len(hosts))
-
-	for _, h := range hosts {
-		if err := h.Deploy(ctx); err != nil {
-			return fmt.Errorf("deploying %s: %w", h.Name, err)
-		}
-	}
-
-	l.InfoContext(ctx, "deployed phase")
-	return nil
 }
 
 func aggregateDiffs(ctx context.Context, dir string) (*AggregatedDiff, error) {
