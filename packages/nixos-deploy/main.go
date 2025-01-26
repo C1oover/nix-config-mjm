@@ -319,7 +319,7 @@ func evalLocalNode(ctx context.Context, path string) (*Host, error) {
 	if err := cfg.Nix.EvalJSON(ctx, &result, nix.EvalOptions{Expr: evalExpr}); err != nil {
 		return nil, fmt.Errorf("evaluating node: %w", err)
 	}
-	return NewLocalHost(cfg, name, result.DrvPath, result.OutPath), nil
+	return NewHost(cfg, name, result.DrvPath, result.OutPath, DeployConfig{}), nil
 }
 
 type deployPlan struct {

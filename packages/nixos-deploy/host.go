@@ -61,12 +61,6 @@ func NewHost(cfg Config, name string, drvPath string, outPath string, deployConf
 	}
 }
 
-func NewLocalHost(cfg Config, name string, drvPath string, outPath string) *Host {
-	h := NewHost(cfg, name, drvPath, outPath, DeployConfig{})
-	h.Kind = HostKindLocal
-	return h
-}
-
 func (h *Host) Build(ctx context.Context, useNom bool) error {
 	l := h.log.With("drv_path", h.DrvPath)
 	l.InfoContext(ctx, "building host")
