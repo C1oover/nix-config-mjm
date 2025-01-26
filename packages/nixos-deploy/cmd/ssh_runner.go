@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 	"os"
-	"strings"
 
+	"al.essio.dev/pkg/shellescape"
 	"golang.org/x/crypto/ssh"
 )
 
@@ -45,8 +45,8 @@ func (r *SSHRunner) Execute(ctx context.Context, name string, args ...string) er
 	session.Stdout = os.Stdout
 	session.Stderr = os.Stderr
 
-	// TODO better shell escaping?
-	return session.Run(name + " " + strings.Join(args, " "))
+	argStr := shellescape.QuoteCommand(args)
+	return session.Run(name + " " + argStr)
 }
 
 func (r *SSHRunner) ExecuteOutput(ctx context.Context, name string, args ...string) ([]byte, error) {
@@ -58,6 +58,6 @@ func (r *SSHRunner) ExecuteOutput(ctx context.Context, name string, args ...stri
 
 	session.Stderr = os.Stderr
 
-	// TODO better shell escaping?
-	return session.Output(name + " " + strings.Join(args, " "))
+	argStr := shellescape.QuoteCommand(args)
+	return session.Output(name + " " + argStr)
 }
