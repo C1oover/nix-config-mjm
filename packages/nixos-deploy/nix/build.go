@@ -6,11 +6,10 @@ import (
 	"log/slog"
 	"os"
 	"os/exec"
-	"strings"
 )
 
 // Realise builds a derivation from an evaluated .drv file and returns the path to the output.
-func (_ Real) Realise(ctx context.Context, drvPath string, useNom bool) (string, error) {
+func (_ Real) Realise(ctx context.Context, drvPath string, useNom bool) error {
 	args := []string{"--no-gc-warning", "--realise", drvPath}
 	if useNom {
 		args = append(args, "--log-format", "internal-json", "-v")
@@ -23,7 +22,7 @@ func (_ Real) Realise(ctx context.Context, drvPath string, useNom bool) (string,
 		nomCmd.Stderr = os.Stderr
 		nomIn, err := nomCmd.StdinPipe()
 		if err != nil {
-			return "", fmt.Errorf("creating nom in pipe: %w", err)
+			return fmt.Errorf("creating nom in pipe: %w", err)
 		}
 
 		cmd.Stdout = nomIn
@@ -31,34 +30,32 @@ func (_ Real) Realise(ctx context.Context, drvPath string, useNom bool) (string,
 
 		slog.DebugContext(ctx, "running nom")
 		if err := nomCmd.Start(); err != nil {
-			return "", fmt.Errorf("starting nom: %w", err)
+			return fmt.Errorf("starting nom: %w", err)
 		}
 		slog.DebugContext(ctx, "running nix-store", "args", args)
 		if err := cmd.Start(); err != nil {
-			return "", fmt.Errorf("starting nix-store: %w", err)
+			return fmt.Errorf("starting nix-store: %w", err)
 		}
 		if err := cmd.Wait(); err != nil {
-			return "", fmt.Errorf("running nix-store: %w", err)
+			return fmt.Errorf("running nix-store: %w", err)
 		}
 
 		slog.DebugContext(ctx, "finished nix-store")
 		nomIn.Close()
 		if err := nomCmd.Wait(); err != nil {
-			return "", fmt.Errorf("running nom: %w", err)
+			return fmt.Errorf("running nom: %w", err)
 		}
 
 		slog.DebugContext(ctx, "finished nom")
-		return "", nil
+		return nil
 	} else {
 		cmd.Stderr = os.Stderr
 		slog.DebugContext(ctx, "running nix-store", "args", args)
-		output, err := cmd.Output()
-		if err != nil {
-			return "", fmt.Errorf("running nix-store: %w", err)
+		if err := cmd.Run(); err != nil {
+			return fmt.Errorf("running nix-store: %w", err)
 		}
 
-		result := strings.TrimSpace(string(output))
-		slog.DebugContext(ctx, "finished nix-store", "out", result)
-		return result, nil
+		slog.DebugContext(ctx, "finished nix-store")
+		return nil
 	}
 }

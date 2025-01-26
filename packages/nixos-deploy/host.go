@@ -43,7 +43,7 @@ type DeployConfig struct {
 	ConsulChecks []string `json:"consulChecks"`
 }
 
-func NewHost(cfg Config, name string, drvPath string, deployConfig DeployConfig) *Host {
+func NewHost(cfg Config, name string, drvPath string, outPath string, deployConfig DeployConfig) *Host {
 	kind := HostKindLocal
 	if deployConfig.TargetHost != nil {
 		kind = HostKindSSH
@@ -54,6 +54,7 @@ func NewHost(cfg Config, name string, drvPath string, deployConfig DeployConfig)
 		Name:         name,
 		Kind:         kind,
 		DrvPath:      drvPath,
+		OutPath:      outPath,
 		DeployConfig: deployConfig,
 		cfg:          cfg,
 		log:          logger,
@@ -61,28 +62,19 @@ func NewHost(cfg Config, name string, drvPath string, deployConfig DeployConfig)
 }
 
 func NewLocalHost(cfg Config, name string, drvPath string, outPath string) *Host {
-	h := NewHost(cfg, name, drvPath, DeployConfig{})
+	h := NewHost(cfg, name, drvPath, outPath, DeployConfig{})
 	h.Kind = HostKindLocal
-	h.OutPath = outPath
 	return h
 }
 
 func (h *Host) Build(ctx context.Context, useNom bool) error {
-	if useNom && h.OutPath == "" {
-		return fmt.Errorf("building with nom requires the out path to already be set, but it is empty")
-	}
-
 	l := h.log.With("drv_path", h.DrvPath)
 	l.InfoContext(ctx, "building host")
 
-	outPath, err := h.cfg.Nix.Realise(ctx, h.DrvPath, useNom)
-	if err != nil {
+	if err := h.cfg.Nix.Realise(ctx, h.DrvPath, useNom); err != nil {
 		return fmt.Errorf("realising node %s: %w", h.Name, err)
 	}
 
-	if !useNom {
-		h.OutPath = outPath
-	}
 	l.InfoContext(ctx, "finished building host", "out_path", h.OutPath)
 	return nil
 }

@@ -8,7 +8,7 @@ import (
 // Nix is an interface for performing operations using nix.
 type Nix interface {
 	// Realise builds a derivation from a .drv file.
-	Realise(ctx context.Context, drvPath string, useNom bool) (string, error)
+	Realise(ctx context.Context, drvPath string, useNom bool) error
 	// EvalJobs evaluates an attribute set of derivations using nix-eval-jobs for
 	// parallelization.
 	EvalJobs(ctx context.Context, opts EvalJobsOptions) ([]EvalJobResult, error)
@@ -36,6 +36,10 @@ type EvalJobResult struct {
 	DrvPath string            `json:"drvPath"`
 	Outputs map[string]string `json:"outputs"`
 	Error   string            `json:"error"`
+}
+
+func (r EvalJobResult) OutPath() string {
+	return r.Outputs["out"]
 }
 
 // Real is a concrete implementation of [Nix] that calls out to the nix

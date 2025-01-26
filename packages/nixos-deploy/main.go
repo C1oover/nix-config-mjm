@@ -254,30 +254,29 @@ func evalNodes(ctx context.Context, cfg Config, path string, hostnames []string)
 		return nil, fmt.Errorf("running eval: %w", err)
 	}
 
-	var configDrv string
+	var configResult nix.EvalJobResult
 	var errorAttrs []string
-	pathsByAttrs := map[string]string{}
-	for _, p := range paths {
-		if p.Error != "" {
-			errorAttrs = append(errorAttrs, p.Attr)
-		} else if p.Attr == "configJson" {
-			configDrv = p.DrvPath
+	resultsByAttrs := map[string]nix.EvalJobResult{}
+	for _, r := range paths {
+		if r.Error != "" {
+			errorAttrs = append(errorAttrs, r.Attr)
+		} else if r.Attr == "configJson" {
+			configResult = r
 		} else {
-			pathsByAttrs[p.Attr] = p.DrvPath
+			resultsByAttrs[r.Attr] = r
 		}
 	}
 	if len(errorAttrs) > 0 {
 		return nil, fmt.Errorf("evaluation failed for one or more nodes (%s): %w", strings.Join(errorAttrs, ", "), err)
 	}
 
-	configOut, err := cfg.Nix.Realise(ctx, configDrv, false)
-	if err != nil {
+	if err := cfg.Nix.Realise(ctx, configResult.DrvPath, false); err != nil {
 		return nil, fmt.Errorf("realising config json: %w", err)
 	}
 
-	configFile, err := os.Open(configOut)
+	configFile, err := os.Open(configResult.OutPath())
 	if err != nil {
-		return nil, fmt.Errorf("opening %q: %w", configOut, err)
+		return nil, fmt.Errorf("opening %q: %w", configResult.OutPath(), err)
 	}
 	defer configFile.Close()
 
@@ -287,12 +286,12 @@ func evalNodes(ctx context.Context, cfg Config, path string, hostnames []string)
 	}
 
 	var hosts []*Host
-	for name, drvPath := range pathsByAttrs {
+	for name, r := range resultsByAttrs {
 		if !slices.ContainsFunc(plan.Phases, func(p deployPhase) bool { return slices.Contains(p.Nodes, name) }) {
 			continue
 		}
 
-		hosts = append(hosts, NewHost(cfg, name, drvPath, plan.Deployment[name]))
+		hosts = append(hosts, NewHost(cfg, name, r.DrvPath, r.OutPath(), plan.Deployment[name]))
 	}
 
 	return &deployPlan{
