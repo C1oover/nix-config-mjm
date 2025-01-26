@@ -21,9 +21,8 @@ import (
 )
 
 var (
-	plansFile       = flag.String("plans", "plans.nix", "File to evaluate for deploy plans")
-	sshIdentityFile = flag.String("ssh-identity-file", "", "SSH key to use")
-	concurrency     = flag.Int("concurrency", runtime.NumCPU(), "Number of nodes to evaluate/build concurrently")
+	plansFile   = flag.String("plans", "plans.nix", "File to evaluate for deploy plans")
+	concurrency = flag.Int("concurrency", runtime.NumCPU(), "Number of nodes to evaluate/build concurrently")
 
 	logLevel slog.Level
 )
@@ -66,15 +65,15 @@ func main() {
 	}
 }
 
-func newConfig() Config {
+func newConfig(keyPath string) Config {
 	args := []string{
 		"-o",
 		"BatchMode=yes",
 		"-T",
 	}
 
-	if *sshIdentityFile != "" {
-		args = append(args, "-o", fmt.Sprintf("IdentityFile=%s", *sshIdentityFile))
+	if keyPath != "" {
+		args = append(args, "-o", fmt.Sprintf("IdentityFile=%s", keyPath))
 	}
 
 	slog.Debug("ssh options", "opts", args)
@@ -89,7 +88,13 @@ func handleDeploy(ctx context.Context) error {
 	hostnames := flag.Args()
 	hostnames = hostnames[1:]
 
-	plan, err := evalNodes(ctx, *plansFile, hostnames)
+	keyPath, err := generateAndWriteSSHKey(ctx)
+	if err != nil {
+		return fmt.Errorf("generating ssh key: %w", err)
+	}
+	defer os.RemoveAll(path.Dir(keyPath))
+
+	plan, err := evalNodes(ctx, newConfig(keyPath), *plansFile, hostnames)
 	if err != nil {
 		return fmt.Errorf("evaluating nodes: %w", err)
 	}
@@ -129,7 +134,13 @@ func handleDiff(ctx context.Context) error {
 	hostnames := flag.Args()
 	hostnames = hostnames[1:]
 
-	plan, err := evalNodes(ctx, *plansFile, hostnames)
+	keyPath, err := generateAndWriteSSHKey(ctx)
+	if err != nil {
+		return fmt.Errorf("generating ssh key: %w", err)
+	}
+	defer os.RemoveAll(path.Dir(keyPath))
+
+	plan, err := evalNodes(ctx, newConfig(keyPath), *plansFile, hostnames)
 	if err != nil {
 		return fmt.Errorf("evaluating nodes: %w", err)
 	}
@@ -191,7 +202,13 @@ func handleReboot(ctx context.Context) error {
 		return fmt.Errorf("reboot command requires exactly one host")
 	}
 
-	plan, err := evalNodes(ctx, *plansFile, hostnames)
+	keyPath, err := generateAndWriteSSHKey(ctx)
+	if err != nil {
+		return fmt.Errorf("generating ssh key: %w", err)
+	}
+	defer os.RemoveAll(path.Dir(keyPath))
+
+	plan, err := evalNodes(ctx, newConfig(keyPath), *plansFile, hostnames)
 	if err != nil {
 		return fmt.Errorf("evaluating nodes: %w", err)
 	}
@@ -232,7 +249,7 @@ func handleApplyLocal(ctx context.Context) error {
 	return nil
 }
 
-func evalNodes(ctx context.Context, path string, hostnames []string) (*deployPlan, error) {
+func evalNodes(ctx context.Context, cfg Config, path string, hostnames []string) (*deployPlan, error) {
 	workers := *concurrency
 	if len(hostnames) > 0 && len(hostnames) < workers-1 {
 		workers = len(hostnames) + 1
@@ -289,7 +306,6 @@ func evalNodes(ctx context.Context, path string, hostnames []string) (*deployPla
 		return nil, fmt.Errorf("decoding plan json: %w", err)
 	}
 
-	cfg := newConfig()
 	var hosts []*Host
 	for name, drvPath := range pathsByAttrs {
 		if !slices.ContainsFunc(plan.Phases, func(p deployPhase) bool { return slices.Contains(p.Nodes, name) }) {
@@ -322,7 +338,7 @@ func evalLocalNode(ctx context.Context, path string) (*Host, error) {
 	if err := nix.EvalJSON(ctx, &result, nix.EvalOptions{Expr: evalExpr}); err != nil {
 		return nil, fmt.Errorf("evaluating node: %w", err)
 	}
-	return NewLocalHost(newConfig(), name, result.DrvPath, result.OutPath), nil
+	return NewLocalHost(newConfig(""), name, result.DrvPath, result.OutPath), nil
 }
 
 type deployPlan struct {

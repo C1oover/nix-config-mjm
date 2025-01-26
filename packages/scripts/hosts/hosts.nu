@@ -1,5 +1,4 @@
 use nu-lib *
-use nu-lib/deploy.nu *
 use nu-lib/vault.nu *
 
 def --wrapped "darwin rebuild" [...args] {
@@ -31,14 +30,14 @@ def --wrapped "main rebuild" [...args] {
 }
 
 def "main deploy" [...hosts] {
-  with-temp-key {|key|
-    nixos-deploy --ssh-identity-file $key deploy ...$hosts
+  with-vault {
+    nixos-deploy deploy ...$hosts
   }
 }
 
 def "main diff" [...hosts] {
-  with-temp-key {|key|
-    let text = nixos-deploy --ssh-identity-file $key diff ...$hosts
+  with-vault {
+    let text = nixos-deploy diff ...$hosts
     if ($text | is-empty) {
       print "No changes."
     } else {
@@ -49,35 +48,31 @@ def "main diff" [...hosts] {
 
 def "main ci deploy" [] {
   with-vault {
-    with-temp-key {|key|
-      nixos-deploy --ssh-identity-file $key deploy
-    }
+    nixos-deploy deploy
   }
 }
 
 def "main ci diff" [] {
   with-vault {
-    with-temp-key {|ssh_key|
-      let comment_text = nixos-deploy --ssh-identity-file $ssh_key diff
-      let body = if ($comment_text | is-empty) {
-        "No package changes for server hosts."
-      } else {
-        $comment_text
-      }
+    let comment_text = nixos-deploy diff
+    let body = if ($comment_text | is-empty) {
+      "No package changes for server hosts."
+    } else {
+      $comment_text
+    }
 
-      if ($env.CI_API_V4_URL? | is-empty) {
-        print -e "Would post the following comment to GitLab:\n"
-        print $body
-      } else {
-        (gitlab mr note create
-          --url $env.CI_API_V4_URL
-          --token $env.PINS_UPDATE_TOKEN
-          --project $env.CI_PROJECT_ID
-          --mr $env.CI_MERGE_REQUEST_IID
-          --body $body)
+    if ($env.CI_API_V4_URL? | is-empty) {
+      print -e "Would post the following comment to GitLab:\n"
+      print $body
+    } else {
+      (gitlab mr note create
+        --url $env.CI_API_V4_URL
+        --token $env.PINS_UPDATE_TOKEN
+        --project $env.CI_PROJECT_ID
+        --mr $env.CI_MERGE_REQUEST_IID
+        --body $body)
 
-        print -e "posted comment to merge request"
-      }
+      print -e "posted comment to merge request"
     }
   }
 }
