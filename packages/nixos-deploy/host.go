@@ -7,12 +7,12 @@ import (
 	"fmt"
 	"log/slog"
 	"os"
-	"os/exec"
 	"path"
 	"strings"
 	"time"
 
 	"git.midna.dev/mjm/nix-config/packages/nixos-deploy/cmd"
+	"git.midna.dev/mjm/nix-config/packages/nixos-deploy/nix"
 	consulapi "github.com/hashicorp/consul/api"
 )
 
@@ -32,7 +32,6 @@ type Host struct {
 	RebootNeeded bool
 	cfg          Config
 	log          *slog.Logger
-	sshTarget    string
 	remoteRunner cmd.Runner
 }
 
@@ -46,10 +45,8 @@ type DeployConfig struct {
 
 func NewHost(cfg Config, name string, drvPath string, deployConfig DeployConfig) *Host {
 	kind := HostKindLocal
-	var sshTarget string
 	if deployConfig.TargetHost != nil {
 		kind = HostKindSSH
-		sshTarget = fmt.Sprintf("%s@%s", *deployConfig.TargetUser, *deployConfig.TargetHost)
 	}
 
 	logger := slog.Default().WithGroup("host").With("name", name)
@@ -60,7 +57,6 @@ func NewHost(cfg Config, name string, drvPath string, deployConfig DeployConfig)
 		DeployConfig: deployConfig,
 		cfg:          cfg,
 		log:          logger,
-		sshTarget:    sshTarget,
 	}
 }
 
@@ -69,25 +65,6 @@ func NewLocalHost(cfg Config, name string, drvPath string, outPath string) *Host
 	h.Kind = HostKindLocal
 	h.OutPath = outPath
 	return h
-}
-
-func (h *Host) CopyClosure(ctx context.Context, p string) error {
-	if h.Kind == HostKindLocal {
-		return nil
-	}
-
-	toUrl := fmt.Sprintf("ssh-ng://%s", h.sshTarget)
-	cmd := exec.CommandContext(ctx, "nix", "copy", "--no-check-sigs", "--to", toUrl, p)
-	cmd.Stderr = os.Stderr
-	cmd.Stdout = os.Stdout
-
-	sshOptsStr := strings.Join(h.cfg.SSHOpts, " ")
-	cmd.Env = append(os.Environ(), fmt.Sprintf("NIX_SSHOPTS=%s", sshOptsStr))
-
-	if err := cmd.Run(); err != nil {
-		return fmt.Errorf("running nix copy: %w", err)
-	}
-	return nil
 }
 
 func (h *Host) Build(ctx context.Context, useNom bool) error {
@@ -111,10 +88,18 @@ func (h *Host) Build(ctx context.Context, useNom bool) error {
 }
 
 func (h *Host) Push(ctx context.Context) error {
-	l := h.log.With("out_path", h.OutPath, "target", h.sshTarget)
+	if h.Kind == HostKindLocal {
+		return nil
+	}
+
+	toUrl := fmt.Sprintf("ssh-ng://%s@%s", *h.DeployConfig.TargetUser, *h.DeployConfig.TargetHost)
+	l := h.log.With("out_path", h.OutPath, "target", toUrl)
 	l.InfoContext(ctx, "pushing system")
 
-	if err := h.CopyClosure(ctx, h.OutPath); err != nil {
+	if err := h.cfg.Nix.Copy(ctx, nix.CopyOptions{
+		Installables: []string{h.OutPath},
+		To:           toUrl,
+	}); err != nil {
 		return fmt.Errorf("copying closure for %s: %w", h.Name, err)
 	}
 

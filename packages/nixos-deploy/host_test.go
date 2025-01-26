@@ -13,7 +13,7 @@ func TestNewHostSSH(t *testing.T) {
 	user := "mjm"
 	host := "uranus.home.mattmoriarity.com"
 
-	cfg := Config{SSHOpts: []string{"--foo", "bar"}}
+	cfg := Config{}
 	h := NewHost(cfg, "uranus", "/nix/store/g5dyb9016k8fnz3ng6k50jc7nc5zqhf3-nixos-system-uranus-25.05pre-git.drv", DeployConfig{
 		TargetUser: &user,
 		TargetHost: &host,
@@ -26,12 +26,10 @@ func TestNewHostSSH(t *testing.T) {
 	test.Eq(t, "mjm", *h.DeployConfig.TargetUser)
 	test.Eq(t, "uranus.home.mattmoriarity.com", *h.DeployConfig.TargetHost)
 	test.False(t, h.RebootNeeded)
-	test.Eq(t, []string{"--foo", "bar"}, h.cfg.SSHOpts)
-	test.Eq(t, "mjm@uranus.home.mattmoriarity.com", h.sshTarget)
 }
 
 func TestNewHostLocal(t *testing.T) {
-	cfg := Config{SSHOpts: []string{"--foo", "bar"}}
+	cfg := Config{}
 	h := NewHost(cfg, "uranus", "/nix/store/g5dyb9016k8fnz3ng6k50jc7nc5zqhf3-nixos-system-uranus-25.05pre-git.drv", DeployConfig{})
 
 	test.Eq(t, "uranus", h.Name)
@@ -41,8 +39,6 @@ func TestNewHostLocal(t *testing.T) {
 	test.Nil(t, h.DeployConfig.TargetHost)
 	test.Nil(t, h.DeployConfig.TargetUser)
 	test.False(t, h.RebootNeeded)
-	test.Eq(t, []string{"--foo", "bar"}, h.cfg.SSHOpts)
-	test.Eq(t, "", h.sshTarget)
 }
 
 func TestNewLocalHost(t *testing.T) {
@@ -59,8 +55,6 @@ func TestNewLocalHost(t *testing.T) {
 	test.Nil(t, h.DeployConfig.TargetHost)
 	test.Nil(t, h.DeployConfig.TargetUser)
 	test.False(t, h.RebootNeeded)
-	test.Nil(t, h.cfg.SSHOpts)
-	test.Eq(t, "", h.sshTarget)
 }
 
 func TestPushToAttic(t *testing.T) {
@@ -133,7 +127,7 @@ func TestCheckRebootNeeded(t *testing.T) {
 
 	t.Run("local host", func(t *testing.T) {
 		r := &cmd.MockRunner{}
-		cfg := Config{Runner: r, SSHOpts: []string{"-o", "Foo=Bar"}}
+		cfg := Config{Runner: r}
 		h := NewHost(cfg, "uranus", "/nix/store/g5dyb9016k8fnz3ng6k50jc7nc5zqhf3-nixos-system-uranus-25.05pre-git.drv", DeployConfig{})
 		h.OutPath = "/nix/store/h3big3vbjnk32vf0nb5vi80yq0l9ivxb-nixos-system-uranus-25.05pre-git"
 		ctx := context.Background()
