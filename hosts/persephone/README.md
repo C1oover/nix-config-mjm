@@ -13,4 +13,4 @@ It's a 13th generation Intel Framework 13, with 64GB of RAM and 1TB of storage.
     It's a single-device filesystem, with native bcachefs encryption (not LUKS) and zstd compression enabled.
 -   It uses [Lanzaboote](https://github.com/nix-community/lanzaboote) to do SecureBoot.
     This allows using Clevis to automatically unlock the disk at boot as long as the SecureBoot configuration hasn't been messed with.
--   It runs Plasma 6 ([my desktop environment of choice](../common/global/nixos/desktop/)) with Wayland.
+-   It runs Plasma 6 ([my desktop environment of choice](../../modules/nixos/desktop/)) with Wayland.
