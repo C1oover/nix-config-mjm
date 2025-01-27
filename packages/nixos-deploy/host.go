@@ -193,13 +193,18 @@ func (h *Host) ApplyLocal(ctx context.Context) error {
 		if input == "n" || input == "no" {
 			return nil
 		}
+		if input == "switch" || input == "boot" {
+			goal = input
+			h.log.InfoContext(ctx, "overriding goal", "goal", goal)
+			break
+		}
 	}
 
 	if err := h.apply(ctx, goal); err != nil {
 		return fmt.Errorf("applying: %w", err)
 	}
 
-	if h.RebootNeeded {
+	if goal == "boot" {
 		fmt.Fprintln(os.Stderr, "Reboot to apply changes.")
 	}
 	return nil
