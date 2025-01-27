@@ -1,7 +1,9 @@
 # Host configurations
 
 This is where the configs for each of my systems lives.
-Each system has its own directory with at minimum a `default.nix`
+Each system has its own directory with at minimum a `default.nix`.
+Some may have a `home.nix` which contains any Home Manager settings specific to that system.
+The `home.nix` is [automatically imported](../modules/common/base/user.nix#L27) as a Home Manager module if present.
 
 ## Hosts
 
@@ -11,21 +13,21 @@ Each system has its own directory with at minimum a `default.nix`
   - [athena](athena/): Work 16-inch MacBook Pro M2
 - Proxmox VMs, all running on a cluster of 3 Proxmox VE hosts built from various Dell OptiPlex SFF machines I bought on craigslist
   - [megaera](megaera/), [tisiphone](tisiphone/), [alecto](alecto/): 3 node Consul and Vault cluster
-  - [aether](aether/), [erebus](erebus/): DNS servers
   - [leto](leto/): Runs majority of my self-hosted services
   - [chaos](chaos/): Media server
   - [helio](helios/): Matrix homeserver and various bridges
+  - [melinoe](melinoe/): GitLab server
   - [hypnos](hypnos/): GitLab CI runner
 - Raspberry Pi 4B's
   - [arges](arges/): NUT server, remote builder for aarch64 in CI
-  - [brontes](brontes/), [steropes](steropes/): Ingress reverse proxy with Nginx for all self-hosted services
+  - [brontes](brontes/), [steropes](steropes/): Ingress reverse proxy with Caddy for all self-hosted services
 - VPS
   - [aion](aion/): a super barebones Hetzner VM that serves as a public IPv4 proxy to brontes and steropes
 
 ## Deploying changes
 
 Every half hour, [a CI job](../.gitlab-ci.yml#L64) runs that [checks for updates](../packages/scripts/scripts.nu) in either the `nixos`, `nixos-small` or `nixpkgs` (for Darwin) npins sources, which target the various unstable channels.
-If either channel has updates, then all pinned sources are updated, and the updated sources are committed by the CI job.
+If any of these channels has updates, then all pinned sources are updated, and the updated sources are committed by the CI job.
 
 Each commit (including the automatic source updates) to the `main` branch will trigger a deploy job to all NixOS servers.
 Deploys are done with a bespoke deployment tool called [nixos-deploy](../packages/nixos-deploy).
