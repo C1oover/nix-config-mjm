@@ -18,7 +18,7 @@ Services can also define things that affect state outside just the host running 
 - Ingress (Caddy) reverse-proxy vhost configuration
 - Anything that needs to be provisioned with OpenTofu, primarily Vault approles and policies
 
-The [ingress](ingress/) service will use the `nodes` parameter Colmena provides to get all of the vhost configuration from all the nodes and merge them together.
+The [ingress](ingress/) service will use the `nodes` parameter [nixos-deploy](../packages/nixos-deploy) provides to get all of the vhost configuration from all the nodes and merge them together.
 It will then use that to generate the Caddy configuration.
 Similarly, when creating the OpenTofu configuration, OpenTofu resources and Vault services and policies are merged together to produce the full configuration.
 
@@ -26,20 +26,10 @@ The [Vault support](../modules/tofu/vault.nix) is particularly nice, as it's sma
 
 ## State and impermanence
 
-All of my servers are set up with a tmpfs root filesystem, using [Impermanence](https://github.com/nix-community/impermanence) to persist important state.
-I have some special options under [`mjm.state`](../hosts/common/global/nixos/impermanence.nix) that allow for declaring files and directories that needs persisting without needing to know the root directory of the persistent storage.
+All of my servers are set up with a tmpfs root filesystem, using [Preservation](https://github.com/nix-community/preservation) to persist important state.
+I have some special options under [`mjm.state`](../modules/nixos/state.nix) that allow for declaring files and directories that needs persisting without needing to know the root directory of the persistent storage.
 This is important because not all of my machines keep the persisted data in the same place.
 Some use `/persist`, some use `/nix/persist`, just because of the ad-hoc way I set them up.
 
 My services can add their data directories to `mjm.state.directories` when the service is enabled, and these directories will end up persisted to whatever `mjm.state.persistDir` is configured as for that machine.
 This is way nicer than having a list of all the persisted directories for each host: if I enable a service on a new host, I can't forget to start persisting its data, because it's configured as part of the service.
-
-## Deployment tags
-
-Each service module adds a tag `svc-<name>` to the host's Colmena deployment configuration.
-This means that if I want to deploy every machine running a particular service (because I just changed something about it), I can easily do that.
-For instance, if I wanted to deploy every machine running garage, I could run:
-
-```
-$ just deploy @svc-garage
-```
