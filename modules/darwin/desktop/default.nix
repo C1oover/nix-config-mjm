@@ -27,5 +27,9 @@ in
         "submariner"
       ];
     };
+
+    programs.fish.shellInit = mkIf config.homebrew.enable ''
+      ${config.homebrew.brewPrefix}/brew shellenv | source
+    '';
   };
 }

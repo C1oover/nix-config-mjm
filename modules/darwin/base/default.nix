@@ -18,8 +18,7 @@
 
   environment.etc."set-environment".source = config.system.build.setEnvironment;
 
-  programs.nushell.enable = true;
-  programs.zsh.enable = true;
+  environment.shells = [ config.programs.fish.package ];
 
   security.pam.enableSudoTouchIdAuth = true;
 

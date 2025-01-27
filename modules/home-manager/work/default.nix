@@ -72,6 +72,16 @@ in
       inherit (pkgs) cloudflared google-cloud-sdk;
     };
 
+    programs.fish.shellInitLast = ''
+      source ~/.asdf/asdf.fish
+    '';
+    xdg.configFile."fish/completions/asdf.fish".source =
+      config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.asdf/completions/asdf.fish";
+
+    # orbstack likes to replace these, very annoying
+    xdg.configFile."fish/completions/docker.fish".force = true;
+    xdg.configFile."fish/completions/kubectl.fish".force = true;
+
     programs.nushell.extraConfig = ''
       def ",t all" [] {
         docker compose exec slab_1 mix test.all
