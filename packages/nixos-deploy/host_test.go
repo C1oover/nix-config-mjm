@@ -5,9 +5,35 @@ import (
 	"testing"
 
 	"git.midna.dev/mjm/nix-config/packages/nixos-deploy/cmd"
+	"git.midna.dev/mjm/nix-config/packages/nixos-deploy/nix"
 	"github.com/shoenig/test"
 	"github.com/shoenig/test/must"
 )
+
+type mockNix struct {
+	lastBuild struct {
+		drvPath string
+		useNom  bool
+	}
+}
+
+func (n *mockNix) Realise(_ context.Context, drvPath string, useNom bool) error {
+	n.lastBuild.drvPath = drvPath
+	n.lastBuild.useNom = useNom
+	return nil
+}
+
+func (n *mockNix) EvalJobs(_ context.Context, opts nix.EvalJobsOptions) ([]nix.EvalJobResult, error) {
+	return nil, nil
+}
+
+func (n *mockNix) EvalJSON(_ context.Context, dst interface{}, opts nix.EvalOptions) error {
+	return nil
+}
+
+func (n *mockNix) Copy(_ context.Context, opts nix.CopyOptions) error {
+	return nil
+}
 
 func TestNewHostSSH(t *testing.T) {
 	user := "mjm"
@@ -51,6 +77,42 @@ func TestNewHostLocal(t *testing.T) {
 	test.False(t, h.RebootNeeded)
 	test.True(t, h.IsLocal())
 	test.False(t, h.IsRemote())
+}
+
+func TestBuildWithoutNom(t *testing.T) {
+	n := &mockNix{}
+	cfg := Config{
+		Nix: n,
+	}
+	h := NewHost(
+		cfg,
+		"uranus",
+		"/nix/store/g5dyb9016k8fnz3ng6k50jc7nc5zqhf3-nixos-system-uranus-25.05pre-git.drv",
+		"/nix/store/h3big3vbjnk32vf0nb5vi80yq0l9ivxb-nixos-system-uranus-25.05pre-git",
+		DeployConfig{})
+	ctx := context.Background()
+
+	must.NoError(t, h.Build(ctx, false))
+	test.Eq(t, "/nix/store/g5dyb9016k8fnz3ng6k50jc7nc5zqhf3-nixos-system-uranus-25.05pre-git.drv", n.lastBuild.drvPath)
+	test.False(t, n.lastBuild.useNom)
+}
+
+func TestBuildWithNom(t *testing.T) {
+	n := &mockNix{}
+	cfg := Config{
+		Nix: n,
+	}
+	h := NewHost(
+		cfg,
+		"uranus",
+		"/nix/store/g5dyb9016k8fnz3ng6k50jc7nc5zqhf3-nixos-system-uranus-25.05pre-git.drv",
+		"/nix/store/h3big3vbjnk32vf0nb5vi80yq0l9ivxb-nixos-system-uranus-25.05pre-git",
+		DeployConfig{})
+	ctx := context.Background()
+
+	must.NoError(t, h.Build(ctx, true))
+	test.Eq(t, "/nix/store/g5dyb9016k8fnz3ng6k50jc7nc5zqhf3-nixos-system-uranus-25.05pre-git.drv", n.lastBuild.drvPath)
+	test.True(t, n.lastBuild.useNom)
 }
 
 func TestPushToAttic(t *testing.T) {
