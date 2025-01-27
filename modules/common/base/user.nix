@@ -8,10 +8,12 @@ let
   inherit (lib)
     mkOption
     optional
+    pathExists
     types
     ;
 
   username = config.mjm.username;
+  machineSpecificConfig = ../../../hosts/${config.networking.hostName}/home.nix;
 in
 {
   options.mjm.username = mkOption {
@@ -20,13 +22,8 @@ in
   };
 
   config = {
-    home-manager.users.${username}.imports =
-      let
-        machineSpecificConfig = ../../../home/matt/${config.networking.hostName}.nix;
-      in
-      [
-        "${localModulesPath}/home-manager"
-      ]
-      ++ optional (builtins.pathExists machineSpecificConfig) machineSpecificConfig;
+    home-manager.users.${username}.imports = [
+      "${localModulesPath}/home-manager"
+    ] ++ optional (pathExists machineSpecificConfig) machineSpecificConfig;
   };
 }

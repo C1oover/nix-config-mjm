@@ -14,14 +14,10 @@ Anyway, thanks Gabriel for the helpful inspiration!
 
 ## Repo structure
 
-- [hosts](hosts/): NixOS/nix-darwin configurations for each host
-- [home](home/): Home Manager configuration
-- [services](services/): Modules for setting up NixOS services, which can be enabled in individual host configs
+- [hosts](hosts/): Configurations specific for each host
+- [lib](lib/): Nix library functions for various purposes
 - [modules](modules/): Custom modules for extending various things that use the NixOS module system
 - [packages](packages/): Nix packages that for whatever reason aren't upstreamed to Nixpkgs
+- [services](services/): Modules for setting up NixOS services, which can be enabled in individual host configs
 
 See the READMEs for individual directories for more details.
-
-I use [flake-parts](https://flake.parts) to keep things organized.
-A few of the above directories have a `default.nix` that is a flake module,
-which adds outputs to the flake that are relevant to that part of the repo.
