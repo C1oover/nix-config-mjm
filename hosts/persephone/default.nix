@@ -9,6 +9,7 @@
   imports = [
     "${inputs.hardware}/framework/13-inch/13th-gen-intel"
     ./hardware-configuration.nix
+    ./mounts.nix
   ];
 
   deployment.targetHost = null;
