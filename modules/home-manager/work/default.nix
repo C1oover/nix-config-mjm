@@ -5,54 +5,15 @@
   ...
 }:
 let
-  inherit (lib) mkEnableOption mkIf;
+  inherit (lib) getExe mkEnableOption mkIf;
   cfg = config.mjm.work;
 
-  snappy-decompress =
-    pkgs.writers.writePython3 "snappy-decompress" { libraries = [ pkgs.python3Packages.cramjam ]; }
-      ''
-        import sys
-        import cramjam
-
-        input = sys.stdin.buffer.read()
-        sys.stdout.buffer.write(bytes(cramjam.snappy.decompress_raw(input[:-1])))
-      '';
-
-  slab = pkgs.writers.writeNuBin ",slab" ''
-    def --wrapped "main ssh" [...rest] {
-      npm run docker:ssh ...$rest
+  slab = pkgs.writers.writeNuBin ",slab" (
+    pkgs.replaceVars ./slab.nu {
+      sqlite3 = getExe pkgs.sqlite;
+      snappy-decompress = "${pkgs.snappy-decompress}";
     }
-
-    def "main start" [] {
-      docker compose up --no-log-prefix
-    }
-
-    def "main restart" [name: string = "slab_1"] {
-      docker compose down $name
-      docker compose up -d $name
-    }
-
-    def "main rebuild" [name: string = "slab_1"] {
-      docker compose build $name
-      docker compose up -d $name
-    }
-
-    def --wrapped "main up" [...rest] {
-      docker compose up -d ...$rest
-    }
-
-    def "main iex" [] {
-      docker compose exec slab_1 iex --sname iex --cookie dev-cookie --remsh slab@slab_1
-    }
-
-    def "main token" [] {
-      cd (mktemp -d)
-      cp `~/Library/Application Support/Firefox/Profiles/matt/storage/default/https+++matt.slabdev.com/ls/data.sqlite` data.sqlite
-      ${pkgs.sqlite}/bin/sqlite3 data.sqlite "select value from data where key = 'CapacitorStorage.authToken'" | ${snappy-decompress}
-    }
-
-    def main [] {}
-  '';
+  );
 in
 {
   imports = [
