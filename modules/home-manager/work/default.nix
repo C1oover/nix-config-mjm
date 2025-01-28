@@ -44,21 +44,6 @@ in
     xdg.configFile."fish/completions/kubectl.fish".force = true;
 
     programs.nushell.extraConfig = ''
-      def ",t all" [] {
-        docker compose exec slab_1 mix test.all
-      }
-
-      def ",t last" [] {
-        let last_test = open ~/.cache/mjm/last_test --raw | decode utf-8 | str trim
-        docker compose exec slab_1 mix test $last_test
-      }
-
-      def ",t" [] {
-        mkdir ~/.cache/mjm
-        let test_path = ls test/**/*_test.exs | get name | str join (char nl) | fzf | tee { save -f ~/.cache/mjm/last_test }
-        docker compose exec slab_1 mix test $test_path
-      }
-
       $env.ASDF_DIR = ($env.HOME | path join '.asdf')
       source ${config.home.homeDirectory}/.asdf/asdf.nu
     '';
