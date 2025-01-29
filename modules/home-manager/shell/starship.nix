@@ -30,7 +30,6 @@ in
           format = mkForce "($nix_shell$container\${custom.jj}\${custom.jj_added}\${custom.jj_removed}\n)$cmd_duration$hostname$localip$shlvl$shell$env_var$jobs$sudo$username$character";
         }
         (importTOML ./jetpack.toml)
-        # (builtins.fromTOML (builtins.readFile ./nerd-font-symbols.toml))
       ];
     };
 
