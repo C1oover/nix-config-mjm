@@ -29,6 +29,7 @@ in
         pstree
         ripgrep
         serpl
+        skim
         tree
         unzip
         wget

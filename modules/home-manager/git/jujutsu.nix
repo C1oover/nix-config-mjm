@@ -6,6 +6,7 @@
 }:
 let
   inherit (lib)
+    getExe
     mkEnableOption
     mkIf
     optional
@@ -87,6 +88,12 @@ in
             "--to"
             "@"
           ];
+          mega = [
+            "util"
+            "exec"
+            "--"
+            (getExe jm)
+          ];
         };
         revsets = {
           log = "@ | trunk() | ancestors(trunk()..(visible_heads() & mine() & ~tags()), 2)";
@@ -108,6 +115,12 @@ in
       ",ju" = ''
         jj git fetch
         jj rebase -d 'trunk()'
+      '';
+
+      ",jf" = ''
+        jj log --no-graph --color always -T 'if(description, change_id.short() ++ " " ++ description.first_line() ++ "\n")' $argv |
+          sk --nth 2.. --ansi --preview 'jj show --color always {1}' |
+          string split -f 1 ' '
       '';
     };
 
