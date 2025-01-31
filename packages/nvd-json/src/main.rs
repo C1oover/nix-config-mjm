@@ -190,7 +190,7 @@ impl Package {
         let chunks: Vec<&str> = basename.split('-').skip(1).collect();
         let (pname_chunks, version_chunks) = match chunks.iter().position(|chunk| {
             if let Some(c) = chunk.chars().nth(0) {
-                c.is_digit(10)
+                c.is_digit(10) || (chunk.len() >= 7 && chunk.chars().all(|c| c.is_ascii_hexdigit()))
             } else {
                 false
             }
@@ -641,6 +641,30 @@ mod tests {
                 version: Version::new("0-unstable-2024-01-07"),
                 store_path: PathBuf::from(
                     "/nix/store/ci4y46j5xdjgrl8cyn6f46kz5h2lzxvx-publicsuffix-list-0-unstable-2024-01-07"
+                )
+            })
+        );
+        assert_eq!(
+            Package::from_store_path(Path::new(
+                "/nix/store/058p7bsn5lj71qzmw5knmw7ff0ql2ly5-helix-tree-sitter-amber-c6df3ec2ec243ed76550c525e7ac3d9a10c6c814"
+            )),
+            Some(Package {
+                pname: String::from("helix-tree-sitter-amber"),
+                version: Version::new("c6df3ec2ec243ed76550c525e7ac3d9a10c6c814"),
+                store_path: PathBuf::from(
+                    "/nix/store/058p7bsn5lj71qzmw5knmw7ff0ql2ly5-helix-tree-sitter-amber-c6df3ec2ec243ed76550c525e7ac3d9a10c6c814"
+                )
+            })
+        );
+        assert_eq!(
+            Package::from_store_path(Path::new(
+                "/nix/store/058p7bsn5lj71qzmw5knmw7ff0ql2ly5-foobar-abcdef"
+            )),
+            Some(Package {
+                pname: String::from("foobar-abcdef"),
+                version: Version::new(""),
+                store_path: PathBuf::from(
+                    "/nix/store/058p7bsn5lj71qzmw5knmw7ff0ql2ly5-foobar-abcdef"
                 )
             })
         );
