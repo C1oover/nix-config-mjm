@@ -1,0 +1,13 @@
+{
+  vault-secrets.roleId = "61d175e1-7a2e-4554-2cca-cff48c926b82";
+  vault-secrets.encryptedSecretId = ''
+    DHzAexF2RZGcSwvqCLwg/iAAAAABAAAADAAAABAAAACMSlwgU4cht9d/8poAAAAAgAAAAAAAAAALACM
+    A8AAAACAAAAAAngAgyrHwXPgmLRSfnWmVOVadmQsfrWwNmn8rotDBuVJu8LkAEBAt22MCDqTcF1ad61
+    oYAkv8vqoHoql9hhULLI7md1w/8jrTVTlvyrJ/H8YNcJemQIVKWiomlNGu39GjQx5YquYl4tHhsCbKC
+    ujHDDG+PFtPQ/3cGfANz7fyD3ur149hedxOD5O3LeeCFMQEUnZs2JYUAZq58ZcctQX8AE4ACAALAAAA
+    EgAg/928wzzwZljax6QULbex0pLe130yDZJRVcq/rrtdgRsAEAAgCo54O1NoIVzheq2tIrr5nK2NCEY
+    yHi1z9RZtfNNGIkn/3bzDPPBmWNrHpBQtt7HSkt7XfTINklFVyr+uu12BGwAAAAA9luYJlP0l8cE8vi
+    eHb/LhiKxlW/kGF3Z9I2bpvpRNP3FSZk1PF/AWY5p7YmXSmggVxEkHrxj1biiIsHF0ZcpVblnFJWDQK
+    Rgv8rmR2IfHnvdOEgmj
+  '';
+}

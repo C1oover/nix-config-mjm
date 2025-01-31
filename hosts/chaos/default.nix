@@ -1,6 +1,10 @@
 { localModulesPath, ... }:
 {
-  imports = [ "${localModulesPath}/nixos/profiles/proxmox-vm.nix" ];
+  imports = [
+    "${localModulesPath}/nixos/profiles/proxmox-vm.nix"
+
+    ./secrets.nix
+  ];
 
   networking.hostName = "chaos";
 
@@ -43,18 +47,6 @@
       size = "8G";
     };
   };
-
-  vault-secrets.roleId = "a87469f6-a653-37ab-8aa4-2a1adeed567f";
-  vault-secrets.encryptedSecretId = ''
-    DHzAexF2RZGcSwvqCLwg/iAAAAABAAAADAAAABAAAABlSeuUPPOONAyz/4EAAAAAgAAAAAAAAAALACM
-    A8AAAACAAAAAAngAgZyMueB74Y3vYyetmQcSbPCFWjSbcxo11oHm9+goEnEcAEAeVL5GGStlUXJNy09
-    htkL4QXwXGCrViJ02OHaJNjPNPzQoR9vLNrYi2DhDbk50qO+NsToGzByQN+42f0s1Z0Bxdqzr7eLJoK
-    6nav1koikrEaBmc5VNTHUBqfPXX83hxbLzNhb9rWndh6R9wp1Nnerb8tWYI3DJMHK6BAE4ACAALAAAA
-    EgAg/928wzzwZljax6QULbex0pLe130yDZJRVcq/rrtdgRsAEAAgUY533bNIby2cCW9LnE8SOL0JLP1
-    LqcYqk5v4UlVd8gP/3bzDPPBmWNrHpBQtt7HSkt7XfTINklFVyr+uu12BGwAAAADyb17I9+DGdMAj4i
-    ZmxKoHdMMDIwPCAvFJy1akkKb1QTJ7LMpShLLfoIYstgt7Laja0rlFaUycEkiUYzI50XBQ6fsD+rS17
-    yXU3UOky0PsvkVuArCv
-  '';
 
   system.stateVersion = "22.11";
 }
