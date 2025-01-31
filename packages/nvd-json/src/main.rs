@@ -426,9 +426,16 @@ impl AggregatedDiffResult {
         hostname: &str,
         changes: Vec<VersionChange>,
     ) {
+        let nixos_system_pname = format!("nixos-system-{hostname}");
         for vc in changes {
+            let pname = if vc.pname == nixos_system_pname {
+                String::from("nixos-system")
+            } else {
+                vc.pname
+            };
+
             changes_by_pname
-                .entry(vc.pname)
+                .entry(pname)
                 .or_insert_with_key(|pname| AggregatedVersionChange {
                     pname: pname.clone(),
                     hosts: Vec::new(),
@@ -833,6 +840,11 @@ mod tests {
                     old_versions: Some(vec![String::from("0.21.0")]),
                     new_versions: Some(vec![String::from("0.22.0")]),
                 },
+                VersionChange {
+                    pname: String::from("nixos-system-bulbasaur"),
+                    old_versions: Some(vec![String::from("25.05beta745246.11c8e6aebf3a")]),
+                    new_versions: Some(vec![String::from("25.05beta745391.975ac0ab33ee")]),
+                },
             ],
             added_packages: vec![VersionChange {
                 pname: String::from("signal-desktop"),
@@ -849,11 +861,18 @@ mod tests {
         let charmander = DiffResult {
             left: String::new(),
             right: String::new(),
-            version_changes: vec![VersionChange {
-                pname: String::from("jujutsu"),
-                old_versions: Some(vec![String::from("0.21.0")]),
-                new_versions: Some(vec![String::from("0.22.0")]),
-            }],
+            version_changes: vec![
+                VersionChange {
+                    pname: String::from("jujutsu"),
+                    old_versions: Some(vec![String::from("0.21.0")]),
+                    new_versions: Some(vec![String::from("0.22.0")]),
+                },
+                VersionChange {
+                    pname: String::from("nixos-system-charmander"),
+                    old_versions: Some(vec![String::from("25.05beta745246.11c8e6aebf3a")]),
+                    new_versions: Some(vec![String::from("25.05beta745391.975ac0ab33ee")]),
+                },
+            ],
             added_packages: vec![
                 VersionChange {
                     pname: String::from("element-desktop"),
@@ -880,11 +899,18 @@ mod tests {
         let squirtle = DiffResult {
             left: String::new(),
             right: String::new(),
-            version_changes: vec![VersionChange {
-                pname: String::from("firefox"),
-                old_versions: Some(vec![String::from("128.0")]),
-                new_versions: Some(vec![String::from("130.0.1")]),
-            }],
+            version_changes: vec![
+                VersionChange {
+                    pname: String::from("firefox"),
+                    old_versions: Some(vec![String::from("128.0")]),
+                    new_versions: Some(vec![String::from("130.0.1")]),
+                },
+                VersionChange {
+                    pname: String::from("nixos-system-squirtle"),
+                    old_versions: Some(vec![String::from("25.05beta745246.11c8e6aebf3a")]),
+                    new_versions: Some(vec![String::from("25.05beta745391.975ac0ab33ee")]),
+                },
+            ],
             added_packages: vec![VersionChange {
                 pname: String::from("element-desktop"),
                 old_versions: None,
@@ -957,6 +983,38 @@ mod tests {
                                 hostname: String::from("charmander"),
                                 old_versions: Some(vec![String::from("0.21.0")]),
                                 new_versions: Some(vec![String::from("0.22.0")]),
+                            }
+                        ]
+                    },
+                    AggregatedVersionChange {
+                        pname: String::from("nixos-system"),
+                        hosts: vec![
+                            PerHostVersionChange {
+                                hostname: String::from("bulbasaur"),
+                                old_versions: Some(vec![String::from(
+                                    "25.05beta745246.11c8e6aebf3a"
+                                )]),
+                                new_versions: Some(vec![String::from(
+                                    "25.05beta745391.975ac0ab33ee"
+                                )]),
+                            },
+                            PerHostVersionChange {
+                                hostname: String::from("charmander"),
+                                old_versions: Some(vec![String::from(
+                                    "25.05beta745246.11c8e6aebf3a"
+                                )]),
+                                new_versions: Some(vec![String::from(
+                                    "25.05beta745391.975ac0ab33ee"
+                                )]),
+                            },
+                            PerHostVersionChange {
+                                hostname: String::from("squirtle"),
+                                old_versions: Some(vec![String::from(
+                                    "25.05beta745246.11c8e6aebf3a"
+                                )]),
+                                new_versions: Some(vec![String::from(
+                                    "25.05beta745391.975ac0ab33ee"
+                                )]),
                             }
                         ]
                     }
