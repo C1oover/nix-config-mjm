@@ -212,6 +212,7 @@ impl Package {
 
 #[derive(Debug)]
 struct PackageSet {
+    #[allow(dead_code)]
     store_paths: Vec<std::path::PathBuf>,
     packages_by_pname: HashMap<String, Vec<Package>>,
 }
