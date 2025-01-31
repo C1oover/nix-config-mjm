@@ -5,10 +5,12 @@
   ...
 }:
 let
-  inherit (lib) mkEnableOption mkIf;
+  inherit (lib) getExe mkEnableOption mkIf;
   cfg = config.mjm.aerospace;
 
   tomlFormat = pkgs.formats.toml { };
+
+  aero = pkgs.writeNuBin ",aero" ./aero.nu;
 in
 {
   options.mjm.aerospace = {
@@ -22,6 +24,8 @@ in
         cmd-alt-shift-slash = "layout tiles";
         cmd-alt-shift-quote = "layout accordion";
         cmd-alt-shift-t = "layout horizontal vertical";
+        cmd-alt-shift-d = "exec-and-forget ${getExe aero} docked";
+        cmd-alt-shift-p = "exec-and-forget ${getExe aero} portable";
 
         cmd-alt-h = "focus left";
         cmd-alt-j = "focus down";
@@ -82,8 +86,6 @@ in
       ];
     };
 
-    home.packages = [
-      (pkgs.writeNuBin ",aero" ./aero.nu)
-    ];
+    home.packages = [ aero ];
   };
 }
