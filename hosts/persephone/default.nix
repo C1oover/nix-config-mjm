@@ -11,8 +11,6 @@
     ./secrets.nix
   ];
 
-  deployment.targetHost = null;
-
   mjm.desktop.enable = true;
   mjm.secureboot.enable = true;
   mjm.state = {

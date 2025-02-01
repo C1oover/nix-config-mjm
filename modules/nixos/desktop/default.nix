@@ -5,7 +5,7 @@
   ...
 }:
 let
-  inherit (lib) mkForce mkIf;
+  inherit (lib) mkForce mkIf mkOverride;
   cfg = config.mjm.desktop;
 in
 {
@@ -22,6 +22,8 @@ in
 
   config = mkIf cfg.enable {
     time.timeZone = "America/Denver";
+
+    deployment.targetHost = mkOverride 900 null;
 
     systemd.oomd = {
       enableRootSlice = true;

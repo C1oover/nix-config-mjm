@@ -4,8 +4,6 @@
   ...
 }:
 {
-
-  deployment.targetHost = null;
   imports = [
     ./hardware-configuration.nix
     ./wireplumber.nix
