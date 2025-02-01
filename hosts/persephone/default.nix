@@ -26,22 +26,8 @@
     directories = [ "/home" ];
   };
 
-  # boot.kernelPackages = pkgs.linuxPackagesFor (
-  #   pkgs.linux_testing.override {
-  #     argsOverride = {
-  #       modDirVersion = "6.8.0-rc1";
-  #       src = pkgs.fetchgit {
-  #         url = "https://evilpiepirate.org/git/bcachefs.git";
-  #         rev = "9cde7c92bce99069531cccdd6cd3412f3242a289";
-  #         hash = "sha256-Jgg0WXIvGJLMJjXIMRKszVw/g+rXK7q9uVx7lNt30wE=";
-  #       };
-  #     };
-  #   }
-  # );
-
   environment.systemPackages = [
     pkgs.unofficial-homestuck-collection
-    config.boot.kernelPackages.perf
   ];
 
   boot.initrd.systemd.services."bcachefs-unlock@" = {
