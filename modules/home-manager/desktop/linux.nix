@@ -25,6 +25,7 @@ in
         piper
         signal-desktop
         strawberry-qt6
+        unofficial-homestuck-collection
         wl-clipboard
         xclip
         xdg-utils

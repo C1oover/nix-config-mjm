@@ -1,8 +1,4 @@
-{
-  pkgs,
-  inputs,
-  ...
-}:
+{ inputs, ... }:
 {
   imports = [
     "${inputs.hardware}/framework/13-inch/13th-gen-intel"
@@ -10,6 +6,8 @@
     ./mounts.nix
     ./secrets.nix
   ];
+
+  networking.hostName = "persephone";
 
   mjm.desktop.enable = true;
   mjm.secureboot.enable = true;
@@ -22,12 +20,6 @@
     };
     directories = [ "/home" ];
   };
-
-  environment.systemPackages = [
-    pkgs.unofficial-homestuck-collection
-  ];
-
-  networking.hostName = "persephone";
 
   services.fwupd.enable = true;
   services.hardware.bolt.enable = true;

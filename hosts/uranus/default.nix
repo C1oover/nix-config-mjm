@@ -9,16 +9,17 @@
     ./wireplumber.nix
   ];
 
-  environment.systemPackages = lib.attrValues {
-    inherit (pkgs) chrysalis unofficial-homestuck-collection;
-  };
+  networking.hostName = "uranus";
 
   mjm.desktop.enable = true;
   mjm.secureboot.enable = true;
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  networking.hostName = "uranus";
+  environment.systemPackages = lib.attrValues {
+    inherit (pkgs) chrysalis;
+  };
+
   networking.networkmanager.enable = false;
   systemd.network.networks."10-lan".matchConfig.Name = lib.mkForce "enp3*";
 
