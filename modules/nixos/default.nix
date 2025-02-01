@@ -1,10 +1,5 @@
-{ inputs, ... }:
 {
   imports = [
-    "${inputs.home-manager}/nixos"
-    "${inputs.catppuccin}/modules/nixos"
-    (import inputs.proxmox).nixosModules.proxmox-ve
-
     ../common/nushell.nix
 
     ../../services

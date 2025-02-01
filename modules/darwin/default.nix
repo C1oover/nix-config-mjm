@@ -1,8 +1,5 @@
-{ inputs, ... }:
 {
   imports = [
-    "${inputs.home-manager}/nix-darwin"
-
     ../common/nushell.nix
 
     ../../services/darwin.nix

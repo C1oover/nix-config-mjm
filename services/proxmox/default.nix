@@ -49,6 +49,8 @@ let
   });
 in
 {
+  imports = [ (import inputs.proxmox).nixosModules.proxmox-ve ];
+
   options.mjm.proxmox = {
     enable = mkEnableOption "Proxmox VE";
 
