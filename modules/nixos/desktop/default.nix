@@ -46,19 +46,13 @@ in
     };
 
     security.rtkit.enable = true;
-    services.pipewire = {
-      enable = true;
-      alsa.enable = true;
-      alsa.support32Bit = true;
-      pulse.enable = true;
-      extraConfig.pipewire.raop-discover = {
-        context.modules = [
-          {
-            name = "libpipewire-module-raop-discover";
-            args = { };
-          }
-        ];
-      };
+    services.pipewire.extraConfig.pipewire.raop-discover = {
+      context.modules = [
+        {
+          name = "libpipewire-module-raop-discover";
+          args = { };
+        }
+      ];
     };
 
     # airplay requires this
