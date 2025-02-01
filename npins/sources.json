@@ -164,6 +164,18 @@
       "url": "https://api.github.com/repos/nix-community/lanzaboote/tarball/v0.4.2",
       "hash": "0xc1wawnb0297h5khxblmf9pd1fry950xkcm7mwlck19s2906h80"
     },
+    "nix-index-database": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "nix-community",
+        "repo": "nix-index-database"
+      },
+      "branch": "main",
+      "revision": "79b7b8eae3243fc5aa9aad34ba6b9bbb2266f523",
+      "url": "https://github.com/nix-community/nix-index-database/archive/79b7b8eae3243fc5aa9aad34ba6b9bbb2266f523.tar.gz",
+      "hash": "14afzsbmakr4bvp85ksgacmfibhp0hw9n6hslky6cb1hy0r6v11c"
+    },
     "nixos": {
       "type": "Channel",
       "name": "nixos-unstable",
