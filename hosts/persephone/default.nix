@@ -77,10 +77,7 @@
   '';
 
   networking.hostName = "persephone";
-  networking.networkmanager = {
-    enable = true;
-    wifi.backend = "iwd";
-  };
+  networking.networkmanager.enable = true;
 
   # sddm will silently wait 30 sec for a fingerprint after login before timing out
   # i don't want to login with fingerprint anyway (since it wouldn't unlock kwallet)
@@ -90,8 +87,6 @@
 
   services.fwupd.enable = true;
   services.hardware.bolt.enable = true;
-
-  virtualisation.podman.enable = true;
 
   users.users.matt = {
     extraGroups = [ "video" ];
