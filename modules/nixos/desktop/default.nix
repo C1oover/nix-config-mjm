@@ -33,5 +33,9 @@ in
 
     services.yubikey-agent.enable = true;
     systemd.user.services.yubikey-agent.wantedBy = mkForce [ "graphical-session.target" ];
+
+    mjm.state.directories = mkIf config.services.fprintd.enable [
+      "/var/lib/fprint"
+    ];
   };
 }

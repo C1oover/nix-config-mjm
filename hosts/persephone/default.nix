@@ -24,10 +24,7 @@
       enable = true;
       size = "32G";
     };
-    directories = [
-      "/home"
-      "/var/lib/fprint"
-    ];
+    directories = [ "/home" ];
   };
 
   preservation.preserveAt."/persist".users.matt.directories = lib.mkForce [ ];
