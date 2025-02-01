@@ -1,6 +1,5 @@
 {
   pkgs,
-  lib,
   inputs,
   config,
   ...
@@ -26,8 +25,6 @@
     };
     directories = [ "/home" ];
   };
-
-  preservation.preserveAt."/persist".users.matt.directories = lib.mkForce [ ];
 
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 
