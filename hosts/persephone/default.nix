@@ -16,6 +16,7 @@
   deployment.targetHost = null;
 
   mjm.desktop.enable = true;
+  mjm.secureboot.enable = true;
   mjm.state = {
     enablePreservation = true;
     persistDir = "/persist";
@@ -29,7 +30,6 @@
       "/var/lib/NetworkManager"
       "/var/lib/iwd"
       "/etc/NetworkManager/system-connections"
-      "/etc/secureboot"
     ];
   };
 
@@ -52,16 +52,8 @@
 
   environment.systemPackages = [
     pkgs.unofficial-homestuck-collection
-    pkgs.sbctl
     config.boot.kernelPackages.perf
   ];
-
-  boot.loader.systemd-boot.enable = false;
-
-  boot.lanzaboote = {
-    enable = true;
-    pkiBundle = "/etc/secureboot";
-  };
 
   boot.initrd.systemd.services."bcachefs-unlock@" = {
     overrideStrategy = "asDropin";

@@ -9,10 +9,11 @@
   deployment.targetHost = null;
 
   environment.systemPackages = lib.attrValues {
-    inherit (pkgs) chrysalis unofficial-homestuck-collection sbctl;
+    inherit (pkgs) chrysalis unofficial-homestuck-collection;
   };
 
   mjm.desktop.enable = true;
+  mjm.secureboot.enable = true;
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
@@ -20,13 +21,6 @@
 
   networking.hostName = "uranus";
   systemd.network.networks."10-lan".matchConfig.Name = lib.mkForce "enp3*";
-
-  boot.loader.systemd-boot.enable = false;
-
-  boot.lanzaboote = {
-    enable = true;
-    pkiBundle = "/etc/secureboot";
-  };
 
   boot.initrd.luks.devices = {
     cryptroot = {
