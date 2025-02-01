@@ -29,5 +29,9 @@ in
         background=${pkgs.kdePackages.plasma-workspace-wallpapers}/share/wallpapers/MilkyWay/contents/images/5120x2880.png
       '')
     ];
+
+    # sddm will silently wait 30 sec for a fingerprint after login before timing out
+    # i don't want to login with fingerprint anyway (since it wouldn't unlock kwallet)
+    security.pam.services.login.fprintAuth = false;
   };
 }

@@ -69,10 +69,6 @@
   networking.hostName = "persephone";
   networking.networkmanager.enable = true;
 
-  # sddm will silently wait 30 sec for a fingerprint after login before timing out
-  # i don't want to login with fingerprint anyway (since it wouldn't unlock kwallet)
-  security.pam.services.login.fprintAuth = false;
-
   services.fwupd.enable = true;
   services.hardware.bolt.enable = true;
 
