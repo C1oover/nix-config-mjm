@@ -60,8 +60,6 @@
     serviceConfig.ExecCondition = "";
   };
 
-  boot.swraid.enable = false;
-
   # Allow desktop mouse and keyboard to wake the system
   services.udev.extraRules = ''
     ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="046d", ATTRS{idProduct}=="c24a", ATTR{power/wakeup}="enabled"
