@@ -13,6 +13,7 @@ in
 
     ./boot.nix
     ./fonts.nix
+    ./network.nix
     ./plasma.nix
     ./sound.nix
     ./virtualisation.nix
@@ -29,10 +30,6 @@ in
     programs.steam.enable = true;
     services.ratbagd.enable = true;
     hardware.bluetooth.enable = true;
-
-    services.resolved.enable = true;
-    networking.networkmanager.wifi.backend = "iwd";
-    systemd.services.NetworkManager-wait-online.enable = false;
 
     services.yubikey-agent.enable = true;
     systemd.user.services.yubikey-agent.wantedBy = mkForce [ "graphical-session.target" ];

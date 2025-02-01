@@ -27,9 +27,6 @@
     directories = [
       "/home"
       "/var/lib/fprint"
-      "/var/lib/NetworkManager"
-      "/var/lib/iwd"
-      "/etc/NetworkManager/system-connections"
     ];
   };
 
@@ -67,7 +64,6 @@
   '';
 
   networking.hostName = "persephone";
-  networking.networkmanager.enable = true;
 
   services.fwupd.enable = true;
   services.hardware.bolt.enable = true;

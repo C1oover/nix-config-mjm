@@ -20,6 +20,7 @@
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 
   networking.hostName = "uranus";
+  networking.networkmanager.enable = false;
   systemd.network.networks."10-lan".matchConfig.Name = lib.mkForce "enp3*";
 
   boot.initrd.luks.devices = {
