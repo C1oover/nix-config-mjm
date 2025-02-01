@@ -83,14 +83,8 @@
   # i don't want to login with fingerprint anyway (since it wouldn't unlock kwallet)
   security.pam.services.login.fprintAuth = false;
 
-  programs.light.enable = true;
-
   services.fwupd.enable = true;
   services.hardware.bolt.enable = true;
-
-  users.users.matt = {
-    extraGroups = [ "video" ];
-  };
 
   services.openssh.enable = true;
 
