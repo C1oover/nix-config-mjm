@@ -1,7 +1,6 @@
 {
   pkgs,
   inputs,
-  config,
   ...
 }:
 {
@@ -29,11 +28,6 @@
   environment.systemPackages = [
     pkgs.unofficial-homestuck-collection
   ];
-
-  boot.initrd.systemd.services."bcachefs-unlock@" = {
-    overrideStrategy = "asDropin";
-    serviceConfig.ExecCondition = "";
-  };
 
   networking.hostName = "persephone";
 
