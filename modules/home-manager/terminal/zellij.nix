@@ -33,5 +33,15 @@ in
         zellij action rename-tab (pwd | path basename)
       }
     '';
+
+    programs.fish.interactiveShellInit = ''
+      function zellij_tab_name_update --on-variable PWD
+        if set -q ZELLIJ
+          command nohup zellij action rename-tab (basename (pwd)) >/dev/null 2>&1
+        end
+      end
+
+      zellij_tab_name_update
+    '';
   };
 }
