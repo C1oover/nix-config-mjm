@@ -13,6 +13,7 @@ in
     ../../common/desktop.nix
 
     ./boot.nix
+    ./chrysalis.nix
     ./fonts.nix
     ./network.nix
     ./plasma.nix
