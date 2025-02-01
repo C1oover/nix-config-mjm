@@ -26,8 +26,6 @@
     directories = [ "/home" ];
   };
 
-  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
-
   # boot.kernelPackages = pkgs.linuxPackagesFor (
   #   pkgs.linux_testing.override {
   #     argsOverride = {
@@ -50,12 +48,6 @@
     overrideStrategy = "asDropin";
     serviceConfig.ExecCondition = "";
   };
-
-  # Allow desktop mouse and keyboard to wake the system
-  services.udev.extraRules = ''
-    ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="046d", ATTRS{idProduct}=="c24a", ATTR{power/wakeup}="enabled"
-    ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="3496", ATTRS{idProduct}=="0006", ATTR{power/wakeup}="enabled"
-  '';
 
   networking.hostName = "persephone";
 
