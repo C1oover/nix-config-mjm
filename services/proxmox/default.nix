@@ -102,6 +102,8 @@ in
 
       checks.up = {
         http.url = "https://${config.networking.hostName}.home.mattmoriarity.com:8006/";
+        # TODO remove once I can get the ACME certs fixed
+        checkConfig.tls_skip_verify = true;
       };
     };
 
