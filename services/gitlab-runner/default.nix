@@ -128,13 +128,6 @@ in
       "127.0.0.1:2375"
     ];
 
-    services.openssh.knownHosts = {
-      aion = {
-        extraHostNames = [ "5.78.46.61" ];
-        publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDUWju/ZTNyivso/yzx6RFE/9D50qTiWVXDvITrkyEVh";
-      };
-    };
-
     programs.ssh.extraConfig = mkAfter ''
       Host arges.home.mattmoriarity.com
         IdentitiesOnly yes

@@ -48,6 +48,10 @@ in
         publicKeyFile = "${sshHostCA}";
         certAuthority = true;
       };
+      aion = {
+        extraHostNames = [ "5.78.46.61" ];
+        publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDUWju/ZTNyivso/yzx6RFE/9D50qTiWVXDvITrkyEVh";
+      };
       proxmox = {
         hostNames = [ "*.home.mattmoriarity.com" ];
         publicKey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQD3vy++Xj7QpqRrSviH4zRlzcuWzx+beCsEw8tFNKiYZrYffZhWeoNmZ1/UtbDSb48wD2HiYEemqyMUOXXsxtSTDNIFF/+m4itrBvbabCfOUPxjrLONrd82t9OmgrbPOg+MKSa4+mPlGjxnIZfcX50coMlUpamMUTzXtqTublYtQjsPEkVxsRACGEBtqZ/l/ccOQL0jnxV6+WP1Yk2hYu13vpkBPkxtuBh3F6aA81ur9h1u2glfI9+3SnytSRinoTLnAdYdl8TOHrpMf7iuz+YQ/QX5CIFPRJLSA2UKP5UxHC/Zqg8BadiTL1my0nIHpzqyskIhnUiXFHetPRrmvAtryAcIQhvtnLXt6S4p4xob1bIZPeeDlKVH9piX5NwMdV+Cm0DWV3zSkJF9a6j1wAoAFDFU/veeo2bTNiNQYgGRn0+hwdJLf/0h8SUqBsdsaYnvp/CECFZfVqDkvegAkhdtmyWTPcjQMDi+C6TNaCwNm3HA0a+7jHnD8ExN2RgBBtjS1sYaomvW2eE3/h4XmFRXyMRhr6xoAbBvRPZ5SxAnS3X/mIK5Z+kuWlMCz3kKTerlF+rOxM2IsI9H14eNC443PQX2Ot/drtHC3XDRfi1oQNTTrkCg3sulqz1TcXzqGRRiGG0NlOIVV6qbp6WuVS0Gq6VTxIwf0V9KPUSB0vp3vQ==";
