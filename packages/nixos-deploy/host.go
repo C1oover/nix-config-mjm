@@ -308,6 +308,10 @@ func (h *Host) Reboot(ctx context.Context) error {
 			break
 		}
 
+		// the existing connection to the host may not be good or valid anymore
+		if err != nil {
+			h.remoteRunner = nil
+		}
 		time.Sleep(2 * time.Second)
 	}
 
