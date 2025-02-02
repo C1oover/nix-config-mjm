@@ -258,13 +258,13 @@
       "type": "Git",
       "repository": {
         "type": "GitHub",
-        "owner": "SaumonNet",
+        "owner": "mjm",
         "repo": "proxmox-nixos"
       },
-      "branch": "main",
-      "revision": "4ad21ba619d779b229e308b58066bafd65d5153d",
-      "url": "https://github.com/SaumonNet/proxmox-nixos/archive/4ad21ba619d779b229e308b58066bafd65d5153d.tar.gz",
-      "hash": "1h9an32xg8mg2f67h34b02zmdaffgvmbxp8h86wm04wnjdrzfxcj"
+      "branch": "mega",
+      "revision": "d5b788a19998d5a198a6cd2a1ca81ac851e9339a",
+      "url": "https://github.com/mjm/proxmox-nixos/archive/d5b788a19998d5a198a6cd2a1ca81ac851e9339a.tar.gz",
+      "hash": "0jm668hh80alqln62nil4zf8hv1fy8y0aqyk3c5dmcmhr8k4gzry"
     },
     "terranix": {
       "type": "GitRelease",
