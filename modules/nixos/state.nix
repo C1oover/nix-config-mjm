@@ -6,6 +6,7 @@
 }:
 let
   inherit (lib)
+    any
     filterAttrs
     mkEnableOption
     mkIf
@@ -160,7 +161,9 @@ in
           files = map (filterAttrs isValidForPreservation) cfg.files;
 
           # TODO abstract this
-          users.${config.mjm.username}.directories = [ ".local/share/atuin" ];
+          users.${config.mjm.username}.directories = mkIf (!any (d: d.directory == "/home") cfg.directories) [
+            ".local/share/atuin"
+          ];
         };
       };
 

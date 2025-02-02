@@ -2,11 +2,16 @@
   config,
   pkgs,
   lib,
+  inputs,
   ...
 }:
 {
   imports = [
+    "${inputs.catppuccin}/modules/nixos"
+    "${inputs.home-manager}/nixos"
+
     ../../common/base
+
     ./attic.nix
     ./networkd.nix
     ./user.nix

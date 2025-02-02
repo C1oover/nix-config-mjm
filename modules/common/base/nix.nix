@@ -1,4 +1,7 @@
 { inputs, pkgs, ... }:
+let
+  nix-index = import inputs.nix-index-database { inherit pkgs; };
+in
 {
 
   nix.settings = {
@@ -34,5 +37,9 @@
   nix.nixPath = [ "nixpkgs=flake:nixpkgs" ];
   nix.registry.nixpkgs.flake.outPath = builtins.storePath pkgs.path;
 
-  programs.nix-index.enable = true;
+  programs.nix-index = {
+    enable = true;
+    package = nix-index.nix-index-with-db;
+  };
+  environment.systemPackages = [ nix-index.comma-with-db ];
 }

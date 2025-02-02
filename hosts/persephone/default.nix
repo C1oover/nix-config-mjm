@@ -1,10 +1,4 @@
-{
-  pkgs,
-  lib,
-  inputs,
-  config,
-  ...
-}:
+{ inputs, ... }:
 {
   imports = [
     "${inputs.hardware}/framework/13-inch/13th-gen-intel"
@@ -13,9 +7,10 @@
     ./secrets.nix
   ];
 
-  deployment.targetHost = null;
+  networking.hostName = "persephone";
 
   mjm.desktop.enable = true;
+  mjm.secureboot.enable = true;
   mjm.state = {
     enablePreservation = true;
     persistDir = "/persist";
@@ -23,79 +18,11 @@
       enable = true;
       size = "32G";
     };
-    directories = [
-      "/home"
-      "/var/lib/fprint"
-      "/var/lib/NetworkManager"
-      "/var/lib/iwd"
-      "/etc/NetworkManager/system-connections"
-      "/etc/secureboot"
-    ];
+    directories = [ "/home" ];
   };
-
-  preservation.preserveAt."/persist".users.matt.directories = lib.mkForce [ ];
-
-  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
-
-  # boot.kernelPackages = pkgs.linuxPackagesFor (
-  #   pkgs.linux_testing.override {
-  #     argsOverride = {
-  #       modDirVersion = "6.8.0-rc1";
-  #       src = pkgs.fetchgit {
-  #         url = "https://evilpiepirate.org/git/bcachefs.git";
-  #         rev = "9cde7c92bce99069531cccdd6cd3412f3242a289";
-  #         hash = "sha256-Jgg0WXIvGJLMJjXIMRKszVw/g+rXK7q9uVx7lNt30wE=";
-  #       };
-  #     };
-  #   }
-  # );
-
-  environment.systemPackages = [
-    pkgs.unofficial-homestuck-collection
-    pkgs.sbctl
-    config.boot.kernelPackages.perf
-  ];
-
-  boot.loader.systemd-boot.enable = false;
-
-  boot.lanzaboote = {
-    enable = true;
-    pkiBundle = "/etc/secureboot";
-  };
-
-  boot.initrd.systemd.services."bcachefs-unlock@" = {
-    overrideStrategy = "asDropin";
-    serviceConfig.ExecCondition = "";
-  };
-
-  boot.swraid.enable = false;
-
-  # Allow desktop mouse and keyboard to wake the system
-  services.udev.extraRules = ''
-    ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="046d", ATTRS{idProduct}=="c24a", ATTR{power/wakeup}="enabled"
-    ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="3496", ATTRS{idProduct}=="0006", ATTR{power/wakeup}="enabled"
-  '';
-
-  networking.hostName = "persephone";
-  networking.networkmanager = {
-    enable = true;
-    wifi.backend = "iwd";
-  };
-
-  # sddm will silently wait 30 sec for a fingerprint after login before timing out
-  # i don't want to login with fingerprint anyway (since it wouldn't unlock kwallet)
-  security.pam.services.login.fprintAuth = false;
-
-  programs.light.enable = true;
 
   services.fwupd.enable = true;
   services.hardware.bolt.enable = true;
-
-  virtualisation.podman.enable = true;
-
-  users.users.matt = {
-    extraGroups = [ "video" ];
-  };
 
   services.openssh.enable = true;
 

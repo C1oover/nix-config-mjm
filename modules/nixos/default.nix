@@ -1,11 +1,5 @@
-{ inputs, ... }:
 {
   imports = [
-    "${inputs.home-manager}/nixos"
-    "${inputs.catppuccin}/modules/nixos"
-    (import inputs.lanzaboote).nixosModules.lanzaboote
-    (import inputs.proxmox).nixosModules.proxmox-ve
-
     ../common/nushell.nix
 
     ../../services
@@ -18,6 +12,7 @@
     ./ingress.nix
     ./linkding.nix
     ./raspberrypi
+    ./secureboot.nix
     ./server
     ./services.nix
     ./ssh.nix

@@ -1,6 +1,8 @@
 { inputs, config, ... }:
 {
   imports = [
+    "${inputs.home-manager}/nix-darwin"
+
     ../../common/base
 
     ./dock.nix
