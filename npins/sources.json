@@ -145,9 +145,9 @@
         "repo": "home-manager"
       },
       "branch": "master",
-      "revision": "18fa9f323d8adbb0b7b8b98a8488db308210ed93",
-      "url": "https://github.com/nix-community/home-manager/archive/18fa9f323d8adbb0b7b8b98a8488db308210ed93.tar.gz",
-      "hash": "0j56s38y0yzy3pw7qia1n9zkmmn9nkb9mpklj2mc30k5l11fs170"
+      "revision": "066ba0c5cfddbc9e0dddaec73b1561ad38aa8abe",
+      "url": "https://github.com/nix-community/home-manager/archive/066ba0c5cfddbc9e0dddaec73b1561ad38aa8abe.tar.gz",
+      "hash": "14sryxr51hya2hqlpl7qpmi6l70wfv9p2vzdrlqyzmf0wzjrmgn9"
     },
     "lanzaboote": {
       "type": "GitRelease",
@@ -203,8 +203,8 @@
     "nixpkgs": {
       "type": "Channel",
       "name": "nixpkgs-unstable",
-      "url": "https://releases.nixos.org/nixpkgs/nixpkgs-25.05pre746909.8532db2a88ba/nixexprs.tar.xz",
-      "hash": "12q0qil4zivxj31n8a996h17k50hkrik1n430qlkhp74wifby01f"
+      "url": "https://releases.nixos.org/nixpkgs/nixpkgs-25.05pre747074.2d31b9476b7c/nixexprs.tar.xz",
+      "hash": "1a1zk3nn8r7mvkarf99d8lfbzzdvlk50jx07ax5dpkcbxbkvj7sb"
     },
     "nixpkgs-firefox-darwin": {
       "type": "Git",
