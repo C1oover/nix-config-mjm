@@ -262,9 +262,9 @@
         "repo": "proxmox-nixos"
       },
       "branch": "mega",
-      "revision": "d5b788a19998d5a198a6cd2a1ca81ac851e9339a",
-      "url": "https://github.com/mjm/proxmox-nixos/archive/d5b788a19998d5a198a6cd2a1ca81ac851e9339a.tar.gz",
-      "hash": "0jm668hh80alqln62nil4zf8hv1fy8y0aqyk3c5dmcmhr8k4gzry"
+      "revision": "5133b2577689ebdb9842154455cd8c280f5bb5aa",
+      "url": "https://github.com/mjm/proxmox-nixos/archive/5133b2577689ebdb9842154455cd8c280f5bb5aa.tar.gz",
+      "hash": "1vffxakhb1zi5mmkh6yc38dc7wnhbqgzvz05vs6lbnb5790zkcmm"
     },
     "terranix": {
       "type": "GitRelease",

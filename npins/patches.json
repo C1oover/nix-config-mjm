@@ -10,10 +10,5 @@
       "hash": "sha256-JqxFVDVTJIUVADbXgulIenqZeknxahZvQ7hb554Tkzs="
     }
   },
-  "proxmox": {
-    "111": {
-      "hash": "sha256-RXrtvvM3AYRB4lotkHSdmN7reKycGJWIlUL5gI3NAuE="
-    }
-  },
   "lanzaboote": {}
 }
