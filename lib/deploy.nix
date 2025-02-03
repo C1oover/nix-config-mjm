@@ -10,6 +10,7 @@ let
     groupBy
     mapAttrs
     pipe
+    recurseIntoAttrs
     ;
 
   evalPlan =
@@ -77,16 +78,23 @@ let
         (findFirst (
           p: (!(p ? excludeIf && p.excludeIf name config)) && (p ? includeIf && p.includeIf name config)
         ) defaultPhase plan.phases).name;
+
+      config = {
+        deployment = deploymentConfig;
+        phases = phasesWithNodes plans.plans.${plan};
+      };
     in
     if tofuNodes then
       nodes
     else
       {
-        configJson = json.generate "plan-config.json" {
-          deployment = deploymentConfig;
-          phases = phasesWithNodes plans.plans.${plan};
-        };
-      }
-      // (mapAttrs (_: v: v.config.system.build.toplevel) nodes);
+        inherit config;
+        configJson = json.generate "plan-config.json" config;
+        toplevels = pipe nodes [
+          (mapAttrs (_: v: v.config.system.build.toplevel))
+          recurseIntoAttrs
+        ];
+        hosts = nodes;
+      };
 in
 evalPlan

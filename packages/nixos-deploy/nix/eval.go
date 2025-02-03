@@ -56,6 +56,9 @@ func (_ Real) EvalJSON(ctx context.Context, dst interface{}, opts EvalOptions) e
 	if opts.Expr != "" {
 		args = append(args, "--expr", opts.Expr)
 	}
+	for _, s := range opts.Include {
+		args = append(args, "--include", s)
+	}
 	if opts.Path != "" {
 		args = append(args, "--file", opts.Path)
 	}

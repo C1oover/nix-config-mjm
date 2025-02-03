@@ -261,8 +261,8 @@ func evalNodes(ctx context.Context, cfg Config, path string, hostnames []string)
 			errorAttrs = append(errorAttrs, r.Attr)
 		} else if r.Attr == "configJson" {
 			configResult = r
-		} else {
-			resultsByAttrs[r.Attr] = r
+		} else if r.AttrPath[0] == "toplevels" {
+			resultsByAttrs[r.AttrPath[1]] = r
 		}
 	}
 	if len(errorAttrs) > 0 {
@@ -301,7 +301,7 @@ func evalLocalNode(ctx context.Context, path string) (*Host, error) {
 		return nil, fmt.Errorf("getting hostname: %w", err)
 	}
 
-	evalExpr := fmt.Sprintf("let config = (import ./%s {}).%s; in { drv = config.drvPath; out = config.outPath; }", path, name)
+	evalExpr := fmt.Sprintf("let config = (import <plans> {}).toplevels.%s; in { drv = config.drvPath; out = config.outPath; }", name)
 
 	var result struct {
 		DrvPath string `json:"drv"`
@@ -311,7 +311,10 @@ func evalLocalNode(ctx context.Context, path string) (*Host, error) {
 	cfg := NewLocalConfig()
 
 	slog.InfoContext(ctx, "evaluating local host", "name", name)
-	if err := cfg.Nix.EvalJSON(ctx, &result, nix.EvalOptions{Expr: evalExpr}); err != nil {
+	if err := cfg.Nix.EvalJSON(ctx, &result, nix.EvalOptions{
+		Expr:    evalExpr,
+		Include: []string{"plans=" + path},
+	}); err != nil {
 		return nil, fmt.Errorf("evaluating node: %w", err)
 	}
 	return NewHost(cfg, name, result.DrvPath, result.OutPath, DeployConfig{}), nil

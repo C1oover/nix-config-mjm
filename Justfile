@@ -15,6 +15,9 @@ deploy target *flags:
 diff host:
   nix run -f . scripts.hosts -- diff {{host}}
 
+repl:
+  nix repl -f plans.nix
+
 tf-plan:
   nix run -f . scripts.tofu -- plan
 

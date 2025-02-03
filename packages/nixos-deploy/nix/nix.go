@@ -20,8 +20,9 @@ type Nix interface {
 }
 
 type EvalOptions struct {
-	Path string
-	Expr string
+	Path    string
+	Expr    string
+	Include []string
 }
 
 type EvalJobsOptions struct {
@@ -32,10 +33,11 @@ type EvalJobsOptions struct {
 }
 
 type EvalJobResult struct {
-	Attr    string            `json:"attr"`
-	DrvPath string            `json:"drvPath"`
-	Outputs map[string]string `json:"outputs"`
-	Error   string            `json:"error"`
+	Attr     string            `json:"attr"`
+	AttrPath []string          `json:"attrPath"`
+	DrvPath  string            `json:"drvPath"`
+	Outputs  map[string]string `json:"outputs"`
+	Error    string            `json:"error"`
 }
 
 func (r EvalJobResult) OutPath() string {
