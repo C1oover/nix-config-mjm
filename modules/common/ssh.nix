@@ -64,7 +64,10 @@ in
         certAuthority = true;
       };
       aion = {
-        extraHostNames = [ "5.78.46.61" ];
+        hostNames = [
+          "aion"
+          "5.78.46.61"
+        ];
         publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDUWju/ZTNyivso/yzx6RFE/9D50qTiWVXDvITrkyEVh";
       };
       proxmox = {
