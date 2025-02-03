@@ -18,7 +18,6 @@ let
     {
       plan ? "default",
       namesToInclude ? [ ],
-      tofuNodes ? false,
     }:
     let
       allPkgs = lib.mapAttrs (_name: path: import path { }) sources;
@@ -84,17 +83,14 @@ let
         phases = phasesWithNodes plans.plans.${plan};
       };
     in
-    if tofuNodes then
-      nodes
-    else
-      {
-        inherit config;
-        configJson = json.generate "plan-config.json" config;
-        toplevels = pipe nodes [
-          (mapAttrs (_: v: v.config.system.build.toplevel))
-          recurseIntoAttrs
-        ];
-        hosts = nodes;
-      };
+    {
+      inherit config;
+      configJson = json.generate "plan-config.json" config;
+      toplevels = pipe nodes [
+        (mapAttrs (_: v: v.config.system.build.toplevel))
+        recurseIntoAttrs
+      ];
+      hosts = nodes;
+    };
 in
 evalPlan

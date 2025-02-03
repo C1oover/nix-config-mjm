@@ -4,7 +4,7 @@
 }:
 
 let
-  nodes = import ../plans.nix { tofuNodes = true; };
+  nodes = (import ../plans.nix { }).hosts;
 
   config = lib.evalModules {
     modules = [
