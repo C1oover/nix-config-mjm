@@ -2,13 +2,20 @@
   pkgs,
   lib,
   config,
+  nodes,
   ...
 }:
 let
   inherit (lib)
+    attrValues
+    concatMapAttrsStringSep
+    concatMapStringsSep
+    filter
+    groupBy
     mkEnableOption
     mkIf
     mkOption
+    pipe
     types
     ;
   cfg = config.mjm.ssh;
@@ -21,6 +28,14 @@ let
     url = "http://vault.service.consul:8200/v1/ssh-host-signer/public_key";
     sha256 = "1zy0wvd26iaypwf7zpvdxfhmabdg191q4986aw993j23q87z3g59";
   };
+
+  groupedNodes = pipe nodes [
+    attrValues
+    (filter (
+      n: n.config.deployment.targetHost != null && n.config.deployment.targetUser != config.mjm.username
+    ))
+    (groupBy (n: n.config.deployment.targetUser))
+  ];
 in
 {
   options.mjm.ssh = {
@@ -59,15 +74,23 @@ in
       };
     };
 
-    programs.ssh.extraConfig = ''
-      CanonicalizeHostname yes
-      CanonicalDomains home.mattmoriarity.com
+    programs.ssh.extraConfig =
+      ''
+        CanonicalizeHostname yes
+        CanonicalDomains home.mattmoriarity.com
 
-      Host aion
-        Hostname 5.78.46.61
+        Host aion
+          Hostname 5.78.46.61
 
-      Host artemis.home.mattmoriarity.com apollo.home.mattmoriarity.com hades.home.mattmoriarity.com melinoe.home.mattmoriarity.com talos.home.mattmoriarity.com
-        User mjm
-    '';
+        # Logic below only covers NixOS nodes, not nix-darwin
+        # TODO fix if nixos-deploy gets darwin support
+        Host talos.home.mattmoriarity.com
+          User mjm
+
+      ''
+      + concatMapAttrsStringSep "\n\n" (user: nodes: ''
+        Host ${concatMapStringsSep " " (n: n.config.deployment.targetHost) nodes}
+          User ${user}
+      '') groupedNodes;
   };
 }
