@@ -114,9 +114,15 @@ in
             jj rebase -d 'trunk()'
           '';
           f = mkFishAlias "jj-f" ''
-            jj log --no-graph --color always -T 'if(description, change_id.short() ++ " " ++ description.first_line() ++ "\n")' $argv |
+            jj log --no-graph --color always -T 'if(description, separate(" ", format_short_change_id_with_hidden_and_divergent_info(self), description.first_line(), if(conflict, label("conflict", "conflict"))) ++ "\n")' $argv |
               sk --nth 2.. --ansi --preview 'jj show --color always {1}' |
               string split -f 1 ' '
+          '';
+          e = mkFishAlias "jj-e" ''
+            jj edit (jj f)
+          '';
+          n = mkFishAlias "jj-n" ''
+            jj new (jj f)
           '';
         };
         revsets = {
