@@ -23,35 +23,62 @@ let
       allPkgs = lib.mapAttrs (_name: path: import path { }) sources;
       json = allPkgs.nixos-small.formats.json { };
 
-      evalNode =
-        name: configs:
-        let
-          nixpkgsKey = plans.meta.nixpkgs.${name} or plans.meta.nixpkgs.default;
-          npkgs = allPkgs.${nixpkgsKey};
-          evalConfig = import (npkgs.path + "/nixos/lib/eval-config.nix");
-        in
-        evalConfig {
-          modules = [
-            plans.defaults
-          ] ++ configs;
-          specialArgs = {
-            inherit name;
-            nodes = uncheckedNodes;
-          } // plans.meta.specialArgs;
-        };
+      evalNode = {
+        nixos =
+          name: configs:
+          let
+            nixpkgsKey = plans.nixos.meta.nixpkgs.${name} or plans.nixos.meta.nixpkgs.default;
+            npkgs = allPkgs.${nixpkgsKey};
+            evalConfig = import (npkgs.path + "/nixos/lib/eval-config.nix");
+          in
+          evalConfig {
+            modules = [
+              plans.nixos.defaults
+            ] ++ configs;
+            specialArgs = {
+              inherit name;
+              nodes = uncheckedNodes;
+            } // plans.nixos.meta.specialArgs;
+          };
+        darwin =
+          name: configs:
+          let
+            nixpkgsKey = plans.darwin.meta.nixpkgs.${name} or plans.darwin.meta.nixpkgs.default;
+            nixpkgs = sources.${nixpkgsKey};
+            evalConfig = import "${sources.darwin}/eval-config.nix";
+          in
+          evalConfig {
+            lib = import "${nixpkgs}/lib";
+            modules = configs ++ [
+              plans.darwin.defaults
+              {
+                nixpkgs.source = nixpkgs;
+                system.checks.verifyNixPath = false;
+              }
+            ];
+            specialArgs = {
+              inherit name;
+              nodes = { };
+            } // plans.darwin.meta.specialArgs;
+          };
+      };
 
       uncheckedNodes = mapAttrs (
         name: value:
-        evalNode name [
+        evalNode.nixos name [
           { _module.check = false; }
           value
         ]
-      ) plans.hosts;
-      nodes = pipe plans.hosts [
+      ) plans.nixos.hosts;
+      nodes = pipe plans.nixos.hosts [
         (filterAttrs (name: _value: if namesToInclude == [ ] then true else elem name namesToInclude))
-        (mapAttrs (name: value: evalNode name [ value ]))
+        (mapAttrs (name: value: evalNode.nixos name [ value ]))
       ];
       deploymentConfig = mapAttrs (_: v: v.config.deployment) nodes;
+      darwinNodes = pipe plans.darwin.hosts [
+        (filterAttrs (name: _value: if namesToInclude == [ ] then true else elem name namesToInclude))
+        (mapAttrs (name: value: evalNode.darwin name [ value ]))
+      ];
 
       phasesWithNodes =
         plan:
@@ -86,11 +113,13 @@ let
     {
       inherit config;
       configJson = json.generate "plan-config.json" config;
-      toplevels = pipe nodes [
+      toplevels = pipe (nodes // darwinNodes) [
         (mapAttrs (_: v: v.config.system.build.toplevel))
         recurseIntoAttrs
       ];
-      hosts = nodes;
+      hosts = nodes // darwinNodes;
+      nixosHosts = nodes;
+      darwinHosts = darwinNodes;
     };
 in
 evalPlan

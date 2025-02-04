@@ -290,7 +290,7 @@ func evalNodes(ctx context.Context, cfg Config, path string, hostnames []string)
 			continue
 		}
 
-		dp.Hosts = append(dp.Hosts, NewHost(cfg, name, r.DrvPath, r.OutPath(), plan.Deployment[name]))
+		dp.Hosts = append(dp.Hosts, NewHost(cfg, name, r.System, r.DrvPath, r.OutPath(), plan.Deployment[name]))
 	}
 	return dp, nil
 }
@@ -301,11 +301,12 @@ func evalLocalNode(ctx context.Context, path string) (*Host, error) {
 		return nil, fmt.Errorf("getting hostname: %w", err)
 	}
 
-	evalExpr := fmt.Sprintf("let config = (import <plans> {}).toplevels.%s; in { drv = config.drvPath; out = config.outPath; }", name)
+	evalExpr := fmt.Sprintf("let config = (import <plans> {}).toplevels.%s; in { drv = config.drvPath; out = config.outPath; inherit (config) system; }", name)
 
 	var result struct {
 		DrvPath string `json:"drv"`
 		OutPath string `json:"out"`
+		System  string `json:"system"`
 	}
 
 	cfg := NewLocalConfig()
@@ -317,7 +318,7 @@ func evalLocalNode(ctx context.Context, path string) (*Host, error) {
 	}); err != nil {
 		return nil, fmt.Errorf("evaluating node: %w", err)
 	}
-	return NewHost(cfg, name, result.DrvPath, result.OutPath, DeployConfig{}), nil
+	return NewHost(cfg, name, result.System, result.DrvPath, result.OutPath, DeployConfig{}), nil
 }
 
 func aggregateDiffs(ctx context.Context, dir string) (*AggregatedDiff, error) {

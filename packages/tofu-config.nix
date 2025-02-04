@@ -4,7 +4,7 @@
 }:
 
 let
-  nodes = (import ../plans.nix { }).hosts;
+  nodes = (import ../plans.nix { }).nixosHosts;
 
   config = lib.evalModules {
     modules = [

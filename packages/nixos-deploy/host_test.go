@@ -43,6 +43,7 @@ func TestNewHostSSH(t *testing.T) {
 	h := NewHost(
 		cfg,
 		"uranus",
+		"x86_64-linux",
 		"/nix/store/g5dyb9016k8fnz3ng6k50jc7nc5zqhf3-nixos-system-uranus-25.05pre-git.drv",
 		"/nix/store/h3big3vbjnk32vf0nb5vi80yq0l9ivxb-nixos-system-uranus-25.05pre-git",
 		DeployConfig{
@@ -58,6 +59,7 @@ func TestNewHostSSH(t *testing.T) {
 	test.False(t, h.RebootNeeded)
 	test.False(t, h.IsLocal())
 	test.True(t, h.IsRemote())
+	test.False(t, h.IsDarwin())
 }
 
 func TestNewHostLocal(t *testing.T) {
@@ -65,6 +67,7 @@ func TestNewHostLocal(t *testing.T) {
 	h := NewHost(
 		cfg,
 		"uranus",
+		"x86_64-linux",
 		"/nix/store/g5dyb9016k8fnz3ng6k50jc7nc5zqhf3-nixos-system-uranus-25.05pre-git.drv",
 		"/nix/store/h3big3vbjnk32vf0nb5vi80yq0l9ivxb-nixos-system-uranus-25.05pre-git",
 		DeployConfig{})
@@ -77,6 +80,28 @@ func TestNewHostLocal(t *testing.T) {
 	test.False(t, h.RebootNeeded)
 	test.True(t, h.IsLocal())
 	test.False(t, h.IsRemote())
+	test.False(t, h.IsDarwin())
+}
+
+func TestNewHostLocalDarwin(t *testing.T) {
+	cfg := Config{}
+	h := NewHost(
+		cfg,
+		"athena",
+		"aarch64-darwin",
+		"/nix/store/fn5mp1b73w45q3a9qnh3wp3zl8mpzvw1-darwin-system-25.05.drv",
+		"/nix/store/dwxkv6qrqs31sj084shp5pfswmarl4mw-darwin-system-25.05",
+		DeployConfig{})
+
+	test.Eq(t, "athena", h.Name)
+	test.Eq(t, "/nix/store/fn5mp1b73w45q3a9qnh3wp3zl8mpzvw1-darwin-system-25.05.drv", h.DrvPath)
+	test.Eq(t, "/nix/store/dwxkv6qrqs31sj084shp5pfswmarl4mw-darwin-system-25.05", h.OutPath)
+	test.Nil(t, h.DeployConfig.TargetHost)
+	test.Nil(t, h.DeployConfig.TargetUser)
+	test.False(t, h.RebootNeeded)
+	test.True(t, h.IsLocal())
+	test.False(t, h.IsRemote())
+	test.True(t, h.IsDarwin())
 }
 
 func TestBuildWithoutNom(t *testing.T) {
@@ -87,6 +112,7 @@ func TestBuildWithoutNom(t *testing.T) {
 	h := NewHost(
 		cfg,
 		"uranus",
+		"x86_64-linux",
 		"/nix/store/g5dyb9016k8fnz3ng6k50jc7nc5zqhf3-nixos-system-uranus-25.05pre-git.drv",
 		"/nix/store/h3big3vbjnk32vf0nb5vi80yq0l9ivxb-nixos-system-uranus-25.05pre-git",
 		DeployConfig{})
@@ -105,6 +131,7 @@ func TestBuildWithNom(t *testing.T) {
 	h := NewHost(
 		cfg,
 		"uranus",
+		"x86_64-linux",
 		"/nix/store/g5dyb9016k8fnz3ng6k50jc7nc5zqhf3-nixos-system-uranus-25.05pre-git.drv",
 		"/nix/store/h3big3vbjnk32vf0nb5vi80yq0l9ivxb-nixos-system-uranus-25.05pre-git",
 		DeployConfig{})
@@ -121,6 +148,7 @@ func TestPushToAttic(t *testing.T) {
 	h := NewHost(
 		cfg,
 		"uranus",
+		"x86_64-linux",
 		"/nix/store/g5dyb9016k8fnz3ng6k50jc7nc5zqhf3-nixos-system-uranus-25.05pre-git.drv",
 		"/nix/store/h3big3vbjnk32vf0nb5vi80yq0l9ivxb-nixos-system-uranus-25.05pre-git",
 		DeployConfig{})
@@ -146,6 +174,7 @@ func TestCheckRebootNeeded(t *testing.T) {
 		h := NewHost(
 			cfg,
 			"uranus",
+			"x86_64-linux",
 			"/nix/store/g5dyb9016k8fnz3ng6k50jc7nc5zqhf3-nixos-system-uranus-25.05pre-git.drv",
 			"/nix/store/h3big3vbjnk32vf0nb5vi80yq0l9ivxb-nixos-system-uranus-25.05pre-git",
 			DeployConfig{
@@ -159,7 +188,6 @@ func TestCheckRebootNeeded(t *testing.T) {
 		}
 		must.NoError(t, h.CheckRebootNeeded(ctx))
 		test.Eq(t, [][]string{{
-			"sudo",
 			"/nix/store/h3big3vbjnk32vf0nb5vi80yq0l9ivxb-nixos-system-uranus-25.05pre-git/bin/nvd-json",
 			"reboot-check",
 			"/nix/store/h3big3vbjnk32vf0nb5vi80yq0l9ivxb-nixos-system-uranus-25.05pre-git",
@@ -180,6 +208,7 @@ func TestCheckRebootNeeded(t *testing.T) {
 		h := NewHost(
 			cfg,
 			"uranus",
+			"x86_64-linux",
 			"/nix/store/g5dyb9016k8fnz3ng6k50jc7nc5zqhf3-nixos-system-uranus-25.05pre-git.drv",
 			"/nix/store/h3big3vbjnk32vf0nb5vi80yq0l9ivxb-nixos-system-uranus-25.05pre-git",
 			DeployConfig{
@@ -201,6 +230,7 @@ func TestCheckRebootNeeded(t *testing.T) {
 		h := NewHost(
 			cfg,
 			"uranus",
+			"x86_64-linux",
 			"/nix/store/g5dyb9016k8fnz3ng6k50jc7nc5zqhf3-nixos-system-uranus-25.05pre-git.drv",
 			"/nix/store/h3big3vbjnk32vf0nb5vi80yq0l9ivxb-nixos-system-uranus-25.05pre-git",
 			DeployConfig{})
@@ -211,7 +241,6 @@ func TestCheckRebootNeeded(t *testing.T) {
 		}
 		must.NoError(t, h.CheckRebootNeeded(ctx))
 		test.Eq(t, [][]string{{
-			"sudo",
 			"/nix/store/h3big3vbjnk32vf0nb5vi80yq0l9ivxb-nixos-system-uranus-25.05pre-git/bin/nvd-json",
 			"reboot-check",
 			"/nix/store/h3big3vbjnk32vf0nb5vi80yq0l9ivxb-nixos-system-uranus-25.05pre-git",

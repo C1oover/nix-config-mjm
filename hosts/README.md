@@ -1,6 +1,6 @@
 # Host configurations
 
-This is where the configs for each of my systems lives.
+This is where the configs for each of my systems (both NixOS and nix-darwin) lives.
 Each system has its own directory with at minimum a `default.nix`.
 Some may have a `home.nix` which contains any Home Manager settings specific to that system.
 The `home.nix` is [automatically imported](../modules/common/base/user.nix#L27) as a Home Manager module if present.

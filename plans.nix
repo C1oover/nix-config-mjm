@@ -1,9 +1,4 @@
 let
-  evalPlan = import ./lib/deploy.nix;
-  sources = import ./npins/patched.nix;
-
-  localModulesPath = toString ./modules;
-
   hostNames = [
     "aion"
     "alecto"
@@ -24,25 +19,37 @@ let
     "uranus"
   ];
 
+  darwinHostNames = [
+    "athena"
+    "mars"
+    "talos"
+  ];
+
   plans = {
-    meta = {
-      nixpkgs = {
-        default = "nixos-small";
-        persephone = "nixos";
-        uranus = "nixos-plasma";
+    nixos = {
+      meta = {
+        nixpkgs = {
+          default = "nixos-small";
+          persephone = "nixos";
+          uranus = "nixos-plasma";
+        };
+
+        inherit specialArgs;
       };
 
-      specialArgs = {
-        inputs = sources;
-        inherit localModulesPath;
+      defaults = "${localModulesPath}/nixos";
+      inherit hosts;
+    };
+
+    darwin = {
+      meta = {
+        nixpkgs.default = "nixpkgs";
+        inherit specialArgs;
       };
-    };
 
-    defaults = {
-      imports = [ "${localModulesPath}/nixos" ];
+      defaults = "${localModulesPath}/darwin";
+      hosts = darwinHosts;
     };
-
-    inherit hosts;
 
     plans.default = {
       defaultPhase = "main";
@@ -60,12 +67,26 @@ let
     };
   };
 
-  mkHost = name: { imports = [ ./hosts/${name} ]; };
+  evalPlan = import ./lib/deploy.nix;
+  sources = import ./npins/patched.nix;
+
+  localModulesPath = toString ./modules;
+  specialArgs = {
+    inputs = sources;
+    inherit localModulesPath;
+  };
+
   hosts = builtins.listToAttrs (
     map (name: {
       inherit name;
-      value = mkHost name;
+      value = ./hosts/${name};
     }) hostNames
+  );
+  darwinHosts = builtins.listToAttrs (
+    map (name: {
+      inherit name;
+      value = ./hosts/${name};
+    }) darwinHostNames
   );
 in
 evalPlan plans

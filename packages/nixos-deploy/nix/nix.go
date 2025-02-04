@@ -38,6 +38,7 @@ type EvalJobResult struct {
 	DrvPath  string            `json:"drvPath"`
 	Outputs  map[string]string `json:"outputs"`
 	Error    string            `json:"error"`
+	System   string            `json:"system"`
 }
 
 func (r EvalJobResult) OutPath() string {
