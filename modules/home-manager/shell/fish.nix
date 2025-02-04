@@ -13,6 +13,8 @@ in
       enable = true;
     };
 
+    programs.carapace.enableFishIntegration = false;
+
     catppuccin.fish.enable = true;
   };
 }

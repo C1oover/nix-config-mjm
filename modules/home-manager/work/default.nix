@@ -39,10 +39,6 @@ in
     xdg.configFile."fish/completions/asdf.fish".source =
       config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.asdf/completions/asdf.fish";
 
-    # orbstack likes to replace these, very annoying
-    xdg.configFile."fish/completions/docker.fish".force = true;
-    xdg.configFile."fish/completions/kubectl.fish".force = true;
-
     programs.nushell.extraConfig = ''
       $env.ASDF_DIR = ($env.HOME | path join '.asdf')
       source ${config.home.homeDirectory}/.asdf/asdf.nu
