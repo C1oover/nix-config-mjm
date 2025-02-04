@@ -18,6 +18,7 @@ import (
 
 type Host struct {
 	Name         string
+	System       string
 	DrvPath      string
 	OutPath      string
 	DeployConfig DeployConfig
@@ -35,10 +36,11 @@ type DeployConfig struct {
 	ConsulChecks []string `json:"consulChecks"`
 }
 
-func NewHost(cfg Config, name string, drvPath string, outPath string, deployConfig DeployConfig) *Host {
+func NewHost(cfg Config, name string, system string, drvPath string, outPath string, deployConfig DeployConfig) *Host {
 	logger := slog.Default().WithGroup("host").With("name", name)
 	return &Host{
 		Name:         name,
+		System:       system,
 		DrvPath:      drvPath,
 		OutPath:      outPath,
 		DeployConfig: deployConfig,
@@ -53,6 +55,10 @@ func (h *Host) IsLocal() bool {
 
 func (h *Host) IsRemote() bool {
 	return !h.IsLocal()
+}
+
+func (h *Host) IsDarwin() bool {
+	return strings.HasSuffix(h.System, "-darwin")
 }
 
 func (h *Host) Build(ctx context.Context, useNom bool) error {
@@ -100,6 +106,10 @@ func (h *Host) PushToAttic(ctx context.Context) error {
 }
 
 func (h *Host) CheckRebootNeeded(ctx context.Context) error {
+	if h.IsDarwin() {
+		return nil
+	}
+
 	h.log.InfoContext(ctx, "checking if reboot is needed")
 
 	output, err := h.runCommand(ctx, path.Join(h.OutPath, "bin/nvd-json"), "reboot-check", h.OutPath)
@@ -212,13 +222,28 @@ func (h *Host) ApplyLocal(ctx context.Context) error {
 
 func (h *Host) apply(ctx context.Context, goal string) error {
 	h.log.InfoContext(ctx, "setting system profile", "out_path", h.OutPath)
-	if _, err := h.runCommand(ctx, "nix-env", "--profile", systemProfile, "--set", h.OutPath); err != nil {
+	if _, err := h.runCommand(ctx, "sudo", "nix-env", "--profile", systemProfile, "--set", h.OutPath); err != nil {
 		return fmt.Errorf("setting system profile: %w", err)
 	}
 
-	h.log.InfoContext(ctx, "activating system", "goal", goal)
-	if _, err := h.runCommand(ctx, path.Join(systemProfile, "bin/switch-to-configuration"), goal); err != nil {
+	if err := h.activate(ctx, goal); err != nil {
 		return fmt.Errorf("activating system: %w", err)
+	}
+
+	return nil
+}
+
+func (h *Host) activate(ctx context.Context, goal string) error {
+	h.log.InfoContext(ctx, "activating system", "goal", goal)
+
+	if h.IsDarwin() {
+		if _, err := h.runCommand(ctx, path.Join(systemProfile, "sw/bin/darwin-rebuild"), "activate"); err != nil {
+			return fmt.Errorf("running darwin-rebuild activate: %w", err)
+		}
+	} else {
+		if _, err := h.runCommand(ctx, "sudo", path.Join(systemProfile, "bin/switch-to-configuration"), goal); err != nil {
+			return fmt.Errorf("running switch-to-configuration: %w", err)
+		}
 	}
 
 	return nil
@@ -293,7 +318,7 @@ func (h *Host) Reboot(ctx context.Context) error {
 	}
 	h.log.DebugContext(ctx, "got original boot id", "boot_id", oldID)
 
-	_, err = h.runCommand(ctx, "reboot")
+	_, err = h.runCommand(ctx, "sudo", "reboot")
 	if err != nil {
 		// TODO figure out if there's an error that can happen here because of the reboot
 		return fmt.Errorf("initiating reboot: %w", err)
@@ -348,10 +373,7 @@ func (h *Host) runCommand(ctx context.Context, name string, args ...string) ([]b
 		}
 	}
 
-	cArgs := []string{name}
-	cArgs = append(cArgs, args...)
-
-	output, err := r.ExecuteOutput(ctx, "sudo", cArgs...)
+	output, err := r.ExecuteOutput(ctx, name, args...)
 	if err != nil {
 		return nil, fmt.Errorf("running command on %s: %w", h.Name, err)
 	}

@@ -2,8 +2,8 @@ alias rb := rebuild
 alias tfp := tf-plan
 alias tfa := tf-apply
 
-rebuild *flags:
-  nix run -f . scripts.hosts -- rebuild {{flags}}
+rebuild:
+  nix run -f . nixos-deploy -- apply-local
 
 gc:
   -nix-collect-garbage --delete-older-than 7d

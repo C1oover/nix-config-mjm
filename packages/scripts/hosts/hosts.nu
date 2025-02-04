@@ -1,34 +1,6 @@
 use nu-lib *
 use nu-lib/vault.nu *
 
-def --wrapped "darwin rebuild" [...args] {
-  let out_path = nom-build hosts/darwin.nix -A $'(scutil --get LocalHostName).system' ...$args
-  nvd diff /run/current-system $out_path
-
-  loop {
-    match (input "Apply these changes with switch goal? " | str downcase) {
-      "y" | "yes" => { break }
-      "n" | "no" => { return null }
-    }
-  }
-
-  sudo -H --preserve-env=PATH env nix-env -p /nix/var/nix/profiles/system --set $out_path
-  /nix/var/nix/profiles/system/activate-user
-  sudo -H --preserve-env=PATH /nix/var/nix/profiles/system/activate
-}
-
-def --wrapped "linux rebuild" [...args] {
-  nixos-deploy apply-local
-}
-
-def --wrapped "main rebuild" [...args] {
-  if (uname).operating-system == "Darwin" {
-    darwin rebuild ...$args
-  } else {
-    linux rebuild ...$args
-  }
-}
-
 def "main deploy" [...hosts] {
   with-vault {
     nixos-deploy deploy ...$hosts

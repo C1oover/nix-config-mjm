@@ -6,6 +6,7 @@
   nix-eval-jobs,
   nix-output-monitor,
   nvd-json,
+  nvd,
 }:
 
 buildGoModule {
@@ -25,6 +26,7 @@ buildGoModule {
           nix-eval-jobs
           nix-output-monitor
           nvd-json
+          nvd
           attic-client
         ]
       }
