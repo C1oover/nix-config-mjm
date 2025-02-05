@@ -24,8 +24,8 @@ in
     overlays = [
       (final: prev: {
         nur = import inputs.nur {
-          nurpkgs = prev;
           pkgs = prev;
+          nurpkgs = import prev.path { };
         };
       })
       (import ../../../overlay.nix)
