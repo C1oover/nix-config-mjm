@@ -133,9 +133,9 @@
         "repo": "helix"
       },
       "branch": "mega",
-      "revision": "8439103220ca54760235bc70c18732d3ec91e909",
-      "url": "https://github.com/mjm/helix/archive/8439103220ca54760235bc70c18732d3ec91e909.tar.gz",
-      "hash": "04b4ghclx8wm219mam4524y5qdya945v4pl5g4chgkrq5m4p28s4"
+      "revision": "9007f179f8d5fef3653d3f6acd7b7681290738a4",
+      "url": "https://github.com/mjm/helix/archive/9007f179f8d5fef3653d3f6acd7b7681290738a4.tar.gz",
+      "hash": "1y2ksgzrc3b6chf7f2jj3fzfsz01ql1f1jy2yg4658747lbmjsr0"
     },
     "home-manager": {
       "type": "Git",
