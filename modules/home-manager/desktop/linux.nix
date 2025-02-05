@@ -58,6 +58,8 @@ in
 
     services.kdeconnect.enable = true;
 
+    services.easyeffects.enable = true;
+
     fonts.fontconfig.enable = false;
 
     # Noto Sans Mono doesn't have a spacing value set, so kitty won't allow its
