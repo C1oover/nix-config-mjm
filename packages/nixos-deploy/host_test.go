@@ -247,4 +247,126 @@ func TestCheckRebootNeeded(t *testing.T) {
 		}}, r.History)
 		test.True(t, h.RebootNeeded)
 	})
+
+	t.Run("darwin host", func(t *testing.T) {
+		r := &cmd.MockRunner{}
+		cfg := Config{Runner: r}
+		h := NewHost(
+			cfg,
+			"athena",
+			"aarch64-darwin",
+			"/nix/store/fn5mp1b73w45q3a9qnh3wp3zl8mpzvw1-darwin-system-25.05.drv",
+			"/nix/store/dwxkv6qrqs31sj084shp5pfswmarl4mw-darwin-system-25.05",
+			DeployConfig{})
+		ctx := context.Background()
+
+		must.NoError(t, h.CheckRebootNeeded(ctx))
+		test.SliceEmpty(t, r.History)
+		test.False(t, h.RebootNeeded)
+	})
+}
+
+const testDiffOutput string = `
+{
+  "left": "/nix/store/wdlgy4gsy7bp0bzchjapf9mkh56i8m4z-nixos-system-leto-25.05beta747941.ceaea203f3ae",
+  "right": "/nix/store/sv332lwsg9fify6y1ymlk70qif4kn6ar-nixos-system-leto-25.05beta748220.f6c5b2b731ab",
+  "version_changes": [
+    {
+      "pname": "nixos-system-leto",
+      "old_versions": [
+        "25.05beta747941.ceaea203f3ae"
+      ],
+      "new_versions": [
+        "25.05beta748220.f6c5b2b731ab"
+      ]
+    },
+    {
+      "pname": "prometheus",
+      "old_versions": [
+        "3.0.1"
+      ],
+      "new_versions": [
+        "3.1.0"
+      ]
+    },
+    {
+      "pname": "python3.12-rapidfuzz",
+      "old_versions": [
+        "3.12.0"
+      ],
+      "new_versions": [
+        "3.12.1"
+      ]
+    }
+  ],
+  "added_packages": [],
+  "removed_packages": [],
+  "reboot_packages": []
+}
+`
+
+func TestHostDiff(t *testing.T) {
+	t.Run("ssh host", func(t *testing.T) {
+		r := &cmd.MockRunner{}
+		cfg := Config{
+			Runner: &cmd.MockRunner{},
+			RemoteRunner: func(host, user string) (cmd.Runner, error) {
+				return r, nil
+			},
+		}
+		user := "mjm"
+		host := "uranus.home.mattmoriarity.com"
+		h := NewHost(
+			cfg,
+			"uranus",
+			"x86_64-linux",
+			"/nix/store/g5dyb9016k8fnz3ng6k50jc7nc5zqhf3-nixos-system-uranus-25.05pre-git.drv",
+			"/nix/store/h3big3vbjnk32vf0nb5vi80yq0l9ivxb-nixos-system-uranus-25.05pre-git",
+			DeployConfig{
+				TargetUser: &user,
+				TargetHost: &host,
+			})
+		ctx := context.Background()
+
+		r.Outputs = [][]byte{
+			[]byte(testDiffOutput),
+		}
+		output, err := h.Diff(ctx)
+		must.NoError(t, err)
+		test.Eq(t, [][]string{
+			{
+				"/nix/store/h3big3vbjnk32vf0nb5vi80yq0l9ivxb-nixos-system-uranus-25.05pre-git/bin/nvd-json",
+				"diff",
+				"/run/current-system",
+				"/nix/store/h3big3vbjnk32vf0nb5vi80yq0l9ivxb-nixos-system-uranus-25.05pre-git",
+			},
+		}, r.History)
+		test.Eq(t, testDiffOutput, string(output))
+	})
+
+	t.Run("local host", func(t *testing.T) {
+		r := &cmd.MockRunner{}
+		cfg := Config{Runner: r}
+		h := NewHost(
+			cfg,
+			"uranus",
+			"x86_64-linux",
+			"/nix/store/g5dyb9016k8fnz3ng6k50jc7nc5zqhf3-nixos-system-uranus-25.05pre-git.drv",
+			"/nix/store/h3big3vbjnk32vf0nb5vi80yq0l9ivxb-nixos-system-uranus-25.05pre-git",
+			DeployConfig{})
+		ctx := context.Background()
+
+		r.Outputs = [][]byte{
+			[]byte(testDiffOutput),
+		}
+		output, err := h.Diff(ctx)
+		must.NoError(t, err)
+		test.Eq(t, [][]string{{
+			"/nix/store/h3big3vbjnk32vf0nb5vi80yq0l9ivxb-nixos-system-uranus-25.05pre-git/bin/nvd-json",
+			"diff",
+			"/run/current-system",
+			"/nix/store/h3big3vbjnk32vf0nb5vi80yq0l9ivxb-nixos-system-uranus-25.05pre-git",
+		}}, r.History)
+		test.Eq(t, testDiffOutput, string(output))
+	})
 }
