@@ -7,6 +7,9 @@
   "nixos-small": {
     "380268": {
       "hash": "sha256-uhaFuVUxUWdYkyC9CB6TjJDagQgdmFRxtr0iohWMqHw="
+    },
+    "380275": {
+      "hash": "sha256-A1kVx4AEqnIPlmv8AZqcdf/8ZZaIJ10/g/ge7dPcy9s="
     }
   },
   "darwin": {
