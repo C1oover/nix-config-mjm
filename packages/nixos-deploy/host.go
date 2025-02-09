@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log/slog"
 	"os"
@@ -14,6 +15,7 @@ import (
 	"git.midna.dev/mjm/nix-config/packages/nixos-deploy/cmd"
 	"git.midna.dev/mjm/nix-config/packages/nixos-deploy/nix"
 	consulapi "github.com/hashicorp/consul/api"
+	"golang.org/x/crypto/ssh"
 )
 
 type Host struct {
@@ -319,8 +321,7 @@ func (h *Host) Reboot(ctx context.Context) error {
 	h.log.DebugContext(ctx, "got original boot id", "boot_id", oldID)
 
 	_, err = h.runCommand(ctx, "sudo", "reboot")
-	if err != nil {
-		// TODO figure out if there's an error that can happen here because of the reboot
+	if err != nil && !errors.Is(err, &ssh.ExitMissingError{}) {
 		return fmt.Errorf("initiating reboot: %w", err)
 	}
 
