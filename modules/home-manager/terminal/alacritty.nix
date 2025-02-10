@@ -9,9 +9,7 @@ let
 in
 {
   options.mjm.terminal.alacritty = {
-    enable = mkEnableOption "alacritty" // {
-      default = true;
-    };
+    enable = mkEnableOption "alacritty";
   };
 
   config = mkIf (cfg.enable && cfg.alacritty.enable) {

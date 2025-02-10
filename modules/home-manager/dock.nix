@@ -21,6 +21,7 @@ let
   systemApps = [
     "Mail"
     "Messages"
+    "Utilities/Terminal"
   ];
 in
 {

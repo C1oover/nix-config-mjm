@@ -10,7 +10,7 @@ let
   cfg = config.mjm.shell;
 in
 {
-  config = mkIf cfg.enable {
+  config = mkIf (cfg.enable && osConfig.programs.nushell.enable) {
     programs.nushell = {
       enable = true;
       extraConfig = mkBefore ''

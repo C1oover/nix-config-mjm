@@ -1,5 +1,6 @@
 {
   config,
+  osConfig,
   lib,
   ...
 }:
@@ -8,7 +9,7 @@ let
   cfg = config.mjm.shell;
 in
 {
-  config = mkIf cfg.enable {
+  config = mkIf (cfg.enable && osConfig.programs.zsh.enable) {
     programs.zsh = {
       enable = true;
       enableCompletion = true;

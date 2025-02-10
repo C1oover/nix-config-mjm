@@ -9,9 +9,7 @@ let
 in
 {
   options.mjm.terminal.kitty = {
-    enable = mkEnableOption "kitty" // {
-      default = true;
-    };
+    enable = mkEnableOption "kitty";
   };
 
   config = mkIf (cfg.enable && cfg.kitty.enable) {
