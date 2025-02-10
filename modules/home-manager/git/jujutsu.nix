@@ -97,7 +97,10 @@ in
             "@"
           ];
           mega = mkAlias (getExe jm);
-          p = [ "git push" ];
+          p = [
+            "git"
+            "push"
+          ];
           pc = [
             "git"
             "push"
