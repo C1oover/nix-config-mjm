@@ -5,7 +5,6 @@
   mjm.git.enableWatchman = false;
 
   mjm.terminal.enable = true;
-  mjm.terminal.kitty.enable = false;
 
   home.dock.entries = [
     { app = "Messages"; }
