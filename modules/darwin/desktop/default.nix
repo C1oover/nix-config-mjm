@@ -22,6 +22,7 @@ in
         "dash"
         "element"
         "fantastical"
+        "soundsource"
         "stats"
         "submariner"
       ];
