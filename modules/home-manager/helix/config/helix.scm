@@ -4,7 +4,7 @@
 (require "helix/editor.scm")
 
 (provide run-mix
-         kitty-run
+         zellij-run
          test-all
          test-current-file
          test-previous
@@ -79,14 +79,14 @@
 (define (slab-workspace?)
   (equal? "slab" (file-name (helix-find-workspace))))
 
-(define (kitty-run name . args)
+(define (zellij-run name . args)
   (let ([cmd (string-join args " ")])
     (helix.run-shell-command "zellij"
                              "run"
                              "--floating"
                              (string-append "--name='" name "'")
                              "--"
-                             "`which nu`"
+                             "fish"
                              "-li"
                              "-c"
                              (string-append "'" cmd "'")
@@ -95,4 +95,4 @@
 (define (run-mix . args)
   (let ([mix (if (slab-workspace?) "docker compose exec slab_1 mix" "mix")]
         [name (string-append "mix " (string-join args " "))])
-    (apply kitty-run (cons name (cons mix args)))))
+    (apply zellij-run (cons name (cons mix args)))))
