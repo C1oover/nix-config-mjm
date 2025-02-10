@@ -190,9 +190,9 @@
         "repo": "nixpkgs"
       },
       "branch": "plasma-6.3",
-      "revision": "1963ebfa9c77e8d9291981d252f6e6bb856667e5",
-      "url": "https://github.com/mjm/nixpkgs/archive/1963ebfa9c77e8d9291981d252f6e6bb856667e5.tar.gz",
-      "hash": "1criln2bkwsmfb19fs271fnmckrawmacxp7nd8zcnil99gr9fl1r"
+      "revision": "9d9cfd1319a26883c2bb3d503c0ed6aa8282ebd2",
+      "url": "https://github.com/mjm/nixpkgs/archive/9d9cfd1319a26883c2bb3d503c0ed6aa8282ebd2.tar.gz",
+      "hash": "1m1pkrms3sas14b60y31p0i2kq2afbfdgisljlcr9m4ywpigz0ba"
     },
     "nixos-small": {
       "type": "Channel",
