@@ -121,6 +121,11 @@ in
               sk --nth 2.. --ansi --preview 'jj show --color always {1}' |
               string split -f 1 ' '
           '';
+          fb = mkFishAlias "jj-fb" ''
+            jj bookmark list --color always -t --quiet -T 'if(!remote && present, label("bookmark", name) ++ format_ref_targets(self) ++ "\n")' $argv |
+              sk --ansi |
+              string split -f 1 ':'
+          '';
           e = mkFishAlias "jj-e" ''
             jj edit (jj f)
           '';
