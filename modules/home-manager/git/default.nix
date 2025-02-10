@@ -10,6 +10,7 @@ let
     mkDefault
     mkEnableOption
     mkIf
+    mkMerge
     ;
   cfg = config.mjm.git;
 
@@ -23,33 +24,42 @@ in
 
   options.mjm.git = {
     enable = mkEnableOption "Git configuration";
+    desktop.enable = mkEnableOption "tools and config only needed for workstations";
   };
 
-  config = mkIf cfg.enable {
-    home.packages = attrValues {
-      inherit git-scripts;
-      inherit (pkgs)
-        glab
-        git-credential-manager
-        ;
-    };
-
-    programs.git = {
-      enable = true;
-      aliases = {
-        st = "status -sb";
-        ci = "commit --verbose";
-        di = "diff";
-        dc = "diff --cached";
-      };
-      diff-so-fancy.enable = true;
-      extraConfig = {
-        push = {
-          default = "simple";
-          autoSetupRemote = true;
+  config = mkIf cfg.enable (mkMerge [
+    {
+      programs.git = {
+        enable = true;
+        aliases = {
+          st = "status -sb";
+          ci = "commit --verbose";
+          di = "diff";
+          dc = "diff --cached";
         };
-        help.autocorrect = 10;
-        pull.rebase = false;
+        extraConfig = {
+          push = {
+            default = "simple";
+            autoSetupRemote = true;
+          };
+          help.autocorrect = 10;
+          pull.rebase = false;
+        };
+        userName = "Matt Moriarity";
+        userEmail = mkDefault "matt@mattmoriarity.com";
+      };
+    }
+
+    (mkIf cfg.desktop.enable {
+      home.packages = attrValues {
+        inherit git-scripts;
+        inherit (pkgs)
+          glab
+          git-credential-manager
+          ;
+      };
+
+      programs.git.extraConfig = {
         credential = {
           helper = "manager";
           credentialStore = mkIf pkgs.stdenv.isLinux "secretservice";
@@ -60,8 +70,6 @@ in
           };
         };
       };
-      userName = "Matt Moriarity";
-      userEmail = mkDefault "matt@mattmoriarity.com";
-    };
-  };
+    })
+  ]);
 }

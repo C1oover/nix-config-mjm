@@ -9,7 +9,7 @@ let
   cfg = config.mjm.git;
 in
 {
-  config = mkIf cfg.enable {
+  config = mkIf (cfg.enable && cfg.desktop.enable) {
     programs.starship.settings = {
       git_branch.only_attached = true;
       git_commit.disabled = true;

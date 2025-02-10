@@ -37,9 +37,7 @@
   catppuccin.flavor = "macchiato";
 
   environment.systemPackages = [
-    pkgs.nvd
     pkgs.ghostty.terminfo
-    pkgs.kitty.terminfo
   ];
 
   system.extraSystemBuilderCmds = ''

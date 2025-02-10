@@ -41,7 +41,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf (cfg.enable && cfg.desktop.enable) {
     home.packages =
       [ jm ] ++ optional cfg.enableMeld pkgs.meld ++ optional cfg.enableWatchman pkgs.watchman;
 

@@ -17,26 +17,15 @@ in
   # this check always gets weird when a new stable release branches off.
   home.enableNixpkgsReleaseCheck = false;
 
-  home.packages = attrValues (
-    {
-      inherit (pkgs)
-        fx
-        gh
-        httpie
-        hydra-check
-        nix-output-monitor
-        nix-tree
-        pstree
-        ripgrep
-        serpl
-        skim
-        tree
-        unzip
-        wget
-        ;
-    }
-    // lib.optionalAttrs pkgs.stdenv.isLinux { inherit (pkgs) attic-client; }
-  );
+  home.packages = attrValues {
+    inherit (pkgs)
+      pstree
+      ripgrep
+      tree
+      unzip
+      wget
+      ;
+  };
 
   news.display = "silent";
   programs.home-manager.enable = true;

@@ -1,4 +1,5 @@
 {
+  pkgs,
   lib,
   config,
   osConfig,
@@ -6,6 +7,7 @@
 }:
 let
   inherit (lib)
+    attrValues
     mkDefault
     mkIf
     mkOption
@@ -31,7 +33,26 @@ in
   };
 
   config = mkIf cfg.enable {
+    mjm.git.desktop.enable = mkDefault true;
     mjm.helix.enable = mkDefault true;
+    mjm.shell.desktop.enable = mkDefault true;
     mjm.terminal.enable = mkDefault true;
+
+    # Many of these aren't really desktop-related necessarily, but they _are_
+    # tools I don't really need preinstalled on server machines.
+    home.packages = attrValues {
+      inherit (pkgs)
+        attic-client
+        fx
+        gh
+        httpie
+        hydra-check
+        nix-output-monitor
+        nix-tree
+        nvd
+        serpl
+        skim
+        ;
+    };
   };
 }
