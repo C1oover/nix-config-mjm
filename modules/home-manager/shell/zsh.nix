@@ -18,7 +18,6 @@ in
       autosuggestion.enable = true;
       defaultKeymap = "emacs";
       initExtra = ''
-        if [ -f "$HOME/.asdf/asdf.sh" ]; then . "$HOME/.asdf/asdf.sh"; fi
         bindkey -- "''${terminfo[kdch1]}" delete-char
       '';
     };

@@ -33,15 +33,10 @@ in
       inherit (pkgs) cloudflared google-cloud-sdk;
     };
 
-    programs.fish.shellInitLast = ''
-      source ~/.asdf/asdf.fish
-    '';
-    xdg.configFile."fish/completions/asdf.fish".source =
-      config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.asdf/completions/asdf.fish";
+    home.sessionVariables.ASDF_DATA_DIR = "${config.xdg.stateHome}/asdf";
 
-    programs.nushell.extraConfig = ''
-      $env.ASDF_DIR = ($env.HOME | path join '.asdf')
-      source ${config.home.homeDirectory}/.asdf/asdf.nu
+    programs.fish.shellInitLast = ''
+      fish_add_path $ASDF_DATA_DIR/shims
     '';
 
     programs.kitty.darwinLaunchOptions = [

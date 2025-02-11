@@ -19,6 +19,9 @@
     # openssl is needed for building erlang with asdf
     "openssl@1.1"
     "openssl@3"
+
+    # TODO switch this to install via nix once nixpkgs has 0.16+
+    "asdf"
   ];
 
   system.stateVersion = 4;
