@@ -12,9 +12,7 @@
 
   nixpkgs.overlays = [ (import "${inputs.nixpkgs-firefox-darwin}/overlay.nix") ];
 
-  nix.configureBuildUsers = true;
   nix.settings.trusted-users = [ "@admin" ];
-  services.nix-daemon.enable = true;
 
   time.timeZone = "America/Denver";
 
