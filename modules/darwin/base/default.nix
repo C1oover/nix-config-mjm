@@ -27,4 +27,6 @@
   environment.etc."sudoers.d/admin-no-passwd".text = ''
     %admin ALL = (ALL) NOPASSWD: ALL
   '';
+
+  system.defaults.NSGlobalDomain.AppleFontSmoothing = 0;
 }
