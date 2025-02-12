@@ -266,7 +266,7 @@ func evalNodes(ctx context.Context, cfg Config, path string, hostnames []string)
 		}
 	}
 	if len(errorAttrs) > 0 {
-		return nil, fmt.Errorf("evaluation failed for one or more nodes (%s): %w", strings.Join(errorAttrs, ", "), err)
+		return nil, fmt.Errorf("evaluation failed for one or more nodes (%s)", strings.Join(errorAttrs, ", "))
 	}
 
 	if err := cfg.Nix.Realise(ctx, configResult.DrvPath, false); err != nil {
