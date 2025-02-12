@@ -59,6 +59,7 @@ in
         };
 
         core.fsmonitor = mkIf cfg.enableWatchman "watchman";
+        git.subprocess = true;
 
         revset-aliases = {
           "merge_base(x)" = "fork_point(trunk() | x)";
