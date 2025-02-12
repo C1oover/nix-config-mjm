@@ -9,6 +9,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
+// DeployPlan is a plan for how to do a phased rollout of deploys to a set of hosts.
 type DeployPlan struct {
 	Phases []DeployPhase
 	Hosts  []*Host
@@ -19,17 +20,25 @@ type planConfig struct {
 	Deployment map[string]DeployConfig `json:"deployment"`
 }
 
+// DeployPhase is a single phase in a deploy. It is a group of nodes that should be
+// deployed at a particular point during the deploy.
 type DeployPhase struct {
 	Name  string   `json:"name"`
 	Nodes []string `json:"nodes"`
 }
 
+// ContainsHost returns true if any of the phases in the plan contain the host with
+// the given name.
 func (p *DeployPlan) ContainsHost(name string) bool {
 	return slices.ContainsFunc(p.Phases, func(p DeployPhase) bool {
 		return slices.Contains(p.Nodes, name)
 	})
 }
 
+// EachHost runs a function concurrently for each host in the plan, regardless of
+// the host's phase, if any. The maximum number of active functions running at one
+// time is controlled by the -concurrency CLI flag. If any hosts return an error
+// from the function, the first one will be returned.
 func (p *DeployPlan) EachHost(ctx context.Context, f func(context.Context, *Host) error) error {
 	g, childCtx := errgroup.WithContext(ctx)
 	g.SetLimit(*concurrency)
@@ -42,6 +51,8 @@ func (p *DeployPlan) EachHost(ctx context.Context, f func(context.Context, *Host
 	return g.Wait()
 }
 
+// Deploy will deploy each phase in the plan in sequence. Any hosts that are in
+// the plan but not named in any phase will not be deployed.
 func (p *DeployPlan) Deploy(ctx context.Context) error {
 	nodesByName := map[string]*Host{}
 	for _, h := range p.Hosts {
