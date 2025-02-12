@@ -39,6 +39,10 @@ in
     enableMeld = mkEnableOption "meld for jujutsu" // {
       default = config.mjm.desktop.enable;
     };
+
+    enableSigning = mkEnableOption "commit signing with SSH key" // {
+      default = true;
+    };
   };
 
   config = mkIf (cfg.enable && cfg.desktop.enable) {
@@ -60,6 +64,12 @@ in
 
         core.fsmonitor = mkIf cfg.enableWatchman "watchman";
         git.subprocess = true;
+
+        signing = mkIf cfg.enableSigning {
+          sign-all = true;
+          backend = "ssh";
+          key = "~/.ssh/id_ed25519.pub";
+        };
 
         revset-aliases = {
           "merge_base(x)" = "fork_point(trunk() | x)";
