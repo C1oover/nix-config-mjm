@@ -112,6 +112,9 @@ in
             jj git push
             or jj undo
           '';
+          pf = mkFishAlias "jj-pf" ''
+            jj git push --branch (jj fb)
+          '';
           up = mkFishAlias "jj-up" ''
             jj git fetch
             jj rebase -d 'trunk()'
