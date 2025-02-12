@@ -36,29 +36,24 @@ func main() {
 	}))
 	slog.SetDefault(logger)
 
-	switch flag.Arg(0) {
+	var err error
+	cmd := flag.Arg(0)
+	switch cmd {
 	case "deploy":
-		if err := handleDeploy(ctx); err != nil {
-			slog.ErrorContext(ctx, "deploy failed", "error", err)
-			os.Exit(1)
-		}
+		err = handleDeploy(ctx)
 	case "diff":
-		if err := handleDiff(ctx); err != nil {
-			slog.ErrorContext(ctx, "diff failed", "error", err)
-			os.Exit(1)
-		}
+		err = handleDiff(ctx)
 	case "reboot":
-		if err := handleReboot(ctx); err != nil {
-			slog.ErrorContext(ctx, "reboot failed", "error", err)
-			os.Exit(1)
-		}
+		err = handleReboot(ctx)
 	case "apply-local":
-		if err := handleApplyLocal(ctx); err != nil {
-			slog.ErrorContext(ctx, "apply failed", "error", err)
-			os.Exit(1)
-		}
+		err = handleApplyLocal(ctx)
 	default:
-		slog.ErrorContext(ctx, "unexpected command", "command", flag.Arg(0))
+		slog.ErrorContext(ctx, "unexpected command", "command", cmd)
+		os.Exit(1)
+	}
+
+	if err != nil {
+		slog.ErrorContext(ctx, "command failed", "command", cmd, "error", err)
 		os.Exit(1)
 	}
 }
