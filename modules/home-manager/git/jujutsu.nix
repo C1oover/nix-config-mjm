@@ -150,6 +150,16 @@ in
         revsets = {
           log = "@ | trunk() | ancestors(trunk()..(visible_heads() & mine() & ~tags()), 2)";
         };
+
+        fix.tools = {
+          mix-format = {
+            command = "mix format - --stdin-filename=$path";
+            patterns = [
+              "glob:'**/*.ex'"
+              "glob:'**/*.exs'"
+            ];
+          };
+        };
       };
     };
   };
