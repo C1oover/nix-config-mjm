@@ -31,7 +31,7 @@ let
         nixpkgs = {
           default = "nixos-small";
           persephone = "nixos";
-          uranus = "nixos-plasma";
+          uranus = "nixos";
         };
 
         inherit specialArgs;
