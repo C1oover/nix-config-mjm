@@ -1,7 +1,7 @@
 {
   "nixos": {
     "345207": {
-      "hash": "sha256-tI+wlhyC2e63NirN2kgg1I4GMPvMwFTIFFyo2nR1MDQ="
+      "hash": "sha256-R4ngvaR/9pXOK2cz3c+wO5UpT/LDsIVaTrDwhigMSFM="
     }
   },
   "nixos-small": {},
