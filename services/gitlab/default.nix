@@ -273,8 +273,7 @@ in
       "gitlab-pages"
     ];
     deployment.tests = {
-      # can't get this to pass on build VM
-      # inherit (pkgs.nixosTests) gitlab;
+      inherit (pkgs.nixosTests) gitlab;
     };
   };
 }
