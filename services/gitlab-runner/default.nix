@@ -115,8 +115,12 @@ in
       };
     };
 
-    # The nix-shell runner needs this to be able to clone repos and evaluate flakes
-    environment.systemPackages = [ pkgs.git ];
+    environment.systemPackages = [
+      # The nix-shell runner needs this to be able to clone repos and evaluate flakes
+      pkgs.git
+      # Used to push automatic updates to megamerges
+      pkgs.jujutsu
+    ];
 
     # If Docker changes, we don't want it to restart during a deploy, because that will cause the deploy
     # to fail, and then we'll just be stuck in that state.
