@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.mjm.authelia;
@@ -140,6 +145,10 @@ in
         upstream.service.name = "lldap";
         enableAuthProxy = false;
       };
+    };
+
+    deployment.tests = {
+      inherit (pkgs.nixosTests) authelia;
     };
   };
 }

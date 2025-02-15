@@ -85,6 +85,10 @@ in
     };
 
     deployment.consulChecks = [ "vault" ];
+    deployment.tests = {
+      # this triggers the unfree error for some reason, which is weird.
+      # inherit (pkgs.nixosTests) vault;
+    };
 
     networking.firewall.allowedTCPPorts = [
       8200

@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 let
   inherit (lib)
     mkEnableOption
@@ -115,6 +120,10 @@ in
           mode = "0700";
         }
       ];
+
+      deployment.tests = {
+        inherit (pkgs.nixosTests) consul;
+      };
     })
   ]);
 }

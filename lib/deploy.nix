@@ -74,7 +74,7 @@ let
         (filterAttrs (name: _value: if namesToInclude == [ ] then true else elem name namesToInclude))
         (mapAttrs (name: value: evalNode.nixos name [ value ]))
       ];
-      deploymentConfig = mapAttrs (_: v: v.config.deployment) nodes;
+      deploymentConfig = mapAttrs (_: v: removeAttrs v.config.deployment [ "tests" ]) nodes;
       darwinNodes = pipe plans.darwin.hosts [
         (filterAttrs (name: _value: if namesToInclude == [ ] then true else elem name namesToInclude))
         (mapAttrs (name: value: evalNode.darwin name [ value ]))
@@ -115,6 +115,10 @@ let
       configJson = json.generate "plan-config.json" config;
       toplevels = pipe (nodes // darwinNodes) [
         (mapAttrs (_: v: v.config.system.build.toplevel))
+        recurseIntoAttrs
+      ];
+      tests = pipe nodes [
+        (mapAttrs (_: v: recurseIntoAttrs v.config.deployment.tests))
         recurseIntoAttrs
       ];
       hosts = nodes // darwinNodes;

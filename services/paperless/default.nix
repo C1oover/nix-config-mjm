@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 let
   inherit (lib) mkAfter mkEnableOption mkIf;
   cfg = config.mjm.paperless;
@@ -98,6 +103,10 @@ in
     mjm.backups.paperless = {
       passwordFile = secrets.backup_password.path;
       paths = [ "/var/lib/paperless/media/documents" ];
+    };
+
+    deployment.tests = {
+      inherit (pkgs.nixosTests) paperless;
     };
   };
 }

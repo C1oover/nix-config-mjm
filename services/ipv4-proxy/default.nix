@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.mjm.ipv4-proxy;
@@ -44,5 +49,9 @@ in
       80
       443
     ];
+
+    deployment.tests = {
+      inherit (pkgs.nixosTests) haproxy;
+    };
   };
 }

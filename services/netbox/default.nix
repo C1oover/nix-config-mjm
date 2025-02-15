@@ -99,5 +99,9 @@ in
       port = 8000;
       metrics.enable = true;
     };
+
+    deployment.tests = {
+      inherit (pkgs.nixosTests) netbox_4_1;
+    };
   };
 }

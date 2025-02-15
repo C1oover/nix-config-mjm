@@ -46,5 +46,9 @@ in
         http.path = "/healthcheck";
       };
     };
+
+    deployment.tests = {
+      inherit (pkgs.nixosTests) miniflux;
+    };
   };
 }

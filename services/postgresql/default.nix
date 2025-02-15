@@ -59,5 +59,12 @@ in
         owner = "postgres";
       };
     };
+
+    deployment.tests = {
+      inherit (pkgs.nixosTests.postgresql.postgresql.postgresql_16)
+        postgresql
+        postgresql-backup-all
+        ;
+    };
   };
 }

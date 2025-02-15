@@ -124,5 +124,9 @@ in
         http.path = "/ready";
       };
     };
+
+    deployment.tests = {
+      inherit (pkgs.nixosTests) loki;
+    };
   };
 }
