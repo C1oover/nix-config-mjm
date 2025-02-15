@@ -12,6 +12,7 @@ import (
 	"runtime"
 	"slices"
 	"strings"
+	"sync"
 	"time"
 
 	"git.midna.dev/mjm/nix-config/packages/nixos-deploy/nix"
@@ -78,9 +79,13 @@ func handleDeploy(ctx context.Context) error {
 		return h.IsLocal()
 	})
 
+	var testLock sync.Mutex
 	if err := plan.EachHost(ctx, func(ctx context.Context, h *Host) error {
 		if err := h.Build(ctx, false); err != nil {
 			return fmt.Errorf("building node %s: %w", h.Name, err)
+		}
+		if err := h.Test(ctx, &testLock, false); err != nil {
+			return fmt.Errorf("testing node %s: %w", h.Name, err)
 		}
 		if err := h.Push(ctx); err != nil {
 			return fmt.Errorf("pushing node %s: %w", h.Name, err)
@@ -127,9 +132,13 @@ func handleDiff(ctx context.Context) error {
 	defer os.RemoveAll(diffsDir)
 	slog.DebugContext(ctx, "created temp dir for diffs", "path", diffsDir)
 
+	var testLock sync.Mutex
 	if err := plan.EachHost(ctx, func(ctx context.Context, h *Host) error {
 		if err := h.Build(ctx, false); err != nil {
 			return fmt.Errorf("building node %s: %w", h.Name, err)
+		}
+		if err := h.Test(ctx, &testLock, false); err != nil {
+			return fmt.Errorf("testing node %s: %w", h.Name, err)
 		}
 		if err := h.PushToAttic(ctx); err != nil {
 			return fmt.Errorf("pushing node %s to attic: %w", h.Name, err)
@@ -251,6 +260,7 @@ func evalNodes(ctx context.Context, cfg Config, path string, hostnames []string)
 	var configResult nix.EvalJobResult
 	var errorAttrs []string
 	resultsByAttrs := map[string]nix.EvalJobResult{}
+	testsByHost := map[string][]string{}
 	for _, r := range paths {
 		if r.Error != "" {
 			errorAttrs = append(errorAttrs, r.Attr)
@@ -258,10 +268,12 @@ func evalNodes(ctx context.Context, cfg Config, path string, hostnames []string)
 			configResult = r
 		} else if r.AttrPath[0] == "toplevels" {
 			resultsByAttrs[r.AttrPath[1]] = r
+		} else if r.AttrPath[0] == "tests" {
+			testsByHost[r.AttrPath[1]] = append(testsByHost[r.AttrPath[1]], r.DrvPath)
 		}
 	}
 	if len(errorAttrs) > 0 {
-		return nil, fmt.Errorf("evaluation failed for one or more nodes (%s)", strings.Join(errorAttrs, ", "))
+		return nil, fmt.Errorf("evaluation failed for one or more attributes (%s)", strings.Join(errorAttrs, ", "))
 	}
 
 	if err := cfg.Nix.Realise(ctx, configResult.DrvPath, false); err != nil {
@@ -285,7 +297,9 @@ func evalNodes(ctx context.Context, cfg Config, path string, hostnames []string)
 			continue
 		}
 
-		dp.Hosts = append(dp.Hosts, NewHost(cfg, name, r.System, r.DrvPath, r.OutPath(), plan.Deployment[name]))
+		h := NewHost(cfg, name, r.System, r.DrvPath, r.OutPath(), plan.Deployment[name])
+		h.Tests = testsByHost[name]
+		dp.Hosts = append(dp.Hosts, h)
 	}
 	return dp, nil
 }

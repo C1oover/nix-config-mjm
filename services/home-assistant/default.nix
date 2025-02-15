@@ -218,5 +218,9 @@ in
         rm /var/lib/hass/backups/*
       '';
     };
+
+    deployment.tests = {
+      inherit (pkgs.nixosTests) home-assistant;
+    };
   };
 }

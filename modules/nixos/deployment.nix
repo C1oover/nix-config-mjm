@@ -55,6 +55,13 @@ in
       type = types.bool;
       default = true;
     };
+    tests = mkOption {
+      description = ''
+        NixOS tests that should be run before deploying to this host.
+      '';
+      type = types.attrsOf types.package;
+      default = { };
+    };
   };
 
   config = {

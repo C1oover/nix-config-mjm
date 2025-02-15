@@ -5,7 +5,11 @@
   ...
 }:
 let
-  inherit (lib) mkEnableOption mkForce mkIf;
+  inherit (lib)
+    mkEnableOption
+    mkForce
+    mkIf
+    ;
 in
 {
   options.mjm.garage = {
@@ -84,5 +88,11 @@ in
     };
 
     deployment.consulChecks = [ "garage" ];
+    deployment.tests = {
+      inherit (pkgs.nixosTests.garage)
+        basic1_x
+        with-3node-replication1_x
+        ;
+    };
   };
 }

@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.mjm.grafana;
@@ -56,6 +61,10 @@ in
       checks.up = {
         http.path = "/api/health";
       };
+    };
+
+    deployment.tests = {
+      grafana-basic = pkgs.nixosTests.grafana.basic;
     };
   };
 }

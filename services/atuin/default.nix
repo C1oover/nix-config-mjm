@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.mjm.atuin;
@@ -28,6 +33,10 @@ in
       checks.up = {
         http.path = "/";
       };
+    };
+
+    deployment.tests = {
+      inherit (pkgs.nixosTests) atuin;
     };
   };
 }

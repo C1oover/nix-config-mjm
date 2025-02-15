@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 let
   inherit (lib)
     mkEnableOption
@@ -127,6 +132,11 @@ in
           intervalSeconds = 30;
         };
       };
+    };
+
+    deployment.tests = {
+      inherit (pkgs.nixosTests.prometheus) alertmanager config-reload;
+      inherit (pkgs.nixosTests.prometheus-exporters) blackbox pve;
     };
   };
 }

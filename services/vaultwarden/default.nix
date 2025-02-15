@@ -61,5 +61,10 @@ in
         rm /var/lib/bitwarden_rs/db-backup.sqlite3
       '';
     };
+
+    deployment.tests = {
+      vaultwarden = pkgs.nixosTests.vaultwarden.sqlite;
+      vaultwarden-backup = pkgs.nixosTests.vaultwarden.sqlite-backup;
+    };
   };
 }

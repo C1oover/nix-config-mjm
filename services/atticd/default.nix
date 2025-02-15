@@ -1,4 +1,5 @@
 {
+  pkgs,
   config,
   lib,
   ...
@@ -57,6 +58,10 @@ in
       checks.up = {
         http.path = "/";
       };
+    };
+
+    deployment.tests = {
+      inherit (pkgs.nixosTests) atticd;
     };
   };
 }
