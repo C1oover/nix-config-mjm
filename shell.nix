@@ -24,7 +24,7 @@ devshell.mkShell (
         vault-bin
         ;
 
-      inherit (pkgs.scripts) hosts patch;
+      inherit (pkgs.scripts) hosts;
     };
 
     env = [
