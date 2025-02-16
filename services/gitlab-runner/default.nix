@@ -123,6 +123,7 @@ in
       pkgs.git
       # Used to push automatic updates to megamerges
       pkgs.jujutsu
+      pkgs.scripts.update-fork
     ];
 
     # If Docker changes, we don't want it to restart during a deploy, because that will cause the deploy
