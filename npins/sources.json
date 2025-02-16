@@ -251,13 +251,13 @@
     "proxmox": {
       "type": "Git",
       "repository": {
-        "type": "GitHub",
-        "owner": "mjm",
-        "repo": "proxmox-nixos"
+        "type": "GitLab",
+        "repo_path": "mjm/proxmox-nixos",
+        "server": "https://git.midna.dev/"
       },
-      "branch": "mega",
+      "branch": "deploy/main",
       "revision": "5133b2577689ebdb9842154455cd8c280f5bb5aa",
-      "url": "https://github.com/mjm/proxmox-nixos/archive/5133b2577689ebdb9842154455cd8c280f5bb5aa.tar.gz",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fproxmox-nixos/repository/archive.tar.gz?sha=5133b2577689ebdb9842154455cd8c280f5bb5aa",
       "hash": "1vffxakhb1zi5mmkh6yc38dc7wnhbqgzvz05vs6lbnb5790zkcmm"
     },
     "terranix": {
