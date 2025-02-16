@@ -20,6 +20,9 @@ in
         keys.remote_builder_private_key = { };
       };
     };
+    mjm.state.directories = [
+      "/var/lib/private/gitlab-runner"
+    ];
 
     vault-secrets.wantedBy = [ "gitlab-runner.service" ];
     vault-secrets.templates.gitlab-runner-docker-env.text = ''
