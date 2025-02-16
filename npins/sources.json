@@ -73,9 +73,9 @@
         "server": "https://git.midna.dev/"
       },
       "branch": "deploy/master",
-      "revision": "59809d3f7b846e5366a8bfe88f8e41559bf0447a",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnix-darwin/repository/archive.tar.gz?sha=59809d3f7b846e5366a8bfe88f8e41559bf0447a",
-      "hash": "0vm4kirj1d2pmrjhz7a80gzz92hl8m5i33bzq39jp7mrbkvxgx1h"
+      "revision": "a1b0ad3bd75f18c9c6f48fee3f3e27094905df69",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnix-darwin/repository/archive.tar.gz?sha=a1b0ad3bd75f18c9c6f48fee3f3e27094905df69",
+      "hash": "1zj29bl5qbhpar84mpnbhzhqpbwzbpqap1d6wn9kq6jkhfnikgps"
     },
     "devshell": {
       "type": "Git",
@@ -145,9 +145,9 @@
         "repo": "home-manager"
       },
       "branch": "master",
-      "revision": "eb44c1601ed99896525e983bc9b15eb8b4d5879e",
-      "url": "https://github.com/nix-community/home-manager/archive/eb44c1601ed99896525e983bc9b15eb8b4d5879e.tar.gz",
-      "hash": "1nm4b3qp4kq3c0mzd0487p2fhkyq2m32ypnrcysynmhdffsakkjz"
+      "revision": "ec130e700959ee10b63eedbc87758d20264a9588",
+      "url": "https://github.com/nix-community/home-manager/archive/ec130e700959ee10b63eedbc87758d20264a9588.tar.gz",
+      "hash": "02dy9y6kkdkjl5h3wpn99xvl9n6b8641mg5s0h71i64mzdj75w3n"
     },
     "lanzaboote": {
       "type": "GitRelease",
@@ -184,9 +184,9 @@
         "server": "https://git.midna.dev/"
       },
       "branch": "deploy/nixos-unstable",
-      "revision": "e1c60fdd7bbfdfd5ffd749f8a80f3d92e6a66b08",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=e1c60fdd7bbfdfd5ffd749f8a80f3d92e6a66b08",
-      "hash": "1p80iqv84hcmicfiwjq21094r15l35plpw2cv71n202d7bfk0w3h"
+      "revision": "fb7c0e804694a9443a1534964a1e2b892ee9c2d4",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=fb7c0e804694a9443a1534964a1e2b892ee9c2d4",
+      "hash": "0nisviid0xd7m3i4g840ky4dssfxw6k1rq3hipiy0sgnlyqia77y"
     },
     "nixos-small": {
       "type": "Channel",
@@ -220,9 +220,9 @@
         "repo": "NUR"
       },
       "branch": "master",
-      "revision": "9f31a73dce4791d431ac2d51c61dc2c0ac5cfb9f",
-      "url": "https://github.com/nix-community/NUR/archive/9f31a73dce4791d431ac2d51c61dc2c0ac5cfb9f.tar.gz",
-      "hash": "08z1lrh73gc2gi0nviz1b2rjgi292xnvg4xff5hgr7rc6r5rv1z7"
+      "revision": "cda60b577af4611c6ddcc5039c7ac73d0ed27cf6",
+      "url": "https://github.com/nix-community/NUR/archive/cda60b577af4611c6ddcc5039c7ac73d0ed27cf6.tar.gz",
+      "hash": "0d8bciq7amirv35wn8h6cp49a2m82yqlfwici9rwsqc7pgviwsqx"
     },
     "nurl": {
       "type": "Git",
