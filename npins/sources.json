@@ -68,14 +68,14 @@
     "darwin": {
       "type": "Git",
       "repository": {
-        "type": "GitHub",
-        "owner": "LnL7",
-        "repo": "nix-darwin"
+        "type": "GitLab",
+        "repo_path": "mjm/nix-darwin",
+        "server": "https://git.midna.dev/"
       },
-      "branch": "master",
-      "revision": "678b22642abde2ee77ae2218ab41d802f010e5b0",
-      "url": "https://github.com/LnL7/nix-darwin/archive/678b22642abde2ee77ae2218ab41d802f010e5b0.tar.gz",
-      "hash": "1i6nlks68dmwkvwrc1blhq2mf55fzl3kw0v3fsqpxbz9xbhzlnxf"
+      "branch": "deploy/master",
+      "revision": "59809d3f7b846e5366a8bfe88f8e41559bf0447a",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnix-darwin/repository/archive.tar.gz?sha=59809d3f7b846e5366a8bfe88f8e41559bf0447a",
+      "hash": "0vm4kirj1d2pmrjhz7a80gzz92hl8m5i33bzq39jp7mrbkvxgx1h"
     },
     "devshell": {
       "type": "Git",
@@ -177,10 +177,16 @@
       "hash": "1llkfl28cq8q3brwq6xkm7130p72wqcb5dyrddqng1m7x113w2gw"
     },
     "nixos": {
-      "type": "Channel",
-      "name": "nixos-unstable",
-      "url": "https://releases.nixos.org/nixos/unstable/nixos-25.05beta752742.2ff53fe64443/nixexprs.tar.xz",
-      "hash": "1cc05mm0rrbqzlzff87g4sv1wvsljigjrqf1h1lmm5kqvwkdjd5x"
+      "type": "Git",
+      "repository": {
+        "type": "GitLab",
+        "repo_path": "mjm/nixpkgs",
+        "server": "https://git.midna.dev/"
+      },
+      "branch": "deploy/nixos-unstable",
+      "revision": "3d4d73a919c4f00c0add77190845664a1368a325",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=3d4d73a919c4f00c0add77190845664a1368a325",
+      "hash": "1dm7kw4b4g7hb2hn4a719swra59rykich9281ydm62cgi928v56w"
     },
     "nixos-small": {
       "type": "Channel",

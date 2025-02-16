@@ -1,14 +1,4 @@
 {
-  "nixos": {
-    "345207": {
-      "hash": "sha256-R4ngvaR/9pXOK2cz3c+wO5UpT/LDsIVaTrDwhigMSFM="
-    }
-  },
   "nixos-small": {},
-  "darwin": {
-    "1245": {
-      "hash": "sha256-B9iaL9edE4DL44HyIwn+cOcV7sJkJ+uRIv2TNVBSvHk="
-    }
-  },
   "lanzaboote": {}
 }

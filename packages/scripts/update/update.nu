@@ -6,16 +6,41 @@ def latest-nixpkgs [name] {
     get value.0)
 }
 
+def latest-git [url branch] {
+  (git ls-remote $url $branch |
+    split row "\t" |
+    get 0)
+}
+
 def get-pin [name] {
   open npins/sources.json | get pins | get $name
 }
 
 def is-current [name] {
   let pin = get-pin $name
-  let latest = latest-nixpkgs $pin.name
-  let mine = $pin.url
 
-  print $"checking ($pin.name):"
+  let name = match $pin.type {
+    "Channel" => $pin.name,
+    "Git" => {
+      $pin.branch | str replace 'deploy/' ''
+    }
+  }
+  print $"checking ($name):"
+
+  let latest = match $pin.type {
+    "Channel" => {
+      latest-nixpkgs $pin.name
+    },
+    "Git" => {
+      let url = $"($pin.repository.server)($pin.repository.repo_path).git"
+      latest-git $url $pin.branch
+    }
+  }
+  let mine = match $pin.type {
+    "Channel" => $pin.url,
+    "Git" => $pin.revision,
+  }
+
   print $"latest = ($latest)"
   print $"mine   = ($mine)"
 
