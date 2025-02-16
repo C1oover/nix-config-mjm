@@ -5,7 +5,7 @@
 }:
 
 let
-  sources = import ../../../npins/patched.nix;
+  sources = import ../../../npins;
   nurl = (import sources.nurl).packages.${stdenvNoCC.hostPlatform.system}.default;
 in
 

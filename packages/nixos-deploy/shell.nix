@@ -1,5 +1,5 @@
 {
-  sources ? import ../../npins/patched.nix,
+  sources ? import ../../npins,
   pkgs ? import sources.nixos-small { overlays = [ (import ../../overlay.nix) ]; },
   devshell ? import sources.devshell { nixpkgs = pkgs; },
 }:

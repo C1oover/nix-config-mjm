@@ -1,5 +1,5 @@
 {
-  sources ? import ../../npins/patched.nix,
+  sources ? import ../../npins,
   pkgs ? import sources.nixos-small { },
 }:
 

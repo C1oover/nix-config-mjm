@@ -68,7 +68,7 @@ let
   };
 
   evalPlan = import ./lib/deploy.nix;
-  sources = import ./npins/patched.nix;
+  sources = import ./npins;
 
   localModulesPath = toString ./modules;
   specialArgs = {

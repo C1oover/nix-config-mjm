@@ -1,5 +1,5 @@
 let
-  inputs = import ./npins/patched.nix;
+  inputs = import ./npins;
   pkgs = import inputs.nixos {
     config.allowUnfree = true;
     overlays = [ (import ./overlay.nix) ];

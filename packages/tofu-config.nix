@@ -11,7 +11,7 @@ let
       { _module.args = { inherit pkgs nodes; }; }
       ../modules/tofu
     ];
-    specialArgs.inputs = import ../npins/patched.nix;
+    specialArgs.inputs = import ../npins;
   };
 in
 config.config.tofuConfig.json
