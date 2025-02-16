@@ -262,7 +262,8 @@ func (h *Host) activate(ctx context.Context, goal string) error {
 	h.log.InfoContext(ctx, "activating system", "goal", goal)
 
 	if h.IsDarwin() {
-		if _, err := h.runCommand(ctx, path.Join(systemProfile, "sw/bin/darwin-rebuild"), "activate"); err != nil {
+		// TODO make this able to go through h.runCommand without swallowing stdout
+		if err := h.cfg.Runner.Execute(ctx, "sudo", path.Join(systemProfile, "sw/bin/darwin-rebuild"), "activate"); err != nil {
 			return fmt.Errorf("running darwin-rebuild activate: %w", err)
 		}
 	} else {

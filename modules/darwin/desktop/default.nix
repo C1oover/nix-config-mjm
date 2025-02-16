@@ -13,6 +13,7 @@ in
   config = mkIf cfg.enable {
     homebrew = {
       enable = true;
+      user = config.mjm.username;
       casks = [
         "1password"
         "alfred"

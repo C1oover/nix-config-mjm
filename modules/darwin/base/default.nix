@@ -5,7 +5,6 @@
 
     ../../common/base
 
-    ./dock.nix
     ./keyboard.nix
     ./user.nix
   ];
@@ -16,6 +15,7 @@
 
   time.timeZone = "America/Denver";
 
+  environment.darwinConfig = null;
   environment.etc."set-environment".source = config.system.build.setEnvironment;
 
   environment.shells = [ config.programs.fish.package ];
@@ -25,6 +25,4 @@
   environment.etc."sudoers.d/admin-no-passwd".text = ''
     %admin ALL = (ALL) NOPASSWD: ALL
   '';
-
-  system.defaults.NSGlobalDomain.AppleFontSmoothing = 0;
 }
