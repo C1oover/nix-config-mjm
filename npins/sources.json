@@ -128,14 +128,14 @@
     "helix": {
       "type": "Git",
       "repository": {
-        "type": "GitHub",
-        "owner": "mjm",
-        "repo": "helix"
+        "type": "GitLab",
+        "repo_path": "mjm/helix",
+        "server": "https://git.midna.dev/"
       },
-      "branch": "mega",
-      "revision": "9007f179f8d5fef3653d3f6acd7b7681290738a4",
-      "url": "https://github.com/mjm/helix/archive/9007f179f8d5fef3653d3f6acd7b7681290738a4.tar.gz",
-      "hash": "1y2ksgzrc3b6chf7f2jj3fzfsz01ql1f1jy2yg4658747lbmjsr0"
+      "branch": "deploy/master",
+      "revision": "71f7b8dd8ba3e5eca3f4c5720719897f8fb6deb4",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fhelix/repository/archive.tar.gz?sha=71f7b8dd8ba3e5eca3f4c5720719897f8fb6deb4",
+      "hash": "1khaqvr53fcf8a7mmyzva9kkslr94a3a1jcxa316n147vpfh5kf8"
     },
     "home-manager": {
       "type": "Git",
