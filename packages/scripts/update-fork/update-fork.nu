@@ -1,7 +1,9 @@
 
 def main [--upstream: string] {
-  print $'(ansi gb)initializing jj repo(ansi reset)'
-  jj git init --git-repo .
+  if (not (".jj" | path exists)) {
+    print $'(ansi gb)initializing jj repo(ansi reset)'
+    jj git init --git-repo .
+  }
 
   print $'(ansi gb)setting jj repo config(ansi reset)'
   jj config set --repo git.subprocess true
@@ -18,7 +20,9 @@ def main [--upstream: string] {
 
   print $'(ansi gb)tracking ($env.CI_COMMIT_BRANCH) branch(ansi reset)'
   jj bookmark track $'($env.CI_COMMIT_BRANCH)@origin'
-  jj bookmark set $env.CI_COMMIT_BRANCH -r $'($env.CI_COMMIT_BRANCH)@origin'
+
+  print $'(ansi gb)fetching origin changes from ($env.CI_COMMIT_BRANCH) branch(ansi reset)'
+  jj git fetch --remote origin --branch $env.CI_COMMIT_BRANCH
 
   let upstream_branch = $env.CI_COMMIT_BRANCH | str replace 'deploy/' ''
   print $'(ansi gb)fetching upstream changes from ($upstream_branch)(ansi reset)'
@@ -28,5 +32,5 @@ def main [--upstream: string] {
   jj rebase -s $env.CI_COMMIT_BRANCH -d $'($upstream_branch)@upstream' -d $'all:($env.CI_COMMIT_BRANCH)- ~ ::($upstream_branch)@upstream'
 
   print $'(ansi gb)pushing ($env.CI_COMMIT_BRANCH) branch(ansi reset)'
-  jj git push --branch $env.CI_COMMIT_BRANCH
+  jj git push --bookmark $env.CI_COMMIT_BRANCH
 }
