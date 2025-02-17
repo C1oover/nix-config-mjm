@@ -73,9 +73,9 @@
         "server": "https://git.midna.dev/"
       },
       "branch": "deploy/master",
-      "revision": "3cb7fc4218848b8de6cf19b2149356fb96db8957",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnix-darwin/repository/archive.tar.gz?sha=3cb7fc4218848b8de6cf19b2149356fb96db8957",
-      "hash": "1w5nqgcnvlhwhgpj24ngwjhciscms4chga29x5kk9nadm383fjy9"
+      "revision": "33dd0a3950a046f0d0c5154f2e1f4c013bdf4cd7",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnix-darwin/repository/archive.tar.gz?sha=33dd0a3950a046f0d0c5154f2e1f4c013bdf4cd7",
+      "hash": "0g4kawgaz5lq9imkn236jwqc1pnqh3d9x27hqgq0v6nziqycx4sv"
     },
     "devshell": {
       "type": "Git",
@@ -133,9 +133,9 @@
         "server": "https://git.midna.dev/"
       },
       "branch": "deploy/master",
-      "revision": "71f7b8dd8ba3e5eca3f4c5720719897f8fb6deb4",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fhelix/repository/archive.tar.gz?sha=71f7b8dd8ba3e5eca3f4c5720719897f8fb6deb4",
-      "hash": "1khaqvr53fcf8a7mmyzva9kkslr94a3a1jcxa316n147vpfh5kf8"
+      "revision": "5a8e277e548039e8cd197aed8a4fb7603cd8ca5e",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fhelix/repository/archive.tar.gz?sha=5a8e277e548039e8cd197aed8a4fb7603cd8ca5e",
+      "hash": "1px7kbl27621hl0yhf3m1x5qwwggavfiwpyiffccyr778zwlfbsq"
     },
     "home-manager": {
       "type": "Git",
@@ -184,9 +184,9 @@
         "server": "https://git.midna.dev/"
       },
       "branch": "deploy/nixos-unstable",
-      "revision": "ec0683d4d4976e2f416544dc462135541ad16349",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=ec0683d4d4976e2f416544dc462135541ad16349",
-      "hash": "1x77dv9jflf8axpzh81mk2fkxs984vi56ly56cw6v38r2xfk4bpl"
+      "revision": "e0d12a135671f3aca267fd46dca0440561794f9d",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=e0d12a135671f3aca267fd46dca0440561794f9d",
+      "hash": "10hcgzafwb1rzhjbnb04gaxll3l9i8phcai5bakp55lj21f1g608"
     },
     "nixos-small": {
       "type": "Channel",
@@ -220,9 +220,9 @@
         "repo": "NUR"
       },
       "branch": "master",
-      "revision": "b0c441831a4928503f288334e032719acf8bb055",
-      "url": "https://github.com/nix-community/NUR/archive/b0c441831a4928503f288334e032719acf8bb055.tar.gz",
-      "hash": "01z3wr3gh9gx2v7ghpbpcwng7cdrpv3d2lnm3c9sjjqcxhgzbx2d"
+      "revision": "ce08c4fc6e533f485797904ecc179d6a07302719",
+      "url": "https://github.com/nix-community/NUR/archive/ce08c4fc6e533f485797904ecc179d6a07302719.tar.gz",
+      "hash": "14dl3hqiqffscl2krmvgr8bb23j22z0xgl600rib2msbf7k4wihx"
     },
     "preservation": {
       "type": "Git",
@@ -244,9 +244,9 @@
         "server": "https://git.midna.dev/"
       },
       "branch": "deploy/main",
-      "revision": "40a89bb216a607eae0c63285ff8af65d59a5a033",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fproxmox-nixos/repository/archive.tar.gz?sha=40a89bb216a607eae0c63285ff8af65d59a5a033",
-      "hash": "01lxxiidj4clmncqly2vy0r450k8nj1pbclvzar2nlkv9jisg069"
+      "revision": "1cd7cf30de5c2530c977122ee203cb5ed2ea86cb",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fproxmox-nixos/repository/archive.tar.gz?sha=1cd7cf30de5c2530c977122ee203cb5ed2ea86cb",
+      "hash": "04f6r6zkzb5h978zr9kihiygx5fz3z8n6897a4zk88xx2d9w6l89"
     },
     "terranix": {
       "type": "GitRelease",
