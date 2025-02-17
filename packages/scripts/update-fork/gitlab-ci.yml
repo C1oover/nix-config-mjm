@@ -1,5 +1,6 @@
 variables:
   GIT_CHECKOUT: "false"
+  GIT_DEPTH: "0"
 stages: [update]
 update megamerge:
   tags: [nix-shell]
