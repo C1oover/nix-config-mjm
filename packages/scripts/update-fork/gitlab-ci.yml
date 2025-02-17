@@ -1,0 +1,10 @@
+variables:
+  GIT_CHECKOUT: "false"
+stages: [update]
+update megamerge:
+  tags: [nix-shell]
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+  stage: update
+  resource_group: megamerge
+  script: update-fork --upstream $UPSTREAM
