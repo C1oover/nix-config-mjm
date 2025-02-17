@@ -121,9 +121,9 @@
         "repo": "nixos-hardware"
       },
       "branch": "master",
-      "revision": "2eccff41bab80839b1d25b303b53d339fbb07087",
-      "url": "https://github.com/NixOS/nixos-hardware/archive/2eccff41bab80839b1d25b303b53d339fbb07087.tar.gz",
-      "hash": "18mvkhlzlws28brxmjw2igwmxsrh8v3plixywlbrg6hpiy1na977"
+      "revision": "3e2ea8a49d4d76276b0f4e2041df8ca5c0771371",
+      "url": "https://github.com/NixOS/nixos-hardware/archive/3e2ea8a49d4d76276b0f4e2041df8ca5c0771371.tar.gz",
+      "hash": "1zkwzz3gycadad5yvzglpcll4a66nl5gnzz9n6l4ch6v6sdaja0v"
     },
     "helix": {
       "type": "Git",
@@ -145,9 +145,9 @@
         "repo": "home-manager"
       },
       "branch": "master",
-      "revision": "662fa98bf488daa82ce8dc2bc443872952065ab9",
-      "url": "https://github.com/nix-community/home-manager/archive/662fa98bf488daa82ce8dc2bc443872952065ab9.tar.gz",
-      "hash": "08sdh9ghqzj1iydpjckdzyjfn32cavbj3nvwp9x15fmp8l9p3i5g"
+      "revision": "9d0d48f4c3d2fb1a8c8607da143bb567a741d914",
+      "url": "https://github.com/nix-community/home-manager/archive/9d0d48f4c3d2fb1a8c8607da143bb567a741d914.tar.gz",
+      "hash": "1rwp5iiv0zsg5q78dwhprzm8xyzbbpk6c821n7w2z0d2jfxg96wi"
     },
     "lanzaboote": {
       "type": "GitRelease",
@@ -184,15 +184,15 @@
         "server": "https://git.midna.dev/"
       },
       "branch": "deploy/nixos-unstable",
-      "revision": "8d392383641076f0e46970e978d5051510ca2730",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=8d392383641076f0e46970e978d5051510ca2730",
-      "hash": "0m09gv32fps46mfwvq68wjikyyxvn2wi05cziz6apgwk0hs0anrv"
+      "revision": "fdb9fdafa664bf5e7075b9284aa08edf46eab9bb",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=fdb9fdafa664bf5e7075b9284aa08edf46eab9bb",
+      "hash": "0z4fb77h38vrii6f37z7cqgndaigszk54a1vgq386yikl10sckhy"
     },
     "nixos-small": {
       "type": "Channel",
       "name": "nixos-unstable-small",
-      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-25.05beta754461.d74a2335ac9c/nixexprs.tar.xz",
-      "hash": "1w47vdns563m0yj1x4a11zsxfzr7ahg4p33xcs4ipfywh6vdh0n3"
+      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-25.05beta754733.1ead14e49dfa/nixexprs.tar.xz",
+      "hash": "0ycqq6d8b3wvhpmv0sdbc571jjiscrp6ssi46qn527vsyfl9pxgq"
     },
     "nixpkgs": {
       "type": "Channel",
@@ -220,9 +220,9 @@
         "repo": "NUR"
       },
       "branch": "master",
-      "revision": "9eb607bbf306793ffa93e298e5a40cc5f6c9562a",
-      "url": "https://github.com/nix-community/NUR/archive/9eb607bbf306793ffa93e298e5a40cc5f6c9562a.tar.gz",
-      "hash": "0n8axaip20y14rgfqs1p6zw5hzznz3njs22kys81nikmzpnhw64y"
+      "revision": "781ae51ede60bf3207d6a78084f76037fe6bfbe2",
+      "url": "https://github.com/nix-community/NUR/archive/781ae51ede60bf3207d6a78084f76037fe6bfbe2.tar.gz",
+      "hash": "0ms4vdvn44k3207g4schw9k54b8gkrn3bdlb7b0424xplaik8csy"
     },
     "preservation": {
       "type": "Git",
