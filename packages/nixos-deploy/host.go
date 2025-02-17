@@ -137,7 +137,7 @@ func (h *Host) CheckRebootNeeded(ctx context.Context) error {
 
 	h.log.InfoContext(ctx, "checking if reboot is needed")
 
-	output, err := h.runCommand(ctx, path.Join(h.OutPath, "bin/nvd-json"), "reboot-check", h.OutPath)
+	output, err := h.ExecuteOutput(ctx, path.Join(h.OutPath, "bin/nvd-json"), "reboot-check", h.OutPath)
 	if err != nil {
 		return fmt.Errorf("running nvd-json: %w", err)
 	}
@@ -156,7 +156,7 @@ func (h *Host) CheckRebootNeeded(ctx context.Context) error {
 func (h *Host) Diff(ctx context.Context) ([]byte, error) {
 	h.log.InfoContext(ctx, "diffing against current system", "out_path", h.OutPath)
 
-	output, err := h.runCommand(ctx, path.Join(h.OutPath, "bin/nvd-json"), "diff", "/run/current-system", h.OutPath)
+	output, err := h.ExecuteOutput(ctx, path.Join(h.OutPath, "bin/nvd-json"), "diff", "/run/current-system", h.OutPath)
 	if err != nil {
 		return nil, fmt.Errorf("running nvd-json: %w", err)
 	}
@@ -247,7 +247,7 @@ func (h *Host) ApplyLocal(ctx context.Context) error {
 
 func (h *Host) apply(ctx context.Context, goal string) error {
 	h.log.InfoContext(ctx, "setting system profile", "out_path", h.OutPath)
-	if _, err := h.runCommand(ctx, "sudo", "nix-env", "--profile", systemProfile, "--set", h.OutPath); err != nil {
+	if err := h.Execute(ctx, "sudo", "nix-env", "--profile", systemProfile, "--set", h.OutPath); err != nil {
 		return fmt.Errorf("setting system profile: %w", err)
 	}
 
@@ -262,12 +262,11 @@ func (h *Host) activate(ctx context.Context, goal string) error {
 	h.log.InfoContext(ctx, "activating system", "goal", goal)
 
 	if h.IsDarwin() {
-		// TODO make this able to go through h.runCommand without swallowing stdout
-		if err := h.cfg.Runner.Execute(ctx, "sudo", path.Join(systemProfile, "sw/bin/darwin-rebuild"), "activate"); err != nil {
+		if err := h.Execute(ctx, "sudo", path.Join(systemProfile, "sw/bin/darwin-rebuild"), "activate"); err != nil {
 			return fmt.Errorf("running darwin-rebuild activate: %w", err)
 		}
 	} else {
-		if _, err := h.runCommand(ctx, "sudo", path.Join(systemProfile, "bin/switch-to-configuration"), goal); err != nil {
+		if err := h.Execute(ctx, "sudo", path.Join(systemProfile, "bin/switch-to-configuration"), goal); err != nil {
 			return fmt.Errorf("running switch-to-configuration: %w", err)
 		}
 	}
@@ -344,8 +343,7 @@ func (h *Host) Reboot(ctx context.Context) error {
 	}
 	h.log.DebugContext(ctx, "got original boot id", "boot_id", oldID)
 
-	_, err = h.runCommand(ctx, "sudo", "reboot")
-	if err != nil && !errors.Is(err, &ssh.ExitMissingError{}) {
+	if err := h.Execute(ctx, "sudo", "reboot"); err != nil && !errors.Is(err, &ssh.ExitMissingError{}) {
 		return fmt.Errorf("initiating reboot: %w", err)
 	}
 
@@ -373,7 +371,7 @@ func (h *Host) getBootID(ctx context.Context) (string, error) {
 	ctx, cancel := context.WithTimeoutCause(ctx, 10*time.Second, fmt.Errorf("timeout checking boot ID"))
 	defer cancel()
 
-	output, err := h.runCommand(ctx, "cat", "/proc/sys/kernel/random/boot_id")
+	output, err := h.ExecuteOutput(ctx, "cat", "/proc/sys/kernel/random/boot_id")
 	if err != nil {
 		return "", fmt.Errorf("getting boot id: %w", err)
 	}
@@ -381,27 +379,42 @@ func (h *Host) getBootID(ctx context.Context) (string, error) {
 	return strings.TrimSpace(string(output)), nil
 }
 
-func (h *Host) runCommand(ctx context.Context, name string, args ...string) ([]byte, error) {
-	r := h.cfg.Runner
-	if h.IsRemote() {
-		r = h.remoteRunner
-		if r == nil {
-			h.log.DebugContext(ctx, "creating new remote runner")
-
-			var err error
-			if r, err = h.cfg.RemoteRunner(*h.DeployConfig.TargetHost, *h.DeployConfig.TargetUser); err != nil {
-				return nil, fmt.Errorf("creating remote runner for %s: %w", h.Name, err)
-			}
-			h.remoteRunner = r
-		} else {
-			h.log.DebugContext(ctx, "reusing existing remote runner")
-		}
-	}
-
-	output, err := r.ExecuteOutput(ctx, name, args...)
+func (h *Host) Execute(ctx context.Context, name string, args ...string) error {
+	runner, err := h.getRunner(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("running command on %s: %w", h.Name, err)
+		return err
 	}
 
-	return output, nil
+	return runner.Execute(ctx, name, args...)
+}
+
+func (h *Host) ExecuteOutput(ctx context.Context, name string, args ...string) ([]byte, error) {
+	runner, err := h.getRunner(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return runner.ExecuteOutput(ctx, name, args...)
+}
+
+var _ cmd.Runner = (*Host)(nil)
+
+func (h *Host) getRunner(ctx context.Context) (cmd.Runner, error) {
+	if h.IsLocal() {
+		return h.cfg.Runner, nil
+	}
+
+	if h.remoteRunner != nil {
+		h.log.DebugContext(ctx, "reusing existing remote runner")
+		return h.remoteRunner, nil
+	}
+
+	h.log.DebugContext(ctx, "creating new remote runner")
+
+	runner, err := h.cfg.RemoteRunner(*h.DeployConfig.TargetHost, *h.DeployConfig.TargetUser)
+	if err != nil {
+		return nil, fmt.Errorf("creating remote runner for %s: %w", h.Name, err)
+	}
+	h.remoteRunner = runner
+	return runner, nil
 }
