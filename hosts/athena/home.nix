@@ -17,9 +17,9 @@
       app = "Firefox";
       package = config.programs.firefox.package;
     }
-    { app = "Element"; }
-    { app = "Signal"; }
-    { app = "Mail"; }
+    "Element"
+    "Signal"
+    "Mail"
     {
       app = "zoom.us";
       package = pkgs.zoom-us;
@@ -28,15 +28,15 @@
       app = "Slack";
       package = pkgs.slack;
     }
-    { app = "Fantastical"; }
-    { app = "1Password"; }
-    { app = "Bitwarden"; }
-    { app = "Slab"; }
-    { app = "Ghostty"; }
-    { app = "Dash"; }
-    { app = "Postico 2"; }
-    { app = "Teleport Connect"; }
-    { app = "Bruno"; }
+    "Fantastical"
+    "1Password"
+    "Bitwarden"
+    "Slab"
+    "Ghostty"
+    "Dash"
+    "Postico 2"
+    "Teleport Connect"
+    "Bruno"
     {
       path = "${config.home.homeDirectory}/Downloads/";
       section = "others";

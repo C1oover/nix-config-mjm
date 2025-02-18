@@ -7,7 +7,7 @@
   mjm.terminal.enable = true;
 
   home.dock.entries = [
-    { app = "Messages"; }
-    { app = "Utilities/Terminal"; }
+    "Messages"
+    "Utilities/Terminal"
   ];
 }
