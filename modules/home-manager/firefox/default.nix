@@ -10,7 +10,6 @@ let
     mkEnableOption
     mkIf
     mkPackageOption
-    optionalString
     ;
   cfg = config.mjm.firefox;
 
@@ -86,7 +85,7 @@ in
           "widget.use-xdg-desktop-portal.open-uri" = 1;
           "widget.use-xdg-desktop-portal.settings" = 1;
         };
-        extensions =
+        extensions.packages =
           with pkgs.nur.repos;
           builtins.attrValues {
             inherit (rycee.firefox-addons)
