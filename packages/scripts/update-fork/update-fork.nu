@@ -1,5 +1,20 @@
 
+def jj-transaction [block: block] {
+  let current_op = jj op log --no-graph -T id --limit 1
+
+  try {
+    do $block
+  } catch {|e|
+    print $'(ansi rb)restoring jj repo state(ansi reset)'
+    jj op restore --what repo $current_op
+    error make $e.raw
+  }
+}
+
 def main [--upstream: string] {
+  let branch = $env.CI_COMMIT_BRANCH
+  let upstream_branch = $branch | str replace 'deploy/' ''
+
   if (not (".jj" | path exists)) {
     print $'(ansi gb)initializing jj repo(ansi reset)'
     jj git init --git-repo .
@@ -18,19 +33,20 @@ def main [--upstream: string] {
     jj git remote add upstream $upstream
   }
 
-  print $'(ansi gb)tracking ($env.CI_COMMIT_BRANCH) branch(ansi reset)'
-  jj bookmark track $'($env.CI_COMMIT_BRANCH)@origin'
+  print $'(ansi gb)tracking ($branch) branch(ansi reset)'
+  jj bookmark track $'($branch)@origin'
 
-  print $'(ansi gb)fetching origin changes from ($env.CI_COMMIT_BRANCH) branch(ansi reset)'
-  jj git fetch --remote origin --branch $env.CI_COMMIT_BRANCH
+  print $'(ansi gb)fetching origin changes from ($branch) branch(ansi reset)'
+  jj git fetch --remote origin --branch $branch
 
-  let upstream_branch = $env.CI_COMMIT_BRANCH | str replace 'deploy/' ''
   print $'(ansi gb)fetching upstream changes from ($upstream_branch)(ansi reset)'
   jj git fetch --remote upstream --branch $upstream_branch
 
-  print $'(ansi gb)rebasing ($env.CI_COMMIT_BRANCH) branch(ansi reset)'
-  jj rebase -s $env.CI_COMMIT_BRANCH -d $'($upstream_branch)@upstream' -d $'all:($env.CI_COMMIT_BRANCH)- ~ ::($upstream_branch)@upstream'
+  jj-transaction {
+    print $'(ansi gb)rebasing ($branch) branch(ansi reset)'
+    jj rebase -s $branch -d $'($upstream_branch)@upstream' -d $'all:($branch)- ~ ::($upstream_branch)@upstream'
 
-  print $'(ansi gb)pushing ($env.CI_COMMIT_BRANCH) branch(ansi reset)'
-  jj git push --bookmark $env.CI_COMMIT_BRANCH
+    print $'(ansi gb)pushing ($branch) branch(ansi reset)'
+    jj git push --bookmark $branch
+  }
 }
