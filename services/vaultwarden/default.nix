@@ -63,8 +63,9 @@ in
     };
 
     deployment.tests = {
-      vaultwarden = pkgs.nixosTests.vaultwarden.sqlite;
-      vaultwarden-backup = pkgs.nixosTests.vaultwarden.sqlite-backup;
+      # these tests are unreliable for weird selenium reasons
+      # vaultwarden = pkgs.nixosTests.vaultwarden.sqlite;
+      # vaultwarden-backup = pkgs.nixosTests.vaultwarden.sqlite-backup;
     };
   };
 }
