@@ -1,5 +1,5 @@
 
-def jj-transaction [block: block] {
+def jj-transaction [block: closure] {
   let current_op = jj op log --no-graph -T id --limit 1
 
   try {
