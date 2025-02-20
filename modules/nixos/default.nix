@@ -11,6 +11,7 @@
     ./desktop
     ./ingress.nix
     ./linkding.nix
+    ./proxmox-vm.nix
     ./raspberrypi
     ./secureboot.nix
     ./server

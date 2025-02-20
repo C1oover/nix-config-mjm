@@ -1,8 +1,5 @@
-{ localModulesPath, ... }:
 {
   imports = [
-    "${localModulesPath}/nixos/profiles/proxmox-vm.nix"
-
     ./secrets.nix
   ];
 
@@ -38,6 +35,7 @@
 
   mjm.consul.enable = true;
   mjm.gitlab.enable = true;
+  mjm.proxmox-vm.enable = true;
   mjm.server.enable = true;
   mjm.state = {
     enablePreservation = true;
