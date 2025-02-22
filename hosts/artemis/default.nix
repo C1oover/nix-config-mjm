@@ -61,6 +61,7 @@
     managementInterface = "enp1s0";
     bridgeInterface = "enp2s0";
   };
+  mjm.remote-builder.enable = true;
   mjm.server.enable = true;
 
   system.stateVersion = "25.05";

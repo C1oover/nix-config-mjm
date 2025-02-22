@@ -25,6 +25,7 @@
     ./postgresql
     ./prometheus
     ./proxmox
+    ./remote-builder
     ./tailscale
     ./vault
     ./vaultwarden

@@ -23,6 +23,7 @@
     mode = "server";
   };
   mjm.raspberrypi.enable = true;
+  mjm.remote-builder.enable = true;
   mjm.server.enable = true;
   mjm.state = {
     enablePreservation = true;
@@ -39,12 +40,6 @@
       }
     ];
   };
-
-  # TODO consider if this should be in services/
-  # remote builder key
-  users.users.matt.openssh.authorizedKeys.keys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHWS7+ecqC11q28WuizDlFuiEYEro1gv2ZtN4fs4hayg"
-  ];
 
   system.stateVersion = "21.03";
 }

@@ -21,7 +21,11 @@ in
       };
     };
     mjm.state.directories = [
-      "/var/lib/private/gitlab-runner"
+      {
+        directory = "/var/lib/private/gitlab-runner";
+        user = "nobody";
+        group = "nogroup";
+      }
     ];
 
     vault-secrets.wantedBy = [ "gitlab-runner.service" ];
@@ -137,16 +141,22 @@ in
     ];
 
     programs.ssh.extraConfig = mkAfter ''
-      Host arges.home.mattmoriarity.com
+      Host arges.home.mattmoriarity.com artemis.home.mattmoriarity.com hades.home.mattmoriarity.com
         IdentitiesOnly yes
         IdentityFile ${config.mjm.services.gitlab-runner.vault.keys.remote_builder_private_key.path}
-        User matt
     '';
+
+    # force nixos tests to use a remote builder
+    nix.settings.system-features = [
+      "benchmark"
+      "big-parallel"
+    ];
 
     nix.distributedBuilds = true;
     nix.buildMachines = [
       {
         hostName = "arges.home.mattmoriarity.com";
+        sshUser = "matt";
         system = "aarch64-linux";
         protocol = "ssh-ng";
         maxJobs = 4;
@@ -159,6 +169,30 @@ in
         ];
         mandatoryFeatures = [ ];
         publicHostKey = "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSURTM3BQTkVhSEEreWNEYTdrVHlOU3hzQVlCRlpJN1lNd2VEcnJOMEdnK2wgcm9vdEBuaXhvcwo=";
+      }
+      {
+        hostName = "hades.home.mattmoriarity.com";
+        system = "x86_64-linux";
+        protocol = "ssh-ng";
+        maxJobs = 1;
+        speedFactor = 1;
+        supportedFeatures = [
+          "kvm"
+          "nixos-test"
+        ];
+        mandatoryFeatures = [ "nixos-test" ];
+      }
+      {
+        hostName = "artemis.home.mattmoriarity.com";
+        system = "x86_64-linux";
+        protocol = "ssh-ng";
+        maxJobs = 1;
+        speedFactor = 1;
+        supportedFeatures = [
+          "kvm"
+          "nixos-test"
+        ];
+        mandatoryFeatures = [ "nixos-test" ];
       }
     ];
   };
