@@ -14,6 +14,7 @@
     ./ingress
     ./ipv4-proxy
     ./launchpad
+    ./libvirtd
     ./linkding
     ./matrix-server
     ./media-server

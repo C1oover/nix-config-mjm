@@ -1,0 +1,31 @@
+{ config, lib, ... }:
+let
+  inherit (lib) mkEnableOption mkIf;
+  cfg = config.mjm.libvirtd;
+in
+{
+  options.mjm.libvirtd = {
+    enable = mkEnableOption "libvirtd";
+  };
+
+  config = mkIf cfg.enable {
+    # really don't want an entire VM host rebooting automatically
+    deployment.rebootAutomatically = false;
+
+    virtualisation.libvirtd = {
+      enable = true;
+      qemu = {
+        swtpm.enable = true;
+        ovmf.enable = true;
+      };
+    };
+
+    # TODO do network device config here instead of relying on it from proxmox module.
+
+    users.users.${config.mjm.username}.extraGroups = [ "libvirtd" ];
+
+    # TODO parameterize if I ever have uneven hosts
+    boot.kernelParams = [ "zfs.zfs_arc_max=7516192768" ];
+    hardware.ksm.enable = true;
+  };
+}

@@ -52,6 +52,7 @@
   boot.loader.systemd-boot.enable = true;
 
   mjm.consul.enable = true;
+  mjm.libvirtd.enable = true;
   mjm.nut = {
     enable = true;
     connectedUPSName = "smart500";
