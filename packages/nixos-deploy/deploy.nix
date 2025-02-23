@@ -1,14 +1,16 @@
 let
-  sources = import ../npins;
+  sources = import ../../npins;
   lib = import "${sources.nixos-small}/lib";
 
   inherit (lib)
     attrNames
+    attrValues
     elem
     filterAttrs
     findFirst
     groupBy
     mapAttrs
+    mergeAttrsList
     pipe
     recurseIntoAttrs
     ;
@@ -118,7 +120,9 @@ let
         recurseIntoAttrs
       ];
       tests = pipe nodes [
-        (mapAttrs (_: v: recurseIntoAttrs v.config.deployment.tests))
+        attrValues
+        (map (v: v.config.deployment.tests))
+        mergeAttrsList
         recurseIntoAttrs
       ];
       hosts = nodes // darwinNodes;

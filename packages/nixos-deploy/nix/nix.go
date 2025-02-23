@@ -8,7 +8,7 @@ import (
 // Nix is an interface for performing operations using nix.
 type Nix interface {
 	// Realise builds a derivation from a .drv file.
-	Realise(ctx context.Context, drvPath string, useNom bool) error
+	Realise(ctx context.Context, drvPaths []string, useNom bool) error
 	// EvalJobs evaluates an attribute set of derivations using nix-eval-jobs for
 	// parallelization.
 	EvalJobs(ctx context.Context, opts EvalJobsOptions) ([]EvalJobResult, error)

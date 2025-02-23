@@ -6,6 +6,7 @@ import (
 	"log/slog"
 	"slices"
 
+	"git.midna.dev/mjm/nix-config/packages/nixos-deploy/nix"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -13,6 +14,8 @@ import (
 type DeployPlan struct {
 	Phases []DeployPhase
 	Hosts  []*Host
+	Tests  []nix.EvalJobResult
+	cfg    Config
 }
 
 type planConfig struct {
@@ -49,6 +52,32 @@ func (p *DeployPlan) EachHost(ctx context.Context, f func(context.Context, *Host
 		})
 	}
 	return g.Wait()
+}
+
+func (p *DeployPlan) Build(ctx context.Context, useNom bool) error {
+	var drvPaths []string
+	for _, h := range p.Hosts {
+		drvPaths = append(drvPaths, h.DrvPath)
+	}
+
+	if err := p.cfg.Nix.Realise(ctx, drvPaths, useNom); err != nil {
+		return fmt.Errorf("building plan hosts: %w", err)
+	}
+
+	return nil
+}
+
+func (p *DeployPlan) Test(ctx context.Context, useNom bool) error {
+	var drvPaths []string
+	for _, h := range p.Tests {
+		drvPaths = append(drvPaths, h.DrvPath)
+	}
+
+	if err := p.cfg.Nix.Realise(ctx, drvPaths, useNom); err != nil {
+		return fmt.Errorf("running plan tests: %w", err)
+	}
+
+	return nil
 }
 
 // Deploy will deploy each phase in the plan in sequence. Any hosts that are in

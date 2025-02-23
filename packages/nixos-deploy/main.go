@@ -21,6 +21,7 @@ import (
 var (
 	plansFile   = flag.String("plans", "plans.nix", "File to evaluate for deploy plans")
 	concurrency = flag.Int("concurrency", runtime.NumCPU(), "Number of nodes to evaluate/build concurrently")
+	nom         = flag.Bool("nom", os.Getenv("CI") == "", "Whether to run builds through nix-output-monitor")
 
 	logLevel slog.Level
 )
@@ -78,13 +79,15 @@ func handleDeploy(ctx context.Context) error {
 		return h.IsLocal()
 	})
 
+	if err := plan.Build(ctx, *nom); err != nil {
+		return fmt.Errorf("building all hosts: %w", err)
+	}
+
+	if err := plan.Test(ctx, *nom); err != nil {
+		return fmt.Errorf("running all tests: %w", err)
+	}
+
 	if err := plan.EachHost(ctx, func(ctx context.Context, h *Host) error {
-		if err := h.Build(ctx, false); err != nil {
-			return fmt.Errorf("building node %s: %w", h.Name, err)
-		}
-		if err := h.Test(ctx, false); err != nil {
-			return fmt.Errorf("testing node %s: %w", h.Name, err)
-		}
 		if err := h.Push(ctx); err != nil {
 			return fmt.Errorf("pushing node %s: %w", h.Name, err)
 		}
@@ -130,13 +133,15 @@ func handleDiff(ctx context.Context) error {
 	defer os.RemoveAll(diffsDir)
 	slog.DebugContext(ctx, "created temp dir for diffs", "path", diffsDir)
 
+	if err := plan.Build(ctx, *nom); err != nil {
+		return fmt.Errorf("building all hosts: %w", err)
+	}
+
+	if err := plan.Test(ctx, *nom); err != nil {
+		return fmt.Errorf("running all tests: %w", err)
+	}
+
 	if err := plan.EachHost(ctx, func(ctx context.Context, h *Host) error {
-		if err := h.Build(ctx, false); err != nil {
-			return fmt.Errorf("building node %s: %w", h.Name, err)
-		}
-		if err := h.Test(ctx, false); err != nil {
-			return fmt.Errorf("testing node %s: %w", h.Name, err)
-		}
 		if err := h.PushToAttic(ctx); err != nil {
 			return fmt.Errorf("pushing node %s to attic: %w", h.Name, err)
 		}
@@ -256,8 +261,8 @@ func evalNodes(ctx context.Context, cfg Config, path string, hostnames []string)
 
 	var configResult nix.EvalJobResult
 	var errorAttrs []string
+	var testResults []nix.EvalJobResult
 	resultsByAttrs := map[string]nix.EvalJobResult{}
-	testsByHost := map[string][]string{}
 	for _, r := range paths {
 		if r.Error != "" {
 			errorAttrs = append(errorAttrs, r.Attr)
@@ -266,14 +271,14 @@ func evalNodes(ctx context.Context, cfg Config, path string, hostnames []string)
 		} else if r.AttrPath[0] == "toplevels" {
 			resultsByAttrs[r.AttrPath[1]] = r
 		} else if r.AttrPath[0] == "tests" {
-			testsByHost[r.AttrPath[1]] = append(testsByHost[r.AttrPath[1]], r.DrvPath)
+			testResults = append(testResults, r)
 		}
 	}
 	if len(errorAttrs) > 0 {
 		return nil, fmt.Errorf("evaluation failed for one or more attributes (%s)", strings.Join(errorAttrs, ", "))
 	}
 
-	if err := cfg.Nix.Realise(ctx, configResult.DrvPath, false); err != nil {
+	if err := cfg.Nix.Realise(ctx, []string{configResult.DrvPath}, false); err != nil {
 		return nil, fmt.Errorf("realising config json: %w", err)
 	}
 
@@ -288,14 +293,13 @@ func evalNodes(ctx context.Context, cfg Config, path string, hostnames []string)
 		return nil, fmt.Errorf("decoding plan json: %w", err)
 	}
 
-	dp := &DeployPlan{Phases: plan.Phases}
+	dp := &DeployPlan{Phases: plan.Phases, Tests: testResults, cfg: cfg}
 	for name, r := range resultsByAttrs {
 		if !dp.ContainsHost(name) {
 			continue
 		}
 
 		h := NewHost(cfg, name, r.System, r.DrvPath, r.OutPath(), plan.Deployment[name])
-		h.Tests = testsByHost[name]
 		dp.Hosts = append(dp.Hosts, h)
 	}
 	return dp, nil

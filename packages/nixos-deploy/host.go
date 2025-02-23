@@ -25,7 +25,6 @@ type Host struct {
 	OutPath      string
 	DeployConfig DeployConfig
 	RebootNeeded bool
-	Tests        []string
 	cfg          Config
 	log          *slog.Logger
 	remoteRunner cmd.Runner
@@ -68,29 +67,11 @@ func (h *Host) Build(ctx context.Context, useNom bool) error {
 	l := h.log.With("drv_path", h.DrvPath)
 	l.InfoContext(ctx, "building host")
 
-	if err := h.cfg.Nix.Realise(ctx, h.DrvPath, useNom); err != nil {
+	if err := h.cfg.Nix.Realise(ctx, []string{h.DrvPath}, useNom); err != nil {
 		return fmt.Errorf("realising node %s: %w", h.Name, err)
 	}
 
 	l.InfoContext(ctx, "finished building host", "out_path", h.OutPath)
-	return nil
-}
-
-func (h *Host) Test(ctx context.Context, useNom bool) error {
-	if len(h.Tests) == 0 {
-		return nil
-	}
-
-	h.log.InfoContext(ctx, "testing host")
-
-	for _, t := range h.Tests {
-		h.log.InfoContext(ctx, "running test", "drv_path", t)
-		if err := h.cfg.Nix.Realise(ctx, t, useNom); err != nil {
-			return fmt.Errorf("building test %s: %w", t, err)
-		}
-	}
-
-	h.log.InfoContext(ctx, "finished testing host")
 	return nil
 }
 

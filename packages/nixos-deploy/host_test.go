@@ -12,13 +12,13 @@ import (
 
 type mockNix struct {
 	lastBuild struct {
-		drvPath string
-		useNom  bool
+		drvPaths []string
+		useNom   bool
 	}
 }
 
-func (n *mockNix) Realise(_ context.Context, drvPath string, useNom bool) error {
-	n.lastBuild.drvPath = drvPath
+func (n *mockNix) Realise(_ context.Context, drvPaths []string, useNom bool) error {
+	n.lastBuild.drvPaths = drvPaths
 	n.lastBuild.useNom = useNom
 	return nil
 }
@@ -119,7 +119,7 @@ func TestBuildWithoutNom(t *testing.T) {
 	ctx := context.Background()
 
 	must.NoError(t, h.Build(ctx, false))
-	test.Eq(t, "/nix/store/g5dyb9016k8fnz3ng6k50jc7nc5zqhf3-nixos-system-uranus-25.05pre-git.drv", n.lastBuild.drvPath)
+	test.Eq(t, []string{"/nix/store/g5dyb9016k8fnz3ng6k50jc7nc5zqhf3-nixos-system-uranus-25.05pre-git.drv"}, n.lastBuild.drvPaths)
 	test.False(t, n.lastBuild.useNom)
 }
 
@@ -138,7 +138,7 @@ func TestBuildWithNom(t *testing.T) {
 	ctx := context.Background()
 
 	must.NoError(t, h.Build(ctx, true))
-	test.Eq(t, "/nix/store/g5dyb9016k8fnz3ng6k50jc7nc5zqhf3-nixos-system-uranus-25.05pre-git.drv", n.lastBuild.drvPath)
+	test.Eq(t, []string{"/nix/store/g5dyb9016k8fnz3ng6k50jc7nc5zqhf3-nixos-system-uranus-25.05pre-git.drv"}, n.lastBuild.drvPaths)
 	test.True(t, n.lastBuild.useNom)
 }
 
