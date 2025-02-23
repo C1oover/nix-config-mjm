@@ -77,13 +77,10 @@ func (h *Host) Build(ctx context.Context, useNom bool) error {
 	return nil
 }
 
-func (h *Host) Test(ctx context.Context, lock sync.Locker, useNom bool) error {
+func (h *Host) Test(ctx context.Context, useNom bool) error {
 	if len(h.Tests) == 0 {
 		return nil
 	}
-
-	lock.Lock()
-	defer lock.Unlock()
 
 	h.log.InfoContext(ctx, "testing host")
 

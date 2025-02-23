@@ -12,7 +12,6 @@ import (
 	"runtime"
 	"slices"
 	"strings"
-	"sync"
 	"time"
 
 	"git.midna.dev/mjm/nix-config/packages/nixos-deploy/nix"
@@ -79,12 +78,11 @@ func handleDeploy(ctx context.Context) error {
 		return h.IsLocal()
 	})
 
-	var testLock sync.Mutex
 	if err := plan.EachHost(ctx, func(ctx context.Context, h *Host) error {
 		if err := h.Build(ctx, false); err != nil {
 			return fmt.Errorf("building node %s: %w", h.Name, err)
 		}
-		if err := h.Test(ctx, &testLock, false); err != nil {
+		if err := h.Test(ctx, false); err != nil {
 			return fmt.Errorf("testing node %s: %w", h.Name, err)
 		}
 		if err := h.Push(ctx); err != nil {
@@ -132,12 +130,11 @@ func handleDiff(ctx context.Context) error {
 	defer os.RemoveAll(diffsDir)
 	slog.DebugContext(ctx, "created temp dir for diffs", "path", diffsDir)
 
-	var testLock sync.Mutex
 	if err := plan.EachHost(ctx, func(ctx context.Context, h *Host) error {
 		if err := h.Build(ctx, false); err != nil {
 			return fmt.Errorf("building node %s: %w", h.Name, err)
 		}
-		if err := h.Test(ctx, &testLock, false); err != nil {
+		if err := h.Test(ctx, false); err != nil {
 			return fmt.Errorf("testing node %s: %w", h.Name, err)
 		}
 		if err := h.PushToAttic(ctx); err != nil {
