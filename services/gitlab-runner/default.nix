@@ -141,7 +141,7 @@ in
     ];
 
     programs.ssh.extraConfig = mkAfter ''
-      Host arges.home.mattmoriarity.com artemis.home.mattmoriarity.com hades.home.mattmoriarity.com
+      Host apollo.home.mattmoriarity.com arges.home.mattmoriarity.com artemis.home.mattmoriarity.com hades.home.mattmoriarity.com
         IdentitiesOnly yes
         IdentityFile ${config.mjm.services.gitlab-runner.vault.keys.remote_builder_private_key.path}
     '';
@@ -153,47 +153,43 @@ in
     ];
 
     nix.distributedBuilds = true;
-    nix.buildMachines = [
-      {
-        hostName = "arges.home.mattmoriarity.com";
-        sshUser = "matt";
-        system = "aarch64-linux";
-        protocol = "ssh-ng";
-        maxJobs = 4;
-        speedFactor = 2;
-        supportedFeatures = [
-          "nixos-test"
-          "benchmark"
-          "big-parallel"
-          "kvm"
-        ];
-        mandatoryFeatures = [ ];
-        publicHostKey = "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSURTM3BQTkVhSEEreWNEYTdrVHlOU3hzQVlCRlpJN1lNd2VEcnJOMEdnK2wgcm9vdEBuaXhvcwo=";
-      }
-      {
-        hostName = "hades.home.mattmoriarity.com";
-        system = "x86_64-linux";
-        protocol = "ssh-ng";
-        maxJobs = 1;
-        speedFactor = 1;
-        supportedFeatures = [
-          "kvm"
-          "nixos-test"
-        ];
-        mandatoryFeatures = [ "nixos-test" ];
-      }
-      {
-        hostName = "artemis.home.mattmoriarity.com";
-        system = "x86_64-linux";
-        protocol = "ssh-ng";
-        maxJobs = 1;
-        speedFactor = 1;
-        supportedFeatures = [
-          "kvm"
-          "nixos-test"
-        ];
-        mandatoryFeatures = [ "nixos-test" ];
-      }
-    ];
+    nix.buildMachines =
+      let
+        mkVmTestBuilder = name: {
+          hostName = "${name}.home.mattmoriarity.com";
+          system = "x86_64-linux";
+          protocol = "ssh-ng";
+          maxJobs = 1;
+          speedFactor = 1;
+          supportedFeatures = [
+            "kvm"
+            "nixos-test"
+          ];
+          mandatoryFeatures = [ "nixos-test" ];
+        };
+      in
+      [
+        {
+          hostName = "arges.home.mattmoriarity.com";
+          sshUser = "matt";
+          system = "aarch64-linux";
+          protocol = "ssh-ng";
+          maxJobs = 4;
+          speedFactor = 2;
+          supportedFeatures = [
+            "nixos-test"
+            "benchmark"
+            "big-parallel"
+            "kvm"
+          ];
+          mandatoryFeatures = [ ];
+          publicHostKey = "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSURTM3BQTkVhSEEreWNEYTdrVHlOU3hzQVlCRlpJN1lNd2VEcnJOMEdnK2wgcm9vdEBuaXhvcwo=";
+        }
+      ]
+      ++ (map mkVmTestBuilder [
+        "hades"
+        "artemis"
+        "apollo"
+      ]);
   };
 }
