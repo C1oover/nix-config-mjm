@@ -10,7 +10,6 @@ import (
 	"os"
 	"path"
 	"strings"
-	"sync"
 	"time"
 
 	"git.midna.dev/mjm/nix-config/packages/nixos-deploy/cmd"
