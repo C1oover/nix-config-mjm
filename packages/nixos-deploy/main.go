@@ -21,6 +21,7 @@ import (
 var (
 	plansFile   = flag.String("plans", "plans.nix", "File to evaluate for deploy plans")
 	concurrency = flag.Int("concurrency", runtime.NumCPU(), "Number of nodes to evaluate/build concurrently")
+	nom         = flag.Bool("nom", os.Getenv("CI") == "", "Whether to run builds through nix-output-monitor")
 
 	logLevel slog.Level
 )
@@ -78,11 +79,11 @@ func handleDeploy(ctx context.Context) error {
 		return h.IsLocal()
 	})
 
-	if err := plan.Build(ctx); err != nil {
+	if err := plan.Build(ctx, *nom); err != nil {
 		return fmt.Errorf("building all hosts: %w", err)
 	}
 
-	if err := plan.Test(ctx); err != nil {
+	if err := plan.Test(ctx, *nom); err != nil {
 		return fmt.Errorf("running all tests: %w", err)
 	}
 
@@ -132,11 +133,11 @@ func handleDiff(ctx context.Context) error {
 	defer os.RemoveAll(diffsDir)
 	slog.DebugContext(ctx, "created temp dir for diffs", "path", diffsDir)
 
-	if err := plan.Build(ctx); err != nil {
+	if err := plan.Build(ctx, *nom); err != nil {
 		return fmt.Errorf("building all hosts: %w", err)
 	}
 
-	if err := plan.Test(ctx); err != nil {
+	if err := plan.Test(ctx, *nom); err != nil {
 		return fmt.Errorf("running all tests: %w", err)
 	}
 

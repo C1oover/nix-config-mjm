@@ -54,26 +54,26 @@ func (p *DeployPlan) EachHost(ctx context.Context, f func(context.Context, *Host
 	return g.Wait()
 }
 
-func (p *DeployPlan) Build(ctx context.Context) error {
+func (p *DeployPlan) Build(ctx context.Context, useNom bool) error {
 	var drvPaths []string
 	for _, h := range p.Hosts {
 		drvPaths = append(drvPaths, h.DrvPath)
 	}
 
-	if err := p.cfg.Nix.Realise(ctx, drvPaths, true); err != nil {
+	if err := p.cfg.Nix.Realise(ctx, drvPaths, useNom); err != nil {
 		return fmt.Errorf("building plan hosts: %w", err)
 	}
 
 	return nil
 }
 
-func (p *DeployPlan) Test(ctx context.Context) error {
+func (p *DeployPlan) Test(ctx context.Context, useNom bool) error {
 	var drvPaths []string
 	for _, h := range p.Tests {
 		drvPaths = append(drvPaths, h.DrvPath)
 	}
 
-	if err := p.cfg.Nix.Realise(ctx, drvPaths, true); err != nil {
+	if err := p.cfg.Nix.Realise(ctx, drvPaths, useNom); err != nil {
 		return fmt.Errorf("running plan tests: %w", err)
 	}
 
