@@ -1,5 +1,5 @@
 let
-  sources = import ../npins;
+  sources = import ../../npins;
   lib = import "${sources.nixos-small}/lib";
 
   inherit (lib)
