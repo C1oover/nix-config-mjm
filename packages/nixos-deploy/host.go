@@ -68,7 +68,7 @@ func (h *Host) Build(ctx context.Context, useNom bool) error {
 	l := h.log.With("drv_path", h.DrvPath)
 	l.InfoContext(ctx, "building host")
 
-	if err := h.cfg.Nix.Realise(ctx, h.DrvPath, useNom); err != nil {
+	if err := h.cfg.Nix.Realise(ctx, []string{h.DrvPath}, useNom); err != nil {
 		return fmt.Errorf("realising node %s: %w", h.Name, err)
 	}
 
@@ -85,7 +85,7 @@ func (h *Host) Test(ctx context.Context, useNom bool) error {
 
 	for _, t := range h.Tests {
 		h.log.InfoContext(ctx, "running test", "drv_path", t)
-		if err := h.cfg.Nix.Realise(ctx, t, useNom); err != nil {
+		if err := h.cfg.Nix.Realise(ctx, []string{t}, useNom); err != nil {
 			return fmt.Errorf("building test %s: %w", t, err)
 		}
 	}

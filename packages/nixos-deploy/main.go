@@ -78,10 +78,11 @@ func handleDeploy(ctx context.Context) error {
 		return h.IsLocal()
 	})
 
+	if err := plan.Build(ctx); err != nil {
+		return fmt.Errorf("building all hosts: %w", err)
+	}
+
 	if err := plan.EachHost(ctx, func(ctx context.Context, h *Host) error {
-		if err := h.Build(ctx, false); err != nil {
-			return fmt.Errorf("building node %s: %w", h.Name, err)
-		}
 		if err := h.Test(ctx, false); err != nil {
 			return fmt.Errorf("testing node %s: %w", h.Name, err)
 		}
@@ -130,10 +131,11 @@ func handleDiff(ctx context.Context) error {
 	defer os.RemoveAll(diffsDir)
 	slog.DebugContext(ctx, "created temp dir for diffs", "path", diffsDir)
 
+	if err := plan.Build(ctx); err != nil {
+		return fmt.Errorf("building all hosts: %w", err)
+	}
+
 	if err := plan.EachHost(ctx, func(ctx context.Context, h *Host) error {
-		if err := h.Build(ctx, false); err != nil {
-			return fmt.Errorf("building node %s: %w", h.Name, err)
-		}
 		if err := h.Test(ctx, false); err != nil {
 			return fmt.Errorf("testing node %s: %w", h.Name, err)
 		}
@@ -273,7 +275,7 @@ func evalNodes(ctx context.Context, cfg Config, path string, hostnames []string)
 		return nil, fmt.Errorf("evaluation failed for one or more attributes (%s)", strings.Join(errorAttrs, ", "))
 	}
 
-	if err := cfg.Nix.Realise(ctx, configResult.DrvPath, false); err != nil {
+	if err := cfg.Nix.Realise(ctx, []string{configResult.DrvPath}, false); err != nil {
 		return nil, fmt.Errorf("realising config json: %w", err)
 	}
 
@@ -288,7 +290,7 @@ func evalNodes(ctx context.Context, cfg Config, path string, hostnames []string)
 		return nil, fmt.Errorf("decoding plan json: %w", err)
 	}
 
-	dp := &DeployPlan{Phases: plan.Phases}
+	dp := &DeployPlan{Phases: plan.Phases, cfg: cfg}
 	for name, r := range resultsByAttrs {
 		if !dp.ContainsHost(name) {
 			continue

@@ -13,6 +13,7 @@ import (
 type DeployPlan struct {
 	Phases []DeployPhase
 	Hosts  []*Host
+	cfg    Config
 }
 
 type planConfig struct {
@@ -49,6 +50,19 @@ func (p *DeployPlan) EachHost(ctx context.Context, f func(context.Context, *Host
 		})
 	}
 	return g.Wait()
+}
+
+func (p *DeployPlan) Build(ctx context.Context) error {
+	var drvPaths []string
+	for _, h := range p.Hosts {
+		drvPaths = append(drvPaths, h.DrvPath)
+	}
+
+	if err := p.cfg.Nix.Realise(ctx, drvPaths, true); err != nil {
+		return fmt.Errorf("building plan hosts: %w", err)
+	}
+
+	return nil
 }
 
 // Deploy will deploy each phase in the plan in sequence. Any hosts that are in
