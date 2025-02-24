@@ -121,9 +121,9 @@
         "repo": "nixos-hardware"
       },
       "branch": "master",
-      "revision": "099d38a69ed75b6f549aa0daadc08c075d44a4d7",
-      "url": "https://github.com/NixOS/nixos-hardware/archive/099d38a69ed75b6f549aa0daadc08c075d44a4d7.tar.gz",
-      "hash": "0yvadyxk7lqybph3gyvwfjjirym0gcf70m82zrn5cdi2c0w5ia84"
+      "revision": "d58f642ddb23320965b27beb0beba7236e9117b5",
+      "url": "https://github.com/NixOS/nixos-hardware/archive/d58f642ddb23320965b27beb0beba7236e9117b5.tar.gz",
+      "hash": "0p9k2s8m25ligyd58cifpvz214nk5fdvkpl0lcxg41h41ml3ysd4"
     },
     "helix": {
       "type": "Git",
@@ -184,15 +184,15 @@
         "server": "https://git.midna.dev/"
       },
       "branch": "deploy/nixos-unstable",
-      "revision": "7dc47802d1c8bc39c405962a015850c392ec6978",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=7dc47802d1c8bc39c405962a015850c392ec6978",
-      "hash": "18pxm05219s5d0i27qgm5rqcb8gkymq1dyknxbh18f66qlf5kga7"
+      "revision": "5a668a870a86adffa1e10ff4f023fe2b01cb2b6c",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=5a668a870a86adffa1e10ff4f023fe2b01cb2b6c",
+      "hash": "1wwjask0vcjmrxqjypx8v5f5d59yf97ba0vkgf3j9d448drp79hj"
     },
     "nixos-small": {
       "type": "Channel",
       "name": "nixos-unstable-small",
-      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-25.05beta758096.0b3aa63c013c/nixexprs.tar.xz",
-      "hash": "006skc650ypljxxixzjf76ffzqajgzjigj74ns6c48vb7gc5vsk7"
+      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-25.05beta758196.92d410c2519d/nixexprs.tar.xz",
+      "hash": "0y3q8pr49j56sqzp39shn93acayfchg3hgnlaivsk162vwgic580"
     },
     "nixpkgs": {
       "type": "Channel",
@@ -220,9 +220,9 @@
         "repo": "NUR"
       },
       "branch": "master",
-      "revision": "0f6d871700022c339dcb70439241b6445ec880d4",
-      "url": "https://github.com/nix-community/NUR/archive/0f6d871700022c339dcb70439241b6445ec880d4.tar.gz",
-      "hash": "12zdpfmrhpphmwgb53gz1kb270hlc5vj5hlc4psd6gcnbnkzkdrf"
+      "revision": "8fa0d624799c0f18bf123e10cf597d523aebcca8",
+      "url": "https://github.com/nix-community/NUR/archive/8fa0d624799c0f18bf123e10cf597d523aebcca8.tar.gz",
+      "hash": "1xy8h30yabsdwjki883n9s6cbm3i18k3v07jd8ym0n936h5hjb5c"
     },
     "preservation": {
       "type": "Git",
