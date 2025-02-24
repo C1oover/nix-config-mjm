@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.mjm.libvirtd;
@@ -14,6 +19,7 @@ in
 
     virtualisation.libvirtd = {
       enable = true;
+      package = pkgs.libvirt.override { enableIscsi = true; };
       qemu = {
         swtpm.enable = true;
         ovmf.enable = true;
