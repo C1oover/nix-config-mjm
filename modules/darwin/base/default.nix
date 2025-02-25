@@ -20,7 +20,7 @@
 
   environment.shells = [ config.programs.fish.package ];
 
-  security.pam.enableSudoTouchIdAuth = true;
+  security.pam.services.sudo_local.touchIdAuth = true;
 
   environment.etc."sudoers.d/admin-no-passwd".text = ''
     %admin ALL = (ALL) NOPASSWD: ALL
