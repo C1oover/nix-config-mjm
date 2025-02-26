@@ -1,32 +1,15 @@
 {
   services.pipewire.wireplumber = {
-    extraScripts."mjm/select-correct-profile.lua" = builtins.readFile ./select-correct-profile.lua;
-    extraConfig.dell-monitor = {
+    extraConfig.desk-devices = {
       "context.properties" = {
         "log.level" = "I";
       };
 
       "monitor.alsa.rules" = [
-        # prioritize the displayport audio over the yeti mic,
-        # so that we stay on the DP audio device even when switching
-        # between profiles (which changes the node name, so the
-        # remembered default node gets ignored)
+        # disable the displayport audio from the graphics card
         {
           matches = [
             { "api.alsa.card.name" = "HDA ATI HDMI"; }
-          ];
-          actions = {
-            update-props = {
-              "priority.session" = "1200";
-            };
-          };
-        }
-
-        # disable the motherboard's audio device
-        {
-          matches = [
-            { "api.alsa.card.name" = "HD-Audio Generic"; }
-            { }
           ];
           actions = {
             update-props = {
@@ -35,7 +18,7 @@
           };
         }
 
-        # disable the sink node for the Yeti mic and the audio source for the webcam
+        # disable nodes that i don't use to clean up the choices
         {
           matches = [
             {
@@ -46,6 +29,14 @@
               "media.class" = "Audio/Source";
               "api.alsa.card.name" = "HD Pro Webcam C920";
             }
+            {
+              "media.class" = "Audio/Source";
+              "api.alsa.card.name" = "Studio Display";
+            }
+            {
+              "media.class" = "Audio/Source";
+              "api.alsa.card.name" = "HD-Audio Generic";
+            }
           ];
           actions = {
             update-props = {
@@ -54,20 +45,6 @@
           };
         }
       ];
-
-      # add a custom hook before the existing profile selection
-      # logic that figures out which profile matches the main
-      # monitor, and chooses that one.
-      "wireplumber.components" = [
-        {
-          name = "mjm/select-correct-profile.lua";
-          type = "script/lua";
-          provides = "hooks.mjm.select-correct-profile";
-        }
-      ];
-      "wireplumber.profiles".main = {
-        "hooks.mjm.select-correct-profile" = "required";
-      };
     };
   };
 }
