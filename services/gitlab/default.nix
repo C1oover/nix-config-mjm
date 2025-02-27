@@ -152,8 +152,8 @@ in
           trusted_proxies = [
             "10.0.0.3"
             "10.0.0.4"
-            "2601:282:167f:d062:dea6:32ff:fed5:d840"
-            "2601:282:167f:d062:dea6:32ff:fe96:bc05"
+            "${config.mjm.ipv6Prefix}:dea6:32ff:fed5:d840"
+            "${config.mjm.ipv6Prefix}:dea6:32ff:fe96:bc05"
           ];
           email_from = "gitlab@matt.mattmoriarity.com";
           email_display_name = "GitLab (midna.dev)";
@@ -232,7 +232,7 @@ in
       globalConfig = ''
         auto_https off
         servers {
-          trusted_proxies static 10.0.0.3 10.0.0.4 2601:282:167f:d062:dea6:32ff:fed5:d840 2601:282:167f:d062:dea6:32ff:fe96:bc05
+          trusted_proxies static 10.0.0.3 10.0.0.4 ${config.mjm.ipv6Prefix}:dea6:32ff:fed5:d840 ${config.mjm.ipv6Prefix}:dea6:32ff:fe96:bc05
         }
       '';
       virtualHosts.":80" = {

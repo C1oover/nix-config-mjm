@@ -9,8 +9,8 @@ let
   # would kinda be nice if we could get these from the node configs but
   # they don't declare it anywhere
   ingressIPs = {
-    brontes = "2601:282:167f:d062:dea6:32ff:fed5:d840";
-    steropes = "2601:282:167f:d062:dea6:32ff:fe96:bc05";
+    brontes = "${config.mjm.ipv6Prefix}:dea6:32ff:fed5:d840";
+    steropes = "${config.mjm.ipv6Prefix}:dea6:32ff:fe96:bc05";
   };
 in
 {

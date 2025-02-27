@@ -49,7 +49,7 @@ in
           "netbox.midna.dev"
           "netbox.service.consul"
           "10.0.2.41"
-          "[2601:282:167f:d062:acf4:f0ff:feb0:3126]"
+          "[${config.mjm.ipv6Prefix}:acf4:f0ff:feb0:3126]"
         ];
         CORS_ORIGIN_ALLOW_ALL = false;
         CORS_ORIGIN_WHITELIST = [ "https://netbox.midna.dev" ];

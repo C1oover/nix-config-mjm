@@ -102,7 +102,7 @@ in
           trusted_proxies = [
             "10.0.0.3"
             "10.0.0.4"
-            "2601:282:167f:d062::/64"
+            "${config.mjm.ipv6Prefix}::/64"
           ];
         };
         auth_header = {
