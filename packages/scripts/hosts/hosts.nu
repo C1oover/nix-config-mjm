@@ -2,7 +2,7 @@ use nu-lib *
 use nu-lib/vault.nu *
 
 def "main diff" [...hosts] {
-  let text = nixos-deploy diff ...$hosts
+  let text = dippy diff ...$hosts
   if ($text | is-empty) {
     print "No changes."
   } else {
@@ -11,7 +11,7 @@ def "main diff" [...hosts] {
 }
 
 def "main ci diff" [] {
-  let comment_text = nixos-deploy diff
+  let comment_text = dippy diff
   let body = if ($comment_text | is-empty) {
     "No package changes for server hosts."
   } else {

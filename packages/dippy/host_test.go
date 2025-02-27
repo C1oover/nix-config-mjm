@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"git.midna.dev/mjm/nix-config/packages/nixos-deploy/cmd"
-	"git.midna.dev/mjm/nix-config/packages/nixos-deploy/nix"
+	"git.midna.dev/mjm/nix-config/packages/dippy/cmd"
+	"git.midna.dev/mjm/nix-config/packages/dippy/nix"
 	"github.com/shoenig/test"
 	"github.com/shoenig/test/must"
 )

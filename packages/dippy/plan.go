@@ -6,7 +6,7 @@ import (
 	"log/slog"
 	"slices"
 
-	"git.midna.dev/mjm/nix-config/packages/nixos-deploy/nix"
+	"git.midna.dev/mjm/nix-config/packages/dippy/nix"
 	"golang.org/x/sync/errgroup"
 )
 

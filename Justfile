@@ -3,14 +3,14 @@ alias tfp := tf-plan
 alias tfa := tf-apply
 
 rebuild:
-  nix run -f . nixos-deploy -- apply-local
+  nix run -f . dippy -- apply-local
 
 gc:
   -nix-collect-garbage --delete-older-than 7d
   -sudo nix-collect-garbage --delete-older-than 7d
 
 deploy *targets:
-  nix run -f . nixos-deploy -- deploy {{targets}}
+  nix run -f . dippy -- deploy {{targets}}
 
 diff host:
   nix run -f . scripts.hosts -- diff {{host}}

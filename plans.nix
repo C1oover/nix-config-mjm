@@ -67,7 +67,7 @@ let
     };
   };
 
-  evalPlan = import ./packages/nixos-deploy/deploy.nix;
+  evalPlan = import ./packages/dippy/deploy.nix;
   sources = import ./npins;
 
   localModulesPath = toString ./modules;

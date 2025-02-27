@@ -10,7 +10,7 @@
 }:
 
 buildGoModule {
-  pname = "nixos-deploy";
+  pname = "dippy";
   version = "0.1.0";
 
   src = ./.;
@@ -20,7 +20,7 @@ buildGoModule {
   nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''
-    wrapProgram $out/bin/nixos-deploy \
+    wrapProgram $out/bin/dippy \
       --prefix PATH : ${
         lib.makeBinPath [
           nix-eval-jobs
@@ -32,5 +32,5 @@ buildGoModule {
       }
   '';
 
-  meta.mainProgram = "nixos-deploy";
+  meta.mainProgram = "dippy";
 }

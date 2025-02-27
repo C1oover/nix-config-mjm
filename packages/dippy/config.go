@@ -6,8 +6,8 @@ import (
 	"os"
 	"path"
 
-	"git.midna.dev/mjm/nix-config/packages/nixos-deploy/cmd"
-	"git.midna.dev/mjm/nix-config/packages/nixos-deploy/nix"
+	"git.midna.dev/mjm/nix-config/packages/dippy/cmd"
+	"git.midna.dev/mjm/nix-config/packages/dippy/nix"
 	"golang.org/x/crypto/ssh"
 	"golang.org/x/crypto/ssh/knownhosts"
 )

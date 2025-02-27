@@ -30,10 +30,10 @@ Every half hour, [a CI job](../.gitlab-ci.yml#L64) runs that [checks for updates
 If any of these channels has updates, then all pinned sources are updated, and the updated sources are committed by the CI job.
 
 Each commit (including the automatic source updates) to the `main` branch will trigger a deploy job to all NixOS servers.
-Deploys are done with a bespoke deployment tool called [nixos-deploy](../packages/nixos-deploy).
+Deploys are done with a bespoke deployment tool called [dippy](../packages/dippy).
 The deploy plan configuration can be found in [plans.nix](../plans.nix).
 
-Workstations are updated manually, still using `nixos-deploy`.
+Workstations are updated manually, still using `dippy`.
 By running `just rebuild`, it will build the configuration for the current system with [nom](https://github.com/maralorn/nix-output-monitor), and then use [nvd](https://gitlab.com/khumba/nvd) to print which package versions were changed.
 Then it will check if the kernel or systemd versions have changed, and will decide whether the changes should be applied in-place or by rebooting.
 Either way, it will prompt for confirmation and then apply the changes.

@@ -88,7 +88,7 @@ func generateSSHKey(ctx context.Context) (*ssh.Certificate, crypto.PrivateKey, e
 }
 
 func writeSSHKey(cert *ssh.Certificate, privKey crypto.PrivateKey) (string, error) {
-	keyDir, err := os.MkdirTemp("", "nixos-deploy-keys")
+	keyDir, err := os.MkdirTemp("", "dippy-keys")
 	if err != nil {
 		return "", fmt.Errorf("creating temp dir for keys: %w", err)
 	}

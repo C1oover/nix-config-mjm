@@ -14,7 +14,7 @@ import (
 	"strings"
 	"time"
 
-	"git.midna.dev/mjm/nix-config/packages/nixos-deploy/nix"
+	"git.midna.dev/mjm/nix-config/packages/dippy/nix"
 	"github.com/lmittmann/tint"
 )
 
@@ -126,7 +126,7 @@ func handleDiff(ctx context.Context) error {
 	}
 
 	slog.DebugContext(ctx, "creating temp dir for diffs")
-	diffsDir, err := os.MkdirTemp("", "nixos-deploy-diffs")
+	diffsDir, err := os.MkdirTemp("", "dippy-diffs")
 	if err != nil {
 		return fmt.Errorf("creating temp dir: %w", err)
 	}

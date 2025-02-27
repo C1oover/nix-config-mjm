@@ -12,8 +12,8 @@ import (
 	"strings"
 	"time"
 
-	"git.midna.dev/mjm/nix-config/packages/nixos-deploy/cmd"
-	"git.midna.dev/mjm/nix-config/packages/nixos-deploy/nix"
+	"git.midna.dev/mjm/nix-config/packages/dippy/cmd"
+	"git.midna.dev/mjm/nix-config/packages/dippy/nix"
 	consulapi "github.com/hashicorp/consul/api"
 	"golang.org/x/crypto/ssh"
 )

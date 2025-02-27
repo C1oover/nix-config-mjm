@@ -1,4 +1,4 @@
-module git.midna.dev/mjm/nix-config/packages/nixos-deploy
+module git.midna.dev/mjm/nix-config/packages/dippy
 
 go 1.23.4
 

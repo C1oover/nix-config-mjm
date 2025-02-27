@@ -86,7 +86,7 @@ in
           Hostname 5.78.46.61
 
         # Logic below only covers NixOS nodes, not nix-darwin
-        # TODO fix if nixos-deploy gets darwin support
+        # TODO fix when dippy exposes darwin nodes
         Host talos.home.mattmoriarity.com
           User mjm
 

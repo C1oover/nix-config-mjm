@@ -12,7 +12,7 @@
   nix,
   systemd,
   nvd-json,
-  nixos-deploy,
+  dippy,
 }:
 
 writeNuBin ",hosts" {
@@ -30,7 +30,7 @@ writeNuBin ",hosts" {
         nvd
         nvd-json
         nix
-        nixos-deploy
+        dippy
       ]
       ++ lib.optionals stdenvNoCC.isLinux [
         nettools

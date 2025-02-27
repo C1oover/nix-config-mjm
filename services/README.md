@@ -18,7 +18,7 @@ Services can also define things that affect state outside just the host running 
 - Ingress (Caddy) reverse-proxy vhost configuration
 - Anything that needs to be provisioned with OpenTofu, primarily Vault approles and policies
 
-The [ingress](ingress/) service will use the `nodes` parameter [nixos-deploy](../packages/nixos-deploy) provides to get all of the vhost configuration from all the nodes and merge them together.
+The [ingress](ingress/) service will use the `nodes` parameter [dippy](../packages/dippy) provides to get all of the vhost configuration from all the nodes and merge them together.
 It will then use that to generate the Caddy configuration.
 Similarly, when creating the OpenTofu configuration, OpenTofu resources and Vault services and policies are merged together to produce the full configuration.
 
