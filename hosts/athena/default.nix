@@ -24,19 +24,19 @@
     "asdf"
   ];
 
-  networking.hosts =
-    let
-      slabDomains = [
-        "matt.slabdev.com"
-        "slabdev.com"
-        "api.slabdev.com"
-        "cdn.slabdev.com"
-      ];
-    in
-    {
-      "127.0.0.1" = slabDomains;
-      "::1" = slabDomains;
-    };
+  # networking.hosts =
+  #   let
+  #     slabDomains = [
+  #       "matt.slabdev.com"
+  #       "slabdev.com"
+  #       "api.slabdev.com"
+  #       "cdn.slabdev.com"
+  #     ];
+  #   in
+  #   {
+  #     "127.0.0.1" = slabDomains;
+  #     "::1" = slabDomains;
+  #   };
 
   system.stateVersion = 4;
   nixpkgs.system = "aarch64-darwin";
