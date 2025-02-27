@@ -54,7 +54,7 @@ deploy nixos hosts:
   # before_script: !reference [.snippets, setup_devenv]
   script:
     - nix run -f . scripts.hosts -- ci attic-login
-    - nix run -f . nixos-deploy -- deploy
+    - nix run -f . dippy -- deploy
 build tofu changes:
   tags: [nix]
   rules:
