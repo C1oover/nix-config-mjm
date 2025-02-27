@@ -9,8 +9,8 @@ gc:
   -nix-collect-garbage --delete-older-than 7d
   -sudo nix-collect-garbage --delete-older-than 7d
 
-deploy target *flags:
-  nix run -f . scripts.hosts -- deploy {{target}} {{flags}}
+deploy *targets:
+  nix run -f . nixos-deploy -- deploy {{targets}}
 
 diff host:
   nix run -f . scripts.hosts -- diff {{host}}
