@@ -12,7 +12,6 @@ in
   config = mkIf (cfg.enable && pkgs.stdenv.isLinux) {
     mjm.emacs.enable = mkDefault true;
     mjm.email.enable = mkDefault true;
-    mjm.homelab.enable = mkDefault true;
     mjm.syncthing.enable = mkDefault true;
 
     home.packages = attrValues {

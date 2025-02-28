@@ -35,6 +35,7 @@ in
   config = mkIf cfg.enable {
     mjm.git.desktop.enable = mkDefault true;
     mjm.helix.enable = mkDefault true;
+    mjm.homelab.enable = mkDefault true;
     mjm.shell.desktop.enable = mkDefault true;
     mjm.terminal.enable = mkDefault true;
 
