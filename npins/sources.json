@@ -195,10 +195,16 @@
       "hash": "1yhpf1f3602gd1641d35gj3bmclgsnyx8kp5ni29kylx0k7j2hxz"
     },
     "nixpkgs": {
-      "type": "Channel",
-      "name": "nixpkgs-unstable",
-      "url": "https://releases.nixos.org/nixpkgs/nixpkgs-25.05pre759303.3a05eebede89/nixexprs.tar.xz",
-      "hash": "0m5436kzlbmvhjg13d7sjvrwsgiy7xh7d1j5p433s34kykr702c4"
+      "type": "Git",
+      "repository": {
+        "type": "GitLab",
+        "repo_path": "mjm/nixpkgs",
+        "server": "https://git.midna.dev/"
+      },
+      "branch": "deploy/nixpkgs-unstable",
+      "revision": "b4816b5bc795065e72f0591e10cc35e8734ff278",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=b4816b5bc795065e72f0591e10cc35e8734ff278",
+      "hash": "0nyyb0shwfl0bpkycii6cdwmwf8mllrg5k2sxkpq3l273xzg99kx"
     },
     "nixpkgs-firefox-darwin": {
       "type": "Git",
