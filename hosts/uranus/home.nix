@@ -1,3 +1,0 @@
-{
-  mjm.homelab.enableYubikey = false;
-}

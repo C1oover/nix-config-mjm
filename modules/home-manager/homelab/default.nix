@@ -2,7 +2,6 @@
   pkgs,
   lib,
   config,
-  osConfig,
   ...
 }:
 let
@@ -27,7 +26,7 @@ in
 
     enableYubikey = mkOption {
       type = types.bool;
-      default = if pkgs.stdenv.isLinux then osConfig.services.yubikey-agent.enable else true;
+      default = false;
     };
 
     sshPublicKeyName = mkOption {
