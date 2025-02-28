@@ -35,14 +35,15 @@ in
           auto_reload_config = true;
 
           retry_join = lib.mkDefault [
-            "10.0.2.40"
-            "10.0.2.42"
-            "10.0.2.43"
+            "megaera.home.mattmoriarity.com"
+            "tisiphone.home.mattmoriarity.com"
+            "alecto.home.mattmoriarity.com"
           ];
 
           client_addr = "0.0.0.0";
           bind_addr = mkDefault "[::]";
           advertise_addr_ipv4 = cfg.ipv4Address;
+          advertise_addr = cfg.ipv4Address;
 
           ports.grpc = 8502;
 

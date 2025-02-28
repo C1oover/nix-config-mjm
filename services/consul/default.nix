@@ -50,15 +50,10 @@ in
           delim=" "
         ''
         + lib.concatStrings (
-          lib.flip map
-            [
-              "advertise_addr"
-              "advertise_addr_ipv6"
-            ]
-            (key: ''
-              echo "$delim \"${key}\": \"$(getAddr)\"" >> /etc/consul-addrs.json
-              delim=","
-            '')
+          lib.flip map [ "advertise_addr_ipv6" ] (key: ''
+            echo "$delim \"${key}\": \"$(getAddr)\"" >> /etc/consul-addrs.json
+            delim=","
+          '')
         )
         + ''
           echo "}" >> /etc/consul-addrs.json
