@@ -45,5 +45,18 @@ in
         intervalSeconds = 30;
       };
     };
+
+    # In case sshd starts without a host certificate, perhaps because vault is unavailable,
+    # watch the path to the cert and trigger a restart when it shows up.
+    systemd.paths.ssh-host-cert = {
+      pathConfig.PathChanged = "/run/vault-secrets/ssh-host-cert";
+    };
+    systemd.services.ssh-host-cert = {
+      after = [ "network.target" ];
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${pkgs.systemd}/bin/systemctl restart sshd.service";
+      };
+    };
   };
 }
