@@ -3,7 +3,6 @@
   writers,
   vault,
   openssh,
-  kitty,
   sshPublicKeyPath,
 }:
 
@@ -19,7 +18,6 @@ writers.writeNuBin "homelab"
       (lib.makeBinPath [
         vault
         openssh
-        kitty
       ])
     ];
   }
