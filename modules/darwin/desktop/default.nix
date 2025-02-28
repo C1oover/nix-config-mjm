@@ -23,6 +23,8 @@ in
         "dash"
         "element"
         "fantastical"
+        "ghostty"
+        "signal"
         "soundsource"
         "stats"
         "submariner"
