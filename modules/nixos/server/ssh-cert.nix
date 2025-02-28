@@ -49,6 +49,7 @@ in
     # In case sshd starts without a host certificate, perhaps because vault is unavailable,
     # watch the path to the cert and trigger a restart when it shows up.
     systemd.paths.ssh-host-cert = {
+      wantedBy = [ "multi-user.target" ];
       pathConfig.PathChanged = "/run/vault-secrets/ssh-host-cert";
     };
     systemd.services.ssh-host-cert = {
