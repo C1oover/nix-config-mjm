@@ -17,6 +17,7 @@ in
     services.invidious = {
       enable = true;
       domain = "yt.midna.dev";
+      address = "::";
       settings = {
         db.user = "invidious";
         external_port = 443;
