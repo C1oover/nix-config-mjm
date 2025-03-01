@@ -97,9 +97,9 @@
         "repo": "firefox-csshacks"
       },
       "branch": "master",
-      "revision": "8c371d758a64099bb6711b98deb871b7474aa040",
-      "url": "https://github.com/MrOtherGuy/firefox-csshacks/archive/8c371d758a64099bb6711b98deb871b7474aa040.tar.gz",
-      "hash": "01c6qidxhbl65aa8ajh490dw8aqsv00i72z3i5caf7yxmwkp2f35"
+      "revision": "0bdc0db51f87795ec19a1966fc655444a4444051",
+      "url": "https://github.com/MrOtherGuy/firefox-csshacks/archive/0bdc0db51f87795ec19a1966fc655444a4444051.tar.gz",
+      "hash": "1s37wrsbxiw19jlk1jyn2212z9by52kks1021wg9icp8d6p4g2fd"
     },
     "freenas-proxmox": {
       "type": "Git",
@@ -145,9 +145,9 @@
         "repo": "home-manager"
       },
       "branch": "master",
-      "revision": "f0b5e7e8a75abdea32bbff09ddd7b6eeb4b9b445",
-      "url": "https://github.com/nix-community/home-manager/archive/f0b5e7e8a75abdea32bbff09ddd7b6eeb4b9b445.tar.gz",
-      "hash": "0lmc12vd7zbdmw7ax4cn3y5isq61892v2lxsx96y3ifihz07nkr5"
+      "revision": "fcac3d6d88302a5e64f6cb8014ac785e08874c8d",
+      "url": "https://github.com/nix-community/home-manager/archive/fcac3d6d88302a5e64f6cb8014ac785e08874c8d.tar.gz",
+      "hash": "172sb8wdqm5fcx85gwzbf0b3l846s4b3ldfrpdhq5lf27lb20w81"
     },
     "lanzaboote": {
       "type": "GitRelease",
@@ -202,9 +202,9 @@
         "server": "https://git.midna.dev/"
       },
       "branch": "deploy/nixpkgs-unstable",
-      "revision": "b4816b5bc795065e72f0591e10cc35e8734ff278",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=b4816b5bc795065e72f0591e10cc35e8734ff278",
-      "hash": "0nyyb0shwfl0bpkycii6cdwmwf8mllrg5k2sxkpq3l273xzg99kx"
+      "revision": "beac518ce0d28301f8db9cfac635c6a6c00ed616",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=beac518ce0d28301f8db9cfac635c6a6c00ed616",
+      "hash": "04iv6airp0dlwslm6f150adbv29fwq2s8hldnw7pwf2a75rcknhx"
     },
     "nixpkgs-firefox-darwin": {
       "type": "Git",
@@ -226,9 +226,9 @@
         "repo": "NUR"
       },
       "branch": "master",
-      "revision": "803af1dede2d5da2d5d8b9216eadc2d9c286541d",
-      "url": "https://github.com/nix-community/NUR/archive/803af1dede2d5da2d5d8b9216eadc2d9c286541d.tar.gz",
-      "hash": "0cfi1byvb38ixifcalakhdl05kf4b8v5l14snxc3216kb04592mf"
+      "revision": "e732503d07b547eb8790bb2893c91c1f162b770c",
+      "url": "https://github.com/nix-community/NUR/archive/e732503d07b547eb8790bb2893c91c1f162b770c.tar.gz",
+      "hash": "1gdyk2niivmny88hinhby1mnk63izm6ba4k5464fa402bypcv799"
     },
     "preservation": {
       "type": "Git",
