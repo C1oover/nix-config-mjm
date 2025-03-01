@@ -35,9 +35,9 @@
         "repo": "home-assistant"
       },
       "branch": "main",
-      "revision": "e877188ca467e7bbe8991440f6b5f6b3d30347fc",
-      "url": "https://github.com/catppuccin/home-assistant/archive/e877188ca467e7bbe8991440f6b5f6b3d30347fc.tar.gz",
-      "hash": "0xr9zlb6qqpaf5y93l7vlww16301p4cp3wbx5bdgfb6dlnarhjkr"
+      "revision": "26b6a807a72b9fd601a275b32261f135961a4845",
+      "url": "https://github.com/catppuccin/home-assistant/archive/26b6a807a72b9fd601a275b32261f135961a4845.tar.gz",
+      "hash": "01s1p6xk7753rdkz3qj3vbxkf9scqbrlv7bs482hmgl2ibbji8mc"
     },
     "catppuccin-process-compose": {
       "type": "Git",
@@ -184,9 +184,9 @@
         "server": "https://git.midna.dev/"
       },
       "branch": "deploy/nixos-unstable",
-      "revision": "b6aec475ae78d2a079293a9dd945089677c2f461",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=b6aec475ae78d2a079293a9dd945089677c2f461",
-      "hash": "13ymqdfd7q3w7mw08f8bssbf3gk27y4hz61594765326vrp77a4n"
+      "revision": "d21c6bcb05b96f8f496b216c2d3f8e15d5602194",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=d21c6bcb05b96f8f496b216c2d3f8e15d5602194",
+      "hash": "0ldxasrb7gn0fg93wjk6c6j3pxf1w6433j1rj9a0lzlbv2848bcq"
     },
     "nixos-small": {
       "type": "Channel",
@@ -214,9 +214,9 @@
         "repo": "nixpkgs-firefox-darwin"
       },
       "branch": "main",
-      "revision": "30ae4b406f2d07bae84786e0921477a3c602ecf5",
-      "url": "https://github.com/bandithedoge/nixpkgs-firefox-darwin/archive/30ae4b406f2d07bae84786e0921477a3c602ecf5.tar.gz",
-      "hash": "04zmibjp7kynyx5rs50n7kr03pc4bvxvfa3d09rnrmhbcn3dsqi7"
+      "revision": "5c2ba3e5d098791114cc4b3ec898ffc8ead825ac",
+      "url": "https://github.com/bandithedoge/nixpkgs-firefox-darwin/archive/5c2ba3e5d098791114cc4b3ec898ffc8ead825ac.tar.gz",
+      "hash": "0cry15g7l3njsddwh80rwcd6ran2vx7iwl58530yxwml38dfkdvk"
     },
     "nur": {
       "type": "Git",
@@ -226,9 +226,9 @@
         "repo": "NUR"
       },
       "branch": "master",
-      "revision": "ae4c322ff60a18fcaac439add13d884796dd87f5",
-      "url": "https://github.com/nix-community/NUR/archive/ae4c322ff60a18fcaac439add13d884796dd87f5.tar.gz",
-      "hash": "0ln3s8dihghzrrhh63lm276mjirrjw42j5rh8lviwzqvpwb615gi"
+      "revision": "2efd087395c3c3a0778af4bfb79ea8955a5dbb17",
+      "url": "https://github.com/nix-community/NUR/archive/2efd087395c3c3a0778af4bfb79ea8955a5dbb17.tar.gz",
+      "hash": "0cah2lcn71ra31fzzl9iwr8l0gxqc65zhvhbymmgx85mq14q82yd"
     },
     "preservation": {
       "type": "Git",
