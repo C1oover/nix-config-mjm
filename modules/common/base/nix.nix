@@ -23,10 +23,7 @@ in
     config.allowUnfree = true;
     overlays = [
       (final: prev: {
-        nur = import inputs.nur {
-          pkgs = prev;
-          nurpkgs = import prev.path { };
-        };
+        rycee = import inputs.rycee { pkgs = final; };
       })
       (import ../../../overlay.nix)
     ];

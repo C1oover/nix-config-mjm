@@ -218,18 +218,6 @@
       "url": "https://github.com/bandithedoge/nixpkgs-firefox-darwin/archive/5c2ba3e5d098791114cc4b3ec898ffc8ead825ac.tar.gz",
       "hash": "0cry15g7l3njsddwh80rwcd6ran2vx7iwl58530yxwml38dfkdvk"
     },
-    "nur": {
-      "type": "Git",
-      "repository": {
-        "type": "GitHub",
-        "owner": "nix-community",
-        "repo": "NUR"
-      },
-      "branch": "master",
-      "revision": "e732503d07b547eb8790bb2893c91c1f162b770c",
-      "url": "https://github.com/nix-community/NUR/archive/e732503d07b547eb8790bb2893c91c1f162b770c.tar.gz",
-      "hash": "1gdyk2niivmny88hinhby1mnk63izm6ba4k5464fa402bypcv799"
-    },
     "preservation": {
       "type": "Git",
       "repository": {
@@ -253,6 +241,18 @@
       "revision": "175acd3178e98054325378313110d248d780c718",
       "url": "https://git.midna.dev/api/v4/projects/mjm%2Fproxmox-nixos/repository/archive.tar.gz?sha=175acd3178e98054325378313110d248d780c718",
       "hash": "1vffxakhb1zi5mmkh6yc38dc7wnhbqgzvz05vs6lbnb5790zkcmm"
+    },
+    "rycee": {
+      "type": "Git",
+      "repository": {
+        "type": "GitLab",
+        "repo_path": "rycee/nur-expressions",
+        "server": "https://gitlab.com/"
+      },
+      "branch": "master",
+      "revision": "1e46c2a53468ce23870a510123f5c4b4702f16b1",
+      "url": "https://gitlab.com/api/v4/projects/rycee%2Fnur-expressions/repository/archive.tar.gz?sha=1e46c2a53468ce23870a510123f5c4b4702f16b1",
+      "hash": "1l62561az9yxha3iq41whr34p62s3l92bvv4pmi2kf6lm2h3bifl"
     },
     "terranix": {
       "type": "GitRelease",

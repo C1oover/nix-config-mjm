@@ -26,7 +26,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    home.packages = with pkgs; [ nur.repos.rycee.mozilla-addons-to-nix ];
+    home.packages = with pkgs; [ rycee.mozilla-addons-to-nix ];
 
     programs.firefox = {
       enable = true;
@@ -85,30 +85,28 @@ in
           "widget.use-xdg-desktop-portal.open-uri" = 1;
           "widget.use-xdg-desktop-portal.settings" = 1;
         };
-        extensions.packages =
-          with pkgs.nur.repos;
-          builtins.attrValues {
-            inherit (rycee.firefox-addons)
-              betterttv
-              bitwarden
-              firefox-color
-              istilldontcareaboutcookies
-              libredirect
-              plasma-integration
-              stylus
-              sidebery
-              sponsorblock
-              tampermonkey
-              ublock-origin
-              ;
-            inherit (addons)
-              minimaltwitter
-              shinigami-eyes
-              linkding-extension
-              linkding-injector
-              sixindicator
-              ;
-          };
+        extensions.packages = builtins.attrValues {
+          inherit (pkgs.rycee.firefox-addons)
+            betterttv
+            bitwarden
+            firefox-color
+            istilldontcareaboutcookies
+            libredirect
+            plasma-integration
+            stylus
+            sidebery
+            sponsorblock
+            tampermonkey
+            ublock-origin
+            ;
+          inherit (addons)
+            minimaltwitter
+            shinigami-eyes
+            linkding-extension
+            linkding-injector
+            sixindicator
+            ;
+        };
         userChrome = ''
           ${builtins.readFile "${inputs.firefox-csshacks}/chrome/hide_tabs_toolbar_v2.css"}
         '';
