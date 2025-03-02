@@ -9,7 +9,13 @@ let
 in
 {
   config = mkIf cfg.enable {
-    virtualisation.libvirtd.enable = true;
+    virtualisation.libvirtd = {
+      enable = true;
+      qemu = {
+        swtpm.enable = true;
+        ovmf.enable = true;
+      };
+    };
     programs.virt-manager.enable = true;
     mjm.state.directories = [ "/var/lib/libvirt" ];
 
