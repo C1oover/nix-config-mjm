@@ -191,8 +191,8 @@
     "nixos-small": {
       "type": "Channel",
       "name": "nixos-unstable-small",
-      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-25.05beta761900.1d2fe0135f36/nixexprs.tar.xz",
-      "hash": "0dzrk1ybfhwbw8ix2dhphfk8akq5zjx1y221byphgzw01i0jxp24"
+      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-25.05beta762106.789d5d063318/nixexprs.tar.xz",
+      "hash": "0lgzs1qnj7a08vkak5sfm5zx4fazjcyl14ibpyndl9415mnkcmw3"
     },
     "nixpkgs": {
       "type": "Git",
@@ -238,8 +238,8 @@
         "server": "https://git.midna.dev/"
       },
       "branch": "deploy/main",
-      "revision": "fd79f962012ad6869953a283c4a0b7e48cdabe8f",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fproxmox-nixos/repository/archive.tar.gz?sha=fd79f962012ad6869953a283c4a0b7e48cdabe8f",
+      "revision": "84a749906855315777d87cb2c281daf101cc37fd",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fproxmox-nixos/repository/archive.tar.gz?sha=84a749906855315777d87cb2c281daf101cc37fd",
       "hash": "1vffxakhb1zi5mmkh6yc38dc7wnhbqgzvz05vs6lbnb5790zkcmm"
     },
     "rycee": {
