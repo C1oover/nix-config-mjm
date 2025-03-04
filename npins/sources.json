@@ -191,8 +191,8 @@
     "nixos-small": {
       "type": "Channel",
       "name": "nixos-unstable-small",
-      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-25.05beta762106.789d5d063318/nixexprs.tar.xz",
-      "hash": "0lgzs1qnj7a08vkak5sfm5zx4fazjcyl14ibpyndl9415mnkcmw3"
+      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-25.05beta762386.72bccb296023/nixexprs.tar.xz",
+      "hash": "1nsac0xxfi500a24bga2xlmpsilzn53l4v9h3qqx7blln84qri6s"
     },
     "nixpkgs": {
       "type": "Git",
