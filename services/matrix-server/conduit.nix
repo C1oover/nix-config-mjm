@@ -18,7 +18,7 @@ in
 
   config = mkIf cfg.enable {
     mjm.services.matrix-server = { };
-    mjm.state.directories = [ "/var/lib/private/matrix-conduit" ];
+    mjm.state.directories = [ "/var/lib/private/conduwuit" ];
 
     ingress.virtualHosts.chat = {
       upstream.service.name = "conduit";
@@ -26,12 +26,15 @@ in
       useIPv4Proxy = true;
     };
 
-    services.matrix-conduit = {
+    services.conduwuit = {
       enable = true;
       package = pkg;
 
       settings.global = {
-        address = "::";
+        address = [
+          "0.0.0.0"
+          "::"
+        ];
         server_name = "midna.dev";
         database_backend = "rocksdb";
         log = "info";
@@ -59,10 +62,10 @@ in
       };
     };
 
-    networking.firewall.allowedTCPPorts = [ config.services.matrix-conduit.settings.global.port ];
+    networking.firewall.allowedTCPPorts = [ 6167 ];
 
     services.consul.services.conduit = {
-      inherit (config.services.matrix-conduit.settings.global) port;
+      port = 6167;
 
       checks.up = {
         http.path = "/_matrix/client/versions";
