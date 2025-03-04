@@ -73,9 +73,9 @@
         "server": "https://git.midna.dev/"
       },
       "branch": "deploy/master",
-      "revision": "0604ea47b2f55a5fe896659cf43365667beb3d92",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnix-darwin/repository/archive.tar.gz?sha=0604ea47b2f55a5fe896659cf43365667beb3d92",
-      "hash": "1ydi0l8fn39kfhv87yh89lbaqs962g0h51h040lg0zf3wf65wkxs"
+      "revision": "996637f57a497f3f3021cc7bf09f6afa069eb12b",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnix-darwin/repository/archive.tar.gz?sha=996637f57a497f3f3021cc7bf09f6afa069eb12b",
+      "hash": "0slcfx5yb8iac8p18nr1mxmfdlscjiz5mqrwa71icqd8gbkb4jzb"
     },
     "devshell": {
       "type": "Git",
@@ -133,9 +133,9 @@
         "server": "https://git.midna.dev/"
       },
       "branch": "deploy/master",
-      "revision": "a194e9b9aa9fff31563213bb791ab2d6fb17c82a",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fhelix/repository/archive.tar.gz?sha=a194e9b9aa9fff31563213bb791ab2d6fb17c82a",
-      "hash": "10769xm6bj84p32yn34vk7sc5lpl6z7fnldv2c6xi9pykwqkifdm"
+      "revision": "ba565a3f0f40adc2f4274a0645a2c5e821bf1217",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fhelix/repository/archive.tar.gz?sha=ba565a3f0f40adc2f4274a0645a2c5e821bf1217",
+      "hash": "0ibwb741mcxvadljvnpxgkbl2hsbdrzxrcff5xl9j2sp2ay46qix"
     },
     "home-manager": {
       "type": "Git",
@@ -145,9 +145,9 @@
         "repo": "home-manager"
       },
       "branch": "master",
-      "revision": "fcac3d6d88302a5e64f6cb8014ac785e08874c8d",
-      "url": "https://github.com/nix-community/home-manager/archive/fcac3d6d88302a5e64f6cb8014ac785e08874c8d.tar.gz",
-      "hash": "172sb8wdqm5fcx85gwzbf0b3l846s4b3ldfrpdhq5lf27lb20w81"
+      "revision": "70fbbf05a5594b0a72124ab211bff1d502c89e3f",
+      "url": "https://github.com/nix-community/home-manager/archive/70fbbf05a5594b0a72124ab211bff1d502c89e3f.tar.gz",
+      "hash": "1w40h2rdwag7pyk334vphni55b9akd90a9vaf0mg5w5ab8qq74pw"
     },
     "lanzaboote": {
       "type": "GitRelease",
@@ -202,9 +202,9 @@
         "server": "https://git.midna.dev/"
       },
       "branch": "deploy/nixpkgs-unstable",
-      "revision": "4aacb74518012c13d87f7f7ca10d22fd5fdddf2f",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=4aacb74518012c13d87f7f7ca10d22fd5fdddf2f",
-      "hash": "0p47crxd9fbdhlnanjzzk44wns5x2mzgi01br7k3dlcf8g3a74j4"
+      "revision": "5722bd6755f6b2f5d957208d71f71dfce083c180",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=5722bd6755f6b2f5d957208d71f71dfce083c180",
+      "hash": "0bxi9vmn8fqasq51qsv15wy257k2plrqfbrwm1vcfkq5hx4hj9cs"
     },
     "nixpkgs-firefox-darwin": {
       "type": "Git",
@@ -214,9 +214,9 @@
         "repo": "nixpkgs-firefox-darwin"
       },
       "branch": "main",
-      "revision": "049806b398fed4f04bbfca34fff8b99f0e045b5f",
-      "url": "https://github.com/bandithedoge/nixpkgs-firefox-darwin/archive/049806b398fed4f04bbfca34fff8b99f0e045b5f.tar.gz",
-      "hash": "1lmbl1wg70kpinrmy8a425bym157pnildx5nfv0n6pv1rfljgd1m"
+      "revision": "bc19d296e678a70ad9b63b40de9a7edf69f7bba1",
+      "url": "https://github.com/bandithedoge/nixpkgs-firefox-darwin/archive/bc19d296e678a70ad9b63b40de9a7edf69f7bba1.tar.gz",
+      "hash": "0izdpr487xp7j4ksnka6krgga2973bl4131z0j875vpvxkpih1dj"
     },
     "preservation": {
       "type": "Git",
@@ -250,9 +250,9 @@
         "server": "https://gitlab.com/"
       },
       "branch": "master",
-      "revision": "093c063a23aa38f31082a554f03899127750aee3",
-      "url": "https://gitlab.com/api/v4/projects/rycee%2Fnur-expressions/repository/archive.tar.gz?sha=093c063a23aa38f31082a554f03899127750aee3",
-      "hash": "07ccb2qqv0na4sw0g4v045147ywg8s0bzyvm72y32fhqfs2jgc31"
+      "revision": "3023b1d8f9f85b9bbc0df2dff78de83cf89dd948",
+      "url": "https://gitlab.com/api/v4/projects/rycee%2Fnur-expressions/repository/archive.tar.gz?sha=3023b1d8f9f85b9bbc0df2dff78de83cf89dd948",
+      "hash": "0p634qn7gy6j1a6l1yql857bxvw836660wcfgs6k99qdx4pr0fmc"
     },
     "terranix": {
       "type": "GitRelease",
