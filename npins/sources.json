@@ -52,18 +52,16 @@
       "hash": "02niadbnif2c28vy51gp40yp55l9gksdxj3bkmav35gbwgs538ms"
     },
     "conduit": {
-      "type": "GitRelease",
+      "type": "Git",
       "repository": {
-        "type": "Git",
-        "url": "https://github.com/girlbossceo/conduwuit.git"
+        "type": "GitHub",
+        "owner": "girlbossceo",
+        "repo": "conduwuit"
       },
-      "pre_releases": false,
-      "version_upper_bound": null,
-      "release_prefix": null,
-      "version": "v0.4.6",
-      "revision": "8f7ade4c22533a3177bfd8f175e178573ba6c1d4",
-      "url": null,
-      "hash": "1wfjzzh1c7yi4nlb80msj2k2v1p4ibxijwmk9zhiydcy9dccipds"
+      "branch": "main",
+      "revision": "e3b81f7b6488b5c483e8b13e3959fe591bf4cb92",
+      "url": "https://github.com/girlbossceo/conduwuit/archive/e3b81f7b6488b5c483e8b13e3959fe591bf4cb92.tar.gz",
+      "hash": "0ln8w44fjk5adyk1jmryzlwb773p3afd44x895a4f5anwdnd9ls1"
     },
     "darwin": {
       "type": "Git",
