@@ -30,7 +30,7 @@ let
           name: configs:
           let
             nixpkgsKey = plans.nixos.meta.nixpkgs.${name} or plans.nixos.meta.nixpkgs.default;
-            npkgs = allPkgs.${nixpkgsKey};
+            npkgs = if builtins.isPath nixpkgsKey then import nixpkgsKey { } else allPkgs.${nixpkgsKey};
             evalConfig = import (npkgs.path + "/nixos/lib/eval-config.nix");
           in
           evalConfig {

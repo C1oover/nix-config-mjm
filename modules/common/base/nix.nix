@@ -1,6 +1,13 @@
-{ inputs, pkgs, ... }:
+{
+  inputs,
+  pkgs,
+  lib,
+  ...
+}:
 let
+  inherit (lib) isStorePath mkIf;
   nix-index = import inputs.nix-index-database { inherit pkgs; };
+  addNixPath = isStorePath pkgs.path;
 in
 {
 
@@ -31,8 +38,8 @@ in
 
   nix.package = pkgs.lix;
 
-  nix.nixPath = [ "nixpkgs=flake:nixpkgs" ];
-  nix.registry.nixpkgs.flake.outPath = builtins.storePath pkgs.path;
+  nix.nixPath = mkIf addNixPath [ "nixpkgs=flake:nixpkgs" ];
+  nix.registry.nixpkgs.flake.outPath = mkIf addNixPath (builtins.storePath pkgs.path);
 
   programs.nix-index = {
     enable = true;
