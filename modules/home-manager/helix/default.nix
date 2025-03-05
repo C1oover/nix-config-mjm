@@ -3,14 +3,13 @@
   inputs,
   lib,
   config,
-  osConfig,
   ...
 }:
 let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.mjm.helix;
 
-  helix = (import inputs.helix).packages.${pkgs.system}.default;
+  helix = pkgs.callPackage inputs.helix { };
 in
 {
   options.mjm.helix = {
