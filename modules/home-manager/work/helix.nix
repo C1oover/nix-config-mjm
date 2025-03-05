@@ -13,13 +13,11 @@ let
 in
 {
   config = mkIf cfg.enable {
-    mjm.helix.enable = true;
-
     # cmake is needed to build some elixir deps
     # if it's not in the path, elixir-ls might just not work
     home.packages = with pkgs; [ cmake ];
 
-    programs.helix =
+    mjm.helix =
       let
         efmConfig = yamlFormat.generate "efm-config.yml" {
           version = 2;
@@ -42,6 +40,7 @@ in
         };
       in
       {
+        enable = true;
         extraPackages = with pkgs; [ efm-langserver ];
         languages = {
           language-server.efm = {
