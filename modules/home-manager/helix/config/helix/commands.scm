@@ -114,7 +114,7 @@
 (provide format)
 
 ;;@doc
-;;Format the file using the LSP formatter.
+;;Format the file using an external formatter or language server.
 (define (format . args)
     (helix.format *helix.cx* args))
 
@@ -366,14 +366,14 @@
 (provide lsp-restart)
 
 ;;@doc
-;;Restarts the language servers used by the current doc
+;;Restarts the given language servers, or all language servers that are used by the current file if no arguments are supplied
 (define (lsp-restart . args)
     (helix.lsp-restart *helix.cx* args))
 
 (provide lsp-stop)
 
 ;;@doc
-;;Stops the language servers that are used by the current doc
+;;Stops the given language servers, or all language servers that are used by the current file if no arguments are supplied
 (define (lsp-stop . args)
     (helix.lsp-stop *helix.cx* args))
 
@@ -472,7 +472,7 @@
 (provide toggle-option)
 
 ;;@doc
-;;Toggle a boolean config option at runtime.
+;;Toggle a config option at runtime.
 ;;For example to toggle smart case search, use `:toggle search.smart-case`.
 (define (toggle-option . args)
     (helix.toggle-option *helix.cx* args))
@@ -490,13 +490,6 @@
 ;;Sort ranges in selection.
 (define (sort . args)
     (helix.sort *helix.cx* args))
-
-(provide rsort)
-
-;;@doc
-;;Sort ranges in selection in reverse order.
-(define (rsort . args)
-    (helix.rsort *helix.cx* args))
 
 (provide reflow)
 
@@ -575,13 +568,6 @@
 (define (run-shell-command . args)
     (helix.run-shell-command *helix.cx* args))
 
-(provide run-shell-command-text)
-
-;;@doc
-;;Run a shell command
-(define (run-shell-command-text . args)
-    (helix.run-shell-command-text *helix.cx* args))
-
 (provide reset-diff-change)
 
 ;;@doc
@@ -623,3 +609,17 @@
 ;;Load a file into buffer
 (define (read . args)
     (helix.read *helix.cx* args))
+
+(provide echo)
+
+;;@doc
+;;Prints the given arguments to the statusline.
+(define (echo . args)
+    (helix.echo *helix.cx* args))
+
+(provide noop)
+
+;;@doc
+;;Does nothing.
+(define (noop . args)
+    (helix.noop *helix.cx* args))

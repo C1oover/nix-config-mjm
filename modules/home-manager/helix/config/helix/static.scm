@@ -461,6 +461,12 @@
 (define (search_selection)
     (helix.static.search_selection *helix.cx*))
 
+(provide search_selection_detect_word_boundaries)
+;;@doc
+;;Use current selection as the search pattern, automatically wrapping with `\b` on word boundaries
+(define (search_selection_detect_word_boundaries)
+    (helix.static.search_selection_detect_word_boundaries *helix.cx*))
+
 (provide make_search_word_bounded)
 ;;@doc
 ;;Modify current search to make it word bounded
@@ -592,6 +598,24 @@
 ;;Open file picker at current working directory
 (define (file_picker_in_current_directory)
     (helix.static.file_picker_in_current_directory *helix.cx*))
+
+(provide file_explorer)
+;;@doc
+;;Open file explorer in workspace root
+(define (file_explorer)
+    (helix.static.file_explorer *helix.cx*))
+
+(provide file_explorer_in_current_buffer_directory)
+;;@doc
+;;Open file explorer at current buffer's directory
+(define (file_explorer_in_current_buffer_directory)
+    (helix.static.file_explorer_in_current_buffer_directory *helix.cx*))
+
+(provide file_explorer_in_current_directory)
+;;@doc
+;;Open file explorer at current working directory
+(define (file_explorer_in_current_directory)
+    (helix.static.file_explorer_in_current_directory *helix.cx*))
 
 (provide code_action)
 ;;@doc
@@ -1409,6 +1433,12 @@
 (define (insert_register)
     (helix.static.insert_register *helix.cx*))
 
+(provide copy_between_registers)
+;;@doc
+;;Copy between two registers
+(define (copy_between_registers)
+    (helix.static.copy_between_registers *helix.cx*))
+
 (provide align_view_middle)
 ;;@doc
 ;;Align view middle
@@ -1744,6 +1774,18 @@
 ;;Extend to a two-character label
 (define (extend_to_word)
     (helix.static.extend_to_word *helix.cx*))
+
+(provide goto_next_tabstop)
+;;@doc
+;;goto next snippet placeholder
+(define (goto_next_tabstop)
+    (helix.static.goto_next_tabstop *helix.cx*))
+
+(provide goto_prev_tabstop)
+;;@doc
+;;goto next snippet placeholder
+(define (goto_prev_tabstop)
+    (helix.static.goto_prev_tabstop *helix.cx*))
 
 (provide insert_char)
 ;;@doc

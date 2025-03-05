@@ -7,6 +7,10 @@
 (define (get-config-option-value arg)
     (helix.get-config-option-value *helix.cx* arg))
 
+(provide set-configuration-for-file!)
+(define (set-configuration-for-file! path config)
+    (helix.set-configuration-for-file! *helix.cx* path config))
+
 (provide get-keybindings)
 (define (get-keybindings)
     (helix.get-keybindings *helix.config*))
@@ -262,3 +266,15 @@
 (provide inline-diagnostics-end-of-line-enable)
 (define (inline-diagnostics-end-of-line-enable arg)
     (helix.inline-diagnostics-end-of-line-enable *helix.config* arg))
+
+(provide get-language-config)
+(define (get-language-config arg)
+    (helix.get-language-config *helix.config* arg))
+
+(provide get-language-config-by-filename)
+(define (get-language-config-by-filename arg)
+    (helix.get-language-config-by-filename *helix.config* arg))
+
+(provide set-language-config!)
+(define (set-language-config! arg)
+    (helix.set-language-config! *helix.config* arg))
