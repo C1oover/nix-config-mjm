@@ -71,9 +71,9 @@
         "server": "https://git.midna.dev/"
       },
       "branch": "deploy/master",
-      "revision": "996637f57a497f3f3021cc7bf09f6afa069eb12b",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnix-darwin/repository/archive.tar.gz?sha=996637f57a497f3f3021cc7bf09f6afa069eb12b",
-      "hash": "0slcfx5yb8iac8p18nr1mxmfdlscjiz5mqrwa71icqd8gbkb4jzb"
+      "revision": "3608fd557d3dfb4f11e5b53c97009edc352fe9b0",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnix-darwin/repository/archive.tar.gz?sha=3608fd557d3dfb4f11e5b53c97009edc352fe9b0",
+      "hash": "0akx47p982d65xmdn70szzlc1vqps08y83r45wqjrklm74qj6x76"
     },
     "devshell": {
       "type": "Git",
@@ -131,9 +131,9 @@
         "server": "https://git.midna.dev/"
       },
       "branch": "deploy/master",
-      "revision": "ba565a3f0f40adc2f4274a0645a2c5e821bf1217",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fhelix/repository/archive.tar.gz?sha=ba565a3f0f40adc2f4274a0645a2c5e821bf1217",
-      "hash": "0ibwb741mcxvadljvnpxgkbl2hsbdrzxrcff5xl9j2sp2ay46qix"
+      "revision": "655e61ad65858e6ffabeca35353ca74ea958b687",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fhelix/repository/archive.tar.gz?sha=655e61ad65858e6ffabeca35353ca74ea958b687",
+      "hash": "1d5wcz23xidi5b918axmvp7xsc7cq7f1zndyy0cfgwybr0icqvcl"
     },
     "home-manager": {
       "type": "Git",
@@ -143,9 +143,9 @@
         "repo": "home-manager"
       },
       "branch": "master",
-      "revision": "70fbbf05a5594b0a72124ab211bff1d502c89e3f",
-      "url": "https://github.com/nix-community/home-manager/archive/70fbbf05a5594b0a72124ab211bff1d502c89e3f.tar.gz",
-      "hash": "1w40h2rdwag7pyk334vphni55b9akd90a9vaf0mg5w5ab8qq74pw"
+      "revision": "3f08cd8ef77dcd7586075a460a61c8432baf25a9",
+      "url": "https://github.com/nix-community/home-manager/archive/3f08cd8ef77dcd7586075a460a61c8432baf25a9.tar.gz",
+      "hash": "1pphqaq2kd0l1r3ss3nkgcg1fxx727xbzrc9lcrg7x9lmfs02jrq"
     },
     "lanzaboote": {
       "type": "GitRelease",
@@ -189,8 +189,8 @@
     "nixos-small": {
       "type": "Channel",
       "name": "nixos-unstable-small",
-      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-25.05beta762386.72bccb296023/nixexprs.tar.xz",
-      "hash": "1nsac0xxfi500a24bga2xlmpsilzn53l4v9h3qqx7blln84qri6s"
+      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-25.05beta762600.7611aea8d5db/nixexprs.tar.xz",
+      "hash": "17m3nv0hsdfnnxkgjmzn157y17xwln0lcslglghpd8s9wippp2p0"
     },
     "nixpkgs": {
       "type": "Git",
