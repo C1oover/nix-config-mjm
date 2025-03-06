@@ -187,10 +187,16 @@
       "hash": "0h24zycqk7kqzdd3w2x1c0binml047ghnpiindg9jvmf51qjyfc9"
     },
     "nixos-small": {
-      "type": "Channel",
-      "name": "nixos-unstable-small",
-      "url": "https://releases.nixos.org/nixos/unstable-small/nixos-25.05beta762600.7611aea8d5db/nixexprs.tar.xz",
-      "hash": "17m3nv0hsdfnnxkgjmzn157y17xwln0lcslglghpd8s9wippp2p0"
+      "type": "Git",
+      "repository": {
+        "type": "GitLab",
+        "repo_path": "mjm/nixpkgs",
+        "server": "https://git.midna.dev/"
+      },
+      "branch": "deploy/nixos-unstable-small",
+      "revision": "fdf129c1a6f9e49339a5f667d005ba3b329e1b3c",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=fdf129c1a6f9e49339a5f667d005ba3b329e1b3c",
+      "hash": "0g04h2ykbimw7wjsc88bxxkkxy7xz88sc19apkrayy49zdnzw7xg"
     },
     "nixpkgs": {
       "type": "Git",

@@ -23,7 +23,11 @@ in
       qemu = {
         swtpm.enable = true;
         ovmf.enable = true;
+        ovmf.packages = [ pkgs.OVMFFull.fd ];
       };
+      onBoot = "ignore"; # VMs should be configured to autostart
+      onShutdown = "shutdown";
+      parallelShutdown = 3;
     };
 
     # TODO do network device config here instead of relying on it from proxmox module.
