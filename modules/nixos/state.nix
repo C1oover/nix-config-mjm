@@ -114,6 +114,7 @@ in
           directory = "/var/log";
           inInitrd = true;
         }
+        "/var/lib/systemd"
       ];
 
       mjm.state.files = [

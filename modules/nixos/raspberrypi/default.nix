@@ -25,9 +25,6 @@ in
     powerManagement.cpuFreqGovernor = "ondemand";
     nixpkgs.hostPlatform = "aarch64-linux";
 
-    # they don't have a TPM, so we need this directory to be persistent
-    # so we can use it for the key for systemd-creds
-    mjm.state.directories = [ "/var/lib/systemd" ];
     boot.initrd.systemd.tpm2.enable = false;
 
     hardware.deviceTree.overlays = [
