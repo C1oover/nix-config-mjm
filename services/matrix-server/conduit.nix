@@ -18,7 +18,13 @@ in
 
   config = mkIf cfg.enable {
     mjm.services.matrix-server = { };
-    mjm.state.directories = [ "/var/lib/private/conduwuit" ];
+    mjm.state.directories = [
+      {
+        directory = "/var/lib/private/conduwuit";
+        user = "nobody";
+        group = "nogroup";
+      }
+    ];
 
     ingress.virtualHosts.chat = {
       upstream.service.name = "conduit";
