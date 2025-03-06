@@ -22,6 +22,7 @@ var (
 	plansFile   = flag.String("plans", "plans.nix", "File to evaluate for deploy plans")
 	concurrency = flag.Int("concurrency", runtime.NumCPU(), "Number of nodes to evaluate/build concurrently")
 	nom         = flag.Bool("nom", os.Getenv("CI") == "", "Whether to run builds through nix-output-monitor")
+	forceGoal   = flag.String("goal", "", "Force use of a specific goal regardless of reboot check")
 
 	logLevel slog.Level
 )

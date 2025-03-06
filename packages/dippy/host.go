@@ -155,26 +155,28 @@ func (h *Host) DiffLocal(ctx context.Context) error {
 
 const systemProfile = "/nix/var/nix/profiles/system"
 
-func (h *Host) Deploy(ctx context.Context) error {
+func (h *Host) Deploy(ctx context.Context, goal string) error {
 	h.log.InfoContext(ctx, "deploying")
 
-	goal := "switch"
-	if h.RebootNeeded {
-		goal = "boot"
+	if goal == "" {
+		goal = "switch"
+		if h.RebootNeeded {
+			goal = "boot"
+		}
 	}
 
 	if err := h.apply(ctx, goal); err != nil {
 		return fmt.Errorf("applying: %w", err)
 	}
 
-	if h.RebootNeeded && h.DeployConfig.AutoReboot {
+	if goal == "boot" && h.DeployConfig.AutoReboot {
 		if err := h.Reboot(ctx); err != nil {
 			return fmt.Errorf("rebooting: %w", err)
 		}
 	}
 
 	// skip consul checks if the boot goal was used but the node wasn't rebooted yet
-	if !h.RebootNeeded || h.DeployConfig.AutoReboot {
+	if goal != "boot" || h.DeployConfig.AutoReboot {
 		if err := h.WaitUntilHealthy(ctx); err != nil {
 			return fmt.Errorf("waiting for %s to be healthy: %w", h.Name, err)
 		}

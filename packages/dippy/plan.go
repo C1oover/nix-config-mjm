@@ -113,7 +113,7 @@ func (_ DeployPlan) deployPhaseHosts(ctx context.Context, name string, hosts []*
 	l.InfoContext(ctx, "deploying phase", "host_count", len(hosts))
 
 	for _, h := range hosts {
-		if err := h.Deploy(ctx); err != nil {
+		if err := h.Deploy(ctx, *forceGoal); err != nil {
 			return fmt.Errorf("deploying %s: %w", h.Name, err)
 		}
 	}
