@@ -23,6 +23,7 @@ var (
 	concurrency = flag.Int("concurrency", runtime.NumCPU(), "Number of nodes to evaluate/build concurrently")
 	nom         = flag.Bool("nom", os.Getenv("CI") == "", "Whether to run builds through nix-output-monitor")
 	forceGoal   = flag.String("goal", "", "Force use of a specific goal regardless of reboot check")
+	pushToAttic = flag.Bool("attic", true, "Whether to push the built system to the attic cache")
 
 	logLevel slog.Level
 )
@@ -92,8 +93,10 @@ func handleDeploy(ctx context.Context) error {
 		if err := h.Push(ctx); err != nil {
 			return fmt.Errorf("pushing node %s: %w", h.Name, err)
 		}
-		if err := h.PushToAttic(ctx); err != nil {
-			return fmt.Errorf("pushing node %s to attic: %w", h.Name, err)
+		if *pushToAttic {
+			if err := h.PushToAttic(ctx); err != nil {
+				return fmt.Errorf("pushing node %s to attic: %w", h.Name, err)
+			}
 		}
 		if err := h.CheckRebootNeeded(ctx); err != nil {
 			return fmt.Errorf("checking if reboot is needed on %s: %w", h.Name, err)
@@ -143,8 +146,10 @@ func handleDiff(ctx context.Context) error {
 	}
 
 	if err := plan.EachHost(ctx, func(ctx context.Context, h *Host) error {
-		if err := h.PushToAttic(ctx); err != nil {
-			return fmt.Errorf("pushing node %s to attic: %w", h.Name, err)
+		if *pushToAttic {
+			if err := h.PushToAttic(ctx); err != nil {
+				return fmt.Errorf("pushing node %s to attic: %w", h.Name, err)
+			}
 		}
 
 		if h.IsRemote() {
@@ -220,8 +225,10 @@ func handleApplyLocal(ctx context.Context) error {
 		return fmt.Errorf("building node: %w", err)
 	}
 
-	if err := h.PushToAttic(ctx); err != nil {
-		return fmt.Errorf("pushing to attic: %w", err)
+	if *pushToAttic {
+		if err := h.PushToAttic(ctx); err != nil {
+			return fmt.Errorf("pushing to attic: %w", err)
+		}
 	}
 
 	if err := h.DiffLocal(ctx); err != nil {
