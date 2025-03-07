@@ -26,6 +26,5 @@ in
       6001
       6002
     ];
-    services.avahi.enable = true;
   };
 }
