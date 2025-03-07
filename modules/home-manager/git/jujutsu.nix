@@ -63,10 +63,9 @@ in
         };
 
         core.fsmonitor = mkIf cfg.enableWatchman "watchman";
-        git.subprocess = true;
 
         signing = mkIf cfg.enableSigning {
-          sign-all = true;
+          behavior = "own";
           backend = "ssh";
           key = "~/.ssh/id_ed25519.pub";
         };
