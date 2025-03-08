@@ -9,6 +9,8 @@ let
   cfg = config.mjm.libvirtd;
 in
 {
+  imports = [ ./backups.nix ];
+
   options.mjm.libvirtd = {
     enable = mkEnableOption "libvirtd";
   };
