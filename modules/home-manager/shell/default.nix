@@ -42,6 +42,15 @@ in
         ];
       };
 
+      programs.direnv = {
+        enable = true;
+        nix-direnv.enable = true;
+
+        config = {
+          global.warn_timeout = "1m";
+        };
+      };
+
       programs.bat.enable = true;
       programs.btop.enable = true;
       programs.carapace.enable = true;
@@ -55,15 +64,6 @@ in
     }
 
     (mkIf cfg.desktop.enable {
-      programs.direnv = {
-        enable = true;
-        nix-direnv.enable = true;
-
-        config = {
-          global.warn_timeout = "1m";
-        };
-      };
-
       programs.fzf.enable = true;
       programs.yazi.enable = true;
 
