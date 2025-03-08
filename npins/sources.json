@@ -83,9 +83,9 @@
         "repo": "devshell"
       },
       "branch": "main",
-      "revision": "f7795ede5b02664b57035b3b757876703e2c3eac",
-      "url": "https://github.com/numtide/devshell/archive/f7795ede5b02664b57035b3b757876703e2c3eac.tar.gz",
-      "hash": "1rm57diq54amiv6kafim0gpnindm63hsycfflpibpj72gancgvdl"
+      "revision": "7c9e793ebe66bcba8292989a68c0419b737a22a0",
+      "url": "https://github.com/numtide/devshell/archive/7c9e793ebe66bcba8292989a68c0419b737a22a0.tar.gz",
+      "hash": "165601skgrlgvgr4h7hjbz80zp7zpn7z2c7qjh6bal8hmjmmlqwi"
     },
     "firefox-csshacks": {
       "type": "Git",
@@ -182,9 +182,9 @@
         "server": "https://git.midna.dev/"
       },
       "branch": "deploy/nixos-unstable",
-      "revision": "5cf447aa7adc2d27964622024e8f759dcca6a4ab",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=5cf447aa7adc2d27964622024e8f759dcca6a4ab",
-      "hash": "0krpq18g6gv2dvax9rnbxpscjmppagl270ighr5vwns067pa9vlc"
+      "revision": "4463d567bc8ffa79b7e724db975635930fad6528",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=4463d567bc8ffa79b7e724db975635930fad6528",
+      "hash": "19kc3v6f3045jhjadqmr3crg8yny1zvlg6la46ynpaxg63afwryx"
     },
     "nixos-small": {
       "type": "Git",
