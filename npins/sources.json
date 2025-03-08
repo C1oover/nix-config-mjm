@@ -131,9 +131,9 @@
         "server": "https://git.midna.dev/"
       },
       "branch": "deploy/master",
-      "revision": "9233cb15b7ce9fe4b76191d7c8b870741399030f",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fhelix/repository/archive.tar.gz?sha=9233cb15b7ce9fe4b76191d7c8b870741399030f",
-      "hash": "1s6q7vf6djf78wdw69583y32bhq92831xcn9wl353434158n8xr8"
+      "revision": "e688d7b46bc49506b529dfdce693385705281ab4",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fhelix/repository/archive.tar.gz?sha=e688d7b46bc49506b529dfdce693385705281ab4",
+      "hash": "1r6zac7slqb9n62blwsydg8bg4jhw4pg725lbwmclhva405dbk5r"
     },
     "home-manager": {
       "type": "Git",
@@ -143,9 +143,9 @@
         "repo": "home-manager"
       },
       "branch": "master",
-      "revision": "04c915bcf1a1eac3519372ff3185beef053fba7c",
-      "url": "https://github.com/nix-community/home-manager/archive/04c915bcf1a1eac3519372ff3185beef053fba7c.tar.gz",
-      "hash": "11kzq9741i2y9xignbkbamcrmbqq54b282bsmx2wgf8si8xnhfi9"
+      "revision": "7f4c60a3d6e548dbc13666565c22cb3f8dcdad44",
+      "url": "https://github.com/nix-community/home-manager/archive/7f4c60a3d6e548dbc13666565c22cb3f8dcdad44.tar.gz",
+      "hash": "17wax2y1dx8x8gnhvvch2snikmw0g1yshrlvzfan66dpycd1y504"
     },
     "lanzaboote": {
       "type": "GitRelease",
@@ -170,9 +170,9 @@
         "repo": "nix-index-database"
       },
       "branch": "main",
-      "revision": "26a0f969549cf4d56f6e9046b9e0418b3f3b94a5",
-      "url": "https://github.com/nix-community/nix-index-database/archive/26a0f969549cf4d56f6e9046b9e0418b3f3b94a5.tar.gz",
-      "hash": "0ag1ma5qy7h3zxsvg24qzqlfnfvdkrkj36rp1lakbsj1ilks9plc"
+      "revision": "eeaf10849c3a0435323216885c0df7569dc95cb9",
+      "url": "https://github.com/nix-community/nix-index-database/archive/eeaf10849c3a0435323216885c0df7569dc95cb9.tar.gz",
+      "hash": "0p5178bq5c4dhwgg2hkw53f4hsda6706vf5db5cki1hl9f4hcgfk"
     },
     "nixos": {
       "type": "Git",
@@ -194,9 +194,9 @@
         "server": "https://git.midna.dev/"
       },
       "branch": "deploy/nixos-unstable-small",
-      "revision": "e34dd6cea251d124917b7ab14259de662db7813b",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=e34dd6cea251d124917b7ab14259de662db7813b",
-      "hash": "068c8hcnwwndmchxrdjkz5i53wkzqpg0izj5fiz7f89171mrgpls"
+      "revision": "a5a212822771ab745f02b194255b91778d02c3ba",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=a5a212822771ab745f02b194255b91778d02c3ba",
+      "hash": "14vpy8ivx0wqz2h851vxiwncqz1ck4wxpa8wwpl8q4w8cnclb1f0"
     },
     "nixpkgs": {
       "type": "Git",
@@ -218,9 +218,9 @@
         "repo": "nixpkgs-firefox-darwin"
       },
       "branch": "main",
-      "revision": "8a1680c379829fdad5c2ec44694f9f08e8906d7e",
-      "url": "https://github.com/bandithedoge/nixpkgs-firefox-darwin/archive/8a1680c379829fdad5c2ec44694f9f08e8906d7e.tar.gz",
-      "hash": "0fzasp7nnrjd9dskcaj2rsrnxg6gbl5mpm64kbnyx1aqypbhh2jg"
+      "revision": "08fecf075adbbf16def85b210b653db461963ca4",
+      "url": "https://github.com/bandithedoge/nixpkgs-firefox-darwin/archive/08fecf075adbbf16def85b210b653db461963ca4.tar.gz",
+      "hash": "14iq2zh34d7pp97pz9i5656zxnz7yfnhzlph0r28kq33505xfshg"
     },
     "preservation": {
       "type": "Git",
@@ -254,9 +254,9 @@
         "server": "https://gitlab.com/"
       },
       "branch": "master",
-      "revision": "30f586fd26fc52324cbe806e8c6f73924004c1aa",
-      "url": "https://gitlab.com/api/v4/projects/rycee%2Fnur-expressions/repository/archive.tar.gz?sha=30f586fd26fc52324cbe806e8c6f73924004c1aa",
-      "hash": "133idqvs0k1l7n4rpxk2975lfy82kp5j9f88jrf7bsj0xambdzyn"
+      "revision": "0bbd4266c08de042ecf51e5fb356be915e839f10",
+      "url": "https://gitlab.com/api/v4/projects/rycee%2Fnur-expressions/repository/archive.tar.gz?sha=0bbd4266c08de042ecf51e5fb356be915e839f10",
+      "hash": "0jg4w4y9l5hpqvd4mbr15ca4mk803pqnvmkvnk2xjdy6q8a29w08"
     },
     "terranix": {
       "type": "GitRelease",
