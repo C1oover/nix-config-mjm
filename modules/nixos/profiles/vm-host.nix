@@ -53,5 +53,7 @@ in
       enable = true;
       name = cfg.iscsiName;
     };
+
+    services.zfs.autoScrub.enable = true;
   };
 }
