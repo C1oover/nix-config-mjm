@@ -17,12 +17,13 @@
     }
   ];
 
+  mjm.profiles.raspberry-pi.enable = true;
+
   mjm.consul.enable = true;
   mjm.nut = {
     enable = true;
     mode = "server";
   };
-  mjm.raspberrypi.enable = true;
   mjm.remote-builder.enable = true;
   mjm.server.enable = true;
   mjm.state = {

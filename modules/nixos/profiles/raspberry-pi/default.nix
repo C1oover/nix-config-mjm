@@ -1,10 +1,10 @@
 { config, lib, ... }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.mjm.raspberrypi;
+  cfg = config.mjm.profiles.raspberry-pi;
 in
 {
-  options.mjm.raspberrypi = {
+  options.mjm.profiles.raspberry-pi = {
     enable = mkEnableOption "Raspberry Pi hardware support";
   };
 

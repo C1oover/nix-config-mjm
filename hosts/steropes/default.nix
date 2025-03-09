@@ -17,13 +17,14 @@
     }
   ];
 
+  mjm.profiles.raspberry-pi.enable = true;
+
   mjm.consul.enable = true;
   mjm.ingress.enable = true;
   mjm.nut = {
     enable = true;
     connectedUPSName = "or500";
   };
-  mjm.raspberrypi.enable = true;
   mjm.server.enable = true;
   mjm.state = {
     enablePreservation = true;

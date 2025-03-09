@@ -4,6 +4,7 @@
 
     ../../services
 
+    ./profiles/raspberry-pi
     ./profiles/vm-host.nix
 
     ./backups.nix
@@ -14,7 +15,6 @@
     ./ingress.nix
     ./linkding.nix
     ./qemu-vm.nix
-    ./raspberrypi
     ./secureboot.nix
     ./server
     ./services.nix
