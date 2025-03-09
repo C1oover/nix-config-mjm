@@ -21,12 +21,10 @@ in
 
     managementInterface = mkOption {
       type = types.str;
-      default = config.mjm.proxmox.managementInterface;
     };
 
     bridgeInterface = mkOption {
       type = types.str;
-      default = config.mjm.proxmox.bridgeInterface;
     };
   };
 
@@ -45,11 +43,6 @@ in
       onBoot = "ignore"; # VMs should be configured to autostart
       onShutdown = "shutdown";
       parallelShutdown = 3;
-    };
-
-    systemd.services.libvirtd = {
-      requires = [ "slow-data.mount" ];
-      after = [ "slow-data.mount" ];
     };
 
     systemd.network.networks = {
@@ -78,5 +71,7 @@ in
     # TODO parameterize if I ever have uneven hosts
     boot.kernelParams = [ "zfs.zfs_arc_max=7516192768" ];
     hardware.ksm.enable = true;
+
+    boot.zfs.extraPools = [ "slow" ];
   };
 }

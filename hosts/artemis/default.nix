@@ -51,16 +51,14 @@
   boot.loader.systemd-boot.enable = true;
 
   mjm.consul.enable = true;
-  mjm.libvirtd.enable = true;
+  mjm.libvirtd = {
+    enable = true;
+    managementInterface = "enp1s0";
+    bridgeInterface = "enp2s0";
+  };
   mjm.nut = {
     enable = true;
     connectedUPSName = "or500";
-  };
-  mjm.proxmox = {
-    enable = true;
-    ipAddress = "10.0.2.10";
-    managementInterface = "enp1s0";
-    bridgeInterface = "enp2s0";
   };
   mjm.remote-builder.enable = true;
   mjm.server.enable = true;
