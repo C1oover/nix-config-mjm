@@ -5,7 +5,12 @@
   ...
 }:
 let
-  inherit (lib) mkEnableOption mkIf;
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    mkOption
+    types
+    ;
   cfg = config.mjm.libvirtd;
 in
 {
@@ -13,6 +18,16 @@ in
 
   options.mjm.libvirtd = {
     enable = mkEnableOption "libvirtd";
+
+    managementInterface = mkOption {
+      type = types.str;
+      default = config.mjm.proxmox.managementInterface;
+    };
+
+    bridgeInterface = mkOption {
+      type = types.str;
+      default = config.mjm.proxmox.bridgeInterface;
+    };
   };
 
   config = mkIf cfg.enable {
@@ -32,7 +47,26 @@ in
       parallelShutdown = 3;
     };
 
-    # TODO do network device config here instead of relying on it from proxmox module.
+    systemd.network.networks = {
+      "10-lan" = {
+        matchConfig.Name = cfg.managementInterface;
+        # other config for this network is in base module
+      };
+      "10-lan2" = {
+        matchConfig.Name = cfg.bridgeInterface;
+        networkConfig.Bridge = "vmbr0";
+      };
+      "10-lan2-bridge" = {
+        matchConfig.Name = "vmbr0";
+      };
+    };
+
+    systemd.network.netdevs.vmbr0 = {
+      netdevConfig = {
+        Name = "vmbr0";
+        Kind = "bridge";
+      };
+    };
 
     users.users.${config.mjm.username}.extraGroups = [ "libvirtd" ];
 
