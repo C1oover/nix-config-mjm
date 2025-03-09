@@ -13,7 +13,7 @@
     ./desktop
     ./ingress.nix
     ./linkding.nix
-    ./proxmox-vm.nix
+    ./qemu-vm.nix
     ./raspberrypi
     ./secureboot.nix
     ./server

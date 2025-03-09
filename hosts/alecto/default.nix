@@ -23,7 +23,7 @@
     enable = true;
     server.enable = true;
   };
-  mjm.proxmox-vm.enable = true;
+  mjm.qemu-vm.enable = true;
   mjm.server.enable = true;
   mjm.state = {
     enablePreservation = true;

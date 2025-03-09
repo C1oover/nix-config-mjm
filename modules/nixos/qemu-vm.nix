@@ -1,11 +1,11 @@
 { config, lib, ... }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.mjm.proxmox-vm;
+  cfg = config.mjm.qemu-vm;
 in
 {
-  options.mjm.proxmox-vm = {
-    enable = mkEnableOption "Proxmox VM support";
+  options.mjm.qemu-vm = {
+    enable = mkEnableOption "QEMU VM support";
   };
 
   config = mkIf cfg.enable {
