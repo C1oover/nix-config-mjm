@@ -47,6 +47,11 @@ in
       parallelShutdown = 3;
     };
 
+    systemd.services.libvirtd = {
+      requires = [ "slow-data.mount" ];
+      after = [ "slow-data.mount" ];
+    };
+
     systemd.network.networks = {
       "10-lan" = {
         matchConfig.Name = cfg.managementInterface;
