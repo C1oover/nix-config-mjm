@@ -4,6 +4,8 @@
 
     ../../services
 
+    ./profiles/vm-host.nix
+
     ./backups.nix
     ./base
     ./consul-services.nix

@@ -6,11 +6,6 @@
   networking.hostName = "hades";
   networking.hostId = "8519e7ed";
 
-  services.openiscsi = {
-    enable = true;
-    name = "iqn.2008-11.org.linux-kvm:2f4af4fd-4b15-4bcb-a2c6-58c8beecd5c1";
-  };
-
   boot.initrd.availableKernelModules = [
     "xhci_pci"
     "ahci"
@@ -19,24 +14,6 @@
     "sd_mod"
   ];
   boot.kernelModules = [ "kvm-intel" ];
-
-  fileSystems."/" = {
-    device = "rpool/nixos/root";
-    fsType = "zfs";
-    options = [ "zfsutil" ];
-  };
-
-  fileSystems."/nix" = {
-    device = "rpool/nixos/nix";
-    fsType = "zfs";
-    options = [ "zfsutil" ];
-  };
-
-  fileSystems."/home" = {
-    device = "rpool/nixos/home";
-    fsType = "zfs";
-    options = [ "zfsutil" ];
-  };
 
   fileSystems."/boot" = {
     device = "/dev/disk/by-partuuid/bfe9ead3-4309-4518-81eb-3d60406927a1";
@@ -49,18 +26,17 @@
 
   boot.loader.systemd-boot.enable = true;
 
-  mjm.consul.enable = true;
-  mjm.libvirtd = {
+  mjm.profiles.vm-host = {
     enable = true;
     managementInterface = "eno1";
     bridgeInterface = "enp2s0";
+    iscsiName = "iqn.2008-11.org.linux-kvm:2f4af4fd-4b15-4bcb-a2c6-58c8beecd5c1";
   };
+
   mjm.nut = {
     enable = true;
     connectedUPSName = "or500";
   };
-  mjm.remote-builder.enable = true;
-  mjm.server.enable = true;
 
   system.stateVersion = "25.05";
 }
