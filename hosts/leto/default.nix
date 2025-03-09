@@ -26,6 +26,8 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  mjm.profiles.qemu-vm.enable = true;
+
   mjm.actual.enable = true;
   mjm.atticd.enable = true;
   mjm.atuin.enable = true;
@@ -40,7 +42,6 @@
   mjm.netbox.enable = true;
   mjm.paperless.enable = true;
   mjm.prometheus.enable = true;
-  mjm.qemu-vm.enable = true;
   mjm.server.enable = true;
   mjm.state = {
     enablePreservation = true;

@@ -30,13 +30,14 @@
     }
   ];
 
+  mjm.profiles.qemu-vm.enable = true;
+
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
   mjm.consul.enable = true;
   mjm.garage.enable = true;
   mjm.matrix-server.enable = true;
-  mjm.qemu-vm.enable = true;
   mjm.server.enable = true;
   mjm.state = {
     enablePreservation = true;

@@ -33,9 +33,10 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  mjm.profiles.qemu-vm.enable = true;
+
   mjm.consul.enable = true;
   mjm.gitlab.enable = true;
-  mjm.qemu-vm.enable = true;
   mjm.server.enable = true;
   mjm.state = {
     enablePreservation = true;
