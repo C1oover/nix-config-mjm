@@ -77,7 +77,6 @@ fn render_app_links() -> Markup {
             .list-group {
                 (app_link("Consul", "boxes", "https://consul.midna.dev/"))
                 (app_link("Vault", "safe-fill", "https://vault.midna.dev/"))
-                (app_link("Proxmox", "motherboard-fill", "https://proxmox.midna.dev/"))
                 (app_link("GitLab", "code-slash", "https://git.midna.dev/"))
                 (app_link("NetBox", "diagram-3-fill", "https://netbox.midna.dev/"))
             }

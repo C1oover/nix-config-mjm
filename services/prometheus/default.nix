@@ -27,7 +27,6 @@ in
   imports = [
     ./blackbox.nix
     ./consul-exporter.nix
-    ./pve-exporter.nix
     ./jobs
   ];
 
@@ -136,7 +135,7 @@ in
 
     deployment.tests = {
       inherit (pkgs.nixosTests.prometheus) alertmanager config-reload;
-      inherit (pkgs.nixosTests.prometheus-exporters) blackbox pve;
+      inherit (pkgs.nixosTests.prometheus-exporters) blackbox;
     };
   };
 }

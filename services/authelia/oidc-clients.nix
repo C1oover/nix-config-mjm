@@ -35,28 +35,6 @@
     userinfo_signing_algorithm = "none";
   }
   {
-    id = "proxmox";
-    description = "Proxmox Virtual Environment";
-    secret = "$pbkdf2-sha512$310000$jSR5KT8pbsKrYovaP0RYhA$pt40j9SHmF3SfZPgxGfmQZKfS.07Zks7MkmCHuAzJaEOY0Gca1CzvFwczMWhFHiRTd1tOsLzKY1yGAdYb1Q9sA";
-    public = false;
-    authorization_policy = "two_factor";
-    require_pkce = true;
-    pkce_challenge_method = "S256";
-    redirect_uris = [
-      "https://10.0.2.10:8006"
-      "https://10.0.2.11:8006"
-      "https://artemis.home.mattmoriarity.com:8006"
-      "https://apollo.home.mattmoriarity.com:8006"
-      "https://proxmox.midna.dev"
-    ];
-    scopes = [
-      "openid"
-      "profile"
-      "email"
-    ];
-    userinfo_signed_response_alg = "none";
-  }
-  {
     id = "peertube";
     description = "PeerTube";
     secret = "$pbkdf2-sha512$310000$i/oOcdThnanFjq1JqrACMg$IUGcZqmZZtGOwjfYT1O1ZiMVk634D73XX9qgmwYDtJW3HVcNDRwU9JcX2pJp4WchFkx2iwArh8DWfbU.2xLYiw";

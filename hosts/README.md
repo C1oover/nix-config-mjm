@@ -11,7 +11,11 @@ The `home.nix` is [automatically imported](../modules/common/base/user.nix#L27) 
   - [persephone](persephone/): 13th gen Intel Framework 13 laptop
   - [uranus](uranus/): Desktop/gaming PC built in 2022
   - [athena](athena/): Work 16-inch MacBook Pro M2
-- Proxmox VMs, all running on a cluster of 3 Proxmox VE hosts built from various Dell OptiPlex SFF machines I bought on craigslist
+- VM hosts, running on assorted Dell OptiPlex SFF machines I bought on craigslist
+  - [artemis](artemis/)
+  - [apollo](apollo/)
+  - [hades](hades/)
+- libvirt VMs, running on the above VM hosts
   - [megaera](megaera/), [tisiphone](tisiphone/), [alecto](alecto/): 3 node Consul and Vault cluster
   - [leto](leto/): Runs majority of my self-hosted services
   - [chaos](chaos/): Media server

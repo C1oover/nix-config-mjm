@@ -8,7 +8,6 @@
     ./consul-services.nix
     ./homelab-https.nix
     ./nut.nix
-    ./proxmox.nix
     ./vault.nix
   ];
 }

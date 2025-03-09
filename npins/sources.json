@@ -99,18 +99,6 @@
       "url": "https://github.com/MrOtherGuy/firefox-csshacks/archive/a4d7b12decf4a3a5e76825d6d462b94c3ed1fa45.tar.gz",
       "hash": "0vkvg5gpxasrz5g39klls3in0cm23czsx6mnrpdb40p3gjifr5c3"
     },
-    "freenas-proxmox": {
-      "type": "Git",
-      "repository": {
-        "type": "GitHub",
-        "owner": "TheGrandWazoo",
-        "repo": "freenas-proxmox"
-      },
-      "branch": "master",
-      "revision": "29b110f5e2f37a3bf6154a01948bb40261ddc93e",
-      "url": "https://github.com/TheGrandWazoo/freenas-proxmox/archive/29b110f5e2f37a3bf6154a01948bb40261ddc93e.tar.gz",
-      "hash": "11w1gj62gw6vy71z48rx2vdrbrzl0z65bpsh59fs9ygg7k2aijdv"
-    },
     "hardware": {
       "type": "Git",
       "repository": {
@@ -233,18 +221,6 @@
       "revision": "2f16754f9f6b766c1429375ab7417dc81cc90a63",
       "url": "https://github.com/WilliButz/preservation/archive/2f16754f9f6b766c1429375ab7417dc81cc90a63.tar.gz",
       "hash": "00z0yp3pqr1ypmb3xl2s8qf499ayv1hwqhzjwihl3w8g3y6zxi4a"
-    },
-    "proxmox": {
-      "type": "Git",
-      "repository": {
-        "type": "GitLab",
-        "repo_path": "mjm/proxmox-nixos",
-        "server": "https://git.midna.dev/"
-      },
-      "branch": "deploy/main",
-      "revision": "84a749906855315777d87cb2c281daf101cc37fd",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fproxmox-nixos/repository/archive.tar.gz?sha=84a749906855315777d87cb2c281daf101cc37fd",
-      "hash": "1vffxakhb1zi5mmkh6yc38dc7wnhbqgzvz05vs6lbnb5790zkcmm"
     },
     "rycee": {
       "type": "Git",
