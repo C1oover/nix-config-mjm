@@ -12,6 +12,12 @@ in
     services.zrepl = {
       enable = true;
       settings = {
+        global.monitoring = [
+          {
+            type = "prometheus";
+            listen = ":9811";
+          }
+        ];
         jobs = [
           {
             name = "backup_to_local";
@@ -59,6 +65,13 @@ in
           }
         ];
       };
+    };
+
+    networking.firewall.allowedTCPPorts = [ 9811 ];
+
+    services.consul.services.zrepl = {
+      port = 9811;
+      metrics.enable = true;
     };
   };
 }
