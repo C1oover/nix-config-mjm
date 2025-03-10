@@ -57,7 +57,10 @@ in
 
     services.kdeconnect.enable = true;
 
-    services.easyeffects.enable = true;
+    # don't really need this right now if I'm using the amp, and it seems to
+    # block shutdown for a solid minute and a half.
+    # 
+    # services.easyeffects.enable = true;
 
     fonts.fontconfig.enable = false;
 
