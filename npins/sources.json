@@ -182,9 +182,9 @@
         "server": "https://git.midna.dev/"
       },
       "branch": "deploy/nixos-unstable-small",
-      "revision": "b7b6eaa4b056b975a29948c02ffc32ee9d84ec6d",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=b7b6eaa4b056b975a29948c02ffc32ee9d84ec6d",
-      "hash": "08cj4ia9x68i2s2rln32h7rxajw2i11cskf84p837fn4w10fphng"
+      "revision": "49b2a3dd2f2447438916afe5611f2544677a81f9",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=49b2a3dd2f2447438916afe5611f2544677a81f9",
+      "hash": "0wqbj3xi41ikd4ly66s2rbjfap892fzbmh1ww6gv5vm1rgdqhf33"
     },
     "nixpkgs": {
       "type": "Git",
@@ -194,9 +194,9 @@
         "server": "https://git.midna.dev/"
       },
       "branch": "deploy/nixpkgs-unstable",
-      "revision": "2028f38768a3add7eec5699811e9fe3006cb13a8",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=2028f38768a3add7eec5699811e9fe3006cb13a8",
-      "hash": "0m60f445h4pagsvd785i0zncgwmj7w04man0y40c7hmy4xc2bk34"
+      "revision": "0c670cc1e061a44356a469160eae40d3b5fc7fae",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=0c670cc1e061a44356a469160eae40d3b5fc7fae",
+      "hash": "18sz2ad8pn3l0v3x349rv629g5nlnd67wa15ln3wjdrj1kpm8l99"
     },
     "nixpkgs-firefox-darwin": {
       "type": "Git",
@@ -230,9 +230,9 @@
         "server": "https://gitlab.com/"
       },
       "branch": "master",
-      "revision": "beba3b207145e92750cdb50eb8e9b0caf998af05",
-      "url": "https://gitlab.com/api/v4/projects/rycee%2Fnur-expressions/repository/archive.tar.gz?sha=beba3b207145e92750cdb50eb8e9b0caf998af05",
-      "hash": "189c477pwcz2507pvy376l8gbasx1kn83216z4plyza6ha9shqs6"
+      "revision": "f086e15336227c65af733b221159739c04132a8a",
+      "url": "https://gitlab.com/api/v4/projects/rycee%2Fnur-expressions/repository/archive.tar.gz?sha=f086e15336227c65af733b221159739c04132a8a",
+      "hash": "1m5fzjif4d2w8ms9jyzh6sbq35hdy9n8f4zh7im61gs6n5ab7kmc"
     },
     "terranix": {
       "type": "GitRelease",
