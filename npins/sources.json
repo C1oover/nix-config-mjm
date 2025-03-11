@@ -131,9 +131,9 @@
         "repo": "home-manager"
       },
       "branch": "master",
-      "revision": "7fb8678716c158642ac42f9ff7a18c0800fea551",
-      "url": "https://github.com/nix-community/home-manager/archive/7fb8678716c158642ac42f9ff7a18c0800fea551.tar.gz",
-      "hash": "0mg9gkp1j34yjaam8pirj6garl8gz3rcjabs3njwdmr1irbiz9nr"
+      "revision": "c630dfa8abcc65984cc1e47fb25d4552c81dd37e",
+      "url": "https://github.com/nix-community/home-manager/archive/c630dfa8abcc65984cc1e47fb25d4552c81dd37e.tar.gz",
+      "hash": "1ajanxfffynxzdvpq1128n4bcw4pksbnrnlm9w03b7k03zqmn6c0"
     },
     "lanzaboote": {
       "type": "GitRelease",
@@ -194,9 +194,9 @@
         "server": "https://git.midna.dev/"
       },
       "branch": "deploy/nixpkgs-unstable",
-      "revision": "9a78b78c9417d7e100258b73c88d282c039417b2",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=9a78b78c9417d7e100258b73c88d282c039417b2",
-      "hash": "178ln8xaw3ip9b8ibk0vl60plrxvzzbc1dw7rx8xrsq050nd0vri"
+      "revision": "2028f38768a3add7eec5699811e9fe3006cb13a8",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=2028f38768a3add7eec5699811e9fe3006cb13a8",
+      "hash": "0m60f445h4pagsvd785i0zncgwmj7w04man0y40c7hmy4xc2bk34"
     },
     "nixpkgs-firefox-darwin": {
       "type": "Git",
@@ -230,9 +230,9 @@
         "server": "https://gitlab.com/"
       },
       "branch": "master",
-      "revision": "ba7a019fc6c9ee63e3e1a425e0bbf8dd697f7b16",
-      "url": "https://gitlab.com/api/v4/projects/rycee%2Fnur-expressions/repository/archive.tar.gz?sha=ba7a019fc6c9ee63e3e1a425e0bbf8dd697f7b16",
-      "hash": "1r0blak23lj7jc31m34hadgl97adi4j5qlyhr2n2sj0bvn4ha369"
+      "revision": "beba3b207145e92750cdb50eb8e9b0caf998af05",
+      "url": "https://gitlab.com/api/v4/projects/rycee%2Fnur-expressions/repository/archive.tar.gz?sha=beba3b207145e92750cdb50eb8e9b0caf998af05",
+      "hash": "189c477pwcz2507pvy376l8gbasx1kn83216z4plyza6ha9shqs6"
     },
     "terranix": {
       "type": "GitRelease",
