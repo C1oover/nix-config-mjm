@@ -5,7 +5,7 @@
   ...
 }:
 let
-  inherit (lib) mkAfter mkEnableOption mkIf;
+  inherit (lib) mkAfter mkEnableOption mkForce mkIf;
   cfg = config.mjm.gitlab-runner;
 in
 {
@@ -147,7 +147,7 @@ in
     '';
 
     # force nixos tests to use a remote builder
-    nix.settings.system-features = [
+    nix.settings.system-features = mkForce [
       "benchmark"
       "big-parallel"
     ];
