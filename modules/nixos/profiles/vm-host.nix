@@ -54,6 +54,8 @@ in
       name = cfg.iscsiName;
     };
 
+    boot.kernelParams = [ "zfs.zfs_arc_max=7516192768" ];
+    boot.zfs.extraPools = [ "slow" ];
     services.zfs.autoScrub.enable = true;
   };
 }

@@ -59,6 +59,10 @@
   ];
 
   mjm.consul.enable = true;
+  mjm.libvirtd = {
+    enable = true;
+    bridgeInterface = "enp0s31f6";
+  };
   mjm.nas.enable = true;
   mjm.nut = {
     enable = true;

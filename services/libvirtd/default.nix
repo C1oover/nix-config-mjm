@@ -7,6 +7,7 @@
 let
   inherit (lib)
     mkEnableOption
+    mkMerge
     mkIf
     mkOption
     types
@@ -21,6 +22,7 @@ in
 
     managementInterface = mkOption {
       type = types.str;
+      default = cfg.bridgeInterface;
     };
 
     bridgeInterface = mkOption {
@@ -45,19 +47,25 @@ in
       parallelShutdown = 3;
     };
 
-    systemd.network.networks = {
-      "10-lan" = {
-        matchConfig.Name = cfg.managementInterface;
+    systemd.network.networks = mkMerge [
+      {
+        "10-lan2" = {
+          matchConfig.Name = cfg.bridgeInterface;
+          networkConfig.Bridge = "vmbr0";
+        };
+      }
+      (mkIf (cfg.managementInterface == cfg.bridgeInterface) {
+        "10-lan" = {
+          matchConfig.Name = "vmbr0";
+          linkConfig.RequiredForOnline = "routable";
+        };
+      })
+      (mkIf (cfg.managementInterface != cfg.bridgeInterface) {
         # other config for this network is in base module
-      };
-      "10-lan2" = {
-        matchConfig.Name = cfg.bridgeInterface;
-        networkConfig.Bridge = "vmbr0";
-      };
-      "10-lan2-bridge" = {
-        matchConfig.Name = "vmbr0";
-      };
-    };
+        "10-lan".matchConfig.Name = cfg.managementInterface;
+        "10-lan2-bridge".matchConfig.Name = "vmbr0";
+      })
+    ];
 
     systemd.network.netdevs.vmbr0 = {
       netdevConfig = {
@@ -68,10 +76,6 @@ in
 
     users.users.${config.mjm.username}.extraGroups = [ "libvirtd" ];
 
-    # TODO parameterize if I ever have uneven hosts
-    boot.kernelParams = [ "zfs.zfs_arc_max=7516192768" ];
     hardware.ksm.enable = true;
-
-    boot.zfs.extraPools = [ "slow" ];
   };
 }
