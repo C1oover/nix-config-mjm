@@ -60,6 +60,10 @@
 
   mjm.consul.enable = true;
   mjm.nas.enable = true;
+  mjm.nut = {
+    enable = true;
+    connectedUPSName = "smart500";
+  };
   mjm.server.enable = true;
 
   system.stateVersion = "25.05";
