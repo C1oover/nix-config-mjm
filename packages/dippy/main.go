@@ -24,6 +24,7 @@ var (
 	nom         = flag.Bool("nom", os.Getenv("CI") == "", "Whether to run builds through nix-output-monitor")
 	forceGoal   = flag.String("goal", "", "Force use of a specific goal regardless of reboot check")
 	pushToAttic = flag.Bool("attic", true, "Whether to push the built system to the attic cache")
+	runTests    = flag.Bool("tests", true, "whether to run NixOS VM tests")
 
 	logLevel slog.Level
 )
@@ -85,8 +86,10 @@ func handleDeploy(ctx context.Context) error {
 		return fmt.Errorf("building all hosts: %w", err)
 	}
 
-	if err := plan.Test(ctx, *nom); err != nil {
-		return fmt.Errorf("running all tests: %w", err)
+	if *runTests {
+		if err := plan.Test(ctx, *nom); err != nil {
+			return fmt.Errorf("running all tests: %w", err)
+		}
 	}
 
 	if err := plan.EachHost(ctx, func(ctx context.Context, h *Host) error {
@@ -141,8 +144,10 @@ func handleDiff(ctx context.Context) error {
 		return fmt.Errorf("building all hosts: %w", err)
 	}
 
-	if err := plan.Test(ctx, *nom); err != nil {
-		return fmt.Errorf("running all tests: %w", err)
+	if *runTests {
+		if err := plan.Test(ctx, *nom); err != nil {
+			return fmt.Errorf("running all tests: %w", err)
+		}
 	}
 
 	if err := plan.EachHost(ctx, func(ctx context.Context, h *Host) error {
