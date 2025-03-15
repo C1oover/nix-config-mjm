@@ -19,6 +19,7 @@
     ./matrix-server
     ./media-server
     ./miniflux
+    ./nas
     ./netbox
     ./nut
     ./otel-collector

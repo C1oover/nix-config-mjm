@@ -7,6 +7,7 @@ let
     "artemis"
     "brontes"
     "chaos"
+    "demeter"
     "hades"
     "helios"
     "hypnos"
