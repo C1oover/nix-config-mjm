@@ -131,7 +131,14 @@ in
           domain = "\${desec_domain.midna-dev.id}";
           type = "TXT";
           subname = "";
-          records = [ "v=spf1 include:spf.messagingengine.com ?all" ];
+          records = [ "v=spf1 include:spf.messagingengine.com ~all" ];
+          ttl = 3600;
+        };
+        dmarc = {
+          domain = "\${desec_domain.midna-dev.id}";
+          type = "TXT";
+          subname = "_dmarc";
+          records = [ "v=DMARC1; p=reject; rua=mailto:dmarc-rua@mj.midna.dev; ruf=mailto:dmarc-ruf@mj.midna.dev" ];
           ttl = 3600;
         };
         mta-sts = {
