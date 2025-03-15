@@ -107,9 +107,9 @@ in
             sixindicator
             ;
         };
-        userChrome = ''
-          ${builtins.readFile "${inputs.firefox-csshacks}/chrome/hide_tabs_toolbar_v2.css"}
-        '';
+        # userChrome = ''
+        #   ${builtins.readFile "${inputs.firefox-csshacks}/chrome/hide_tabs_toolbar_v2.css"}
+        # '';
         search.force = true;
         search.default = "SearXNG";
         search.engines =
