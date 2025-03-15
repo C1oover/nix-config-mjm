@@ -21,7 +21,10 @@ let
   vhosts = cfg.virtualHosts;
 in
 {
-  imports = [ ./dns.nix ];
+  imports = [
+    ./dns.nix
+    ./mta-sts.nix
+  ];
 
   options.mjm.ingress = {
     enable = mkEnableOption "ingress";

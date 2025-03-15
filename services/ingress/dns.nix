@@ -134,6 +134,27 @@ in
           records = [ "v=spf1 include:spf.messagingengine.com ?all" ];
           ttl = 3600;
         };
+        mta-sts = {
+          domain = "\${desec_domain.midna-dev.id}";
+          type = "CNAME";
+          subname = "mta-sts";
+          records = [ "ingress4.midna.dev." ];
+          ttl = 3600;
+        };
+        mta-sts-txt = {
+          domain = "\${desec_domain.midna-dev.id}";
+          type = "TXT";
+          subname = "_mta-sts";
+          records = [ "v=STSv1; id=20250315T173345Z"];
+          ttl = 3600;
+        };
+        tls-rpt = {
+          domain = "\${desec_domain.midna-dev.id}";
+          type = "TXT";
+          subname = "_smtp._tls";
+          records = [ "v=TLSRPTv1; rua=mailto:tlsrpt@mj.midna.dev" ];
+          ttl = 3600;
+        };
       };
   };
 }
