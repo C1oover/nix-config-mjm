@@ -27,7 +27,7 @@ in
     services.linkding = {
       enable = true;
 
-      address = "";
+      address = "[::]";
       port = 7090;
       openFirewall = true;
 
