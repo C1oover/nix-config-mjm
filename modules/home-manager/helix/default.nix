@@ -30,7 +30,7 @@ let
 
   helixConfigHome = pkgs.linkFarm "helix-config" {
     "helix/config.toml" = helixConfig;
-    "helix/langauges.toml" = helixLanguages;
+    "helix/languages.toml" = helixLanguages;
     "helix/init.scm" = "${./config/init.scm}";
     "helix/helix.scm" = "${./config/helix.scm}";
     "helix/helix" = "${./config/helix}";
