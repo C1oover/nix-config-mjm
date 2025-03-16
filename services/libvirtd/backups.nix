@@ -4,10 +4,15 @@
   ...
 }:
 let
-  inherit (lib) mkIf;
+  inherit (lib) mkIf mkOption types;
   cfg = config.mjm.libvirtd;
 in
 {
+  options.mjm.libvirtd.vmsDataset = mkOption {
+    type = types.str;
+    default = "rpool/data";
+  };
+  
   config = mkIf cfg.enable {
     services.zrepl = {
       enable = true;
@@ -28,8 +33,8 @@ in
               client_identity = "local";
             };
             filesystems = {
-              "rpool/data<" = true;
-              "rpool/data" = false;
+              "${cfg.vmsDataset}<" = true;
+              "${cfg.vmsDataset}" = false;
             };
             snapshotting = {
               type = "periodic";

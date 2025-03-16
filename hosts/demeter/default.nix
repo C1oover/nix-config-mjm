@@ -62,6 +62,7 @@
   mjm.libvirtd = {
     enable = true;
     bridgeInterface = "enp0s31f6";
+    vmsDataset = "fast";
   };
   mjm.nas.enable = true;
   mjm.nut = {
