@@ -5,7 +5,12 @@
   ...
 }:
 let
-  inherit (lib) mkAfter mkEnableOption mkForce mkIf;
+  inherit (lib)
+    mkAfter
+    mkEnableOption
+    mkForce
+    mkIf
+    ;
   cfg = config.mjm.gitlab-runner;
 in
 {

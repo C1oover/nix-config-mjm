@@ -12,7 +12,7 @@ in
     type = types.str;
     default = "rpool/data";
   };
-  
+
   config = mkIf cfg.enable {
     services.zrepl = {
       enable = true;

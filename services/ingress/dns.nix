@@ -138,7 +138,9 @@ in
           domain = "\${desec_domain.midna-dev.id}";
           type = "TXT";
           subname = "_dmarc";
-          records = [ "v=DMARC1; p=reject; rua=mailto:dmarc-rua@mj.midna.dev; ruf=mailto:dmarc-ruf@mj.midna.dev" ];
+          records = [
+            "v=DMARC1; p=reject; rua=mailto:dmarc-rua@mj.midna.dev; ruf=mailto:dmarc-ruf@mj.midna.dev"
+          ];
           ttl = 3600;
         };
         mta-sts = {
@@ -152,7 +154,7 @@ in
           domain = "\${desec_domain.midna-dev.id}";
           type = "TXT";
           subname = "_mta-sts";
-          records = [ "v=STSv1; id=20250315T173345Z"];
+          records = [ "v=STSv1; id=20250315T173345Z" ];
           ttl = 3600;
         };
         tls-rpt = {

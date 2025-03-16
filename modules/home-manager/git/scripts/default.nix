@@ -19,11 +19,9 @@ resholve.mkDerivation {
   src = ./.;
 
   installPhase = ''
-    ${lib.concatMapStrings
-      (script: ''
-        install -Dv ${script}.sh $out/bin/,${script}
-      '')
-      scripts}
+    ${lib.concatMapStrings (script: ''
+      install -Dv ${script}.sh $out/bin/,${script}
+    '') scripts}
   '';
 
   passthru.scripts = scripts;

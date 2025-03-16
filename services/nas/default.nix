@@ -33,7 +33,10 @@ in
     };
 
     boot.kernelParams = [ "zfs.zfs_arc_max=${toString (8 * 1024 * 1024 * 1024)}" ];
-    boot.zfs.extraPools = [ "fast" "slow" ];
+    boot.zfs.extraPools = [
+      "fast"
+      "slow"
+    ];
     services.zfs.autoScrub.enable = true;
 
     users.users.mediaserver = {
@@ -41,6 +44,6 @@ in
       group = "mediaserver";
       createHome = false;
     };
-    users.groups.mediaserver = {};
+    users.groups.mediaserver = { };
   };
 }

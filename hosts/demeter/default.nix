@@ -47,7 +47,10 @@
     "/boot" = {
       device = "/dev/disk/by-partuuid/8ba4b6e4-c4be-457b-88ab-a7bd84af6b9f";
       fsType = "vfat";
-      options = [ "fmask=0077" "dmask=0077" ];
+      options = [
+        "fmask=0077"
+        "dmask=0077"
+      ];
     };
   };
 
