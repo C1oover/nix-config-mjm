@@ -94,6 +94,64 @@ in
 
     networking.firewall.allowedTCPPorts = [ 8788 ];
 
+    systemd.tmpfiles.settings."10-media-server" = {
+      "/videos/shows" = {
+        d = {
+          user = "sonarr";
+          group = "media";
+        };
+        Z = {
+          user = "sonarr";
+          group = "media";
+          mode = "~0775";
+        };
+      };
+      "/videos/movies" = {
+        d = {
+          user = "radarr";
+          group = "media";
+        };
+        Z = {
+          user = "radarr";
+          group = "media";
+          mode = "~0775";
+        };
+      };
+      "/videos/music" = {
+        d = {
+          user = "lidarr";
+          group = "media";
+        };
+        Z = {
+          user = "lidarr";
+          group = "media";
+          mode = "~0775";
+        };
+      };
+      "/videos/books" = {
+        d = {
+          user = "readarr";
+          group = "media";
+        };
+        Z = {
+          user = "readarr";
+          group = "media";
+          mode = "~0775";
+        };
+      };
+      "/videos/audiobooks" = {
+        d = {
+          user = "readarr";
+          group = "media";
+        };
+        Z = {
+          user = "readarr";
+          group = "media";
+          mode = "~0775";
+        };
+      };
+    };
+
     services.prometheus.exporters = {
       exportarr-sonarr = {
         enable = true;

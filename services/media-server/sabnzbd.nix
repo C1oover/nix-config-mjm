@@ -26,6 +26,28 @@ in
 
     users.users.sabnzbd.extraGroups = [ "media" ];
 
+    systemd.tmpfiles.settings."10-media-server" = {
+      "/videos/downloads" = {
+        d = {
+          user = "sabnzbd";
+          group = "media";
+        };
+        Z = {
+          user = "sabnzbd";
+          group = "media";
+          mode = "~0775";
+        };
+      };
+      "/videos/downloads/complete".d = {
+        user = "sabnzbd";
+        group = "media";
+      };
+      "/videos/downloads/incomplete".d = {
+        user = "sabnzbd";
+        group = "media";
+      };
+    };
+
     services.prometheus.exporters.sabnzbd = {
       enable = true;
       openFirewall = true;

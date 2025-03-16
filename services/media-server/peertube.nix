@@ -55,6 +55,14 @@ in
       };
     };
 
+    systemd.tmpfiles.settings."10-media-server" = {
+      "/videos/peertube".d = {
+        user = "peertube";
+        group = "media";
+        mode = "~0775";
+      };
+    };
+
     services.nginx.virtualHosts."tube.midna.dev" = {
       serverName = "_";
       listen = [
