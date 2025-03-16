@@ -55,6 +55,7 @@ in
           certificates.automate = [
             "midna.dev"
             "*.midna.dev"
+            "*.mattmoriarity.com"
           ];
           automation.policies = [
             {

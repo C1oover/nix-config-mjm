@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   inherit (lib) mkIf;
   cfg = config.mjm.ingress;
@@ -7,7 +12,14 @@ in
   config = mkIf cfg.enable {
     services.caddy.settings.apps.http.servers.default.routes = [
       {
-        match = [ { host = [ "mta-sts.midna.dev" ]; } ];
+        match = [
+          {
+            host = [
+              "mta-sts.midna.dev"
+              "mta-sts.mattmoriarity.com"
+            ];
+          }
+        ];
         handle = [
           {
             handler = "file_server";
