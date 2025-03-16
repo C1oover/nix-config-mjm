@@ -34,6 +34,8 @@ in
     # really don't want an entire VM host rebooting automatically
     deployment.rebootAutomatically = false;
 
+    environment.systemPackages = [ pkgs.virtiofsd ];
+
     virtualisation.libvirtd = {
       enable = true;
       package = pkgs.libvirt.override { enableIscsi = true; };
