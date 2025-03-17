@@ -9,12 +9,6 @@ gc:
   -nix-collect-garbage --delete-older-than 7d
   -sudo nix-collect-garbage --delete-older-than 7d
 
-deploy *targets:
-  nix run -f . dippy -- deploy {{targets}}
-
-diff host:
-  nix run -f . scripts.hosts -- diff {{host}}
-
 repl:
   nix repl -f plans.nix
 

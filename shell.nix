@@ -15,10 +15,15 @@ devshell.mkShell (
     commands = [
       { package = pkgs.just; }
       { package = pkgs.npins; }
+      {
+        name = "dippy";
+        command = ''nix run -f . dippy -- "$@"'';
+      }
     ];
 
     devshell.packages = attrValues {
       inherit (pkgs)
+        nixfmt-rfc-style
         opentofu
         terraform-ls
         vault-bin
