@@ -64,9 +64,16 @@ def "main add" [
 # Inserts the revision between trunk and the megamerge. Don't use this
 # if you need to preserve the parents of the revision.
 def "main insert" [
-  revision: string = "@"       # the revision to add to the megamerge
+  revision: string = ""        # the revision(s) to add to the megamerge
   --mega (-m): string = "mega" # the revision of the megamerge
 ] {
+  let revision = if ($revision | is-empty) {
+    # this should grab everything from the working copy back to where it
+    # branched from $mega or trunk.
+    $"($mega)..heads\(description\(glob:'?*') & ::@)"
+  } else {
+    $revision
+  }
   jj rebase -r $revision --after 'trunk()' --before $mega
 }
 
