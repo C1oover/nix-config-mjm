@@ -59,9 +59,9 @@
         "repo": "conduwuit"
       },
       "branch": "main",
-      "revision": "4518f554081532400bfae64b931cd135dbceb755",
-      "url": "https://github.com/girlbossceo/conduwuit/archive/4518f554081532400bfae64b931cd135dbceb755.tar.gz",
-      "hash": "1bmdqdfc5s9i50cp3d1b0fxskzsnvb7kf273ch45b4b1s31aj9wh"
+      "revision": "658c19d55eb5fdf30f27e189c414208e2eae6e24",
+      "url": "https://github.com/girlbossceo/conduwuit/archive/658c19d55eb5fdf30f27e189c414208e2eae6e24.tar.gz",
+      "hash": "1sv5rdj7zfqmlryr5p2hk3kjcmqbmrkfwsk4ln822f404hsisiyk"
     },
     "darwin": {
       "type": "Git",
@@ -107,9 +107,9 @@
         "repo": "nixos-hardware"
       },
       "branch": "master",
-      "revision": "e1f12151258b12c567f456d8248e4694e9390613",
-      "url": "https://github.com/NixOS/nixos-hardware/archive/e1f12151258b12c567f456d8248e4694e9390613.tar.gz",
-      "hash": "0k6q8blcaf1jjgclsxrcm6s3i233hwgsrdzs8c1hvg6wbyvmah3z"
+      "revision": "113cd3916682def185290145924fa30b30bda972",
+      "url": "https://github.com/NixOS/nixos-hardware/archive/113cd3916682def185290145924fa30b30bda972.tar.gz",
+      "hash": "01chgzlmzk5cw54wq8ly3gw7ms943q80ccgljvwkviqzdp8czfsa"
     },
     "helix": {
       "type": "Git",
@@ -158,9 +158,9 @@
         "repo": "nix-index-database"
       },
       "branch": "main",
-      "revision": "5c77c6d6f2e8cc6007c2b1a4df1a507834404a67",
-      "url": "https://github.com/nix-community/nix-index-database/archive/5c77c6d6f2e8cc6007c2b1a4df1a507834404a67.tar.gz",
-      "hash": "1m954b8xpxip93b13qxk0h8rbc18hdl38xnkps47dmzrv38v8k09"
+      "revision": "2cfb4e1ca32f59dd2811d7a6dd5d4d1225f0955c",
+      "url": "https://github.com/nix-community/nix-index-database/archive/2cfb4e1ca32f59dd2811d7a6dd5d4d1225f0955c.tar.gz",
+      "hash": "19jpwbzdvp63dxsmk61k69vm5dacqfjl669s4m95d6vshhr76cx4"
     },
     "nixos": {
       "type": "Git",
@@ -182,9 +182,9 @@
         "server": "https://git.midna.dev/"
       },
       "branch": "deploy/nixos-unstable-small",
-      "revision": "ebcff7bb35db16aae674b59e571e4d680b31e77d",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=ebcff7bb35db16aae674b59e571e4d680b31e77d",
-      "hash": "1w17yximb7w2d6r1dfqicfa2k36l80hlfb1rmnrhnj6ngr5nsb0c"
+      "revision": "b179a7e86b6254b0e95e0175446f380e302f9d03",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=b179a7e86b6254b0e95e0175446f380e302f9d03",
+      "hash": "03zf0ipr7slarqraj9k0j6pv2yr9mmx33r24bmwagg6c1mgp4b7y"
     },
     "nixpkgs": {
       "type": "Git",
@@ -206,9 +206,9 @@
         "repo": "nixpkgs-firefox-darwin"
       },
       "branch": "main",
-      "revision": "fa3c50c6f561eb620cff84aa10d9b076d14307f8",
-      "url": "https://github.com/bandithedoge/nixpkgs-firefox-darwin/archive/fa3c50c6f561eb620cff84aa10d9b076d14307f8.tar.gz",
-      "hash": "0rf605cm9dj3hn8ai7d10azi0g20d9avfz54lax6fhbyww5il8g6"
+      "revision": "c4c426373b6c9502a523a7582f9dff7165a90c63",
+      "url": "https://github.com/bandithedoge/nixpkgs-firefox-darwin/archive/c4c426373b6c9502a523a7582f9dff7165a90c63.tar.gz",
+      "hash": "18w2kxlfc07d2pn68a88q1d1px3zijmqphc96msfvlv32j56wqkm"
     },
     "preservation": {
       "type": "Git",
@@ -230,9 +230,9 @@
         "server": "https://gitlab.com/"
       },
       "branch": "master",
-      "revision": "5a0ac85616aa6b166ea715a41bc1255bb802b189",
-      "url": "https://gitlab.com/api/v4/projects/rycee%2Fnur-expressions/repository/archive.tar.gz?sha=5a0ac85616aa6b166ea715a41bc1255bb802b189",
-      "hash": "0m1gkhg30npkzk0rw2wjrah4zfcv8kdrrpdrgwnp5xsra2bgnzrp"
+      "revision": "f081f8d67e518cbbdcca01cfff1b7f4dcdabe014",
+      "url": "https://gitlab.com/api/v4/projects/rycee%2Fnur-expressions/repository/archive.tar.gz?sha=f081f8d67e518cbbdcca01cfff1b7f4dcdabe014",
+      "hash": "106pivy4bmhg0mrrp4xxqckf9l4624wypjl8dwmh187v0qkf6cg4"
     },
     "terranix": {
       "type": "GitRelease",
