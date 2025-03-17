@@ -107,9 +107,9 @@
         "repo": "nixos-hardware"
       },
       "branch": "master",
-      "revision": "113cd3916682def185290145924fa30b30bda972",
-      "url": "https://github.com/NixOS/nixos-hardware/archive/113cd3916682def185290145924fa30b30bda972.tar.gz",
-      "hash": "01chgzlmzk5cw54wq8ly3gw7ms943q80ccgljvwkviqzdp8czfsa"
+      "revision": "4f4d97d7b7be387286cc9c988760a7ebaa5be1f1",
+      "url": "https://github.com/NixOS/nixos-hardware/archive/4f4d97d7b7be387286cc9c988760a7ebaa5be1f1.tar.gz",
+      "hash": "0ab190d577mqy5g3sfm60f0skxfks7a3nsdrhjh6xnwdn8vjkz6x"
     },
     "helix": {
       "type": "Git",
@@ -194,9 +194,9 @@
         "server": "https://git.midna.dev/"
       },
       "branch": "deploy/nixpkgs-unstable",
-      "revision": "e7683aff2b0494afc5fc8f6da6079a942db3fa14",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=e7683aff2b0494afc5fc8f6da6079a942db3fa14",
-      "hash": "1sbb2dbw4n9smaff6n5jl83y6gzhvf0vk67lmsaqrqrr1a4xxwgd"
+      "revision": "c31e07209f5e4badd85d8b79feeb17247a4a5e4f",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=c31e07209f5e4badd85d8b79feeb17247a4a5e4f",
+      "hash": "1amcjm38v07f6vi2cdsahkfmjwn2yq6snp4darqmlafg4wp71ram"
     },
     "nixpkgs-firefox-darwin": {
       "type": "Git",
