@@ -29,6 +29,8 @@
   # use nix-index/nix-locate instead
   programs.command-not-found.enable = false;
 
+  documentation.enable = lib.mkDefault false;
+
   time.timeZone = lib.mkDefault "Etc/UTC";
 
   users.mutableUsers = false;

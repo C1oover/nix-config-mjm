@@ -22,6 +22,7 @@ in
   ];
 
   config = mkIf cfg.enable {
+    documentation.enable = true;
     time.timeZone = "America/Denver";
 
     deployment.targetHost = mkOverride 900 null;
