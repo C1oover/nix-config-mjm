@@ -47,7 +47,16 @@ in
           enabled = true;
           address = "tcp://0.0.0.0:9959";
         };
-        webauthn.display_name = "Homelab";
+        webauthn = {
+          enable_passkey_login = true;
+          experimental_enable_passkey_uv_two_factors = true;
+          display_name = "Homelab";
+          attestation_conveyance_preference = "direct";
+          metadata = {
+            enabled = true;
+            validate_entry = false;
+          };
+        };
         authentication_backend.ldap = {
           implementation = "custom";
           url = "ldap://localhost:3890";
