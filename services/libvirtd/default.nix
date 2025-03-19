@@ -76,6 +76,8 @@ in
       };
     };
 
+    services.lldpd.enable = true;
+
     users.users.${config.mjm.username}.extraGroups = [ "libvirtd" ];
 
     hardware.ksm.enable = true;
