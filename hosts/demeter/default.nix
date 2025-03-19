@@ -72,6 +72,7 @@
     enable = true;
     connectedUPSName = "smart500";
   };
+  mjm.remote-builder.enable = true;
   mjm.server.enable = true;
 
   system.stateVersion = "25.05";

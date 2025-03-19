@@ -164,7 +164,7 @@ in
           hostName = "${name}.home.mattmoriarity.com";
           system = "x86_64-linux";
           protocol = "ssh-ng";
-          maxJobs = 1;
+          maxJobs = 2;
           speedFactor = 1;
           supportedFeatures = [
             "kvm"
@@ -190,11 +190,12 @@ in
           mandatoryFeatures = [ ];
           publicHostKey = "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSURTM3BQTkVhSEEreWNEYTdrVHlOU3hzQVlCRlpJN1lNd2VEcnJOMEdnK2wgcm9vdEBuaXhvcwo=";
         }
+        (mkVmTestBuilder "apollo" // { maxJobs = 1; })
       ]
       ++ (map mkVmTestBuilder [
         "hades"
         "artemis"
-        "apollo"
+        "demeter"
       ]);
   };
 }
