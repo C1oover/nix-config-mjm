@@ -107,9 +107,9 @@
         "repo": "nixos-hardware"
       },
       "branch": "master",
-      "revision": "4f4d97d7b7be387286cc9c988760a7ebaa5be1f1",
-      "url": "https://github.com/NixOS/nixos-hardware/archive/4f4d97d7b7be387286cc9c988760a7ebaa5be1f1.tar.gz",
-      "hash": "0ab190d577mqy5g3sfm60f0skxfks7a3nsdrhjh6xnwdn8vjkz6x"
+      "revision": "daaae13dff0ecc692509a1332ff9003d9952d7a9",
+      "url": "https://github.com/NixOS/nixos-hardware/archive/daaae13dff0ecc692509a1332ff9003d9952d7a9.tar.gz",
+      "hash": "0mzb68svsmcpwnk33s45v5ak6sqgg2892rwpnzjfn23z98k20lsl"
     },
     "helix": {
       "type": "Git",
@@ -119,9 +119,9 @@
         "server": "https://git.midna.dev/"
       },
       "branch": "deploy/master",
-      "revision": "b909103f091e43b7eda226550c9e1a6610274914",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fhelix/repository/archive.tar.gz?sha=b909103f091e43b7eda226550c9e1a6610274914",
-      "hash": "16dn06bjig6lgrh984gzyksj1p7xnhi40rbvzywfmxk4pl81x5bm"
+      "revision": "180f83ff9255ddf2fa6b7341bfce9716c839e84f",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fhelix/repository/archive.tar.gz?sha=180f83ff9255ddf2fa6b7341bfce9716c839e84f",
+      "hash": "067y2qm8r91y2jr4fv2mcjcyqb9vbcw40zgn1ix8gybjn621j2ph"
     },
     "home-manager": {
       "type": "Git",
@@ -194,9 +194,9 @@
         "server": "https://git.midna.dev/"
       },
       "branch": "deploy/nixpkgs-unstable",
-      "revision": "675a3b5e776536b3101e1e10c820fd828265aafb",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=675a3b5e776536b3101e1e10c820fd828265aafb",
-      "hash": "0fp552f3kmc5ck15536zgnqplx7f6lsd4pzkyyi9i67bgm7qfdr9"
+      "revision": "d91501a5eabaa479a9f6974ef8dbcd06c51fc26b",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=d91501a5eabaa479a9f6974ef8dbcd06c51fc26b",
+      "hash": "1dr6jkh4yzn42vm20f2fxks2xcjk5p3m6gzr393zgwgv1f8y35v9"
     },
     "nixpkgs-firefox-darwin": {
       "type": "Git",
