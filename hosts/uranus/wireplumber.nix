@@ -7,9 +7,11 @@
 
       "monitor.alsa.rules" = [
         # disable the displayport audio from the graphics card
+        # and the mobo audio ports that i don't use
         {
           matches = [
             { "api.alsa.card.name" = "HDA ATI HDMI"; }
+            { "api.alsa.card.name" = "HD-Audio Generic"; }
           ];
           actions = {
             update-props = {
@@ -32,10 +34,6 @@
             {
               "media.class" = "Audio/Source";
               "api.alsa.card.name" = "Studio Display";
-            }
-            {
-              "media.class" = "Audio/Source";
-              "api.alsa.card.name" = "HD-Audio Generic";
             }
           ];
           actions = {
