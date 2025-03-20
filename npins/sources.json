@@ -131,9 +131,9 @@
         "repo": "home-manager"
       },
       "branch": "master",
-      "revision": "22a36aa709de7dd42b562a433b9cefecf104a6ee",
-      "url": "https://github.com/nix-community/home-manager/archive/22a36aa709de7dd42b562a433b9cefecf104a6ee.tar.gz",
-      "hash": "0yh5rdcn1cjgz2k6bpc1nxa2fq7r2rlc7v8y9bi9jp0cszgavsaf"
+      "revision": "97a00e0659b2807454507eb3a593bd09b099bd80",
+      "url": "https://github.com/nix-community/home-manager/archive/97a00e0659b2807454507eb3a593bd09b099bd80.tar.gz",
+      "hash": "1abkr7bzlapip90278q308hrpzn6ya43k2k7855jrjib89h48y1z"
     },
     "lanzaboote": {
       "type": "GitRelease",
@@ -182,9 +182,9 @@
         "server": "https://git.midna.dev/"
       },
       "branch": "deploy/nixos-unstable-small",
-      "revision": "6722e7e1df12c36843a3a567930435e7f0d0713f",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=6722e7e1df12c36843a3a567930435e7f0d0713f",
-      "hash": "0xi0k4n57igzmhw4z07cnzlw19rqf0cwppjbmxpd0w0ak3jkcsyi"
+      "revision": "bf0f862a4ef88848b5c3da46f7e839613fad0a4c",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=bf0f862a4ef88848b5c3da46f7e839613fad0a4c",
+      "hash": "10nd9dcf9x981zl5rq817gmppxfnxi1g786p8dfd2xd36zsliqb3"
     },
     "nixpkgs": {
       "type": "Git",
@@ -206,9 +206,9 @@
         "repo": "nixpkgs-firefox-darwin"
       },
       "branch": "main",
-      "revision": "b01464e4504ca40e7f1a182e06518c79445c9d7d",
-      "url": "https://github.com/bandithedoge/nixpkgs-firefox-darwin/archive/b01464e4504ca40e7f1a182e06518c79445c9d7d.tar.gz",
-      "hash": "1d2j4xrxij46fzdf93lvizv54f47lc5m03nd8p3hrs2x6k9bckxw"
+      "revision": "c868ff433ea5123e837a62ae689543045187d7a4",
+      "url": "https://github.com/bandithedoge/nixpkgs-firefox-darwin/archive/c868ff433ea5123e837a62ae689543045187d7a4.tar.gz",
+      "hash": "0v2vppvw5dhz7ikkrkq6hf578ds00bxlr2cq8w7sm7yj9jp96nhn"
     },
     "preservation": {
       "type": "Git",
@@ -230,9 +230,9 @@
         "server": "https://gitlab.com/"
       },
       "branch": "master",
-      "revision": "d91a2ea080804c3a9213d6e460e8cff68cfacf8d",
-      "url": "https://gitlab.com/api/v4/projects/rycee%2Fnur-expressions/repository/archive.tar.gz?sha=d91a2ea080804c3a9213d6e460e8cff68cfacf8d",
-      "hash": "1vzfiv69ia3sri75pd5jc93d35iw0apn1m43128wp9z87slq5ykj"
+      "revision": "5b4fc9b4b510ee8b2e26c47261c1262bbd12800d",
+      "url": "https://gitlab.com/api/v4/projects/rycee%2Fnur-expressions/repository/archive.tar.gz?sha=5b4fc9b4b510ee8b2e26c47261c1262bbd12800d",
+      "hash": "1chmwg3jsz2j3ih6s0bqhcpm6jkfjj8xw2h2sgi809his4941x3w"
     },
     "terranix": {
       "type": "GitRelease",
