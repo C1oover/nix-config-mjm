@@ -61,7 +61,10 @@ in
 
       programs.git.extraConfig = {
         credential = {
-          helper = "manager";
+          helper = [
+            "" # important: need to unset the default osx one on macOS, or it will mess up refreshing GitLab tokens
+            "manager"
+          ];
           credentialStore = mkIf pkgs.stdenv.isLinux "secretservice";
           "https://git.midna.dev" = {
             gitLabDevClientId = "2c4d82734ab055ae7ef0d2b1d1a596170d87e28ef4578a99de8298bdfdae52e9";
