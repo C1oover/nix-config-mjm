@@ -119,9 +119,9 @@
         "server": "https://git.midna.dev/"
       },
       "branch": "deploy/master",
-      "revision": "180f83ff9255ddf2fa6b7341bfce9716c839e84f",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fhelix/repository/archive.tar.gz?sha=180f83ff9255ddf2fa6b7341bfce9716c839e84f",
-      "hash": "067y2qm8r91y2jr4fv2mcjcyqb9vbcw40zgn1ix8gybjn621j2ph"
+      "revision": "2cf48ab9b8abca32b9b3ae4aa820f8d2aacec844",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fhelix/repository/archive.tar.gz?sha=2cf48ab9b8abca32b9b3ae4aa820f8d2aacec844",
+      "hash": "1b4kmnjzribq7cjbd40hsdz43k6dw8b119sbv7g6d6kshh071czb"
     },
     "home-manager": {
       "type": "Git",
@@ -131,9 +131,9 @@
         "repo": "home-manager"
       },
       "branch": "master",
-      "revision": "94605dcadefeaff6b35c8931c9f38e4f4dc7ad0a",
-      "url": "https://github.com/nix-community/home-manager/archive/94605dcadefeaff6b35c8931c9f38e4f4dc7ad0a.tar.gz",
-      "hash": "1jmkjrp3z2qrmszqdgc1iqllqcc62lcqdilcx05nzfi6fiq9fhj3"
+      "revision": "d725df5ad8cee60e61ee6fe3afb735e4fbc1ff41",
+      "url": "https://github.com/nix-community/home-manager/archive/d725df5ad8cee60e61ee6fe3afb735e4fbc1ff41.tar.gz",
+      "hash": "15anwrbmzqsnyayphs2fx9242nmkvikbw6ifxs53542wd1k3531d"
     },
     "lanzaboote": {
       "type": "GitRelease",
@@ -194,9 +194,9 @@
         "server": "https://git.midna.dev/"
       },
       "branch": "deploy/nixpkgs-unstable",
-      "revision": "d91501a5eabaa479a9f6974ef8dbcd06c51fc26b",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=d91501a5eabaa479a9f6974ef8dbcd06c51fc26b",
-      "hash": "1dr6jkh4yzn42vm20f2fxks2xcjk5p3m6gzr393zgwgv1f8y35v9"
+      "revision": "9a41ebe5b2353cb260257e88f30b4e81e7e95d6d",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=9a41ebe5b2353cb260257e88f30b4e81e7e95d6d",
+      "hash": "0hkx37b69y8mpxgq9rnvqlqbrk635jl2ab5v1ac7ayvpk3gzn2q4"
     },
     "nixpkgs-firefox-darwin": {
       "type": "Git",
@@ -230,9 +230,9 @@
         "server": "https://gitlab.com/"
       },
       "branch": "master",
-      "revision": "1b0b14b56353040142e0ef5b0ab37743bbbf4ab4",
-      "url": "https://gitlab.com/api/v4/projects/rycee%2Fnur-expressions/repository/archive.tar.gz?sha=1b0b14b56353040142e0ef5b0ab37743bbbf4ab4",
-      "hash": "1p8hb4w4da1vcj54h7rikmp9yfn2r56jb359rfg4av7k2cvgnp2i"
+      "revision": "10f7b577f5081b30ca6b7fd5f98de8d7dfdb5a27",
+      "url": "https://gitlab.com/api/v4/projects/rycee%2Fnur-expressions/repository/archive.tar.gz?sha=10f7b577f5081b30ca6b7fd5f98de8d7dfdb5a27",
+      "hash": "1bf0jdcjlff8105d2332gmwndi45mjj4fx95i6pw5xgl0zzjaiis"
     },
     "terranix": {
       "type": "GitRelease",
