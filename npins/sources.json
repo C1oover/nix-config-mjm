@@ -131,9 +131,9 @@
         "repo": "home-manager"
       },
       "branch": "master",
-      "revision": "d725df5ad8cee60e61ee6fe3afb735e4fbc1ff41",
-      "url": "https://github.com/nix-community/home-manager/archive/d725df5ad8cee60e61ee6fe3afb735e4fbc1ff41.tar.gz",
-      "hash": "15anwrbmzqsnyayphs2fx9242nmkvikbw6ifxs53542wd1k3531d"
+      "revision": "da0181819479ddc034a3db9a77ed21ea3bcc0668",
+      "url": "https://github.com/nix-community/home-manager/archive/da0181819479ddc034a3db9a77ed21ea3bcc0668.tar.gz",
+      "hash": "17anr2y4zpg838cdglaq2y06fpxa86im9vdppgf5mciybqi1615x"
     },
     "lanzaboote": {
       "type": "GitRelease",
@@ -170,9 +170,9 @@
         "server": "https://git.midna.dev/"
       },
       "branch": "deploy/nixos-unstable",
-      "revision": "cbb066ff13cbc8758688d6d2381f02691852429c",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=cbb066ff13cbc8758688d6d2381f02691852429c",
-      "hash": "0w5s0n0ji3lz2wj3l8b808vnfzgc95c36v9f2qbpy6s44kr1b19f"
+      "revision": "c1a2d8e46fcc4845de71f5921a375c03fa86eb9f",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=c1a2d8e46fcc4845de71f5921a375c03fa86eb9f",
+      "hash": "1pzhdlwxlxdgc1imx8184vd4wrvzwhlk7wb76bvij319q1jy2nxc"
     },
     "nixos-small": {
       "type": "Git",
@@ -206,9 +206,9 @@
         "repo": "nixpkgs-firefox-darwin"
       },
       "branch": "main",
-      "revision": "c868ff433ea5123e837a62ae689543045187d7a4",
-      "url": "https://github.com/bandithedoge/nixpkgs-firefox-darwin/archive/c868ff433ea5123e837a62ae689543045187d7a4.tar.gz",
-      "hash": "0v2vppvw5dhz7ikkrkq6hf578ds00bxlr2cq8w7sm7yj9jp96nhn"
+      "revision": "9245a27e35addde94575e87d3720df14c52b22ed",
+      "url": "https://github.com/bandithedoge/nixpkgs-firefox-darwin/archive/9245a27e35addde94575e87d3720df14c52b22ed.tar.gz",
+      "hash": "167dycgmryi5dkwcb2mif0dcjhxks2iyv293xx2hhwad5j61x2mw"
     },
     "preservation": {
       "type": "Git",
