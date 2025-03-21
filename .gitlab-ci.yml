@@ -67,6 +67,9 @@ build tofu changes:
   id_tokens:
     VAULT_ID_TOKEN:
       aud: http://vault.service.consul:8200
+  artifacts:
+    reports:
+      terraform: plan.json
   before_script: !reference [.snippets, setup_devenv]
   script:
     - nix run -f . scripts.tofu -- ci plan
