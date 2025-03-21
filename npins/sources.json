@@ -119,9 +119,9 @@
         "server": "https://git.midna.dev/"
       },
       "branch": "deploy/master",
-      "revision": "e5735371e9a43a16021122be655dd03b505c3c56",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fhelix/repository/archive.tar.gz?sha=e5735371e9a43a16021122be655dd03b505c3c56",
-      "hash": "0z7cvzsqgqds0q1qy2scww0hbd4if7nzdpmg64yi2bp1k5ckmcrf"
+      "revision": "74b113434ebf2ca48cc4965a830a3b8753814699",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fhelix/repository/archive.tar.gz?sha=74b113434ebf2ca48cc4965a830a3b8753814699",
+      "hash": "00q1rnqck2nwvqmg8bhdk8ks8yhnzdxblccx5q45dinqwvwi6wjd"
     },
     "home-manager": {
       "type": "Git",
@@ -131,9 +131,9 @@
         "repo": "home-manager"
       },
       "branch": "master",
-      "revision": "d61711497be9ad6a6633aaf203b038b5a970621f",
-      "url": "https://github.com/nix-community/home-manager/archive/d61711497be9ad6a6633aaf203b038b5a970621f.tar.gz",
-      "hash": "0i8j4vvdyigcvcrym22p603zjifvm0l41h03d97xmq5xgm366c6a"
+      "revision": "8a68f18e96bcab13e4f97bece61e6602298a3141",
+      "url": "https://github.com/nix-community/home-manager/archive/8a68f18e96bcab13e4f97bece61e6602298a3141.tar.gz",
+      "hash": "1b4i4dpjl0vck7my01rjv8135a0rmwgjjc442dvi0gcwxxrbc04a"
     },
     "lanzaboote": {
       "type": "GitRelease",
@@ -194,9 +194,9 @@
         "server": "https://git.midna.dev/"
       },
       "branch": "deploy/nixpkgs-unstable",
-      "revision": "ef4e3cafafb351cdab02d8f1ced3921296fc6cba",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=ef4e3cafafb351cdab02d8f1ced3921296fc6cba",
-      "hash": "1mw0wh4ybd8ybgzypg0rw1dy3ryf8lm8sax4rk667kif997vpcnm"
+      "revision": "f70b992303c59dcd4cdbb9a0850c21735ef22002",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=f70b992303c59dcd4cdbb9a0850c21735ef22002",
+      "hash": "0v2rcwrh93hvbra4jazxv7p8smj6k5dxagjqm5ksrvbrkgyg3g1c"
     },
     "nixpkgs-firefox-darwin": {
       "type": "Git",
