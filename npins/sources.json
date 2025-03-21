@@ -194,9 +194,9 @@
         "server": "https://git.midna.dev/"
       },
       "branch": "deploy/nixpkgs-unstable",
-      "revision": "97f5a1b691aef1bf832dd7b26bb75b7fde65418a",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=97f5a1b691aef1bf832dd7b26bb75b7fde65418a",
-      "hash": "1fr9jnn025781bjn7igc34z1qblshwl206gsm8rny8hpqiawp2ng"
+      "revision": "ef4e3cafafb351cdab02d8f1ced3921296fc6cba",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=ef4e3cafafb351cdab02d8f1ced3921296fc6cba",
+      "hash": "1mw0wh4ybd8ybgzypg0rw1dy3ryf8lm8sax4rk667kif997vpcnm"
     },
     "nixpkgs-firefox-darwin": {
       "type": "Git",
