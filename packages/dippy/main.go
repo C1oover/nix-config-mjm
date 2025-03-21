@@ -22,9 +22,10 @@ var (
 	plansFile   = flag.String("plans", "plans.nix", "File to evaluate for deploy plans")
 	concurrency = flag.Int("concurrency", runtime.NumCPU(), "Number of nodes to evaluate/build concurrently")
 	nom         = flag.Bool("nom", os.Getenv("CI") == "", "Whether to run builds through nix-output-monitor")
+	ciSections  = flag.Bool("ci-sections", os.Getenv("CI") != "", "Whether to emit collapsible sections for CI logs")
 	forceGoal   = flag.String("goal", "", "Force use of a specific goal regardless of reboot check")
 	pushToAttic = flag.Bool("attic", true, "Whether to push the built system to the attic cache")
-	runTests    = flag.Bool("tests", true, "whether to run NixOS VM tests")
+	runTests    = flag.Bool("tests", true, "Whether to run NixOS VM tests")
 
 	logLevel slog.Level
 )
@@ -72,26 +73,33 @@ func handleDeploy(ctx context.Context) error {
 	}
 	defer cfg.Cleanup()
 
+	s := sectionStart("Evaluating hosts and tests", true)
 	plan, err := evalNodes(ctx, cfg, *plansFile, hostnames)
 	if err != nil {
 		return fmt.Errorf("evaluating nodes: %w", err)
 	}
+	sectionEnd(s)
 
 	// remove any local hosts, we don't want to deploy to those
 	plan.Hosts = slices.DeleteFunc(plan.Hosts, func(h *Host) bool {
 		return h.IsLocal()
 	})
 
+	s = sectionStart("Building hosts", false)
 	if err := plan.Build(ctx, *nom); err != nil {
 		return fmt.Errorf("building all hosts: %w", err)
 	}
+	sectionEnd(s)
 
 	if *runTests {
+		s = sectionStart("Running NixOS VM tests", false)
 		if err := plan.Test(ctx, *nom); err != nil {
 			return fmt.Errorf("running all tests: %w", err)
 		}
+		sectionEnd(s)
 	}
 
+	s = sectionStart("Pushing systems to hosts and attic", true)
 	if err := plan.EachHost(ctx, func(ctx context.Context, h *Host) error {
 		if err := h.Push(ctx); err != nil {
 			return fmt.Errorf("pushing node %s: %w", h.Name, err)
@@ -108,12 +116,16 @@ func handleDeploy(ctx context.Context) error {
 	}); err != nil {
 		return fmt.Errorf("building nodes: %w", err)
 	}
+	sectionEnd(s)
 
+	s = sectionStart("Deploying", false)
 	if err := plan.Deploy(ctx); err != nil {
 		return fmt.Errorf("deploying plan: %w", err)
 	}
 
 	slog.InfoContext(ctx, "deploy completed")
+	sectionEnd(s)
+
 	return nil
 }
 
@@ -127,10 +139,12 @@ func handleDiff(ctx context.Context) error {
 	}
 	defer cfg.Cleanup()
 
+	s := sectionStart("Evaluating hosts and tests", true)
 	plan, err := evalNodes(ctx, cfg, *plansFile, hostnames)
 	if err != nil {
 		return fmt.Errorf("evaluating nodes: %w", err)
 	}
+	sectionEnd(s)
 
 	slog.DebugContext(ctx, "creating temp dir for diffs")
 	diffsDir, err := os.MkdirTemp("", "dippy-diffs")
@@ -140,16 +154,21 @@ func handleDiff(ctx context.Context) error {
 	defer os.RemoveAll(diffsDir)
 	slog.DebugContext(ctx, "created temp dir for diffs", "path", diffsDir)
 
+	s = sectionStart("Building hosts", false)
 	if err := plan.Build(ctx, *nom); err != nil {
 		return fmt.Errorf("building all hosts: %w", err)
 	}
+	sectionEnd(s)
 
 	if *runTests {
+		s = sectionStart("Running NixOS VM tests", false)
 		if err := plan.Test(ctx, *nom); err != nil {
 			return fmt.Errorf("running all tests: %w", err)
 		}
+		sectionEnd(s)
 	}
 
+	s = sectionStart("Pushing and diffing hosts", true)
 	if err := plan.EachHost(ctx, func(ctx context.Context, h *Host) error {
 		if *pushToAttic {
 			if err := h.PushToAttic(ctx); err != nil {
@@ -180,6 +199,7 @@ func handleDiff(ctx context.Context) error {
 	}); err != nil {
 		return fmt.Errorf("building nodes: %w", err)
 	}
+	sectionEnd(s)
 
 	slog.DebugContext(ctx, "aggregating diffs", "path", diffsDir)
 	aggregated, err := aggregateDiffs(ctx, diffsDir)
