@@ -11,10 +11,6 @@ type logSection string
 var sectionIdx int
 
 func sectionStart(header string, collapsed bool) logSection {
-	if !*ciSections {
-		return ""
-	}
-
 	s := logSection(fmt.Sprintf("section%d", sectionIdx))
 	sectionIdx++
 
@@ -29,10 +25,6 @@ func sectionStart(header string, collapsed bool) logSection {
 }
 
 func sectionEnd(s logSection) {
-	if !*ciSections {
-		return
-	}
-
 	now := time.Now().Unix()
 	fmt.Fprintf(os.Stderr, "\033[0Ksection_end:%d:%s\r\033[0K", now, s)
 }

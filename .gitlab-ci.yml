@@ -1,6 +1,4 @@
 .snippets:
-  setup_devenv:
-    - . "$HOME/.nix-profile/etc/profile.d/nix.sh"
   nixos_changes:
     - .gitlab-ci.yml
     - default.nix
@@ -18,6 +16,16 @@
     - npins/*
     - services/**/*
     - terraform/**/*
+.vault:
+  id_tokens:
+    VAULT_ID_TOKEN:
+      aud: http://vault.service.consul:8200
+.tofu:
+  tags: [nix]
+  variables:
+    TF_PLUGIN_CACHE_MAY_BREAK_DEPENDENCY_LOCK_FILE: "yes"
+  before_script:
+    - . "$HOME/.nix-profile/etc/profile.d/nix.sh
 stages:
   - check
   - deploy
@@ -25,6 +33,8 @@ variables:
   CONSUL_HTTP_ADDR: "consul.service.consul:8500"
   VAULT_ADDR: "http://vault.service.consul:8200"
 build nixos hosts:
+  extends:
+    - .vault
   tags: [nix-shell]
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -32,13 +42,12 @@ build nixos hosts:
   stage: check
   needs: []
   resource_group: production/nixos
-  id_tokens:
-    VAULT_ID_TOKEN:
-      aud: http://vault.service.consul:8200
   script:
     - nix run -f . scripts.hosts -- ci attic-login
     - nix run -f . scripts.hosts -- ci diff
 deploy nixos hosts:
+  extends:
+    - .vault
   tags: [nix-shell]
   rules:
     - if: $CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"
@@ -48,33 +57,27 @@ deploy nixos hosts:
   environment:
     name: production
   resource_group: production/nixos
-  id_tokens:
-    VAULT_ID_TOKEN:
-      aud: http://vault.service.consul:8200
-  # before_script: !reference [.snippets, setup_devenv]
   script:
     - nix run -f . scripts.hosts -- ci attic-login
     - nix run -f . dippy -- deploy
 build tofu changes:
-  tags: [nix]
+  extends:
+    - .vault
+    - .tofu
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes: !reference [.snippets, tofu_changes]
   stage: check
   needs: []
-  variables:
-    TF_PLUGIN_CACHE_MAY_BREAK_DEPENDENCY_LOCK_FILE: "yes"
-  id_tokens:
-    VAULT_ID_TOKEN:
-      aud: http://vault.service.consul:8200
   artifacts:
     reports:
       terraform: plan.json
-  before_script: !reference [.snippets, setup_devenv]
   script:
     - nix run -f . scripts.tofu -- ci plan
 apply terranix changes:
-  tags: [nix]
+  extends:
+    - .vault
+    - .tofu
   rules:
     - if: $CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"
       changes: !reference [.snippets, tofu_changes]
@@ -83,12 +86,6 @@ apply terranix changes:
   environment:
     name: production
   resource_group: production/nomad
-  variables:
-    TF_PLUGIN_CACHE_MAY_BREAK_DEPENDENCY_LOCK_FILE: "yes"
-  id_tokens:
-    VAULT_ID_TOKEN:
-      aud: http://vault.service.consul:8200
-  before_script: !reference [.snippets, setup_devenv]
   script:
     - nix run -f . scripts.tofu -- ci apply
 check for flake updates:
@@ -96,6 +93,5 @@ check for flake updates:
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
   stage: check
-  # before_script: !reference [.snippets, setup_devenv]
   script:
     - nix run -f . scripts.update -- ci update-pins

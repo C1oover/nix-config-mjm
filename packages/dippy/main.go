@@ -22,7 +22,6 @@ var (
 	plansFile   = flag.String("plans", "plans.nix", "File to evaluate for deploy plans")
 	concurrency = flag.Int("concurrency", runtime.NumCPU(), "Number of nodes to evaluate/build concurrently")
 	nom         = flag.Bool("nom", os.Getenv("CI") == "", "Whether to run builds through nix-output-monitor")
-	ciSections  = flag.Bool("ci-sections", os.Getenv("CI") != "", "Whether to emit collapsible sections for CI logs")
 	forceGoal   = flag.String("goal", "", "Force use of a specific goal regardless of reboot check")
 	pushToAttic = flag.Bool("attic", true, "Whether to push the built system to the attic cache")
 	runTests    = flag.Bool("tests", true, "Whether to run NixOS VM tests")
