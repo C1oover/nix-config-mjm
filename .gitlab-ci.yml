@@ -57,7 +57,8 @@ deploy nixos hosts:
   stage: deploy
   needs: []
   environment:
-    name: production
+    name: production/nixos
+    deployment_tier: production
   resource_group: production/nixos
   script:
     - nix run -f . scripts.hosts -- ci attic-login
@@ -86,8 +87,9 @@ apply terranix changes:
   stage: deploy
   needs: []
   environment:
-    name: production
-  resource_group: production/nomad
+    name: production/tofu
+    deployment_tier: production
+  resource_group: production/tofu
   script:
     - nix run -f . scripts.tofu -- ci apply
 check for flake updates:
