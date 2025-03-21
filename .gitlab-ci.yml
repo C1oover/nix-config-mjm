@@ -2,20 +2,22 @@
   nixos_changes:
     - .gitlab-ci.yml
     - default.nix
+    - overlay.nix
     - plans.nix
-    - apps/**/*
-    - home/**/*
     - hosts/**/*
     - modules/**/*
     - npins/*
     - packages/**/*
-    - secrets/**/*
     - services/**/*
   tofu_changes:
     - .gitlab-ci.yml
+    - hosts/**/*
+    - modules/nixos/**/*
+    - modules/tofu/**/*
     - npins/*
+    - packages/opentofu.nix
+    - packages/tofu-config.nix
     - services/**/*
-    - terraform/**/*
 .vault:
   id_tokens:
     VAULT_ID_TOKEN:
