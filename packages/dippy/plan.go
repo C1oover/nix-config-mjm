@@ -109,15 +109,20 @@ func (_ DeployPlan) deployPhaseHosts(ctx context.Context, name string, hosts []*
 		return nil
 	}
 
+	s := sectionStart("Deploying "+name+" hosts", false)
 	l := slog.Default().WithGroup("phase").With("name", name)
 	l.InfoContext(ctx, "deploying phase", "host_count", len(hosts))
 
 	for _, h := range hosts {
+		s := sectionStart("Deploying "+h.Name, false)
 		if err := h.Deploy(ctx, *forceGoal); err != nil {
 			return fmt.Errorf("deploying %s: %w", h.Name, err)
 		}
+		sectionEnd(s)
 	}
 
 	l.InfoContext(ctx, "deployed phase")
+	sectionEnd(s)
+
 	return nil
 }
