@@ -33,10 +33,23 @@ def --wrapped "main apply" [...args] {
 }
 
 def "main ci plan" [] {
+  let old_pwd = pwd
+
   with-vault {
     with-tofu {
       tofu init
-      tofu plan
+      tofu plan -out=plan.cache
+
+      # adapted from https://docs.gitlab.com/user/infrastructure/iac/mr_integration/
+      let plan = tofu show -json plan.cache | from json
+      let actions = $plan.resource_changes.change.actions | flatten
+      let report = {
+        create: ($actions | where {|el| $el == "create" } | length)
+        update: ($actions | where {|el| $el == "update" } | length)
+        delete: ($actions | where {|el| $el == "delete" } | length)
+      }
+
+      $report | save $'($old_pwd)/plan.json'
     }
   }
 }
