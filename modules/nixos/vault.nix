@@ -56,17 +56,9 @@ let
           type = types.str;
           default = name;
         };
-        hosts = mkOption {
-          type = types.listOf types.str;
-          default = [ ];
-        };
         paths = mkOption {
           default = { };
           type = types.attrsOf jsonFormat.type;
-        };
-        commonPolicies = mkOption {
-          default = [ ];
-          type = types.listOf types.str;
         };
       };
     };

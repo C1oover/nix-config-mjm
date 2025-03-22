@@ -48,6 +48,9 @@ func newVaultClient(ctx context.Context) (*api.Client, error) {
 		c.SetToken(resp.Auth.ClientToken)
 	}
 
+	// TODO this is kind of a hacky way to make the token be set for later calls to Pulumi.
+	// Ideally this would be lifted up and passed around more explicitly
+	os.Setenv("VAULT_TOKEN", c.Token())
 	return c, nil
 }
 

@@ -17,6 +17,8 @@ devshell.mkShell (
         nix-eval-jobs
         nvd-json
         ;
+
+      pulumi = pkgs.pulumi.withPackages (p: [ p.pulumi-language-go ]);
     };
   }
 )

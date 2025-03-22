@@ -6,6 +6,7 @@ import (
 	"log/slog"
 	"slices"
 
+	"git.midna.dev/mjm/nix-config/packages/dippy/infra"
 	"git.midna.dev/mjm/nix-config/packages/dippy/nix"
 	"golang.org/x/sync/errgroup"
 )
@@ -15,6 +16,7 @@ type DeployPlan struct {
 	Phases []DeployPhase
 	Hosts  []*Host
 	Tests  []nix.EvalJobResult
+	Infra  *infra.Input
 	cfg    Config
 }
 

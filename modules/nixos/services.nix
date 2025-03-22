@@ -40,11 +40,6 @@ let
         vault = {
           enable = mkEnableOption "Vault service policy";
 
-          commonPolicies = mkOption {
-            type = types.listOf types.str;
-            default = [ ];
-          };
-
           loadedBy = mkOption {
             type = types.listOf types.str;
             default = [ ];
@@ -53,7 +48,7 @@ let
           keys = mkOption {
             type = types.attrsOf (
               types.submodule (
-                { name, config, ... }:
+                { name, ... }:
                 {
                   options = {
                     loadedBy = mkOption {
@@ -105,9 +100,7 @@ in
       };
     })
     (mkIf (vaultServices != [ ]) {
-      vault.services = listToAttrs (
-        map (s: nameValuePair s.name { inherit (s.vault) commonPolicies; }) vaultServices
-      );
+      vault.services = listToAttrs (map (s: nameValuePair s.name { }) vaultServices);
 
       vault-secrets.services = listToAttrs (
         map (s: nameValuePair s.name { inherit (s.vault) loadedBy keys; }) vaultServices

@@ -14,6 +14,7 @@ import (
 	"strings"
 	"time"
 
+	"git.midna.dev/mjm/nix-config/packages/dippy/infra"
 	"git.midna.dev/mjm/nix-config/packages/dippy/nix"
 	"github.com/lmittmann/tint"
 )
@@ -51,6 +52,10 @@ func main() {
 		err = handleReboot(ctx)
 	case "apply-local":
 		err = handleApplyLocal(ctx)
+	case "apply-infra":
+		err = handleApplyInfra(ctx)
+	case "diff-infra":
+		err = handleDiffInfra(ctx)
 	default:
 		slog.ErrorContext(ctx, "unexpected command", "command", cmd)
 		os.Exit(1)
@@ -114,6 +119,12 @@ func handleDeploy(ctx context.Context) error {
 		return nil
 	}); err != nil {
 		return fmt.Errorf("building nodes: %w", err)
+	}
+	sectionEnd(s)
+
+	s = sectionStart("Applying infra changes", false)
+	if err := infra.Apply(ctx, plan.Infra); err != nil {
+		return fmt.Errorf("applying infra changes: %w", err)
 	}
 	sectionEnd(s)
 
@@ -200,6 +211,12 @@ func handleDiff(ctx context.Context) error {
 	}
 	sectionEnd(s)
 
+	s = sectionStart("Previewing infra changes", false)
+	if err := infra.Preview(ctx, plan.Infra); err != nil {
+		return fmt.Errorf("previewing infra changes: %w", err)
+	}
+	sectionEnd(s)
+
 	slog.DebugContext(ctx, "aggregating diffs", "path", diffsDir)
 	aggregated, err := aggregateDiffs(ctx, diffsDir)
 	if err != nil {
@@ -266,6 +283,46 @@ func handleApplyLocal(ctx context.Context) error {
 	return nil
 }
 
+func handleApplyInfra(ctx context.Context) error {
+	cfg := NewLocalConfig()
+
+	slog.InfoContext(ctx, "evaluating infra config", "file", *plansFile)
+
+	result := new(infra.Input)
+	if err := cfg.Nix.EvalJSON(ctx, result, nix.EvalOptions{
+		Expr:    "(import <plans> {}).infra",
+		Include: []string{"plans=" + *plansFile},
+	}); err != nil {
+		return fmt.Errorf("evaluating infra data from nix: %w", err)
+	}
+
+	if err := infra.Apply(ctx, result); err != nil {
+		return fmt.Errorf("applying infra: %w", err)
+	}
+
+	return nil
+}
+
+func handleDiffInfra(ctx context.Context) error {
+	cfg := NewLocalConfig()
+
+	slog.InfoContext(ctx, "evaluating infra config", "file", *plansFile)
+
+	result := new(infra.Input)
+	if err := cfg.Nix.EvalJSON(ctx, result, nix.EvalOptions{
+		Expr:    "(import <plans> {}).infra",
+		Include: []string{"plans=" + *plansFile},
+	}); err != nil {
+		return fmt.Errorf("evaluating infra data from nix: %w", err)
+	}
+
+	if err := infra.Preview(ctx, result); err != nil {
+		return fmt.Errorf("previewing infra: %w", err)
+	}
+
+	return nil
+}
+
 func evalNodes(ctx context.Context, cfg Config, path string, hostnames []string) (*DeployPlan, error) {
 	workers := *concurrency
 	if len(hostnames) > 0 && len(hostnames) < workers-1 {
@@ -291,7 +348,7 @@ func evalNodes(ctx context.Context, cfg Config, path string, hostnames []string)
 		return nil, fmt.Errorf("running eval: %w", err)
 	}
 
-	var configResult nix.EvalJobResult
+	var configResult, infraResult nix.EvalJobResult
 	var errorAttrs []string
 	var testResults []nix.EvalJobResult
 	resultsByAttrs := map[string]nix.EvalJobResult{}
@@ -300,6 +357,8 @@ func evalNodes(ctx context.Context, cfg Config, path string, hostnames []string)
 			errorAttrs = append(errorAttrs, r.Attr)
 		} else if r.Attr == "configJson" {
 			configResult = r
+		} else if r.Attr == "infraJson" {
+			infraResult = r
 		} else if r.AttrPath[0] == "toplevels" {
 			resultsByAttrs[r.AttrPath[1]] = r
 		} else if r.AttrPath[0] == "tests" {
@@ -310,22 +369,24 @@ func evalNodes(ctx context.Context, cfg Config, path string, hostnames []string)
 		return nil, fmt.Errorf("evaluation failed for one or more attributes (%s)", strings.Join(errorAttrs, ", "))
 	}
 
-	if err := cfg.Nix.Realise(ctx, []string{configResult.DrvPath}, false); err != nil {
+	var plan planConfig
+	if err := realiseJSON(ctx, cfg, configResult, &plan); err != nil {
 		return nil, fmt.Errorf("realising config json: %w", err)
 	}
 
-	configFile, err := os.Open(configResult.OutPath())
-	if err != nil {
-		return nil, fmt.Errorf("opening %q: %w", configResult.OutPath(), err)
-	}
-	defer configFile.Close()
-
-	var plan planConfig
-	if err := json.NewDecoder(configFile).Decode(&plan); err != nil {
-		return nil, fmt.Errorf("decoding plan json: %w", err)
+	infraInput := new(infra.Input)
+	if err := realiseJSON(ctx, cfg, infraResult, infraInput); err != nil {
+		return nil, fmt.Errorf("realising infra json: %w", err)
 	}
 
-	dp := &DeployPlan{Phases: plan.Phases, Tests: testResults, cfg: cfg}
+	slog.DebugContext(ctx, "infra input", "input", infraInput)
+
+	dp := &DeployPlan{
+		Phases: plan.Phases,
+		Tests:  testResults,
+		Infra:  infraInput,
+		cfg:    cfg,
+	}
 	for name, r := range resultsByAttrs {
 		if !dp.ContainsHost(name) {
 			continue
@@ -361,6 +422,24 @@ func evalLocalNode(ctx context.Context, path string) (*Host, error) {
 		return nil, fmt.Errorf("evaluating node: %w", err)
 	}
 	return NewHost(cfg, name, result.System, result.DrvPath, result.OutPath, DeployConfig{}), nil
+}
+
+func realiseJSON(ctx context.Context, cfg Config, result nix.EvalJobResult, v any) error {
+	if err := cfg.Nix.Realise(ctx, []string{result.DrvPath}, false); err != nil {
+		return fmt.Errorf("realising %q: %w", result.DrvPath, err)
+	}
+
+	f, err := os.Open(result.OutPath())
+	if err != nil {
+		return fmt.Errorf("opening %q: %w", result.OutPath(), err)
+	}
+	defer f.Close()
+
+	if err := json.NewDecoder(f).Decode(v); err != nil {
+		return fmt.Errorf("decoding json: %w", err)
+	}
+
+	return nil
 }
 
 func aggregateDiffs(ctx context.Context, dir string) (*AggregatedDiff, error) {

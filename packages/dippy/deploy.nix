@@ -6,6 +6,7 @@ let
     attrNames
     attrValues
     elem
+    filter
     filterAttrs
     findFirst
     groupBy
@@ -111,10 +112,43 @@ let
         deployment = deploymentConfig;
         phases = phasesWithNodes plans.plans.${plan};
       };
+
+      infra =
+        let
+          allNodes = attrValues nodes;
+        in
+        {
+          vhosts = pipe allNodes [
+            (filter (n: !n.config.mjm.ingress.enable))
+            (map (n: n.config.ingress.virtualHosts))
+            mergeAttrsList
+            (mapAttrs (_: v: v.useIPv4Proxy))
+          ];
+          vaultServices = pipe allNodes [
+            (map (n: n.config.vault.services))
+            mergeAttrsList
+            (mapAttrs (_: p: p.paths))
+          ];
+          vaultPolicies = pipe allNodes [
+            (map (n: n.config.vault.policies))
+            mergeAttrsList
+            (mapAttrs (_: p: builtins.toJSON { path = p.paths; }))
+          ];
+          vaultRoles = pipe nodes [
+            (filterAttrs (_: n: n.config.vault.policies != { } || n.config.vault.services != { }))
+            (mapAttrs (
+              _: n: {
+                policies = attrNames n.config.vault.policies;
+                services = attrNames n.config.vault.services;
+              }
+            ))
+          ];
+        };
     in
     {
-      inherit config;
+      inherit config infra;
       configJson = json.generate "plan-config.json" config;
+      infraJson = json.generate "infra.json" infra;
       toplevels = pipe (nodes // darwinNodes) [
         (mapAttrs (_: v: v.config.system.build.toplevel))
         recurseIntoAttrs

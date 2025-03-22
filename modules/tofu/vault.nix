@@ -1,10 +1,8 @@
 { lib, nodes, ... }:
 let
   inherit (lib)
-    any
     attrNames
     attrValues
-    elem
     filter
     filterAttrs
     hasAttr
@@ -37,13 +35,7 @@ let
 
   policiesForNode =
     node:
-    (filter (
-      p:
-      hasAttr p node.config.vault.policies
-      || any (svc: elem p (map (name: "common-${name}") svc.commonPolicies)) (
-        attrValues node.config.vault.services
-      )
-    ) policyNames)
+    (filter (p: hasAttr p node.config.vault.policies) policyNames)
     ++ (map (s: "service-${s}") (filter (s: hasAttr s node.config.vault.services) serviceNames));
 in
 {
