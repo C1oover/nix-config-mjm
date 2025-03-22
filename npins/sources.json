@@ -194,9 +194,9 @@
         "server": "https://git.midna.dev/"
       },
       "branch": "deploy/nixpkgs-unstable",
-      "revision": "f70b992303c59dcd4cdbb9a0850c21735ef22002",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=f70b992303c59dcd4cdbb9a0850c21735ef22002",
-      "hash": "0v2rcwrh93hvbra4jazxv7p8smj6k5dxagjqm5ksrvbrkgyg3g1c"
+      "revision": "8d2e7a246d3fbbb99f7e74970ec1a32af2a9331c",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=8d2e7a246d3fbbb99f7e74970ec1a32af2a9331c",
+      "hash": "1rsirgwbmrb4fxawvwkhnf9k18r2qbyzh5vm90414svk92mmmwp3"
     },
     "nixpkgs-firefox-darwin": {
       "type": "Git",
@@ -206,9 +206,9 @@
         "repo": "nixpkgs-firefox-darwin"
       },
       "branch": "main",
-      "revision": "9245a27e35addde94575e87d3720df14c52b22ed",
-      "url": "https://github.com/bandithedoge/nixpkgs-firefox-darwin/archive/9245a27e35addde94575e87d3720df14c52b22ed.tar.gz",
-      "hash": "167dycgmryi5dkwcb2mif0dcjhxks2iyv293xx2hhwad5j61x2mw"
+      "revision": "e4b621f5498b53cec909a352a92b5df31c2c0b4f",
+      "url": "https://github.com/bandithedoge/nixpkgs-firefox-darwin/archive/e4b621f5498b53cec909a352a92b5df31c2c0b4f.tar.gz",
+      "hash": "1508fg70xfpfiknd5z2mh0gb01dbryyjb3y8x5l63d91ay21fynq"
     },
     "preservation": {
       "type": "Git",
