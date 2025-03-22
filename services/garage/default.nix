@@ -60,6 +60,7 @@ in
         tag = "s3";
       };
       enableAuthProxy = false;
+      useIPv4Proxy = true;
     };
 
     environment.systemPackages = builtins.attrValues {

@@ -22,6 +22,7 @@ in
     ingress.virtualHosts.attic = {
       upstream.service.name = "attic";
       enableAuthProxy = false;
+      useIPv4Proxy = true;
     };
 
     services.atticd = {
