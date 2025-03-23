@@ -71,9 +71,9 @@
         "server": "https://git.midna.dev/"
       },
       "branch": "deploy/master",
-      "revision": "10e6c6d1fcf8f35962c2b4e84fd4cdc4793cd1ea",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnix-darwin/repository/archive.tar.gz?sha=10e6c6d1fcf8f35962c2b4e84fd4cdc4793cd1ea",
-      "hash": "0dyjyyxph57ns65rzdwnbmwknmwdsn4k2vqpbvbmj6scm2fr58si"
+      "revision": "5b9d8c4bd6b7fd37b1ad1493fb0ef8d6aa03c721",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnix-darwin/repository/archive.tar.gz?sha=5b9d8c4bd6b7fd37b1ad1493fb0ef8d6aa03c721",
+      "hash": "0fzj4h9w8njk7ig507aabfsm2hk3vc9ckq90m8y4n5vi69xj3dla"
     },
     "devshell": {
       "type": "Git",
@@ -131,9 +131,9 @@
         "repo": "home-manager"
       },
       "branch": "master",
-      "revision": "5ff90f09d1bd189b722e60798513724cdd3580b6",
-      "url": "https://github.com/nix-community/home-manager/archive/5ff90f09d1bd189b722e60798513724cdd3580b6.tar.gz",
-      "hash": "0rlphpdkkz6fg3nmgl864yrmapq6igiq0bsd1vyldzi5da4axpd9"
+      "revision": "4f4538467fd29a8f5037c0939592cd89cd401155",
+      "url": "https://github.com/nix-community/home-manager/archive/4f4538467fd29a8f5037c0939592cd89cd401155.tar.gz",
+      "hash": "14was47l314gb3sr3xrx2r0hxnj5wk7zjwalvrg5znp5ppv5w6qf"
     },
     "lanzaboote": {
       "type": "GitRelease",
@@ -170,9 +170,9 @@
         "server": "https://git.midna.dev/"
       },
       "branch": "deploy/nixos-unstable",
-      "revision": "c1a2d8e46fcc4845de71f5921a375c03fa86eb9f",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=c1a2d8e46fcc4845de71f5921a375c03fa86eb9f",
-      "hash": "1pzhdlwxlxdgc1imx8184vd4wrvzwhlk7wb76bvij319q1jy2nxc"
+      "revision": "3918c3f2744a58c2cafa80633f67ef29cf4039e8",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=3918c3f2744a58c2cafa80633f67ef29cf4039e8",
+      "hash": "1mvq2vgxlgwh2ym0nqnw74bgknyf1plbd2qxbsgw4wx0z0ybwk6l"
     },
     "nixos-small": {
       "type": "Git",
