@@ -131,9 +131,9 @@
         "repo": "home-manager"
       },
       "branch": "master",
-      "revision": "b61ae3b677a07c30cf6be5233e772b97a3a8b2fb",
-      "url": "https://github.com/nix-community/home-manager/archive/b61ae3b677a07c30cf6be5233e772b97a3a8b2fb.tar.gz",
-      "hash": "1lrqy85z3cb4vjirb5gbdvxw8p0871yabc4wzxh51bisshk54nnh"
+      "revision": "5ff90f09d1bd189b722e60798513724cdd3580b6",
+      "url": "https://github.com/nix-community/home-manager/archive/5ff90f09d1bd189b722e60798513724cdd3580b6.tar.gz",
+      "hash": "0rlphpdkkz6fg3nmgl864yrmapq6igiq0bsd1vyldzi5da4axpd9"
     },
     "lanzaboote": {
       "type": "GitRelease",
@@ -194,9 +194,9 @@
         "server": "https://git.midna.dev/"
       },
       "branch": "deploy/nixpkgs-unstable",
-      "revision": "6179eeb68b1989b426ac97fada166e757e8abd1b",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=6179eeb68b1989b426ac97fada166e757e8abd1b",
-      "hash": "1bqap7xx87lmn2ayk8d8bqlpnv0rq0zlcsalw7cj5majl1f8bdxw"
+      "revision": "26042d98774b19d13bf518d5a9ff586ed8621518",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=26042d98774b19d13bf518d5a9ff586ed8621518",
+      "hash": "1k23a4d8wllvwb38kqy7gp5bwxfmhqccrazfgj430vmwjhk4vxm8"
     },
     "nixpkgs-firefox-darwin": {
       "type": "Git",
