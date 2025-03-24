@@ -30,8 +30,7 @@ func setUpVaultSSH(ctx *pulumi.Context) error {
 		},
 		AllowedExtensions:     pulumi.String("permit-pty"),
 		AllowUserCertificates: pulumi.Bool(true),
-		// TODO restrict this to a more specific set
-		AllowedUsers: pulumi.String("*"),
+		AllowedUsers:          pulumi.String("root,matt,mjm"),
 	}, pulumi.Protect(true)); err != nil {
 		return err
 	}
