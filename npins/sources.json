@@ -233,21 +233,6 @@
       "revision": "10f7b577f5081b30ca6b7fd5f98de8d7dfdb5a27",
       "url": "https://gitlab.com/api/v4/projects/rycee%2Fnur-expressions/repository/archive.tar.gz?sha=10f7b577f5081b30ca6b7fd5f98de8d7dfdb5a27",
       "hash": "1bf0jdcjlff8105d2332gmwndi45mjj4fx95i6pw5xgl0zzjaiis"
-    },
-    "terranix": {
-      "type": "GitRelease",
-      "repository": {
-        "type": "GitHub",
-        "owner": "terranix",
-        "repo": "terranix"
-      },
-      "pre_releases": false,
-      "version_upper_bound": null,
-      "release_prefix": null,
-      "version": "2.8.0",
-      "revision": "987714cabc1f2ecf298c1646864d9f95d98aee0d",
-      "url": "https://api.github.com/repos/terranix/terranix/tarball/2.8.0",
-      "hash": "1c1skpw9zppms5zri64cagfakcpsbyaz3d06ral3n1bckj7vdyyl"
     }
   },
   "version": 3

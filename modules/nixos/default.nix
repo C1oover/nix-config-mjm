@@ -20,7 +20,6 @@
     ./services.nix
     ./ssh.nix
     ./state.nix
-    ./terraform.nix
     ./userborn.nix
     ./vault.nix
     ./vault-agent.nix

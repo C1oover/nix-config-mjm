@@ -22,7 +22,6 @@ let
 in
 {
   imports = [
-    ./dns.nix
     ./mta-sts.nix
   ];
 

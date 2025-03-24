@@ -11,18 +11,19 @@ Services can define other options under that namespace as well for further custo
 These modules are much more opinionated than those in upstream NixOS.
 They're specifically configured to serve my own needs.
 
-## Ingress and OpenTofu provisioning
+## Ingress and infra provisioning
 
 Services can also define things that affect state outside just the host running the service, things like:
 
 - Ingress (Caddy) reverse-proxy vhost configuration
-- Anything that needs to be provisioned with OpenTofu, primarily Vault approles and policies
+- Anything that needs to be provisioned with Pulumi, primarily Vault approles and policies
 
 The [ingress](ingress/) service will use the `nodes` parameter [dippy](../packages/dippy) provides to get all of the vhost configuration from all the nodes and merge them together.
 It will then use that to generate the Caddy configuration.
-Similarly, when creating the OpenTofu configuration, OpenTofu resources and Vault services and policies are merged together to produce the full configuration.
+Similarly, dippy will infra-related config from all of the hosts and use it when creating resources with Pulumi.
 
-The [Vault support](../modules/tofu/vault.nix) is particularly nice, as it's smart about assigning policies to the hosts running the corresponding services, without having to explicitly declare which hosts those are.
+The Vault support is particularly nice.
+It's smart about assigning policies to the hosts running the corresponding services, without having to explicitly declare which hosts those are.
 
 ## State and impermanence
 
