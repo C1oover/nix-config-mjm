@@ -28,8 +28,7 @@ func setUpVaultSSH(ctx *pulumi.Context) error {
 		DefaultExtensions: pulumi.StringMap{
 			"permit-pty": pulumi.String(""),
 		},
-		// TODO remove some of these
-		AllowedExtensions:     pulumi.String("permit-agent-forwarding,permit-port-forwarding,permit-pty,permit-user-rc,permit-X11-forwarding"),
+		AllowedExtensions:     pulumi.String("permit-pty"),
 		AllowUserCertificates: pulumi.Bool(true),
 		// TODO restrict this to a more specific set
 		AllowedUsers: pulumi.String("*"),
