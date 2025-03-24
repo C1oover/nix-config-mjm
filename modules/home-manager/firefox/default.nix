@@ -111,16 +111,18 @@ in
         #   ${builtins.readFile "${inputs.firefox-csshacks}/chrome/hide_tabs_toolbar_v2.css"}
         # '';
         search.force = true;
-        search.default = "SearXNG";
+        search.default = "searxng";
         search.engines =
           let
             mkSearchix =
               {
+                name,
                 type ? "options",
                 project,
                 alias,
               }:
               {
+                inherit name;
                 urls = [
                   {
                     template = "https://searchix.alanpearce.eu/${type}/${project}/search";
@@ -137,7 +139,8 @@ in
               };
           in
           {
-            "SearXNG" = {
+            searxng = {
+              name = "SearXNG";
               urls = [
                 {
                   template = "https://searx.org/search";
@@ -150,24 +153,29 @@ in
                 }
               ];
             };
-            "Nix Packages" = mkSearchix {
+            nix-packages = mkSearchix {
+              name = "Nix Packages";
               type = "packages";
               project = "nixpkgs";
               alias = "np";
             };
-            "NixOS Options" = mkSearchix {
+            nixos-options = mkSearchix {
+              name = "NixOS Options";
               project = "nixos";
               alias = "no";
             };
-            "nix-darwin Options" = mkSearchix {
+            nix-darwin-options = mkSearchix {
+              name = "nix-darwin Options";
               project = "darwin";
               alias = "nd";
             };
-            "Home Manager Options" = mkSearchix {
+            home-manager-options = mkSearchix {
+              name = "Home Manager Options";
               project = "home-manager";
               alias = "nh";
             };
-            "Links" = {
+            linkding = {
+              name = "Links";
               urls = [
                 {
                   template = "https://links.midna.dev/bookmarks";
@@ -181,7 +189,8 @@ in
               ];
               definedAliases = [ "@l" ];
             };
-            "WowHead Classic" = {
+            wowhead-classic = {
+              name = "WowHead Classic";
               urls = [
                 {
                   template = "https://www.wowhead.com/classic/search";
@@ -195,8 +204,8 @@ in
               ];
               definedAliases = [ "@wh" ];
             };
-            "Bing".metadata.hidden = true;
-            "Google".metadata.alias = "@g";
+            bing.metaData.hidden = true;
+            google.metaData.alias = "@g";
           };
       };
     };
