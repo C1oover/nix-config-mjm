@@ -131,9 +131,9 @@
         "repo": "home-manager"
       },
       "branch": "master",
-      "revision": "4f4538467fd29a8f5037c0939592cd89cd401155",
-      "url": "https://github.com/nix-community/home-manager/archive/4f4538467fd29a8f5037c0939592cd89cd401155.tar.gz",
-      "hash": "14was47l314gb3sr3xrx2r0hxnj5wk7zjwalvrg5znp5ppv5w6qf"
+      "revision": "2d057cd9d4f767737498e0aae75b07353c75bdee",
+      "url": "https://github.com/nix-community/home-manager/archive/2d057cd9d4f767737498e0aae75b07353c75bdee.tar.gz",
+      "hash": "1kvxvs5mizs2jsz9qnra00jxvx91pck464cbbcb3fc0bfcq7awk2"
     },
     "lanzaboote": {
       "type": "GitRelease",
