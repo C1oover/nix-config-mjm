@@ -1,46 +1,20 @@
-.snippets:
-  nixos_changes:
-    - .gitlab-ci.yml
-    - default.nix
-    - overlay.nix
-    - plans.nix
-    - hosts/**/*
-    - modules/**/*
-    - npins/*
-    - packages/**/*
-    - services/**/*
-  tofu_changes:
-    - .gitlab-ci.yml
-    - hosts/**/*
-    - modules/nixos/**/*
-    - modules/tofu/**/*
-    - npins/*
-    - packages/opentofu.nix
-    - packages/tofu-config.nix
-    - services/**/*
 .vault:
   id_tokens:
     VAULT_ID_TOKEN:
       aud: http://vault.service.consul:8200
-.tofu:
-  tags: [nix]
-  variables:
-    TF_PLUGIN_CACHE_MAY_BREAK_DEPENDENCY_LOCK_FILE: "yes"
-  before_script:
-    - . "$HOME/.nix-profile/etc/profile.d/nix.sh"
 stages:
   - check
   - deploy
 variables:
   CONSUL_HTTP_ADDR: "consul.service.consul:8500"
   VAULT_ADDR: "http://vault.service.consul:8200"
+  PULUMI_HOME: "/tmp/pulumi-home-$CI_JOB_ID"
 build nixos hosts:
   extends:
     - .vault
   tags: [nix-shell]
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      changes: !reference [.snippets, nixos_changes]
   stage: check
   needs: []
   resource_group: production/nixos
@@ -53,7 +27,6 @@ deploy nixos hosts:
   tags: [nix-shell]
   rules:
     - if: $CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"
-      changes: !reference [.snippets, nixos_changes]
   stage: deploy
   needs: []
   environment:
@@ -63,35 +36,6 @@ deploy nixos hosts:
   script:
     - nix run -f . scripts.hosts -- ci attic-login
     - nix run -f . dippy -- deploy
-build tofu changes:
-  extends:
-    - .vault
-    - .tofu
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      changes: !reference [.snippets, tofu_changes]
-  stage: check
-  needs: []
-  artifacts:
-    reports:
-      terraform: plan.json
-  script:
-    - nix run -f . scripts.tofu -- ci plan
-apply terranix changes:
-  extends:
-    - .vault
-    - .tofu
-  rules:
-    - if: $CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"
-      changes: !reference [.snippets, tofu_changes]
-  stage: deploy
-  needs: []
-  environment:
-    name: production/tofu
-    deployment_tier: production
-  resource_group: production/tofu
-  script:
-    - nix run -f . scripts.tofu -- ci apply
 check for flake updates:
   tags: [nix-shell]
   rules:

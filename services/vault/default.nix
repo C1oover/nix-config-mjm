@@ -34,9 +34,6 @@ in
   };
 
   imports = [
-    ./admin.nix
-    ./auth.nix
-    ./mounts.nix
     ./unseal.nix
   ];
 
@@ -145,12 +142,5 @@ in
 
       inherit (config.systemd.services.render-vault-secrets.serviceConfig) LoadCredentialEncrypted;
     };
-
-    terraform.terraform.required_providers.vault = {
-      source = "registry.opentofu.org/hashicorp/vault";
-      version = ">= 3.0.0";
-    };
-
-    terraform.provider.vault = { };
   };
 }

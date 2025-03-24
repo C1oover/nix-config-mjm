@@ -7,7 +7,12 @@
   nix-output-monitor,
   nvd-json,
   nvd,
+  pulumi,
 }:
+
+let
+  pulumiGo = pulumi.withPackages (p: [ p.pulumi-language-go ]);
+in
 
 buildGoModule {
   pname = "dippy";
@@ -15,7 +20,10 @@ buildGoModule {
 
   src = ./.;
 
-  vendorHash = "sha256-XMGc52gNAlmGBENVT8Kbvm+YcGsEeOGpcpcS4s8JCp4=";
+  vendorHash = "sha256-RGZVl2UwS8/Ki9TqLNU7OrHs0MgAJr82sckWbS7eHhY=";
+  proxyVendor = true;
+
+  excludedPackages = [ "./sdks/desec" ];
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -28,6 +36,7 @@ buildGoModule {
           nvd-json
           nvd
           attic-client
+          pulumiGo
         ]
       }
   '';

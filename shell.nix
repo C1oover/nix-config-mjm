@@ -24,8 +24,6 @@ devshell.mkShell (
     devshell.packages = attrValues {
       inherit (pkgs)
         nixfmt-rfc-style
-        opentofu
-        terraform-ls
         vault-bin
         ;
 

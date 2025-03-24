@@ -1,0 +1,44 @@
+package infra
+
+import (
+	"github.com/pulumi/pulumi-vault/sdk/v6/go/vault"
+	"github.com/pulumi/pulumi-vault/sdk/v6/go/vault/identity"
+	"github.com/pulumi/pulumi-vault/sdk/v6/go/vault/jwt"
+	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+)
+
+func setUpAuthOIDC(ctx *pulumi.Context, adminGroup *identity.Group) error {
+	// TODO create this here instead of getting it.
+	// will require recreating a new oidc secret, and providing it to pulumi
+	backend, err := vault.GetAuthBackend(ctx, "oidc", pulumi.ID("oidc"), nil)
+	if err != nil {
+		return err
+	}
+
+	if _, err := jwt.NewAuthBackendRole(ctx, "default", &jwt.AuthBackendRoleArgs{
+		Backend:     backend.Path,
+		RoleName:    pulumi.String("default"),
+		UserClaim:   pulumi.String("preferred_username"),
+		GroupsClaim: pulumi.String("groups"),
+		OidcScopes: pulumi.ToStringArray([]string{
+			"groups", "email", "profile",
+		}),
+		AllowedRedirectUris: pulumi.ToStringArray([]string{
+			"https://vault.midna.dev/oidc/callback",
+			"https://vault.midna.dev/ui/vault/auth/oidc/oidc/callback",
+			"http://localhost:8250/oidc/callback",
+		}),
+	}, pulumi.Import(pulumi.ID("auth/oidc/role/default"))); err != nil {
+		return err
+	}
+
+	if _, err := identity.NewGroupAlias(ctx, "oidc-admins", &identity.GroupAliasArgs{
+		Name:          pulumi.String("admins"),
+		MountAccessor: backend.Accessor,
+		CanonicalId:   adminGroup.ID(),
+	}, pulumi.Import(pulumi.ID("008dd915-009d-4501-3416-f0e209ba16bb"))); err != nil {
+		return err
+	}
+
+	return nil
+}
