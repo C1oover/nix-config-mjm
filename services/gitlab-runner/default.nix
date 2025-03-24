@@ -6,6 +6,7 @@
 }:
 let
   inherit (lib)
+    concatMapStringsSep
     mkAfter
     mkEnableOption
     mkForce
@@ -146,7 +147,7 @@ in
     ];
 
     programs.ssh.extraConfig = mkAfter ''
-      Host apollo.home.mattmoriarity.com arges.home.mattmoriarity.com artemis.home.mattmoriarity.com hades.home.mattmoriarity.com
+      Host ${concatMapStringsSep " " (m: m.hostName) config.nix.buildMachines}
         IdentitiesOnly yes
         IdentityFile ${config.mjm.services.gitlab-runner.vault.keys.remote_builder_private_key.path}
     '';
