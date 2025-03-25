@@ -19,7 +19,6 @@ build nixos hosts:
   needs: []
   resource_group: production/nixos
   script:
-    - nix run -f . scripts.hosts -- ci attic-login
     - nix run -f . dippy -- diff
 deploy nixos hosts:
   extends:
@@ -34,7 +33,6 @@ deploy nixos hosts:
     deployment_tier: production
   resource_group: production/nixos
   script:
-    - nix run -f . scripts.hosts -- ci attic-login
     - nix run -f . dippy -- deploy
 check for updates:
   tags: [nix-shell]

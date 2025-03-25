@@ -99,7 +99,7 @@ func (h *Host) PushToAttic(ctx context.Context) error {
 	l := h.log.With("out_path", h.OutPath)
 	l.InfoContext(ctx, "pushing to attic cache")
 
-	if err := h.cfg.Runner.Execute(ctx, "attic", "push", "homelab", h.OutPath); err != nil {
+	if err := h.cfg.Runner.Execute(ctx, "attic", "push", "homelab-dippy:homelab", h.OutPath); err != nil {
 		return fmt.Errorf("running attic push: %w", err)
 	}
 

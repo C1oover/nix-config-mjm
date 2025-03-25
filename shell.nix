@@ -26,8 +26,6 @@ devshell.mkShell (
         nixfmt-rfc-style
         vault-bin
         ;
-
-      inherit (pkgs.scripts) hosts;
     };
 
     env = [

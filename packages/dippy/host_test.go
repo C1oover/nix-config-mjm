@@ -156,7 +156,7 @@ func TestPushToAttic(t *testing.T) {
 
 	must.NoError(t, h.PushToAttic(ctx))
 	test.Eq(t, [][]string{{
-		"attic", "push", "homelab", "/nix/store/h3big3vbjnk32vf0nb5vi80yq0l9ivxb-nixos-system-uranus-25.05pre-git",
+		"attic", "push", "homelab-dippy:homelab", "/nix/store/h3big3vbjnk32vf0nb5vi80yq0l9ivxb-nixos-system-uranus-25.05pre-git",
 	}}, r.History)
 }
 
