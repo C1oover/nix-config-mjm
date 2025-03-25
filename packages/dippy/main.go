@@ -105,6 +105,10 @@ func handleDeploy(ctx context.Context) error {
 		sectionEnd(s)
 	}
 
+	if err := atticLogin(ctx, cfg); err != nil {
+		return fmt.Errorf("logging in to attic: %w", err)
+	}
+
 	s = sectionStart("Pushing systems to hosts and attic", true)
 	if err := plan.EachHost(ctx, func(ctx context.Context, h *Host) error {
 		if err := h.Push(ctx); err != nil {
@@ -178,6 +182,10 @@ func handleDiff(ctx context.Context) error {
 			return fmt.Errorf("running all tests: %w", err)
 		}
 		sectionEnd(s)
+	}
+
+	if err := atticLogin(ctx, cfg); err != nil {
+		return fmt.Errorf("logging in to attic: %w", err)
 	}
 
 	s = sectionStart("Pushing and diffing hosts", true)
@@ -299,7 +307,12 @@ func handleReboot(ctx context.Context) error {
 }
 
 func handleApplyLocal(ctx context.Context) error {
-	h, err := evalLocalNode(ctx, *plansFile)
+	cfg, err := NewLocalConfig()
+	if err != nil {
+		return fmt.Errorf("generating config: %w", err)
+	}
+
+	h, err := evalLocalNode(ctx, cfg, *plansFile)
 	if err != nil {
 		return fmt.Errorf("evaluating node: %w", err)
 	}
@@ -309,6 +322,10 @@ func handleApplyLocal(ctx context.Context) error {
 	}
 
 	if *pushToAttic {
+		if err := atticLogin(ctx, cfg); err != nil {
+			return fmt.Errorf("logging in to attic: %w", err)
+		}
+
 		if err := h.PushToAttic(ctx); err != nil {
 			return fmt.Errorf("pushing to attic: %w", err)
 		}
@@ -446,7 +463,7 @@ func evalNodes(ctx context.Context, cfg Config, path string, hostnames []string)
 	return dp, nil
 }
 
-func evalLocalNode(ctx context.Context, path string) (*Host, error) {
+func evalLocalNode(ctx context.Context, cfg Config, path string) (*Host, error) {
 	name, err := os.Hostname()
 	if err != nil {
 		return nil, fmt.Errorf("getting hostname: %w", err)
@@ -458,11 +475,6 @@ func evalLocalNode(ctx context.Context, path string) (*Host, error) {
 		DrvPath string `json:"drv"`
 		OutPath string `json:"out"`
 		System  string `json:"system"`
-	}
-
-	cfg, err := NewLocalConfig()
-	if err != nil {
-		return nil, fmt.Errorf("generating config: %w", err)
 	}
 
 	slog.InfoContext(ctx, "evaluating local host", "name", name)
