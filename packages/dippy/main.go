@@ -5,12 +5,14 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"io"
 	"log/slog"
 	"os"
 	"os/exec"
 	"path"
 	"runtime"
 	"slices"
+	"strconv"
 	"strings"
 	"time"
 
@@ -211,11 +213,13 @@ func handleDiff(ctx context.Context) error {
 	}
 	sectionEnd(s)
 
-	s = sectionStart("Previewing infra changes", false)
-	if err := infra.Preview(ctx, cfg.Vault, plan.Infra); err != nil {
-		return fmt.Errorf("previewing infra changes: %w", err)
+	if len(hostnames) == 0 {
+		s = sectionStart("Previewing infra changes", false)
+		if err := infra.Preview(ctx, cfg.Vault, plan.Infra); err != nil {
+			return fmt.Errorf("previewing infra changes: %w", err)
+		}
+		sectionEnd(s)
 	}
-	sectionEnd(s)
 
 	slog.DebugContext(ctx, "aggregating diffs", "path", diffsDir)
 	aggregated, err := aggregateDiffs(ctx, diffsDir)
@@ -223,7 +227,45 @@ func handleDiff(ctx context.Context) error {
 		return fmt.Errorf("aggregating diffs: %w", err)
 	}
 
-	return aggregated.Write(os.Stdout)
+	var body strings.Builder
+	if err := aggregated.Write(&body); err != nil {
+		return fmt.Errorf("writing formatted summary: %w", err)
+	}
+
+	if body.Len() == 0 {
+		body.WriteString("No package changes for server hosts.\n")
+	}
+
+	gitlabBaseURL := os.Getenv("CI_API_V4_URL")
+	if gitlabBaseURL == "" {
+		io.WriteString(os.Stdout, body.String())
+	} else {
+		projectID, err := strconv.Atoi(os.Getenv("CI_PROJECT_ID"))
+		if err != nil {
+			return fmt.Errorf("converting project ID %q to int: %w", os.Getenv("CI_PROJECT_ID"), err)
+		}
+
+		mergeRequestID, err := strconv.Atoi(os.Getenv("CI_MERGE_REQUEST_IID"))
+		if err != nil {
+			return fmt.Errorf("converting merge request ID %q to int: %w", os.Getenv("CI_MERGE_REQUEST_IID"), err)
+		}
+
+		slog.DebugContext(ctx, "creating merge request note", "base_url", gitlabBaseURL, "project", projectID, "merge_request", mergeRequestID)
+
+		if err := createMergeRequestNote(ctx, &createMergeRequestNoteArgs{
+			BaseURL:        gitlabBaseURL,
+			Token:          os.Getenv("PINS_UPDATE_TOKEN"),
+			Project:        projectID,
+			MergeRequestID: mergeRequestID,
+			Body:           body.String(),
+		}); err != nil {
+			return fmt.Errorf("creating merge request note: %w", err)
+		}
+
+		slog.InfoContext(ctx, "created merge request note")
+	}
+
+	return nil
 }
 
 func handleReboot(ctx context.Context) error {

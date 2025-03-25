@@ -20,7 +20,7 @@ build nixos hosts:
   resource_group: production/nixos
   script:
     - nix run -f . scripts.hosts -- ci attic-login
-    - nix run -f . scripts.hosts -- ci diff
+    - nix run -f . dippy -- diff
 deploy nixos hosts:
   extends:
     - .vault
