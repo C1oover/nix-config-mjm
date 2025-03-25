@@ -122,6 +122,7 @@ def "main ci update-pins" [] {
 
   print "latest nixpkgs doesn't match my version. updating pinned sources..."
   let output = npins update o+e>| $in
+  print $output
   git config user.email "gitlab@mj.midna.dev"
   git config user.name "Pins Updater"
   git add npins/sources.json
