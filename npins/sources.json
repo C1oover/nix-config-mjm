@@ -182,8 +182,8 @@
         "server": "https://git.midna.dev/"
       },
       "branch": "deploy/nixos-unstable-small",
-      "revision": "f13773f4f862a80f52cf36c8ee793b681a90853a",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=f13773f4f862a80f52cf36c8ee793b681a90853a",
+      "revision": "71312151c7b09356c56cce00dc11f8d952fdedc6",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=71312151c7b09356c56cce00dc11f8d952fdedc6",
       "hash": "0rw10abscy0bxp7bmsk26c95rkplyzjn9zscwpvcayqpn3gafpfx"
     },
     "nixpkgs": {
@@ -206,9 +206,9 @@
         "repo": "nixpkgs-firefox-darwin"
       },
       "branch": "main",
-      "revision": "c6c3f0f7a4b62641da54ac2c5200512bcbcba1fb",
-      "url": "https://github.com/bandithedoge/nixpkgs-firefox-darwin/archive/c6c3f0f7a4b62641da54ac2c5200512bcbcba1fb.tar.gz",
-      "hash": "1w7f5x8gmzq1pb770k2vn6dlm2n5q1zr5hc39mnci1h0kpki9bw1"
+      "revision": "0da84b5dee458444605517441c6925c92d9fbc85",
+      "url": "https://github.com/bandithedoge/nixpkgs-firefox-darwin/archive/0da84b5dee458444605517441c6925c92d9fbc85.tar.gz",
+      "hash": "1sr70yih9r9w46gqnbl4cghh3wmlx0v3bdc0i7pyb9xg4l5s8dpd"
     },
     "preservation": {
       "type": "Git",
