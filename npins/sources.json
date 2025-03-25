@@ -71,9 +71,9 @@
         "server": "https://git.midna.dev/"
       },
       "branch": "deploy/master",
-      "revision": "5b9d8c4bd6b7fd37b1ad1493fb0ef8d6aa03c721",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnix-darwin/repository/archive.tar.gz?sha=5b9d8c4bd6b7fd37b1ad1493fb0ef8d6aa03c721",
-      "hash": "0fzj4h9w8njk7ig507aabfsm2hk3vc9ckq90m8y4n5vi69xj3dla"
+      "revision": "a37eb0db087eb3fb9acb7876e343f2a5abc43e52",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnix-darwin/repository/archive.tar.gz?sha=a37eb0db087eb3fb9acb7876e343f2a5abc43e52",
+      "hash": "1s0y55l0bha2lc4k3vl24h5z6iz5irav6a0y6fqmd9dmp04nkdd3"
     },
     "devshell": {
       "type": "Git",
@@ -131,9 +131,9 @@
         "repo": "home-manager"
       },
       "branch": "master",
-      "revision": "c4d5d72805d14ea43c140eeb70401bf84c0f11b4",
-      "url": "https://github.com/nix-community/home-manager/archive/c4d5d72805d14ea43c140eeb70401bf84c0f11b4.tar.gz",
-      "hash": "0zhy281ji09kcflvbbs91zi6x5jabzpafvh8syaigdpcww6irwgj"
+      "revision": "869f2ec2add75ce2a70a6dbbf585b8399abec625",
+      "url": "https://github.com/nix-community/home-manager/archive/869f2ec2add75ce2a70a6dbbf585b8399abec625.tar.gz",
+      "hash": "0iy4gbhydx7h37dnpnzcqaz8ycy4i4zqzdvax22496rrxds42z0p"
     },
     "lanzaboote": {
       "type": "GitRelease",
@@ -194,9 +194,9 @@
         "server": "https://git.midna.dev/"
       },
       "branch": "deploy/nixpkgs-unstable",
-      "revision": "14843d4569e4ca82121fcdfe2b26c43108a11381",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=14843d4569e4ca82121fcdfe2b26c43108a11381",
-      "hash": "1hd3vkg3wiil36fzykgpgilhdpbi335a5m238q273y7wnrj53nm7"
+      "revision": "f0b505c27f0153b2db91287404a6ddd0a7d792dd",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=f0b505c27f0153b2db91287404a6ddd0a7d792dd",
+      "hash": "1qb47p57426sq0iim309768ip4sdac5v54b3qs1wvz04b2pz5d5f"
     },
     "nixpkgs-firefox-darwin": {
       "type": "Git",
