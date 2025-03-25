@@ -123,7 +123,7 @@ func handleDeploy(ctx context.Context) error {
 	sectionEnd(s)
 
 	s = sectionStart("Applying infra changes", false)
-	if err := infra.Apply(ctx, plan.Infra); err != nil {
+	if err := infra.Apply(ctx, cfg.Vault, plan.Infra); err != nil {
 		return fmt.Errorf("applying infra changes: %w", err)
 	}
 	sectionEnd(s)
@@ -212,7 +212,7 @@ func handleDiff(ctx context.Context) error {
 	sectionEnd(s)
 
 	s = sectionStart("Previewing infra changes", false)
-	if err := infra.Preview(ctx, plan.Infra); err != nil {
+	if err := infra.Preview(ctx, cfg.Vault, plan.Infra); err != nil {
 		return fmt.Errorf("previewing infra changes: %w", err)
 	}
 	sectionEnd(s)
@@ -284,7 +284,10 @@ func handleApplyLocal(ctx context.Context) error {
 }
 
 func handleApplyInfra(ctx context.Context) error {
-	cfg := NewLocalConfig()
+	cfg, err := NewLocalConfig()
+	if err != nil {
+		return fmt.Errorf("generating config: %w", err)
+	}
 
 	slog.InfoContext(ctx, "evaluating infra config", "file", *plansFile)
 
@@ -296,7 +299,7 @@ func handleApplyInfra(ctx context.Context) error {
 		return fmt.Errorf("evaluating infra data from nix: %w", err)
 	}
 
-	if err := infra.Apply(ctx, result); err != nil {
+	if err := infra.Apply(ctx, cfg.Vault, result); err != nil {
 		return fmt.Errorf("applying infra: %w", err)
 	}
 
@@ -304,7 +307,10 @@ func handleApplyInfra(ctx context.Context) error {
 }
 
 func handleDiffInfra(ctx context.Context) error {
-	cfg := NewLocalConfig()
+	cfg, err := NewLocalConfig()
+	if err != nil {
+		return fmt.Errorf("generating config: %w", err)
+	}
 
 	slog.InfoContext(ctx, "evaluating infra config", "file", *plansFile)
 
@@ -316,7 +322,7 @@ func handleDiffInfra(ctx context.Context) error {
 		return fmt.Errorf("evaluating infra data from nix: %w", err)
 	}
 
-	if err := infra.Preview(ctx, result); err != nil {
+	if err := infra.Preview(ctx, cfg.Vault, result); err != nil {
 		return fmt.Errorf("previewing infra: %w", err)
 	}
 
@@ -412,7 +418,10 @@ func evalLocalNode(ctx context.Context, path string) (*Host, error) {
 		System  string `json:"system"`
 	}
 
-	cfg := NewLocalConfig()
+	cfg, err := NewLocalConfig()
+	if err != nil {
+		return nil, fmt.Errorf("generating config: %w", err)
+	}
 
 	slog.InfoContext(ctx, "evaluating local host", "name", name)
 	if err := cfg.Nix.EvalJSON(ctx, &result, nix.EvalOptions{

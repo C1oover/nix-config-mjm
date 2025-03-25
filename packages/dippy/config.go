@@ -8,11 +8,14 @@ import (
 
 	"git.midna.dev/mjm/nix-config/packages/dippy/cmd"
 	"git.midna.dev/mjm/nix-config/packages/dippy/nix"
+	"git.midna.dev/mjm/nix-config/packages/dippy/vault"
+	"github.com/hashicorp/vault/api"
 	"golang.org/x/crypto/ssh"
 	"golang.org/x/crypto/ssh/knownhosts"
 )
 
 type Config struct {
+	Vault        *api.Client
 	Nix          nix.Nix
 	Runner       cmd.Runner
 	RemoteRunner func(host, user string) (cmd.Runner, error)
@@ -20,7 +23,12 @@ type Config struct {
 }
 
 func GenerateConfig(ctx context.Context) (Config, error) {
-	cert, privKey, err := generateSSHKey(ctx)
+	c, err := vault.NewClient(ctx)
+	if err != nil {
+		return Config{}, fmt.Errorf("creating vault client: %w", err)
+	}
+
+	cert, privKey, err := vault.GenerateSSHKey(ctx, c)
 	if err != nil {
 		return Config{}, fmt.Errorf("generating ssh key: %w", err)
 	}
@@ -46,6 +54,7 @@ func GenerateConfig(ctx context.Context) (Config, error) {
 	}
 
 	return Config{
+		Vault:  c,
 		Nix:    nix.New(keyPath),
 		Runner: cmd.LocalRunner{},
 		RemoteRunner: func(host, user string) (cmd.Runner, error) {
@@ -55,14 +64,20 @@ func GenerateConfig(ctx context.Context) (Config, error) {
 	}, nil
 }
 
-func NewLocalConfig() Config {
+func NewLocalConfig() (Config, error) {
+	c, err := vault.NewClient(context.TODO())
+	if err != nil {
+		return Config{}, fmt.Errorf("creating vault client: %w", err)
+	}
+
 	return Config{
+		Vault:  c,
 		Nix:    nix.New(""),
 		Runner: cmd.LocalRunner{},
 		RemoteRunner: func(host, user string) (cmd.Runner, error) {
 			return nil, fmt.Errorf("remote runner not supported in this config")
 		},
-	}
+	}, nil
 }
 
 func (c *Config) Cleanup() {

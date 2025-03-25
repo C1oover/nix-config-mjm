@@ -6,6 +6,7 @@ import (
 	"log/slog"
 	"os"
 
+	"github.com/hashicorp/vault/api"
 	"github.com/pulumi/pulumi-vault/sdk/v6/go/vault"
 	"github.com/pulumi/pulumi/sdk/v3/go/auto"
 	"github.com/pulumi/pulumi/sdk/v3/go/auto/optpreview"
@@ -71,10 +72,10 @@ func deploy(input *Input) func(*pulumi.Context) error {
 	}
 }
 
-func Apply(ctx context.Context, input *Input) error {
+func Apply(ctx context.Context, c *api.Client, input *Input) error {
 	slog.InfoContext(ctx, "applying infra changes")
 
-	s, err := setUpStack(ctx, input)
+	s, err := setUpStack(ctx, c, input)
 	if err != nil {
 		return fmt.Errorf("setting up pulumi stack: %w", err)
 	}
@@ -90,10 +91,10 @@ func Apply(ctx context.Context, input *Input) error {
 	return nil
 }
 
-func Preview(ctx context.Context, input *Input) error {
+func Preview(ctx context.Context, c *api.Client, input *Input) error {
 	slog.InfoContext(ctx, "previewing infra changes")
 
-	s, err := setUpStack(ctx, input)
+	s, err := setUpStack(ctx, c, input)
 	if err != nil {
 		return fmt.Errorf("setting up pulumi stack: %w", err)
 	}
@@ -107,7 +108,7 @@ func Preview(ctx context.Context, input *Input) error {
 	return nil
 }
 
-func setUpStack(ctx context.Context, input *Input) (auto.Stack, error) {
+func setUpStack(ctx context.Context, c *api.Client, input *Input) (auto.Stack, error) {
 	slog.DebugContext(ctx, "setting up pulumi stack")
 	s, err := auto.UpsertStackInlineSource(ctx, "prod", "homelab", deploy(input), auto.Project(workspace.Project{
 		Name:    "homelab",
@@ -115,6 +116,8 @@ func setUpStack(ctx context.Context, input *Input) (auto.Stack, error) {
 		Backend: &workspace.ProjectBackend{
 			URL: "s3://pulumi-state?endpoint=garage.midna.dev&region=home&s3ForcePathStyle=true",
 		},
+	}), auto.EnvVars(map[string]string{
+		"VAULT_TOKEN": c.Token(),
 	}))
 	if err != nil {
 		return auto.Stack{}, fmt.Errorf("upserting pulumi stack: %w", err)
