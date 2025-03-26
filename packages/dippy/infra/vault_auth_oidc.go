@@ -1,16 +1,43 @@
 package infra
 
 import (
-	"github.com/pulumi/pulumi-vault/sdk/v6/go/vault"
+	"github.com/pulumi/pulumi-random/sdk/v4/go/random"
 	"github.com/pulumi/pulumi-vault/sdk/v6/go/vault/identity"
 	"github.com/pulumi/pulumi-vault/sdk/v6/go/vault/jwt"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
 func setUpAuthOIDC(ctx *pulumi.Context, adminGroup *identity.Group) error {
-	// TODO create this here instead of getting it.
-	// will require recreating a new oidc secret, and providing it to pulumi
-	backend, err := vault.GetAuthBackend(ctx, "oidc", pulumi.ID("oidc"), nil)
+	oidcClientID, err := random.NewRandomString(ctx, "vault-oidc-client-id", &random.RandomStringArgs{
+		Length:  pulumi.Int(64),
+		Special: pulumi.Bool(false),
+	})
+	if err != nil {
+		return err
+	}
+	ctx.Export("vaultOidcClientID", oidcClientID.Result)
+
+	oidcClientSecret, err := random.NewRandomBytes(ctx, "vault-oidc-client-secret", &random.RandomBytesArgs{
+		Length: pulumi.Int(64),
+	})
+	if err != nil {
+		return err
+	}
+	ctx.Export("vaultOidcClientSecret", oidcClientSecret.Hex)
+
+	backend, err := jwt.NewAuthBackend(ctx, "oidc", &jwt.AuthBackendArgs{
+		Path:             pulumi.String("oidc"),
+		Type:             pulumi.String("oidc"),
+		OidcDiscoveryUrl: pulumi.String("https://auth.midna.dev"),
+		OidcClientId:     oidcClientID.Result,
+		OidcClientSecret: oidcClientSecret.Hex,
+		DefaultRole:      pulumi.String("default"),
+		Tune: &jwt.AuthBackendTuneArgs{
+			DefaultLeaseTtl: pulumi.String("768h"),
+			MaxLeaseTtl:     pulumi.String("768h"),
+			TokenType:       pulumi.String("default-service"),
+		},
+	}, pulumi.Protect(true))
 	if err != nil {
 		return err
 	}
@@ -28,7 +55,7 @@ func setUpAuthOIDC(ctx *pulumi.Context, adminGroup *identity.Group) error {
 			"https://vault.midna.dev/ui/vault/auth/oidc/oidc/callback",
 			"http://localhost:8250/oidc/callback",
 		}),
-	}, pulumi.Import(pulumi.ID("auth/oidc/role/default"))); err != nil {
+	}); err != nil {
 		return err
 	}
 
@@ -36,7 +63,7 @@ func setUpAuthOIDC(ctx *pulumi.Context, adminGroup *identity.Group) error {
 		Name:          pulumi.String("admins"),
 		MountAccessor: backend.Accessor,
 		CanonicalId:   adminGroup.ID(),
-	}, pulumi.Import(pulumi.ID("008dd915-009d-4501-3416-f0e209ba16bb"))); err != nil {
+	}); err != nil {
 		return err
 	}
 
