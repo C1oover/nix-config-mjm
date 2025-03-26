@@ -8,7 +8,7 @@ stages:
 variables:
   CONSUL_HTTP_ADDR: "consul.service.consul:8500"
   VAULT_ADDR: "http://vault.service.consul:8200"
-  PULUMI_HOME: "/tmp/pulumi-home-$CI_JOB_ID"
+  PULUMI_HOME: "/tmp/pulumi-home-$CI_PROJECT_ID"
 build nixos hosts:
   extends:
     - .vault
