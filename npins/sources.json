@@ -170,9 +170,9 @@
         "server": "https://git.midna.dev/"
       },
       "branch": "deploy/nixos-unstable",
-      "revision": "3918c3f2744a58c2cafa80633f67ef29cf4039e8",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=3918c3f2744a58c2cafa80633f67ef29cf4039e8",
-      "hash": "1mvq2vgxlgwh2ym0nqnw74bgknyf1plbd2qxbsgw4wx0z0ybwk6l"
+      "revision": "4d7a72f3da4ad47d8799a70fa3df75d0f48d0079",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=4d7a72f3da4ad47d8799a70fa3df75d0f48d0079",
+      "hash": "078q1alb6ganw4w06j7lf628hc06hc2ajhggrr0mx7kw04k6i98x"
     },
     "nixos-small": {
       "type": "Git",
