@@ -119,9 +119,9 @@
         "server": "https://git.midna.dev/"
       },
       "branch": "deploy/master",
-      "revision": "1d5b6815b3741b1e341d906ea3121b297de446e1",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fhelix/repository/archive.tar.gz?sha=1d5b6815b3741b1e341d906ea3121b297de446e1",
-      "hash": "1ih3qlj7aifmpf3ypsyhi1d4az8lzricibx138lphsz4rw43chr6"
+      "revision": "92d105c903e16becf693a8c1e847105a34f73c5b",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fhelix/repository/archive.tar.gz?sha=92d105c903e16becf693a8c1e847105a34f73c5b",
+      "hash": "0pzz0pw263vgap1gqjrm38ri51r1wd0z322p6d1hdynxy13gmbpi"
     },
     "home-manager": {
       "type": "Git",
