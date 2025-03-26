@@ -128,11 +128,13 @@ func handleDeploy(ctx context.Context) error {
 	}
 	sectionEnd(s)
 
-	s = sectionStart("Applying infra changes", false)
-	if err := infra.Apply(ctx, cfg.Vault, plan.Infra); err != nil {
-		return fmt.Errorf("applying infra changes: %w", err)
+	if len(hostnames) == 0 {
+		s = sectionStart("Applying infra changes", false)
+		if err := infra.Apply(ctx, cfg.Vault, plan.Infra); err != nil {
+			return fmt.Errorf("applying infra changes: %w", err)
+		}
+		sectionEnd(s)
 	}
-	sectionEnd(s)
 
 	s = sectionStart("Deploying", false)
 	if err := plan.Deploy(ctx); err != nil {
