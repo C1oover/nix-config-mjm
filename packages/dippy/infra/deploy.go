@@ -109,6 +109,11 @@ func Preview(ctx context.Context, c *api.Client, input *Input) error {
 }
 
 func setUpStack(ctx context.Context, c *api.Client, input *Input) (auto.Stack, error) {
+	secret, err := c.KVv2("kv").Get(ctx, "prod/repos/nix-config")
+	if err != nil {
+		return auto.Stack{}, fmt.Errorf("fetching vault secrets: %w", err)
+	}
+
 	slog.DebugContext(ctx, "setting up pulumi stack")
 	s, err := auto.UpsertStackInlineSource(ctx, "prod", "homelab", deploy(input), auto.Project(workspace.Project{
 		Name:    "homelab",
@@ -117,7 +122,10 @@ func setUpStack(ctx context.Context, c *api.Client, input *Input) (auto.Stack, e
 			URL: "s3://pulumi-state?endpoint=garage.midna.dev&region=home&s3ForcePathStyle=true",
 		},
 	}), auto.EnvVars(map[string]string{
-		"VAULT_TOKEN": c.Token(),
+		"VAULT_TOKEN":              c.Token(),
+		"AWS_ACCESS_KEY_ID":        secret.Data["garage_key_id"].(string),
+		"AWS_SECRET_ACCESS_KEY":    secret.Data["garage_secret_key"].(string),
+		"PULUMI_CONFIG_PASSPHRASE": secret.Data["pulumi_passphrase"].(string),
 	}))
 	if err != nil {
 		return auto.Stack{}, fmt.Errorf("upserting pulumi stack: %w", err)
