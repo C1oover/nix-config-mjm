@@ -248,6 +248,11 @@ func handleDiff(ctx context.Context) error {
 	if gitlabBaseURL == "" {
 		io.WriteString(os.Stdout, body.String())
 	} else {
+		secret, err := cfg.Vault.KVv2("kv").Get(ctx, "prod/repos/nix-config")
+		if err != nil {
+			return fmt.Errorf("getting gitlab token from vault: %w", err)
+		}
+
 		projectID, err := strconv.Atoi(os.Getenv("CI_PROJECT_ID"))
 		if err != nil {
 			return fmt.Errorf("converting project ID %q to int: %w", os.Getenv("CI_PROJECT_ID"), err)
@@ -262,7 +267,7 @@ func handleDiff(ctx context.Context) error {
 
 		if err := createMergeRequestNote(ctx, &createMergeRequestNoteArgs{
 			BaseURL:        gitlabBaseURL,
-			Token:          os.Getenv("PINS_UPDATE_TOKEN"),
+			Token:          secret.Data["gitlab_token"].(string),
 			Project:        projectID,
 			MergeRequestID: mergeRequestID,
 			Body:           body.String(),
