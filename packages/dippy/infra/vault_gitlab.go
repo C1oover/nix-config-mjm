@@ -1,13 +1,15 @@
 package infra
 
 import (
+	_ "embed"
+
 	"github.com/pulumi/pulumi-vault/sdk/v6/go/vault"
 	"github.com/pulumi/pulumi-vault/sdk/v6/go/vault/jwt"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-// TODO write this with structured data
-const nixConfigRepoPolicy = `{"path":{"auth/*":{"capabilities":["create","read","update","delete","list","sudo"]},"identity/*":{"capabilities":["create","read","update","delete","list","sudo"]},"kv/data/prod/repos/nix-config":{"capabilities":["read"]},"ssh-client-signer/*":{"capabilities":["create","read","update","delete","list","sudo"]},"ssh-client-signer/sign/homelab-client":{"capabilities":["update"]},"ssh-host-signer/*":{"capabilities":["create","read","update","delete","list","sudo"]},"sys/auth":{"capabilities":["read"]},"sys/auth/*":{"capabilities":["create","update","delete","sudo"]},"sys/mounts":{"capabilities":["read"]},"sys/mounts/*":{"capabilities":["create","read","update","delete","list","sudo"]},"sys/policies/acl/*":{"capabilities":["create","read","update","delete","list","sudo"]}}}`
+//go:embed vault_repo_nix_config.hcl
+var nixConfigRepoPolicy string
 
 func setUpVaultGitLab(ctx *pulumi.Context) error {
 	backend, err := jwt.NewAuthBackend(ctx, "gitlab", &jwt.AuthBackendArgs{
