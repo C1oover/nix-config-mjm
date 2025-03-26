@@ -126,6 +126,7 @@ func setUpStack(ctx context.Context, c *api.Client, input *Input) (auto.Stack, e
 		"AWS_ACCESS_KEY_ID":        secret.Data["garage_key_id"].(string),
 		"AWS_SECRET_ACCESS_KEY":    secret.Data["garage_secret_key"].(string),
 		"PULUMI_CONFIG_PASSPHRASE": secret.Data["pulumi_passphrase"].(string),
+		"DESEC_API_TOKEN":          secret.Data["desec_api_token"].(string),
 	}))
 	if err != nil {
 		return auto.Stack{}, fmt.Errorf("upserting pulumi stack: %w", err)
