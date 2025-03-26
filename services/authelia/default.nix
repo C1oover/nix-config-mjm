@@ -58,19 +58,18 @@ in
           };
         };
         authentication_backend.ldap = {
-          implementation = "custom";
-          url = "ldap://localhost:3890";
+          implementation = "lldap";
+          address = "ldap://localhost:3890";
           timeout = "5s";
           start_tls = false;
           base_dn = "dc=home,dc=mattmoriarity,dc=com";
-          username_attribute = "uid";
-          additional_users_dn = "ou=people";
-          users_filter = "(&({username_attribute}={input})(objectClass=person))";
-          additional_groups_dn = "ou=groups";
-          groups_filter = "(member={dn})";
-          group_name_attribute = "cn";
-          mail_attribute = "mail";
-          display_name_attribute = "displayName";
+          attributes = {
+            username = "uid";
+            mail = "mail";
+            group_name = "cn";
+            member_of = "memberOf";
+            display_name = "displayName";
+          };
           user = "uid=service,ou=people,dc=home,dc=mattmoriarity,dc=com";
         };
         access_control = {
@@ -86,15 +85,13 @@ in
         ];
         session.redis.host = "${config.services.redis.servers.authelia.unixSocket}";
         storage.postgres = {
-          host = "/run/postgresql";
-          port = 5432;
+          address = "unix:///run/postgresql";
           database = "authelia-main";
           username = "authelia-main";
           password = "authelia-main";
         };
         notifier.smtp = {
-          host = "smtp.fastmail.com";
-          port = 587;
+          address = "submission://smtp.fastmail.com:587";
           username = "matt@mattmoriarity.com";
           sender = "Authelia <admin@mattmoriarity.com>";
         };
@@ -102,13 +99,13 @@ in
       };
       secrets.manual = true;
       environmentVariables = {
-        AUTHELIA_JWT_SECRET_FILE = "%d/authelia_jwt_secret";
+        AUTHELIA_AUTHENTICATION_BACKEND_LDAP_PASSWORD_FILE = "%d/authelia_ldap_password";
         AUTHELIA_IDENTITY_PROVIDERS_OIDC_HMAC_SECRET_FILE = "%d/authelia_hmac_secret";
         AUTHELIA_IDENTITY_PROVIDERS_OIDC_ISSUER_PRIVATE_KEY_FILE = "%d/authelia_jwt_private_key";
+        AUTHELIA_IDENTITY_VALIDATION_RESET_PASSWORD_JWT_SECRET_FILE = "%d/authelia_jwt_secret";
+        AUTHELIA_NOTIFIER_SMTP_PASSWORD_FILE = "%d/authelia_smtp_password";
         AUTHELIA_SESSION_SECRET_FILE = "%d/authelia_session_secret";
         AUTHELIA_STORAGE_ENCRYPTION_KEY_FILE = "%d/authelia_storage_encryption_key";
-        AUTHELIA_AUTHENTICATION_BACKEND_LDAP_PASSWORD_FILE = "%d/authelia_ldap_password";
-        AUTHELIA_NOTIFIER_SMTP_PASSWORD_FILE = "%d/authelia_smtp_password";
       };
     };
 

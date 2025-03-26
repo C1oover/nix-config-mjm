@@ -12,7 +12,7 @@
       "groups"
       "email"
     ];
-    userinfo_signing_algorithm = "none";
+    userinfo_signed_response_alg = "none";
     token_endpoint_auth_method = "client_secret_basic";
   }
   {
@@ -32,7 +32,7 @@
       "groups"
       "email"
     ];
-    userinfo_signing_algorithm = "none";
+    userinfo_signed_response_alg = "none";
   }
   {
     client_id = "peertube";
@@ -47,7 +47,7 @@
       "groups"
       "email"
     ];
-    userinfo_signing_algorithm = "none";
+    userinfo_signed_response_alg = "none";
     response_modes = [ "form_post" ];
   }
 ]
