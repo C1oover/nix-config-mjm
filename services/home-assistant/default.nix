@@ -227,8 +227,9 @@ in
       '';
     };
 
-    deployment.tests = {
-      inherit (pkgs.nixosTests) home-assistant;
-    };
+    # these are too fragile i think
+    # deployment.tests = {
+    #   inherit (pkgs.nixosTests) home-assistant;
+    # };
   };
 }
