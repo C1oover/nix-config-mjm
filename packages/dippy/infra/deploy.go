@@ -58,13 +58,18 @@ func deploy(input *Input) func(*pulumi.Context) error {
 			return err
 		}
 
-		if _, err := vault.NewMount(ctx, "kv", &vault.MountArgs{
+		kv, err := vault.NewMount(ctx, "kv", &vault.MountArgs{
 			Type: pulumi.String("kv"),
 			Path: pulumi.String("kv"),
 			Options: pulumi.StringMap{
 				"version": pulumi.String("2"),
 			},
-		}, pulumi.Protect(true)); err != nil {
+		}, pulumi.Protect(true))
+		if err != nil {
+			return err
+		}
+
+		if err := setUpHomeAssistantOIDC(ctx, kv); err != nil {
 			return err
 		}
 

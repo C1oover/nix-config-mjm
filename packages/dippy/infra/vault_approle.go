@@ -86,6 +86,7 @@ func newVaultService(ctx *pulumi.Context, name string, args *VaultServiceArgs, o
 	policy := args.Paths.ToMapOutput().ApplyT(func(paths map[string]any) (string, error) {
 		paths = maps.Clone(paths)
 		paths["kv/data/prod/services/"+name] = map[string][]string{"capabilities": {"read"}}
+		paths["kv/data/prod/services/"+name+"/*"] = map[string][]string{"capabilities": {"read"}}
 		data := map[string]any{"path": paths}
 
 		b, err := json.Marshal(data)

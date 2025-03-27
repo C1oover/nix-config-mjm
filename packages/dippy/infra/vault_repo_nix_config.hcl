@@ -27,6 +27,9 @@ path "sys/mounts" {
 path "sys/mounts/*" {
   capabilities = ["create", "read", "update", "delete", "list", "sudo"]
 }
+path "kv/data/prod/*" {
+  capabilities = ["create", "read", "update", "delete"]
+}
 path "ssh-client-signer/*" {
   capabilities = ["create", "read", "update", "delete", "list", "sudo"]
 }

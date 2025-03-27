@@ -45,12 +45,16 @@ in
         fastmail_password: {{ .Data.data.fastmail_password }}
         paperless_authorization: Token {{ .Data.data.paperless_token }}
         {{ end }}
+        {{ with secret "kv/prod/services/home-assistant/managed" }}
+        oidc_client_secret: {{ .Data.data.oidc_client_secret }}
+        {{ end }}
       '';
       owner = "hass";
     };
 
     ingress.virtualHosts.home = {
       upstream.service.name = "home-assistant";
+      enableAuthProxy = false;
     };
 
     services.home-assistant = {
@@ -105,8 +109,12 @@ in
             "${config.mjm.ipv6Prefix}::/64"
           ];
         };
-        auth_header = {
-          username_header = "Remote-User";
+        auth_oidc = {
+          client_id = "Ck6UhnhOFIoo8jYitELDVI7Ys93kIJ6ZGcrLI6xr1YT9PWaIYUQEjc50iqgPSlCz";
+          client_secret = "!secret oidc_client_secret";
+          discovery_url = "https://auth.midna.dev/.well-known/openid-configuration";
+          display_name = "Authelia";
+          features.automatic_user_linking = true;
         };
         frontend.themes = "!include_dir_merge_named themes";
         automation = "!include automations.yaml";
@@ -173,7 +181,7 @@ in
         ];
       };
       customComponents = with pkgs.home-assistant-custom-components; [
-        auth-header
+        auth_oidc
         waste_collection_schedule
         adaptive_lighting
       ];

@@ -50,4 +50,21 @@
     userinfo_signed_response_alg = "none";
     response_modes = [ "form_post" ];
   }
+  {
+    client_id = "Ck6UhnhOFIoo8jYitELDVI7Ys93kIJ6ZGcrLI6xr1YT9PWaIYUQEjc50iqgPSlCz";
+    client_name = "Home Assistant";
+    client_secret = "$argon2id$v=19$m=65536,t=3,p=4$0IiDX4VOL96OzjoCAdNnZg$iyajs99yFezP4fPw4nH5vnqfOoN04jkN7eVZhNPPweM";
+    public = false;
+    require_pkce = true;
+    pkce_challenge_method = "S256";
+    authorization_policy = "two_factor";
+    redirect_uris = [ "https://home.midna.dev/auth/oidc/callback" ];
+    scopes = [
+      "openid"
+      "profile"
+      "groups"
+    ];
+    id_token_signed_response_alg = "RS256";
+    token_endpoint_auth_method = "client_secret_post";
+  }
 ]
