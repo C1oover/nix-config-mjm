@@ -19,7 +19,7 @@ build nixos hosts:
   needs: []
   resource_group: production/nixos
   script:
-    - nix run -f . dippy -- diff
+    - nix run -f . dippy -- -concurrency=6 diff
 deploy nixos hosts:
   extends:
     - .vault
@@ -33,7 +33,7 @@ deploy nixos hosts:
     deployment_tier: production
   resource_group: production/nixos
   script:
-    - nix run -f . dippy -- deploy
+    - nix run -f . dippy -- -concurrency=6 deploy
 check for updates:
   tags: [nix-shell]
   rules:
