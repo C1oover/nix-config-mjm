@@ -9,23 +9,23 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-func setUpHomeAssistantOIDC(ctx *pulumi.Context, kvMount *vault.Mount) error {
-	oidcClientID, err := random.NewRandomString(ctx, "hass-oidc-client-id", &random.RandomStringArgs{
+func setUpGrafanaOIDC(ctx *pulumi.Context, kvMount *vault.Mount) error {
+	oidcClientID, err := random.NewRandomString(ctx, "grafana-oidc-client-id", &random.RandomStringArgs{
 		Length:  pulumi.Int(64),
 		Special: pulumi.Bool(false),
 	})
 	if err != nil {
 		return err
 	}
-	ctx.Export("hassOidcClientID", oidcClientID.Result)
+	ctx.Export("grafanaOidcClientID", oidcClientID.Result)
 
-	oidcClientSecret, err := random.NewRandomBytes(ctx, "hass-oidc-client-secret", &random.RandomBytesArgs{
+	oidcClientSecret, err := random.NewRandomBytes(ctx, "grafana-oidc-client-secret", &random.RandomBytesArgs{
 		Length: pulumi.Int(64),
 	})
 	if err != nil {
 		return err
 	}
-	ctx.Export("hassOidcClientSecret", oidcClientSecret.Hex)
+	ctx.Export("grafanaOidcClientSecret", oidcClientSecret.Hex)
 
 	data := oidcClientSecret.Hex.ApplyT(func(s string) (string, error) {
 		d, err := json.Marshal(map[string]string{
@@ -37,9 +37,9 @@ func setUpHomeAssistantOIDC(ctx *pulumi.Context, kvMount *vault.Mount) error {
 		return string(d), nil
 	}).(pulumi.StringOutput)
 
-	if _, err := kv.NewSecretV2(ctx, "hass-managed", &kv.SecretV2Args{
+	if _, err := kv.NewSecretV2(ctx, "grafana-managed", &kv.SecretV2Args{
 		Mount:    kvMount.Path,
-		Name:     pulumi.String("prod/services/home-assistant/managed"),
+		Name:     pulumi.String("prod/services/grafana/managed"),
 		DataJson: data,
 	}); err != nil {
 		return err

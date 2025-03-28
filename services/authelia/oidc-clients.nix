@@ -67,4 +67,22 @@
     id_token_signed_response_alg = "RS256";
     token_endpoint_auth_method = "client_secret_post";
   }
+  {
+    client_id = "7BReUARtsRcF6ypjiA4DcJ3E6fJNjzwheH5Tj1HCLoqfXCQSLHxZJHQ7bAV9U0aU";
+    client_name = "Grafana";
+    client_secret = "$argon2id$v=19$m=65536,t=3,p=4$LExwz3BrD2Cu5o1ur61RIw$W4kCJsEG+VuCxeEOI689IEMoiE2r5G2Nwrc+q4fHU0c";
+    public = false;
+    require_pkce = true;
+    pkce_challenge_method = "S256";
+    authorization_policy = "two_factor";
+    redirect_uris = [ "https://graphs.midna.dev/login/generic_oauth" ];
+    scopes = [
+      "openid"
+      "profile"
+      "groups"
+      "email"
+    ];
+    userinfo_signed_response_alg = "none";
+    token_endpoint_auth_method = "client_secret_basic";
+  }
 ]

@@ -7,6 +7,7 @@
 let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.mjm.grafana;
+  secrets = config.mjm.services.grafana.vault.keys;
 in
 {
   options.mjm.grafana = {
@@ -21,14 +22,19 @@ in
   config = mkIf cfg.enable {
     mjm.services.grafana = {
       postgresql.enable = true;
+      vault = {
+        enable = true;
+        keys = {
+          "managed/oidc_client_secret".owner = "grafana";
+        };
+      };
     };
 
     ingress.virtualHosts.graphs = {
       upstream.service.name = "grafana";
+      enableAuthProxy = false;
       useIPv4Proxy = true;
     };
-
-    vault.services.grafana = { };
 
     services.grafana = {
       enable = true;
@@ -36,6 +42,7 @@ in
         server = {
           http_addr = "0.0.0.0";
           domain = "graphs.midna.dev";
+          root_url = "https://graphs.midna.dev";
         };
 
         database = {
@@ -44,10 +51,27 @@ in
           user = "grafana";
         };
 
-        "auth.proxy" = {
+        auth = {
+          disable_login_form = true;
+        };
+
+        "auth.generic_oauth" = {
           enabled = true;
-          header_name = "Remote-User";
-          headers = "Email:Remote-Email";
+          name = "Authelia";
+          icon = "signin";
+          client_id = "7BReUARtsRcF6ypjiA4DcJ3E6fJNjzwheH5Tj1HCLoqfXCQSLHxZJHQ7bAV9U0aU";
+          client_secret = "$__file{${secrets."managed/oidc_client_secret".path}}";
+          scopes = "openid profile email groups";
+          auth_url = "https://auth.midna.dev/api/oidc/authorization";
+          token_url = "https://auth.midna.dev/api/oidc/token";
+          api_url = "https://auth.midna.dev/api/oidc/userinfo";
+          login_attribute_path = "preferred_username";
+          groups_attribute_path = "groups";
+          name_attribute_path = "name";
+          use_pkce = true;
+
+          # only enterprise gets a proper mapping from groups to roles
+          skip_org_role_sync = true;
         };
       };
     };

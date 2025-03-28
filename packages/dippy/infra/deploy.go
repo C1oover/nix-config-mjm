@@ -73,6 +73,10 @@ func deploy(input *Input) func(*pulumi.Context) error {
 			return err
 		}
 
+		if err := setUpGrafanaOIDC(ctx, kv); err != nil {
+			return err
+		}
+
 		return nil
 	}
 }
