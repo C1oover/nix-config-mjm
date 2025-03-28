@@ -30,7 +30,7 @@ func newMailRecords(ctx *pulumi.Context, name string, args *MailRecordsArgs, opt
 		Type:    pulumi.String("TXT"),
 		Ttl:     pulumi.Float64(3600),
 		Records: pulumi.ToStringArray([]string{
-			"v=STSv1; id=20250315T173345Z",
+			"v=STSv1; id=20250328T162250Z",
 		}),
 	}, pulumi.Parent(mr)); err != nil {
 		return nil, err
