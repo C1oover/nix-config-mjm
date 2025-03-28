@@ -5,20 +5,68 @@ layout {
 		}
 
 		pane split_direction="vertical" {
-			pane name="editor" command="hx" size="60%" focus=true
+			pane split_direction="horizontal" size="70%" {
+				pane name="editor" command="hx" focus=true
+				pane name="logs" size=20 {
+					command ",slab"
+					args "start"
+				}
+			}
 			pane split_direction="horizontal" {
-				pane
 				pane
 			}
 		}
 
-		pane name="logs" size=20 {
-			command ",slab"
-			args "start"
-		}
-
 		pane size=1 borderless=true {
 			plugin location="zellij:status-bar"
+		}
+	}
+
+	swap_tiled_layout {
+		tab cwd="/Users/matt/Projects/slab" max_panes=7 {
+			pane size=1 borderless=true {
+				plugin location="zellij:tab-bar"
+			}
+
+			pane split_direction="vertical" {
+				pane split_direction="horizontal" size="70%" {
+					pane name="editor" command="hx" focus=true
+					pane name="logs" size=20 {
+						command ",slab"
+						args "start"
+					}
+				}
+				pane split_direction="horizontal" {
+					children
+				}
+			}
+
+			pane size=1 borderless=true {
+				plugin location="zellij:status-bar"
+			}
+		}
+	}
+
+	swap_tiled_layout name="wide" {
+		tab cwd="/Users/matt/Projects/slab" exact_panes=5 {
+			pane size=1 borderless=true {
+				plugin location="zellij:tab-bar"
+			}
+
+			pane split_direction="horizontal" {
+				pane name="editor" command="hx" focus=true
+				pane split_direction="vertical" size=20 {
+					pane name="logs" size="50%" {
+						command ",slab"
+						args "start"
+					}
+					pane
+				}
+			}
+
+			pane size=1 borderless=true {
+				plugin location="zellij:status-bar"
+			}
 		}
 	}
 }
