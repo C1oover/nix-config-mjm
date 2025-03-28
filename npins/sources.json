@@ -223,9 +223,9 @@
       },
       "branch": "main",
       "submodules": false,
-      "revision": "c2cb43c444234267e6606d7c820ca834b3d05da6",
-      "url": "https://github.com/bandithedoge/nixpkgs-firefox-darwin/archive/c2cb43c444234267e6606d7c820ca834b3d05da6.tar.gz",
-      "hash": "14yfszzzs9167rsf2wz3ds4vvc23jvl33gc4nyrrr7lbpq042mig"
+      "revision": "add67a2c63320b3a3e7f2ac067a1f4b1d081da73",
+      "url": "https://github.com/bandithedoge/nixpkgs-firefox-darwin/archive/add67a2c63320b3a3e7f2ac067a1f4b1d081da73.tar.gz",
+      "hash": "0vx63ay2akd614w1d4ma357mxw0ksqkas9ns32ibd32sg6iq4l8f"
     },
     "preservation": {
       "type": "Git",
@@ -249,9 +249,9 @@
       },
       "branch": "master",
       "submodules": false,
-      "revision": "d74460da63a8c08a69a1f143b04f2ab1a6b2f5c2",
-      "url": "https://gitlab.com/api/v4/projects/rycee%2Fnur-expressions/repository/archive.tar.gz?sha=d74460da63a8c08a69a1f143b04f2ab1a6b2f5c2",
-      "hash": "1mc84nhqdhfllz34xlf0lg91hzddr0pb7a7ladwx7304x0pnn23l"
+      "revision": "f8861a4b09a181dd88f6626d0202d9225ae85d65",
+      "url": "https://gitlab.com/api/v4/projects/rycee%2Fnur-expressions/repository/archive.tar.gz?sha=f8861a4b09a181dd88f6626d0202d9225ae85d65",
+      "hash": "0nzxqpy7df6k5r0hvqcsp6j0dx7fybg9kr9drazpcyn0qzn5hlmn"
     }
   },
   "version": 5
