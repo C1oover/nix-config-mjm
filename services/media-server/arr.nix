@@ -11,13 +11,6 @@ let
 in
 {
   config = mkIf cfg.enable {
-    nixpkgs.config.permittedInsecurePackages = [
-      "aspnetcore-runtime-6.0.36"
-      "aspnetcore-runtime-wrapped-6.0.36"
-      "dotnet-sdk-6.0.428"
-      "dotnet-sdk-wrapped-6.0.428"
-    ];
-
     mjm.services.media-server.vault.keys = {
       sonarr_api_key = { };
       radarr_api_key = { };
