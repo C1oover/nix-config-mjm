@@ -28,7 +28,7 @@ in
               destination = "/.well-known/mta-sts.txt";
               text = ''
                 version: STSv1
-                mode: testing
+                mode: enforce
                 mx: in1-smtp.messagingengine.com
                 mx: in2-smtp.messagingengine.com
                 max_age: 2419200
