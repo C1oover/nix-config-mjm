@@ -68,8 +68,6 @@ in
         nix = with lib; {
           authenticationTokenConfigFile = config.vault-secrets.templates.gitlab-runner-docker-env.path;
           registrationFlags = [
-            # temporary: remove when invalid host issue is fixed
-            "--docker-host tcp://127.0.0.1:2375"
             "--output-limit 102400"
           ];
           dockerImage = "alpine";
@@ -139,12 +137,6 @@ in
     # If Docker changes, we don't want it to restart during a deploy, because that will cause the deploy
     # to fail, and then we'll just be stuck in that state.
     systemd.services.docker.restartIfChanged = false;
-
-    # temporary: remove when invalid host issue is fixed
-    virtualisation.docker.listenOptions = [
-      "/run/docker.sock"
-      "127.0.0.1:2375"
-    ];
 
     programs.ssh.extraConfig = mkAfter ''
       Host ${concatMapStringsSep " " (m: m.hostName) config.nix.buildMachines}
