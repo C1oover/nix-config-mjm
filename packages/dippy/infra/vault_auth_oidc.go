@@ -1,36 +1,18 @@
 package infra
 
 import (
-	"github.com/pulumi/pulumi-random/sdk/v4/go/random"
 	"github.com/pulumi/pulumi-vault/sdk/v6/go/vault/identity"
 	"github.com/pulumi/pulumi-vault/sdk/v6/go/vault/jwt"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-func setUpAuthOIDC(ctx *pulumi.Context, adminGroup *identity.Group) error {
-	oidcClientID, err := random.NewRandomString(ctx, "vault-oidc-client-id", &random.RandomStringArgs{
-		Length:  pulumi.Int(64),
-		Special: pulumi.Bool(false),
-	})
-	if err != nil {
-		return err
-	}
-	ctx.Export("vaultOidcClientID", oidcClientID.Result)
-
-	oidcClientSecret, err := random.NewRandomBytes(ctx, "vault-oidc-client-secret", &random.RandomBytesArgs{
-		Length: pulumi.Int(64),
-	})
-	if err != nil {
-		return err
-	}
-	ctx.Export("vaultOidcClientSecret", oidcClientSecret.Hex)
-
+func setUpAuthOIDC(ctx *pulumi.Context, adminGroup *identity.Group, oidc oidcClient) error {
 	backend, err := jwt.NewAuthBackend(ctx, "oidc", &jwt.AuthBackendArgs{
 		Path:             pulumi.String("oidc"),
 		Type:             pulumi.String("oidc"),
 		OidcDiscoveryUrl: pulumi.String("https://auth.midna.dev"),
-		OidcClientId:     oidcClientID.Result,
-		OidcClientSecret: oidcClientSecret.Hex,
+		OidcClientId:     oidc.ClientID,
+		OidcClientSecret: oidc.ClientSecret,
 		DefaultRole:      pulumi.String("default"),
 		Tune: &jwt.AuthBackendTuneArgs{
 			DefaultLeaseTtl: pulumi.String("768h"),

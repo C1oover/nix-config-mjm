@@ -20,6 +20,7 @@ type Input struct {
 	VaultServices map[string]map[string]any `json:"vaultServices"`
 	VaultPolicies map[string]string         `json:"vaultPolicies"`
 	VaultRoles    map[string]RoleInput      `json:"vaultRoles"`
+	OIDCClients   []string                  `json:"oidcClients"`
 }
 
 type RoleInput struct {
@@ -39,10 +40,6 @@ func deploy(input *Input) func(*pulumi.Context) error {
 
 		adminGroup, err := setUpVaultAdmin(ctx)
 		if err != nil {
-			return err
-		}
-
-		if err := setUpAuthOIDC(ctx, adminGroup); err != nil {
 			return err
 		}
 
@@ -69,11 +66,12 @@ func deploy(input *Input) func(*pulumi.Context) error {
 			return err
 		}
 
-		if err := setUpHomeAssistantOIDC(ctx, kv); err != nil {
+		clients, err := setUpOIDC(ctx, input.OIDCClients, kv)
+		if err != nil {
 			return err
 		}
 
-		if err := setUpGrafanaOIDC(ctx, kv); err != nil {
+		if err := setUpAuthOIDC(ctx, adminGroup, clients["vault"]); err != nil {
 			return err
 		}
 

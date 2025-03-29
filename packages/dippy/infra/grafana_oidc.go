@@ -28,9 +28,7 @@ func setUpGrafanaOIDC(ctx *pulumi.Context, kvMount *vault.Mount) error {
 	ctx.Export("grafanaOidcClientSecret", oidcClientSecret.Hex)
 
 	data := oidcClientSecret.Hex.ApplyT(func(s string) (string, error) {
-		d, err := json.Marshal(map[string]string{
-			"oidc_client_secret": s,
-		})
+		d, err := json.Marshal(map[string]string{"oidc_client_secret": s})
 		if err != nil {
 			return "", err
 		}

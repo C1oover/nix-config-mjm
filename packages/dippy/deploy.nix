@@ -143,6 +143,11 @@ let
               }
             ))
           ];
+          oidcClients = pipe allNodes [
+            (map (n: n.config.mjm.authelia.oidcClients))
+            mergeAttrsList
+            attrNames
+          ];
         };
     in
     {
