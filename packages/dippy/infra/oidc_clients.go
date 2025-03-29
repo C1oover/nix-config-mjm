@@ -41,37 +41,31 @@ func setUpOIDC(ctx *pulumi.Context, clientNames []string, kvMount *vault.Mount) 
 		}
 	}
 
-	data := clients["grafana"].ClientSecret.ApplyT(func(s string) (string, error) {
-		d, err := json.Marshal(map[string]string{"oidc_client_secret": s})
-		if err != nil {
-			return "", err
-		}
-		return string(d), nil
-	}).(pulumi.StringOutput)
-
-	if _, err := kv.NewSecretV2(ctx, "grafana-managed", &kv.SecretV2Args{
-		Mount:    kvMount.Path,
-		Name:     pulumi.String("prod/services/grafana/managed"),
-		DataJson: data,
-	}); err != nil {
+	if _, err := newOIDCClientKVSecret(ctx, kvMount, "grafana-managed", "grafana", clients["grafana"].ClientSecret); err != nil {
 		return nil, err
 	}
-
-	data = clients["hass"].ClientSecret.ApplyT(func(s string) (string, error) {
-		d, err := json.Marshal(map[string]string{"oidc_client_secret": s})
-		if err != nil {
-			return "", err
-		}
-		return string(d), nil
-	}).(pulumi.StringOutput)
-
-	if _, err := kv.NewSecretV2(ctx, "hass-managed", &kv.SecretV2Args{
-		Mount:    kvMount.Path,
-		Name:     pulumi.String("prod/services/home-assistant/managed"),
-		DataJson: data,
-	}); err != nil {
+	if _, err := newOIDCClientKVSecret(ctx, kvMount, "hass-managed", "home-assistant", clients["hass"].ClientSecret); err != nil {
+		return nil, err
+	}
+	if _, err := newOIDCClientKVSecret(ctx, kvMount, "gitlab-managed", "gitlab", clients["gitlab"].ClientSecret); err != nil {
 		return nil, err
 	}
 
 	return clients, nil
+}
+
+func newOIDCClientKVSecret(ctx *pulumi.Context, kvMount *vault.Mount, name string, svcName string, clientSecret pulumi.StringOutput) (*kv.SecretV2, error) {
+	data := clientSecret.ApplyT(func(s string) (string, error) {
+		d, err := json.Marshal(map[string]string{"oidc_client_secret": s})
+		if err != nil {
+			return "", err
+		}
+		return string(d), nil
+	}).(pulumi.StringOutput)
+
+	return kv.NewSecretV2(ctx, name, &kv.SecretV2Args{
+		Mount:    kvMount.Path,
+		Name:     pulumi.Sprintf("prod/services/%s/managed", svcName),
+		DataJson: data,
+	})
 }

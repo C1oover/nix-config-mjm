@@ -9,8 +9,7 @@ let
   cfg = config.mjm.gitlab;
   secrets = config.mjm.services.gitlab.vault.keys;
 
-  # TODO generate a random ID for this
-  clientId = "gitlab";
+  clientId = "jVwrh7Lz6flakzaT6oLJJPAhRnyvLey0X33kVDVurMUAVPcfVPnrEt9XnBAoCE5r";
   redirectUri = "https://git.midna.dev/users/auth/openid_connect/callback";
 in
 {
@@ -30,7 +29,7 @@ in
               "db_key_base"
               "fastmail_password"
               "initial_root_password"
-              "openid_connect_secret"
+              "managed/oidc_client_secret"
               "openid_connect_signing_key"
               "otp_key_base"
               "pages_api_secret_key"
@@ -215,7 +214,7 @@ in
                 pkce = true;
                 client_options = {
                   identifier = clientId;
-                  secret._secret = secrets.openid_connect_secret.path;
+                  secret._secret = secrets."managed/oidc_client_secret".path;
                   redirect_uri = redirectUri;
                   gitlab = {
                     groups_attribute = "groups";
@@ -232,7 +231,7 @@ in
     mjm.authelia.oidcClients.gitlab = {
       name = "GitLab";
       inherit clientId;
-      clientSecret = "$pbkdf2-sha512$310000$KBrmIfaP43sBTkOZ5tvwlA$y8/qNNGAeeco48h4vsmtqA73thgVubddQOepMfqG3w0zEvnWPf9w/L8kJpuanGwKtwkejAC.g.M4sQ.Q1qY6OQ";
+      clientSecret = "$argon2id$v=19$m=65536,t=3,p=4$TSJDgCxch+ahWCQ0KNi51Q$K40y7dODVjPjV//jVemSSL8n2FuQqEm8Mwo8sqLNTXw";
       redirectUris = [ redirectUri ];
     };
 
