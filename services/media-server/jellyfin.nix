@@ -27,6 +27,20 @@ in
       openFirewall = true;
     };
 
+    mjm.authelia.oidcClients.jellyfin = {
+      name = "Jellyfin";
+      clientId = "3n3vR0P8cJuVbgXK3TVYWSG7joDrITANJ2YzjU3wdg8PMeSPd6U7ZBOuQp4X9cf8";
+      clientSecret = "$argon2id$v=19$m=65536,t=3,p=4$lBl0VCuHURqxh1quwbEoWQ$4g4sGOcrvljimFwENZiOwinCcRZDgVl+bh1nE3T93Tg";
+      requirePkce = true;
+      redirectUris = [ "https://media.midna.dev/sso/OID/redirect/authelia" ];
+      scopes = [
+        "openid"
+        "profile"
+        "groups"
+      ];
+      tokenEndpointAuthMethod = "client_secret_post";
+    };
+
     users.users.jellyfin.extraGroups = [ "media" ];
 
     services.consul.services.jellyfin = {
