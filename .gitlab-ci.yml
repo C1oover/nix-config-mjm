@@ -8,11 +8,10 @@ stages:
 variables:
   CONSUL_HTTP_ADDR: "consul.service.consul:8500"
   VAULT_ADDR: "http://vault.service.consul:8200"
-  PULUMI_HOME: "/tmp/pulumi-home-$CI_PROJECT_ID"
 build nixos hosts:
   extends:
     - .vault
-  tags: [nix-shell]
+  tags: [nix]
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
   stage: check
@@ -23,7 +22,7 @@ build nixos hosts:
 deploy nixos hosts:
   extends:
     - .vault
-  tags: [nix-shell]
+  tags: [nix]
   rules:
     - if: $CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"
   stage: deploy
@@ -35,7 +34,7 @@ deploy nixos hosts:
   script:
     - nix run -f . dippy -- -concurrency=6 deploy
 check for updates:
-  tags: [nix-shell]
+  tags: [nix]
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
   stage: check
