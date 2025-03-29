@@ -6,13 +6,17 @@
 }:
 let
   inherit (lib)
+    attrValues
     concatMapStringsSep
+    concatStringsSep
     mkAfter
     mkEnableOption
     mkForce
     mkIf
     ;
   cfg = config.mjm.gitlab-runner;
+  secrets = config.mjm.services.gitlab-runner.vault.keys;
+  nix = config.nix.package;
 in
 {
   options.mjm.gitlab-runner = {
@@ -46,15 +50,27 @@ in
 
     boot.kernel.sysctl."net.ipv4.ip_forward" = true;
 
-    virtualisation.docker = {
+    virtualisation.podman = {
       enable = true;
-      daemon.settings = {
-        ipv6 = true;
-        fixed-cidr-v6 = "fd00::/80";
-        experimental = true;
-        ip6tables = true; # requires experimental
+      dockerCompat = true;
+      dockerSocket.enable = true;
+      defaultNetwork.settings = {
+        dns_enabled = true;
+        ipv6_enabled = true;
+        subnets = [
+          {
+            gateway = "10.88.0.1";
+            subnet = "10.88.0.0/16";
+          }
+          {
+            gateway = "fd00::1";
+            subnet = "fd00::/80";
+          }
+        ];
       };
     };
+    # gitlab-runner will enable this by default, but we want podman instead
+    virtualisation.docker.enable = false;
 
     # run a GC weekly in the middle of the night
     nix.gc.dates = "Mon *-*-* 11:00:00";
@@ -65,20 +81,29 @@ in
         concurrent = 5;
       };
       services = {
-        nix = with lib; {
+        nix = {
           authenticationTokenConfigFile = config.vault-secrets.templates.gitlab-runner-docker-env.path;
           registrationFlags = [
             "--output-limit 102400"
+            "--docker-enable-ipv6"
           ];
           dockerImage = "alpine";
           dockerVolumes = [
+            # dynamic persistent storage
+            "/root/.cache/nix"
+            "/root/.pulumi"
+
+            # bind mounts from host
             "/nix/store:/nix/store:ro"
             "/nix/var/nix/db:/nix/var/nix/db:ro"
             "/nix/var/nix/daemon-socket:/nix/var/nix/daemon-socket:ro"
             "/etc/ssl/certs/ca-certificates.crt:/etc/ssl/certs/ca-certificates.crt:ro"
             "/etc/ssh/ssh_known_hosts:/etc/ssh/ssh_known_hosts:ro"
+            "/etc/ssh/ssh_config:/etc/ssh/ssh_config:ro"
+            "${secrets.remote_builder_private_key.path}:${secrets.remote_builder_private_key.path}:ro"
+            "/etc/nix/nix.conf:/etc/nix/nix.conf:ro"
+            "/etc/nix/machines:/etc/nix/machines:ro"
           ];
-          dockerDisableCache = true;
           preBuildScript = pkgs.writeScript "setup-container" ''
             mkdir -p -m 0755 /nix/var/log/nix/drvs
             mkdir -p -m 0755 /nix/var/nix/gcroots
@@ -89,23 +114,20 @@ in
             mkdir -p -m 1777 /nix/var/nix/profiles/per-user
             mkdir -p -m 0755 /nix/var/nix/profiles/per-user/root
             mkdir -p -m 0700 "$HOME/.nix-defexpr"
-            . ${pkgs.nix}/etc/profile.d/nix-daemon.sh
-            ${pkgs.nix}/bin/nix-env -i ${
-              concatStringsSep " " (
-                with pkgs;
-                [
-                  nix
+            . ${nix}/etc/profile.d/nix-daemon.sh
+            ${nix}/bin/nix-env -i ${
+              concatStringsSep " " (attrValues {
+                inherit nix;
+                inherit (pkgs)
                   cacert
                   git
                   openssh
                   glibcLocalesUtf8
-                ]
-              )
+                  ;
+              })
             }
-            ${pkgs.nix}/bin/nix-channel --add https://nixos.org/channels/nixos-unstable nixpkgs
-            ${pkgs.nix}/bin/nix-channel --update nixpkgs
-            mkdir -p -m 0755 /etc/nix
-            echo "experimental-features = flakes nix-command" > /etc/nix/nix.conf
+            ${nix}/bin/nix-channel --add https://nixos.org/channels/nixos-unstable nixpkgs
+            ${nix}/bin/nix-channel --update nixpkgs
           '';
           environmentVariables = {
             ENV = "/etc/profile";
@@ -116,6 +138,7 @@ in
             PATH = "/nix/var/nix/profiles/default/bin:/nix/var/nix/profiles/default/sbin:/bin:/sbin:/usr/bin:/usr/sbin";
             NIX_SSL_CERT_FILE = "/nix/var/nix/profiles/default/etc/ssl/certs/ca-bundle.crt";
             LOCALE_ARCHIVE = "/nix/var/nix/profiles/default/lib/locale/locale-archive";
+            FF_NETWORK_PER_BUILD = "true";
           };
         };
         nix-shell = {
@@ -134,14 +157,10 @@ in
       pkgs.scripts.update-fork
     ];
 
-    # If Docker changes, we don't want it to restart during a deploy, because that will cause the deploy
-    # to fail, and then we'll just be stuck in that state.
-    systemd.services.docker.restartIfChanged = false;
-
     programs.ssh.extraConfig = mkAfter ''
       Host ${concatMapStringsSep " " (m: m.hostName) config.nix.buildMachines}
         IdentitiesOnly yes
-        IdentityFile ${config.mjm.services.gitlab-runner.vault.keys.remote_builder_private_key.path}
+        IdentityFile ${secrets.remote_builder_private_key.path}
     '';
 
     # force nixos tests to use a remote builder
