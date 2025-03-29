@@ -22,8 +22,15 @@ in
     virtualisation.podman = {
       enable = true;
       dockerCompat = true;
+      defaultNetwork.settings = {
+        dns_enabled = true;
+        ipv6_enabled = true;
+      };
     };
 
-    users.users.${config.mjm.username}.extraGroups = [ "libvirtd" ];
+    users.users.${config.mjm.username}.extraGroups = [
+      "libvirtd"
+      "podman"
+    ];
   };
 }
