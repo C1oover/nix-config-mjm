@@ -53,6 +53,9 @@ func setUpOIDC(ctx *pulumi.Context, clientNames []string, kvMount *vault.Mount) 
 	if _, err := newOIDCClientKVSecret(ctx, kvMount, "miniflux-managed", "miniflux", clients["miniflux"].ClientSecret); err != nil {
 		return nil, err
 	}
+	if _, err := newOIDCClientKVSecret(ctx, kvMount, "paperless-managed", "paperless", clients["paperless"].ClientSecret); err != nil {
+		return nil, err
+	}
 
 	return clients, nil
 }
