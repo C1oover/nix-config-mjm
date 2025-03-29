@@ -92,6 +92,17 @@ in
       8201
     ];
 
+    mjm.authelia.oidcClients.vault = {
+      name = "Hashicorp Vault";
+      clientId = "3oGSHETQNzAa2Hd7CGaBAk08lskEJMKnR7YgMXMgWgqCsl9cWOuWzh2VT5LBu9fA";
+      clientSecret = "$argon2id$v=19$m=65536,t=3,p=4$QSmbERaC2fvE2IJnxScj2w$7TC9He52pllowLCVODoYOc8E1xS6cNrDSwyxvhqZdug";
+      redirectUris = [
+        "https://vault.midna.dev/oidc/callback"
+        "https://vault.midna.dev/ui/vault/auth/oidc/oidc/callback"
+        "http://localhost:8250/oidc/callback"
+      ];
+    };
+
     mjm.state.directories = [
       {
         directory = config.services.vault.storagePath;

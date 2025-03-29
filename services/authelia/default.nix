@@ -13,7 +13,10 @@ in
     enable = mkEnableOption "authelia";
   };
 
-  imports = [ ./lldap.nix ];
+  imports = [
+    ./lldap.nix
+    ./oidc-clients.nix
+  ];
 
   config = mkIf cfg.enable {
     mjm.services.authelia = {
@@ -95,7 +98,6 @@ in
           username = "matt@mattmoriarity.com";
           sender = "Authelia <admin@mattmoriarity.com>";
         };
-        identity_providers.oidc.clients = import ./oidc-clients.nix;
       };
       secrets.manual = true;
       environmentVariables = {

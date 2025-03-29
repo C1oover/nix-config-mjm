@@ -10,6 +10,7 @@ let
   cfg = config.mjm.home-assistant;
 
   port = config.services.home-assistant.config.http.server_port;
+  clientId = "Ck6UhnhOFIoo8jYitELDVI7Ys93kIJ6ZGcrLI6xr1YT9PWaIYUQEjc50iqgPSlCz";
 in
 {
   imports = [ ./music-assistant.nix ];
@@ -110,7 +111,7 @@ in
           ];
         };
         auth_oidc = {
-          client_id = "Ck6UhnhOFIoo8jYitELDVI7Ys93kIJ6ZGcrLI6xr1YT9PWaIYUQEjc50iqgPSlCz";
+          client_id = clientId;
           client_secret = "!secret oidc_client_secret";
           discovery_url = "https://auth.midna.dev/.well-known/openid-configuration";
           display_name = "Authelia";
@@ -185,6 +186,20 @@ in
         waste_collection_schedule
         adaptive_lighting
       ];
+    };
+
+    mjm.authelia.oidcClients.hass = {
+      name = "Home Assistant";
+      inherit clientId;
+      clientSecret = "$argon2id$v=19$m=65536,t=3,p=4$0IiDX4VOL96OzjoCAdNnZg$iyajs99yFezP4fPw4nH5vnqfOoN04jkN7eVZhNPPweM";
+      requirePkce = true;
+      redirectUris = [ "https://home.midna.dev/auth/oidc/callback" ];
+      scopes = [
+        "openid"
+        "profile"
+        "groups"
+      ];
+      tokenEndpointAuthMethod = "client_secret_post";
     };
 
     systemd.tmpfiles.settings."10-home-assistant" = {

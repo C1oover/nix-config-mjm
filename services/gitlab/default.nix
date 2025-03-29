@@ -8,6 +8,10 @@ let
   inherit (lib) genAttrs mkEnableOption mkIf;
   cfg = config.mjm.gitlab;
   secrets = config.mjm.services.gitlab.vault.keys;
+
+  # TODO generate a random ID for this
+  clientId = "gitlab";
+  redirectUri = "https://git.midna.dev/users/auth/openid_connect/callback";
 in
 {
   options.mjm.gitlab = {
@@ -210,9 +214,9 @@ in
                 send_scope_to_token_endpoint = true;
                 pkce = true;
                 client_options = {
-                  identifier = "gitlab";
+                  identifier = clientId;
                   secret._secret = secrets.openid_connect_secret.path;
-                  redirect_uri = "https://git.midna.dev/users/auth/openid_connect/callback";
+                  redirect_uri = redirectUri;
                   gitlab = {
                     groups_attribute = "groups";
                     admin_groups = [ "admins" ];
@@ -223,6 +227,13 @@ in
           ];
         };
       };
+    };
+
+    mjm.authelia.oidcClients.gitlab = {
+      name = "GitLab";
+      inherit clientId;
+      clientSecret = "$pbkdf2-sha512$310000$KBrmIfaP43sBTkOZ5tvwlA$y8/qNNGAeeco48h4vsmtqA73thgVubddQOepMfqG3w0zEvnWPf9w/L8kJpuanGwKtwkejAC.g.M4sQ.Q1qY6OQ";
+      redirectUris = [ redirectUri ];
     };
 
     services.caddy = {
