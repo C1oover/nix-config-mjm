@@ -8,6 +8,7 @@ let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.mjm.grafana;
   secrets = config.mjm.services.grafana.vault.keys;
+  clientId = "7BReUARtsRcF6ypjiA4DcJ3E6fJNjzwheH5Tj1HCLoqfXCQSLHxZJHQ7bAV9U0aU";
 in
 {
   options.mjm.grafana = {
@@ -59,7 +60,7 @@ in
           enabled = true;
           name = "Authelia";
           icon = "signin";
-          client_id = "7BReUARtsRcF6ypjiA4DcJ3E6fJNjzwheH5Tj1HCLoqfXCQSLHxZJHQ7bAV9U0aU";
+          client_id = clientId;
           client_secret = "$__file{${secrets."managed/oidc_client_secret".path}}";
           scopes = "openid profile email groups";
           auth_url = "https://auth.midna.dev/api/oidc/authorization";
@@ -74,6 +75,14 @@ in
           skip_org_role_sync = true;
         };
       };
+    };
+
+    mjm.authelia.oidcClients.grafana = {
+      name = "Grafana";
+      inherit clientId;
+      clientSecret = "$argon2id$v=19$m=65536,t=3,p=4$LExwz3BrD2Cu5o1ur61RIw$W4kCJsEG+VuCxeEOI689IEMoiE2r5G2Nwrc+q4fHU0c";
+      requirePkce = true;
+      redirectUris = [ "https://graphs.midna.dev/login/generic_oauth" ];
     };
 
     networking.firewall.allowedTCPPorts = [ 3000 ];

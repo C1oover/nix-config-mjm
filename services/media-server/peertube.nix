@@ -55,6 +55,13 @@ in
       };
     };
 
+    mjm.authelia.oidcClients.peertube = {
+      name = "PeerTube";
+      clientId = "peertube";
+      clientSecret = "$pbkdf2-sha512$310000$i/oOcdThnanFjq1JqrACMg$IUGcZqmZZtGOwjfYT1O1ZiMVk634D73XX9qgmwYDtJW3HVcNDRwU9JcX2pJp4WchFkx2iwArh8DWfbU.2xLYiw";
+      redirectUris = [ "https://tube.midna.dev/plugins/auth-openid-connect/router/code-cb" ];
+    };
+
     systemd.tmpfiles.settings."10-media-server" = {
       "/videos/peertube".d = {
         user = "peertube";

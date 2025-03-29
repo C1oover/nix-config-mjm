@@ -1,88 +1,93 @@
-[
-  {
-    client_id = "gitlab";
-    client_name = "GitLab";
-    client_secret = "$pbkdf2-sha512$310000$KBrmIfaP43sBTkOZ5tvwlA$y8/qNNGAeeco48h4vsmtqA73thgVubddQOepMfqG3w0zEvnWPf9w/L8kJpuanGwKtwkejAC.g.M4sQ.Q1qY6OQ";
-    public = false;
-    authorization_policy = "two_factor";
-    redirect_uris = [ "https://git.midna.dev/users/auth/openid_connect/callback" ];
-    scopes = [
-      "openid"
-      "profile"
-      "groups"
-      "email"
-    ];
-    userinfo_signed_response_alg = "none";
-    token_endpoint_auth_method = "client_secret_basic";
-  }
-  {
-    client_id = "3oGSHETQNzAa2Hd7CGaBAk08lskEJMKnR7YgMXMgWgqCsl9cWOuWzh2VT5LBu9fA";
-    client_name = "Hashicorp Vault";
-    client_secret = "$argon2id$v=19$m=65536,t=3,p=4$QSmbERaC2fvE2IJnxScj2w$7TC9He52pllowLCVODoYOc8E1xS6cNrDSwyxvhqZdug";
-    public = false;
-    authorization_policy = "two_factor";
-    redirect_uris = [
-      "https://vault.midna.dev/oidc/callback"
-      "https://vault.midna.dev/ui/vault/auth/oidc/oidc/callback"
-      "http://localhost:8250/oidc/callback"
-    ];
-    scopes = [
-      "openid"
-      "profile"
-      "groups"
-      "email"
-    ];
-    userinfo_signed_response_alg = "none";
-  }
-  {
-    client_id = "peertube";
-    client_name = "PeerTube";
-    client_secret = "$pbkdf2-sha512$310000$i/oOcdThnanFjq1JqrACMg$IUGcZqmZZtGOwjfYT1O1ZiMVk634D73XX9qgmwYDtJW3HVcNDRwU9JcX2pJp4WchFkx2iwArh8DWfbU.2xLYiw";
-    public = false;
-    authorization_policy = "two_factor";
-    redirect_uris = [ "https://tube.midna.dev/plugins/auth-openid-connect/router/code-cb" ];
-    scopes = [
-      "openid"
-      "profile"
-      "groups"
-      "email"
-    ];
-    userinfo_signed_response_alg = "none";
-    response_modes = [ "form_post" ];
-  }
-  {
-    client_id = "Ck6UhnhOFIoo8jYitELDVI7Ys93kIJ6ZGcrLI6xr1YT9PWaIYUQEjc50iqgPSlCz";
-    client_name = "Home Assistant";
-    client_secret = "$argon2id$v=19$m=65536,t=3,p=4$0IiDX4VOL96OzjoCAdNnZg$iyajs99yFezP4fPw4nH5vnqfOoN04jkN7eVZhNPPweM";
-    public = false;
-    require_pkce = true;
-    pkce_challenge_method = "S256";
-    authorization_policy = "two_factor";
-    redirect_uris = [ "https://home.midna.dev/auth/oidc/callback" ];
-    scopes = [
-      "openid"
-      "profile"
-      "groups"
-    ];
-    id_token_signed_response_alg = "RS256";
-    token_endpoint_auth_method = "client_secret_post";
-  }
-  {
-    client_id = "7BReUARtsRcF6ypjiA4DcJ3E6fJNjzwheH5Tj1HCLoqfXCQSLHxZJHQ7bAV9U0aU";
-    client_name = "Grafana";
-    client_secret = "$argon2id$v=19$m=65536,t=3,p=4$LExwz3BrD2Cu5o1ur61RIw$W4kCJsEG+VuCxeEOI689IEMoiE2r5G2Nwrc+q4fHU0c";
-    public = false;
-    require_pkce = true;
-    pkce_challenge_method = "S256";
-    authorization_policy = "two_factor";
-    redirect_uris = [ "https://graphs.midna.dev/login/generic_oauth" ];
-    scopes = [
-      "openid"
-      "profile"
-      "groups"
-      "email"
-    ];
-    userinfo_signed_response_alg = "none";
-    token_endpoint_auth_method = "client_secret_basic";
-  }
-]
+{
+config,
+  lib,
+  nodes,
+  pkgs,
+  ...
+}:
+let
+  inherit (lib)
+    attrValues
+    mergeAttrsList
+    mkIf
+    mkMerge
+    mkOption
+    pipe
+    types
+    ;
+  cfg = config.mjm.authelia;
+  clients = pipe nodes [
+    attrValues
+    (map (n: n.config.mjm.authelia.oidcClients))
+    mergeAttrsList
+    attrValues
+    (map (c: c.clientConfig))
+  ];
+  yamlFormat = pkgs.formats.yaml { };
+in
+{
+  options.mjm.authelia.oidcClients = mkOption {
+    default = { };
+    type = types.attrsOf (
+      types.submodule (
+        { config, ... }:
+        {
+          options = {
+            name = mkOption { type = types.str; };
+            clientId = mkOption { type = types.str; };
+            clientSecret = mkOption { type = types.str; };
+
+            requirePkce = mkOption {
+              default = false;
+              type = types.bool;
+            };
+            redirectUris = mkOption { type = types.listOf types.str; };
+            scopes = mkOption {
+              type = types.listOf types.str;
+              default = [
+                "openid"
+                "profile"
+                "groups"
+                "email"
+              ];
+            };
+            tokenEndpointAuthMethod = mkOption {
+              default = "client_secret_basic";
+              type = types.enum [
+                "none"
+                "client_secret_basic"
+                "client_secret_post"
+                "client_secret_jwt"
+                "private_key_jwt"
+              ];
+            };
+
+            clientConfig = mkOption {
+              internal = true;
+              type = types.submodule { freeformType = yamlFormat.type; };
+            };
+          };
+
+          config.clientConfig = mkMerge [
+            {
+              client_id = config.clientId;
+              client_name = config.name;
+              client_secret = config.clientSecret;
+              redirect_uris = config.redirectUris;
+              scopes = config.scopes;
+              token_endpoint_auth_method = config.tokenEndpointAuthMethod;
+            }
+            (mkIf config.requirePkce {
+              require_pkce = true;
+              pkce_challenge_method = "S256";
+            })
+          ];
+        }
+      )
+    );
+  };
+
+  config = mkIf cfg.enable {
+    services.authelia.instances.main.settings.identity_providers.oidc.clients = clients;
+  };
+}
