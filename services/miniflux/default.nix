@@ -7,6 +7,9 @@
 let
   inherit (lib) mkEnableOption mkForce mkIf;
   cfg = config.mjm.miniflux;
+
+  clientId = "4dVtVDFB6wqBTqqE1hJzVe2shJDaMiEH3wY9BjN9IQ44lrnFmcxiOwzdBDHmk3zB";
+  redirectUri = "https://feeds.midna.dev/oauth2/oidc/callback";
 in
 {
   options.mjm.miniflux = {
@@ -14,11 +17,14 @@ in
   };
 
   config = mkIf cfg.enable {
-    mjm.services.miniflux = { };
+    mjm.services.miniflux = {
+      vault.enable = true;
+    };
     mjm.postgresql.enable = true;
 
     ingress.virtualHosts.feeds = {
       upstream.service.name = "miniflux";
+      enableAuthProxy = false;
       useIPv4Proxy = true;
     };
 
@@ -29,11 +35,29 @@ in
         BASE_URL = "https://feeds.midna.dev/";
         METRICS_COLLECTOR = 1;
         METRICS_ALLOWED_NETWORKS = "127.0.0.1/8,10.0.0.0/16,${config.mjm.ipv6Prefix}::/64";
-        AUTH_PROXY_HEADER = "Remote-User";
-        AUTH_PROXY_USER_CREATION = 1;
         CREATE_ADMIN = mkForce 0;
+        OAUTH2_PROVIDER = "oidc";
+        OAUTH2_CLIENT_ID = clientId;
+        OAUTH2_REDIRECT_URL = redirectUri;
+        OAUTH2_OIDC_DISCOVERY_ENDPOINT = "https://auth.midna.dev";
+        OAUTH2_USER_CREATION = 1;
       };
-      adminCredentialsFile = pkgs.writeText "miniflux-creds" "";
+      adminCredentialsFile = config.vault-secrets.templates.miniflux-env.path;
+    };
+
+    vault-secrets.wantedBy = [ "miniflux.service" ];
+    vault-secrets.templates.miniflux-env.text = ''
+      {{ with secret "kv/prod/services/miniflux/managed" }}
+      OAUTH2_CLIENT_SECRET={{ .Data.data.oidc_client_secret }}
+      {{ end }}
+    '';
+
+    mjm.authelia.oidcClients.miniflux = {
+      name = "Miniflux";
+      inherit clientId;
+      clientSecret = "$argon2id$v=19$m=65536,t=3,p=4$F6tAZnVxae+QgvGjCC6GhQ$tVXggATlvY5qpsMut62Ap5B8RcRPi4HPZwrfz02uJ7Q";
+      requirePkce = true;
+      redirectUris = [ redirectUri ];
     };
 
     networking.firewall.allowedTCPPorts = [ 9999 ];
