@@ -191,10 +191,10 @@ in
           mandatoryFeatures = [ ];
           publicHostKey = "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSURTM3BQTkVhSEEreWNEYTdrVHlOU3hzQVlCRlpJN1lNd2VEcnJOMEdnK2wgcm9vdEBuaXhvcwo=";
         }
-        (mkVmTestBuilder "apollo" // { maxJobs = 1; })
+        (mkVmTestBuilder "hades" // { maxJobs = 1; })
       ]
       ++ (map mkVmTestBuilder [
-        "hades"
+        "apollo"
         "artemis"
         "demeter"
       ]);
