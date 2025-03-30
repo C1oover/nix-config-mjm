@@ -3,7 +3,7 @@ variables:
   GIT_DEPTH: "0"
 stages: [update]
 update megamerge:
-  tags: [nix-shell]
+  tags: [nix]
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
   stage: update

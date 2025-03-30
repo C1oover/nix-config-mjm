@@ -121,9 +121,11 @@ in
                 inherit (pkgs)
                   cacert
                   git
-                  openssh
                   glibcLocalesUtf8
+                  jujutsu
+                  openssh
                   ;
+                inherit (pkgs.scripts) update-fork;
               })
             }
             mkdir -p /etc/nix
