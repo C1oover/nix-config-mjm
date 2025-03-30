@@ -99,10 +99,6 @@ in
             "/nix/var/nix/daemon-socket:/nix/var/nix/daemon-socket:ro"
             "/etc/ssl/certs/ca-certificates.crt:/etc/ssl/certs/ca-certificates.crt:ro"
             "/etc/ssh/ssh_known_hosts:/etc/ssh/ssh_known_hosts:ro"
-            "/etc/ssh/ssh_config:/etc/ssh/ssh_config:ro"
-            "${secrets.remote_builder_private_key.path}:${secrets.remote_builder_private_key.path}:ro"
-            "/etc/nix/nix.conf:/etc/nix/nix.conf:ro"
-            "/etc/nix/machines:/etc/nix/machines:ro"
           ];
           preBuildScript = pkgs.writeScript "setup-container" ''
             mkdir -p -m 0755 /nix/var/log/nix/drvs
@@ -126,6 +122,10 @@ in
                   ;
               })
             }
+            mkdir -p /etc/nix
+            ln -sf ${pkgs.writeText "nix.conf" ''
+              experimental-features = nix-command flakes
+            ''} /etc/nix/nix.conf
             ${nix}/bin/nix-channel --add https://nixos.org/channels/nixos-unstable nixpkgs
             ${nix}/bin/nix-channel --update nixpkgs
           '';
