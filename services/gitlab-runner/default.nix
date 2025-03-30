@@ -72,6 +72,10 @@ in
     # gitlab-runner will enable this by default, but we want podman instead
     virtualisation.docker.enable = false;
 
+    # without this, when podman changes, it will be restarted, which will kill the build
+    # in the middle of restarting services and leave things in a bad state.
+    systemd.services.podman.restartIfChanged = false;
+
     # run a GC weekly in the middle of the night
     nix.gc.dates = "Mon *-*-* 11:00:00";
 
