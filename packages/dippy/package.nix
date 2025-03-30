@@ -11,7 +11,7 @@
 }:
 
 let
-  pulumiGo = pulumi.withPackages (p: [ p.pulumi-language-go ]);
+  pulumiGo = pulumi.withPackages (p: [ p.pulumi-go ]);
 in
 
 buildGoModule {

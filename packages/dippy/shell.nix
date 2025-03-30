@@ -18,7 +18,7 @@ devshell.mkShell (
         nvd-json
         ;
 
-      pulumi = pkgs.pulumi.withPackages (p: [ p.pulumi-language-go ]);
+      pulumi = pkgs.pulumi.withPackages (p: [ p.pulumi-go ]);
     };
   }
 )
