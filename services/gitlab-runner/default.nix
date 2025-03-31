@@ -43,10 +43,6 @@ in
       CI_SERVER_URL=https://git.midna.dev
       CI_SERVER_TOKEN={{ with secret "kv/prod/services/gitlab-runner" }}{{ .Data.data.nix_docker_auth_token }}{{ end }}
     '';
-    vault-secrets.templates.gitlab-runner-shell-env.text = ''
-      CI_SERVER_URL=https://git.midna.dev
-      CI_SERVER_TOKEN={{ with secret "kv/prod/services/gitlab-runner" }}{{ .Data.data.nix_shell_auth_token }}{{ end }}
-    '';
 
     boot.kernel.sysctl."net.ipv4.ip_forward" = true;
 
@@ -147,21 +143,13 @@ in
             FF_NETWORK_PER_BUILD = "true";
           };
         };
-        nix-shell = {
-          authenticationTokenConfigFile = config.vault-secrets.templates.gitlab-runner-shell-env.path;
-          registrationFlags = [ "--output-limit 102400" ];
-          executor = "shell";
-        };
       };
     };
 
-    environment.systemPackages = [
-      # The nix-shell runner needs this to be able to clone repos and evaluate flakes
-      pkgs.git
-      # Used to push automatic updates to megamerges
-      pkgs.jujutsu
-      pkgs.scripts.update-fork
-    ];
+    # you would think all the config below shouldn't be here because the builds
+    # run in a container, but you'd be wrong. because the container uses the
+    # host's nix-daemon, that is what is performing the builds. so the host's
+    # settings for SSH and Nix config are what matters.
 
     programs.ssh.extraConfig = mkAfter ''
       Host ${concatMapStringsSep " " (m: m.hostName) config.nix.buildMachines}
