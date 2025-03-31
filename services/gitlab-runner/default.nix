@@ -86,6 +86,7 @@ in
           registrationFlags = [
             "--output-limit 102400"
             "--docker-enable-ipv6"
+            "--docker-pull-policy if-not-present"
           ];
           dockerImage = "alpine";
           dockerVolumes = [
