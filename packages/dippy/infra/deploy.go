@@ -30,6 +30,10 @@ type RoleInput struct {
 
 func deploy(input *Input) func(*pulumi.Context) error {
 	return func(ctx *pulumi.Context) error {
+		if err := setUpAion(ctx); err != nil {
+			return err
+		}
+
 		if err := setUpMattmoriarityCom(ctx); err != nil {
 			return err
 		}
@@ -134,6 +138,7 @@ func setUpStack(ctx context.Context, c *api.Client, input *Input) (auto.Stack, e
 		"AWS_SECRET_ACCESS_KEY":    secret.Data["garage_secret_key"].(string),
 		"PULUMI_CONFIG_PASSPHRASE": secret.Data["pulumi_passphrase"].(string),
 		"DESEC_API_TOKEN":          secret.Data["desec_api_token"].(string),
+		"HCLOUD_TOKEN":             secret.Data["hcloud_token"].(string),
 	}))
 	if err != nil {
 		return auto.Stack{}, fmt.Errorf("upserting pulumi stack: %w", err)
