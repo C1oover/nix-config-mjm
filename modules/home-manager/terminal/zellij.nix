@@ -24,6 +24,7 @@ in
       src = ./zellij.kdl;
       copy_command = if pkgs.stdenv.isDarwin then "pbcopy" else "wl-copy";
     };
+    xdg.configFile."zellij/layouts/default.kdl".source = ./default.kdl;
 
     programs.fish.functions.",tt" = ''
       zellij action rename-tab (basename (pwd))
