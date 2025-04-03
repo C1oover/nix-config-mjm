@@ -75,10 +75,10 @@ in
         };
 
         aliases = {
-          unpushed = [
+          ll = [
             "log"
             "-r"
-            "bookmarks() & ~(main | remote_bookmarks())"
+            "@ | trunk() | ancestors(reachable(@ | mine(), mutable()), 2)"
           ];
           history = [
             "log"
@@ -147,7 +147,7 @@ in
           '';
         };
         revsets = {
-          log = "@ | trunk() | ancestors(trunk()..(visible_heads() & mine() & ~tags()), 2)";
+          log = "@ | ancestors(reachable(@, mutable()), 2)";
         };
 
         fix.tools = {
