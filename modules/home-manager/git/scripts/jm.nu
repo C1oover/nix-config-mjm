@@ -50,7 +50,7 @@ def "main advance" [
 
 # Add a revision to the megamerge
 #
-# The revision will keep its existing parents but will be made a child
+# The revision will keep its existing parents but will be made a parent
 # of the megamerge.
 def "main add" [
   revision: string = "@"       # the revision to add to the megamerge
@@ -83,6 +83,17 @@ def "main remove" [
   --mega (-m): string = "mega" # the revision of the megamerge
 ] {
   jj rebase -s $mega -d $'all:($mega)- ~ ($revision)'
+}
+
+# Replace revisions in the megamerge
+#
+# This is doing an add and remove in a single operation.
+def "main replace" [
+  before: string               # the revision to remove from the megamerge
+  after: string                # the revision to add to the megamerge
+  --mega (-m): string = "mega" # the revision of the megamerge
+] {
+  jj rebase -s $mega -d $'all:($mega)- ~ ($before)' -d $after
 }
 
 # Manage megamerges with Jujutsu
