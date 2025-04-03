@@ -22,6 +22,8 @@
 
     # TODO switch this to install via nix once nixpkgs has 0.16+
     "asdf"
+    # TODO install via nixpkgs when it's not broken
+    "cloudflared"
   ];
 
   # networking.hosts =
