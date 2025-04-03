@@ -184,9 +184,9 @@
       },
       "branch": "deploy/nixos-unstable",
       "submodules": false,
-      "revision": "c0ddddb74d1de5ca37794ca9a83ef8b96fdabc05",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=c0ddddb74d1de5ca37794ca9a83ef8b96fdabc05",
-      "hash": "1zr292k5ii235qqldjgy6046j0ag61m6cn5yk86kwy1h4pyq6nas"
+      "revision": "5f14e02614c976af75a4cfbdf030e6997284e753",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=5f14e02614c976af75a4cfbdf030e6997284e753",
+      "hash": "0qc75lri1hshxcma0cgk2q9w1hg3l8nisvq0pnnfn7v4xknd96n1"
     },
     "nixos-small": {
       "type": "Git",
@@ -197,9 +197,9 @@
       },
       "branch": "deploy/nixos-unstable-small",
       "submodules": false,
-      "revision": "779b29b6d2adcb561ec28ae86edefb4cca809618",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=779b29b6d2adcb561ec28ae86edefb4cca809618",
-      "hash": "12as9ncqki1c3i8h7wf9c6y81lsfla37lhiw5z74abiv09lni39b"
+      "revision": "621dbf8750ea37efc5f467ccde08ca08f327cad7",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=621dbf8750ea37efc5f467ccde08ca08f327cad7",
+      "hash": "0ncxfbblc1gsqp4hqc82cii71409f3jwrp3spzwpc5q58vg35pza"
     },
     "nixpkgs": {
       "type": "Git",
@@ -210,9 +210,9 @@
       },
       "branch": "deploy/nixpkgs-unstable",
       "submodules": false,
-      "revision": "59dda8906499ede3be3942729d001a0e7fbfc2c4",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=59dda8906499ede3be3942729d001a0e7fbfc2c4",
-      "hash": "0x8jqzs26rjrj5nz1b0zy64bix4jjmk8c06qpa3r99f0nwisgvm3"
+      "revision": "99f3dccbdbfc6200785007d8e33163c809041c8a",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=99f3dccbdbfc6200785007d8e33163c809041c8a",
+      "hash": "081zp3cg828hr5yd69gxipyxxq4xzpi5nhfnwwbnyi9hx6zq927d"
     },
     "nixpkgs-firefox-darwin": {
       "type": "Git",
