@@ -66,6 +66,14 @@ in
         }
       '';
       extraConfig = ''
+        # extra test listener for TLS
+        listener "tcp" {
+          address = "0.0.0.0:8250"
+          tls_cert_file = "/var/cache/vault/cert.pem"
+          tls_key_file = "/var/cache/vault/key.pem"
+          tls_min_version = "tls13"
+        }
+
         api_addr = "http://{{ GetPrivateIP }}:8200"
         cluster_addr = "https://{{ GetPrivateIP }}:8201"
         disable_mlock = true
@@ -111,6 +119,46 @@ in
         mode = "0700";
       }
     ];
+
+    security.polkit.enable = true;
+    security.polkit.extraConfig = ''
+      polkit.addRule(function(action, subject) {
+        if (action.id === "org.freedesktop.systemd1.manage-units" &&
+            action.lookup("unit") === "vault.service" &&
+            action.lookup("verb") === "reload" &&
+            subject.user === "vault") {
+          return polkit.Result.YES;
+        }
+
+        return polkit.Result.NOT_HANDLED;
+      });
+    '';
+
+    mjm.spire.agent.enable = true;
+    systemd.services.vault-certs =
+      let
+        configFile = pkgs.writeText "vault-spiffe-helper.hcl" ''
+          agent_address = "/run/spire-agent/api.sock"
+          cmd = "${pkgs.systemd}/bin/systemctl"
+          cmd_args = "reload vault"
+          cert_dir = "/var/cache/vault"
+          daemon_mode = true
+          svid_file_name = "cert.pem"
+          svid_key_file_name = "key.pem"
+          svid_bundle_file_name = "bundle.pem"
+        '';
+      in
+      {
+        wantedBy = [ "multi-user.target" ];
+        before = [ "vault.service" ];
+        serviceConfig = {
+          ExecStart = "${pkgs.spiffe-helper}/bin/spiffe-helper -config ${configFile}";
+          CacheDirectory = "vault";
+          User = "vault";
+          Group = "vault";
+        };
+      };
+    systemd.services.vault.serviceConfig.CacheDirectory = "vault";
 
     mjm.backups.vault =
       let

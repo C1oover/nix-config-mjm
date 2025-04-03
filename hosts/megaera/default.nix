@@ -26,7 +26,6 @@
     server.enable = true;
   };
   mjm.server.enable = true;
-  mjm.spire.agent.enable = true;
   mjm.state = {
     enablePreservation = true;
     persistDir = "/persist";
