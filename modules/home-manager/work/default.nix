@@ -30,7 +30,11 @@ in
 
     home.packages = builtins.attrValues {
       inherit slab;
-      inherit (pkgs) cloudflared google-cloud-sdk;
+      inherit (pkgs)
+        # broken in nixpkgs due to needing a fork of go 1.22
+        # cloudflared
+        google-cloud-sdk
+        ;
     };
 
     home.sessionVariables.ASDF_DATA_DIR = "${config.xdg.stateHome}/asdf";
