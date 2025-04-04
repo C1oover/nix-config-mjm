@@ -75,5 +75,13 @@ in
         Group = "spire-agent";
       };
     };
+
+    environment.systemPackages = [
+      pkgs.spire-agent
+      (pkgs.writeShellScriptBin ",spire" ''
+        set -o errexit
+        ${pkgs.spire-agent}/bin/spire-agent "$@" -socketPath /run/spire-agent/api.sock
+      '')
+    ];
   };
 }

@@ -86,5 +86,13 @@ in
       8081
       8082
     ];
+
+    environment.systemPackages = [
+      pkgs.spire-server
+      (pkgs.writeShellScriptBin ",spire" ''
+        set -o errexit
+        ${pkgs.spire-server}/bin/spire-server "$@" -socketPath /run/spire-server/api.sock
+      '')
+    ];
   };
 }
