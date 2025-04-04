@@ -64,9 +64,9 @@
       },
       "branch": "main",
       "submodules": false,
-      "revision": "0f81c1e1ccdcb0c5c6d5a27e82f16eb37b1e61c8",
-      "url": "https://github.com/girlbossceo/conduwuit/archive/0f81c1e1ccdcb0c5c6d5a27e82f16eb37b1e61c8.tar.gz",
-      "hash": "1lkn1v4agdcq8k8ic77da9rmmdqzw5hxrxmjy8rn0762la3izyy7"
+      "revision": "00f7745ec4ebcea5f892376c5de5db1299f71696",
+      "url": "https://github.com/girlbossceo/conduwuit/archive/00f7745ec4ebcea5f892376c5de5db1299f71696.tar.gz",
+      "hash": "0gd2y694d6iypni1nmpywf9x2bgm6444lpb2jdqllziq6qxgr8v9"
     },
     "darwin": {
       "type": "Git",
@@ -197,9 +197,9 @@
       },
       "branch": "deploy/nixos-unstable-small",
       "submodules": false,
-      "revision": "f1f9a70925211b054a25830dfd639ecb6ce442b2",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=f1f9a70925211b054a25830dfd639ecb6ce442b2",
-      "hash": "1985f57jr52by3g3n4hjasmnvh2hjhbnjcmzcx97pnlzlw1d77vh"
+      "revision": "230bbb2dcd55381e239461661851bb4039060a41",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=230bbb2dcd55381e239461661851bb4039060a41",
+      "hash": "18z9yi51m3min7j7lp4bvfjzbmwq1clz7kv9rpbjvn59s0q76src"
     },
     "nixpkgs": {
       "type": "Git",
@@ -223,9 +223,9 @@
       },
       "branch": "main",
       "submodules": false,
-      "revision": "a3e2e5cc9feed1bf61699c5a5adbb3565bfa0efc",
-      "url": "https://github.com/bandithedoge/nixpkgs-firefox-darwin/archive/a3e2e5cc9feed1bf61699c5a5adbb3565bfa0efc.tar.gz",
-      "hash": "0kfyl4qvj1czmkiih0vr40gh0afnamhjg7w0a0z44x5d6qxgf3ss"
+      "revision": "055188f9b4f6d92d7d19d2f1d004628661ea58d7",
+      "url": "https://github.com/bandithedoge/nixpkgs-firefox-darwin/archive/055188f9b4f6d92d7d19d2f1d004628661ea58d7.tar.gz",
+      "hash": "084x97b74zkal6886ihrgskaa1gbj6ahixzk4dwnyi51iz838fr4"
     },
     "preservation": {
       "type": "Git",
