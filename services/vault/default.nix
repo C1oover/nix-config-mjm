@@ -98,6 +98,8 @@ in
     networking.firewall.allowedTCPPorts = [
       8200
       8201
+      8250
+      8251
     ];
 
     mjm.authelia.oidcClients.vault = {
