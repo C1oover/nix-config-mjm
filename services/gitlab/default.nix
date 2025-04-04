@@ -106,7 +106,14 @@ in
 
     services.gitlab = {
       enable = true;
-      packages.gitlab = pkgs.gitlab-ee;
+      packages.gitlab = pkgs.gitlab-ee.overrideAttrs (old: {
+        # workaround https://gitlab.com/gitlab-org/gitlab/-/issues/534135
+        postPatch =
+          old.postPatch
+          + ''
+            sed -i '/CloudConnector/c super' ee/app/controllers/ee/jwks_controller.rb
+          '';
+      });
       host = "git.midna.dev";
       port = 443;
       https = true;
