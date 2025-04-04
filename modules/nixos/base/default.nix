@@ -30,6 +30,7 @@
   programs.command-not-found.enable = false;
 
   documentation.enable = lib.mkDefault false;
+  documentation.man.generateCaches = lib.mkOverride 900 false;
 
   time.timeZone = lib.mkDefault "Etc/UTC";
 

@@ -23,6 +23,8 @@ in
 
   config = mkIf cfg.enable {
     documentation.enable = true;
+    documentation.man.generateCaches = true;
+
     time.timeZone = "America/Denver";
 
     deployment.targetHost = mkOverride 900 null;
