@@ -23,6 +23,7 @@ in
 {
   imports = [
     ./mta-sts.nix
+    ./spiffe-oidc.nix
   ];
 
   options.mjm.ingress = {

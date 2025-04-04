@@ -20,6 +20,7 @@ let
     mkMerge
     mkOption
     nameValuePair
+    optionalString
     unique
     types
     ;
@@ -289,15 +290,22 @@ in
             vault
             consul-template
             glibc.getent
+            spire-agent
+            jq
           ];
           preStart = mkIf cfg.useSpiffe ''
-            ${pkgs.spire-agent}/bin/spire-agent api fetch -socketPath /run/spire-agent/api.sock -write /run/vault-secrets-certs
+            spire-agent api fetch -socketPath /run/spire-agent/api.sock -write /run/vault-secrets-certs
           '';
           script = ''
-            role_id=${cfg.roleId}
-            secret_id_file="${cfg.secretIdFile}"
-
-            VAULT_TOKEN="$(vault write -field=token auth/approle/login role_id=$role_id secret_id=@$secret_id_file)"
+            ${optionalString cfg.useSpiffe ''
+              jwt="$(spire-agent api fetch jwt -audience $VAULT_ADDR -output json -socketPath /run/spire-agent/api.sock | jq -r '.[0].svids[0].svid')"
+              VAULT_TOKEN="$(vault write -field=token auth/spiffe/login role=spiffe jwt=$jwt)"
+            ''}
+            ${optionalString (!cfg.useSpiffe) ''
+              role_id=${cfg.roleId}
+              secret_id_file="${cfg.secretIdFile}"
+              VAULT_TOKEN="$(vault write -field=token auth/approle/login role_id=$role_id secret_id=@$secret_id_file)"
+            ''}
             export VAULT_TOKEN
 
             exec consul-template -config ${cfgFile} -exec true

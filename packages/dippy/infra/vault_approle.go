@@ -6,10 +6,18 @@ import (
 
 	"github.com/pulumi/pulumi-vault/sdk/v6/go/vault"
 	"github.com/pulumi/pulumi-vault/sdk/v6/go/vault/approle"
+	"github.com/pulumi/pulumi-vault/sdk/v6/go/vault/identity"
+	"github.com/pulumi/pulumi-vault/sdk/v6/go/vault/jwt"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-func setUpVaultAppRoles(ctx *pulumi.Context, services map[string]map[string]any, policies map[string]string, roles map[string]RoleInput) error {
+func setUpVaultAppRoles(
+	ctx *pulumi.Context,
+	spiffeBackend *jwt.AuthBackend,
+	services map[string]map[string]any,
+	policies map[string]string,
+	roles map[string]RoleInput,
+) error {
 	backend, err := vault.NewAuthBackend(ctx, "approle", &vault.AuthBackendArgs{
 		Type:           pulumi.String("approle"),
 		Path:           pulumi.String("approle"),
@@ -60,6 +68,22 @@ func setUpVaultAppRoles(ctx *pulumi.Context, services map[string]map[string]any,
 			TokenPolicies: tokenPolicies,
 		})
 		if err != nil {
+			return err
+		}
+
+		entity, err := identity.NewEntity(ctx, "host-"+name, &identity.EntityArgs{
+			Name:     pulumi.Sprintf("host: %s", name),
+			Policies: tokenPolicies,
+		})
+		if err != nil {
+			return err
+		}
+
+		if _, err := identity.NewEntityAlias(ctx, "spiffe-host-"+name, &identity.EntityAliasArgs{
+			Name:          pulumi.Sprintf("spiffe://home.mattmoriarity.com/%s/vault-secrets", name),
+			CanonicalId:   entity.ID(),
+			MountAccessor: spiffeBackend.Accessor,
+		}); err != nil {
 			return err
 		}
 	}

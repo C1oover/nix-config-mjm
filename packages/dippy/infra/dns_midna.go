@@ -127,6 +127,15 @@ func setUpMidnaDev(ctx *pulumi.Context, vhosts map[string]bool) error {
 	}, pulumi.Import(pulumi.ID("midna.dev/www/CNAME"))); err != nil {
 		return err
 	}
+	if _, err := desec.NewRrset(ctx, "spiffe.midna.dev", &desec.RrsetArgs{
+		Domain:  d.ID(),
+		Subname: pulumi.String("spiffe"),
+		Type:    pulumi.String("CNAME"),
+		Ttl:     pulumi.Float64(3600),
+		Records: pulumi.ToStringArray([]string{ "ingress.midna.dev."}),
+	}); err != nil {
+		return err
+	}
 
 	return nil
 }

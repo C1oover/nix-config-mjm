@@ -1,12 +1,4 @@
 {
-  vault-secrets.roleId = "58fe9a5f-99d1-0411-8063-4f52ca8979a9";
-
-  vault-secrets.encryptedSecretId = ''
-    Whxqht+dQJax1aZeCGLxmiAAAAABAAAADAAAABAAAABxiP5iOufu8eTEQp0AAAAAN2XaD1dOQ6leF7N
-    U8k0eYOpc+EH8PEvP6JiDsbtm4f77fNsaua0jzRBPTNrvHDL/VTH3w7BTs5krOrcGBd61MTjjeynQLi
-    JD8frNcfkHkQ9EEJta
-  '';
-
   mjm.vault.encryptedUnsealTokens = [
     ''
       Whxqht+dQJax1aZeCGLxmiAAAAABAAAADAAAABAAAADyvQlZvMZR3NZ+ywUAAAAABR2PrIWRb74OBnP

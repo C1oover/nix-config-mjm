@@ -14,6 +14,10 @@ func sectionStart(header string, collapsed bool) logSection {
 	s := logSection(fmt.Sprintf("section%d", sectionIdx))
 	sectionIdx++
 
+	if os.Getenv("CI") == "" {
+		return s
+	}
+
 	now := time.Now().Unix()
 	var c string
 	if collapsed {
@@ -25,6 +29,10 @@ func sectionStart(header string, collapsed bool) logSection {
 }
 
 func sectionEnd(s logSection) {
+	if os.Getenv("CI") == "" {
+		return
+	}
+
 	now := time.Now().Unix()
 	fmt.Fprintf(os.Stderr, "\033[0Ksection_end:%d:%s\r\033[0K", now, s)
 }

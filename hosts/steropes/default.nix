@@ -1,6 +1,4 @@
 {
-  imports = [ ./secrets.nix ];
-
   networking.hostName = "steropes";
 
   fileSystems."/persist" = {
