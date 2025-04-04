@@ -203,6 +203,10 @@ in
         Folder where secrets are rendered.
       '';
     };
+    useSpiffe = mkOption {
+      type = types.bool;
+      default = config.mjm.spire.agent.enable;
+    };
     roleId = mkOption {
       type = types.str;
       description = ''
@@ -224,7 +228,8 @@ in
     };
     vaultAddress = mkOption {
       type = types.str;
-      default = "http://vault.service.consul:8200";
+      default =
+        if cfg.useSpiffe then "https://vault.service.consul:8250" else "http://vault.service.consul:8200";
       description = ''
         Address to use to communicate with Vault.
       '';
@@ -285,6 +290,9 @@ in
             consul-template
             glibc.getent
           ];
+          preStart = mkIf cfg.useSpiffe ''
+            ${pkgs.spire-agent}/bin/spire-agent api fetch -socketPath /run/spire-agent/api.sock -write /run/vault-secrets-certs
+          '';
           script = ''
             role_id=${cfg.roleId}
             secret_id_file="${cfg.secretIdFile}"
@@ -296,6 +304,7 @@ in
           '';
           environment = {
             VAULT_ADDR = cfg.vaultAddress;
+            VAULT_CACERT = mkIf cfg.useSpiffe "/run/vault-secrets-certs/bundle.0.pem";
           };
           startLimitIntervalSec = 0;
           serviceConfig = {
@@ -303,6 +312,7 @@ in
             RemainAfterExit = true;
             Restart = "on-failure";
             RestartSec = "5s";
+            RuntimeDirectory = "vault-secrets-certs";
           };
         };
       }
