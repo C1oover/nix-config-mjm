@@ -1,5 +1,4 @@
 {
-  pkgs,
   config,
   lib,
   ...
@@ -25,7 +24,7 @@ in
         "hass"
         # "hass_players"
         "opensubsonic"
-        "slimproto"
+        # "slimproto"
         # "snapcast"
       ];
     };
