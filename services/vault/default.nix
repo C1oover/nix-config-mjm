@@ -49,33 +49,36 @@ in
     services.vault = {
       enable = true;
       package = pkgs.vault-bin;
-      address = "0.0.0.0:8200";
+      address = "0.0.0.0:8250";
+      tlsCertFile = "/var/cache/vault/cert.pem";
+      tlsKeyFile = "/var/cache/vault/key.pem";
       storageBackend = "raft";
       storageConfig = ''
         node_id = "${cfg.nodeId}"
         ${concatMapStrings (n: ''
           retry_join {
-            leader_api_addr = "http://${n}:8200"
+            leader_api_addr = "https://${n}:8250"
           }
         '') cfg.nodes}
       '';
       listenerExtraConfig = ''
-        cluster_address = "0.0.0.0:8201"
+        tls_min_version = "tls13"
         telemetry {
           unauthenticated_metrics_access = true
         }
       '';
       extraConfig = ''
-        # extra test listener for TLS
+        # legacy plaintext listener
         listener "tcp" {
-          address = "0.0.0.0:8250"
-          tls_cert_file = "/var/cache/vault/cert.pem"
-          tls_key_file = "/var/cache/vault/key.pem"
-          tls_min_version = "tls13"
+          address = "0.0.0.0:8200"
+          tls_disable = true
+          telemetry {
+            unauthenticated_metrics_access = true
+          }
         }
 
         api_addr = "http://{{ GetPrivateIP }}:8200"
-        cluster_addr = "https://{{ GetPrivateIP }}:8201"
+        cluster_addr = "https://{{ GetPrivateIP }}:8251"
         disable_mlock = true
         ui = true
 
