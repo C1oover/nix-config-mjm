@@ -17,7 +17,7 @@ let
 
   envVars = {
     CONSUL_HTTP_ADDR = "http://consul.service.consul:8500";
-    VAULT_ADDR = "http://vault.service.consul:8200";
+    VAULT_ADDR = "https://vault.midna.dev";
   };
 in
 {
