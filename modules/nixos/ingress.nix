@@ -17,17 +17,15 @@ let
             type = types.str;
             default = name;
           };
-          addresses = mkOption {
-            type = types.nullOr (types.listOf types.str);
-            default = null;
-          };
           ipHash = mkOption {
             type = types.bool;
             default = false;
           };
-          useSSL = mkOption {
-            type = types.bool;
-            default = false;
+          tls = {
+            enable = mkOption {
+              type = types.bool;
+              default = false;
+            };
           };
           service = {
             name = mkOption {
@@ -53,7 +51,7 @@ let
           default = [ ];
         };
         extraRoutes = mkOption {
-          type = types.listOf (types.submodule ({ freeformType = jsonFormat.type; }));
+          type = types.listOf (types.submodule { freeformType = jsonFormat.type; });
           default = [ ];
         };
         useIPv4Proxy = mkOption {

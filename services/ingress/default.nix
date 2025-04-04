@@ -143,13 +143,18 @@ in
                 {
                   handler = "reverse_proxy";
                   load_balancing = mkIf upstream.ipHash { selection_policy.policy = "ip_hash"; };
-                  transport = mkIf upstream.useSSL {
+                  transport = mkIf upstream.tls.enable {
                     protocol = "http";
                     tls = {
-                      insecure_skip_verify = true;
+                      ca = {
+                        provider = "file";
+                        pem_files = [ "/var/cache/caddy/bundle.pem" ];
+                      };
+                      server_name = "${upstream.service.name}.service.consul";
+                      # TODO client certs
                     };
                   };
-                  dynamic_upstreams = mkIf (upstream.service.name != null) (
+                  dynamic_upstreams =
                     {
                       refresh = "15s";
                       # TODO probably add resolver addresses to directly connect to consul
@@ -168,9 +173,7 @@ in
                           name = "${upstream.service.name}.service.consul";
                           port = toString upstream.service.port;
                         }
-                    )
-                  );
-                  upstreams = mkIf (upstream.addresses != null) (map (addr: { dial = addr; }) upstream.addresses);
+                    );
                 }
               ];
             };
@@ -244,6 +247,46 @@ in
         http.url = "http://localhost:2019/reverse_proxy/upstreams";
       };
     };
+
+    security.polkit.enable = true;
+    security.polkit.extraConfig = ''
+      polkit.addRule(function(action, subject) {
+        if (action.id === "org.freedesktop.systemd1.manage-units" &&
+            action.lookup("unit") === "caddy.service" &&
+            action.lookup("verb") === "reload" &&
+            subject.user === "caddy") {
+          return polkit.Result.YES;
+        }
+
+        return polkit.Result.NOT_HANDLED;
+      });
+    '';
+
+    mjm.spire.agent.enable = true;
+    systemd.services.caddy-certs =
+      let
+        configFile = pkgs.writeText "caddy-spiffe-helper.hcl" ''
+          agent_address = "/run/spire-agent/api.sock"
+          cmd = "${pkgs.systemd}/bin/systemctl"
+          cmd_args = "reload caddy"
+          cert_dir = "/var/cache/caddy"
+          daemon_mode = true
+          svid_file_name = "cert.pem"
+          svid_key_file_name = "key.pem"
+          svid_bundle_file_name = "bundle.pem"
+        '';
+      in
+      {
+        wantedBy = [ "multi-user.target" ];
+        before = [ "caddy.service" ];
+        serviceConfig = {
+          ExecStart = "${pkgs.spiffe-helper}/bin/spiffe-helper -config ${configFile}";
+          CacheDirectory = "caddy";
+          User = "caddy";
+          Group = "caddy";
+        };
+      };
+    systemd.services.caddy.serviceConfig.CacheDirectory = "caddy";
 
     ingress.virtualHosts = pipe nodes [
       attrValues

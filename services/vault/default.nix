@@ -41,7 +41,11 @@ in
     mjm.services.vault = { };
 
     ingress.virtualHosts.vault = {
-      upstream.service.name = "vault";
+      upstream = {
+        service.name = "vault";
+        service.port = 8250;
+        tls.enable = true;
+      };
 
       enableAuthProxy = false;
     };
