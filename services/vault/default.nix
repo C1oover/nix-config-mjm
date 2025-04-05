@@ -169,32 +169,41 @@ in
       };
     systemd.services.vault.serviceConfig.CacheDirectory = "vault";
 
-    mjm.backups.vault =
-      let
-        vault = lib.getExe config.services.vault.package;
-      in
-      {
-        passwordFile = config.vault-secrets.services.vault.keys.backup_password.path;
-        paths = [ "/tmp/vault.snap" ];
-        backupPrepareCommand = ''
-          role_id=${config.vault-secrets.roleId}
-          secret_id_file="$CREDENTIALS_DIRECTORY/secret-id"
+    # TODO this is reusing the vault-secrets spiffe ID and associated entity in vault.
+    # it should be updated to use its own ID, entity, and corresponding policy.
+    mjm.backups.vault = {
+      passwordFile = config.vault-secrets.services.vault.keys.backup_password.path;
+      paths = [ "/tmp/vault.snap" ];
+      backupPrepareCommand = ''
+        export PATH=${
+          lib.makeBinPath [
+            config.services.vault.package
+            pkgs.spire-agent
+            pkgs.jq
+          ]
+        }:$PATH
 
-          export VAULT_ADDR=http://127.0.0.1:8200
-          VAULT_TOKEN="$(${vault} write -field=token auth/approle/login role_id=$role_id secret_id=@$secret_id_file)"
-          export VAULT_TOKEN
+        spire-agent api fetch -socketPath /run/spire-agent/api.sock -write /run/restic-backups-vault
 
-          is_leader="$(${vault} read -field=is_self sys/leader)"
-          if [ "$is_leader" = "true" ]; then
-            ${vault} operator raft snapshot save /tmp/vault.snap
-          else
-            echo "not the leader, skipping backup."
-          fi
-        '';
-        backupCleanupCommand = ''
-          rm -f /tmp/vault.snap
-        '';
-      };
+        export VAULT_CACERT=/run/restic-backups-vault/bundle.0.pem
+        export VAULT_ADDR=https://127.0.0.1:8250
+        export VAULT_TLS_SERVER_NAME=vault.service.consul
+
+        jwt="$(spire-agent api fetch jwt -audience https://vault.service.consul:8250 -output json -socketPath /run/spire-agent/api.sock | jq -r '.[0].svids[0].svid')"
+        VAULT_TOKEN="$(vault write -field=token auth/spiffe/login role=spiffe jwt=$jwt)"
+        export VAULT_TOKEN
+
+        is_leader="$(vault read -field=is_self sys/leader)"
+        if [ "$is_leader" = "true" ]; then
+          vault operator raft snapshot save /tmp/vault.snap
+        else
+          echo "not the leader, skipping backup."
+        fi
+      '';
+      backupCleanupCommand = ''
+        rm -f /tmp/vault.snap
+      '';
+    };
 
     vault.services.vault.paths = {
       "sys/leader".capabilities = [ "read" ];
@@ -207,8 +216,6 @@ in
     systemd.services.restic-backups-vault.serviceConfig = {
       # if not the leader, the backup command will fail, but we won't want to treat that as a failure.
       SuccessExitStatus = "1";
-
-      inherit (config.systemd.services.render-vault-secrets.serviceConfig) LoadCredentialEncrypted;
     };
   };
 }
