@@ -62,6 +62,7 @@ let
 in
 {
   options.mjm.spire.tunnels = mkOption {
+    default = { };
     type = types.attrsOf (
       types.submodule (
         { ... }:
