@@ -70,37 +70,11 @@ in
       };
     };
 
-    systemd.sockets.conduwuit-tunnel = {
-      wantedBy = [ "sockets.target" ];
-      partOf = [ "conduwuit-tunnel.service" ];
-      socketConfig = {
-        FileDescriptorName = "ghostunnel";
-        ListenStream = "[::]:6167";
-      };
+    mjm.spire.tunnels.conduwuit = {
+      mode = "server";
+      port = 6167;
+      target = "localhost:6166";
     };
-
-    systemd.services.conduwuit-tunnel = {
-      wantedBy = [ "multi-user.target" ];
-      after = [
-        "network.target"
-        "conduwuit-tunnel.socket"
-      ];
-      requires = [ "conduwuit-tunnel.socket" ];
-
-      environment.SPIFFE_ENDPOINT_SOCKET = "unix:${config.mjm.spire.agent.socketPath}";
-
-      serviceConfig = {
-        Type = "notify-reload";
-        ExecStart = "${pkgs.ghostunnel}/bin/ghostunnel server --listen=systemd:ghostunnel --target=localhost:6166 --use-workload-api --disable-authentication";
-        DynamicUser = true;
-        Restart = "always";
-        WatchdogSec = 1;
-      };
-    };
-
-    networking.firewall.allowedTCPPorts = [ 6167 ];
-
-    mjm.spire.agent.enable = true;
 
     services.consul.services.conduit = {
       port = 6167;

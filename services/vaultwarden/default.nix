@@ -41,36 +41,11 @@ in
       };
     };
 
-    mjm.spire.agent.enable = true;
-    systemd.sockets.vaultwarden-tunnel = {
-      wantedBy = [ "sockets.target" ];
-      partOf = [ "vaultwarden-tunnel.service" ];
-      socketConfig = {
-        FileDescriptorName = "ghostunnel";
-        ListenStream = "[::]:8222";
-      };
+    mjm.spire.tunnels.vaultwarden = {
+      mode = "server";
+      port = 8222;
+      target = "localhost:8221";
     };
-
-    systemd.services.vaultwarden-tunnel = {
-      wantedBy = [ "multi-user.target" ];
-      after = [
-        "network.target"
-        "vaultwarden-tunnel.socket"
-      ];
-      requires = [ "vaultwarden-tunnel.socket" ];
-
-      environment.SPIFFE_ENDPOINT_SOCKET = "unix:${config.mjm.spire.agent.socketPath}";
-
-      serviceConfig = {
-        Type = "notify-reload";
-        ExecStart = "${pkgs.ghostunnel}/bin/ghostunnel server --listen=systemd:ghostunnel --target=localhost:8221 --use-workload-api --disable-authentication";
-        DynamicUser = true;
-        Restart = "always";
-        WatchdogSec = 1;
-      };
-    };
-
-    networking.firewall.allowedTCPPorts = [ 8222 ];
 
     services.consul.services.vaultwarden = {
       port = 8222;
