@@ -100,6 +100,10 @@ in
                             type = types.nullOr types.str;
                             default = null;
                           };
+                          port = mkOption {
+                            type = types.port;
+                            default = svcPort;
+                          };
                           path = mkOption {
                             type = types.nullOr types.str;
                             default = null;
@@ -127,9 +131,9 @@ in
                           id = mkDefault config.id;
                           name = mkDefault config.name;
                           http = mkMerge [
-                            (mkIf (
-                              config.http.path != null
-                            ) "http${optionalString config.http.tls "s"}://localhost:${toString svcPort}${config.http.path}")
+                            (mkIf (config.http.path != null)
+                              "http${optionalString config.http.tls "s"}://localhost:${toString config.http.port}${config.http.path}"
+                            )
                             (mkIf (config.http.url != null) config.http.url)
                           ];
                           args = mkIf (config.script.args != null) config.script.args;

@@ -45,6 +45,7 @@ in
       mode = "server";
       port = 8222;
       target = "localhost:8221";
+      allowIngress = true;
     };
 
     services.consul.services.vaultwarden = {
@@ -52,7 +53,7 @@ in
 
       checks.up = {
         http.path = "/alive";
-        http.tls = true;
+        http.port = 8221;
       };
     };
 

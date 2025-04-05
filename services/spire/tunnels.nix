@@ -13,6 +13,7 @@ let
     mapAttrs'
     mkIf
     mkOption
+    optional
     pipe
     types
     ;
@@ -44,15 +45,17 @@ let
 
       serviceConfig = {
         Type = "notify-reload";
-        ExecStart = utils.escapeSystemdExecArgs [
-          "${pkgs.ghostunnel}/bin/ghostunnel"
-          tunnel.mode
-          "--listen=systemd:ghostunnel"
-          "--target=${tunnel.target}"
-          "--use-workload-api"
-          # TODO make configurable
-          "--disable-authentication"
-        ];
+        ExecStart = utils.escapeSystemdExecArgs (
+          [
+            "${pkgs.ghostunnel}/bin/ghostunnel"
+            tunnel.mode
+            "--listen=systemd:ghostunnel"
+            "--target=${tunnel.target}"
+            "--use-workload-api"
+          ]
+          ++ optional (tunnel.allowedServices == [ ]) "--disable-authentication"
+          ++ (map (s: "--allow-uri=spiffe://home.mattmoriarity.com/svc/${s}") tunnel.allowedServices)
+        );
         DynamicUser = true;
         Restart = "always";
         WatchdogSec = 1;
@@ -65,7 +68,7 @@ in
     default = { };
     type = types.attrsOf (
       types.submodule (
-        { ... }:
+        { config, ... }:
         {
           options = {
             mode = mkOption {
@@ -84,6 +87,18 @@ in
             target = mkOption {
               type = types.str;
             };
+            allowedServices = mkOption {
+              type = types.listOf types.str;
+              default = [ ];
+            };
+            allowIngress = mkOption {
+              type = types.bool;
+              default = false;
+            };
+          };
+
+          config = {
+            allowedServices = mkIf config.allowIngress [ "caddy" ];
           };
         }
       )

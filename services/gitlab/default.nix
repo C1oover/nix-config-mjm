@@ -249,6 +249,7 @@ in
       mode = "server";
       port = 8443;
       target = "unix:/run/gitlab/gitlab-workhorse.socket";
+      allowIngress = true;
     };
 
     networking.firewall.allowedTCPPorts = [
@@ -261,8 +262,16 @@ in
         port = 8443;
 
         checks.up = {
-          http.path = "/-/readiness";
-          http.tls = true;
+          # consul can't do normal http checks to unix sockets, and the
+          # tunnel only allows requests from the ingress, so here we are.
+          script.args = [
+            (lib.getExe pkgs.curl)
+            "--no-progress-meter"
+            "--fail-with-body"
+            "--unix-socket"
+            "/run/gitlab/gitlab-workhorse.socket"
+            "http://localhost/-/readiness"
+          ];
         };
       };
       gitlab-pages = {
