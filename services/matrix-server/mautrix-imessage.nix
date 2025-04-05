@@ -18,7 +18,7 @@ let
   configFormat = pkgs.formats.yaml { };
   configFile = configFormat.generate "mautrix-imessage-config.yaml" {
     homeserver = {
-      address = "http://conduit.service.consul:6167";
+      address = "https://conduit.service.consul:6167";
       domain = "midna.dev";
       websocket_proxy = null;
     };

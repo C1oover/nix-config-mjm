@@ -27,7 +27,11 @@ in
     ];
 
     ingress.virtualHosts.chat = {
-      upstream.service.name = "conduit";
+      upstream = {
+        service.name = "conduit";
+        tls.enable = true;
+      };
+
       enableAuthProxy = false;
       useIPv4Proxy = true;
     };
@@ -37,10 +41,8 @@ in
       package = pkg;
 
       settings.global = {
-        address = [
-          "0.0.0.0"
-          "::"
-        ];
+        address = [ "127.0.0.1" ];
+        port = [ 6166 ];
         server_name = "midna.dev";
         database_backend = "rocksdb";
         log = "info";
@@ -68,13 +70,44 @@ in
       };
     };
 
+    systemd.sockets.conduwuit-tunnel = {
+      wantedBy = [ "sockets.target" ];
+      partOf = [ "conduwuit-tunnel.service" ];
+      socketConfig = {
+        FileDescriptorName = "ghostunnel";
+        ListenStream = "[::]:6167";
+      };
+    };
+
+    systemd.services.conduwuit-tunnel = {
+      wantedBy = [ "multi-user.target" ];
+      after = [
+        "network.target"
+        "conduwuit-tunnel.socket"
+      ];
+      requires = [ "conduwuit-tunnel.socket" ];
+
+      environment.SPIFFE_ENDPOINT_SOCKET = "unix:/run/spire-agent/api.sock";
+
+      serviceConfig = {
+        Type = "notify-reload";
+        ExecStart = "${pkgs.ghostunnel}/bin/ghostunnel server --listen=systemd:ghostunnel --target=localhost:6166 --use-workload-api --disable-authentication";
+        DynamicUser = true;
+        Restart = "always";
+        WatchdogSec = 1;
+      };
+    };
+
     networking.firewall.allowedTCPPorts = [ 6167 ];
+
+    mjm.spire.agent.enable = true;
 
     services.consul.services.conduit = {
       port = 6167;
 
       checks.up = {
         http.path = "/_matrix/client/versions";
+        http.tls = true;
       };
     };
   };

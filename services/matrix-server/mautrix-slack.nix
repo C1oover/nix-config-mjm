@@ -13,7 +13,7 @@ let
   configFormat = pkgs.formats.yaml { };
   configFile = configFormat.generate "mautrix-slack-config.yaml" {
     homeserver = {
-      address = "http://localhost:6167";
+      address = "http://localhost:6166";
       domain = "midna.dev";
     };
     appservice = {

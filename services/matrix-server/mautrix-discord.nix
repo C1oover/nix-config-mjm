@@ -12,7 +12,7 @@ let
   configFormat = pkgs.formats.yaml { };
   configFile = configFormat.generate "mautrix-discord-config.yaml" {
     homeserver = {
-      address = "http://localhost:6167";
+      address = "http://localhost:6166";
       public_address = "https://chat.midna.dev";
       domain = "midna.dev";
     };

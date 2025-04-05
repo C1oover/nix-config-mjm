@@ -16,7 +16,7 @@ in
 
     services.heisenbridge = {
       enable = true;
-      homeserver = "http://localhost:6167";
+      homeserver = "http://localhost:6166";
       debug = true;
       owner = "@mjm:midna.dev";
       namespaces = {
