@@ -20,7 +20,7 @@ buildGoModule {
 
   src = ./.;
 
-  vendorHash = "sha256-fusC7hR4Zg1fPIcI89e/dnXna77hpS+UYW4zlwIggrE=";
+  vendorHash = "sha256-bT79LvTnOyB0N1ElnEVySdtRKDSuEwIv73Ww4EyjV7w=";
 
   excludedPackages = [ "./sdks/desec" ];
 

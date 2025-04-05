@@ -41,6 +41,11 @@ let
       WorkloadAttestor "systemd" {
         plugin_data {}
       }
+      ${optionalString config.virtualisation.podman.enable ''
+        WorkloadAttestor "docker" {
+          plugin_data {}
+        }
+      ''}
     }
   '';
 in
@@ -73,6 +78,7 @@ in
         # DynamicUser = true;
         User = "spire-agent";
         Group = "spire-agent";
+        SupplementaryGroups = mkIf config.virtualisation.podman.enable [ "podman" ];
       };
     };
 

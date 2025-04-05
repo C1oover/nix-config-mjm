@@ -1,16 +1,11 @@
-.vault:
-  id_tokens:
-    VAULT_ID_TOKEN:
-      aud: http://vault.service.consul:8200
 stages:
   - check
   - deploy
 variables:
   CONSUL_HTTP_ADDR: "consul.service.consul:8500"
-  VAULT_ADDR: "http://vault.service.consul:8200"
+  VAULT_ADDR: "https://vault.service.consul:8250"
+  SPIFFE_ENDPOINT_SOCKET: unix:///run/spire-agent/api.sock
 build nixos hosts:
-  extends:
-    - .vault
   tags: [nix]
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -20,8 +15,6 @@ build nixos hosts:
   script:
     - nix run -f . dippy -- -concurrency=6 diff
 deploy nixos hosts:
-  extends:
-    - .vault
   tags: [nix]
   rules:
     - if: $CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"

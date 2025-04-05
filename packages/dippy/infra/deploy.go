@@ -13,6 +13,8 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/auto/optup"
 	"github.com/pulumi/pulumi/sdk/v3/go/common/workspace"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+	"github.com/spiffe/go-spiffe/v2/spiffeid"
+	"github.com/spiffe/go-spiffe/v2/workloadapi"
 )
 
 type Input struct {
@@ -130,6 +132,45 @@ func setUpStack(ctx context.Context, c *api.Client, input *Input) (auto.Stack, e
 		return auto.Stack{}, fmt.Errorf("fetching vault secrets: %w", err)
 	}
 
+	env := map[string]string{
+		"VAULT_TOKEN":              c.Token(),
+		"AWS_ACCESS_KEY_ID":        secret.Data["garage_key_id"].(string),
+		"AWS_SECRET_ACCESS_KEY":    secret.Data["garage_secret_key"].(string),
+		"PULUMI_CONFIG_PASSPHRASE": secret.Data["pulumi_passphrase"].(string),
+		"DESEC_API_TOKEN":          secret.Data["desec_api_token"].(string),
+		"HCLOUD_TOKEN":             secret.Data["hcloud_token"].(string),
+	}
+	if spiffeSocket := os.Getenv("SPIFFE_ENDPOINT_SOCKET"); spiffeSocket != "" {
+		source, err := workloadapi.NewX509Source(ctx, workloadapi.WithClientOptions(workloadapi.WithAddr(spiffeSocket)))
+		if err != nil {
+			return auto.Stack{}, fmt.Errorf("creating x509 source: %w", err)
+		}
+		defer source.Close()
+
+		trustDomain := spiffeid.RequireTrustDomainFromString("home.mattmoriarity.com")
+		bundle, err := source.GetX509BundleForTrustDomain(trustDomain)
+		if err != nil {
+			return auto.Stack{}, fmt.Errorf("getting trust bundle: %w", err)
+		}
+
+		b, err := bundle.Marshal()
+		if err != nil {
+			return auto.Stack{}, fmt.Errorf("marshalling trust bundle: %w", err)
+		}
+
+		f, err := os.CreateTemp("", "bundle-*.pem")
+		if err != nil {
+			return auto.Stack{}, fmt.Errorf("creating tempfile for bundle: %w", err)
+		}
+		defer f.Close()
+
+		if _, err := f.Write(b); err != nil {
+			return auto.Stack{}, fmt.Errorf("writing bundle to file: %w", err)
+		}
+
+		env["VAULT_CACERT"] = f.Name()
+	}
+
 	slog.DebugContext(ctx, "setting up pulumi stack")
 	s, err := auto.UpsertStackInlineSource(ctx, "prod", "homelab", deploy(input), auto.Project(workspace.Project{
 		Name:    "homelab",
@@ -137,14 +178,7 @@ func setUpStack(ctx context.Context, c *api.Client, input *Input) (auto.Stack, e
 		Backend: &workspace.ProjectBackend{
 			URL: "s3://pulumi-state?endpoint=garage.midna.dev&region=home&s3ForcePathStyle=true",
 		},
-	}), auto.EnvVars(map[string]string{
-		"VAULT_TOKEN":              c.Token(),
-		"AWS_ACCESS_KEY_ID":        secret.Data["garage_key_id"].(string),
-		"AWS_SECRET_ACCESS_KEY":    secret.Data["garage_secret_key"].(string),
-		"PULUMI_CONFIG_PASSPHRASE": secret.Data["pulumi_passphrase"].(string),
-		"DESEC_API_TOKEN":          secret.Data["desec_api_token"].(string),
-		"HCLOUD_TOKEN":             secret.Data["hcloud_token"].(string),
-	}))
+	}), auto.EnvVars(env))
 	if err != nil {
 		return auto.Stack{}, fmt.Errorf("upserting pulumi stack: %w", err)
 	}

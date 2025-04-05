@@ -1,8 +1,4 @@
 {
-  imports = [
-    ./secrets.nix
-  ];
-
   # hypnos is the one running the deploy, so we don't want to reboot in
   # the middle of the job.
   deployment.rebootAutomatically = false;

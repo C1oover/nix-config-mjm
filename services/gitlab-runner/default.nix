@@ -46,6 +46,8 @@ in
 
     boot.kernel.sysctl."net.ipv4.ip_forward" = true;
 
+    mjm.spire.agent.enable = true;
+
     virtualisation.podman = {
       enable = true;
       dockerCompat = true;
@@ -100,6 +102,7 @@ in
             "/nix/var/nix/daemon-socket:/nix/var/nix/daemon-socket:ro"
             "/etc/ssl/certs/ca-certificates.crt:/etc/ssl/certs/ca-certificates.crt:ro"
             "/etc/ssh/ssh_known_hosts:/etc/ssh/ssh_known_hosts:ro"
+            "/run/spire-agent:/run/spire-agent:ro"
           ];
           preBuildScript = pkgs.writeScript "setup-container" ''
             mkdir -p -m 0755 /nix/var/log/nix/drvs

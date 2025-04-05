@@ -20,6 +20,7 @@ let
     mkMerge
     mkOption
     nameValuePair
+    optional
     optionalString
     unique
     types
@@ -284,7 +285,7 @@ in
         systemd.services.render-vault-secrets = {
           wantedBy = cfg.wantedBy;
           before = cfg.wantedBy;
-          after = [ "network-online.target" ];
+          after = [ "network-online.target" ] ++ optional cfg.useSpiffe "spire-agent.service";
           wants = [ "network-online.target" ];
           path = with pkgs; [
             vault
