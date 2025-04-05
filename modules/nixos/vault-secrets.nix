@@ -295,6 +295,12 @@ in
             jq
           ];
           preStart = mkIf cfg.useSpiffe ''
+            # wait a bit for the spire-agent socket to be available
+            for ((i=0; i<5; i++)); do
+              [ -S /run/spire-agent/api.sock ] && break
+              sleep 2
+            done
+
             spire-agent api fetch -socketPath /run/spire-agent/api.sock -write /run/vault-secrets-certs
           '';
           script = ''
