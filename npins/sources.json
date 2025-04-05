@@ -103,9 +103,9 @@
       },
       "branch": "master",
       "submodules": false,
-      "revision": "9bf9c83944c7a02655b2046bf5366ed0d5f9b296",
-      "url": "https://github.com/MrOtherGuy/firefox-csshacks/archive/9bf9c83944c7a02655b2046bf5366ed0d5f9b296.tar.gz",
-      "hash": "0np12mj0hhawx5cf12bj6920cjfxwivgvbs97b790lmk18hwagy4"
+      "revision": "be179ef099846d18ee4b1e36c506b0e529a29b9e",
+      "url": "https://github.com/MrOtherGuy/firefox-csshacks/archive/be179ef099846d18ee4b1e36c506b0e529a29b9e.tar.gz",
+      "hash": "0hyrkwmhfwnssq68r7cmirn3w8y9llx6x0sl8rvnx1brf26dgfxp"
     },
     "hardware": {
       "type": "Git",
@@ -197,9 +197,9 @@
       },
       "branch": "deploy/nixos-unstable-small",
       "submodules": false,
-      "revision": "0c79d184c3c353be1f82d8479913fd90194a9ea2",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=0c79d184c3c353be1f82d8479913fd90194a9ea2",
-      "hash": "1k3zn1s8pza7l0j5wb1g6jfzm9zlbh2ny3rljq83y7cmwmjg1qr2"
+      "revision": "f7fdd7faf065b28cf1beca0e40c953f202f1b025",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=f7fdd7faf065b28cf1beca0e40c953f202f1b025",
+      "hash": "1amddg7sr5y4a30an1l2flbjmalcnza20xmwq729sibrcn2jsh56"
     },
     "nixpkgs": {
       "type": "Git",
@@ -223,9 +223,9 @@
       },
       "branch": "main",
       "submodules": false,
-      "revision": "055188f9b4f6d92d7d19d2f1d004628661ea58d7",
-      "url": "https://github.com/bandithedoge/nixpkgs-firefox-darwin/archive/055188f9b4f6d92d7d19d2f1d004628661ea58d7.tar.gz",
-      "hash": "084x97b74zkal6886ihrgskaa1gbj6ahixzk4dwnyi51iz838fr4"
+      "revision": "767b994a4171d8fefd4f4b46a8f2ce2f0e639e0d",
+      "url": "https://github.com/bandithedoge/nixpkgs-firefox-darwin/archive/767b994a4171d8fefd4f4b46a8f2ce2f0e639e0d.tar.gz",
+      "hash": "0swx9f67cd4pdc7d2qpa07sbnayafa3iiaan8p50ka5m34zfffrp"
     },
     "preservation": {
       "type": "Git",
@@ -249,9 +249,9 @@
       },
       "branch": "master",
       "submodules": false,
-      "revision": "31fad27c785e1da95fbc6fd2761818beb7376ffb",
-      "url": "https://gitlab.com/api/v4/projects/rycee%2Fnur-expressions/repository/archive.tar.gz?sha=31fad27c785e1da95fbc6fd2761818beb7376ffb",
-      "hash": "04wvlm000ain9v8ijmavrnam9mkvpq31b51yinljhc8bipimmcln"
+      "revision": "69450e4ad56e5d186e344d6434697daa75e28951",
+      "url": "https://gitlab.com/api/v4/projects/rycee%2Fnur-expressions/repository/archive.tar.gz?sha=69450e4ad56e5d186e344d6434697daa75e28951",
+      "hash": "028lff4j4j7kis6hbkfah88n27p4hpll4afj2vb2idj0qfb2lda5"
     }
   },
   "version": 5
