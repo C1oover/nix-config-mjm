@@ -30,7 +30,7 @@ devshell.mkShell (
 
     env = [
       (nameValuePair "CONSUL_HTTP_ADDR" "consul.service.consul:8500")
-      (nameValuePair "VAULT_ADDR" "http://vault.service.consul:8200")
+      (nameValuePair "VAULT_ADDR" "https://vault.midna.dev")
     ];
   }
 )
