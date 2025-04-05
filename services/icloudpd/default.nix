@@ -19,6 +19,7 @@ in
     mjm.state.services = [ "icloudpd" ];
 
     systemd.services.icloudpd = {
+      enable = false;
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
