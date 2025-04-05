@@ -75,6 +75,7 @@ in
         fi
       '';
       serviceConfig = {
+        Type = "exec";
         ExecStart = "${pkgs.spire-server}/bin/spire-server run -config ${configFile}";
         StateDirectory = "spire-server";
         RuntimeDirectory = "spire-server";

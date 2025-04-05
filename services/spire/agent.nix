@@ -71,6 +71,7 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       serviceConfig = {
+        Type = "exec";
         ExecStart = "${pkgs.spire-agent}/bin/spire-agent run -config ${configFile}";
         StateDirectory = "spire-agent";
         RuntimeDirectory = "spire-agent";

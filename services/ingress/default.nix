@@ -281,6 +281,7 @@ in
         wantedBy = [ "multi-user.target" ];
         before = [ "caddy.service" ];
         serviceConfig = {
+          Type = "exec";
           ExecStart = "${pkgs.spiffe-helper}/bin/spiffe-helper -config ${configFile}";
           CacheDirectory = "caddy";
           User = "caddy";

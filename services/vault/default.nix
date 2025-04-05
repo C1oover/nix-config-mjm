@@ -161,6 +161,7 @@ in
         wantedBy = [ "multi-user.target" ];
         before = [ "vault.service" ];
         serviceConfig = {
+          Type = "exec";
           ExecStart = "${pkgs.spiffe-helper}/bin/spiffe-helper -config ${configFile}";
           CacheDirectory = "vault";
           User = "vault";
