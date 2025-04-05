@@ -267,7 +267,7 @@ in
     systemd.services.caddy-certs =
       let
         configFile = pkgs.writeText "caddy-spiffe-helper.hcl" ''
-          agent_address = "/run/spire-agent/api.sock"
+          agent_address = "${config.mjm.spire.agent.socketPath}";
           cmd = "${pkgs.systemd}/bin/systemctl"
           cmd_args = "reload caddy"
           cert_dir = "/var/cache/caddy"

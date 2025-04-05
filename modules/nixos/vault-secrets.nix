@@ -297,15 +297,15 @@ in
           preStart = mkIf cfg.useSpiffe ''
             # wait a bit for the spire-agent socket to be available
             for ((i=0; i<5; i++)); do
-              [ -S /run/spire-agent/api.sock ] && break
+              [ -S ${config.mjm.spire.agent.socketPath} ] && break
               sleep 2
             done
 
-            spire-agent api fetch -socketPath /run/spire-agent/api.sock -write /run/vault-secrets-certs
+            spire-agent api fetch -socketPath ${config.mjm.spire.agent.socketPath} -write /run/vault-secrets-certs
           '';
           script = ''
             ${optionalString cfg.useSpiffe ''
-              jwt="$(spire-agent api fetch jwt -audience $VAULT_ADDR -output json -socketPath /run/spire-agent/api.sock | jq -r '.[0].svids[0].svid')"
+              jwt="$(spire-agent api fetch jwt -audience $VAULT_ADDR -output json -socketPath ${config.mjm.spire.agent.socketPath} | jq -r '.[0].svids[0].svid')"
               VAULT_TOKEN="$(vault write -field=token auth/spiffe/login role=spiffe jwt=$jwt)"
             ''}
             ${optionalString (!cfg.useSpiffe) ''

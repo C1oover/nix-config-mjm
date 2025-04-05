@@ -87,7 +87,7 @@ in
       ];
       requires = [ "conduwuit-tunnel.socket" ];
 
-      environment.SPIFFE_ENDPOINT_SOCKET = "unix:/run/spire-agent/api.sock";
+      environment.SPIFFE_ENDPOINT_SOCKET = "unix:${config.mjm.spire.agent.socketPath}";
 
       serviceConfig = {
         Type = "notify-reload";

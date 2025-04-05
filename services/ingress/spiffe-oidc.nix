@@ -17,7 +17,7 @@ let
     listen_socket_path = "/run/oidc-discovery-provider/server.sock"
 
     workload_api {
-      socket_path = "/run/spire-agent/api.sock"
+      socket_path = "${config.mjm.spire.agent.socketPath}"
       trust_domain = "home.mattmoriarity.com"
     }
   '';

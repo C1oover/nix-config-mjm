@@ -18,7 +18,7 @@ let
     agent {
       trust_domain = "home.mattmoriarity.com"
       data_dir = "/var/lib/spire-agent"
-      socket_path = "/run/spire-agent/api.sock"
+      socket_path = "${cfg.agent.socketPath}"
       ${optionalString (cfg.agent.joinToken != null) ''join_token = "${cfg.agent.joinToken}"''}
 
       server_address = "arges.home.mattmoriarity.com"
@@ -52,9 +52,16 @@ in
 {
   options.mjm.spire.agent = {
     enable = mkEnableOption "SPIRE agent";
+
     joinToken = mkOption {
       type = types.nullOr types.str;
       default = null;
+    };
+
+    socketPath = mkOption {
+      type = types.path;
+      default = "/run/spire-agent/api.sock";
+      readOnly = true;
     };
   };
 
@@ -87,7 +94,7 @@ in
       pkgs.spire-agent
       (pkgs.writeShellScriptBin ",spire" ''
         set -o errexit
-        ${pkgs.spire-agent}/bin/spire-agent "$@" -socketPath /run/spire-agent/api.sock
+        ${pkgs.spire-agent}/bin/spire-agent "$@" -socketPath ${cfg.agent.socketPath}
       '')
     ];
   };
