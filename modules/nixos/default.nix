@@ -22,7 +22,6 @@
     ./state.nix
     ./userborn.nix
     ./vault.nix
-    ./vault-agent.nix
     ./vault-secrets.nix
   ];
 }
