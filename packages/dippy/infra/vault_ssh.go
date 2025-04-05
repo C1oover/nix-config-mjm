@@ -8,7 +8,7 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-const sshHostLeaseDuration = pulumi.Int(10 * 365 * 24 * time.Hour / time.Second)
+const sshHostLeaseDuration = pulumi.Int(14 * 24 * time.Hour / time.Second)
 
 func setUpVaultSSH(ctx *pulumi.Context) error {
 	clientSigner, err := vault.NewMount(ctx, "ssh-client-signer", &vault.MountArgs{
