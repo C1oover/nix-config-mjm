@@ -21,11 +21,11 @@ let
   cfg = config.mjm.ssh;
 
   sshTrustedKeys = builtins.fetchurl {
-    url = "http://vault.service.consul:8200/v1/ssh-client-signer/public_key";
+    url = "https://vault.midna.dev/v1/ssh-client-signer/public_key";
     sha256 = "12kcpl2mnfds458fv0c0jb0lz122q9jd7vqcfc7cw27giqis2dgl";
   };
   sshHostCA = builtins.fetchurl {
-    url = "http://vault.service.consul:8200/v1/ssh-host-signer/public_key";
+    url = "https://vault.midna.dev/v1/ssh-host-signer/public_key";
     sha256 = "1zy0wvd26iaypwf7zpvdxfhmabdg191q4986aw993j23q87z3g59";
   };
 
