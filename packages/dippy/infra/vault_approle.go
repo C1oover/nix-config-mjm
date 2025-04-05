@@ -74,6 +74,11 @@ func setUpVaultAppRoles(
 		entity, err := identity.NewEntity(ctx, "host-"+name, &identity.EntityArgs{
 			Name:     pulumi.Sprintf("host: %s", name),
 			Policies: tokenPolicies,
+			Metadata: pulumi.StringMap{
+				"hostname": pulumi.String(name),
+				"domain":   pulumi.String("home.mattmoriarity.com"),
+				"fqdn":     pulumi.Sprintf("%s.home.mattmoriarity.com", name),
+			},
 		})
 		if err != nil {
 			return err
