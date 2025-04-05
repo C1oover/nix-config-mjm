@@ -13,6 +13,7 @@ let
     mkIf
     mkMerge
     mkOption
+    optionalString
     types
     ;
 
@@ -103,6 +104,10 @@ in
                             type = types.nullOr types.str;
                             default = null;
                           };
+                          tls = mkOption {
+                            type = types.bool;
+                            default = false;
+                          };
                         };
 
                         script = {
@@ -122,12 +127,15 @@ in
                           id = mkDefault config.id;
                           name = mkDefault config.name;
                           http = mkMerge [
-                            (mkIf (config.http.path != null) "http://localhost:${toString svcPort}${config.http.path}")
+                            (mkIf (
+                              config.http.path != null
+                            ) "http${optionalString config.http.tls "s"}://localhost:${toString svcPort}${config.http.path}")
                             (mkIf (config.http.url != null) config.http.url)
                           ];
                           args = mkIf (config.script.args != null) config.script.args;
                           interval = mkDefault "${toString config.intervalSeconds}s";
                           timeout = mkDefault "${toString config.timeoutSeconds}s";
+                          tls_skip_verify = mkIf config.http.tls true;
                         };
                       };
                     }

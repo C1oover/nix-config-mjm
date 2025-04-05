@@ -76,8 +76,8 @@ in
       port = 8222;
 
       checks.up = {
-        # TODO hit the TLS one
-        http.url = "http://localhost:8221/alive";
+        http.path = "/alive";
+        http.tls = true;
       };
     };
 
