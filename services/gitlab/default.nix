@@ -57,7 +57,10 @@ in
 
     ingress.virtualHosts = {
       git = {
-        upstream.service.name = "gitlab";
+        upstream = {
+          service.name = "gitlab";
+          tls.enable = true;
+        };
 
         enableAuthProxy = false;
         useIPv4Proxy = true;
@@ -242,22 +245,10 @@ in
       redirectUris = [ redirectUri ];
     };
 
-    services.caddy = {
-      enable = true;
-      globalConfig = ''
-        auto_https off
-        servers {
-          trusted_proxies static 10.0.0.3 10.0.0.4 ${config.mjm.ipv6Prefix}:dea6:32ff:fed5:d840 ${config.mjm.ipv6Prefix}:dea6:32ff:fe96:bc05
-        }
-      '';
-      virtualHosts.":80" = {
-        extraConfig = ''
-          reverse_proxy unix//run/gitlab/gitlab-workhorse.socket {
-            header_up Host git.midna.dev:443
-            header_up X-Forwarded-Proto https
-          }
-        '';
-      };
+    mjm.spire.tunnels.gitlab = {
+      mode = "server";
+      port = 8443;
+      target = "unix:/run/gitlab/gitlab-workhorse.socket";
     };
 
     networking.firewall.allowedTCPPorts = [
@@ -267,10 +258,11 @@ in
 
     services.consul.services = {
       gitlab = {
-        port = 80;
+        port = 8443;
 
         checks.up = {
           http.path = "/-/readiness";
+          http.tls = true;
         };
       };
       gitlab-pages = {
