@@ -1,6 +1,4 @@
 {
-  imports = [ ./secrets.nix ];
-
   mjm.username = "mjm";
 
   networking.hostName = "demeter";
@@ -74,6 +72,7 @@
   };
   mjm.remote-builder.enable = true;
   mjm.server.enable = true;
+  mjm.spire.agent.enable = true;
 
   system.stateVersion = "25.05";
 }

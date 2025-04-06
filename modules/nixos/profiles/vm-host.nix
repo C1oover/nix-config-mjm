@@ -48,6 +48,7 @@ in
     };
     mjm.remote-builder.enable = true;
     mjm.server.enable = true;
+    mjm.spire.agent.enable = true;
 
     services.openiscsi = {
       enable = true;
