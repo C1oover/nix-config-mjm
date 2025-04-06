@@ -1,8 +1,4 @@
 {
-  imports = [
-    ./secrets.nix
-  ];
-
   mjm.username = "mjm";
 
   networking.hostName = "melinoe";
