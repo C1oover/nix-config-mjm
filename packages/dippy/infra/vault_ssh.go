@@ -45,14 +45,15 @@ func setUpVaultSSH(ctx *pulumi.Context) error {
 	}
 
 	if _, err := ssh.NewSecretBackendRole(ctx, "homelab-host", &ssh.SecretBackendRoleArgs{
-		Backend:               hostSigner.Path,
-		Name:                  pulumi.String("homelab-host"),
-		KeyType:               pulumi.String("ca"),
-		Ttl:                   pulumi.Sprintf("%d", sshHostLeaseDuration),
-		AllowHostCertificates: pulumi.Bool(true),
-		AllowBareDomains:      pulumi.Bool(true),
-		AllowSubdomains:       pulumi.Bool(true),
-		AllowedDomains:        pulumi.String("home.mattmoriarity.com"),
+		Backend:                hostSigner.Path,
+		Name:                   pulumi.String("homelab-host"),
+		KeyType:                pulumi.String("ca"),
+		Ttl:                    pulumi.Sprintf("%d", sshHostLeaseDuration),
+		AllowHostCertificates:  pulumi.Bool(true),
+		AllowBareDomains:       pulumi.Bool(true),
+		AllowSubdomains:        pulumi.Bool(false),
+		AllowedDomains:         pulumi.String("{{identity.entity.metadata.fqdn}}"),
+		AllowedDomainsTemplate: pulumi.Bool(true),
 	}, pulumi.Protect(true)); err != nil {
 		return err
 	}
