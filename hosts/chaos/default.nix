@@ -1,8 +1,4 @@
 {
-  imports = [
-    ./secrets.nix
-  ];
-
   networking.hostName = "chaos";
 
   fileSystems."/nix" = {
