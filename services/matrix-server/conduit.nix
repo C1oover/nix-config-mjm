@@ -74,7 +74,6 @@ in
       mode = "server";
       port = 6167;
       target = "localhost:6166";
-      allowIngress = true;
     };
 
     services.consul.services.conduit = {
