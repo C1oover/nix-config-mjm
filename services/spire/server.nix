@@ -58,7 +58,14 @@ in
         databases = [ "spire-server" ];
       };
     };
-    mjm.state.services = [ "spire-server" ];
+    # mjm.state.services = [ "spire-server" ];
+    mjm.state.directories = [
+      {
+        directory = "/var/lib/private/spire-server";
+        user = "nobody";
+        group = "nogroup";
+      }
+    ];
 
     systemd.services.spire-server = {
       wantedBy = [ "multi-user.target" ];
