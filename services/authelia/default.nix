@@ -45,7 +45,7 @@ in
       settings = {
         theme = "auto";
         default_2fa_method = "webauthn";
-        server.address = "tcp://:9091";
+        server.address = "tcp://127.0.0.1:9191";
         telemetry.metrics = {
           enabled = true;
           address = "tcp://0.0.0.0:9959";
@@ -124,6 +124,13 @@ in
 
     services.redis.servers.authelia.enable = true;
 
+    mjm.spire.tunnels.authelia = {
+      mode = "server";
+      port = 9091;
+      target = "localhost:9191";
+      allowIngress = true;
+    };
+
     networking.firewall.allowedTCPPorts = [
       9091
       9959
@@ -137,13 +144,17 @@ in
 
       checks.up = {
         http.path = "/api/health";
+        http.port = 9191;
         intervalSeconds = 30;
       };
     };
 
     ingress.virtualHosts = {
       auth = {
-        upstream.service.name = "authelia";
+        upstream = {
+          service.name = "authelia";
+          tls.enable = true;
+        };
 
         enableAuthProxy = false;
         useIPv4Proxy = true;
