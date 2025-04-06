@@ -38,23 +38,6 @@ func setUpAuthSPIFFE(
 		return nil, err
 	}
 
-	entity, err := identity.NewEntity(ctx, "repo-nix-config", &identity.EntityArgs{
-		Name: pulumi.String("repo: nix-config"),
-		Policies: pulumi.StringArray{
-			pulumi.String("repo-nix-config"),
-		},
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	if _, err := identity.NewEntityAlias(ctx, "spiffe-repo-nix-config", &identity.EntityAliasArgs{
-		Name:          pulumi.String("spiffe://home.mattmoriarity.com/ci/repo/nix-config"),
-		CanonicalId:   entity.ID(),
-		MountAccessor: backend.Accessor,
-	}); err != nil {
-		return nil, err
-	}
 
 	svcs := map[string]*VaultService{}
 	for name, paths := range services {

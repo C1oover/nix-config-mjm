@@ -49,7 +49,8 @@ func deploy(input *Input) func(*pulumi.Context) error {
 			return err
 		}
 
-		if _, err := setUpAuthSPIFFE(ctx, input.VaultServices, input.VaultPolicies, input.VaultRoles); err != nil {
+		spiffe, err := setUpAuthSPIFFE(ctx, input.VaultServices, input.VaultPolicies, input.VaultRoles)
+		if err != nil {
 			return err
 		}
 
@@ -57,7 +58,7 @@ func deploy(input *Input) func(*pulumi.Context) error {
 			return err
 		}
 
-		if err := setUpVaultGitLab(ctx); err != nil {
+		if err := setUpVaultGitLab(ctx, spiffe); err != nil {
 			return err
 		}
 
