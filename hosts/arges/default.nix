@@ -26,6 +26,7 @@
   };
   mjm.remote-builder.enable = true;
   mjm.server.enable = true;
+  mjm.spire.agent.enable = true;
   mjm.spire.server.enable = true;
   mjm.state = {
     enablePreservation = true;

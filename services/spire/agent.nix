@@ -21,7 +21,7 @@ let
       socket_path = "${cfg.agent.socketPath}"
       ${optionalString (cfg.agent.joinToken != null) ''join_token = "${cfg.agent.joinToken}"''}
 
-      server_address = "arges.home.mattmoriarity.com"
+      server_address = "${cfg.agent.serverAddress}"
       server_port = 8081
       trust_bundle_path = "${./trust.pem}"
     }
@@ -52,6 +52,11 @@ in
 {
   options.mjm.spire.agent = {
     enable = mkEnableOption "SPIRE agent";
+
+    serverAddress = mkOption {
+      type = types.str;
+      default = if cfg.server.enable then "127.0.0.1" else "arges.home.mattmoriarity.com";
+    };
 
     joinToken = mkOption {
       type = types.nullOr types.str;
