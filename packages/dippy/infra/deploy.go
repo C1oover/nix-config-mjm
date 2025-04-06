@@ -49,12 +49,7 @@ func deploy(input *Input) func(*pulumi.Context) error {
 			return err
 		}
 
-		spiffe, err := setUpAuthSPIFFE(ctx)
-		if err != nil {
-			return err
-		}
-
-		if err := setUpVaultAppRoles(ctx, spiffe, input.VaultServices, input.VaultPolicies, input.VaultRoles); err != nil {
+		if _, err := setUpAuthSPIFFE(ctx, input.VaultServices, input.VaultPolicies, input.VaultRoles); err != nil {
 			return err
 		}
 
