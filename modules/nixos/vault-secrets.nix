@@ -20,8 +20,6 @@ let
     mkMerge
     mkOption
     nameValuePair
-    optional
-    optionalString
     unique
     types
     ;
@@ -205,33 +203,9 @@ in
         Folder where secrets are rendered.
       '';
     };
-    useSpiffe = mkOption {
-      type = types.bool;
-      default = config.mjm.spire.agent.enable;
-    };
-    roleId = mkOption {
-      type = types.str;
-      description = ''
-        Role ID for the AppRole to use to log in to Vault.
-      '';
-    };
-    encryptedSecretId = mkOption {
-      type = types.nullOr types.str;
-      default = null;
-      description = ''
-        Encrypted systemd credential containing the secret ID for the AppRole to use to log in to Vault.
-      '';
-    };
-    secretIdFile = mkOption {
-      type = types.str;
-      description = ''
-        Path to a file that contains the secret ID for the AppRole to use to log in to Vault.
-      '';
-    };
     vaultAddress = mkOption {
       type = types.str;
-      default =
-        if cfg.useSpiffe then "https://vault.service.consul:8250" else "http://vault.service.consul:8200";
+      default = "https://vault.service.consul:8250";
       description = ''
         Address to use to communicate with Vault.
       '';
@@ -265,12 +239,6 @@ in
 
   config = mkMerge [
     (mkIf (cfg.templates != { }) (mkMerge [
-      (mkIf (cfg.encryptedSecretId != null) {
-        systemd.services.render-vault-secrets.serviceConfig.LoadCredentialEncrypted = [
-          "secret-id:${pkgs.writeText "vault-secret-id" cfg.encryptedSecretId}"
-        ];
-        vault-secrets.secretIdFile = "$CREDENTIALS_DIRECTORY/secret-id";
-      })
       {
         fileSystems."/run/vault-secrets" = {
           device = "none";
@@ -285,7 +253,10 @@ in
         systemd.services.render-vault-secrets = {
           wantedBy = cfg.wantedBy;
           before = cfg.wantedBy;
-          after = [ "network-online.target" ] ++ optional cfg.useSpiffe "spire-agent.service";
+          after = [
+            "network-online.target"
+            "spire-agent.service"
+          ];
           wants = [ "network-online.target" ];
           path = with pkgs; [
             vault
@@ -294,7 +265,7 @@ in
             spire-agent
             jq
           ];
-          preStart = mkIf cfg.useSpiffe ''
+          preStart = ''
             # wait a bit for the spire-agent socket to be available
             for ((i=0; i<5; i++)); do
               [ -S ${config.mjm.spire.agent.socketPath} ] && break
@@ -304,22 +275,15 @@ in
             spire-agent api fetch -socketPath ${config.mjm.spire.agent.socketPath} -write /run/vault-secrets-certs
           '';
           script = ''
-            ${optionalString cfg.useSpiffe ''
-              jwt="$(spire-agent api fetch jwt -audience $VAULT_ADDR -output json -socketPath ${config.mjm.spire.agent.socketPath} | jq -r '.[0].svids[0].svid')"
-              VAULT_TOKEN="$(vault write -field=token auth/spiffe/login role=spiffe jwt=$jwt)"
-            ''}
-            ${optionalString (!cfg.useSpiffe) ''
-              role_id=${cfg.roleId}
-              secret_id_file="${cfg.secretIdFile}"
-              VAULT_TOKEN="$(vault write -field=token auth/approle/login role_id=$role_id secret_id=@$secret_id_file)"
-            ''}
+            jwt="$(spire-agent api fetch jwt -audience $VAULT_ADDR -output json -socketPath ${config.mjm.spire.agent.socketPath} | jq -r '.[0].svids[0].svid')"
+            VAULT_TOKEN="$(vault write -field=token auth/spiffe/login role=spiffe jwt=$jwt)"
             export VAULT_TOKEN
 
-            exec consul-template -config ${cfgFile} -exec true
+            exec consul-template -config ${cfgFile} -exec true -log-level info
           '';
           environment = {
             VAULT_ADDR = cfg.vaultAddress;
-            VAULT_CACERT = mkIf cfg.useSpiffe "/run/vault-secrets-certs/bundle.0.pem";
+            VAULT_CACERT = "/run/vault-secrets-certs/bundle.0.pem";
           };
           startLimitIntervalSec = 0;
           serviceConfig = {
