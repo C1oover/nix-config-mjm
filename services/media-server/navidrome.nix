@@ -13,19 +13,22 @@ in
     mjm.state.directories = [ "/var/lib/navidrome" ];
 
     ingress.virtualHosts.music = {
-      upstream.service.name = "navidrome";
+      upstream = {
+        service.name = "navidrome";
+        tls.enable = true;
+      };
     };
 
     services.navidrome = {
       enable = true;
-      openFirewall = true;
       settings = {
-        Address = "0.0.0.0";
-        Port = 4533;
+        # /run/navidrome is / inside the service
+        Address = "unix:/server.sock";
+        UnixSocketPerm = "0666";
         BaseUrl = "https://music.midna.dev";
         MusicFolder = "/videos/music";
         "Prometheus.Enabled" = true;
-        ReverseProxyWhitelist = "10.0.0.3/32,10.0.0.4/32,${config.mjm.ipv6Prefix}:dea6:32ff:fed5:d840/64,${config.mjm.ipv6Prefix}:dea6:32ff:fe96:bc05/64";
+        ReverseProxyWhitelist = "@";
       };
     };
 
@@ -41,12 +44,28 @@ in
       };
     };
 
+    mjm.spire.tunnels.navidrome = {
+      mode = "server";
+      port = 4533;
+      target = "unix:/run/navidrome/server.sock";
+      allowIngress = true;
+    };
+
     services.consul.services.navidrome = {
-      port = config.services.navidrome.settings.Port;
+      port = 4533;
       metrics.enable = true;
 
       checks.up = {
-        http.path = "/ping";
+        # consul can't do normal http checks to unix sockets, and the
+        # tunnel only allows requests from the ingress, so here we are.
+        script.args = [
+          (lib.getExe pkgs.curl)
+          "--no-progress-meter"
+          "--fail-with-body"
+          "--unix-socket"
+          "/run/navidrome/server.sock"
+          "http://localhost/ping"
+        ];
       };
     };
 
