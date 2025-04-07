@@ -10,7 +10,9 @@ in
       extraFlags = [ "-config.expand-env=true" ];
       settings = {
         server = {
+          http_listen_address = "127.0.0.1";
           http_listen_port = 3200;
+          grpc_listen_address = "127.0.0.1";
           grpc_listen_port = 3201;
         };
 
@@ -58,8 +60,6 @@ in
     };
 
     networking.firewall.allowedTCPPorts = [
-      3200
-      3201
       14317
       14318
     ];
