@@ -1,4 +1,9 @@
-{ inputs, config, ... }:
+{
+  inputs,
+  config,
+  pkgs,
+  ...
+}:
 {
   imports = [
     "${inputs.home-manager}/nix-darwin"
@@ -25,4 +30,6 @@
   environment.etc."sudoers.d/admin-no-passwd".text = ''
     %admin ALL = (ALL) NOPASSWD: ALL
   '';
+
+  environment.systemPackages = [ pkgs.openssh ];
 }
