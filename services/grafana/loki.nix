@@ -18,7 +18,8 @@ in
       configuration = {
         auth_enabled = false;
 
-        # server.http_listen_address = "127.0.0.1";
+        server.http_listen_address = "127.0.0.1";
+        # this listening on the host's actual IP seems to be important to loki functioning
         # server.grpc_listen_address = "127.0.0.1";
         server.grpc_listen_port = 3102;
 
@@ -122,8 +123,6 @@ in
         http.port = 3100;
       };
     };
-
-    networking.firewall.allowedTCPPorts = [ 3100 ];
 
     deployment.tests = {
       inherit (pkgs.nixosTests) loki;
