@@ -22,8 +22,8 @@ use crate::{
 pub fn router() -> Router<app::State> {
     Router::new()
         .route("/reminders", post(create))
-        .route("/reminders/:id", put(update).delete(delete))
-        .route("/reminders/:id/edit", get(edit))
+        .route("/reminders/{id}", put(update).delete(delete))
+        .route("/reminders/{id}/edit", get(edit))
 }
 
 #[serde_as]

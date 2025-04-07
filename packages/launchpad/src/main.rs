@@ -11,12 +11,12 @@ use clap::{Parser, Subcommand};
 use config::Config;
 use listenfd::ListenFd;
 use opentelemetry::{global, trace::TracerProvider};
-use opentelemetry_sdk::runtime;
-use tokio::net::TcpListener;
+use opentelemetry_sdk::trace as sdktrace;
+use tokio::net::{TcpListener, UnixListener};
 use tower_http::trace::TraceLayer;
 use tracing::Level;
 use tracing_opentelemetry::OpenTelemetryLayer;
-use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
+use tracing_subscriber::{prelude::*, EnvFilter};
 
 #[derive(Parser)]
 #[command(name = "launchpad")]
@@ -56,17 +56,26 @@ async fn main() {
                 .layer(TraceLayer::new_for_http());
 
             let mut listenfd = ListenFd::from_env();
-            let listener = match listenfd.take_tcp_listener(0).unwrap() {
-                Some(listener) => {
-                    listener.set_nonblocking(true).unwrap();
-                    TcpListener::from_std(listener).unwrap()
+            match listenfd.take_tcp_listener(0) {
+                Ok(maybe_listener) => {
+                    let tcp_listener = match maybe_listener {
+                        Some(listener) => {
+                            listener.set_nonblocking(true).unwrap();
+                            TcpListener::from_std(listener).unwrap()
+                        }
+                        None => TcpListener::bind(&config.bind_address).await.unwrap(),
+                    };
+
+                    serve(tcp_listener, app.into_make_service()).await.unwrap();
                 }
-                None => TcpListener::bind(&config.bind_address).await.unwrap(),
+                Err(_) => {
+                    let unix_listener =
+                        UnixListener::from_std(listenfd.take_unix_listener(0).unwrap().unwrap())
+                            .unwrap();
+                    serve(unix_listener, app.into_make_service()).await.unwrap();
+                }
             };
 
-            serve(listener, app.into_make_service()).await.unwrap();
-
-            global::shutdown_tracer_provider();
             tracer_provider.shutdown().unwrap();
         }
         Command::ProcessReminders => {
@@ -76,19 +85,19 @@ async fn main() {
                 .await
                 .expect("failed to process outstanding reminders");
 
-            global::shutdown_tracer_provider();
             tracer_provider.shutdown().unwrap();
         }
     }
 }
 
-fn init_tracing(config: &Config) -> opentelemetry_sdk::trace::TracerProvider {
-    let otlp_exporter = opentelemetry_otlp::new_exporter().tonic();
-    let provider = opentelemetry_otlp::new_pipeline()
-        .tracing()
-        .with_exporter(otlp_exporter)
-        .install_batch(runtime::Tokio)
+fn init_tracing(config: &Config) -> sdktrace::SdkTracerProvider {
+    let otlp_exporter = opentelemetry_otlp::SpanExporter::builder()
+        .with_http()
+        .build()
         .unwrap();
+    let provider = sdktrace::SdkTracerProvider::builder()
+        .with_batch_exporter(otlp_exporter)
+        .build();
 
     let tracer = provider.tracer("launchpad");
     global::set_tracer_provider(provider.clone());
@@ -96,7 +105,14 @@ fn init_tracing(config: &Config) -> opentelemetry_sdk::trace::TracerProvider {
     let fmt_layer = tracing_subscriber::fmt::layer();
 
     let registry = tracing_subscriber::registry()
-        .with(OpenTelemetryLayer::new(tracer))
+        .with(
+            OpenTelemetryLayer::new(tracer).with_filter(
+                EnvFilter::new("info")
+                    .add_directive("hyper=off".parse().unwrap())
+                    .add_directive("opentelemetry=off".parse().unwrap())
+                    .add_directive("hyper_util=off".parse().unwrap()),
+            ),
+        )
         .with(tracing_subscriber::filter::LevelFilter::from_level(
             Level::DEBUG,
         ));

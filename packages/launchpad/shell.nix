@@ -57,7 +57,7 @@ devshell.mkShell (
 
       (nameValuePair "OTEL_SERVICE_NAME" "launchpad")
       (nameValuePair "OTEL_RESOURCE_ATTRIBUTES" "deployment.environment.name=dev")
-      (nameValuePair "OTEL_EXPORTER_OTLP_ENDPOINT" "http://tempo.service.consul:14317")
+      (nameValuePair "OTEL_EXPORTER_OTLP_ENDPOINT" "http://tempo.service.consul:14318")
     ];
   }
 )

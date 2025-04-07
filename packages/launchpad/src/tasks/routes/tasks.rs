@@ -18,10 +18,10 @@ use crate::{
 pub fn router() -> Router<app::State> {
     Router::new()
         .route("/tasks", get(index).post(create))
-        .route("/tasks/:id", put(update).delete(delete))
-        .route("/tasks/:id/edit", get(edit))
-        .route("/tasks/:id/snooze", get(snooze_form).post(snooze))
-        .route("/tasks/:id/toggle", post(toggle))
+        .route("/tasks/{id}", put(update).delete(delete))
+        .route("/tasks/{id}/edit", get(edit))
+        .route("/tasks/{id}/snooze", get(snooze_form).post(snooze))
+        .route("/tasks/{id}/toggle", post(toggle))
 }
 
 #[tracing::instrument(skip(pool))]

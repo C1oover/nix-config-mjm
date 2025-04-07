@@ -13,10 +13,9 @@ let
 
   serviceEnv = {
     OTEL_SERVICE_NAME = "launchpad";
-    OTEL_EXPORTER_OTLP_ENDPOINT = "http://127.0.0.1:4317";
+    OTEL_EXPORTER_OTLP_ENDPOINT = "http://127.0.0.1:4318";
     OTEL_RESOURCE_ATTRIBUTES = "deployment.environment.name=prod";
     LAUNCHPAD_DATABASE_URL = "postgresql:///launchpad?host=/run/postgresql";
-    LAUNCHPAD_BIND_ADDRESS = "[::]:4100";
     LAUNCHPAD_GITLAB_TOKEN_FILE = "%d/launchpad__gitlab_token";
     LAUNCHPAD_PAPERLESS_TOKEN_FILE = "%d/launchpad__paperless_token";
     LAUNCHPAD_REMINDERS_TOPIC_FILE = "%d/launchpad__reminders_topic";
@@ -53,7 +52,11 @@ in
     mjm.otel-collector.enable = true;
 
     ingress.virtualHosts.launch = {
-      upstream.service.name = "launchpad";
+      upstream = {
+        service.name = "launchpad";
+        tls.enable = true;
+      };
+
       useIPv4Proxy = true;
     };
 
@@ -93,15 +96,26 @@ in
       };
     };
 
+    systemd.sockets.launchpad = {
+      wantedBy = [ "sockets.target" ];
+      partOf = [ "launchpad.service" ];
+      socketConfig = {
+        ListenStream = "/run/launchpad.sock";
+      };
+    };
+
     systemd.services.launchpad = {
       wantedBy = [ "multi-user.target" ];
       after = [
         "network.target"
         "postgresql.service"
+        "launchpad.socket"
       ];
+      requires = [ "launchpad.socket" ];
       environment = serviceEnv;
 
       serviceConfig = {
+        Type = "exec";
         ExecStart = "${pkg}/bin/launchpad serve";
         Restart = "always";
         DynamicUser = true;
@@ -114,7 +128,10 @@ in
       restartIfChanged = false;
       environment = serviceEnv;
 
-      after = [ "postgresql.service" ];
+      after = [
+        "network.target"
+        "postgresql.service"
+      ];
 
       serviceConfig = {
         Type = "oneshot";
@@ -132,13 +149,27 @@ in
       };
     };
 
-    networking.firewall.allowedTCPPorts = [ 4100 ];
+    mjm.spire.tunnels.launchpad = {
+      mode = "server";
+      port = 4100;
+      target = "unix:/run/launchpad.sock";
+      allowIngress = true;
+    };
 
     services.consul.services.launchpad = {
       port = 4100;
 
       checks.up = {
-        http.path = "/healthz";
+        # consul can't do normal http checks to unix sockets, and the
+        # tunnel only allows requests from the ingress, so here we are.
+        script.args = [
+          (lib.getExe pkgs.curl)
+          "--no-progress-meter"
+          "--fail-with-body"
+          "--unix-socket"
+          "/run/launchpad.sock"
+          "http://localhost/healthz"
+        ];
         intervalSeconds = 30;
       };
     };
