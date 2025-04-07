@@ -32,7 +32,11 @@ in
     };
 
     ingress.virtualHosts.graphs = {
-      upstream.service.name = "grafana";
+      upstream = {
+        service.name = "grafana";
+        tls.enable = true;
+      };
+
       enableAuthProxy = false;
       useIPv4Proxy = true;
     };
@@ -41,7 +45,9 @@ in
       enable = true;
       settings = {
         server = {
-          http_addr = "0.0.0.0";
+          protocol = "socket";
+          socket = "/run/grafana/server.sock";
+          socket_mode = "0666";
           domain = "graphs.midna.dev";
           root_url = "https://graphs.midna.dev";
         };
@@ -85,7 +91,12 @@ in
       redirectUris = [ "https://graphs.midna.dev/login/generic_oauth" ];
     };
 
-    networking.firewall.allowedTCPPorts = [ 3000 ];
+    mjm.spire.tunnels.grafana = {
+      mode = "server";
+      port = 3000;
+      target = "unix:/run/grafana/server.sock";
+      allowIngress = true;
+    };
 
     services.consul.services.grafana = {
       port = 3000;
@@ -93,6 +104,7 @@ in
 
       checks.up = {
         http.path = "/api/health";
+        http.socket = "/run/grafana/server.sock";
       };
     };
 

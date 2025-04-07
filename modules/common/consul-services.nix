@@ -108,6 +108,10 @@ in
                             type = types.nullOr types.str;
                             default = null;
                           };
+                          socket = mkOption {
+                            type = types.nullOr types.path;
+                            default = null;
+                          };
                           tls = mkOption {
                             type = types.bool;
                             default = false;
@@ -130,13 +134,23 @@ in
                         checkConfig = {
                           id = mkDefault config.id;
                           name = mkDefault config.name;
-                          http = mkMerge [
+                          http = mkIf (config.http.socket == null) (mkMerge [
                             (mkIf (config.http.path != null)
                               "http${optionalString config.http.tls "s"}://localhost:${toString config.http.port}${config.http.path}"
                             )
                             (mkIf (config.http.url != null) config.http.url)
+                          ]);
+                          args = mkMerge [
+                            (mkIf (config.script.args != null) config.script.args)
+                            (mkIf (config.http.socket != null) [
+                              (lib.getExe pkgs.curl)
+                              "--no-progress-meter"
+                              "--fail-with-body"
+                              "--unix-socket"
+                              config.http.socket
+                              "http://localhost${config.http.path}"
+                            ])
                           ];
-                          args = mkIf (config.script.args != null) config.script.args;
                           interval = mkDefault "${toString config.intervalSeconds}s";
                           timeout = mkDefault "${toString config.timeoutSeconds}s";
                           tls_skip_verify = mkIf config.http.tls true;
