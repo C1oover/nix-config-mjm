@@ -9,7 +9,9 @@ let
     getExe
     mkEnableOption
     mkIf
+    mkOption
     optional
+    types
     ;
   cfg = config.mjm.git;
 
@@ -40,6 +42,26 @@ in
       default = config.mjm.desktop.enable;
     };
 
+    enableKaleidoscope = mkEnableOption "Kaleidoscope merge tool" // {
+      default = pkgs.stdenv.isDarwin && config.mjm.desktop.enable;
+    };
+
+    mergeTool = mkOption {
+      type = types.nullOr (
+        types.enum [
+          "meld"
+          "ksdiff"
+        ]
+      );
+      default =
+        if cfg.enableKaleidoscope then
+          "ksdiff"
+        else if cfg.enableMeld then
+          "meld"
+        else
+          null;
+    };
+
     enableSigning = mkEnableOption "commit signing with SSH key" // {
       default = true;
     };
@@ -59,7 +81,19 @@ in
           default-command = "log";
           diff.format = "git";
           diff-editor = ":builtin";
-          merge-editor = mkIf cfg.enableMeld "meld";
+          merge-editor = mkIf (cfg.mergeTool != null) cfg.mergeTool;
+        };
+
+        merge-tools.ksdiff = mkIf cfg.enableKaleidoscope {
+          merge-args = [
+            "--merge"
+            "--output"
+            "$output"
+            "--base"
+            "$base"
+            "$left"
+            "$right"
+          ];
         };
 
         core.fsmonitor = mkIf cfg.enableWatchman "watchman";
