@@ -18,6 +18,8 @@ in
       configuration = {
         auth_enabled = false;
 
+        # server.http_listen_address = "127.0.0.1";
+        # server.grpc_listen_address = "127.0.0.1";
         server.grpc_listen_port = 3102;
 
         querier.max_concurrent = 16;
@@ -114,16 +116,24 @@ in
       {{ end }}
     '';
 
-    networking.firewall.allowedTCPPorts = [ 3100 ];
+    mjm.spire.tunnels.loki = {
+      mode = "server";
+      port = 3103;
+      target = "localhost:3100";
+      allowedServices = [ "promtail" ];
+    };
 
     services.consul.services.loki = {
-      port = 3100;
+      port = 3103;
       metrics.enable = true;
 
       checks.up = {
         http.path = "/ready";
+        http.port = 3100;
       };
     };
+
+    networking.firewall.allowedTCPPorts = [ 3100 ];
 
     deployment.tests = {
       inherit (pkgs.nixosTests) loki;

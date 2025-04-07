@@ -26,7 +26,11 @@ let
       partOf = [ "${name}-tunnel.service" ];
       socketConfig = {
         FileDescriptorName = "ghostunnel";
-        ListenStream = "[::]:${toString tunnel.port}";
+        ListenStream =
+          if tunnel.mode == "server" then
+            "[::]:${toString tunnel.port}"
+          else
+            "127.0.0.1:${toString tunnel.port}";
       };
     };
   };
@@ -53,8 +57,15 @@ let
             "--target=${tunnel.target}"
             "--use-workload-api"
           ]
-          ++ optional (tunnel.allowedServices == [ ]) "--disable-authentication"
-          ++ (map (s: "--allow-uri=spiffe://home.mattmoriarity.com/svc/${s}") tunnel.allowedServices)
+          ++ (
+            if tunnel.mode == "server" then
+              (
+                optional (tunnel.allowedServices == [ ]) "--disable-authentication"
+                ++ (map (s: "--allow-uri=spiffe://home.mattmoriarity.com/svc/${s}") tunnel.allowedServices)
+              )
+            else
+              [ "--verify-uri=spiffe://home.mattmoriarity.com/svc/${tunnel.service}" ]
+          )
         );
         DynamicUser = true;
         Restart = "always";
@@ -94,6 +105,9 @@ in
             allowIngress = mkOption {
               type = types.bool;
               default = false;
+            };
+            service = mkOption {
+              type = types.str;
             };
           };
 

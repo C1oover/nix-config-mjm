@@ -9,7 +9,7 @@ in
       enable = true;
       configuration = {
         server.http_listen_port = 3101;
-        clients = [ { url = "http://loki.service.consul:3100/loki/api/v1/push"; } ];
+        clients = [ { url = "http://localhost:13100/loki/api/v1/push"; } ];
 
         scrape_configs = [
           {
@@ -40,6 +40,13 @@ in
           }
         ];
       };
+    };
+
+    mjm.spire.tunnels.promtail-loki = {
+      mode = "client";
+      port = 13100;
+      target = "loki.service.consul:3103";
+      service = "loki";
     };
 
     services.consul.services.promtail = {
