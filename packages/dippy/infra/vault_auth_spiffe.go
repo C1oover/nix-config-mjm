@@ -1,6 +1,7 @@
 package infra
 
 import (
+	_ "embed"
 	"encoding/json"
 	"maps"
 
@@ -9,6 +10,9 @@ import (
 	"github.com/pulumi/pulumi-vault/sdk/v6/go/vault/jwt"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
+
+//go:embed service.hcl
+var servicePolicy string
 
 func setUpAuthSPIFFE(
 	ctx *pulumi.Context,
@@ -38,11 +42,20 @@ func setUpAuthSPIFFE(
 		return nil, err
 	}
 
+	servicePolicy, err := vault.NewPolicy(ctx, "service", &vault.PolicyArgs{
+		Name:   pulumi.String("service"),
+		Policy: pulumi.String(servicePolicy),
+	})
+	if err != nil {
+		return nil, err
+	}
 
 	svcs := map[string]*VaultService{}
 	for name, paths := range services {
 		s, err := newVaultService(ctx, name, &VaultServiceArgs{
-			Paths: pulumi.ToMap(paths),
+			SPIFFEBackend: backend,
+			ServicePolicy: servicePolicy,
+			Paths:         pulumi.ToMap(paths),
 		})
 		if err != nil {
 			return nil, err
@@ -107,7 +120,9 @@ type VaultService struct {
 }
 
 type VaultServiceArgs struct {
-	Paths pulumi.MapInput
+	SPIFFEBackend *jwt.AuthBackend
+	ServicePolicy *vault.Policy
+	Paths         pulumi.MapInput
 }
 
 func newVaultService(ctx *pulumi.Context, name string, args *VaultServiceArgs, opts ...pulumi.ResourceOption) (*VaultService, error) {
@@ -135,6 +150,26 @@ func newVaultService(ctx *pulumi.Context, name string, args *VaultServiceArgs, o
 		Policy: policy,
 	}, pulumi.Parent(vs))
 	if err != nil {
+		return nil, err
+	}
+
+	entity, err := identity.NewEntity(ctx, "service-"+name, &identity.EntityArgs{
+		Name: pulumi.Sprintf("service: %s", name),
+		// TODO add additional custom policies
+		Policies: pulumi.StringArray{args.ServicePolicy.Name},
+		Metadata: pulumi.StringMap{
+			"service": pulumi.String(name),
+		},
+	}, pulumi.Parent(vs))
+	if err != nil {
+		return nil, err
+	}
+
+	if _, err := identity.NewEntityAlias(ctx, "spiffe-service-"+name, &identity.EntityAliasArgs{
+		Name:          pulumi.Sprintf("spiffe://home.mattmoriarity.com/svc/%s", name),
+		CanonicalId:   entity.ID(),
+		MountAccessor: args.SPIFFEBackend.Accessor,
+	}, pulumi.Parent(vs)); err != nil {
 		return nil, err
 	}
 
