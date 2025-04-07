@@ -2,11 +2,22 @@
   pkgs,
   config,
   lib,
+  utils,
   ...
 }:
 let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.mjm.authelia;
+
+  keys = map (k: "${k}:/run/authelia-creds.sock") [
+    "jwt_secret"
+    "hmac_secret"
+    "jwt_private_key"
+    "ldap_password"
+    "session_secret"
+    "smtp_password"
+    "storage_encryption_key"
+  ];
 in
 {
   options.mjm.authelia = {
@@ -26,16 +37,16 @@ in
       };
       vault = {
         enable = true;
-        loadedBy = [ "authelia-main" ];
-        keys = {
-          jwt_secret = { };
-          hmac_secret = { };
-          jwt_private_key = { };
-          ldap_password = { };
-          session_secret = { };
-          smtp_password = { };
-          storage_encryption_key = { };
-        };
+        # loadedBy = [ "authelia-main" ];
+        # keys = {
+        #   jwt_secret = { };
+        #   hmac_secret = { };
+        #   jwt_private_key = { };
+        #   ldap_password = { };
+        #   session_secret = { };
+        #   smtp_password = { };
+        #   storage_encryption_key = { };
+        # };
       };
     };
     mjm.state.services = [ "redis-authelia" ];
@@ -101,13 +112,13 @@ in
       };
       secrets.manual = true;
       environmentVariables = {
-        AUTHELIA_AUTHENTICATION_BACKEND_LDAP_PASSWORD_FILE = "%d/authelia_ldap_password";
-        AUTHELIA_IDENTITY_PROVIDERS_OIDC_HMAC_SECRET_FILE = "%d/authelia_hmac_secret";
-        AUTHELIA_IDENTITY_PROVIDERS_OIDC_ISSUER_PRIVATE_KEY_FILE = "%d/authelia_jwt_private_key";
-        AUTHELIA_IDENTITY_VALIDATION_RESET_PASSWORD_JWT_SECRET_FILE = "%d/authelia_jwt_secret";
-        AUTHELIA_NOTIFIER_SMTP_PASSWORD_FILE = "%d/authelia_smtp_password";
-        AUTHELIA_SESSION_SECRET_FILE = "%d/authelia_session_secret";
-        AUTHELIA_STORAGE_ENCRYPTION_KEY_FILE = "%d/authelia_storage_encryption_key";
+        AUTHELIA_AUTHENTICATION_BACKEND_LDAP_PASSWORD_FILE = "%d/ldap_password";
+        AUTHELIA_IDENTITY_PROVIDERS_OIDC_HMAC_SECRET_FILE = "%d/hmac_secret";
+        AUTHELIA_IDENTITY_PROVIDERS_OIDC_ISSUER_PRIVATE_KEY_FILE = "%d/jwt_private_key";
+        AUTHELIA_IDENTITY_VALIDATION_RESET_PASSWORD_JWT_SECRET_FILE = "%d/jwt_secret";
+        AUTHELIA_NOTIFIER_SMTP_PASSWORD_FILE = "%d/smtp_password";
+        AUTHELIA_SESSION_SECRET_FILE = "%d/session_secret";
+        AUTHELIA_STORAGE_ENCRYPTION_KEY_FILE = "%d/storage_encryption_key";
       };
     };
 
@@ -119,10 +130,47 @@ in
       ];
       serviceConfig = {
         SupplementaryGroups = [ config.services.redis.servers.authelia.user ];
+        LoadCredential = keys;
       };
     };
 
     services.redis.servers.authelia.enable = true;
+
+    systemd.sockets.authelia-creds = {
+      wantedBy = [ "sockets.target" ];
+      partOf = [ "authelia-creds.service" ];
+      socketConfig = {
+        ListenStream = "/run/authelia-creds.sock";
+        SocketMode = "0600";
+      };
+    };
+
+    systemd.services.authelia-creds = {
+      wantedBy = [ "multi-user.target" ];
+      after = [
+        "network.target"
+        "authelia-creds.socket"
+      ];
+      requires = [
+        "authelia-creds.socket"
+      ];
+
+      environment = {
+        SPIFFE_ENDPOINT_SOCKET = "unix:${config.mjm.spire.agent.socketPath}";
+        VAULT_ADDR = "https://vault.service.consul:8250";
+      };
+
+      serviceConfig = {
+        Type = "notify";
+        ExecStart = utils.escapeSystemdExecArgs [
+          (lib.getExe pkgs.spire-secrets)
+          "-prefix"
+          "prod/services/authelia"
+          "server"
+        ];
+        DynamicUser = true;
+      };
+    };
 
     mjm.spire.tunnels.authelia = {
       mode = "server";
