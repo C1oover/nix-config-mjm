@@ -72,16 +72,6 @@ in
 
         schema_config.configs = [
           {
-            from = "2024-02-12";
-            store = "tsdb";
-            object_store = "s3";
-            schema = "v12";
-            index = {
-              prefix = "index_";
-              period = "24h";
-            };
-          }
-          {
             from = "2024-04-15";
             store = "tsdb";
             object_store = "s3";
