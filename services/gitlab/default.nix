@@ -2,12 +2,15 @@
   config,
   lib,
   pkgs,
+  utils,
   ...
 }:
 let
-  inherit (lib) genAttrs mkEnableOption mkIf;
+  inherit (lib) mkEnableOption mkIf;
   cfg = config.mjm.gitlab;
-  secrets = config.mjm.services.gitlab.vault.keys;
+
+  mkCred = name: "gitlab_${name}:/run/gitlab-creds.sock";
+  secretPath = svc: name: "/run/credentials/gitlab-${svc}.service/gitlab_${name}";
 
   clientId = "jVwrh7Lz6flakzaT6oLJJPAhRnyvLey0X33kVDVurMUAVPcfVPnrEt9XnBAoCE5r";
   redirectUri = "https://git.midna.dev/users/auth/openid_connect/callback";
@@ -21,23 +24,6 @@ in
     mjm.services.gitlab = {
       vault = {
         enable = true;
-        keys =
-          genAttrs
-            [
-              "aws_access_key_id"
-              "aws_secret_access_key"
-              "db_key_base"
-              "fastmail_password"
-              "initial_root_password"
-              "managed/oidc_client_secret"
-              "openid_connect_signing_key"
-              "otp_key_base"
-              "pages_api_secret_key"
-              "secret_key_base"
-            ]
-            (name: {
-              owner = config.services.gitlab.user;
-            });
       };
     };
     mjm.postgresql.enable = true;
@@ -48,12 +34,6 @@ in
       }
     ];
     mjm.state.services = [ "redis-gitlab" ];
-
-    vault-secrets.wantedBy = [
-      "gitlab-config.service"
-      "gitlab-pages.service"
-      "gitlab-workhorse.service"
-    ];
 
     ingress.virtualHosts = {
       git = {
@@ -109,25 +89,18 @@ in
 
     services.gitlab = {
       enable = true;
-      packages.gitlab = pkgs.gitlab-ee.overrideAttrs (old: {
-        # workaround https://gitlab.com/gitlab-org/gitlab/-/issues/534135
-        postPatch =
-          old.postPatch
-          + ''
-            sed -i '/CloudConnector/c super' ee/app/controllers/ee/jwks_controller.rb
-          '';
-      });
+      packages.gitlab = pkgs.gitlab-ee;
       host = "git.midna.dev";
       port = 443;
       https = true;
 
       secrets = {
-        secretFile = secrets.secret_key_base.path;
-        dbFile = secrets.db_key_base.path;
-        otpFile = secrets.otp_key_base.path;
-        jwsFile = secrets.openid_connect_signing_key.path;
+        secretFile = secretPath "config" "secret_key_base";
+        dbFile = secretPath "config" "db_key_base";
+        otpFile = secretPath "config" "otp_key_base";
+        jwsFile = secretPath "config" "openid_connect_signing_key";
       };
-      initialRootPasswordFile = secrets.initial_root_password.path;
+      initialRootPasswordFile = secretPath "db-config" "initial_root_password";
 
       pages = {
         enable = true;
@@ -142,8 +115,8 @@ in
         object_storage = {
           provider = "AWS";
           s3 = {
-            aws_access_key_id._secret = secrets.aws_access_key_id.path;
-            aws_secret_access_key._secret = secrets.aws_secret_access_key.path;
+            aws_access_key_id._secret = secretPath "workhorse" "aws_access_key_id";
+            aws_secret_access_key._secret = secretPath "workhorse" "aws_secret_access_key";
           };
         };
       };
@@ -153,7 +126,7 @@ in
         address = "smtp.fastmail.com";
         port = 465;
         username = "matt@mattmoriarity.com";
-        passwordFile = secrets.fastmail_password.path;
+        passwordFile = secretPath "config" "fastmail_password";
         enableStartTLSAuto = false;
         tls = true;
       };
@@ -176,8 +149,8 @@ in
           proxy_download = true;
           connection = {
             provider = "AWS";
-            aws_access_key_id._secret = secrets.aws_access_key_id.path;
-            aws_secret_access_key._secret = secrets.aws_secret_access_key.path;
+            aws_access_key_id._secret = secretPath "config" "aws_access_key_id";
+            aws_secret_access_key._secret = secretPath "config" "aws_secret_access_key";
             region = "home";
             endpoint = "http://garage.service.consul:3902";
             path_style = true;
@@ -224,7 +197,7 @@ in
                 pkce = true;
                 client_options = {
                   identifier = clientId;
-                  secret._secret = secrets."managed/oidc_client_secret".path;
+                  secret._secret = secretPath "config" "managed__oidc_client_secret";
                   redirect_uri = redirectUri;
                   gitlab = {
                     groups_attribute = "groups";
@@ -235,6 +208,60 @@ in
             }
           ];
         };
+      };
+    };
+
+    systemd.services.gitlab-config.serviceConfig.LoadCredential = map mkCred [
+      "secret_key_base"
+      "db_key_base"
+      "otp_key_base"
+      "openid_connect_signing_key"
+      "managed__oidc_client_secret"
+      "aws_access_key_id"
+      "aws_secret_access_key"
+      "fastmail_password"
+    ];
+    systemd.services.gitlab-db-config.serviceConfig.LoadCredential = [
+      (mkCred "initial_root_password")
+    ];
+    systemd.services.gitlab-workhorse.serviceConfig.LoadCredential = map mkCred [
+      "aws_access_key_id"
+      "aws_secret_access_key"
+    ];
+
+    systemd.sockets.gitlab-creds = {
+      wantedBy = [ "sockets.target" ];
+      partOf = [ "gitlab-creds.service" ];
+      socketConfig = {
+        ListenStream = "/run/gitlab-creds.sock";
+        SocketMode = "0600";
+      };
+    };
+
+    systemd.services.gitlab-creds = {
+      wantedBy = [ "multi-user.target" ];
+      after = [
+        "network.target"
+        "gitlab-creds.socket"
+      ];
+      requires = [
+        "gitlab-creds.socket"
+      ];
+
+      environment = {
+        SPIFFE_ENDPOINT_SOCKET = "unix:${config.mjm.spire.agent.socketPath}";
+        VAULT_ADDR = "https://vault.service.consul:8250";
+      };
+
+      serviceConfig = {
+        Type = "notify";
+        ExecStart = utils.escapeSystemdExecArgs [
+          (lib.getExe pkgs.spire-secrets)
+          "-path"
+          "prod/services/gitlab"
+          "server"
+        ];
+        DynamicUser = true;
       };
     };
 
@@ -262,16 +289,8 @@ in
         port = 8443;
 
         checks.up = {
-          # consul can't do normal http checks to unix sockets, and the
-          # tunnel only allows requests from the ingress, so here we are.
-          script.args = [
-            (lib.getExe pkgs.curl)
-            "--no-progress-meter"
-            "--fail-with-body"
-            "--unix-socket"
-            "/run/gitlab/gitlab-workhorse.socket"
-            "http://localhost/-/readiness"
-          ];
+          http.path = "/-/readiness";
+          http.socket = "/run/gitlab/gitlab-workhorse.socket";
         };
       };
       gitlab-pages = {
