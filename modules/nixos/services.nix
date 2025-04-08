@@ -1,9 +1,16 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
+}:
 let
   inherit (lib)
     attrNames
     attrValues
     concatMap
+    filter
     filterAttrs
     listToAttrs
     mkEnableOption
@@ -11,6 +18,7 @@ let
     mkMerge
     mkOption
     nameValuePair
+    pipe
     types
     ;
 
@@ -39,6 +47,14 @@ let
 
         vault = {
           enable = mkEnableOption "Vault service policy";
+
+          useSpiffeIdentity = mkEnableOption "per-service SPIFFE identity";
+
+          socketPath = mkOption {
+            type = types.path;
+            default = "/run/${name}-creds.sock";
+            readOnly = true;
+          };
 
           loadedBy = mkOption {
             type = types.listOf types.str;
@@ -76,6 +92,8 @@ let
 
   postgresServices = attrValues (filterAttrs (_: s: s.postgresql.enable) cfg);
   vaultServices = attrValues (filterAttrs (_: s: s.vault.enable) cfg);
+  legacyVaultServices = filter (s: !s.vault.useSpiffeIdentity) vaultServices;
+  spiffeVaultServices = filter (s: s.vault.useSpiffeIdentity) vaultServices;
 in
 {
   options.mjm.services = mkOption {
@@ -84,7 +102,9 @@ in
   };
 
   config = mkMerge [
+
     { deployment.tags = map (s: "svc-${s}") (attrNames cfg); }
+
     (mkIf (postgresServices != [ ]) {
       mjm.postgresql.enable = true;
 
@@ -99,12 +119,62 @@ in
         ) postgresServices;
       };
     })
+
     (mkIf (vaultServices != [ ]) {
       vault.services = listToAttrs (map (s: nameValuePair s.name { }) vaultServices);
 
       vault-secrets.services = listToAttrs (
-        map (s: nameValuePair s.name { inherit (s.vault) loadedBy keys; }) vaultServices
+        map (s: nameValuePair s.name { inherit (s.vault) loadedBy keys; }) legacyVaultServices
       );
     })
+
+    (mkIf (spiffeVaultServices != [ ]) {
+      systemd.services = pipe spiffeVaultServices [
+        (map (
+          { name, ... }:
+          nameValuePair "${name}-creds" {
+            wantedBy = [ "multi-user.target" ];
+            after = [
+              "network.target"
+              "${name}-creds.socket"
+            ];
+            requires = [ "${name}-creds.socket" ];
+
+            environment = {
+              SPIFFE_ENDPOINT_SOCKET = "unix:${config.mjm.spire.agent.socketPath}";
+              VAULT_ADDR = "https://vault.service.consul:8250";
+            };
+
+            serviceConfig = {
+              Type = "notify";
+              ExecStart = utils.escapeSystemdExecArgs [
+                (lib.getExe pkgs.spire-secrets)
+                "-path"
+                "prod/services/${name}"
+                "server"
+              ];
+              DynamicUser = true;
+            };
+          }
+        ))
+        listToAttrs
+      ];
+
+      systemd.sockets = pipe spiffeVaultServices [
+        (map (
+          { name, ... }:
+          nameValuePair "${name}-creds" {
+            wantedBy = [ "sockets.target" ];
+            partOf = [ "${name}-creds.service" ];
+            socketConfig = {
+              ListenStream = "/run/${name}-creds.sock";
+              SocketMode = "0600";
+            };
+          }
+        ))
+        listToAttrs
+      ];
+    })
+
   ];
 }

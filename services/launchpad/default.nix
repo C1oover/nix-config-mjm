@@ -2,7 +2,6 @@
   pkgs,
   config,
   lib,
-  utils,
   ...
 }:
 let
@@ -22,7 +21,7 @@ let
     LAUNCHPAD_ENABLE_PRETTY_OUTPUT = "false";
   };
 
-  keys = [
+  keys = map (k: "launchpad_${k}:${config.mjm.services.launchpad.vault.socketPath}") [
     "gitlab_token"
     "paperless_token"
     "reminders_topic"
@@ -38,15 +37,7 @@ in
       postgresql.enable = true;
       vault = {
         enable = true;
-        # loadedBy = [
-        #   "launchpad"
-        #   "launchpad-reminders"
-        # ];
-        # keys = {
-        #   gitlab_token = { };
-        #   paperless_token = { };
-        #   reminders_topic = { };
-        # };
+        useSpiffeIdentity = true;
       };
     };
     mjm.otel-collector.enable = true;
@@ -60,48 +51,10 @@ in
       useIPv4Proxy = true;
     };
 
-    systemd.sockets.launchpad-creds = {
-      wantedBy = [ "sockets.target" ];
-      partOf = [ "launchpad-creds.service" ];
-      socketConfig = {
-        ListenStream = "/run/launchpad-creds.sock";
-        SocketMode = "0600";
-      };
-    };
-
-    systemd.services.launchpad-creds = {
-      wantedBy = [ "multi-user.target" ];
-      after = [
-        "network.target"
-        "launchpad-creds.socket"
-      ];
-      requires = [
-        "launchpad-creds.socket"
-      ];
-
-      environment = {
-        SPIFFE_ENDPOINT_SOCKET = "unix:${config.mjm.spire.agent.socketPath}";
-        VAULT_ADDR = "https://vault.service.consul:8250";
-      };
-
-      serviceConfig = {
-        Type = "notify";
-        ExecStart = utils.escapeSystemdExecArgs [
-          (lib.getExe pkgs.spire-secrets)
-          "-path"
-          "prod/services/launchpad"
-          "server"
-        ];
-        DynamicUser = true;
-      };
-    };
-
     systemd.sockets.launchpad = {
       wantedBy = [ "sockets.target" ];
       partOf = [ "launchpad.service" ];
-      socketConfig = {
-        ListenStream = "/run/launchpad.sock";
-      };
+      socketConfig.ListenStream = "/run/launchpad.sock";
     };
 
     systemd.services.launchpad = {
@@ -120,7 +73,7 @@ in
         Restart = "always";
         DynamicUser = true;
         User = "launchpad";
-        LoadCredential = map (k: "launchpad_${k}:/run/launchpad-creds.sock") keys;
+        LoadCredential = keys;
       };
     };
 
@@ -138,7 +91,7 @@ in
         ExecStart = "${pkg}/bin/launchpad process-reminders";
         DynamicUser = true;
         User = "launchpad";
-        LoadCredential = map (k: "launchpad_${k}:/run/launchpad-creds.sock") keys;
+        LoadCredential = keys;
       };
     };
 

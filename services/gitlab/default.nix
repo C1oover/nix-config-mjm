@@ -2,14 +2,13 @@
   config,
   lib,
   pkgs,
-  utils,
   ...
 }:
 let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.mjm.gitlab;
 
-  mkCred = name: "gitlab_${name}:/run/gitlab-creds.sock";
+  mkCred = name: "gitlab_${name}:${config.mjm.services.gitlab.vault.socketPath}";
   secretPath = svc: name: "/run/credentials/gitlab-${svc}.service/gitlab_${name}";
 
   clientId = "jVwrh7Lz6flakzaT6oLJJPAhRnyvLey0X33kVDVurMUAVPcfVPnrEt9XnBAoCE5r";
@@ -24,6 +23,7 @@ in
     mjm.services.gitlab = {
       vault = {
         enable = true;
+        useSpiffeIdentity = true;
       };
     };
     mjm.postgresql.enable = true;
@@ -228,42 +228,6 @@ in
       "aws_access_key_id"
       "aws_secret_access_key"
     ];
-
-    systemd.sockets.gitlab-creds = {
-      wantedBy = [ "sockets.target" ];
-      partOf = [ "gitlab-creds.service" ];
-      socketConfig = {
-        ListenStream = "/run/gitlab-creds.sock";
-        SocketMode = "0600";
-      };
-    };
-
-    systemd.services.gitlab-creds = {
-      wantedBy = [ "multi-user.target" ];
-      after = [
-        "network.target"
-        "gitlab-creds.socket"
-      ];
-      requires = [
-        "gitlab-creds.socket"
-      ];
-
-      environment = {
-        SPIFFE_ENDPOINT_SOCKET = "unix:${config.mjm.spire.agent.socketPath}";
-        VAULT_ADDR = "https://vault.service.consul:8250";
-      };
-
-      serviceConfig = {
-        Type = "notify";
-        ExecStart = utils.escapeSystemdExecArgs [
-          (lib.getExe pkgs.spire-secrets)
-          "-path"
-          "prod/services/gitlab"
-          "server"
-        ];
-        DynamicUser = true;
-      };
-    };
 
     mjm.authelia.oidcClients.gitlab = {
       name = "GitLab";

@@ -2,14 +2,13 @@
   pkgs,
   config,
   lib,
-  utils,
   ...
 }:
 let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.mjm.authelia;
 
-  keys = map (k: "authelia_${k}:/run/authelia-creds.sock") [
+  keys = map (k: "authelia_${k}:${config.mjm.services.authelia.vault.socketPath}") [
     "jwt_secret"
     "hmac_secret"
     "jwt_private_key"
@@ -37,16 +36,7 @@ in
       };
       vault = {
         enable = true;
-        # loadedBy = [ "authelia-main" ];
-        # keys = {
-        #   jwt_secret = { };
-        #   hmac_secret = { };
-        #   jwt_private_key = { };
-        #   ldap_password = { };
-        #   session_secret = { };
-        #   smtp_password = { };
-        #   storage_encryption_key = { };
-        # };
+        useSpiffeIdentity = true;
       };
     };
     mjm.state.services = [ "redis-authelia" ];
@@ -135,42 +125,6 @@ in
     };
 
     services.redis.servers.authelia.enable = true;
-
-    systemd.sockets.authelia-creds = {
-      wantedBy = [ "sockets.target" ];
-      partOf = [ "authelia-creds.service" ];
-      socketConfig = {
-        ListenStream = "/run/authelia-creds.sock";
-        SocketMode = "0600";
-      };
-    };
-
-    systemd.services.authelia-creds = {
-      wantedBy = [ "multi-user.target" ];
-      after = [
-        "network.target"
-        "authelia-creds.socket"
-      ];
-      requires = [
-        "authelia-creds.socket"
-      ];
-
-      environment = {
-        SPIFFE_ENDPOINT_SOCKET = "unix:${config.mjm.spire.agent.socketPath}";
-        VAULT_ADDR = "https://vault.service.consul:8250";
-      };
-
-      serviceConfig = {
-        Type = "notify";
-        ExecStart = utils.escapeSystemdExecArgs [
-          (lib.getExe pkgs.spire-secrets)
-          "-path"
-          "prod/services/authelia"
-          "server"
-        ];
-        DynamicUser = true;
-      };
-    };
 
     mjm.spire.tunnels.authelia = {
       mode = "server";
