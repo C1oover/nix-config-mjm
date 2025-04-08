@@ -81,5 +81,20 @@ in
     users.users.${config.mjm.username}.extraGroups = [ "libvirtd" ];
 
     hardware.ksm.enable = true;
+
+    # this doesn't agree with zfs arc it seems
+    systemd.services.disable-mglru = {
+      wantedBy = [ "basic.target" ];
+      script = ''
+        ${pkgs.coreutils-full}/bin/echo n > /sys/kernel/mm/lru_gen/enabled
+      '';
+      serviceConfig = {
+        Type = "oneshot";
+      };
+      unitConfig = {
+        ConditionPathExists = "/sys/kernel/mm/lru_gen/enabled";
+        Description = "Disable Multi-Gen LRU";
+      };
+    };
   };
 }
