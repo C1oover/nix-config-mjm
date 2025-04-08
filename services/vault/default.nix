@@ -134,7 +134,7 @@ in
       polkit.addRule(function(action, subject) {
         if (action.id === "org.freedesktop.systemd1.manage-units" &&
             action.lookup("unit") === "vault.service" &&
-            action.lookup("verb") === "reload" &&
+            action.lookup("verb") === "reload-or-restart" &&
             subject.user === "vault") {
           return polkit.Result.YES;
         }
@@ -149,7 +149,7 @@ in
         configFile = pkgs.writeText "vault-spiffe-helper.hcl" ''
           agent_address = "${config.mjm.spire.agent.socketPath}"
           cmd = "${pkgs.systemd}/bin/systemctl"
-          cmd_args = "reload vault"
+          cmd_args = "reload-or-restart vault"
           cert_dir = "/var/cache/vault"
           daemon_mode = true
           svid_file_name = "cert.pem"
@@ -158,7 +158,10 @@ in
         '';
       in
       {
-        wantedBy = [ "multi-user.target" ];
+        wantedBy = [
+          "multi-user.target"
+          "vault.service"
+        ];
         before = [ "vault.service" ];
         serviceConfig = {
           Type = "exec";
@@ -166,6 +169,8 @@ in
           CacheDirectory = "vault";
           User = "vault";
           Group = "vault";
+          Restart = "always";
+          RestartSec = "5s";
         };
       };
     systemd.services.vault.serviceConfig.CacheDirectory = "vault";

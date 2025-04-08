@@ -9,6 +9,7 @@ let
     mkEnableOption
     mkIf
     mkOption
+    optional
     optionalString
     types
     ;
@@ -81,7 +82,9 @@ in
 
     systemd.services.spire-agent = {
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      after = [ "network.target" ] ++ optional cfg.server.enable "spire-server.service";
+      wants = mkIf cfg.server.enable [ "spire-server.service" ];
+      startLimitIntervalSec = 0;
       serviceConfig = {
         Type = "exec";
         ExecStart = "${pkgs.spire-agent}/bin/spire-agent run -config ${configFile}";
@@ -92,6 +95,8 @@ in
         User = "spire-agent";
         Group = "spire-agent";
         SupplementaryGroups = mkIf config.virtualisation.podman.enable [ "podman" ];
+        Restart = "always";
+        RestartSec = "5s";
       };
     };
 

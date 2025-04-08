@@ -267,7 +267,7 @@ in
       polkit.addRule(function(action, subject) {
         if (action.id === "org.freedesktop.systemd1.manage-units" &&
             action.lookup("unit") === "caddy.service" &&
-            action.lookup("verb") === "reload" &&
+            action.lookup("verb") === "reload-or-restart" &&
             subject.user === "caddy") {
           return polkit.Result.YES;
         }
@@ -282,7 +282,7 @@ in
         configFile = pkgs.writeText "caddy-spiffe-helper.hcl" ''
           agent_address = "${config.mjm.spire.agent.socketPath}"
           cmd = "${pkgs.systemd}/bin/systemctl"
-          cmd_args = "reload caddy"
+          cmd_args = "reload-or-restart caddy"
           cert_dir = "/var/cache/caddy"
           daemon_mode = true
           svid_file_name = "cert.pem"
@@ -291,7 +291,10 @@ in
         '';
       in
       {
-        wantedBy = [ "multi-user.target" ];
+        wantedBy = [
+          "multi-user.target"
+          "caddy.service"
+        ];
         before = [ "caddy.service" ];
         serviceConfig = {
           Type = "exec";
@@ -299,6 +302,8 @@ in
           CacheDirectory = "caddy";
           User = "caddy";
           Group = "caddy";
+          Restart = "always";
+          RestartSec = "5s";
         };
       };
     systemd.services.caddy.serviceConfig.CacheDirectory = "caddy";
