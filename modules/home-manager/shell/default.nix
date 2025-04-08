@@ -25,6 +25,7 @@ in
     {
       programs.atuin = {
         enable = true;
+        daemon.enable = true;
         settings = {
           sync_address = "https://atuin.midna.dev";
         };
