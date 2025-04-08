@@ -151,21 +151,14 @@ in
       };
     };
 
-    ingress.virtualHosts = {
-      auth = {
-        upstream = {
-          service.name = "authelia";
-          tls.enable = true;
-        };
-
-        enableAuthProxy = false;
-        useIPv4Proxy = true;
+    ingress.virtualHosts.auth = {
+      upstream = {
+        service.name = "authelia";
+        tls.enable = true;
       };
 
-      users = {
-        upstream.service.name = "lldap";
-        enableAuthProxy = false;
-      };
+      enableAuthProxy = false;
+      useIPv4Proxy = true;
     };
 
     deployment.tests = {
