@@ -6,8 +6,10 @@ import (
 	"fmt"
 	"io"
 	"log/slog"
+	"maps"
 	"net"
 	"path"
+	"slices"
 	"strings"
 	"time"
 
@@ -24,10 +26,32 @@ import (
 )
 
 var (
-	secretPrefix = flag.String("prefix", "", "prefix to prepend to credential key")
+	paths = map[string]string{}
 )
 
+type pathsValue struct {
+	Paths map[string]string
+}
+
+func (v pathsValue) String() string {
+	return ""
+}
+
+func (v pathsValue) Set(s string) error {
+	cmps := strings.Split(s, ":")
+	switch len(cmps) {
+	case 1:
+		v.Paths[path.Base(cmps[0])] = cmps[0]
+	case 2:
+		v.Paths[cmps[0]] = cmps[1]
+	default:
+		return fmt.Errorf("path value %q in unexpected format", s)
+	}
+	return nil
+}
+
 func main() {
+	flag.Var(&pathsValue{paths}, "path", "")
 	flag.Parse()
 	slog.Info("started", "args", os.Args)
 
@@ -104,11 +128,22 @@ func handleConn(ctx context.Context, c *api.Client, conn net.Conn) {
 		return
 	}
 
-	key := addrComps[3]
-	key = strings.ReplaceAll(key, "__", "/")
-	key = path.Join(*secretPrefix, key)
+	cmps := strings.SplitN(addrComps[3], "_", 2)
+	if len(cmps) < 2 {
+		slog.ErrorContext(ctx, "invalid credential id", "reason", "missing prefix followed by underscore", "cred_id", addrComps[3])
+		return
+	}
+	prefix := cmps[0]
+	pathPrefix, ok := paths[prefix]
+	if !ok {
+		allowedPrefixes := slices.Collect(maps.Keys(paths))
+		slog.ErrorContext(ctx, "invalid credential id", "reason", "unknown prefix", "prefix", prefix, "allowed_prefixes", allowedPrefixes)
+	}
 
-	slog.InfoContext(ctx, "fetching secret", "cred_key", addrComps[3], "path", key)
+	key := strings.ReplaceAll(cmps[1], "__", "/")
+	key = path.Join(pathPrefix, key)
+
+	slog.InfoContext(ctx, "fetching secret", "cred_id", addrComps[3], "path", key)
 	scrt, err := c.KVv2("kv").Get(ctx, path.Dir(key))
 	if err != nil {
 		slog.ErrorContext(ctx, "failed to fetch secret", "error", err)

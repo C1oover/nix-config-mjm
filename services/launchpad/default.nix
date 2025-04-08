@@ -16,9 +16,9 @@ let
     OTEL_EXPORTER_OTLP_ENDPOINT = "http://127.0.0.1:4318";
     OTEL_RESOURCE_ATTRIBUTES = "deployment.environment.name=prod";
     LAUNCHPAD_DATABASE_URL = "postgresql:///launchpad?host=/run/postgresql";
-    LAUNCHPAD_GITLAB_TOKEN_FILE = "%d/launchpad__gitlab_token";
-    LAUNCHPAD_PAPERLESS_TOKEN_FILE = "%d/launchpad__paperless_token";
-    LAUNCHPAD_REMINDERS_TOPIC_FILE = "%d/launchpad__reminders_topic";
+    LAUNCHPAD_GITLAB_TOKEN_FILE = "%d/launchpad_gitlab_token";
+    LAUNCHPAD_PAPERLESS_TOKEN_FILE = "%d/launchpad_paperless_token";
+    LAUNCHPAD_REMINDERS_TOPIC_FILE = "%d/launchpad_reminders_topic";
     LAUNCHPAD_ENABLE_PRETTY_OUTPUT = "false";
   };
 
@@ -88,8 +88,8 @@ in
         Type = "notify";
         ExecStart = utils.escapeSystemdExecArgs [
           (lib.getExe pkgs.spire-secrets)
-          "-prefix"
-          "prod/services"
+          "-path"
+          "prod/services/launchpad"
           "server"
         ];
         DynamicUser = true;
@@ -120,7 +120,7 @@ in
         Restart = "always";
         DynamicUser = true;
         User = "launchpad";
-        LoadCredential = map (k: "launchpad__${k}:/run/launchpad-creds.sock") keys;
+        LoadCredential = map (k: "launchpad_${k}:/run/launchpad-creds.sock") keys;
       };
     };
 
@@ -138,7 +138,7 @@ in
         ExecStart = "${pkg}/bin/launchpad process-reminders";
         DynamicUser = true;
         User = "launchpad";
-        LoadCredential = map (k: "launchpad__${k}:/run/launchpad-creds.sock") keys;
+        LoadCredential = map (k: "launchpad_${k}:/run/launchpad-creds.sock") keys;
       };
     };
 

@@ -9,7 +9,7 @@ let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.mjm.authelia;
 
-  keys = map (k: "${k}:/run/authelia-creds.sock") [
+  keys = map (k: "authelia_${k}:/run/authelia-creds.sock") [
     "jwt_secret"
     "hmac_secret"
     "jwt_private_key"
@@ -112,13 +112,13 @@ in
       };
       secrets.manual = true;
       environmentVariables = {
-        AUTHELIA_AUTHENTICATION_BACKEND_LDAP_PASSWORD_FILE = "%d/ldap_password";
-        AUTHELIA_IDENTITY_PROVIDERS_OIDC_HMAC_SECRET_FILE = "%d/hmac_secret";
-        AUTHELIA_IDENTITY_PROVIDERS_OIDC_ISSUER_PRIVATE_KEY_FILE = "%d/jwt_private_key";
-        AUTHELIA_IDENTITY_VALIDATION_RESET_PASSWORD_JWT_SECRET_FILE = "%d/jwt_secret";
-        AUTHELIA_NOTIFIER_SMTP_PASSWORD_FILE = "%d/smtp_password";
-        AUTHELIA_SESSION_SECRET_FILE = "%d/session_secret";
-        AUTHELIA_STORAGE_ENCRYPTION_KEY_FILE = "%d/storage_encryption_key";
+        AUTHELIA_AUTHENTICATION_BACKEND_LDAP_PASSWORD_FILE = "%d/authelia_ldap_password";
+        AUTHELIA_IDENTITY_PROVIDERS_OIDC_HMAC_SECRET_FILE = "%d/authelia_hmac_secret";
+        AUTHELIA_IDENTITY_PROVIDERS_OIDC_ISSUER_PRIVATE_KEY_FILE = "%d/authelia_jwt_private_key";
+        AUTHELIA_IDENTITY_VALIDATION_RESET_PASSWORD_JWT_SECRET_FILE = "%d/authelia_jwt_secret";
+        AUTHELIA_NOTIFIER_SMTP_PASSWORD_FILE = "%d/authelia_smtp_password";
+        AUTHELIA_SESSION_SECRET_FILE = "%d/authelia_session_secret";
+        AUTHELIA_STORAGE_ENCRYPTION_KEY_FILE = "%d/authelia_storage_encryption_key";
       };
     };
 
@@ -164,7 +164,7 @@ in
         Type = "notify";
         ExecStart = utils.escapeSystemdExecArgs [
           (lib.getExe pkgs.spire-secrets)
-          "-prefix"
+          "-path"
           "prod/services/authelia"
           "server"
         ];
