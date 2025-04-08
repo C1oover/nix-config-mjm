@@ -163,6 +163,8 @@ in
           "vault.service"
         ];
         before = [ "vault.service" ];
+        after = [ "spire-agent.service" ];
+        wants = [ "spire-agent.service" ];
         serviceConfig = {
           Type = "exec";
           ExecStart = "${pkgs.spiffe-helper}/bin/spiffe-helper -config ${configFile}";
