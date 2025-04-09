@@ -61,7 +61,7 @@ func NewClient(ctx context.Context) (*api.Client, error) {
 		defer jwtSource.Close()
 
 		svid, err := jwtSource.FetchJWTSVID(ctx, jwtsvid.Params{
-			Audience: "https://vault.service.consul:8250",
+			Audience: "https://vault.service.consul:8200",
 		})
 		if err != nil {
 			return nil, fmt.Errorf("fetching jwt svid: %w", err)

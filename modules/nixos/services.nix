@@ -142,7 +142,7 @@ in
 
             environment = {
               SPIFFE_ENDPOINT_SOCKET = "unix:${config.mjm.spire.agent.socketPath}";
-              VAULT_ADDR = "https://vault.service.consul:8250";
+              VAULT_ADDR = "https://vault.service.consul:8200";
             };
 
             serviceConfig = {

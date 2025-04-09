@@ -49,7 +49,7 @@ in
             "--tls-skip-verify"
             "--config=/run/vault-unseal/config"
           ]
-          ++ (map (n: "--nodes=https://${n}:8250") cfg.nodes)
+          ++ (map (n: "--nodes=https://${n}:8200") cfg.nodes)
         );
         LoadCredentialEncrypted = imap (
           i: token: "token${toString i}:${pkgs.writeText "unseal-token-${toString i}" token}"

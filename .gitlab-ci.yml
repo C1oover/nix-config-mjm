@@ -3,7 +3,7 @@ stages:
   - deploy
 variables:
   CONSUL_HTTP_ADDR: "consul.service.consul:8500"
-  VAULT_ADDR: "https://vault.service.consul:8250"
+  VAULT_ADDR: "https://vault.service.consul:8200"
   SPIFFE_ENDPOINT_SOCKET: unix:///run/spire-agent/api.sock
 build nixos hosts:
   tags: [nix]

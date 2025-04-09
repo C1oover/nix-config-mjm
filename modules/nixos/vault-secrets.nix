@@ -205,7 +205,7 @@ in
     };
     vaultAddress = mkOption {
       type = types.str;
-      default = "https://vault.service.consul:8250";
+      default = "https://vault.service.consul:8200";
       description = ''
         Address to use to communicate with Vault.
       '';
