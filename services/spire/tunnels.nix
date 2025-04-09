@@ -29,8 +29,12 @@ let
         ListenStream =
           if tunnel.mode == "server" then
             "[::]:${toString tunnel.port}"
+          else if tunnel.port != null then
+            "[::1]:${toString tunnel.port}"
+          else if tunnel.socket != null then
+            tunnel.socket
           else
-            "127.0.0.1:${toString tunnel.port}";
+            builtins.throw "missing port or socket for tunnel";
       };
     };
   };
@@ -89,11 +93,16 @@ in
               ];
             };
             port = mkOption {
-              type = types.port;
+              type = types.nullOr types.port;
+              default = null;
+            };
+            socket = mkOption {
+              type = types.nullOr types.path;
+              default = null;
             };
             openFirewall = mkOption {
               type = types.bool;
-              default = true;
+              default = config.port != null;
             };
             target = mkOption {
               type = types.str;
