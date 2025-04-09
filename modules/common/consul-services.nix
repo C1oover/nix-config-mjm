@@ -59,6 +59,10 @@ in
                 type = types.nullOr types.port;
                 default = null;
               };
+              tls = mkOption {
+                type = types.bool;
+                default = false;
+              };
             };
 
             checks =
@@ -175,6 +179,7 @@ in
               meta = mkIf config.metrics.enable {
                 metrics_path = config.metrics.path;
                 metrics_port = mkIf (config.metrics.port != null) (toString config.metrics.port);
+                metrics_scheme = mkIf config.metrics.tls "https";
               };
               checks = mkIf (config.checks != { }) (
                 map (chk: chk.checkConfig) (filter (chk: chk.enable) (attrValues config.checks))

@@ -96,11 +96,13 @@ in
       port = 3000;
       target = "unix:/run/grafana/server.sock";
       allowIngress = true;
+      allowMetrics = true;
     };
 
     services.consul.services.grafana = {
       port = 3000;
       metrics.enable = true;
+      metrics.tls = true;
 
       checks.up = {
         http.path = "/api/health";

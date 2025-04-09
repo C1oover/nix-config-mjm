@@ -112,11 +112,13 @@ in
       port = 3103;
       target = "localhost:3100";
       allowedServices = [ "promtail" ];
+      allowMetrics = true;
     };
 
     services.consul.services.loki = {
       port = 3103;
       metrics.enable = true;
+      metrics.tls = true;
 
       checks.up = {
         http.path = "/ready";

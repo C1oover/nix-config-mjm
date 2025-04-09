@@ -12,6 +12,7 @@ let
     map
     mapAttrs'
     mkIf
+    mkMerge
     mkOption
     optional
     pipe
@@ -115,13 +116,20 @@ in
               type = types.bool;
               default = false;
             };
+            allowMetrics = mkOption {
+              type = types.bool;
+              default = false;
+            };
             service = mkOption {
               type = types.str;
             };
           };
 
           config = {
-            allowedServices = mkIf config.allowIngress [ "caddy" ];
+            allowedServices = mkMerge [
+              (mkIf config.allowIngress [ "caddy" ])
+              (mkIf config.allowMetrics [ "prometheus" ])
+            ];
           };
         }
       )

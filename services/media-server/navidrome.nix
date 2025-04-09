@@ -49,23 +49,17 @@ in
       port = 4533;
       target = "unix:/run/navidrome/server.sock";
       allowIngress = true;
+      allowMetrics = true;
     };
 
     services.consul.services.navidrome = {
       port = 4533;
       metrics.enable = true;
+      metrics.tls = true;
 
       checks.up = {
-        # consul can't do normal http checks to unix sockets, and the
-        # tunnel only allows requests from the ingress, so here we are.
-        script.args = [
-          (lib.getExe pkgs.curl)
-          "--no-progress-meter"
-          "--fail-with-body"
-          "--unix-socket"
-          "/run/navidrome/server.sock"
-          "http://localhost/ping"
-        ];
+        http.path = "/ping";
+        http.socket = "/run/navidrome/server.sock";
       };
     };
 
