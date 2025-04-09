@@ -36,11 +36,16 @@ in
     mjm.state.services = [ "prometheus" ];
 
     ingress.virtualHosts.metrics = {
-      upstream.service.name = "prometheus";
+      upstream = {
+        service.name = "prometheus";
+        tls.enable = true;
+      };
     };
 
     services.prometheus = {
       enable = true;
+      listenAddress = "[::1]";
+      port = 19090;
       checkConfig = "syntax-only";
       webExternalUrl = "https://metrics.midna.dev";
 
@@ -48,6 +53,12 @@ in
         scrape_interval = "60s";
         evaluation_interval = "30s";
       };
+    };
+
+    mjm.spire.tunnels.prometheus = {
+      mode = "server";
+      port = 9090;
+      target = "localhost:19090";
     };
 
     security.polkit.enable = true;
@@ -98,14 +109,14 @@ in
       };
     systemd.services.prometheus.serviceConfig.CacheDirectory = "prometheus";
 
-    networking.firewall.allowedTCPPorts = [ config.services.prometheus.port ];
-
     services.consul.services.prometheus = {
-      inherit (config.services.prometheus) port;
+      port = 9090;
       metrics.enable = true;
+      metrics.tls = true;
 
       checks.up = {
         http.path = "/-/ready";
+        http.port = 19090;
         intervalSeconds = 30;
       };
     };
