@@ -29,10 +29,6 @@ in
         };
 
         exporters = {
-          "otlp/honeycomb" = {
-            endpoint = "api.honeycomb.io:443";
-            headers.x-honeycomb-team = "\${env:HONEYCOMB_API_KEY}";
-          };
           "otlp/tempo" = {
             endpoint = "tempo.service.consul:14317";
             tls.insecure = true;
@@ -58,7 +54,6 @@ in
               "batch"
             ];
             exporters = [
-              # "otlp/honeycomb"
               "otlp/tempo"
             ];
           };
@@ -68,16 +63,5 @@ in
         };
       };
     };
-
-    systemd.services.opentelemetry-collector.serviceConfig.EnvironmentFile =
-      config.vault-secrets.templates.otel-collector-env.path;
-
-    vault.services.otel-collector = { };
-    vault-secrets.wantedBy = [ "opentelemetry-collector.service" ];
-    vault-secrets.templates.otel-collector-env.text = ''
-      {{ with secret "kv/prod/services/otel-collector" }}
-      HONEYCOMB_API_KEY={{ .Data.data.honeycomb_api_key }}
-      {{ end }}
-    '';
   };
 }
