@@ -35,7 +35,6 @@ func setUpAuthSPIFFE(
 		RoleType:  pulumi.String("jwt"),
 		UserClaim: pulumi.String("sub"),
 		BoundAudiences: pulumi.StringArray{
-			pulumi.String("https://vault.service.consul:8250"),
 			pulumi.String("https://vault.service.consul:8200"),
 		},
 	}); err != nil {
