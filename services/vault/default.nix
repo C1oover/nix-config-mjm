@@ -43,7 +43,6 @@ in
     ingress.virtualHosts.vault = {
       upstream = {
         service.name = "vault";
-        service.port = 8250;
         tls.enable = true;
       };
 
@@ -53,7 +52,7 @@ in
     services.vault = {
       enable = true;
       package = pkgs.vault-bin;
-      address = "0.0.0.0:8250";
+      address = "0.0.0.0:8200";
       tlsCertFile = "/var/cache/vault/cert.pem";
       tlsKeyFile = "/var/cache/vault/key.pem";
       storageBackend = "raft";
@@ -61,7 +60,7 @@ in
         node_id = "${cfg.nodeId}"
         ${concatMapStrings (n: ''
           retry_join {
-            leader_api_addr = "https://${n}:8250"
+            leader_api_addr = "https://${n}:8200"
           }
         '') cfg.nodes}
       '';
@@ -72,17 +71,19 @@ in
         }
       '';
       extraConfig = ''
-        # legacy plaintext listener
+        # TODO remove once nothing is using port 8250
         listener "tcp" {
-          address = "0.0.0.0:8200"
-          tls_disable = true
+          address = "0.0.0.0:8250"
+          tls_cert_file = "/var/cache/vault/cert.pem"
+          tls_key_file = "/var/cache/vault/key.pem"
+          tls_min_version = "tls13"
           telemetry {
             unauthenticated_metrics_access = true
           }
         }
 
-        api_addr = "http://{{ GetPrivateIP }}:8200"
-        cluster_addr = "https://{{ GetPrivateIP }}:8251"
+        api_addr = "https://{{ GetPrivateIP }}:8200"
+        cluster_addr = "https://{{ GetPrivateIP }}:8201"
         disable_mlock = true
         ui = true
 

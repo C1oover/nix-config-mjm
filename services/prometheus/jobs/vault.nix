@@ -8,6 +8,13 @@
           server = "127.0.0.1:8500";
         }
       ];
+      scheme = "https";
+      tls_config = {
+        ca_file = "/var/cache/prometheus/bundle.pem";
+        cert_file = "/var/cache/prometheus/cert.pem";
+        key_file = "/var/cache/prometheus/key.pem";
+        server_name = "vault.service.consul";
+      };
       metrics_path = "/v1/sys/metrics";
       params.format = [ "prometheus" ];
       relabel_configs = [
