@@ -17,7 +17,10 @@ in
         };
 
         distributor.receivers.otlp.protocols = {
-          grpc.endpoint = "0.0.0.0:14317";
+          # used by otel-collector, goes through the tunnel for mTLS
+          grpc.endpoint = "127.0.0.1:24317";
+          # used by launchpad in dev
+          # TODO fix to be able to create a tunnel for it on the dev machine
           http.endpoint = "0.0.0.0:14318";
         };
 
@@ -50,6 +53,12 @@ in
       AWS_SECRET_ACCESS_KEY={{ .Data.data.tempo_garage_secret_key }}
       {{ end }}
     '';
+
+    mjm.spire.tunnels.tempo-grpc = {
+      mode = "server";
+      port = 14317;
+      target = "localhost:24317";
+    };
 
     services.consul.services.tempo = {
       port = 3200;

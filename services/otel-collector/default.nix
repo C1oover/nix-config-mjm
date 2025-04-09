@@ -30,7 +30,11 @@ in
 
         exporters = {
           "otlp/tempo" = {
-            endpoint = "tempo.service.consul:14317";
+            # this should really be able to be a unix socket, but otel collector has dumb validation
+            # around this.
+            # https://github.com/open-telemetry/opentelemetry-collector/blob/e7bbf161e6aac57c95413017630c18cf608cf617/exporter/otlpexporter/config.go#L58-L65
+            endpoint = "localhost:15317";
+            # it's fine, it's going through a TLS tunnel
             tls.insecure = true;
           };
         };
@@ -62,6 +66,13 @@ in
           };
         };
       };
+    };
+
+    mjm.spire.tunnels.otel-collector-tempo = {
+      mode = "client";
+      port = 15317;
+      target = "tempo.service.consul:14317";
+      service = "tempo";
     };
   };
 }
