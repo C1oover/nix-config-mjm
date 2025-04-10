@@ -34,7 +34,7 @@ in
 
         s3_api = {
           s3_region = "home";
-          api_bind_addr = "[::]:3902";
+          api_bind_addr = "/run/garage/s3.sock";
         };
 
         consul_discovery = {
@@ -57,6 +57,7 @@ in
 
     systemd.services.garage.serviceConfig = {
       StateDirectory = mkForce "garage/meta garage/data";
+      RuntimeDirectory = "garage";
       LoadCredential = map (k: "garage_${k}:/run/garage-creds.sock") [
         "rpc_secret"
         "admin_token"
@@ -66,12 +67,28 @@ in
     mjm.state.directories = [ "/var/lib/private/garage/meta" ];
 
     ingress.virtualHosts.garage = {
-      upstream.service = {
-        name = "garage";
-        tag = "s3";
+      upstream = {
+        service = {
+          name = "garage";
+          tag = "s3";
+        };
+        tls.enable = true;
       };
       enableAuthProxy = false;
       useIPv4Proxy = true;
+    };
+
+    # TODO replace this with a bespoke proxy that can match garage keys to SPIFFE IDs
+    mjm.spire.tunnels.garage-s3 = {
+      mode = "server";
+      port = 3902;
+      target = "unix:/run/garage/s3.sock";
+      allowIngress = true;
+      allowedServices = [
+        "gitlab"
+        "tempo"
+        "loki"
+      ];
     };
 
     environment.systemPackages = builtins.attrValues {
@@ -80,7 +97,6 @@ in
 
     networking.firewall.allowedTCPPorts = [
       3901
-      3902
       3903
     ];
 
@@ -93,7 +109,8 @@ in
       serviceConfig.tags = [ "s3" ];
 
       checks.up = {
-        http.url = "http://localhost:3903/health";
+        http.path = "/health";
+        http.port = 3903;
       };
     };
 

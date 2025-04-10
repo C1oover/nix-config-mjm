@@ -29,7 +29,7 @@ in
         storage.trace = {
           backend = "s3";
           s3 = {
-            endpoint = "localhost:3902";
+            endpoint = "localhost:3905";
             bucket = "tempo-traces";
             region = "home";
             access_key = "\${AWS_ACCESS_KEY_ID}";
@@ -54,10 +54,18 @@ in
       {{ end }}
     '';
 
-    mjm.spire.tunnels.tempo-grpc = {
-      mode = "server";
-      port = 14317;
-      target = "localhost:24317";
+    mjm.spire.tunnels = {
+      tempo-grpc = {
+        mode = "server";
+        port = 14317;
+        target = "localhost:24317";
+      };
+      tempo-s3 = {
+        mode = "client";
+        port = 3905;
+        target = "s3.garage.service.consul:3902";
+        service = "garage";
+      };
     };
 
     services.consul.services.tempo = {
@@ -68,9 +76,6 @@ in
       };
     };
 
-    networking.firewall.allowedTCPPorts = [
-      14317
-      14318
-    ];
+    networking.firewall.allowedTCPPorts = [ 14318 ];
   };
 }

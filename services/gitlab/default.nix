@@ -152,7 +152,7 @@ in
             aws_access_key_id._secret = secretPath "config" "aws_access_key_id";
             aws_secret_access_key._secret = secretPath "config" "aws_secret_access_key";
             region = "home";
-            endpoint = "http://garage.service.consul:3902";
+            endpoint = "http://localhost:3904";
             path_style = true;
           };
           objects = {
@@ -236,11 +236,19 @@ in
       redirectUris = [ redirectUri ];
     };
 
-    mjm.spire.tunnels.gitlab = {
-      mode = "server";
-      port = 8443;
-      target = "unix:/run/gitlab/gitlab-workhorse.socket";
-      allowIngress = true;
+    mjm.spire.tunnels = {
+      gitlab = {
+        mode = "server";
+        port = 8443;
+        target = "unix:/run/gitlab/gitlab-workhorse.socket";
+        allowIngress = true;
+      };
+      gitlab-s3 = {
+        mode = "client";
+        port = 3904;
+        target = "s3.garage.service.consul:3902";
+        service = "garage";
+      };
     };
 
     networking.firewall.allowedTCPPorts = [

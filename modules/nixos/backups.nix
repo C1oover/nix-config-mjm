@@ -97,7 +97,7 @@ in
           cfg.exclude != [ ]
         ) "--exclude-file=${pkgs.writeText "exclude-patterns" (concatStringsSep "\n" cfg.exclude)}";
         includePaths = pkgs.writeText "include-patterns" (concatStringsSep "\n" cfg.paths);
-        onsiteRepository = "s3:http://garage.service.consul:3902/restic-backups/${cfg.repositoryName}";
+        onsiteRepository = "s3:garage.midna.dev/restic-backups/${cfg.repositoryName}";
         offsiteRepository = "s3:s3.us-west-001.backblazeb2.com/mjm-restic-backups/${cfg.repositoryName}";
         mkPreamble = repo: location: ''
           set -e
@@ -182,7 +182,7 @@ in
       name: cfg:
       let
         resticCmd = getExe pkgs.restic;
-        onsiteRepository = "s3:http://garage.service.consul:3902/restic-backups/${cfg.repositoryName}";
+        onsiteRepository = "s3:garage.midna.dev/restic-backups/${cfg.repositoryName}";
         offsiteRepository = "s3:s3.us-west-001.backblazeb2.com/mjm-restic-backups/${cfg.repositoryName}";
       in
       pkgs.writeShellScriptBin "restic-${name}" ''

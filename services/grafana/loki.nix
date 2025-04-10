@@ -54,7 +54,7 @@ in
 
         storage_config = {
           aws = {
-            s3 = "http://\${AWS_ACCESS_KEY_ID}:\${AWS_SECRET_ACCESS_KEY}@garage.service.consul:3902";
+            s3 = "http://\${AWS_ACCESS_KEY_ID}:\${AWS_SECRET_ACCESS_KEY}@localhost.:3906";
             region = "home";
             bucketnames = "loki-logs";
             insecure = true;
@@ -107,12 +107,20 @@ in
       {{ end }}
     '';
 
-    mjm.spire.tunnels.loki = {
-      mode = "server";
-      port = 3103;
-      target = "localhost:3100";
-      allowedServices = [ "promtail" ];
-      allowMetrics = true;
+    mjm.spire.tunnels = {
+      loki = {
+        mode = "server";
+        port = 3103;
+        target = "localhost:3100";
+        allowedServices = [ "promtail" ];
+        allowMetrics = true;
+      };
+      loki-s3 = {
+        mode = "client";
+        port = 3906;
+        target = "s3.garage.service.consul:3902";
+        service = "garage";
+      };
     };
 
     services.consul.services.loki = {
