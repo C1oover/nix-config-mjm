@@ -25,7 +25,7 @@ type Host struct {
 	OutPath      string
 	DeployConfig DeployConfig
 	RebootNeeded bool
-	cfg          Config
+	cfg          *Config
 	log          *slog.Logger
 	remoteRunner cmd.Runner
 }
@@ -38,7 +38,7 @@ type DeployConfig struct {
 	ConsulChecks []string `json:"consulChecks"`
 }
 
-func NewHost(cfg Config, name string, system string, drvPath string, outPath string, deployConfig DeployConfig) *Host {
+func NewHost(cfg *Config, name string, system string, drvPath string, outPath string, deployConfig DeployConfig) *Host {
 	logger := slog.Default().WithGroup("host").With("name", name)
 	return &Host{
 		Name:         name,

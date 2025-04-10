@@ -39,7 +39,7 @@ func TestNewHostSSH(t *testing.T) {
 	user := "mjm"
 	host := "uranus.home.mattmoriarity.com"
 
-	cfg := Config{}
+	cfg := &Config{}
 	h := NewHost(
 		cfg,
 		"uranus",
@@ -63,7 +63,7 @@ func TestNewHostSSH(t *testing.T) {
 }
 
 func TestNewHostLocal(t *testing.T) {
-	cfg := Config{}
+	cfg := &Config{}
 	h := NewHost(
 		cfg,
 		"uranus",
@@ -84,7 +84,7 @@ func TestNewHostLocal(t *testing.T) {
 }
 
 func TestNewHostLocalDarwin(t *testing.T) {
-	cfg := Config{}
+	cfg := &Config{}
 	h := NewHost(
 		cfg,
 		"athena",
@@ -106,7 +106,7 @@ func TestNewHostLocalDarwin(t *testing.T) {
 
 func TestBuildWithoutNom(t *testing.T) {
 	n := &mockNix{}
-	cfg := Config{
+	cfg := &Config{
 		Nix: n,
 	}
 	h := NewHost(
@@ -125,7 +125,7 @@ func TestBuildWithoutNom(t *testing.T) {
 
 func TestBuildWithNom(t *testing.T) {
 	n := &mockNix{}
-	cfg := Config{
+	cfg := &Config{
 		Nix: n,
 	}
 	h := NewHost(
@@ -144,7 +144,7 @@ func TestBuildWithNom(t *testing.T) {
 
 func TestPushToAttic(t *testing.T) {
 	r := &cmd.MockRunner{}
-	cfg := Config{Runner: r}
+	cfg := &Config{Runner: r}
 	h := NewHost(
 		cfg,
 		"uranus",
@@ -163,7 +163,7 @@ func TestPushToAttic(t *testing.T) {
 func TestCheckRebootNeeded(t *testing.T) {
 	t.Run("ssh host", func(t *testing.T) {
 		r := &cmd.MockRunner{}
-		cfg := Config{
+		cfg := &Config{
 			Runner: &cmd.MockRunner{},
 			RemoteRunner: func(host, user string) (cmd.Runner, error) {
 				return r, nil
@@ -197,7 +197,7 @@ func TestCheckRebootNeeded(t *testing.T) {
 
 	t.Run("ssh host not needed", func(t *testing.T) {
 		r := &cmd.MockRunner{}
-		cfg := Config{
+		cfg := &Config{
 			Runner: &cmd.MockRunner{},
 			RemoteRunner: func(host, user string) (cmd.Runner, error) {
 				return r, nil
@@ -226,7 +226,7 @@ func TestCheckRebootNeeded(t *testing.T) {
 
 	t.Run("local host", func(t *testing.T) {
 		r := &cmd.MockRunner{}
-		cfg := Config{Runner: r}
+		cfg := &Config{Runner: r}
 		h := NewHost(
 			cfg,
 			"uranus",
@@ -250,7 +250,7 @@ func TestCheckRebootNeeded(t *testing.T) {
 
 	t.Run("darwin host", func(t *testing.T) {
 		r := &cmd.MockRunner{}
-		cfg := Config{Runner: r}
+		cfg := &Config{Runner: r}
 		h := NewHost(
 			cfg,
 			"athena",
@@ -308,7 +308,7 @@ const testDiffOutput string = `
 func TestHostDiff(t *testing.T) {
 	t.Run("ssh host", func(t *testing.T) {
 		r := &cmd.MockRunner{}
-		cfg := Config{
+		cfg := &Config{
 			Runner: &cmd.MockRunner{},
 			RemoteRunner: func(host, user string) (cmd.Runner, error) {
 				return r, nil
@@ -346,7 +346,7 @@ func TestHostDiff(t *testing.T) {
 
 	t.Run("local host", func(t *testing.T) {
 		r := &cmd.MockRunner{}
-		cfg := Config{Runner: r}
+		cfg := &Config{Runner: r}
 		h := NewHost(
 			cfg,
 			"uranus",

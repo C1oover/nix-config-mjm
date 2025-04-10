@@ -17,7 +17,7 @@ type DeployPlan struct {
 	Hosts  []*Host
 	Tests  []nix.EvalJobResult
 	Infra  *infra.Input
-	cfg    Config
+	cfg    *Config
 }
 
 type planConfig struct {

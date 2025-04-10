@@ -80,7 +80,7 @@ func handleDeploy(ctx context.Context) error {
 	defer cfg.Cleanup()
 
 	s := sectionStart("Evaluating hosts and tests", true)
-	plan, err := evalNodes(ctx, cfg, *plansFile, hostnames)
+	plan, err := evalNodes(ctx, &cfg, *plansFile, hostnames)
 	if err != nil {
 		return fmt.Errorf("evaluating nodes: %w", err)
 	}
@@ -105,7 +105,7 @@ func handleDeploy(ctx context.Context) error {
 		sectionEnd(s)
 	}
 
-	if err := atticLogin(ctx, cfg); err != nil {
+	if err := atticLogin(ctx, &cfg); err != nil {
 		return fmt.Errorf("logging in to attic: %w", err)
 	}
 
@@ -129,8 +129,13 @@ func handleDeploy(ctx context.Context) error {
 	sectionEnd(s)
 
 	if len(hostnames) == 0 {
+		vault, err := cfg.Vault(ctx)
+		if err != nil {
+			return fmt.Errorf("getting vault client: %w", err)
+		}
+
 		s = sectionStart("Applying infra changes", false)
-		if err := infra.Apply(ctx, cfg.Vault, plan.Infra); err != nil {
+		if err := infra.Apply(ctx, vault, plan.Infra); err != nil {
 			return fmt.Errorf("applying infra changes: %w", err)
 		}
 		sectionEnd(s)
@@ -158,7 +163,7 @@ func handleDiff(ctx context.Context) error {
 	defer cfg.Cleanup()
 
 	s := sectionStart("Evaluating hosts and tests", true)
-	plan, err := evalNodes(ctx, cfg, *plansFile, hostnames)
+	plan, err := evalNodes(ctx, &cfg, *plansFile, hostnames)
 	if err != nil {
 		return fmt.Errorf("evaluating nodes: %w", err)
 	}
@@ -186,7 +191,7 @@ func handleDiff(ctx context.Context) error {
 		sectionEnd(s)
 	}
 
-	if err := atticLogin(ctx, cfg); err != nil {
+	if err := atticLogin(ctx, &cfg); err != nil {
 		return fmt.Errorf("logging in to attic: %w", err)
 	}
 
@@ -224,8 +229,12 @@ func handleDiff(ctx context.Context) error {
 	sectionEnd(s)
 
 	if len(hostnames) == 0 {
+		vault, err := cfg.Vault(ctx)
+		if err != nil {
+			return fmt.Errorf("getting vault client: %w", err)
+		}
 		s = sectionStart("Previewing infra changes", false)
-		if err := infra.Preview(ctx, cfg.Vault, plan.Infra); err != nil {
+		if err := infra.Preview(ctx, vault, plan.Infra); err != nil {
 			return fmt.Errorf("previewing infra changes: %w", err)
 		}
 		sectionEnd(s)
@@ -250,10 +259,7 @@ func handleDiff(ctx context.Context) error {
 	if gitlabBaseURL == "" {
 		io.WriteString(os.Stdout, body.String())
 	} else {
-		secret, err := cfg.Vault.KVv2("kv").Get(ctx, "prod/repos/nix-config")
-		if err != nil {
-			return fmt.Errorf("getting gitlab token from vault: %w", err)
-		}
+		gitlabToken, err := cfg.GetSecret(ctx, "gitlab_token")
 
 		projectID, err := strconv.Atoi(os.Getenv("CI_PROJECT_ID"))
 		if err != nil {
@@ -269,7 +275,7 @@ func handleDiff(ctx context.Context) error {
 
 		if err := createMergeRequestNote(ctx, &createMergeRequestNoteArgs{
 			BaseURL:        gitlabBaseURL,
-			Token:          secret.Data["gitlab_token"].(string),
+			Token:          gitlabToken,
 			Project:        projectID,
 			MergeRequestID: mergeRequestID,
 			Body:           body.String(),
@@ -297,7 +303,7 @@ func handleReboot(ctx context.Context) error {
 	}
 	defer cfg.Cleanup()
 
-	plan, err := evalNodes(ctx, cfg, *plansFile, hostnames)
+	plan, err := evalNodes(ctx, &cfg, *plansFile, hostnames)
 	if err != nil {
 		return fmt.Errorf("evaluating nodes: %w", err)
 	}
@@ -319,7 +325,7 @@ func handleApplyLocal(ctx context.Context) error {
 		return fmt.Errorf("generating config: %w", err)
 	}
 
-	h, err := evalLocalNode(ctx, cfg, *plansFile)
+	h, err := evalLocalNode(ctx, &cfg, *plansFile)
 	if err != nil {
 		return fmt.Errorf("evaluating node: %w", err)
 	}
@@ -329,12 +335,12 @@ func handleApplyLocal(ctx context.Context) error {
 	}
 
 	if *pushToAttic {
-		if err := atticLogin(ctx, cfg); err != nil {
-			return fmt.Errorf("logging in to attic: %w", err)
-		}
-
-		if err := h.PushToAttic(ctx); err != nil {
-			return fmt.Errorf("pushing to attic: %w", err)
+		if err := atticLogin(ctx, &cfg); err != nil {
+			slog.WarnContext(ctx, "could not log in to attic. skipping push", "error", err)
+		} else {
+			if err := h.PushToAttic(ctx); err != nil {
+				return fmt.Errorf("pushing to attic: %w", err)
+			}
 		}
 	}
 
@@ -365,7 +371,11 @@ func handleApplyInfra(ctx context.Context) error {
 		return fmt.Errorf("evaluating infra data from nix: %w", err)
 	}
 
-	if err := infra.Apply(ctx, cfg.Vault, result); err != nil {
+	vault, err := cfg.Vault(ctx)
+	if err != nil {
+		return fmt.Errorf("getting vault client: %w", err)
+	}
+	if err := infra.Apply(ctx, vault, result); err != nil {
 		return fmt.Errorf("applying infra: %w", err)
 	}
 
@@ -388,14 +398,19 @@ func handleDiffInfra(ctx context.Context) error {
 		return fmt.Errorf("evaluating infra data from nix: %w", err)
 	}
 
-	if err := infra.Preview(ctx, cfg.Vault, result); err != nil {
+	vault, err := cfg.Vault(ctx)
+	if err != nil {
+		return fmt.Errorf("getting vault client: %w", err)
+	}
+
+	if err := infra.Preview(ctx, vault, result); err != nil {
 		return fmt.Errorf("previewing infra: %w", err)
 	}
 
 	return nil
 }
 
-func evalNodes(ctx context.Context, cfg Config, path string, hostnames []string) (*DeployPlan, error) {
+func evalNodes(ctx context.Context, cfg *Config, path string, hostnames []string) (*DeployPlan, error) {
 	workers := *concurrency
 	if len(hostnames) > 0 && len(hostnames) < workers-1 {
 		workers = len(hostnames) + 1
@@ -470,7 +485,7 @@ func evalNodes(ctx context.Context, cfg Config, path string, hostnames []string)
 	return dp, nil
 }
 
-func evalLocalNode(ctx context.Context, cfg Config, path string) (*Host, error) {
+func evalLocalNode(ctx context.Context, cfg *Config, path string) (*Host, error) {
 	name, err := os.Hostname()
 	if err != nil {
 		return nil, fmt.Errorf("getting hostname: %w", err)
@@ -494,7 +509,7 @@ func evalLocalNode(ctx context.Context, cfg Config, path string) (*Host, error) 
 	return NewHost(cfg, name, result.System, result.DrvPath, result.OutPath, DeployConfig{}), nil
 }
 
-func realiseJSON(ctx context.Context, cfg Config, result nix.EvalJobResult, v any) error {
+func realiseJSON(ctx context.Context, cfg *Config, result nix.EvalJobResult, v any) error {
 	if err := cfg.Nix.Realise(ctx, []string{result.DrvPath}, false); err != nil {
 		return fmt.Errorf("realising %q: %w", result.DrvPath, err)
 	}

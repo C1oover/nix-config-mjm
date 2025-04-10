@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"sync"
 
 	"git.midna.dev/mjm/nix-config/packages/dippy/cmd"
 	"git.midna.dev/mjm/nix-config/packages/dippy/nix"
@@ -15,10 +16,12 @@ import (
 )
 
 type Config struct {
-	Vault        *api.Client
 	Nix          nix.Nix
 	Runner       cmd.Runner
 	RemoteRunner func(host, user string) (cmd.Runner, error)
+	vaultLock    sync.Mutex
+	vault        *api.Client
+	vaultSecret  *api.KVSecret
 	keyPath      string
 }
 
@@ -54,30 +57,62 @@ func GenerateConfig(ctx context.Context) (Config, error) {
 	}
 
 	return Config{
-		Vault:  c,
 		Nix:    nix.New(keyPath),
 		Runner: cmd.LocalRunner{},
 		RemoteRunner: func(host, user string) (cmd.Runner, error) {
 			return cmd.NewSSHRunner(host, user, signer, hostKeyCallback)
 		},
+		vault:   c,
 		keyPath: keyPath,
 	}, nil
 }
 
 func NewLocalConfig() (Config, error) {
-	c, err := vault.NewClient(context.TODO())
-	if err != nil {
-		return Config{}, fmt.Errorf("creating vault client: %w", err)
-	}
-
 	return Config{
-		Vault:  c,
 		Nix:    nix.New(""),
 		Runner: cmd.LocalRunner{},
 		RemoteRunner: func(host, user string) (cmd.Runner, error) {
 			return nil, fmt.Errorf("remote runner not supported in this config")
 		},
 	}, nil
+}
+
+func (c *Config) Vault(ctx context.Context) (*api.Client, error) {
+	c.vaultLock.Lock()
+	defer c.vaultLock.Unlock()
+
+	return c.getVaultClient(ctx)
+}
+
+func (c *Config) GetSecret(ctx context.Context, key string) (string, error) {
+	c.vaultLock.Lock()
+	defer c.vaultLock.Unlock()
+
+	if c.vaultSecret == nil {
+		client, err := c.getVaultClient(ctx)
+		if err != nil {
+			return "", fmt.Errorf("getting vault client: %w", err)
+		}
+
+		c.vaultSecret, err = client.KVv2("kv").Get(ctx, "prod/repos/nix-config")
+		if err != nil {
+			return "", fmt.Errorf("getting nix-config kv secret from vault: %w", err)
+		}
+	}
+
+	return c.vaultSecret.Data[key].(string), nil
+}
+
+func (c *Config) getVaultClient(ctx context.Context) (*api.Client, error) {
+	var err error
+	if c.vault == nil {
+		c.vault, err = vault.NewClient(ctx)
+		if err != nil {
+			return nil, fmt.Errorf("creating vault client to read secret: %w", err)
+		}
+	}
+
+	return c.vault, nil
 }
 
 func (c *Config) Cleanup() {
