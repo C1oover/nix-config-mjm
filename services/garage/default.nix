@@ -17,7 +17,12 @@ in
   };
 
   config = mkIf config.mjm.garage.enable {
-    mjm.services.garage = { };
+    mjm.services.garage = {
+      vault = {
+        enable = true;
+        useSpiffeIdentity = true;
+      };
+    };
 
     services.garage = {
       enable = true;
@@ -40,17 +45,23 @@ in
 
         admin.api_bind_addr = "[::]:3903";
       };
-      environmentFile = config.vault-secrets.templates.garage-env.path;
+      # These aren't used in the `garage` wrapper script :-/
+      extraEnvironment = {
+        GARAGE_RPC_SECRET_FILE = "%d/garage_rpc_secret";
+        GARAGE_ADMIN_TOKEN_FILE = "%d/garage_admin_token";
+        # they're not actually world-readable, i promise, it just
+        # doesn't like the 440 permissions systemd gives them
+        GARAGE_ALLOW_WORLD_READABLE_SECRETS = "true";
+      };
     };
 
-    vault.services.garage = { };
-    vault-secrets.wantedBy = [ "garage.service" ];
-    vault-secrets.templates.garage-env.text = ''
-      {{ with secret "kv/prod/services/garage" }}
-      GARAGE_RPC_SECRET={{ .Data.data.rpc_secret }}
-      GARAGE_ADMIN_TOKEN={{ .Data.data.admin_token }}
-      {{ end }}
-    '';
+    systemd.services.garage.serviceConfig = {
+      StateDirectory = mkForce "garage/meta garage/data";
+      LoadCredential = map (k: "garage_${k}:/run/garage-creds.sock") [
+        "rpc_secret"
+        "admin_token"
+      ];
+    };
 
     mjm.state.directories = [ "/var/lib/private/garage/meta" ];
 
@@ -72,8 +83,6 @@ in
       3902
       3903
     ];
-
-    systemd.services.garage.serviceConfig.StateDirectory = mkForce "garage/meta garage/data";
 
     services.consul.services.garage = {
       port = 3902;
