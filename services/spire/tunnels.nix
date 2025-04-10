@@ -25,6 +25,7 @@ let
     value = {
       wantedBy = [ "sockets.target" ];
       partOf = [ "${name}-tunnel.service" ];
+      startLimitIntervalSec = 0;
       socketConfig = {
         FileDescriptorName = "ghostunnel";
         ListenStream =
@@ -51,6 +52,8 @@ let
       requires = [ "${name}-tunnel.socket" ];
 
       environment.SPIFFE_ENDPOINT_SOCKET = "unix:${cfg.agent.socketPath}";
+
+      startLimitIntervalSec = 0;
 
       serviceConfig = {
         Type = "notify-reload";
