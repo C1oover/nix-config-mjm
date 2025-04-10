@@ -26,6 +26,10 @@ in
       theme = catppuccin-${config.catppuccin.flavor}
       font-family = ${cfg.font.family}
       font-size = ${toString cfg.font.size}
+      # special tags for comments
+      font-feature = +ss18
+      # serifs
+      font-feature = +ss16
     '';
   };
 }
