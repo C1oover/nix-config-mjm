@@ -66,6 +66,32 @@ in
 
     mjm.state.directories = [ "/var/lib/private/garage/meta" ];
 
+    systemd.sockets.spiffe-garage = {
+      wantedBy = [ "sockets.target" ];
+      after = [ "spire-agent.service" ];
+      partOf = [ "spiffe-garage.service" ];
+      socketConfig.ListenStream = "[::]:3899";
+    };
+
+    systemd.services.spiffe-garage = {
+      wantedBy = [ "multi-user.target" ];
+      after = [
+        "network.target"
+        "spiffe-garage.socket"
+      ];
+      requires = [ "spiffe-garage.socket" ];
+
+      environment.SPIFFE_ENDPOINT_SOCKET = "unix:${config.mjm.spire.agent.socketPath}";
+
+      serviceConfig = {
+        Type = "notify-reload";
+        ExecStart = "${pkgs.spiffe-garage}/bin/spiffe-garage-srv";
+        DynamicUser = true;
+        Restart = "always";
+        LoadCredential = [ "garage_admin_token:/run/garage-creds.sock" ];
+      };
+    };
+
     ingress.virtualHosts.garage = {
       upstream = {
         service = {
@@ -96,21 +122,28 @@ in
     };
 
     networking.firewall.allowedTCPPorts = [
+      3899
       3901
       3903
     ];
 
-    services.consul.services.garage = {
-      port = 3902;
+    services.consul.services = {
+      garage = {
+        port = 3902;
 
-      metrics.enable = true;
-      metrics.port = 3903;
+        metrics.enable = true;
+        metrics.port = 3903;
 
-      serviceConfig.tags = [ "s3" ];
+        serviceConfig.tags = [ "s3" ];
 
-      checks.up = {
-        http.path = "/health";
-        http.port = 3903;
+        checks.up = {
+          http.path = "/health";
+          http.port = 3903;
+        };
+      };
+
+      spiffe-garage = {
+        port = 3899;
       };
     };
 

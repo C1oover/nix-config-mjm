@@ -1,0 +1,13 @@
+diff --git a/vendor/github.com/minio/minio-go/v7/pkg/credentials/file_aws_credentials.go b/vendor/github.com/minio/minio-go/v7/pkg/credentials/file_aws_credentials.go
+index 541e1a72f0..2661fb6379 100644
+--- a/vendor/github.com/minio/minio-go/v7/pkg/credentials/file_aws_credentials.go
++++ b/vendor/github.com/minio/minio-go/v7/pkg/credentials/file_aws_credentials.go
+@@ -110,7 +110,7 @@
+ 	credentialProcess := strings.TrimSpace(iniProfile.Key("credential_process").String())
+ 	if credentialProcess != "" {
+ 		args := strings.Fields(credentialProcess)
+-		if len(args) <= 1 {
++		if len(args) < 1 {
+ 			return Value{}, errors.New("invalid credential process args")
+ 		}
+ 		cmd := exec.Command(args[0], args[1:]...)

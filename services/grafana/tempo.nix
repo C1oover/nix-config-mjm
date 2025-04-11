@@ -1,13 +1,24 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   inherit (lib) mkIf;
   cfg = config.mjm.grafana;
 in
 {
   config = mkIf cfg.enable {
+    nixpkgs.overlays = [
+      (final: prev: {
+        tempo = prev.tempo.overrideAttrs {
+          patches = [ ./tempo.diff ];
+        };
+      })
+    ];
     services.tempo = {
       enable = true;
-      extraFlags = [ "-config.expand-env=true" ];
       settings = {
         server = {
           http_listen_address = "127.0.0.1";
@@ -32,8 +43,6 @@ in
             endpoint = "localhost:3905";
             bucket = "tempo-traces";
             region = "home";
-            access_key = "\${AWS_ACCESS_KEY_ID}";
-            secret_key = "\${AWS_SECRET_ACCESS_KEY}";
             insecure = true;
             forcepathstyle = true;
           };
@@ -43,16 +52,13 @@ in
       };
     };
 
-    systemd.services.tempo.serviceConfig.EnvironmentFile =
-      config.vault-secrets.templates.tempo-env.path;
-
-    vault-secrets.wantedBy = [ "tempo.service" ];
-    vault-secrets.templates.tempo-env.text = ''
-      {{ with secret "kv/prod/services/grafana" }}
-      AWS_ACCESS_KEY_ID={{ .Data.data.tempo_garage_key_id }}
-      AWS_SECRET_ACCESS_KEY={{ .Data.data.tempo_garage_secret_key }}
-      {{ end }}
-    '';
+    systemd.services.tempo.environment = {
+      SPIFFE_ENDPOINT_SOCKET = "unix:${config.mjm.spire.agent.socketPath}";
+      AWS_SHARED_CREDENTIALS_FILE = pkgs.writeText "spiffe-garage-aws-credentials" ''
+        [default]
+        credential_process = ${pkgs.spiffe-garage}/bin/spiffe-garage-helper
+      '';
+    };
 
     mjm.spire.tunnels = {
       tempo-grpc = {

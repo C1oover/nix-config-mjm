@@ -14,7 +14,6 @@ in
   config = mkIf cfg.enable {
     services.loki = {
       enable = true;
-      extraFlags = [ "-config.expand-env=true" ];
       configuration = {
         auth_enabled = false;
 
@@ -54,7 +53,7 @@ in
 
         storage_config = {
           aws = {
-            s3 = "http://\${AWS_ACCESS_KEY_ID}:\${AWS_SECRET_ACCESS_KEY}@localhost.:3906";
+            s3 = "http://localhost.:3906";
             region = "home";
             bucketnames = "loki-logs";
             insecure = true;
@@ -97,15 +96,16 @@ in
       };
     };
 
-    systemd.services.loki.serviceConfig.EnvironmentFile = config.vault-secrets.templates.loki-env.path;
-
-    vault-secrets.wantedBy = [ "loki.service" ];
-    vault-secrets.templates.loki-env.text = ''
-      {{ with secret "kv/prod/services/grafana" }}
-      AWS_ACCESS_KEY_ID={{ .Data.data.loki_garage_key_id }}
-      AWS_SECRET_ACCESS_KEY={{ .Data.data.loki_garage_secret_key }}
-      {{ end }}
-    '';
+    # AWS SDK runs credential processes through `sh` and expects it to be on PATH
+    systemd.services.loki.path = [ pkgs.bash ];
+    systemd.services.loki.environment = {
+      SPIFFE_ENDPOINT_SOCKET = "unix:${config.mjm.spire.agent.socketPath}";
+      AWS_SDK_LOAD_CONFIG = "1";
+      AWS_SHARED_CREDENTIALS_FILE = pkgs.writeText "spiffe-garage-aws-credentials" ''
+        [default]
+        credential_process = ${pkgs.spiffe-garage}/bin/spiffe-garage-helper
+      '';
+    };
 
     mjm.spire.tunnels = {
       loki = {
