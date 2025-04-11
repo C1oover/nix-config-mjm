@@ -7,6 +7,10 @@
     ./secrets.nix
   ];
 
+  # bcachefs has a bug that seems to particularly break go builds
+  # this works around that
+  boot.tmp.useTmpfs = true;
+
   networking.hostName = "persephone";
 
   mjm.desktop.enable = true;
