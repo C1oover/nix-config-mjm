@@ -68,7 +68,6 @@ in
 
     systemd.sockets.spiffe-garage = {
       wantedBy = [ "sockets.target" ];
-      after = [ "spire-agent.service" ];
       partOf = [ "spiffe-garage.service" ];
       socketConfig.ListenStream = "[::]:3899";
     };
@@ -78,6 +77,7 @@ in
       after = [
         "network.target"
         "spiffe-garage.socket"
+        "spire-agent.service"
       ];
       requires = [ "spiffe-garage.socket" ];
 
