@@ -71,17 +71,6 @@ in
         }
       '';
       extraConfig = ''
-        # TODO remove once nothing is using port 8250
-        listener "tcp" {
-          address = "0.0.0.0:8250"
-          tls_cert_file = "/var/cache/vault/cert.pem"
-          tls_key_file = "/var/cache/vault/key.pem"
-          tls_min_version = "tls13"
-          telemetry {
-            unauthenticated_metrics_access = true
-          }
-        }
-
         api_addr = "https://{{ GetPrivateIP }}:8200"
         cluster_addr = "https://{{ GetPrivateIP }}:8201"
         disable_mlock = true
@@ -106,8 +95,6 @@ in
     networking.firewall.allowedTCPPorts = [
       8200
       8201
-      8250
-      8251
     ];
 
     mjm.authelia.oidcClients.vault = {
