@@ -22,8 +22,14 @@ let
 
     telemetry {
       Prometheus {
+        host = "::"
         port = 8082
       }
+    }
+
+    health_checks {
+      listener_enabled = true
+      bind_port = "8080"
     }
 
     plugins {
@@ -98,6 +104,18 @@ in
       8081
       8082
     ];
+
+    services.consul.services.spire-server = {
+      port = 8081;
+
+      metrics.enable = true;
+      metrics.port = 8082;
+
+      checks.up = {
+        http.path = "/ready";
+        http.port = 8080;
+      };
+    };
 
     environment.systemPackages = [
       pkgs.spire-server
