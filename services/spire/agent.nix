@@ -27,6 +27,18 @@ let
       trust_bundle_path = "${./trust.pem}"
     }
 
+    telemetry {
+      Prometheus {
+        host = "::"
+        port = 9988
+      }
+    }
+
+    health_checks {
+      listener_enabled = true
+      bind_port = "18080"
+    }
+
     plugins {
       NodeAttestor "join_token" {
         plugin_data {}
@@ -97,6 +109,16 @@ in
         SupplementaryGroups = mkIf config.virtualisation.podman.enable [ "podman" ];
         Restart = "always";
         RestartSec = "5s";
+      };
+    };
+
+    services.consul.services.spire-agent = {
+      metrics.enable = true;
+      metrics.port = 9988;
+
+      checks.up = {
+        http.path = "/ready";
+        http.port = 18080;
       };
     };
 

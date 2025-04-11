@@ -46,7 +46,8 @@ in
               default = name;
             };
             port = mkOption {
-              type = types.port;
+              type = types.nullOr types.port;
+              default = null;
             };
 
             metrics = {
@@ -105,7 +106,7 @@ in
                             default = null;
                           };
                           port = mkOption {
-                            type = types.port;
+                            type = types.nullOr types.port;
                             default = svcPort;
                           };
                           path = mkOption {
@@ -174,7 +175,7 @@ in
             serviceConfig = {
               id = mkDefault config.id;
               name = mkDefault config.name;
-              port = mkDefault config.port;
+              port = mkIf (config.port != null) (mkDefault config.port);
 
               meta = mkIf config.metrics.enable {
                 metrics_path = config.metrics.path;
