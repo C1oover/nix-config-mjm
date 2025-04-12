@@ -24,11 +24,7 @@
 
   boot.loader.systemd-boot.enable = true;
 
-  mjm.profiles.vm-host = {
-    enable = true;
-    managementInterface = "eno1";
-    bridgeInterface = "enp2s0";
-  };
+  mjm.profiles.vm-host.enable = true;
 
   mjm.nut = {
     enable = true;

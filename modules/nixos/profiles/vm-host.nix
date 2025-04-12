@@ -3,20 +3,12 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
-    mkOption
-    types
     ;
   cfg = config.mjm.profiles.vm-host;
 in
 {
   options.mjm.profiles.vm-host = {
     enable = mkEnableOption "profile for a host running VMs";
-    managementInterface = mkOption {
-      type = types.str;
-    };
-    bridgeInterface = mkOption {
-      type = types.str;
-    };
   };
 
   config = mkIf cfg.enable {
