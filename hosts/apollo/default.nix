@@ -30,7 +30,6 @@
     enable = true;
     managementInterface = "enp0s31f6";
     bridgeInterface = "enp3s0";
-    iscsiName = "iqn.2008-11.org.linux-kvm:9db00d91-7252-419a-83e6-0e0ad67635e4";
   };
 
   mjm.nut = {

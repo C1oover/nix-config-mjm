@@ -26,7 +26,7 @@ in
 
     virtualisation.libvirtd = {
       enable = true;
-      package = pkgs.libvirt.override { enableIscsi = true; };
+      package = pkgs.libvirt;
       qemu = {
         swtpm.enable = true;
         ovmf.enable = true;

@@ -17,9 +17,6 @@ in
     bridgeInterface = mkOption {
       type = types.str;
     };
-    iscsiName = mkOption {
-      type = types.str;
-    };
   };
 
   config = mkIf cfg.enable {
@@ -50,11 +47,6 @@ in
     mjm.remote-builder.enable = true;
     mjm.server.enable = true;
     mjm.spire.agent.enable = true;
-
-    services.openiscsi = {
-      enable = true;
-      name = cfg.iscsiName;
-    };
 
     boot.kernelParams = [ "zfs.zfs_arc_max=7516192768" ];
     boot.zfs.extraPools = [ "slow" ];
