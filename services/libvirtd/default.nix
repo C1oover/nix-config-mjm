@@ -7,10 +7,7 @@
 let
   inherit (lib)
     mkEnableOption
-    mkMerge
     mkIf
-    mkOption
-    types
     ;
   cfg = config.mjm.libvirtd;
 in
@@ -19,15 +16,6 @@ in
 
   options.mjm.libvirtd = {
     enable = mkEnableOption "libvirtd";
-
-    managementInterface = mkOption {
-      type = types.str;
-      default = cfg.bridgeInterface;
-    };
-
-    bridgeInterface = mkOption {
-      type = types.str;
-    };
   };
 
   config = mkIf cfg.enable {
@@ -49,33 +37,7 @@ in
       parallelShutdown = 3;
     };
 
-    systemd.network.networks = mkMerge [
-      {
-        "10-lan2" = {
-          matchConfig.Name = cfg.bridgeInterface;
-          networkConfig.Bridge = "vmbr0";
-        };
-      }
-      (mkIf (cfg.managementInterface == cfg.bridgeInterface) {
-        "10-lan" = {
-          matchConfig.Name = "vmbr0";
-          linkConfig.RequiredForOnline = "routable";
-        };
-      })
-      (mkIf (cfg.managementInterface != cfg.bridgeInterface) {
-        # other config for this network is in base module
-        "10-lan".matchConfig.Name = cfg.managementInterface;
-        "10-lan2-bridge".matchConfig.Name = "vmbr0";
-      })
-    ];
-
-    systemd.network.netdevs.vmbr0 = {
-      netdevConfig = {
-        Name = "vmbr0";
-        Kind = "bridge";
-      };
-    };
-
+    mjm.networkd.bridge.enable = true;
     services.lldpd.enable = true;
 
     users.users.${config.mjm.username}.extraGroups = [ "libvirtd" ];

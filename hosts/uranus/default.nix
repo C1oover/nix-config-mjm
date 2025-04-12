@@ -1,6 +1,5 @@
 {
   pkgs,
-  lib,
   ...
 }:
 {
@@ -17,7 +16,7 @@
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   networking.networkmanager.enable = false;
-  systemd.network.networks."10-lan".matchConfig.Name = lib.mkForce "enp3*";
+  mjm.networkd.bridge.enable = true;
 
   services.openssh.enable = true;
 

@@ -42,9 +42,10 @@ in
     };
 
     mjm.consul.enable = true;
-    mjm.libvirtd = {
-      enable = true;
-      inherit (cfg) managementInterface bridgeInterface;
+    mjm.libvirtd.enable = true;
+    mjm.networkd = {
+      primaryLinkName = cfg.managementInterface;
+      secondaryLinkName = cfg.bridgeInterface;
     };
     mjm.remote-builder.enable = true;
     mjm.server.enable = true;
