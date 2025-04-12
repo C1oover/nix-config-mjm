@@ -8,13 +8,15 @@ stdenvNoCC.mkDerivation rec {
   pname = "pragmata-pro";
   version = "0.9";
 
-  src = requireFile {
-    name = "PragmataPro0.9-8svlok.zip";
-    url = "https://fsd.it/shop/fonts/pragmatapro/";
-    # This hash can be determined with:
-    #   nix hash file ${name}
-    hash = "sha256-MXjpDNUyAzMDj7CdOXLag+UOGU03AtAMjsrVtfXnV50=";
-  };
+  src =
+    (requireFile {
+      name = "PragmataPro0.9-8svlok.zip";
+      url = "https://fsd.it/shop/fonts/pragmatapro/";
+      # This hash can be determined with:
+      #   nix hash file ${name}
+      hash = "sha256-MXjpDNUyAzMDj7CdOXLag+UOGU03AtAMjsrVtfXnV50=";
+    }).overrideAttrs
+      { allowSubstitutes = true; };
 
   sourceRoot = "PragmataPro${version}";
 
