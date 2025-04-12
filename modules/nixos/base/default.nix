@@ -13,6 +13,7 @@
     ../../common/base
 
     ./attic.nix
+    ./netns.nix
     ./networkd.nix
     ./user.nix
   ];

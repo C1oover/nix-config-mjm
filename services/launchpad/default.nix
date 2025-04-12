@@ -51,6 +51,8 @@ in
       useIPv4Proxy = true;
     };
 
+    mjm.networkd.macvlan.enable = true;
+
     systemd.sockets.launchpad = {
       wantedBy = [ "sockets.target" ];
       partOf = [ "launchpad.service" ];
@@ -65,6 +67,7 @@ in
         "launchpad.socket"
       ];
       requires = [ "launchpad.socket" ];
+      bindsTo = [ "netns-bridge@launchpad.service" ];
       environment = serviceEnv;
 
       serviceConfig = {
@@ -73,6 +76,8 @@ in
         Restart = "always";
         DynamicUser = true;
         User = "launchpad";
+        PrivateTmp = true;
+        NetworkNamespacePath = "/run/netns/launchpad";
         LoadCredential = keys;
       };
     };
@@ -113,16 +118,8 @@ in
       port = 4100;
 
       checks.up = {
-        # consul can't do normal http checks to unix sockets, and the
-        # tunnel only allows requests from the ingress, so here we are.
-        script.args = [
-          (lib.getExe pkgs.curl)
-          "--no-progress-meter"
-          "--fail-with-body"
-          "--unix-socket"
-          "/run/launchpad.sock"
-          "http://localhost/healthz"
-        ];
+        http.path = "/healthz";
+        http.socket = "/run/launchpad.sock";
         intervalSeconds = 30;
       };
     };

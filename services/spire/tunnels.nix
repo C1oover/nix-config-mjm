@@ -50,6 +50,7 @@ let
         "${name}-tunnel.socket"
       ];
       requires = [ "${name}-tunnel.socket" ];
+      bindsTo = mkIf (tunnel.namespace != null) [ "netns-bridge@${tunnel.namespace}.service" ];
 
       environment.SPIFFE_ENDPOINT_SOCKET = "unix:${cfg.agent.socketPath}";
 
@@ -78,6 +79,7 @@ let
         DynamicUser = true;
         Restart = "always";
         WatchdogSec = 1;
+        NetworkNamespacePath = mkIf (tunnel.namespace != null) "/run/netns/${tunnel.namespace}";
       };
     };
   };
@@ -95,6 +97,10 @@ in
                 "client"
                 "server"
               ];
+            };
+            namespace = mkOption {
+              type = types.nullOr types.str;
+              default = null;
             };
             port = mkOption {
               type = types.nullOr types.port;

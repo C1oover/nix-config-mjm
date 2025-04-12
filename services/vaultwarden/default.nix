@@ -35,17 +35,32 @@ in
     services.vaultwarden = {
       enable = true;
       config = {
-        ROCKET_ADDRESS = "127.0.0.1";
+        ROCKET_ADDRESS = "::1";
         ROCKET_PORT = 8221;
         DOMAIN = "https://pass.midna.dev";
       };
     };
 
-    mjm.spire.tunnels.vaultwarden = {
-      mode = "server";
-      port = 8222;
-      target = "localhost:8221";
-      allowIngress = true;
+    systemd.services.vaultwarden = {
+      bindsTo = [ "netns-bridge@vaultwarden.service" ];
+      serviceConfig.NetworkNamespacePath = "/run/netns/vaultwarden";
+    };
+
+    mjm.spire.tunnels = {
+      vaultwarden = {
+        mode = "server";
+        namespace = "vaultwarden";
+        port = 8222;
+        target = "localhost:8221";
+        allowIngress = true;
+        allowedServices = [ "consul-agent" ];
+      };
+      consul-vaultwarden = {
+        mode = "client";
+        socket = "/run/consul-checks/vaultwarden.sock";
+        target = "localhost:8222";
+        service = "vaultwarden";
+      };
     };
 
     services.consul.services.vaultwarden = {
@@ -53,7 +68,7 @@ in
 
       checks.up = {
         http.path = "/alive";
-        http.port = 8221;
+        http.socket = "/run/consul-checks/vaultwarden.sock";
       };
     };
 
