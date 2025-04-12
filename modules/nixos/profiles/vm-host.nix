@@ -40,10 +40,7 @@ in
 
     mjm.consul.enable = true;
     mjm.libvirtd.enable = true;
-    mjm.networkd = {
-      primaryLinkName = cfg.managementInterface;
-      secondaryLinkName = cfg.bridgeInterface;
-    };
+    mjm.networkd.secondaryLinkName = "lan1";
     mjm.remote-builder.enable = true;
     mjm.server.enable = true;
     mjm.spire.agent.enable = true;
