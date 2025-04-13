@@ -22,7 +22,7 @@ let
 
     telemetry {
       Prometheus {
-        host = "::"
+        host = "[::]"
         port = 8082
       }
     }
