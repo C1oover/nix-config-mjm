@@ -122,6 +122,8 @@ in
       };
     };
 
+    networking.firewall.allowedTCPPorts = [ 9988 ];
+
     environment.systemPackages = [
       pkgs.spire-agent
       (pkgs.writeShellScriptBin ",spire" ''
