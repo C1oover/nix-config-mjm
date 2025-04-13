@@ -20,32 +20,36 @@ let
     ;
   cfg = config.mjm.spire;
 
-  mkSocket = name: tunnel: {
-    name = "${name}-tunnel";
-    value = {
-      wantedBy = [ "sockets.target" ];
-      partOf = [ "${name}-tunnel.service" ];
-      bindsTo = mkIf (tunnel.namespace != null) [ "netns-bridge@${tunnel.namespace}.service" ];
-      startLimitIntervalSec = 0;
-      socketConfig = {
-        FileDescriptorName = "ghostunnel";
-        ListenStream =
-          if tunnel.listen != null then
-            tunnel.listen
-          else if tunnel.mode == "server" then
-            "[::]:${toString tunnel.port}"
-          else if tunnel.port != null then
-            "[::1]:${toString tunnel.port}"
-          else if tunnel.socket != null then
-            tunnel.socket
-          else
-            builtins.throw "missing port or socket for tunnel";
-        NetworkNamespacePath = mkIf (
-          tunnel.namespace != null && tunnel.mode == "client"
-        ) "/run/netns/${tunnel.namespace}";
+  mkSocket =
+    name: tunnel:
+    let
+      useNamespace = tunnel.namespace != null && tunnel.mode == "client";
+    in
+    {
+      name = "${name}-tunnel";
+      value = {
+        wantedBy = [ "sockets.target" ];
+        partOf = [ "${name}-tunnel.service" ];
+        bindsTo = mkIf useNamespace [ "netns-bridge@${tunnel.namespace}.service" ];
+        after = mkIf useNamespace [ "netns-bridge@${tunnel.namespace}.service" ];
+        startLimitIntervalSec = 0;
+        socketConfig = {
+          FileDescriptorName = "ghostunnel";
+          ListenStream =
+            if tunnel.listen != null then
+              tunnel.listen
+            else if tunnel.mode == "server" then
+              "[::]:${toString tunnel.port}"
+            else if tunnel.port != null then
+              "[::1]:${toString tunnel.port}"
+            else if tunnel.socket != null then
+              tunnel.socket
+            else
+              builtins.throw "missing port or socket for tunnel";
+          NetworkNamespacePath = mkIf useNamespace "/run/netns/${tunnel.namespace}";
+        };
       };
     };
-  };
 
   mkService = name: tunnel: {
     name = "${name}-tunnel";
@@ -54,7 +58,7 @@ let
       after = [
         "network.target"
         "${name}-tunnel.socket"
-      ];
+      ] ++ optional (tunnel.namespace != null) "netns-bridge@${tunnel.namespace}.service";
       requires = [ "${name}-tunnel.socket" ];
       bindsTo = mkIf (tunnel.namespace != null) [ "netns-bridge@${tunnel.namespace}.service" ];
 

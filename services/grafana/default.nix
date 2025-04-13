@@ -95,6 +95,7 @@ in
 
     systemd.services.grafana = {
       bindsTo = [ "netns-bridge@grafana.service" ];
+      after = [ "netns-bridge@grafana.service" ];
       serviceConfig.NetworkNamespacePath = "/run/netns/grafana";
     };
 
@@ -113,6 +114,13 @@ in
         port = 3100;
         target = "loki.service.consul:3103";
         service = "loki";
+      };
+      grafana-tempo = {
+        mode = "client";
+        namespace = "grafana";
+        port = 3200;
+        target = "tempo.service.consul:3200";
+        service = "tempo";
       };
     };
 
