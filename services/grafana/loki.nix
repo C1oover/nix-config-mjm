@@ -111,6 +111,7 @@ in
         port = 3103;
         target = "localhost:3100";
         allowedServices = [
+          "grafana"
           "promtail"
           "consul-agent"
         ];

@@ -25,6 +25,7 @@ let
     value = {
       wantedBy = [ "sockets.target" ];
       partOf = [ "${name}-tunnel.service" ];
+      bindsTo = mkIf (tunnel.namespace != null) [ "netns-bridge@${tunnel.namespace}.service" ];
       startLimitIntervalSec = 0;
       socketConfig = {
         FileDescriptorName = "ghostunnel";

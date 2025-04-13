@@ -91,12 +91,29 @@ in
       redirectUris = [ "https://graphs.midna.dev/login/generic_oauth" ];
     };
 
-    mjm.spire.tunnels.grafana = {
-      mode = "server";
-      port = 3000;
-      target = "unix:/run/grafana/server.sock";
-      allowIngress = true;
-      allowMetrics = true;
+    mjm.networkd.macvlan.enable = true;
+
+    systemd.services.grafana = {
+      bindsTo = [ "netns-bridge@grafana.service" ];
+      serviceConfig.NetworkNamespacePath = "/run/netns/grafana";
+    };
+
+    mjm.spire.tunnels = {
+      grafana = {
+        mode = "server";
+        namespace = "grafana";
+        port = 3000;
+        target = "unix:/run/grafana/server.sock";
+        allowIngress = true;
+        allowMetrics = true;
+      };
+      grafana-loki = {
+        mode = "client";
+        namespace = "grafana";
+        port = 3100;
+        target = "loki.service.consul:3103";
+        service = "loki";
+      };
     };
 
     services.consul.services.grafana = {
