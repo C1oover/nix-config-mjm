@@ -412,10 +412,6 @@ func handleDiffInfra(ctx context.Context) error {
 
 func evalNodes(ctx context.Context, cfg *Config, path string, hostnames []string) (*DeployPlan, error) {
 	workers := *concurrency
-	if len(hostnames) > 0 && len(hostnames) < workers-1 {
-		workers = len(hostnames) + 1
-	}
-
 	slog.InfoContext(ctx, "evaluating plans", "file", path, "hosts", hostnames, "workers", workers)
 
 	hostnamesBytes, err := json.Marshal(hostnames)
