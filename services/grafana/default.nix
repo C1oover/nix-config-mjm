@@ -129,6 +129,13 @@ in
         target = "prometheus.service.consul:9090";
         service = "prometheus";
       };
+      grafana-alertmanager = {
+        mode = "client";
+        namespace = "grafana";
+        port = 9093;
+        target = "alertmanager.service.consul:9093";
+        service = "alertmanager";
+      };
     };
 
     services.consul.services.grafana = {
