@@ -27,7 +27,7 @@ var (
 	nom         = flag.Bool("nom", os.Getenv("CI") == "", "Whether to run builds through nix-output-monitor")
 	forceGoal   = flag.String("goal", "", "Force use of a specific goal regardless of reboot check")
 	pushToAttic = flag.Bool("attic", true, "Whether to push the built system to the attic cache")
-	runTests    = flag.Bool("tests", true, "Whether to run NixOS VM tests")
+	runTests    = flag.Bool("tests", os.Getenv("CI") != "", "Whether to run NixOS VM tests")
 
 	logLevel slog.Level
 )
