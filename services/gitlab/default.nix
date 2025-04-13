@@ -5,7 +5,12 @@
   ...
 }:
 let
-  inherit (lib) mkEnableOption mkIf;
+  inherit (lib)
+    genAttrs
+    mkEnableOption
+    mkIf
+    mkMerge
+    ;
   cfg = config.mjm.gitlab;
 
   mkCred = name: "gitlab_${name}:${config.mjm.services.gitlab.vault.socketPath}";
@@ -46,7 +51,10 @@ in
         useIPv4Proxy = true;
       };
       pages = {
-        upstream.service.name = "gitlab-pages";
+        upstream = {
+          service.name = "gitlab-pages";
+          tls.enable = true;
+        };
 
         serverAliases = [
           "*.pages.midna.dev"
@@ -101,12 +109,13 @@ in
         jwsFile = secretPath "config" "openid_connect_signing_key";
       };
       initialRootPasswordFile = secretPath "db-config" "initial_root_password";
+      extraEnv.AWS_CONTAINER_CREDENTIALS_RELATIVE_URI = "/creds";
 
       pages = {
         enable = true;
         settings = {
           pages-domain = "pages.midna.dev";
-          listen-proxy = [ ":8090" ];
+          listen-proxy = [ "[::1]:8090" ];
           pages-status = "/healthz";
         };
       };
@@ -114,10 +123,7 @@ in
       workhorse.config = {
         object_storage = {
           provider = "AWS";
-          s3 = {
-            aws_access_key_id._secret = secretPath "workhorse" "aws_access_key_id";
-            aws_secret_access_key._secret = secretPath "workhorse" "aws_secret_access_key";
-          };
+          s3.use_iam_profile = true;
         };
       };
 
@@ -149,10 +155,9 @@ in
           proxy_download = true;
           connection = {
             provider = "AWS";
-            aws_access_key_id._secret = secretPath "config" "aws_access_key_id";
-            aws_secret_access_key._secret = secretPath "config" "aws_secret_access_key";
+            use_iam_profile = true;
             region = "home";
-            endpoint = "http://localhost:3904";
+            endpoint = "http://localhost:3902";
             path_style = true;
           };
           objects = {
@@ -211,22 +216,25 @@ in
       };
     };
 
-    systemd.services.gitlab-config.serviceConfig.LoadCredential = map mkCred [
-      "secret_key_base"
-      "db_key_base"
-      "otp_key_base"
-      "openid_connect_signing_key"
-      "managed__oidc_client_secret"
-      "aws_access_key_id"
-      "aws_secret_access_key"
-      "fastmail_password"
-    ];
-    systemd.services.gitlab-db-config.serviceConfig.LoadCredential = [
-      (mkCred "initial_root_password")
-    ];
-    systemd.services.gitlab-workhorse.serviceConfig.LoadCredential = map mkCred [
-      "aws_access_key_id"
-      "aws_secret_access_key"
+    systemd.services = mkMerge [
+      (genAttrs [ "gitlab-sidekiq" "gitlab-pages" "gitlab-workhorse" "gitlab" "gitlab-backup" ] (_: {
+        bindsTo = [ "netns-bridge@gitlab.service" ];
+        after = [ "netns-bridge@gitlab.service" ];
+        serviceConfig.NetworkNamespacePath = "/run/netns/gitlab";
+      }))
+      {
+        gitlab-config.serviceConfig.LoadCredential = map mkCred [
+          "secret_key_base"
+          "db_key_base"
+          "otp_key_base"
+          "openid_connect_signing_key"
+          "managed__oidc_client_secret"
+          "fastmail_password"
+        ];
+        gitlab-db-config.serviceConfig.LoadCredential = [
+          (mkCred "initial_root_password")
+        ];
+      }
     ];
 
     mjm.authelia.oidcClients.gitlab = {
@@ -236,6 +244,8 @@ in
       redirectUris = [ redirectUri ];
     };
 
+    mjm.networkd.macvlan.enable = true;
+
     mjm.spire.tunnels = {
       gitlab = {
         mode = "server";
@@ -243,18 +253,37 @@ in
         target = "unix:/run/gitlab/gitlab-workhorse.socket";
         allowIngress = true;
       };
+      gitlab-pages = {
+        mode = "server";
+        namespace = "gitlab";
+        port = 8090;
+        target = "localhost:8090";
+        allowIngress = true;
+        allowedServices = [ "consul-agent" ];
+      };
       gitlab-s3 = {
         mode = "client";
-        port = 3904;
+        namespace = "gitlab";
+        port = 3902;
         target = "s3.garage.service.consul:3902";
         service = "garage";
       };
+      gitlab-s3-creds = {
+        mode = "client";
+        namespace = "gitlab";
+        listen = "169.254.170.2:80";
+        target = "spiffe-garage.service.consul:3899";
+        service = "spiffe-garage";
+      };
+      consul-gitlab-pages = {
+        mode = "client";
+        socket = "/run/consul-checks/gitlab-pages.sock";
+        target = "localhost:8090";
+        service = "gitlab-pages";
+      };
     };
 
-    networking.firewall.allowedTCPPorts = [
-      80
-      8090
-    ];
+    networking.firewall.allowedTCPPorts = [ 80 ];
 
     services.consul.services = {
       gitlab = {
@@ -270,6 +299,7 @@ in
 
         checks.up = {
           http.path = "/healthz";
+          http.socket = "/run/consul-checks/gitlab-pages.sock";
         };
       };
     };
