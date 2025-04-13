@@ -68,6 +68,7 @@ in
         "/usr/bin/env ip netns add %i"
         "/bin/sh -c '${buildNetworkJson} %i | netavark -c /run/%i-netns setup /run/netns/%i'"
         "/usr/bin/env ip netns exec %i sysctl -w net.ipv6.conf.eth0.autoconf=1"
+        "/usr/bin/env ip -n %i addr add 169.254.170.2/16 dev lo"
       ];
       ExecStop = "/usr/bin/env ip netns delete %i";
     };

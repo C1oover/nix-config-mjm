@@ -53,7 +53,7 @@ in
 
         storage_config = {
           aws = {
-            s3 = "http://localhost.:3906";
+            s3 = "http://localhost.:3902";
             region = "home";
             bucketnames = "loki-logs";
             insecure = true;
@@ -96,30 +96,45 @@ in
       };
     };
 
-    # AWS SDK runs credential processes through `sh` and expects it to be on PATH
-    systemd.services.loki.path = [ pkgs.bash ];
-    systemd.services.loki.environment = {
-      SPIFFE_ENDPOINT_SOCKET = "unix:${config.mjm.spire.agent.socketPath}";
-      AWS_SDK_LOAD_CONFIG = "1";
-      AWS_SHARED_CREDENTIALS_FILE = pkgs.writeText "spiffe-garage-aws-credentials" ''
-        [default]
-        credential_process = ${pkgs.spiffe-garage}/bin/spiffe-garage-helper
-      '';
+    mjm.networkd.macvlan.enable = true;
+
+    systemd.services.loki = {
+      bindsTo = [ "netns-bridge@loki.service" ];
+      serviceConfig.NetworkNamespacePath = "/run/netns/loki";
+      environment.AWS_CONTAINER_CREDENTIALS_RELATIVE_URI = "/creds";
     };
 
     mjm.spire.tunnels = {
       loki = {
         mode = "server";
+        namespace = "loki";
         port = 3103;
         target = "localhost:3100";
-        allowedServices = [ "promtail" ];
+        allowedServices = [
+          "promtail"
+          "consul-agent"
+        ];
         allowMetrics = true;
       };
       loki-s3 = {
         mode = "client";
-        port = 3906;
+        namespace = "loki";
+        port = 3902;
         target = "s3.garage.service.consul:3902";
         service = "garage";
+      };
+      loki-s3-creds = {
+        mode = "client";
+        namespace = "loki";
+        listen = "169.254.170.2:80";
+        target = "spiffe-garage.service.consul:3899";
+        service = "spiffe-garage";
+      };
+      consul-loki = {
+        mode = "client";
+        socket = "/run/consul-checks/loki.sock";
+        target = "localhost:3103";
+        service = "loki";
       };
     };
 
@@ -130,7 +145,7 @@ in
 
       checks.up = {
         http.path = "/ready";
-        http.port = 3100;
+        http.socket = "/run/consul-checks/loki.sock";
       };
     };
 

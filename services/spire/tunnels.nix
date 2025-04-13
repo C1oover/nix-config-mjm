@@ -29,7 +29,9 @@ let
       socketConfig = {
         FileDescriptorName = "ghostunnel";
         ListenStream =
-          if tunnel.mode == "server" then
+          if tunnel.listen != null then
+            tunnel.listen
+          else if tunnel.mode == "server" then
             "[::]:${toString tunnel.port}"
           else if tunnel.port != null then
             "[::1]:${toString tunnel.port}"
@@ -37,6 +39,9 @@ let
             tunnel.socket
           else
             builtins.throw "missing port or socket for tunnel";
+        NetworkNamespacePath = mkIf (
+          tunnel.namespace != null && tunnel.mode == "client"
+        ) "/run/netns/${tunnel.namespace}";
       };
     };
   };
@@ -99,6 +104,10 @@ in
               ];
             };
             namespace = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+            };
+            listen = mkOption {
               type = types.nullOr types.str;
               default = null;
             };

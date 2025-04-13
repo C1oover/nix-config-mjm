@@ -81,7 +81,7 @@ type proxyHandler struct {
 func (h *proxyHandler) Handler() http.Handler {
 	m := http.NewServeMux()
 	m.HandleFunc("GET /healthz", h.checkHealth)
-	m.HandleFunc("POST /creds", h.getCreds)
+	m.HandleFunc("/creds", h.getCreds)
 	return m
 }
 
