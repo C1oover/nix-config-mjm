@@ -67,6 +67,9 @@ in
         ];
       };
     };
+    virtualisation.containers.containersConf.settings = {
+      containers.pids_limit = -1;
+    };
     # gitlab-runner will enable this by default, but we want podman instead
     virtualisation.docker.enable = false;
 
