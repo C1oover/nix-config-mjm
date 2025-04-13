@@ -122,6 +122,13 @@ in
         target = "tempo.service.consul:3200";
         service = "tempo";
       };
+      grafana-prometheus = {
+        mode = "client";
+        namespace = "grafana";
+        port = 9090;
+        target = "prometheus.service.consul:9090";
+        service = "prometheus";
+      };
     };
 
     services.consul.services.grafana = {

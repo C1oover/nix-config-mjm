@@ -10,5 +10,11 @@ in
       configFile = ./blackbox.yml;
       listenAddress = "127.0.0.1";
     };
+
+    systemd.services.prometheus-blackbox-exporter = {
+      bindsTo = [ "netns-bridge@prometheus.service" ];
+      after = [ "netns-bridge@prometheus.service" ];
+      serviceConfig.NetworkNamespacePath = "/run/netns/prometheus";
+    };
   };
 }

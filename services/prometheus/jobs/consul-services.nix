@@ -2,7 +2,7 @@
   services.prometheus.scrapeConfigs = [
     {
       job_name = "consul-services";
-      consul_sd_configs = [ { server = "127.0.0.1:8500"; } ];
+      consul_sd_configs = [ { server = "consul.service.consul:8500"; } ];
       tls_config = {
         ca_file = "/var/cache/prometheus/bundle.pem";
         cert_file = "/var/cache/prometheus/cert.pem";

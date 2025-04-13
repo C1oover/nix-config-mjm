@@ -5,7 +5,7 @@
       consul_sd_configs = [
         {
           services = [ "vault" ];
-          server = "127.0.0.1:8500";
+          server = "consul.service.consul:8500";
         }
       ];
       scheme = "https";

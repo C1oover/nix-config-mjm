@@ -45,7 +45,7 @@ in
     services.prometheus = {
       enable = true;
       listenAddress = "[::1]";
-      port = 19090;
+      port = 9090;
       checkConfig = "syntax-only";
       webExternalUrl = "https://metrics.midna.dev";
 
@@ -55,10 +55,31 @@ in
       };
     };
 
-    mjm.spire.tunnels.prometheus = {
-      mode = "server";
-      port = 9090;
-      target = "localhost:19090";
+    systemd.services.prometheus = {
+      bindsTo = [ "netns-bridge@prometheus.service" ];
+      after = [ "netns-bridge@prometheus.service" ];
+      serviceConfig.NetworkNamespacePath = "/run/netns/prometheus";
+    };
+
+    mjm.spire.tunnels = {
+      prometheus = {
+        mode = "server";
+        namespace = "prometheus";
+        port = 9090;
+        target = "localhost:9090";
+        allowIngress = true;
+        allowedServices = [
+          "grafana"
+          "consul-agent"
+          "prometheus"
+        ];
+      };
+      consul-prometheus = {
+        mode = "client";
+        socket = "/run/consul-checks/prometheus.sock";
+        target = "localhost:9090";
+        service = "prometheus";
+      };
     };
 
     security.polkit.enable = true;
@@ -116,7 +137,7 @@ in
 
       checks.up = {
         http.path = "/-/ready";
-        http.port = 19090;
+        http.socket = "/run/consul-checks/prometheus.sock";
         intervalSeconds = 30;
       };
     };

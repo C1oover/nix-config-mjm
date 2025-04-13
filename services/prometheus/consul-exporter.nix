@@ -13,11 +13,16 @@ in
   config = mkIf cfg.enable {
     systemd.services.prometheus-consul-exporter = {
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      bindsTo = [ "netns-bridge@prometheus.service" ];
+      after = [
+        "network.target"
+        "netns-bridge@prometheus.service"
+      ];
       serviceConfig = {
         ExecStart = utils.escapeSystemdExecArgs [
           (lib.getExe pkgs.prometheus-consul-exporter)
           "--web.listen-address=127.0.0.1:9107"
+          "--consul.server=consul.service.consul:8500"
         ];
 
         Restart = "always";
@@ -29,6 +34,7 @@ in
         DeviceAllow = [ "" ];
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
+        NetworkNamespacePath = "/run/netns/prometheus";
         NoNewPrivileges = true;
         PrivateDevices = true;
         ProtectClock = true;
