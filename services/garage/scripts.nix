@@ -25,10 +25,11 @@ in
       ''
         systemd-run \
           --service-type=oneshot \
-          -p EnvironmentFile=/run/vault-secrets/garage-env \
+          -p LoadCredential=garage_rpc_secret:/run/garage-creds.sock \
           --wait \
           -qt \
           --collect \
+          env 'GARAGE_RPC_SECRET_FILE=''${CREDENTIALS_DIRECTORY}/garage_rpc_secret' \
           ${garage}/bin/garage \
           "$@"
       '';
