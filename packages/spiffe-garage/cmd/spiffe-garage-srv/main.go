@@ -114,11 +114,13 @@ func (h *proxyHandler) getCreds(w http.ResponseWriter, r *http.Request) {
 		Version         int
 		AccessKeyId     string
 		SecretAccessKey string
+		Token           string
 		Expiration      time.Time
 	}{
 		1,
 		keyID,
 		secretKey,
+		"",
 		time.Now().Add(time.Hour),
 	}
 
