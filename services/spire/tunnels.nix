@@ -28,11 +28,14 @@ let
     {
       name = "${name}-tunnel";
       value = {
-        wantedBy = [ "sockets.target" ];
+        wantedBy = if useNamespace then [ "network.target" ] else [ "sockets.target" ];
         partOf = [ "${name}-tunnel.service" ];
         bindsTo = mkIf useNamespace [ "netns-bridge@${tunnel.namespace}.service" ];
         after = mkIf useNamespace [ "netns-bridge@${tunnel.namespace}.service" ];
         startLimitIntervalSec = 0;
+        unitConfig = mkIf useNamespace {
+          DefaultDependencies = false;
+        };
         socketConfig = {
           FileDescriptorName = "ghostunnel";
           ListenStream =
