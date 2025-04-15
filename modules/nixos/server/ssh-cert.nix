@@ -17,10 +17,7 @@ in
     services.openssh.settings.HostCertificate = "/run/sshd-host-cert/cert";
 
     systemd.services.sshd-host-cert = {
-      wantedBy = [
-        "multi-user.target"
-        "sshd.service"
-      ];
+      wantedBy = [ "multi-user.target" ];
       before = [ "sshd.service" ];
       after = [
         "network-online.target"
@@ -58,7 +55,9 @@ in
           >/run/sshd-host-cert/cert
 
         chmod 0640 /run/sshd-host-cert/cert
-        systemctl try-restart sshd.service
+        # important to not block here, as it seems that this restart, presumably because of the dependencies between
+        # sshd.service and this unit, will block forever without --no-block
+        systemctl --no-block try-restart sshd.service
       '';
       environment = {
         VAULT_ADDR = "https://vault.service.consul:8200";
