@@ -26,7 +26,10 @@ in
     mjm.postgresql.enable = true;
 
     ingress.virtualHosts.feeds = {
-      upstream.service.name = "miniflux";
+      upstream = {
+        service.name = "miniflux";
+        tls.enable = true;
+      };
 
       enableAuthProxy = false;
       useIPv4Proxy = true;
@@ -35,7 +38,7 @@ in
     services.miniflux = {
       enable = true;
       config = {
-        LISTEN_ADDR = "[::]:9999";
+        LISTEN_ADDR = "/run/miniflux/server.sock";
         BASE_URL = "https://feeds.midna.dev/";
         METRICS_COLLECTOR = 1;
         METRICS_ALLOWED_NETWORKS = "127.0.0.1/8,10.0.0.0/16,${config.mjm.ipv6Prefix}::/64";
@@ -51,6 +54,7 @@ in
 
     systemd.services.miniflux = {
       serviceConfig.LoadCredential = [ "miniflux_managed__oidc_client_secret:/run/miniflux-creds.sock" ];
+      serviceConfig.RuntimeDirectoryMode = mkForce "0755";
     };
 
     mjm.authelia.oidcClients.miniflux = {
@@ -61,14 +65,25 @@ in
       redirectUris = [ redirectUri ];
     };
 
-    networking.firewall.allowedTCPPorts = [ 9999 ];
+    mjm.spire.tunnels = {
+      miniflux = {
+        mode = "server";
+        port = 9999;
+        target = "unix:/run/miniflux/server.sock";
+        allowIngress = true;
+        allowMetrics = true;
+      };
+    };
 
     services.consul.services.miniflux = {
       port = 9999;
+
       metrics.enable = true;
+      metrics.tls = true;
 
       checks.up = {
         http.path = "/healthcheck";
+        http.socket = "/run/miniflux/server.sock";
       };
     };
 
