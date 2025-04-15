@@ -1,3 +1,4 @@
+{ lib, ... }:
 {
   mjm.username = "mjm";
 
@@ -49,5 +50,6 @@
     ];
   };
 
+  environment.etc."resolv.conf".source = lib.mkForce "/run/systemd/resolve/resolv.conf";
   system.stateVersion = "25.05";
 }
