@@ -14,6 +14,9 @@ import (
 //go:embed service.hcl
 var servicePolicy string
 
+//go:embed sshd.hcl
+var sshdPolicy string
+
 func setUpAuthSPIFFE(
 	ctx *pulumi.Context,
 	services map[string]map[string]any,
@@ -44,6 +47,14 @@ func setUpAuthSPIFFE(
 	servicePolicy, err := vault.NewPolicy(ctx, "service", &vault.PolicyArgs{
 		Name:   pulumi.String("service"),
 		Policy: pulumi.String(servicePolicy),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	sshdPolicy, err := vault.NewPolicy(ctx, "sshd", &vault.PolicyArgs{
+		Name:   pulumi.String("sshd"),
+		Policy: pulumi.String(sshdPolicy),
 	})
 	if err != nil {
 		return nil, err
@@ -103,6 +114,27 @@ func setUpAuthSPIFFE(
 		if _, err := identity.NewEntityAlias(ctx, "spiffe-host-"+name, &identity.EntityAliasArgs{
 			Name:          pulumi.Sprintf("spiffe://home.mattmoriarity.com/%s/vault-secrets", name),
 			CanonicalId:   entity.ID(),
+			MountAccessor: backend.Accessor,
+		}); err != nil {
+			return nil, err
+		}
+
+		sshdEntity, err := identity.NewEntity(ctx, "host-sshd-"+name, &identity.EntityArgs{
+			Name:     pulumi.Sprintf("sshd: %s", name),
+			Policies: pulumi.StringArray{sshdPolicy.Name},
+			Metadata: pulumi.StringMap{
+				"hostname": pulumi.String(name),
+				"domain":   pulumi.String("home.mattmoriarity.com"),
+				"fqdn":     pulumi.Sprintf("%s.home.mattmoriarity.com", name),
+			},
+		})
+		if err != nil {
+			return nil, err
+		}
+
+		if _, err := identity.NewEntityAlias(ctx, "spiffe-host-sshd-"+name, &identity.EntityAliasArgs{
+			Name:          pulumi.Sprintf("spiffe://home.mattmoriarity.com/%s/sshd", name),
+			CanonicalId:   sshdEntity.ID(),
 			MountAccessor: backend.Accessor,
 		}); err != nil {
 			return nil, err
