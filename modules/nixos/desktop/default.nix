@@ -5,7 +5,7 @@
   ...
 }:
 let
-  inherit (lib) mkForce mkIf mkOverride;
+  inherit (lib) mkIf mkOverride;
   cfg = config.mjm.desktop;
 in
 {
@@ -18,6 +18,7 @@ in
     ./network.nix
     ./plasma.nix
     ./sound.nix
+    ./ssh-tpm.nix
     ./virtualisation.nix
   ];
 
@@ -43,9 +44,6 @@ in
       ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="046d", ATTRS{idProduct}=="c24a", ATTR{power/wakeup}="enabled"
       ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="3496", ATTRS{idProduct}=="0006", ATTR{power/wakeup}="enabled"
     '';
-
-    services.yubikey-agent.enable = true;
-    systemd.user.services.yubikey-agent.wantedBy = mkForce [ "graphical-session.target" ];
 
     mjm.state.directories = mkIf config.services.fprintd.enable [
       "/var/lib/fprint"

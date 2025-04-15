@@ -8,6 +8,7 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
+    mkMerge
     mkOption
     types
     ;
@@ -18,11 +19,14 @@ let
   };
 
   updateCert = pkgs.writeShellScript "update-ssh-cert" ''
-    cert=$(${lib.getExe pkgs.vault} write -field=signed_key ssh-client-signer/sign/homelab-client public_key=@${cfg.sshPublicKeyPath})
+    export VAULT_ADDR="${envVars.VAULT_ADDR}"
+    cert=$(${lib.getExe pkgs.vault} write -field=signed_key ssh-client-signer/sign/homelab-client public_key=@${cfg.sshPublicKeyPath} valid_principals=matt,mjm)
     if [ $? -eq 0 ]; then
       echo $cert > ${cfg.sshCertPath}
     fi
   '';
+
+  isHardwareKey = cfg.enableTpm || cfg.enableSecretive;
 in
 {
   options.mjm.homelab = {
@@ -33,9 +37,14 @@ in
       default = pkgs.stdenv.isDarwin;
     };
 
+    enableTpm = mkOption {
+      type = types.bool;
+      default = pkgs.stdenv.isLinux;
+    };
+
     sshPublicKeyName = mkOption {
       type = types.str;
-      default = "id_ed25519.pub";
+      default = if cfg.enableTpm then "id_ecdsa.pub" else "id_ed25519.pub";
     };
 
     sshPublicKeyDir = mkOption {
@@ -78,13 +87,16 @@ in
 
     programs.ssh = {
       enable = true;
-      extraOptionOverrides.IdentityFile = mkIf (!cfg.enableSecretive) (
+      extraOptionOverrides.IdentityFile = mkIf (!isHardwareKey) (
         builtins.replaceStrings [ ".pub" ] [ "" ] cfg.sshPublicKeyPath
       );
-      extraOptionOverrides.IdentityAgent = mkIf cfg.enableSecretive "${config.home.homeDirectory}/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh";
+      extraOptionOverrides.IdentityAgent = mkMerge [
+        (mkIf cfg.enableSecretive "${config.home.homeDirectory}/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh")
+        (mkIf cfg.enableTpm "\${XDG_RUNTIME_DIR}/ssh-tpm-agent.sock")
+      ];
       matchBlocks.homelab = {
         match = "host *.home.mattmoriarity.com exec \"${updateCert}\"";
-        identityFile = cfg.sshPublicKeyPath;
+        identityFile = if isHardwareKey then cfg.sshPublicKeyPath else cfg.sshPrivateKeyPath;
         certificateFile = cfg.sshCertPath;
       };
     };
