@@ -11,6 +11,7 @@
     "notunes"
     "orbstack"
     "postico"
+    "secretive"
     "slab"
     "teleport-connect"
   ];

@@ -3,6 +3,7 @@
   mjm.aerospace.enable = true;
   mjm.work.enable = true;
 
+  mjm.homelab.sshPublicKeyName = "301bb20112f6533610a20ccc216dcbea.pub";
   mjm.terminal.font.size = 15;
 
   home.packages = builtins.attrValues {
