@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	ipv6Prefix = "2601:282:0:13d8"
+	ipv6Prefix = "2601:282:0:1631"
 	aion       = "5.78.46.61"
 )
 

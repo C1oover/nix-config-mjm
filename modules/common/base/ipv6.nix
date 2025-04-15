@@ -8,6 +8,6 @@ in
   };
 
   config = {
-    mjm.ipv6Prefix = "2601:282:0:13d8";
+    mjm.ipv6Prefix = "2601:282:0:1631";
   };
 }
