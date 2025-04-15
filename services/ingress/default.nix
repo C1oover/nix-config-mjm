@@ -16,7 +16,6 @@ let
     pipe
     ;
   cfg = config.ingress;
-  secrets = config.mjm.services.ingress.vault.keys;
 
   vhosts = cfg.virtualHosts;
 in
@@ -31,15 +30,12 @@ in
   };
 
   config = mkIf config.mjm.ingress.enable {
-    mjm.services.ingress = {
+    mjm.services.caddy = {
       vault = {
         enable = true;
-        keys.desec_api_token = {
-          owner = "caddy";
-        };
+        useSpiffeIdentity = true;
       };
     };
-    vault-secrets.wantedBy = [ "caddy.service" ];
     mjm.state.directories = [
       {
         directory = "/var/lib/caddy";
@@ -68,7 +64,7 @@ in
                     propagation_timeout = "30m";
                     provider = {
                       name = "desec";
-                      token = "{file.${secrets.desec_api_token.path}}";
+                      token = "{file./run/credentials/caddy.service/caddy_desec_api_token}";
                     };
                     resolvers = [
                       "1.1.1.1"
@@ -308,7 +304,11 @@ in
           RestartSec = "5s";
         };
       };
-    systemd.services.caddy.serviceConfig.CacheDirectory = "caddy";
+
+    systemd.services.caddy.serviceConfig = {
+      CacheDirectory = "caddy";
+      LoadCredential = [ "caddy_desec_api_token:/run/caddy-creds.sock" ];
+    };
 
     ingress.virtualHosts = pipe nodes [
       attrValues
