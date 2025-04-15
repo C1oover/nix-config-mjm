@@ -7,7 +7,6 @@
 let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.mjm.grafana;
-  secrets = config.mjm.services.grafana.vault.keys;
   clientId = "7BReUARtsRcF6ypjiA4DcJ3E6fJNjzwheH5Tj1HCLoqfXCQSLHxZJHQ7bAV9U0aU";
 in
 {
@@ -25,9 +24,7 @@ in
       postgresql.enable = true;
       vault = {
         enable = true;
-        keys = {
-          "managed/oidc_client_secret".owner = "grafana";
-        };
+        useSpiffeIdentity = true;
       };
     };
 
@@ -67,7 +64,7 @@ in
           name = "Authelia";
           icon = "signin";
           client_id = clientId;
-          client_secret = "$__file{${secrets."managed/oidc_client_secret".path}}";
+          client_secret = "$__file{/run/credentials/grafana.service/grafana_managed__oidc_client_secret}";
           scopes = "openid profile email groups";
           auth_url = "https://auth.midna.dev/api/oidc/authorization";
           token_url = "https://auth.midna.dev/api/oidc/token";
@@ -96,7 +93,10 @@ in
     systemd.services.grafana = {
       bindsTo = [ "netns-bridge@grafana.service" ];
       after = [ "netns-bridge@grafana.service" ];
-      serviceConfig.NetworkNamespacePath = "/run/netns/grafana";
+      serviceConfig = {
+        NetworkNamespacePath = "/run/netns/grafana";
+        LoadCredential = [ "grafana_managed__oidc_client_secret:/run/grafana-creds.sock" ];
+      };
     };
 
     mjm.spire.tunnels = {
