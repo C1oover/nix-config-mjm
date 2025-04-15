@@ -18,12 +18,16 @@ in
 
   config = mkIf cfg.enable {
     mjm.services.miniflux = {
-      vault.enable = true;
+      vault = {
+        enable = true;
+        useSpiffeIdentity = true;
+      };
     };
     mjm.postgresql.enable = true;
 
     ingress.virtualHosts.feeds = {
       upstream.service.name = "miniflux";
+
       enableAuthProxy = false;
       useIPv4Proxy = true;
     };
@@ -38,19 +42,16 @@ in
         CREATE_ADMIN = mkForce 0;
         OAUTH2_PROVIDER = "oidc";
         OAUTH2_CLIENT_ID = clientId;
+        OAUTH2_CLIENT_SECRET_FILE = "%d/miniflux_managed__oidc_client_secret";
         OAUTH2_REDIRECT_URL = redirectUri;
         OAUTH2_OIDC_DISCOVERY_ENDPOINT = "https://auth.midna.dev";
         OAUTH2_USER_CREATION = 1;
       };
-      adminCredentialsFile = config.vault-secrets.templates.miniflux-env.path;
     };
 
-    vault-secrets.wantedBy = [ "miniflux.service" ];
-    vault-secrets.templates.miniflux-env.text = ''
-      {{ with secret "kv/prod/services/miniflux/managed" }}
-      OAUTH2_CLIENT_SECRET={{ .Data.data.oidc_client_secret }}
-      {{ end }}
-    '';
+    systemd.services.miniflux = {
+      serviceConfig.LoadCredential = [ "miniflux_managed__oidc_client_secret:/run/miniflux-creds.sock" ];
+    };
 
     mjm.authelia.oidcClients.miniflux = {
       name = "Miniflux";
