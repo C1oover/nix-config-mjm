@@ -53,8 +53,8 @@ in
       enable = true;
       package = pkgs.vault-bin;
       address = "0.0.0.0:8200";
-      tlsCertFile = "/var/cache/vault/cert.pem";
-      tlsKeyFile = "/var/cache/vault/key.pem";
+      tlsCertFile = "/run/vault/cert.pem";
+      tlsKeyFile = "/run/vault/key.pem";
       storageBackend = "raft";
       storageConfig = ''
         node_id = "${cfg.nodeId}"
@@ -138,7 +138,7 @@ in
           agent_address = "${config.mjm.spire.agent.socketPath}"
           cmd = "${pkgs.systemd}/bin/systemctl"
           cmd_args = "reload-or-restart vault"
-          cert_dir = "/var/cache/vault"
+          cert_dir = "/run/vault"
           daemon_mode = true
           svid_file_name = "cert.pem"
           svid_key_file_name = "key.pem"
@@ -146,24 +146,24 @@ in
         '';
       in
       {
-        wantedBy = [
-          "multi-user.target"
-          "vault.service"
-        ];
-        before = [ "vault.service" ];
+        wantedBy = [ "multi-user.target" ];
         after = [ "spire-agent.service" ];
         wants = [ "spire-agent.service" ];
         serviceConfig = {
           Type = "exec";
           ExecStart = "${pkgs.spiffe-helper}/bin/spiffe-helper -config ${configFile}";
-          CacheDirectory = "vault";
+          RuntimeDirectory = "vault";
           User = "vault";
           Group = "vault";
           Restart = "always";
           RestartSec = "5s";
         };
       };
-    systemd.services.vault.serviceConfig.CacheDirectory = "vault";
+    systemd.services.vault = {
+      bindsTo = [ "vault-certs.service" ];
+      after = [ "vault-certs.service" ];
+      serviceConfig.RuntimeDirectory = "vault";
+    };
 
     # TODO this is reusing the vault-secrets spiffe ID and associated entity in vault.
     # it should be updated to use its own ID, entity, and corresponding policy.
