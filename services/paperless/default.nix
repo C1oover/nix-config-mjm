@@ -42,7 +42,7 @@ in
 
     services.paperless = {
       enable = true;
-      address = "[::]";
+      address = "::";
       settings = {
         PAPERLESS_DBHOST = "/run/postgresql";
         PAPERLESS_DBPORT = "5432";
