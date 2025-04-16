@@ -10,6 +10,7 @@
 
     ./backups.nix
     ./base
+    ./conduwuit.nix
     ./consul-services.nix
     ./deployment.nix
     ./desktop

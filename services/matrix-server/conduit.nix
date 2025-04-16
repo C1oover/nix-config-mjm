@@ -36,7 +36,8 @@ in
       useIPv4Proxy = true;
     };
 
-    services.conduwuit = {
+    # TODO migrate to grapevine
+    services.x.conduwuit = {
       enable = true;
       package = pkg;
 
