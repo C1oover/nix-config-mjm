@@ -5,9 +5,14 @@
   ...
 }:
 let
-  inherit (lib) mkEnableOption mkIf;
+  inherit (lib)
+    flip
+    genAttrs
+    mkEnableOption
+    mkForce
+    mkIf
+    ;
   cfg = config.mjm.netbox;
-  secrets = config.mjm.services.netbox.vault.keys;
 in
 {
   options.mjm.netbox = {
@@ -18,7 +23,7 @@ in
     mjm.services.netbox = {
       vault = {
         enable = true;
-        keys.secret_key.owner = "netbox";
+        useSpiffeIdentity = true;
       };
     };
     mjm.postgresql.enable = true;
@@ -68,8 +73,24 @@ in
         REMOTE_AUTH_SUPERUSER_GROUPS = [ "admins" ];
         REMOTE_AUTH_STAFF_GROUPS = [ "admins" ];
       };
-      secretKeyFile = secrets.secret_key.path;
+      # even though we override extraConfig to not use this, it will still cause an eval error
+      # because the upstream module tries to use it
+      secretKeyFile = "/dev/null";
+      extraConfig = mkForce ''
+        import os
+        with open(f'{os.environ["CREDENTIALS_DIRECTORY"]}/netbox_secret_key', "r") as file:
+            SECRET_KEY = file.readline()
+      '';
     };
+
+    systemd.services =
+      flip genAttrs
+        (_: { serviceConfig.LoadCredential = [ "netbox_secret_key:/run/netbox-creds.sock" ]; })
+        [
+          "netbox"
+          "netbox-rq"
+          "netbox-housekeeping"
+        ];
 
     services.caddy = {
       enable = true;
