@@ -162,7 +162,6 @@ in
     systemd.services.vault = {
       bindsTo = [ "vault-certs.service" ];
       after = [ "vault-certs.service" ];
-      serviceConfig.RuntimeDirectory = "vault";
     };
 
     # TODO this is reusing the vault-secrets spiffe ID and associated entity in vault.
