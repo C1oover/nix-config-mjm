@@ -28,8 +28,6 @@ in
       font-size = ${toString cfg.font.size}
       # special tags for comments
       font-feature = +ss18
-      # serifs
-      font-feature = +ss16
     '';
   };
 }
