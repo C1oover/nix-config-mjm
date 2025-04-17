@@ -122,7 +122,7 @@ in
       polkit.addRule(function(action, subject) {
         if (action.id === "org.freedesktop.systemd1.manage-units" &&
             action.lookup("unit") === "vault.service" &&
-            action.lookup("verb") === "reload-or-restart" &&
+            action.lookup("verb") === "reload" &&
             subject.user === "vault") {
           return polkit.Result.YES;
         }
@@ -137,7 +137,7 @@ in
         configFile = pkgs.writeText "vault-spiffe-helper.hcl" ''
           agent_address = "${config.mjm.spire.agent.socketPath}"
           cmd = "${pkgs.systemd}/bin/systemctl"
-          cmd_args = "reload-or-restart vault"
+          cmd_args = "reload vault"
           cert_dir = "/run/vault"
           daemon_mode = true
           svid_file_name = "cert.pem"
@@ -162,6 +162,8 @@ in
     systemd.services.vault = {
       bindsTo = [ "vault-certs.service" ];
       after = [ "vault-certs.service" ];
+      startLimitIntervalSec = lib.mkForce 0;
+      serviceConfig.RestartSec = "5s";
     };
 
     # TODO this is reusing the vault-secrets spiffe ID and associated entity in vault.
