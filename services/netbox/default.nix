@@ -148,6 +148,8 @@ in
         mode = "server";
         port = 8000;
         target = "unix:/run/caddy/netbox.sock";
+        allowIngress = true;
+        allowMetrics = true;
       };
     };
 
@@ -156,6 +158,7 @@ in
     services.consul.services.netbox = {
       port = 8000;
       metrics.enable = true;
+      metrics.tls = true;
     };
 
     deployment.tests = {
