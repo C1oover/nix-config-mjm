@@ -14,6 +14,8 @@ let
     mkMerge
     ;
   cfg = config.mjm.netbox;
+
+  clientId = "puow6sn22OE8UBLQT0RPYavisozbEY6Kn4y5a4vpgEHEykETK902zILI0cew4guQ";
 in
 {
   options.mjm.netbox = {
@@ -41,6 +43,8 @@ in
         service.name = "netbox";
         tls.enable = true;
       };
+
+      enableAuthProxy = false;
     };
 
     services.netbox = {
@@ -62,12 +66,13 @@ in
         ];
         METRICS_ENABLED = true;
         REMOTE_AUTH_ENABLED = true;
-        REMOTE_AUTH_BACKEND = "netbox.authentication.RemoteUserBackend";
-        REMOTE_AUTH_HEADER = "HTTP_REMOTE_USER";
-        REMOTE_AUTH_AUTO_CREATE_USER = true;
-        REMOTE_AUTH_GROUP_HEADER = "HTTP_REMOTE_GROUPS";
+        REMOTE_AUTH_BACKEND = "social_core.backends.open_id_connect.OpenIdConnectAuth";
+        # TODO fix this by configuring the X-Forwarded-Proto to come through properly
+        SOCIAL_AUTH_REDIRECT_IS_HTTPS = true;
+        SOCIAL_AUTH_OIDC_OIDC_ENDPOINT = "https://auth.midna.dev";
+        SOCIAL_AUTH_OIDC_KEY = clientId;
+        SOCIAL_AUTH_OIDC_SCOPE = [ "groups" ];
         REMOTE_AUTH_GROUP_SYNC_ENABLED = true;
-        REMOTE_AUTH_GROUP_SEPARATOR = ",";
         REMOTE_AUTH_SUPERUSER_GROUPS = [ "admins" ];
         REMOTE_AUTH_STAFF_GROUPS = [ "admins" ];
       };
@@ -76,9 +81,19 @@ in
       secretKeyFile = "/dev/null";
       extraConfig = mkForce ''
         import os
-        with open(f'{os.environ["CREDENTIALS_DIRECTORY"]}/netbox_secret_key', "r") as file:
+        creds_dir = os.environ["CREDENTIALS_DIRECTORY"]
+        with open(f'{creds_dir}/netbox_secret_key', "r") as file:
             SECRET_KEY = file.readline()
+        with open(f'{creds_dir}/netbox_managed__oidc_client_secret', "r") as file:
+            SOCIAL_AUTH_OIDC_SECRET = file.readline()
       '';
+    };
+
+    mjm.authelia.oidcClients.netbox = {
+      name = "NetBox";
+      inherit clientId;
+      clientSecret = "$argon2id$v=19$m=65536,t=3,p=4$gwBe7ee4a2veQ2L5xyOUEw$Z08vF2YogFlhWPnuWsNg82Z4qm7ijKshLVYugEei3CU";
+      redirectUris = [ "https://netbox.midna.dev/oauth/complete/oidc/" ];
     };
 
     systemd.services = mkMerge [
@@ -92,11 +107,11 @@ in
       }
       (flip genAttrs
         (_: {
-          # bindsTo = [ "netns-bridge@netbox.service" ];
-          # after = [ "netns-bridge@netbox.service" ];
           serviceConfig = {
-            # NetworkNamespacePath = "/run/netns/netbox";
-            LoadCredential = [ "netbox_secret_key:/run/netbox-creds.sock" ];
+            LoadCredential = [
+              "netbox_secret_key:/run/netbox-creds.sock"
+              "netbox_managed__oidc_client_secret:/run/netbox-creds.sock"
+            ];
           };
         })
         [
