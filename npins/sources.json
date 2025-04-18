@@ -129,9 +129,9 @@
       },
       "branch": "deploy/master",
       "submodules": false,
-      "revision": "9953fd0006d364d755db225e8598f354dacbb2b6",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fhelix/repository/archive.tar.gz?sha=9953fd0006d364d755db225e8598f354dacbb2b6",
-      "hash": "1paapjpy4xmy9c5zjjl9xg0szvb3adc0dij5bnzirm92jsnpgxyz"
+      "revision": "3ae0db51ddefd8f183f2eeb8aff56e3bd76599c5",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fhelix/repository/archive.tar.gz?sha=3ae0db51ddefd8f183f2eeb8aff56e3bd76599c5",
+      "hash": "1wzw4r9059iwd2ljnyqvgc103yqqw42g19dd44flkm76n0fa8ddq"
     },
     "home-manager": {
       "type": "Git",
@@ -142,9 +142,9 @@
       },
       "branch": "master",
       "submodules": false,
-      "revision": "72526a5f7cde2ef9075637802a1e2a8d2d658f70",
-      "url": "https://github.com/nix-community/home-manager/archive/72526a5f7cde2ef9075637802a1e2a8d2d658f70.tar.gz",
-      "hash": "0kr9ckh1bhaimifsxim3h7wn9i14d24wdhyvfwidhmzndlyjr690"
+      "revision": "5e6a8203cee7cc33b2e0d9a0adb7268f46447292",
+      "url": "https://github.com/nix-community/home-manager/archive/5e6a8203cee7cc33b2e0d9a0adb7268f46447292.tar.gz",
+      "hash": "1jrpz19ifq2pf7xkl07jdzzbz588pg2plb5ai93mpagrbicshn11"
     },
     "lanzaboote": {
       "type": "GitRelease",
@@ -184,9 +184,9 @@
       },
       "branch": "deploy/nixos-unstable",
       "submodules": false,
-      "revision": "05bd307140b141e255bd85ea6cf2cc4e9c9eb5b3",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=05bd307140b141e255bd85ea6cf2cc4e9c9eb5b3",
-      "hash": "0mkas610q2pvja4x3h6741r5wbyq6fhp8vzijk5cb4kcmpk29vg4"
+      "revision": "0ed8d81214f8f918b41d37612bc801971f136cf9",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=0ed8d81214f8f918b41d37612bc801971f136cf9",
+      "hash": "1idzbhr7wh1njng5qwbn2n78nfz385ddkyfpi3wm96wm0k5pfyf2"
     },
     "nixos-small": {
       "type": "Git",
@@ -249,9 +249,9 @@
       },
       "branch": "master",
       "submodules": false,
-      "revision": "745ebc6faf3791a9cb73beda1e8dbe0c5ce46772",
-      "url": "https://gitlab.com/api/v4/projects/rycee%2Fnur-expressions/repository/archive.tar.gz?sha=745ebc6faf3791a9cb73beda1e8dbe0c5ce46772",
-      "hash": "1rpvdcw0q57ccpcyklvchj605nwd5g0hncz7vl5iwaa3cibqsxrm"
+      "revision": "d53de206d64dd4581b5d5bbc7dcb2e8c5a1d836a",
+      "url": "https://gitlab.com/api/v4/projects/rycee%2Fnur-expressions/repository/archive.tar.gz?sha=d53de206d64dd4581b5d5bbc7dcb2e8c5a1d836a",
+      "hash": "0i6p4fr47hx0r0jfy1sixly6xg102vdvxgkg6n3ikrkixij21zpc"
     }
   },
   "version": 5
