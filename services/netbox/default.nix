@@ -49,7 +49,7 @@ in
 
     services.netbox = {
       enable = true;
-      package = pkgs.netbox_4_1;
+      package = pkgs.netbox_4_2;
       unixSocket = "/run/netbox/server.sock";
       settings = {
         ALLOWED_HOSTS = [
