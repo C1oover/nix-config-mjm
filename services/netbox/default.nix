@@ -11,6 +11,7 @@ let
     mkEnableOption
     mkForce
     mkIf
+    mkMerge
     ;
   cfg = config.mjm.netbox;
 in
@@ -35,20 +36,17 @@ in
       }
     ];
 
-    vault-secrets.wantedBy = [
-      "netbox.service"
-      "netbox-rq.service"
-      "netbox-housekeeping.service"
-    ];
-
     ingress.virtualHosts.netbox = {
-      upstream.service.name = "netbox";
+      upstream = {
+        service.name = "netbox";
+        tls.enable = true;
+      };
     };
 
     services.netbox = {
       enable = true;
       package = pkgs.netbox_4_1;
-      listenAddress = "[::]";
+      unixSocket = "/run/netbox/server.sock";
       settings = {
         ALLOWED_HOSTS = [
           "netbox.midna.dev"
@@ -83,21 +81,39 @@ in
       '';
     };
 
-    systemd.services =
-      flip genAttrs
-        (_: { serviceConfig.LoadCredential = [ "netbox_secret_key:/run/netbox-creds.sock" ]; })
+    systemd.services = mkMerge [
+      {
+        netbox = {
+          serviceConfig.RuntimeDirectory = "netbox";
+        };
+        caddy = {
+          serviceConfig.RuntimeDirectory = "caddy";
+        };
+      }
+      (flip genAttrs
+        (_: {
+          # bindsTo = [ "netns-bridge@netbox.service" ];
+          # after = [ "netns-bridge@netbox.service" ];
+          serviceConfig = {
+            # NetworkNamespacePath = "/run/netns/netbox";
+            LoadCredential = [ "netbox_secret_key:/run/netbox-creds.sock" ];
+          };
+        })
         [
           "netbox"
           "netbox-rq"
           "netbox-housekeeping"
-        ];
+        ]
+      )
+    ];
 
     services.caddy = {
       enable = true;
       globalConfig = ''
         auto_https off
       '';
-      virtualHosts.":8000" = {
+      virtualHosts."http://" = {
+        listenAddresses = [ "unix//run/caddy/netbox.sock|0222" ];
         extraConfig = ''
           encode gzip zstd
           root * /var/lib/netbox/
@@ -106,15 +122,21 @@ in
             not path /static/*
           }
 
-          reverse_proxy @not_static 127.0.0.1:${toString config.services.netbox.port}
+          reverse_proxy @not_static unix/${config.services.netbox.unixSocket}
           file_server
         '';
       };
     };
 
-    users.users.caddy.extraGroups = [ "netbox" ];
+    mjm.spire.tunnels = {
+      netbox = {
+        mode = "server";
+        port = 8000;
+        target = "unix:/run/caddy/netbox.sock";
+      };
+    };
 
-    networking.firewall.allowedTCPPorts = [ 8000 ];
+    users.users.caddy.extraGroups = [ "netbox" ];
 
     services.consul.services.netbox = {
       port = 8000;
