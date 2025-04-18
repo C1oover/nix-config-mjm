@@ -17,7 +17,7 @@ in
     font = {
       family = mkOption {
         type = types.str;
-        default = "PragmataPro Mono Liga";
+        default = "PragmataPro Liga";
       };
       size = mkOption {
         type = types.int;
