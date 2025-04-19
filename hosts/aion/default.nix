@@ -3,9 +3,11 @@
 
   deployment.targetHost = "5.78.46.61";
 
-  boot.loader.grub = {
+  boot.loader.limine = {
     enable = true;
-    device = "/dev/sda";
+    biosDevice = "/dev/sda";
+    biosSupport = true;
+    efiSupport = false;
   };
 
   networking.hostName = "aion";
