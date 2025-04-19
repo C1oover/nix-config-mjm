@@ -67,19 +67,20 @@ in
         METRICS_ENABLED = true;
         REMOTE_AUTH_ENABLED = true;
         REMOTE_AUTH_BACKEND = "social_core.backends.open_id_connect.OpenIdConnectAuth";
-        # TODO fix this by configuring the X-Forwarded-Proto to come through properly
-        SOCIAL_AUTH_REDIRECT_IS_HTTPS = true;
         SOCIAL_AUTH_OIDC_OIDC_ENDPOINT = "https://auth.midna.dev";
         SOCIAL_AUTH_OIDC_KEY = clientId;
         SOCIAL_AUTH_OIDC_SCOPE = [ "groups" ];
         REMOTE_AUTH_GROUP_SYNC_ENABLED = true;
         REMOTE_AUTH_SUPERUSER_GROUPS = [ "admins" ];
         REMOTE_AUTH_STAFF_GROUPS = [ "admins" ];
+        USE_X_FORWARDED_HOST = true;
       };
       # even though we override extraConfig to not use this, it will still cause an eval error
       # because the upstream module tries to use it
       secretKeyFile = "/dev/null";
       extraConfig = mkForce ''
+        SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
         import os
         creds_dir = os.environ["CREDENTIALS_DIRECTORY"]
         with open(f'{creds_dir}/netbox_secret_key', "r") as file:
@@ -137,7 +138,11 @@ in
             not path /static/*
           }
 
-          reverse_proxy @not_static unix/${config.services.netbox.unixSocket}
+          reverse_proxy @not_static unix/${config.services.netbox.unixSocket} {
+            header_up X-Forwarded-For {header.X-Forwarded-For}
+            header_up X-Forwarded-Host {header.X-Forwarded-Host}
+            header_up X-Forwarded-Proto {header.X-Forwarded-Proto}
+          }
           file_server
         '';
       };
