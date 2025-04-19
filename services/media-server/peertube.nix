@@ -2,13 +2,14 @@
 let
   inherit (lib) mkIf;
   cfg = config.mjm.media-server;
-  secrets = config.mjm.services.media-server.vault.keys;
 in
 {
   config = mkIf cfg.enable {
-    mjm.services.media-server.vault.keys = {
-      fastmail_password.owner = "peertube";
-      peertube_secrets.owner = "peertube";
+    mjm.services.peertube = {
+      vault = {
+        enable = true;
+        useSpiffeIdentity = true;
+      };
     };
     mjm.postgresql.enable = true;
     mjm.state.directories = [
@@ -35,8 +36,8 @@ in
       database.createLocally = true;
       redis.createLocally = true;
 
-      secrets.secretsFile = secrets.peertube_secrets.path;
-      smtp.passwordFile = secrets.fastmail_password.path;
+      secrets.secretsFile = "/run/credentials/peertube.service/peertube_secret_key";
+      smtp.passwordFile = "/run/credentials/peertube.service/peertube_fastmail_password";
 
       dataDirs = [ "/videos/peertube" ];
 
@@ -60,6 +61,13 @@ in
       clientId = "peertube";
       clientSecret = "$pbkdf2-sha512$310000$i/oOcdThnanFjq1JqrACMg$IUGcZqmZZtGOwjfYT1O1ZiMVk634D73XX9qgmwYDtJW3HVcNDRwU9JcX2pJp4WchFkx2iwArh8DWfbU.2xLYiw";
       redirectUris = [ "https://tube.midna.dev/plugins/auth-openid-connect/router/code-cb" ];
+    };
+
+    systemd.services.peertube = {
+      serviceConfig.LoadCredential = [
+        "peertube_fastmail_password:/run/peertube-creds.sock"
+        "peertube_secret_key:/run/peertube-creds.sock"
+      ];
     };
 
     systemd.tmpfiles.settings."10-media-server" = {
