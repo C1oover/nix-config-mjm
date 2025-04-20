@@ -7,14 +7,22 @@
 let
   inherit (lib) mkIf;
   cfg = config.mjm.media-server;
-  secrets = config.mjm.services.media-server.vault.keys;
 in
 {
   config = mkIf cfg.enable {
-    mjm.services.media-server.vault.keys = {
-      sonarr_api_key = { };
-      radarr_api_key = { };
-      readarr_api_key = { };
+    mjm.services = {
+      sonarr.vault = {
+        enable = true;
+        useSpiffeIdentity = true;
+      };
+      radarr.vault = {
+        enable = true;
+        useSpiffeIdentity = true;
+      };
+      readarr.vault = {
+        enable = true;
+        useSpiffeIdentity = true;
+      };
     };
     mjm.state.directories = [
       {
@@ -38,12 +46,6 @@ in
         user = "readarr";
         group = "readarr";
       }
-    ];
-
-    vault-secrets.wantedBy = [
-      "prometheus-exportarr-sonarr-exporter.service"
-      "prometheus-exportarr-radarr-exporter.service"
-      "prometheus-exportarr-readarr-exporter.service"
     ];
 
     services.sonarr = {
@@ -149,22 +151,34 @@ in
       exportarr-sonarr = {
         enable = true;
         openFirewall = true;
-        apiKeyFile = secrets.sonarr_api_key.path;
+        apiKeyFile = "/run/sonarr-creds.sock";
         url = "http://127.0.0.1:8989";
       };
       exportarr-radarr = {
         enable = true;
         port = 9707;
         openFirewall = true;
-        apiKeyFile = secrets.radarr_api_key.path;
+        apiKeyFile = "/run/radarr-creds.sock";
         url = "http://127.0.0.1:7878";
       };
       exportarr-readarr = {
         enable = true;
         port = 9706;
         openFirewall = true;
-        apiKeyFile = secrets.readarr_api_key.path;
+        apiKeyFile = "/run/readarr-creds.sock";
         url = "http://127.0.0.1:8787";
+      };
+    };
+
+    mjm.spire.creds = {
+      sonarr.aliases = {
+        "prometheus-exportarr-sonarr-exporter.service/api-key" = "sonarr/api_key";
+      };
+      radarr.aliases = {
+        "prometheus-exportarr-radarr-exporter.service/api-key" = "radarr/api_key";
+      };
+      readarr.aliases = {
+        "prometheus-exportarr-readarr-exporter.service/api-key" = "readarr/api_key";
       };
     };
 

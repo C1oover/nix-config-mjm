@@ -2,11 +2,15 @@
 let
   inherit (lib) mkIf;
   cfg = config.mjm.media-server;
-  secrets = config.mjm.services.media-server.vault.keys;
 in
 {
   config = mkIf cfg.enable {
-    mjm.services.media-server.vault.keys.sabnzbd_api_key = { };
+    mjm.services.sabnzbd = {
+      vault = {
+        enable = true;
+        useSpiffeIdentity = true;
+      };
+    };
     mjm.state.directories = [
       {
         directory = "/var/lib/sabnzbd";
@@ -14,7 +18,9 @@ in
       }
     ];
 
-    vault-secrets.wantedBy = [ "prometheus-sabnzbd-exporter.service" ];
+    mjm.spire.creds.sabnzbd.aliases = {
+      "prometheus-sabnzbd-exporter.service/apikey-0" = "sabnzbd/api_key";
+    };
 
     ingress.virtualHosts.downloads = {
       upstream.service.name = "sabnzbd";
@@ -55,7 +61,7 @@ in
       servers = [
         {
           baseUrl = "http://localhost:8080/sabnzbd";
-          apiKeyFile = secrets.sabnzbd_api_key.path;
+          apiKeyFile = "/run/sabnzbd-creds.sock";
         }
       ];
     };
