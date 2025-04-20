@@ -104,17 +104,12 @@ in
       useIPv4Proxy = true;
     };
 
-    # TODO replace this with a bespoke proxy that can match garage keys to SPIFFE IDs
     mjm.spire.tunnels.garage-s3 = {
       mode = "server";
       port = 3902;
       target = "unix:/run/garage/s3.sock";
-      allowIngress = true;
-      allowedServices = [
-        "gitlab"
-        "tempo"
-        "loki"
-      ];
+      # don't bother with identifying the client, since they need to provide creds
+      # anyway, which spiffe-garage will handle.
     };
 
     environment.systemPackages = builtins.attrValues {
