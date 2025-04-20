@@ -8,7 +8,6 @@ let
   inherit (lib) mkEnableOption mkIf;
 
   cfg = config.mjm.postgresql;
-  secrets = config.vault-secrets.services.postgresql.keys;
 in
 {
   options.mjm.postgresql = {
@@ -36,7 +35,6 @@ in
         pg = config.services.postgresql.package;
       in
       {
-        passwordFile = secrets.backup_password.path;
         paths = [ "/tmp/pgbackup" ];
         user = "postgres";
         backupPrepareCommand = ''
@@ -54,10 +52,9 @@ in
       };
 
     vault.services.postgresql = { };
-    vault-secrets.services.postgresql = {
-      keys.backup_password = {
-        owner = "postgres";
-      };
+    systemd.sockets."spiffe-creds@postgresql" = {
+      overrideStrategy = "asDropin";
+      wantedBy = [ "sockets.target" ];
     };
 
     deployment.tests = {

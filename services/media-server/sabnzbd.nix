@@ -83,7 +83,7 @@ in
       };
     };
 
-    mjm.backups.mediaserver.paths = [
+    mjm.backups.media-server.paths = [
       "/var/lib/sabnzbd/admin"
       "/var/lib/sabnzbd/sabnzbd.ini"
     ];

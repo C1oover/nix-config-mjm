@@ -17,6 +17,9 @@ var servicePolicy string
 //go:embed sshd.hcl
 var sshdPolicy string
 
+//go:embed vault-backup.hcl
+var vaultBackupPolicy string
+
 func setUpAuthSPIFFE(
 	ctx *pulumi.Context,
 	services map[string]map[string]any,
@@ -60,12 +63,27 @@ func setUpAuthSPIFFE(
 		return nil, err
 	}
 
+	vaultBackupPolicy, err := vault.NewPolicy(ctx, "vault-backup", &vault.PolicyArgs{
+		Name:   pulumi.String("vault-backup"),
+		Policy: pulumi.String(vaultBackupPolicy),
+	})
+	if err != nil {
+		return nil, err
+	}
+
 	svcs := map[string]*VaultService{}
 	for name, paths := range services {
+		// TODO get this information from the Nix side
+		var extraPolicies []*vault.Policy
+		if name == "vault" {
+			extraPolicies = []*vault.Policy{vaultBackupPolicy}
+		}
+
 		s, err := newVaultService(ctx, name, &VaultServiceArgs{
 			SPIFFEBackend: backend,
 			ServicePolicy: servicePolicy,
 			Paths:         pulumi.ToMap(paths),
+			ExtraPolicies: extraPolicies,
 		})
 		if err != nil {
 			return nil, err
@@ -154,6 +172,7 @@ type VaultServiceArgs struct {
 	SPIFFEBackend *jwt.AuthBackend
 	ServicePolicy *vault.Policy
 	Paths         pulumi.MapInput
+	ExtraPolicies []*vault.Policy
 }
 
 func newVaultService(ctx *pulumi.Context, name string, args *VaultServiceArgs, opts ...pulumi.ResourceOption) (*VaultService, error) {
@@ -184,10 +203,14 @@ func newVaultService(ctx *pulumi.Context, name string, args *VaultServiceArgs, o
 		return nil, err
 	}
 
+	svcPolicies := pulumi.StringArray{args.ServicePolicy.Name}
+	for _, p := range args.ExtraPolicies {
+		svcPolicies = append(svcPolicies, p.Name)
+	}
+
 	entity, err := identity.NewEntity(ctx, "service-"+name, &identity.EntityArgs{
-		Name: pulumi.Sprintf("service: %s", name),
-		// TODO add additional custom policies
-		Policies: pulumi.StringArray{args.ServicePolicy.Name},
+		Name:     pulumi.Sprintf("service: %s", name),
+		Policies: svcPolicies,
 		Metadata: pulumi.StringMap{
 			"service": pulumi.String(name),
 		},

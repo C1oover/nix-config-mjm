@@ -275,7 +275,7 @@ in
     systemd.services.radarr.path = [ pkgs.ffmpeg ];
 
     # TODO add lidarr
-    mjm.backups.mediaserver = {
+    mjm.backups.media-server = {
       paths = [
         "/var/lib/sonarr/.config/NzbDrone"
         "/var/lib/radarr/.config/Radarr"

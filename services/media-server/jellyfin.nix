@@ -55,7 +55,7 @@ in
       };
     };
 
-    mjm.backups.mediaserver = {
+    mjm.backups.media-server = {
       paths = [ "/var/lib/jellyfin" ];
       exclude = [
         "/var/lib/jellyfin/log"

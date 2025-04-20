@@ -23,10 +23,7 @@ in
     mjm.services.home-assistant = {
       vault = {
         enable = true;
-        keys = {
-          backup_password = { };
-          api_token = { };
-        };
+        useSpiffeIdentity = true;
       };
     };
     mjm.state.directories = [
@@ -229,17 +226,19 @@ in
     services.avahi.enable = true;
 
     mjm.backups.home-assistant = {
-      passwordFile = config.mjm.services.home-assistant.vault.keys.backup_password.path;
       paths = [ "/var/lib/hass/backups" ];
       backupPrepareCommand = ''
         ${pkgs.curl}/bin/curl \
           -X POST \
-          http://localhost:${toString port}/api/services/backup/create \
-          -H "Authorization: Bearer $(cat ${config.mjm.services.home-assistant.vault.keys.api_token.path})"
+          http://home-assistant.service.consul:${toString port}/api/services/backup/create \
+          -H "Authorization: Bearer $(cat $CREDENTIALS_DIRECTORY/home-assistant_api_token)"
       '';
       backupCleanupCommand = ''
         rm /var/lib/hass/backups/*
       '';
+    };
+    systemd.services.restic-backups-home-assistant = {
+      serviceConfig.LoadCredential = [ "home-assistant_api_token:/run/home-assistant-creds.sock" ];
     };
 
     # these are too fragile i think

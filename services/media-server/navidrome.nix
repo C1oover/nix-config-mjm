@@ -63,7 +63,7 @@ in
       };
     };
 
-    mjm.backups.mediaserver = {
+    mjm.backups.media-server = {
       paths = [ "/var/lib/navidrome" ];
       exclude = [ "/var/lib/navidrome/cache" ];
       backupPrepareCommand = ''

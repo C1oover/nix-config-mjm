@@ -38,7 +38,12 @@ in
   ];
 
   config = mkIf cfg.enable {
-    mjm.services.vault = { };
+    mjm.services.vault = {
+      vault = {
+        enable = true;
+        useSpiffeIdentity = true;
+      };
+    };
 
     ingress.virtualHosts.vault = {
       upstream = {
@@ -166,10 +171,7 @@ in
       serviceConfig.RestartSec = "5s";
     };
 
-    # TODO this is reusing the vault-secrets spiffe ID and associated entity in vault.
-    # it should be updated to use its own ID, entity, and corresponding policy.
     mjm.backups.vault = {
-      passwordFile = config.vault-secrets.services.vault.keys.backup_password.path;
       paths = [ "/tmp/vault.snap" ];
       backupPrepareCommand = ''
         export PATH=${
@@ -183,7 +185,7 @@ in
         spire-agent api fetch -socketPath ${config.mjm.spire.agent.socketPath} -write /run/restic-backups-vault
 
         export VAULT_CACERT=/run/restic-backups-vault/bundle.0.pem
-        export VAULT_ADDR=https://127.0.0.1:8200
+        export VAULT_ADDR=https://${config.networking.hostName}.node.consul:8200
         export VAULT_TLS_SERVER_NAME=vault.service.consul
 
         jwt="$(spire-agent api fetch jwt -audience https://vault.service.consul:8200 -output json -socketPath ${config.mjm.spire.agent.socketPath} | jq -r '.[0].svids[0].svid')"
@@ -200,14 +202,6 @@ in
       backupCleanupCommand = ''
         rm -f /tmp/vault.snap
       '';
-    };
-
-    vault.services.vault.paths = {
-      "sys/leader".capabilities = [ "read" ];
-      "sys/storage/raft/snapshot".capabilities = [ "read" ];
-    };
-    vault-secrets.services.vault = {
-      keys.backup_password = { };
     };
 
     systemd.services.restic-backups-vault.serviceConfig = {
