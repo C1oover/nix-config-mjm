@@ -1,8 +1,6 @@
 {
   config,
   lib,
-  pkgs,
-  utils,
   ...
 }:
 let
@@ -126,50 +124,13 @@ in
       vault-secrets.services = listToAttrs (
         map (s: nameValuePair s.name { inherit (s.vault) loadedBy keys; }) legacyVaultServices
       );
-    })
-
-    (mkIf (spiffeVaultServices != [ ]) {
-      systemd.services = pipe spiffeVaultServices [
-        (map (
-          { name, ... }:
-          nameValuePair "${name}-creds" {
-            wantedBy = [ "multi-user.target" ];
-            after = [
-              "network.target"
-              "${name}-creds.socket"
-            ];
-            requires = [ "${name}-creds.socket" ];
-
-            environment = {
-              SPIFFE_ENDPOINT_SOCKET = "unix:${config.mjm.spire.agent.socketPath}";
-              VAULT_ADDR = "https://vault.service.consul:8200";
-            };
-
-            serviceConfig = {
-              Type = "notify";
-              ExecStart = utils.escapeSystemdExecArgs [
-                (lib.getExe pkgs.spire-secrets)
-                "-path"
-                "prod/services/${name}"
-                "server"
-              ];
-              DynamicUser = true;
-            };
-          }
-        ))
-        listToAttrs
-      ];
 
       systemd.sockets = pipe spiffeVaultServices [
         (map (
           { name, ... }:
-          nameValuePair "${name}-creds" {
+          nameValuePair "spiffe-creds@${name}" {
+            overrideStrategy = "asDropin";
             wantedBy = [ "sockets.target" ];
-            partOf = [ "${name}-creds.service" ];
-            socketConfig = {
-              ListenStream = "/run/${name}-creds.sock";
-              SocketMode = "0600";
-            };
           }
         ))
         listToAttrs

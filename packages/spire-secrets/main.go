@@ -26,7 +26,8 @@ import (
 )
 
 var (
-	paths = map[string]string{}
+	paths   = map[string]string{}
+	aliases = map[string]string{}
 )
 
 type pathsValue struct {
@@ -90,6 +91,8 @@ func runServer() error {
 		return fmt.Errorf("creating vault client: %w", err)
 	}
 
+	parseAliases()
+
 	daemon.SdNotify(false, daemon.SdNotifyReady)
 
 	connCh := make(chan net.Conn, 1)
@@ -117,6 +120,24 @@ func runServer() error {
 	}
 }
 
+// the list of aliases is space-separated
+// each alias is a key-value pair separated by a colon
+// the key is <unit>/<cred name> and the value is the path, scoped to the prefix for this server
+func parseAliases() {
+	for e := range strings.SplitSeq(os.Getenv("SECRET_ALIASES"), " ") {
+		if e == "" {
+			continue
+		}
+
+		comps := strings.SplitN(e, ":", 2)
+		if len(comps) < 2 {
+			continue
+		}
+
+		aliases[comps[0]] = comps[1]
+	}
+}
+
 func handleConn(ctx context.Context, c *api.Client, conn net.Conn) {
 	defer conn.Close()
 
@@ -128,20 +149,34 @@ func handleConn(ctx context.Context, c *api.Client, conn net.Conn) {
 		return
 	}
 
-	cmps := strings.SplitN(addrComps[3], "_", 2)
-	if len(cmps) < 2 {
-		slog.ErrorContext(ctx, "invalid credential id", "reason", "missing prefix followed by underscore", "cred_id", addrComps[3])
-		return
-	}
-	prefix := cmps[0]
-	pathPrefix, ok := paths[prefix]
-	if !ok {
-		allowedPrefixes := slices.Collect(maps.Keys(paths))
-		slog.ErrorContext(ctx, "invalid credential id", "reason", "unknown prefix", "prefix", prefix, "allowed_prefixes", allowedPrefixes)
-	}
+	var key string
 
-	key := strings.ReplaceAll(cmps[1], "__", "/")
-	key = path.Join(pathPrefix, key)
+	aliasKey := fmt.Sprintf("%s/%s", addrComps[2], addrComps[3])
+	if p, ok := aliases[aliasKey]; ok {
+		cmps := strings.SplitN(p, "/", 2)
+		pathPrefix, ok := paths[cmps[0]]
+		if !ok {
+			allowedPrefixes := slices.Collect(maps.Keys(paths))
+			slog.ErrorContext(ctx, "invalid credential id", "reason", "unknown prefix", "prefix", cmps[0], "allowed_prefixes", allowedPrefixes)
+		}
+
+		key = path.Join(pathPrefix, cmps[1])
+	} else {
+		cmps := strings.SplitN(addrComps[3], "_", 2)
+		if len(cmps) < 2 {
+			slog.ErrorContext(ctx, "invalid credential id", "reason", "missing prefix followed by underscore", "cred_id", addrComps[3])
+			return
+		}
+		prefix := cmps[0]
+		pathPrefix, ok := paths[prefix]
+		if !ok {
+			allowedPrefixes := slices.Collect(maps.Keys(paths))
+			slog.ErrorContext(ctx, "invalid credential id", "reason", "unknown prefix", "prefix", prefix, "allowed_prefixes", allowedPrefixes)
+		}
+
+		key = strings.ReplaceAll(cmps[1], "__", "/")
+		key = path.Join(pathPrefix, key)
+	}
 
 	slog.InfoContext(ctx, "fetching secret", "cred_id", addrComps[3], "path", key)
 	scrt, err := c.KVv2("kv").Get(ctx, path.Dir(key))
