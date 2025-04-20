@@ -9,8 +9,6 @@ let
     types
     ;
   cfg = config.mjm.nut;
-  secrets.common = config.vault-secrets.common.nut.keys;
-  secrets.server = config.vault-secrets.services.nut.keys;
 
   upsNames = [
     "or500"
@@ -41,19 +39,16 @@ in
 
   config = mkIf cfg.enable (mkMerge [
     {
-      deployment.tags = [ "svc-nut" ];
+      mjm.services.nut-client = {
+        vault = {
+          enable = true;
+          useSpiffeIdentity = true;
+        };
+      };
 
       power.ups = {
         enable = true;
         mode = if cfg.mode == "client" then "netclient" else "netserver";
-      };
-
-      vault.policies.common-nut = {
-        paths."kv/data/prod/common/nut".capabilities = [ "read" ];
-      };
-      vault-secrets.wantedBy = [ "upsmon.service" ];
-      vault-secrets.common.nut = {
-        keys.secondary_password = { };
       };
     }
 
@@ -64,13 +59,24 @@ in
           system = "${cfg.connectedUPSName}@${cfg.serverHostname}";
           user = "upsmon_secondary";
           type = "secondary";
-          passwordFile = secrets.common.secondary_password.path;
+          passwordFile = "/run/nut-client-creds.sock";
+        };
+      };
+
+      mjm.spire.creds.nut-client = {
+        aliases = {
+          "upsmon.service/upsmon_password_${cfg.connectedUPSName}" = "nut-client/secondary_password";
         };
       };
     })
 
     (mkIf (cfg.mode == "server") {
-      deployment.tags = [ "svc-nut-server" ];
+      mjm.services.nut = {
+        vault = {
+          enable = true;
+          useSpiffeIdentity = true;
+        };
+      };
 
       power.ups = {
         mode = "netserver";
@@ -96,11 +102,11 @@ in
         users = {
           upsmon = {
             upsmon = "primary";
-            passwordFile = secrets.server.primary_password.path;
+            passwordFile = "/run/nut-creds.sock";
           };
           upsmon_secondary = {
             upsmon = "secondary";
-            passwordFile = secrets.common.secondary_password.path;
+            passwordFile = "/run/nut-client-creds.sock";
           };
         };
 
@@ -112,9 +118,19 @@ in
           system = "${name}@${cfg.serverHostname}";
           user = "upsmon";
           type = "primary";
-          passwordFile = secrets.server.primary_password.path;
+          passwordFile = "/run/nut-creds.sock";
         });
+      };
 
+      mjm.spire.creds = {
+        nut.aliases = {
+          "upsmon.service/upsmon_password_or500" = "nut/primary_password";
+          "upsmon.service/upsmon_password_smart500" = "nut/primary_password";
+          "upsd.service/upsdusers_password_upsmon" = "nut/primary_password";
+        };
+        nut-client.aliases = {
+          "upsd.service/upsdusers_password_upsmon_secondary" = "nut-client/secondary_password";
+        };
       };
 
       services.prometheus.exporters.nut = {
@@ -139,12 +155,6 @@ in
         checks.up = {
           http.path = "/";
         };
-      };
-
-      vault.services.nut = { };
-      vault-secrets.wantedBy = [ "upsd.service" ];
-      vault-secrets.services.nut = {
-        keys.primary_password = { };
       };
     })
   ]);
