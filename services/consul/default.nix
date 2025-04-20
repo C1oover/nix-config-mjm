@@ -6,6 +6,7 @@
 }:
 let
   inherit (lib)
+    mkDefault
     mkEnableOption
     mkIf
     mkMerge
@@ -22,6 +23,8 @@ in
 
   config = mkIf cfg.enable (mkMerge [
     {
+      mjm.consul.ipv4Address = mkDefault ''{{ . | include "name" "${config.mjm.networkd.primaryIface}" | include "type" "ipv4" | attr "address" }}'';
+
       systemd.services.consul.preStart = lib.mkForce (
         ''
           mkdir -m 0700 -p /var/lib/consul
@@ -29,7 +32,7 @@ in
 
           # Determine interface addresses
           getAddrOnce () {
-            ip -6 addr show scope global primary mngtmpaddr \
+            ip -6 addr show dev ${config.mjm.networkd.primaryIface} scope global primary mngtmpaddr \
               | awk -F '[ /\t]*' '/inet/ {print $3}' | head -n 1
           }
           getAddr () {

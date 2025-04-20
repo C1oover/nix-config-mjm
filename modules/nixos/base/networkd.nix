@@ -25,6 +25,10 @@ in
       default = !config.networking.networkmanager.enable;
     };
 
+    primaryIface = mkOption {
+      type = types.str;
+    };
+
     primaryLinkName = mkOption {
       type = types.str;
       default = "lan0";
@@ -48,6 +52,16 @@ in
 
   config = mkIf cfg.enable {
     networking.useDHCP = false;
+
+    mjm.networkd.primaryIface =
+      if cfg.secondaryLinkName != null then
+        cfg.primaryLinkName
+      else if cfg.bridge.enable then
+        "vmbr0"
+      else if cfg.macvlan.enable then
+        "mac0"
+      else
+        cfg.primaryLinkName;
 
     systemd.network = {
       enable = true;
