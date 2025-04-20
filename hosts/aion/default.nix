@@ -28,8 +28,7 @@
   mjm.ipv4-proxy.enable = true;
   mjm.server = {
     enable = true;
-    enablePromtail = false;
-    enableNodeExporter = false;
+    enableAlloy = false;
     enableSSHHostCert = false;
   };
 

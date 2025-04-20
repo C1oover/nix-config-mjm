@@ -48,6 +48,7 @@ in
       port = 9090;
       checkConfig = "syntax-only";
       webExternalUrl = "https://metrics.midna.dev";
+      extraFlags = [ "--web.enable-remote-write-receiver" ];
 
       globalConfig = {
         scrape_interval = "60s";
@@ -69,8 +70,9 @@ in
         target = "localhost:9090";
         allowIngress = true;
         allowedServices = [
-          "grafana"
+          "alloy"
           "consul-agent"
+          "grafana"
           "prometheus"
         ];
       };

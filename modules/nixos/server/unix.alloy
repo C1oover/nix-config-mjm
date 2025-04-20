@@ -1,0 +1,20 @@
+prometheus.exporter.unix "local" {
+  enable_collectors = ["processes", "systemd"]
+
+  filesystem {
+    mount_points_exclude = "^/(dev|proc|sys|nix/store|var/lib/docker/.+|run|run/.+)($|/)"
+  }
+
+  netclass {
+    ignored_devices = "^(veth|docker)"
+  }
+
+  netdev {
+    device_exclude = "^(veth|docker)"
+  }
+}
+
+prometheus.scrape "unix" {
+  targets = prometheus.exporter.unix.local.targets
+  forward_to = [prometheus.remote_write.prod.receiver]
+}

@@ -1,0 +1,5 @@
+prometheus.remote_write "prod" {
+  endpoint {
+    url = "http://localhost:13102/api/v1/write"
+  }
+}

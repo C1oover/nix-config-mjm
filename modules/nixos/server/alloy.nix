@@ -4,51 +4,28 @@ let
   cfg = config.mjm.server;
 in
 {
-  config = mkIf (cfg.enable && cfg.enablePromtail) {
+  config = mkIf (cfg.enable && cfg.enableAlloy) {
     services.alloy = {
       enable = true;
     };
 
-    environment.etc."alloy/journal.alloy".text = ''
-      loki.source.journal "read" {
-        forward_to = [loki.write.endpoint.receiver]
-        relabel_rules = loki.relabel.journal.rules
-      }
+    environment.etc."alloy/journal.alloy".source = ./journal.alloy;
+    environment.etc."alloy/unix.alloy".source = ./unix.alloy;
+    environment.etc."alloy/prometheus.alloy".source = ./prometheus.alloy;
 
-      loki.relabel "journal" {
-        forward_to = []
-
-        rule {
-          source_labels = ["__journal__systemd_unit"]
-          target_label = "systemd_unit"
-        }
-        rule {
-          source_labels = ["__journal__systemd_unit"]
-          regex = "(.*)\\.service"
-          target_label = "service_name"
-        }
-        rule {
-          source_labels = ["__journal__hostname"]
-          target_label = "hostname"
-        }
-        rule {
-          source_labels = ["__journal_syslog_identifier"]
-          target_label = "syslog_identifier"
-        }
-      }
-
-      loki.write "endpoint" {
-        endpoint {
-          url = "http://localhost:13101/loki/api/v1/push"
-        }
-      }
-    '';
-
-    mjm.spire.tunnels.alloy-loki = {
-      mode = "client";
-      port = 13101;
-      target = "loki.service.consul:3103";
-      service = "loki";
+    mjm.spire.tunnels = {
+      alloy-loki = {
+        mode = "client";
+        port = 13101;
+        target = "loki.service.consul:3103";
+        service = "loki";
+      };
+      alloy-prometheus = {
+        mode = "client";
+        port = 13102;
+        target = "prometheus.service.consul:9090";
+        service = "prometheus";
+      };
     };
 
     services.consul.services.alloy = {
