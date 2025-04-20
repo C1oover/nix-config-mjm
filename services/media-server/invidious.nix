@@ -5,7 +5,13 @@ let
 in
 {
   config = mkIf cfg.enable {
-    mjm.postgresql.enable = true;
+    mjm.services.invidious = {
+      postgresql.enable = true;
+      vault = {
+        enable = true;
+        useSpiffeIdentity = true;
+      };
+    };
     mjm.state.directories = [ "/var/lib/private/invidious" ];
 
     ingress.virtualHosts.yt = {
@@ -23,28 +29,13 @@ in
         external_port = 443;
         https_only = true;
       };
-      extraSettingsFile = "/var/lib/invidious/extra-settings.json";
+      extraSettingsFile = "/run/credentials/invidious.service/invidious_extra_settings";
 
       sig-helper.enable = true;
     };
 
-    vault-secrets.wantedBy = [ "invidious.service" ];
-    vault-secrets.templates.invidious-config.text = ''
-      {{ with secret "kv/prod/services/media-server" }}
-      {
-        "po_token": {{ .Data.data.youtube_po_token | toJSON }},
-        "visitor_data": {{ .Data.data.youtube_visitor_data | toJSON }}
-      }
-      {{ end }}
-    '';
-
     systemd.services.invidious = {
-      serviceConfig.LoadCredential = [
-        "extra-settings:${config.vault-secrets.templates.invidious-config.path}"
-      ];
-      preStart = ''
-        ln -sf "$CREDENTIALS_DIRECTORY/extra-settings" /var/lib/invidious/extra-settings.json
-      '';
+      serviceConfig.LoadCredential = [ "invidious_extra_settings:/run/invidious-creds.sock" ];
     };
 
     networking.firewall.allowedTCPPorts = [ config.services.invidious.port ];
