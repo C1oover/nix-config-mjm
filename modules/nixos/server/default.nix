@@ -4,9 +4,9 @@ let
 in
 {
   imports = [
+    ./alloy.nix
     ./gc.nix
     ./node-exporter.nix
-    ./promtail.nix
     ./ssh-cert.nix
   ];
 

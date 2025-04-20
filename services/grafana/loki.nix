@@ -90,6 +90,8 @@ in
         };
 
         limits_config = {
+          ingestion_rate_mb = 64;
+          ingestion_burst_size_mb = 96;
           retention_period = "672h";
           allow_structured_metadata = true;
         };
@@ -113,6 +115,7 @@ in
         allowedServices = [
           "grafana"
           "promtail"
+          "alloy"
           "consul-agent"
         ];
         allowMetrics = true;
