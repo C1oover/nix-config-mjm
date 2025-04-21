@@ -15,14 +15,7 @@ let
     ;
   cfg = config.mjm.git;
 
-  jm = pkgs.writeNuBin ",jm" {
-    makeWrapperArgs = [
-      "--prefix"
-      ":"
-      "PATH"
-      (lib.makeBinPath [ pkgs.jujutsu ])
-    ];
-  } ./scripts/jm.nu;
+  jm = pkgs.writeNuBin "jj-mega" ./scripts/jm.nu;
 
   mkAlias = script: [
     "util"
@@ -68,8 +61,7 @@ in
   };
 
   config = mkIf (cfg.enable && cfg.desktop.enable) {
-    home.packages =
-      [ jm ] ++ optional cfg.enableMeld pkgs.meld ++ optional cfg.enableWatchman pkgs.watchman;
+    home.packages = optional cfg.enableMeld pkgs.meld ++ optional cfg.enableWatchman pkgs.watchman;
 
     programs.jujutsu = {
       enable = true;
@@ -104,15 +96,25 @@ in
           key = "~/.ssh/id_ed25519.pub";
         };
 
+        template-aliases = {
+          skim_changes = "if(description, separate(' ', format_short_change_id_with_hidden_and_divergent_info(self), description.first_line(), if(conflict, label('conflict', 'conflict'))) ++ \"\\n\")";
+          skim_bookmarks = "if(!remote && present, label('bookmark', name) ++ format_ref_targets(self) ++ \"\\n\")";
+        };
         revset-aliases = {
-          "merge_base(x)" = "fork_point(trunk() | x)";
+          "long_log()" = "@ | trunk() | ancestors(reachable(@ | mine(), mutable()), 2)";
+          "tip()" = "tip(@)";
+          "tip(x)" = "heads(description(glob:'?*') & ::x)";
+        };
+        revsets = {
+          log = "@ | ancestors(reachable(@, mutable()), 2)";
+          short-prefixes = "long_log()";
         };
 
         aliases = {
           ll = [
             "log"
             "-r"
-            "@ | trunk() | ancestors(reachable(@ | mine(), mutable()), 2)"
+            "long_log()"
           ];
           history = [
             "log"
@@ -129,14 +131,14 @@ in
           dc = [
             "diff"
             "--from"
-            "merge_base(@-)"
+            "fork_point(trunk() | @-)"
             "--to"
             "@-"
           ];
           di = [
             "diff"
             "--from"
-            "merge_base(@)"
+            "fork_point(trunk() | @)"
             "--to"
             "@"
           ];
@@ -149,10 +151,10 @@ in
             "git"
             "push"
             "--change"
-            "heads(description(glob:'?*') & ::@)"
+            "tip()"
           ];
           pb = mkFishAlias "jj-pb" ''
-            jj bookmark move --from 'heads(::@ & bookmarks())' --to 'heads(description(glob:"?*") & ::@)'
+            jj bookmark move --from 'heads(::@ & bookmarks())' --to 'tip()'
             jj git push
             or jj undo
           '';
@@ -164,12 +166,12 @@ in
             jj rebase -d 'trunk()'
           '';
           f = mkFishAlias "jj-f" ''
-            jj log --no-graph --color always -T 'if(description, separate(" ", format_short_change_id_with_hidden_and_divergent_info(self), description.first_line(), if(conflict, label("conflict", "conflict"))) ++ "\n")' $argv |
+            jj log -r 'long_log()' --no-graph --color always -T skim_changes $argv |
               sk --nth 2.. --ansi --preview 'jj show --color always {1}' |
               string split -f 1 ' '
           '';
           fb = mkFishAlias "jj-fb" ''
-            jj bookmark list --color always -t --quiet -T 'if(!remote && present, label("bookmark", name) ++ format_ref_targets(self) ++ "\n")' $argv |
+            jj bookmark list --color always -t --quiet -T skim_bookmarks $argv |
               sk --ansi |
               string split -f 1 ':'
           '';
@@ -179,9 +181,6 @@ in
           n = mkFishAlias "jj-n" ''
             jj new (jj f)
           '';
-        };
-        revsets = {
-          log = "@ | ancestors(reachable(@, mutable()), 2)";
         };
 
         fix.tools = {
