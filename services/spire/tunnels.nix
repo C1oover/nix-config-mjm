@@ -11,10 +11,12 @@ let
     filter
     map
     mapAttrs'
+    mkDefault
     mkIf
     mkMerge
     mkOption
     optional
+    optionalString
     pipe
     types
     ;
@@ -23,79 +25,74 @@ let
   mkSocket =
     name: tunnel:
     let
-      useNamespace = tunnel.namespace != null && tunnel.mode == "client";
+      inherit (tunnel) listen;
     in
     {
       name = "${name}-tunnel";
       value = {
-        wantedBy = if useNamespace then [ "network.target" ] else [ "sockets.target" ];
+        wantedBy = if listen.namespace != null then [ "network.target" ] else [ "sockets.target" ];
         partOf = [ "${name}-tunnel.service" ];
-        bindsTo = mkIf useNamespace [ "netns-bridge@${tunnel.namespace}.service" ];
-        after = mkIf useNamespace [ "netns-bridge@${tunnel.namespace}.service" ];
+        bindsTo = mkIf (listen.namespace != null) [ "netns-bridge@${listen.namespace}.service" ];
+        after = mkIf (listen.namespace != null) [ "netns-bridge@${listen.namespace}.service" ];
         startLimitIntervalSec = 0;
-        unitConfig = mkIf useNamespace {
+        unitConfig = mkIf (listen.namespace != null) {
           DefaultDependencies = false;
         };
         socketConfig = {
           FileDescriptorName = "ghostunnel";
-          ListenStream =
-            if tunnel.listen != null then
-              tunnel.listen
-            else if tunnel.mode == "server" then
-              "[::]:${toString tunnel.port}"
-            else if tunnel.port != null then
-              "[::1]:${toString tunnel.port}"
-            else if tunnel.socket != null then
-              tunnel.socket
-            else
-              builtins.throw "missing port or socket for tunnel";
-          NetworkNamespacePath = mkIf useNamespace "/run/netns/${tunnel.namespace}";
+          ListenStream = tunnel.listen.address;
+          NetworkNamespacePath = mkIf (listen.namespace != null) "/run/netns/${listen.namespace}";
         };
       };
     };
 
-  mkService = name: tunnel: {
-    name = "${name}-tunnel";
-    value = {
-      wantedBy = [ "multi-user.target" ];
-      after = [
-        "network.target"
-        "${name}-tunnel.socket"
-      ] ++ optional (tunnel.namespace != null) "netns-bridge@${tunnel.namespace}.service";
-      requires = [ "${name}-tunnel.socket" ];
-      bindsTo = mkIf (tunnel.namespace != null) [ "netns-bridge@${tunnel.namespace}.service" ];
+  mkService =
+    name: tunnel:
+    let
+      inherit (tunnel) target;
+    in
+    {
+      name = "${name}-tunnel";
+      value = {
+        wantedBy = [ "multi-user.target" ];
+        after = [
+          "network.target"
+          "${name}-tunnel.socket"
+        ] ++ optional (target.namespace != null) "netns-bridge@${target.namespace}.service";
+        requires = [ "${name}-tunnel.socket" ];
+        bindsTo = mkIf (target.namespace != null) [ "netns-bridge@${target.namespace}.service" ];
 
-      environment.SPIFFE_ENDPOINT_SOCKET = "unix:${cfg.agent.socketPath}";
+        environment.SPIFFE_ENDPOINT_SOCKET = "unix:${cfg.agent.socketPath}";
 
-      startLimitIntervalSec = 0;
+        startLimitIntervalSec = 0;
 
-      serviceConfig = {
-        Type = "notify-reload";
-        ExecStart = utils.escapeSystemdExecArgs (
-          [
-            "${pkgs.ghostunnel}/bin/ghostunnel"
-            tunnel.mode
-            "--listen=systemd:ghostunnel"
-            "--target=${tunnel.target}"
-            "--use-workload-api"
-          ]
-          ++ (
-            if tunnel.mode == "server" then
-              (
-                optional (tunnel.allowedServices == [ ]) "--disable-authentication"
-                ++ (map (s: "--allow-uri=spiffe://home.mattmoriarity.com/svc/${s}") tunnel.allowedServices)
-              )
-            else
-              [ "--verify-uri=spiffe://home.mattmoriarity.com/svc/${tunnel.service}" ]
-          )
-        );
-        DynamicUser = true;
-        Restart = "always";
-        WatchdogSec = 1;
-        NetworkNamespacePath = mkIf (tunnel.namespace != null) "/run/netns/${tunnel.namespace}";
+        serviceConfig = {
+          Type = "notify-reload";
+          ExecStart = utils.escapeSystemdExecArgs (
+            [
+              "${pkgs.ghostunnel}/bin/ghostunnel"
+              tunnel.mode
+              "--listen=systemd:ghostunnel"
+              "--target=${target.address}"
+              "--use-workload-api"
+            ]
+            ++ (
+              if tunnel.mode == "server" then
+                (
+                  optional (tunnel.allowedServices == [ ]) "--disable-authentication"
+                  ++ (map (s: "--allow-uri=spiffe://home.mattmoriarity.com/svc/${s}") tunnel.allowedServices)
+                )
+              else
+                [ "--verify-uri=spiffe://home.mattmoriarity.com/svc/${tunnel.service}" ]
+            )
+          );
+          DynamicUser = true;
+          Restart = "always";
+          WatchdogSec = 1;
+          NetworkNamespacePath = mkIf (target.namespace != null) "/run/netns/${target.namespace}";
+        };
       };
     };
-  };
 in
 {
   options.mjm.spire.tunnels = mkOption {
@@ -115,24 +112,51 @@ in
               type = types.nullOr types.str;
               default = null;
             };
-            listen = mkOption {
-              type = types.nullOr types.str;
-              default = null;
+            listen = {
+              port = mkOption {
+                type = types.nullOr types.port;
+                default = null;
+              };
+              socket = mkOption {
+                type = types.nullOr types.path;
+                default = null;
+              };
+              address = mkOption {
+                type = types.str;
+              };
+              namespace = mkOption {
+                type = types.nullOr types.str;
+                default = null;
+              };
             };
-            port = mkOption {
-              type = types.nullOr types.port;
-              default = null;
-            };
-            socket = mkOption {
-              type = types.nullOr types.path;
-              default = null;
+            target = {
+              port = mkOption {
+                type = types.nullOr types.port;
+                default = null;
+              };
+              host = mkOption {
+                type = types.nullOr types.str;
+                default = "localhost";
+              };
+              service = mkOption {
+                type = types.nullOr types.str;
+                default = null;
+              };
+              socket = mkOption {
+                type = types.nullOr types.path;
+                default = null;
+              };
+              address = mkOption {
+                type = types.str;
+              };
+              namespace = mkOption {
+                type = types.nullOr types.str;
+                default = null;
+              };
             };
             openFirewall = mkOption {
               type = types.bool;
-              default = config.port != null;
-            };
-            target = mkOption {
-              type = types.str;
+              default = config.listen.port != null && config.listen.namespace == null;
             };
             allowedServices = mkOption {
               type = types.listOf types.str;
@@ -146,16 +170,37 @@ in
               type = types.bool;
               default = false;
             };
+            allowConsul = mkOption {
+              type = types.bool;
+              default = false;
+            };
             service = mkOption {
               type = types.str;
             };
           };
 
           config = {
+            listen.address = mkMerge [
+              (mkIf (config.listen.port != null)
+                "[::${optionalString (config.mode == "client") "1"}]:${toString config.listen.port}"
+              )
+              (mkIf (config.listen.socket != null) config.listen.socket)
+            ];
+
+            target.host = mkIf (config.target.service != null) "${config.target.service}.service.consul";
+
+            target.address = mkMerge [
+              (mkIf (config.target.port != null) "${config.target.host}:${toString config.target.port}")
+              (mkIf (config.target.socket != null) "unix:${config.target.socket}")
+            ];
+
             allowedServices = mkMerge [
               (mkIf config.allowIngress [ "caddy" ])
               (mkIf config.allowMetrics [ "prometheus" ])
+              (mkIf config.allowConsul [ "consul-agent" ])
             ];
+
+            service = mkIf (config.target.service != null) (mkDefault config.target.service);
           };
         }
       )
@@ -169,7 +214,7 @@ in
     networking.firewall.allowedTCPPorts = pipe cfg.tunnels [
       attrValues
       (filter (t: t.openFirewall))
-      (map (t: t.port))
+      (map (t: t.listen.port))
     ];
   };
 }

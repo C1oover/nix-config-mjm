@@ -46,8 +46,8 @@ in
 
     mjm.spire.tunnels.navidrome = {
       mode = "server";
-      port = 4533;
-      target = "unix:/run/navidrome/server.sock";
+      listen.port = 4533;
+      target.socket = "/run/navidrome/server.sock";
       allowIngress = true;
       allowMetrics = true;
     };

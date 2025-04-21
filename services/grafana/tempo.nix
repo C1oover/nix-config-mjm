@@ -54,39 +54,38 @@ in
     mjm.spire.tunnels = {
       tempo = {
         mode = "server";
-        namespace = "tempo";
-        port = 3200;
-        target = "localhost:3200";
-        allowedServices = [
-          "grafana"
-          "consul-agent"
-        ];
+        listen.port = 3200;
+        target.port = 3200;
+        target.namespace = "tempo";
+        allowedServices = [ "grafana" ];
+        allowConsul = true;
       };
       tempo-grpc = {
         mode = "server";
-        namespace = "tempo";
-        port = 14317;
-        target = "localhost:14317";
+        listen.port = 14317;
+        target.port = 14317;
+        target.namespace = "tempo";
         allowedServices = [ "otel-collector" ];
       };
       tempo-s3 = {
         mode = "client";
-        namespace = "tempo";
-        port = 3902;
-        target = "s3.garage.service.consul:3902";
+        listen.port = 3902;
+        listen.namespace = "tempo";
+        target.service = "s3.garage";
+        target.port = 3902;
         service = "garage";
       };
       tempo-s3-creds = {
         mode = "client";
-        namespace = "tempo";
-        listen = "169.254.170.2:80";
-        target = "spiffe-garage.service.consul:3899";
-        service = "spiffe-garage";
+        listen.address = "169.254.170.2:80";
+        listen.namespace = "tempo";
+        target.service = "spiffe-garage";
+        target.port = 3899;
       };
       consul-tempo = {
         mode = "client";
-        socket = "/run/consul-checks/tempo.sock";
-        target = "localhost:3200";
+        listen.socket = "/run/consul-checks/tempo.sock";
+        target.port = 3200;
         service = "tempo";
       };
     };

@@ -48,16 +48,16 @@ in
     mjm.spire.tunnels = {
       vaultwarden = {
         mode = "server";
-        namespace = "vaultwarden";
-        port = 8222;
-        target = "localhost:8221";
+        listen.port = 8222;
+        target.port = 8221;
+        target.namespace = "vaultwarden";
         allowIngress = true;
-        allowedServices = [ "consul-agent" ];
+        allowConsul = true;
       };
       consul-vaultwarden = {
         mode = "client";
-        socket = "/run/consul-checks/vaultwarden.sock";
-        target = "localhost:8222";
+        listen.socket = "/run/consul-checks/vaultwarden.sock";
+        target.port = 8222;
         service = "vaultwarden";
       };
     };

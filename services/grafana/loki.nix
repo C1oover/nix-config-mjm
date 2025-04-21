@@ -109,35 +109,38 @@ in
     mjm.spire.tunnels = {
       loki = {
         mode = "server";
-        namespace = "loki";
-        port = 3103;
-        target = "localhost:3100";
+        listen.port = 3103;
+        target.port = 3100;
+        target.namespace = "loki";
         allowedServices = [
           "grafana"
           "promtail"
           "alloy"
-          "consul-agent"
         ];
         allowMetrics = true;
+        allowConsul = true;
       };
       loki-s3 = {
         mode = "client";
-        namespace = "loki";
-        port = 3902;
-        target = "s3.garage.service.consul:3902";
+        listen.port = 3902;
+        listen.namespace = "loki";
+        target.service = "s3.garage";
+        target.port = 3902;
+        target.namespace = "loki";
         service = "garage";
       };
       loki-s3-creds = {
         mode = "client";
-        namespace = "loki";
-        listen = "169.254.170.2:80";
-        target = "spiffe-garage.service.consul:3899";
-        service = "spiffe-garage";
+        listen.address = "169.254.170.2:80";
+        listen.namespace = "loki";
+        target.service = "spiffe-garage";
+        target.port = 3899;
+        target.namespace = "loki";
       };
       consul-loki = {
         mode = "client";
-        socket = "/run/consul-checks/loki.sock";
-        target = "localhost:3103";
+        listen.socket = "/run/consul-checks/loki.sock";
+        target.port = 3103;
         service = "loki";
       };
     };

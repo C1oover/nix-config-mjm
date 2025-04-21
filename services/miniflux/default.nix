@@ -68,8 +68,8 @@ in
     mjm.spire.tunnels = {
       miniflux = {
         mode = "server";
-        port = 9999;
-        target = "unix:/run/miniflux/server.sock";
+        listen.port = 9999;
+        target.socket = "/run/miniflux/server.sock";
         allowIngress = true;
         allowMetrics = true;
       };

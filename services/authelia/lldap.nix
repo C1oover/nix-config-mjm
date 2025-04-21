@@ -33,8 +33,8 @@ in
 
     mjm.spire.tunnels.lldap = {
       mode = "server";
-      port = 17170;
-      target = "localhost:27170";
+      listen.port = 17170;
+      target.port = 27170;
       allowIngress = true;
     };
 

@@ -128,13 +128,12 @@ in
 
     mjm.spire.tunnels.authelia = {
       mode = "server";
-      port = 9091;
-      target = "localhost:9191";
+      listen.port = 9091;
+      target.port = 9191;
       allowIngress = true;
     };
 
     networking.firewall.allowedTCPPorts = [
-      9091
       9959
     ];
 

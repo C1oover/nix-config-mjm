@@ -16,15 +16,15 @@ in
     mjm.spire.tunnels = {
       alloy-loki = {
         mode = "client";
-        port = 13101;
-        target = "loki.service.consul:3103";
-        service = "loki";
+        listen.port = 13101;
+        target.service = "loki";
+        target.port = 3103;
       };
       alloy-prometheus = {
         mode = "client";
-        port = 13102;
-        target = "prometheus.service.consul:9090";
-        service = "prometheus";
+        listen.port = 13102;
+        target.service = "prometheus";
+        target.port = 9090;
       };
     };
 

@@ -102,39 +102,38 @@ in
     mjm.spire.tunnels = {
       grafana = {
         mode = "server";
-        namespace = "grafana";
-        port = 3000;
-        target = "unix:/run/grafana/server.sock";
+        listen.port = 3000;
+        target.socket = "/run/grafana/server.sock";
         allowIngress = true;
         allowMetrics = true;
       };
       grafana-loki = {
         mode = "client";
-        namespace = "grafana";
-        port = 3100;
-        target = "loki.service.consul:3103";
-        service = "loki";
+        listen.port = 3100;
+        listen.namespace = "grafana";
+        target.port = 3103;
+        target.service = "loki";
       };
       grafana-tempo = {
         mode = "client";
-        namespace = "grafana";
-        port = 3200;
-        target = "tempo.service.consul:3200";
-        service = "tempo";
+        listen.port = 3200;
+        listen.namespace = "grafana";
+        target.service = "tempo";
+        target.port = 3200;
       };
       grafana-prometheus = {
         mode = "client";
-        namespace = "grafana";
-        port = 9090;
-        target = "prometheus.service.consul:9090";
-        service = "prometheus";
+        listen.port = 9090;
+        listen.namespace = "grafana";
+        target.port = 9090;
+        target.service = "prometheus";
       };
       grafana-alertmanager = {
         mode = "client";
-        namespace = "grafana";
-        port = 9093;
-        target = "alertmanager.service.consul:9093";
-        service = "alertmanager";
+        listen.port = 9093;
+        listen.namespace = "grafana";
+        target.port = 9093;
+        target.service = "alertmanager";
       };
     };
 

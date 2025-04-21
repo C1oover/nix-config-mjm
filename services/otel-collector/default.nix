@@ -70,9 +70,9 @@ in
 
     mjm.spire.tunnels.otel-collector-tempo = {
       mode = "client";
-      port = 15317;
-      target = "tempo.service.consul:14317";
-      service = "tempo";
+      listen.port = 15317;
+      target.service = "tempo";
+      target.port = 14317;
     };
   };
 }

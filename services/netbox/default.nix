@@ -151,8 +151,8 @@ in
     mjm.spire.tunnels = {
       netbox = {
         mode = "server";
-        port = 8000;
-        target = "unix:/run/caddy/netbox.sock";
+        listen.port = 8000;
+        target.socket = "/run/caddy/netbox.sock";
         allowIngress = true;
         allowMetrics = true;
       };

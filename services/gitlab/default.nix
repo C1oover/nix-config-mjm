@@ -249,36 +249,39 @@ in
     mjm.spire.tunnels = {
       gitlab = {
         mode = "server";
-        port = 8443;
-        target = "unix:/run/gitlab/gitlab-workhorse.socket";
+        listen.port = 8443;
+        target.socket = "/run/gitlab/gitlab-workhorse.socket";
         allowIngress = true;
       };
       gitlab-pages = {
         mode = "server";
-        namespace = "gitlab";
-        port = 8090;
-        target = "localhost:8090";
+        listen.port = 8090;
+        target.port = 8090;
+        target.namespace = "gitlab";
         allowIngress = true;
-        allowedServices = [ "consul-agent" ];
+        allowConsul = true;
       };
       gitlab-s3 = {
         mode = "client";
-        namespace = "gitlab";
-        port = 3902;
-        target = "s3.garage.service.consul:3902";
+        listen.port = 3902;
+        listen.namespace = "gitlab";
+        target.service = "s3.garage";
+        target.port = 3902;
+        target.namespace = "gitlab";
         service = "garage";
       };
       gitlab-s3-creds = {
         mode = "client";
-        namespace = "gitlab";
-        listen = "169.254.170.2:80";
-        target = "spiffe-garage.service.consul:3899";
-        service = "spiffe-garage";
+        listen.address = "169.254.170.2:80";
+        listen.namespace = "gitlab";
+        target.service = "spiffe-garage";
+        target.port = 3899;
+        target.namespace = "gitlab";
       };
       consul-gitlab-pages = {
         mode = "client";
-        socket = "/run/consul-checks/gitlab-pages.sock";
-        target = "localhost:8090";
+        listen.socket = "/run/consul-checks/gitlab-pages.sock";
+        target.port = 8090;
         service = "gitlab-pages";
       };
     };

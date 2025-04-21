@@ -73,8 +73,8 @@ in
 
     mjm.spire.tunnels.conduwuit = {
       mode = "server";
-      port = 6167;
-      target = "localhost:6166";
+      listen.port = 6167;
+      target.port = 6166;
     };
 
     services.consul.services.conduit = {

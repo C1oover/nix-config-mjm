@@ -42,16 +42,16 @@ in
     mjm.spire.tunnels = {
       atuin = {
         mode = "server";
-        namespace = "atuin";
-        inherit (config.services.atuin) port;
-        target = "localhost:8888";
+        listen.port = 8888;
+        target.port = 8888;
+        target.namespace = "atuin";
         allowIngress = true;
-        allowedServices = [ "consul-agent" ];
+        allowConsul = true;
       };
       consul-atuin = {
         mode = "client";
-        socket = "/run/consul-checks/atuin.sock";
-        target = "localhost:8888";
+        listen.socket = "/run/consul-checks/atuin.sock";
+        target.port = 8888;
         service = "atuin";
       };
     };

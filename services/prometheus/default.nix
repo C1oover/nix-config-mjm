@@ -65,21 +65,21 @@ in
     mjm.spire.tunnels = {
       prometheus = {
         mode = "server";
-        namespace = "prometheus";
-        port = 9090;
-        target = "localhost:9090";
+        listen.port = 9090;
+        target.port = 9090;
+        target.namespace = "prometheus";
         allowIngress = true;
+        allowConsul = true;
         allowedServices = [
           "alloy"
-          "consul-agent"
           "grafana"
           "prometheus"
         ];
       };
       consul-prometheus = {
         mode = "client";
-        socket = "/run/consul-checks/prometheus.sock";
-        target = "localhost:9090";
+        listen.socket = "/run/consul-checks/prometheus.sock";
+        target.port = 9090;
         service = "prometheus";
       };
     };

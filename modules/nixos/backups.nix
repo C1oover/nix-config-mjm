@@ -66,17 +66,18 @@ in
     mjm.spire.tunnels = {
       backups-s3 = {
         mode = "client";
-        namespace = "backups";
-        port = 3902;
-        target = "s3.garage.service.consul:3902";
+        listen.port = 3902;
+        listen.namespace = "backups";
+        target.service = "s3.garage";
+        target.port = 3902;
         service = "garage";
       };
       backups-s3-creds = {
         mode = "client";
-        namespace = "backups";
-        listen = "169.254.170.2:80";
-        target = "spiffe-garage.service.consul:3899";
-        service = "spiffe-garage";
+        listen.address = "169.254.170.2:80";
+        listen.namespace = "backups";
+        target.service = "spiffe-garage";
+        target.port = 3899;
       };
     };
 

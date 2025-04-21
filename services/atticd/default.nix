@@ -67,23 +67,24 @@ in
     mjm.spire.tunnels = {
       attic = {
         mode = "server";
-        namespace = "attic";
-        port = 8100;
-        target = "localhost:8100";
+        listen.port = 8100;
+        target.port = 8100;
+        target.namespace = "attic";
         allowIngress = true;
-        allowedServices = [ "consul-agent" ];
+        allowConsul = true;
       };
       attic-s3-creds = {
         mode = "client";
-        namespace = "attic";
-        listen = "169.254.170.2:80";
-        target = "spiffe-garage.service.consul:3899";
-        service = "spiffe-garage";
+        listen.address = "169.254.170.2:80";
+        listen.namespace = "attic";
+        target.service = "spiffe-garage";
+        target.port = 3899;
+        target.namespace = "attic";
       };
       consul-attic = {
         mode = "client";
-        socket = "/run/consul-checks/attic.sock";
-        target = "localhost:8100";
+        listen.socket = "/run/consul-checks/attic.sock";
+        target.port = 8100;
         service = "attic";
       };
     };

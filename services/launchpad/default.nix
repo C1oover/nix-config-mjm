@@ -109,8 +109,8 @@ in
 
     mjm.spire.tunnels.launchpad = {
       mode = "server";
-      port = 4100;
-      target = "unix:/run/launchpad.sock";
+      listen.port = 4100;
+      target.socket = "/run/launchpad.sock";
       allowIngress = true;
     };
 

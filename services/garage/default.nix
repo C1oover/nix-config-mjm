@@ -106,8 +106,8 @@ in
 
     mjm.spire.tunnels.garage-s3 = {
       mode = "server";
-      port = 3902;
-      target = "unix:/run/garage/s3.sock";
+      listen.port = 3902;
+      target.socket = "/run/garage/s3.sock";
       # don't bother with identifying the client, since they need to provide creds
       # anyway, which spiffe-garage will handle.
     };

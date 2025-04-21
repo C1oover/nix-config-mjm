@@ -87,27 +87,27 @@ in
     mjm.spire.tunnels = {
       alertmanager = {
         mode = "server";
-        namespace = "alertmanager";
-        port = 9093;
-        target = "localhost:9093";
+        listen.port = 9093;
+        target.port = 9093;
+        target.namespace = "alertmanager";
         allowIngress = true;
+        allowConsul = true;
         allowedServices = [
           "grafana"
           "prometheus"
-          "consul-agent"
         ];
       };
       prometheus-alertmanager = {
         mode = "client";
-        namespace = "prometheus";
-        port = 9093;
-        target = "alertmanager.service.consul:9093";
-        service = "alertmanager";
+        listen.port = 9093;
+        listen.namespace = "prometheus";
+        target.service = "alertmanager";
+        target.port = 9093;
       };
       consul-alertmanager = {
         mode = "client";
-        socket = "/run/consul-checks/alertmanager.sock";
-        target = "localhost:9093";
+        listen.socket = "/run/consul-checks/alertmanager.sock";
+        target.port = 9093;
         service = "alertmanager";
       };
     };
