@@ -22,7 +22,6 @@
     ./nas
     ./netbox
     ./nut
-    ./otel-collector
     ./paperless
     ./postgresql
     ./prometheus

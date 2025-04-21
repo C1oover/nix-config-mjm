@@ -20,7 +20,7 @@ in
         };
 
         distributor.receivers.otlp.protocols = {
-          # used by otel-collector, goes through the tunnel for mTLS
+          # used by alloy, goes through the tunnel for mTLS
           grpc.endpoint = "127.0.0.1:14317";
           # used by launchpad in dev
           # TODO fix to be able to create a tunnel for it on the dev machine
@@ -65,7 +65,7 @@ in
         listen.port = 14317;
         target.port = 14317;
         target.namespace = "tempo";
-        allowedServices = [ "otel-collector" ];
+        allowedServices = [ "alloy" ];
       };
       tempo-s3 = {
         mode = "client";

@@ -12,7 +12,7 @@ let
 
   serviceEnv = {
     OTEL_SERVICE_NAME = "launchpad";
-    OTEL_EXPORTER_OTLP_ENDPOINT = "http://127.0.0.1:4318";
+    OTEL_EXPORTER_OTLP_ENDPOINT = "http://localhost:4318";
     OTEL_RESOURCE_ATTRIBUTES = "deployment.environment.name=prod";
     LAUNCHPAD_DATABASE_URL = "postgresql:///launchpad?host=/run/postgresql";
     LAUNCHPAD_GITLAB_TOKEN_FILE = "%d/launchpad_gitlab_token";
@@ -40,7 +40,6 @@ in
         useSpiffeIdentity = true;
       };
     };
-    mjm.otel-collector.enable = true;
 
     ingress.virtualHosts.launch = {
       upstream = {
@@ -107,11 +106,20 @@ in
       };
     };
 
-    mjm.spire.tunnels.launchpad = {
-      mode = "server";
-      listen.port = 4100;
-      target.socket = "/run/launchpad.sock";
-      allowIngress = true;
+    mjm.spire.tunnels = {
+      launchpad = {
+        mode = "server";
+        listen.port = 4100;
+        target.socket = "/run/launchpad.sock";
+        allowIngress = true;
+      };
+      launchpad-alloy = {
+        mode = "client";
+        listen.port = 4318;
+        listen.namespace = "launchpad";
+        target.socket = "/run/alloy-otlphttp.sock";
+        service = "alloy";
+      };
     };
 
     services.consul.services.launchpad = {

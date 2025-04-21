@@ -1,0 +1,37 @@
+otelcol.receiver.otlp "otel" {
+  grpc {
+    endpoint = "127.0.0.1:4317"
+  }
+  http {
+    endpoint = "127.0.0.1:4318"
+  }
+
+  output {
+    traces = [otelcol.processor.memory_limiter.default.input]
+  }
+}
+
+otelcol.exporter.otlp "tempo" {
+  client {
+    endpoint = "localhost:15317"
+    tls {
+      insecure = true
+    }
+  }
+}
+
+otelcol.processor.memory_limiter "default" {
+  check_interval = "5s"
+  limit = "400MiB"
+  spike_limit = "100MiB"
+
+  output {
+    traces = [otelcol.processor.batch.default.input]
+  }
+}
+
+otelcol.processor.batch "default" {
+  output {
+    traces = [otelcol.exporter.otlp.tempo.input]
+  }
+}
