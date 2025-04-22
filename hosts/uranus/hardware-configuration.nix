@@ -56,13 +56,6 @@
     fsType = "vfat";
   };
 
-  swapDevices = [
-    {
-      device = "/dev/disk/by-partlabel/swap";
-      randomEncryption.enable = true;
-    }
-  ];
-
   boot.initrd.luks.devices = {
     cryptroot = {
       device = "/dev/disk/by-partlabel/root";
