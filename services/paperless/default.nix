@@ -128,7 +128,7 @@ in
         target.namespace = "paperless";
         allowIngress = true;
         allowConsul = true;
-        allowedClients = [
+        allowedServices = [
           "home-assistant"
           "launchpad"
         ];
