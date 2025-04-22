@@ -100,6 +100,19 @@ in
           skim_changes = "if(description, separate(' ', format_short_change_id_with_hidden_and_divergent_info(self), description.first_line(), if(conflict, label('conflict', 'conflict'))) ++ \"\\n\")";
           skim_bookmarks = "if(!remote && present, label('bookmark', name) ++ format_ref_targets(self) ++ \"\\n\")";
         };
+        templates = {
+          draft_commit_description = ''
+            concat(
+              coalesce(description, "\n"),
+              surround(
+                "\nJJ: This commit contains the following changes:\n", "",
+                indent("JJ:     ", diff.summary()),
+              ),
+              "\nJJ: ignore-rest\n",
+              diff.git(),
+            )
+          '';
+        };
         revset-aliases = {
           "long_log()" = "@ | trunk() | ancestors(reachable(@ | mine(), mutable()), 2)";
           "tip()" = "tip(@)";
