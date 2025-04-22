@@ -16,6 +16,9 @@ let
   uwsgi = cfg.uwsgi.package.override { plugins = [ "python3" ]; };
   uwsgiCfg = pkgs.writeText "linkding-uwsgi.ini" ''
     [uwsgi]
+    master = True
+    cheap = True
+    protocol = http
     need-plugin = python3
     module = siteroot.wsgi:application
     env = DJANGO_SETTINGS_MODULE=siteroot.settings.prod
@@ -25,6 +28,8 @@ let
     threads = 2
     vacuum = True
     buffer-size = 8192
+    idle = 600
+    die-on-idle = True
     die-on-term = true
     mime-file = ${pkgs.mailcap}/etc/mime.types
 
@@ -51,7 +56,7 @@ in
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = mdDoc ''
+      description = ''
         Enable linkding.
       '';
     };
@@ -59,25 +64,31 @@ in
     dataDir = mkOption {
       type = types.str;
       default = "/var/lib/linkding";
-      description = mdDoc "Directory to use to store linkding data, such as favicons and the SQLite database.";
+      description = "Directory to use to store linkding data, such as favicons and the SQLite database.";
     };
 
     address = mkOption {
       type = types.str;
       default = "localhost";
-      description = mdDoc "Web interface listen address.";
+      description = "Web interface listen address.";
     };
 
     port = mkOption {
       type = types.port;
       default = 9090;
-      description = mdDoc "Web interface port.";
+      description = "Web interface port.";
+    };
+
+    socket = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      description = "Unix socket path for web interface.";
     };
 
     openFirewall = mkOption {
       type = types.bool;
       default = false;
-      description = mdDoc "Open the firewall for the web interface port.";
+      description = "Open the firewall for the web interface port.";
     };
 
     settings = mkOption {
@@ -142,8 +153,6 @@ in
 
     systemd.services.linkding = {
       description = "Linkding bookmarks manager";
-      wantedBy = [ "multi-user.target" ];
-      wants = [ "linkding-tasks.service" ];
       after = [ "network.target" ];
       preStart = ''
         ${pkg}/bin/linkding migrate
@@ -152,10 +161,9 @@ in
         ${pkg}/bin/linkding create_initial_superuser
         # ${pkg}/bin/linkding migrate_tasks
       '';
-      script = ''
-        exec ${uwsgi}/bin/uwsgi --http ${cfg.address}:${toString cfg.port} ${uwsgiCfg}
-      '';
       serviceConfig = {
+        Type = "notify";
+        ExecStart = "${uwsgi}/bin/uwsgi ${uwsgiCfg}";
         User = cfg.user;
         Restart = "on-failure";
         StateDirectory = mkIf (cfg.dataDir == "/var/lib/linkding") "linkding";
@@ -167,9 +175,21 @@ in
       };
     };
 
+    systemd.sockets.linkding = {
+      wantedBy = [ "sockets.target" ];
+      socketConfig = {
+        ListenStream = if cfg.socket != null then cfg.socket else "${cfg.address}:${toString cfg.port}";
+        SocketMode = "0666";
+      };
+    };
+
     systemd.services.linkding-tasks = {
+      wantedBy = [ "multi-user.target" ];
       description = "Linkding background task worker";
-      after = [ "linkding.service" ];
+      after = [
+        "network.target"
+        "linkding.service"
+      ];
       preStart = ''
         mkdir -p ${cfg.dataDir}
       '';

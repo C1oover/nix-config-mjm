@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 let
@@ -20,15 +19,17 @@ in
     mjm.state.services = [ "linkding" ];
 
     ingress.virtualHosts.links = {
-      upstream.service.name = "linkding";
+      upstream = {
+        service.name = "linkding";
+        tls.enable = true;
+      };
       useIPv4Proxy = true;
     };
 
     services.linkding = {
       enable = true;
 
-      address = "[::]";
-      port = 7090;
+      socket = "/run/linkding/server.sock";
       openFirewall = true;
 
       settings = {
@@ -46,11 +47,21 @@ in
 
     systemd.services.linkding.after = [ "postgresql.service" ];
 
+    mjm.spire.tunnels = {
+      linkding = {
+        mode = "server";
+        listen.port = 7090;
+        target.socket = "/run/linkding/server.sock";
+        allowIngress = true;
+      };
+    };
+
     services.consul.services.linkding = {
-      inherit (config.services.linkding) port;
+      port = 7090;
 
       checks.up = {
         http.path = "/health";
+        http.socket = "/run/linkding/server.sock";
       };
     };
   };
