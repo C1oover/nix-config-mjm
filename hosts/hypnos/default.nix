@@ -17,8 +17,10 @@
   };
 
   swapDevices = [
-    { device = "/dev/disk/by-partlabel/swap"; }
-    { device = "/dev/disk/by-partlabel/swap2"; }
+    {
+      device = "/nix/persist/swap";
+      size = 36 * 1024;
+    }
   ];
 
   boot.loader.systemd-boot.enable = true;
@@ -34,7 +36,7 @@
     persistDir = "/nix/persist";
     tmpfsRoot = {
       enable = true;
-      size = "24G";
+      size = "36G";
     };
   };
 
