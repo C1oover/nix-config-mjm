@@ -61,7 +61,7 @@ let
             ];
             specialArgs = {
               inherit name;
-              nodes = { };
+              nodes = uncheckedNodes;
             } // plans.darwin.meta.specialArgs;
           };
       };
