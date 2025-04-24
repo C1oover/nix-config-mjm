@@ -63,6 +63,8 @@ in
                 {
                   routing_key_file = "\${CREDENTIALS_DIRECTORY}/alertmanager_pagerduty_routing_key";
                   severity = ''{{ template "pagerduty.severity" . }}'';
+                  details.firing = ''{{ template "pagerduty.instances" .Alerts.Firing }}'';
+                  details.resolved = ''{{ template "pagerduty.instances" .Alerts.Resolved }}'';
                 }
               ];
             }
