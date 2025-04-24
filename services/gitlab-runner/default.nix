@@ -15,7 +15,6 @@ let
     mkIf
     ;
   cfg = config.mjm.gitlab-runner;
-  secrets = config.mjm.services.gitlab-runner.vault.keys;
   nix = config.nix.package;
 in
 {
@@ -27,7 +26,7 @@ in
     mjm.services.gitlab-runner = {
       vault = {
         enable = true;
-        keys.remote_builder_private_key = { };
+        useSpiffeIdentity = true;
       };
     };
     mjm.state.directories = [
@@ -37,12 +36,6 @@ in
         group = "nogroup";
       }
     ];
-
-    vault-secrets.wantedBy = [ "gitlab-runner.service" ];
-    vault-secrets.templates.gitlab-runner-docker-env.text = ''
-      CI_SERVER_URL=https://git.midna.dev
-      CI_SERVER_TOKEN={{ with secret "kv/prod/services/gitlab-runner" }}{{ .Data.data.nix_docker_auth_token }}{{ end }}
-    '';
 
     boot.kernel.sysctl."net.ipv4.ip_forward" = true;
 
@@ -87,11 +80,13 @@ in
       };
       services = {
         nix = {
-          authenticationTokenConfigFile = config.vault-secrets.templates.gitlab-runner-docker-env.path;
+          authenticationTokenConfigFile = "/dev/null";
           registrationFlags = [
             "--output-limit 102400"
             "--docker-enable-ipv6"
             "--docker-pull-policy if-not-present"
+            "--url https://git.midna.dev"
+            "--token $(systemd-creds cat gitlab-runner_nix_docker_auth_token)"
           ];
           dockerImage = "alpine";
           dockerVolumes = [
@@ -153,6 +148,34 @@ in
       };
     };
 
+    systemd.services.gitlab-runner = {
+      serviceConfig.LoadCredential = [
+        "gitlab-runner_nix_docker_auth_token:/run/gitlab-runner-creds.sock"
+      ];
+    };
+
+    systemd.services.remote-builder-key = {
+      wantedBy = [ "multi-user.target" ];
+      startLimitIntervalSec = 0;
+      script = ''
+        cp "$CREDENTIALS_DIRECTORY/gitlab-runner_remote_builder_private_key" /run/remote-builder-key/key
+      '';
+      serviceConfig = {
+        Type = "oneshot";
+        Restart = "on-failure";
+        RestartSec = 5;
+        RemainAfterExit = true;
+        DynamicUser = true;
+        PrivateNetwork = true;
+        PrivateTmp = true;
+        RuntimeDirectory = "remote-builder-key";
+        RuntimeDirectoryMode = "0700";
+        LoadCredential = [
+          "gitlab-runner_remote_builder_private_key:/run/gitlab-runner-creds.sock"
+        ];
+      };
+    };
+
     # you would think all the config below shouldn't be here because the builds
     # run in a container, but you'd be wrong. because the container uses the
     # host's nix-daemon, that is what is performing the builds. so the host's
@@ -161,7 +184,7 @@ in
     programs.ssh.extraConfig = mkAfter ''
       Host ${concatMapStringsSep " " (m: m.hostName) config.nix.buildMachines}
         IdentitiesOnly yes
-        IdentityFile ${secrets.remote_builder_private_key.path}
+        IdentityFile /run/remote-builder-key/key
     '';
 
     # force nixos tests to use a remote builder

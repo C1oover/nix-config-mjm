@@ -55,11 +55,14 @@ in
       wantedBy = [ "atticd.service" ];
       before = [ "atticd.service" ];
       path = [ pkgs.systemd ];
+      startLimitIntervalSec = 0;
       script = ''
         echo "ATTIC_SERVER_TOKEN_RS256_SECRET_BASE64=$(systemd-creds cat atticd_token_rs256_secret)" > /run/atticd-env/env
       '';
       serviceConfig = {
         Type = "oneshot";
+        Restart = "on-failure";
+        RestartSec = 5;
         RemainAfterExit = true;
         DynamicUser = true;
         PrivateNetwork = true;
