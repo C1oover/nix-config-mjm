@@ -188,20 +188,20 @@ in
       in
       [
         {
-          hostName = "arges.home.mattmoriarity.com";
-          sshUser = "matt";
+          # niobe
+          hostName = "152.53.116.186";
+          sshUser = "mjm";
           system = "aarch64-linux";
           protocol = "ssh-ng";
-          maxJobs = 4;
+          maxJobs = 6;
           speedFactor = 2;
           supportedFeatures = [
             "nixos-test"
             "benchmark"
             "big-parallel"
-            "kvm"
           ];
           mandatoryFeatures = [ ];
-          publicHostKey = "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSURTM3BQTkVhSEEreWNEYTdrVHlOU3hzQVlCRlpJN1lNd2VEcnJOMEdnK2wgcm9vdEBuaXhvcwo=";
+          publicHostKey = "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSUxEbjh6cDFkL3M1T29HZ0FxdEgxNEtFVHZCRU1IOXBERWY2YzJ5amNkWXMgcm9vdEBuaW9iZQo=";
         }
         (mkVmTestBuilder "hades" // { maxJobs = 1; })
       ]

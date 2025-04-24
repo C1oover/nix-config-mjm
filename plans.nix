@@ -14,6 +14,7 @@ let
     "leto"
     "megaera"
     "melinoe"
+    "niobe"
     "persephone"
     "steropes"
     "tisiphone"

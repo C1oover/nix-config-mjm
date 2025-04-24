@@ -95,7 +95,7 @@ in
         (mkIf cfg.enableTpm "\${XDG_RUNTIME_DIR}/ssh-tpm-agent.sock")
       ];
       matchBlocks.homelab = {
-        match = "host *.home.mattmoriarity.com exec \"${updateCert}\"";
+        match = "host *.home.mattmoriarity.com,5.78.46.61,152.53.116.186 exec \"${updateCert}\"";
         identityFile = if isHardwareKey then cfg.sshPublicKeyPath else cfg.sshPrivateKeyPath;
         certificateFile = cfg.sshCertPath;
       };
