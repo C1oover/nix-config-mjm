@@ -15,13 +15,16 @@ in
 
   config = mkIf cfg.enable {
     mjm.services.atticd = {
-      vault.enable = true;
+      vault = {
+        enable = true;
+        useSpiffeIdentity = true;
+      };
       postgresql.enable = true;
     };
 
     ingress.virtualHosts.attic = {
       upstream = {
-        service.name = "attic";
+        service.name = "atticd";
         tls.enable = true;
       };
 
@@ -45,15 +48,29 @@ in
         compression.type = "zstd";
         garbage-collection.default-retention-period = "3 months";
       };
-      environmentFile = config.vault-secrets.templates.attic-env.path;
+      environmentFile = "/run/atticd-env/env";
     };
 
-    vault-secrets.wantedBy = [ "atticd.service" ];
-    vault-secrets.templates.attic-env.text = ''
-      {{ with secret "kv/prod/services/atticd" }}
-      ATTIC_SERVER_TOKEN_RS256_SECRET_BASE64={{ .Data.data.token_rs256_secret }}
-      {{ end }}
-    '';
+    systemd.services.atticd-env = {
+      wantedBy = [ "atticd.service" ];
+      before = [ "atticd.service" ];
+      path = [ pkgs.systemd ];
+      script = ''
+        echo "ATTIC_SERVER_TOKEN_RS256_SECRET_BASE64=$(systemd-creds cat atticd_token_rs256_secret)" > /run/atticd-env/env
+      '';
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        DynamicUser = true;
+        PrivateNetwork = true;
+        PrivateTmp = true;
+        RuntimeDirectory = "atticd-env";
+        RuntimeDirectoryMode = "0700";
+        LoadCredential = [
+          "atticd_token_rs256_secret:/run/atticd-creds.sock"
+        ];
+      };
+    };
 
     mjm.networkd.macvlan.enable = true;
 
@@ -83,18 +100,18 @@ in
       };
       consul-attic = {
         mode = "client";
-        listen.socket = "/run/consul-checks/attic.sock";
+        listen.socket = "/run/consul-checks/atticd.sock";
         target.port = 8100;
-        service = "attic";
+        service = "atticd";
       };
     };
 
-    services.consul.services.attic = {
+    services.consul.services.atticd = {
       port = 8100;
 
       checks.up = {
         http.path = "/";
-        http.socket = "/run/consul-checks/attic.sock";
+        http.socket = "/run/consul-checks/atticd.sock";
       };
     };
 
