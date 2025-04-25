@@ -157,7 +157,7 @@ in
         prometheus = { };
         rest = [
           {
-            resource = "http://paperless.service.consul:28981/api/documents/";
+            resource = "http://localhost:28982/api/documents/";
             params.tags__name__iexact = "inbox";
             headers.Authorization = "!secret paperless_authorization";
             sensor = [
@@ -181,6 +181,17 @@ in
         mode = "server";
         listen.port = 8123;
         target.port = 18123;
+        allowIngress = true;
+        allowConsul = true;
+        allowedServices = [
+          "backups"
+        ];
+      };
+      home-assistant-paperless = {
+        mode = "client";
+        listen.port = 28982;
+        target.service = "paperless";
+        target.port = 28981;
       };
       backup-home-assistant = {
         mode = "client";
