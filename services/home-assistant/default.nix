@@ -9,7 +9,6 @@ let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.mjm.home-assistant;
 
-  port = config.services.home-assistant.config.http.server_port;
   clientId = "Ck6UhnhOFIoo8jYitELDVI7Ys93kIJ6ZGcrLI6xr1YT9PWaIYUQEjc50iqgPSlCz";
 in
 {
@@ -35,7 +34,11 @@ in
     ];
 
     ingress.virtualHosts.home = {
-      upstream.service.name = "home-assistant";
+      upstream = {
+        service.name = "home-assistant";
+        tls.enable = true;
+      };
+
       enableAuthProxy = false;
     };
 
@@ -84,11 +87,15 @@ in
           external_url = "https://home.midna.dev";
         };
         http = {
+          server_host = [
+            "127.0.0.1"
+            "::1"
+          ];
+          server_port = 18123;
           use_x_forwarded_for = true;
           trusted_proxies = [
-            "10.0.0.3"
-            "10.0.0.4"
-            "${config.mjm.ipv6Prefix}::/64"
+            "127.0.0.1"
+            "::1"
           ];
         };
         auth_oidc = {
@@ -169,6 +176,26 @@ in
       ];
     };
 
+    mjm.spire.tunnels = {
+      home-assistant = {
+        mode = "server";
+        listen.port = 8123;
+        target.port = 18123;
+      };
+      backup-home-assistant = {
+        mode = "client";
+        listen.socket = "/run/backup-home-assistant.sock";
+        target.port = 8123;
+        service = "home-assistant";
+      };
+      consul-home-assistant = {
+        mode = "client";
+        listen.socket = "/run/consul-checks/home-assistant.sock";
+        target.port = 8123;
+        service = "home-assistant";
+      };
+    };
+
     mjm.authelia.oidcClients.hass = {
       name = "Home Assistant";
       inherit clientId;
@@ -235,10 +262,11 @@ in
     networking.firewall.allowedTCPPorts = [ 21063 ];
 
     services.consul.services.home-assistant = {
-      inherit port;
+      port = 8123;
 
       checks.up = {
         http.path = "/manifest.json";
+        http.socket = "/run/consul-checks/home-assistant.sock";
       };
     };
 
@@ -249,7 +277,8 @@ in
       backupPrepareCommand = ''
         ${pkgs.curl}/bin/curl \
           -X POST \
-          http://home-assistant.service.consul:${toString port}/api/services/backup/create \
+          --unix-socket=/run/backup-home-assistant.sock \
+          http://home-assistant.service.consul/api/services/backup/create \
           -H "Authorization: Bearer $(cat $CREDENTIALS_DIRECTORY/home-assistant_api_token)"
       '';
       backupCleanupCommand = ''
