@@ -97,6 +97,7 @@ in
         allowedServices = [
           "grafana"
           "prometheus"
+          "launchpad"
         ];
       };
       prometheus-alertmanager = {

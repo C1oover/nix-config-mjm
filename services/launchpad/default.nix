@@ -120,6 +120,20 @@ in
         target.socket = "/run/alloy-otlphttp.sock";
         service = "alloy";
       };
+      launchpad-alertmanager = {
+        mode = "client";
+        listen.port = 9093;
+        listen.namespace = "launchpad";
+        target.service = "alertmanager";
+        target.port = 9093;
+      };
+      launchpad-paperless = {
+        mode = "client";
+        listen.port = 28981;
+        listen.namespace = "launchpad";
+        target.service = "paperless";
+        target.port = 28981;
+      };
     };
 
     services.consul.services.launchpad = {
