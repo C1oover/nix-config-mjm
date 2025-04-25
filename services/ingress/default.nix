@@ -316,9 +316,5 @@ in
       (map (node: node.config.ingress.virtualHosts))
       mergeAttrsList
     ];
-
-    deployment.tests = {
-      inherit (pkgs.nixosTests) caddy;
-    };
   };
 }

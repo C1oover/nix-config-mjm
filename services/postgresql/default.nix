@@ -57,7 +57,7 @@ in
       wantedBy = [ "sockets.target" ];
     };
 
-    deployment.tests = {
+    deployment.tests = mkIf pkgs.stdenv.isx86_64 {
       inherit (pkgs.nixosTests.postgresql.postgresql.postgresql_16)
         postgresql
         postgresql-backup-all
