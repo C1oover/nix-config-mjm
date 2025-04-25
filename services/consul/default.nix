@@ -119,7 +119,7 @@ in
         }
       ];
 
-      deployment.tests = {
+      deployment.tests = mkIf pkgs.stdenv.isx86_64 {
         inherit (pkgs.nixosTests) consul;
       };
     })
