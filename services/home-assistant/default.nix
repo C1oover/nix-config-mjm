@@ -34,22 +34,6 @@ in
       }
     ];
 
-    vault-secrets.wantedBy = [ "home-assistant.service" ];
-    vault-secrets.templates.home-assistant-secrets = {
-      text = ''
-        {{ with secret "kv/prod/services/home-assistant" }}
-        latitude_home: {{ .Data.data.latitude_home }}
-        longitude_home: {{ .Data.data.longitude_home }}
-        fastmail_password: {{ .Data.data.fastmail_password }}
-        paperless_authorization: Token {{ .Data.data.paperless_token }}
-        {{ end }}
-        {{ with secret "kv/prod/services/home-assistant/managed" }}
-        oidc_client_secret: {{ .Data.data.oidc_client_secret }}
-        {{ end }}
-      '';
-      owner = "hass";
-    };
-
     ingress.virtualHosts.home = {
       upstream.service.name = "home-assistant";
       enableAuthProxy = false;
@@ -199,6 +183,41 @@ in
       tokenEndpointAuthMethod = "client_secret_post";
     };
 
+    systemd.services.home-assistant-secrets = {
+      wantedBy = [ "home-assistant.service" ];
+      before = [ "home-assistant.service" ];
+      path = [ pkgs.systemd ];
+      startLimitIntervalSec = 0;
+      script = ''
+        cat > /run/home-assistant-secrets/secrets.yaml <<EOF
+        latitude_home: $(systemd-creds cat home-assistant_latitude_home)
+        longitude_home: $(systemd-creds cat home-assistant_longitude_home)
+        fastmail_password: $(systemd-creds cat home-assistant_fastmail_password)
+        paperless_authorization: Token $(systemd-creds cat home-assistant_paperless_token)
+        oidc_client_secret: $(systemd-creds cat home-assistant_managed__oidc_client_secret)
+        EOF
+      '';
+      serviceConfig = {
+        Type = "oneshot";
+        Restart = "on-failure";
+        RestartSec = 5;
+        RemainAfterExit = true;
+        User = "hass";
+        Group = "hass";
+        PrivateNetwork = true;
+        PrivateTmp = true;
+        RuntimeDirectory = "home-assistant-secrets";
+        RuntimeDirectoryMode = "0700";
+        LoadCredential = [
+          "home-assistant_latitude_home:/run/home-assistant-creds.sock"
+          "home-assistant_longitude_home:/run/home-assistant-creds.sock"
+          "home-assistant_fastmail_password:/run/home-assistant-creds.sock"
+          "home-assistant_paperless_token:/run/home-assistant-creds.sock"
+          "home-assistant_managed__oidc_client_secret:/run/home-assistant-creds.sock"
+        ];
+      };
+    };
+
     systemd.tmpfiles.settings."10-home-assistant" = {
       "/var/lib/hass/themes".d = {
         user = "hass";
@@ -208,7 +227,7 @@ in
         argument = "${inputs.catppuccin-home-assistant}/themes/catppuccin.yaml";
       };
       "/var/lib/hass/secrets.yaml"."L+" = {
-        argument = config.vault-secrets.templates.home-assistant-secrets.path;
+        argument = "/run/home-assistant-secrets/secrets.yaml";
       };
     };
 
