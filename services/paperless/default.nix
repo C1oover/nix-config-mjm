@@ -12,6 +12,7 @@ let
     mkIf
     ;
   cfg = config.mjm.paperless;
+  jsonFormat = pkgs.formats.json { };
 
   scannerPublicKey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC1NXtzg50EbpzudswkjUkxllahH+F54h6MnDoXarftqlHc26M46M5IPQeRpn5F4BLGWs94UNFyod4d7KNhRYXxh2G+gsJcDTREdUR7eKu5CfaFnB2sge8VJM8KwxbURXHlxNF2xha0lIg8HdfSIznogAGqcUYahTJAUdKB1A4UJ9DzHp1Mrlrk3o04TvokRmS18kPM39nstneqHRVC1TPf83QV3tAYBz2iayifH714KTcItflUe5IqDUhBfNURhOnhG0szfK2qtykdg+7/wu0Ah3HOlbfLybx2eAA048kyBiFpllFIGqoO0hN8w7wmMuQ6okxs3tssz7W+dGi5HDob root@BR5CF370C29B2A";
 
@@ -67,7 +68,7 @@ in
         PAPERLESS_DISABLE_REGULAR_LOGIN = true;
         PAPERLESS_REDIRECT_LOGIN_TO_SSO = true;
       };
-      environmentFile = config.vault-secrets.templates.paperless-env.path;
+      environmentFile = "/run/paperless-env/env";
     };
 
     mjm.authelia.oidcClients.paperless = {
@@ -78,47 +79,80 @@ in
       redirectUris = [ "https://paper.midna.dev/accounts/oidc/authelia/login/callback/" ];
     };
 
-    vault-secrets.wantedBy = [
-      "paperless-scheduler.service"
-      "paperless-task-queue.service"
-      "paperless-consumer.service"
-      "paperless-web.service"
-    ];
-    vault-secrets.templates.paperless-env.text = ''
-      {{ with secret "kv/prod/services/paperless/managed" }}
-      PAPERLESS_SOCIALACCOUNT_PROVIDERS=${
-        builtins.toJSON {
-          openid_connect = {
-            SCOPE = [
-              "openid"
-              "profile"
-              "email"
-            ];
-            OAUTH_PKCE_ENABLED = true;
-            APPS = [
-              {
-                provider_id = "authelia";
-                name = "Authelia";
-                client_id = clientId;
-                secret = "{{ .Data.data.oidc_client_secret }}";
-                settings = {
-                  server_url = "https://auth.midna.dev";
-                  token_auth_method = "client_secret_basic";
+    # the scheduler is left out of this: it already runs in a private network namespace
+    systemd.services =
+      genAttrs [ "paperless-task-queue" "paperless-consumer" "paperless-web" ] (name: {
+        bindsTo = [ "netns-bridge@paperless.service" ];
+        after = [ "netns-bridge@paperless.service" ];
+        serviceConfig.NetworkNamespacePath = "/run/netns/paperless";
+      })
+      // {
+        paperless-env = {
+          wantedBy = [
+            "paperless-scheduler.service"
+            "paperless-task-queue.service"
+            "paperless-web.service"
+            "paperless-consumer.service"
+          ];
+          before = [
+            "paperless-scheduler.service"
+            "paperless-task-queue.service"
+            "paperless-web.service"
+            "paperless-consumer.service"
+          ];
+          path = [
+            pkgs.systemd
+            pkgs.jq
+          ];
+          startLimitIntervalSec = 0;
+          script =
+            let
+              socialConfig = jsonFormat.generate "paperless-social.json" {
+                openid_connect = {
+                  SCOPE = [
+                    "openid"
+                    "profile"
+                    "email"
+                  ];
+                  OAUTH_PKCE_ENABLED = true;
+                  APPS = [
+                    {
+                      provider_id = "authelia";
+                      name = "Authelia";
+                      client_id = clientId;
+                      secret = "CLIENT_SECRET";
+                      settings = {
+                        server_url = "https://auth.midna.dev";
+                        token_auth_method = "client_secret_basic";
+                      };
+                    }
+                  ];
                 };
-              }
+              };
+            in
+            ''
+              social_providers=$(jq -c \
+                --rawfile secret $CREDENTIALS_DIRECTORY/paperless_managed__oidc_client_secret \
+                '.openid_connect.APPS[0].secret = $secret' \
+                ${socialConfig})
+              echo "PAPERLESS_SOCIALACCOUNT_PROVIDERS=$social_providers" > /run/paperless-env/env
+            '';
+          serviceConfig = {
+            Type = "oneshot";
+            Restart = "on-failure";
+            RestartSec = 5;
+            RemainAfterExit = true;
+            DynamicUser = true;
+            PrivateNetwork = true;
+            PrivateTmp = true;
+            RuntimeDirectory = "paperless-env";
+            RuntimeDirectoryMode = "0700";
+            LoadCredential = [
+              "paperless_managed__oidc_client_secret:/run/paperless-creds.sock"
             ];
           };
-        }
-      }
-      {{ end }}
-    '';
-
-    # the scheduler is left out of this: it already runs in a private network namespace
-    systemd.services = genAttrs [ "paperless-task-queue" "paperless-consumer" "paperless-web" ] (name: {
-      bindsTo = [ "netns-bridge@paperless.service" ];
-      after = [ "netns-bridge@paperless.service" ];
-      serviceConfig.NetworkNamespacePath = "/run/netns/paperless";
-    });
+        };
+      };
 
     mjm.spire.tunnels = {
       paperless = {
