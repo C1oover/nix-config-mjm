@@ -22,7 +22,7 @@ in
         ExecStart = utils.escapeSystemdExecArgs [
           (lib.getExe pkgs.prometheus-consul-exporter)
           "--web.listen-address=127.0.0.1:9107"
-          "--consul.server=localhost:8500"
+          "--consul.server=consul.service.consul:8500"
         ];
 
         Restart = "always";
