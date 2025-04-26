@@ -61,6 +61,9 @@ in
           listen.namespace = c.namespace;
           target.service = "s3.garage";
           target.port = 3902;
+          # you're gonna think you can remove this, but then it will use s3.garage
+          # which is fine for hostname checks but it's not the name in the spiffe id
+          service = "garage";
         };
       }) cfg.clients;
 
