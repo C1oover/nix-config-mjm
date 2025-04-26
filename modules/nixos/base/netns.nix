@@ -1,5 +1,11 @@
-{ pkgs, ... }:
+{
+  lib,
+  pkgs,
+  ...
+}:
 let
+  inherit (lib) mkIf mkOption types;
+
   buildNetworkJson = pkgs.writeNu "build-network-json" ''
     def main [
       name: string
@@ -29,48 +35,72 @@ let
   '';
 in
 {
-  systemd.sockets.netavark-dhcp-proxy = {
-    wantedBy = [ "sockets.target" ];
-    socketConfig = {
-      ListenStream = "%t/podman/nv-proxy.sock";
-      SocketMode = "0600";
+  options = {
+    systemd.services = mkOption {
+      type = types.attrsOf (
+        types.submodule (
+          { config, ... }:
+          {
+            options.networkNamespace = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+            };
+
+            config = mkIf (config.networkNamespace != null) {
+              bindsTo = [ "netns-bridge@${config.networkNamespace}.service" ];
+              after = [ "netns-bridge@${config.networkNamespace}.service" ];
+              serviceConfig.NetworkNamespacePath = "/run/netns/${config.networkNamespace}";
+            };
+          }
+        )
+      );
     };
   };
 
-  systemd.services.netavark-dhcp-proxy = {
-    wantedBy = [ "default.target" ];
-    requires = [ "netavark-dhcp-proxy.socket" ];
-    after = [ "netavark-dhcp-proxy.socket" ];
-    startLimitIntervalSec = 0;
-
-    serviceConfig = {
-      Type = "exec";
-      ExecStart = "${pkgs.netavark}/bin/netavark dhcp-proxy -a 30";
+  config = {
+    systemd.sockets.netavark-dhcp-proxy = {
+      wantedBy = [ "sockets.target" ];
+      socketConfig = {
+        ListenStream = "%t/podman/nv-proxy.sock";
+        SocketMode = "0600";
+      };
     };
-  };
 
-  systemd.services."netns-bridge@" = {
-    after = [ "network.target" ];
-    path = with pkgs; [
-      iproute2
-      iptables
-      netavark
-      procps
-    ];
-    environment.RUST_LOG = "debug";
+    systemd.services.netavark-dhcp-proxy = {
+      wantedBy = [ "default.target" ];
+      requires = [ "netavark-dhcp-proxy.socket" ];
+      after = [ "netavark-dhcp-proxy.socket" ];
+      startLimitIntervalSec = 0;
 
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = true;
-      RuntimeDirectory = "%i-netns";
-      ExecStartPre = "-/usr/bin/env ip netns delete %i";
-      ExecStart = [
-        "/usr/bin/env ip netns add %i"
-        "/bin/sh -c '${buildNetworkJson} %i | netavark -c /run/%i-netns setup /run/netns/%i'"
-        "/usr/bin/env ip netns exec %i sysctl -w net.ipv6.conf.eth0.autoconf=1"
-        "/usr/bin/env ip -n %i addr add 169.254.170.2/16 dev lo"
+      serviceConfig = {
+        Type = "exec";
+        ExecStart = "${pkgs.netavark}/bin/netavark dhcp-proxy -a 30";
+      };
+    };
+
+    systemd.services."netns-bridge@" = {
+      after = [ "network.target" ];
+      path = with pkgs; [
+        iproute2
+        iptables
+        netavark
+        procps
       ];
-      ExecStop = "/usr/bin/env ip netns delete %i";
+      environment.RUST_LOG = "debug";
+
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        RuntimeDirectory = "%i-netns";
+        ExecStartPre = "-/usr/bin/env ip netns delete %i";
+        ExecStart = [
+          "/usr/bin/env ip netns add %i"
+          "/bin/sh -c '${buildNetworkJson} %i | netavark -c /run/%i-netns setup /run/netns/%i'"
+          "/usr/bin/env ip netns exec %i sysctl -w net.ipv6.conf.eth0.autoconf=1"
+          "/usr/bin/env ip -n %i addr add 169.254.170.2/16 dev lo"
+        ];
+        ExecStop = "/usr/bin/env ip netns delete %i";
+      };
     };
   };
 }

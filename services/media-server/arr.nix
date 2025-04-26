@@ -47,32 +47,41 @@ in
 
     services.sonarr = {
       enable = true;
-      openFirewall = true;
+      settings.server.bindaddress = "localhost";
     };
+    systemd.services.sonarr.networkNamespace = "sonarr";
     users.users.sonarr.extraGroups = [ "media" ];
 
     services.radarr = {
       enable = true;
-      openFirewall = true;
+      settings.server.bindaddress = "localhost";
     };
+    systemd.services.radarr.networkNamespace = "radarr";
     users.users.radarr.extraGroups = [ "media" ];
 
     services.lidarr = {
       enable = true;
-      openFirewall = true;
+      settings.server.bindaddress = "localhost";
     };
+    systemd.services.lidarr.networkNamespace = "lidarr";
     users.users.lidarr.extraGroups = [ "media" ];
 
     services.readarr = {
       enable = true;
-      openFirewall = true;
+      settings.server.bindaddress = "localhost";
     };
+    systemd.services.readarr.networkNamespace = "readarr";
     users.users.readarr.extraGroups = [ "media" ];
 
     systemd.services.readarr-audio = {
       description = "Readarr (second instance)";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
+      networkNamespace = "readarr-audio";
+
+      environment = {
+        READARR__SERVER__BINDADDRESS = "localhost";
+      };
 
       serviceConfig = {
         Type = "simple";
@@ -83,8 +92,6 @@ in
         Restart = "on-failure";
       };
     };
-
-    networking.firewall.allowedTCPPorts = [ 8788 ];
 
     systemd.tmpfiles.settings."10-media-server" = {
       "/videos/shows" = {
@@ -147,25 +154,26 @@ in
     services.prometheus.exporters = {
       exportarr-sonarr = {
         enable = true;
-        openFirewall = true;
+        listenAddress = "::1";
         apiKeyFile = "/run/sonarr-creds.sock";
         url = "http://127.0.0.1:8989";
       };
       exportarr-radarr = {
         enable = true;
-        port = 9707;
-        openFirewall = true;
+        listenAddress = "::1";
         apiKeyFile = "/run/radarr-creds.sock";
         url = "http://127.0.0.1:7878";
       };
       exportarr-readarr = {
         enable = true;
-        port = 9706;
-        openFirewall = true;
+        listenAddress = "::1";
         apiKeyFile = "/run/readarr-creds.sock";
         url = "http://127.0.0.1:8787";
       };
     };
+    systemd.services.prometheus-exportarr-sonarr-exporter.networkNamespace = "sonarr";
+    systemd.services.prometheus-exportarr-radarr-exporter.networkNamespace = "radarr";
+    systemd.services.prometheus-exportarr-readarr-exporter.networkNamespace = "readarr";
 
     mjm.spire.creds = {
       sonarr.aliases = {
@@ -179,15 +187,150 @@ in
       };
     };
 
+    mjm.spire.tunnels = {
+      sonarr = {
+        mode = "server";
+        listen.port = 8989;
+        target.port = 8989;
+        target.namespace = "sonarr";
+        allowIngress = true;
+        allowConsul = true;
+      };
+      sonarr-metrics = {
+        mode = "server";
+        listen.port = 9708;
+        target.port = 9708;
+        target.namespace = "sonarr";
+        allowMetrics = true;
+      };
+      sonarr-sabnzbd = {
+        mode = "client";
+        listen.address = "127.0.0.1:8080";
+        listen.namespace = "sonarr";
+        target.service = "sabnzbd";
+        target.port = 8080;
+      };
+      consul-sonarr = {
+        mode = "client";
+        listen.socket = "/run/consul-checks/sonarr.sock";
+        target.port = 8989;
+        service = "sonarr";
+      };
+
+      radarr = {
+        mode = "server";
+        listen.port = 7878;
+        target.port = 7878;
+        target.namespace = "radarr";
+        allowIngress = true;
+        allowConsul = true;
+      };
+      radarr-metrics = {
+        mode = "server";
+        listen.port = 9707;
+        target.port = 9708;
+        target.namespace = "radarr";
+        allowMetrics = true;
+      };
+      radarr-sabnzbd = {
+        mode = "client";
+        listen.address = "127.0.0.1:8080";
+        listen.namespace = "radarr";
+        target.service = "sabnzbd";
+        target.port = 8080;
+      };
+      consul-radarr = {
+        mode = "client";
+        listen.socket = "/run/consul-checks/radarr.sock";
+        target.port = 7878;
+        service = "radarr";
+      };
+
+      lidarr = {
+        mode = "server";
+        listen.port = 8686;
+        target.port = 8686;
+        target.namespace = "lidarr";
+        allowIngress = true;
+        allowConsul = true;
+      };
+      lidarr-sabnzbd = {
+        mode = "client";
+        listen.address = "127.0.0.1:8080";
+        listen.namespace = "lidarr";
+        target.service = "sabnzbd";
+        target.port = 8080;
+      };
+      consul-lidarr = {
+        mode = "client";
+        listen.socket = "/run/consul-checks/lidarr.sock";
+        target.port = 8686;
+        service = "lidarr";
+      };
+
+      readarr = {
+        mode = "server";
+        listen.port = 8787;
+        target.port = 8787;
+        target.namespace = "readarr";
+        allowIngress = true;
+        allowConsul = true;
+      };
+      readarr-metrics = {
+        mode = "server";
+        listen.port = 9706;
+        target.port = 9708;
+        target.namespace = "readarr";
+        allowMetrics = true;
+      };
+      readarr-sabnzbd = {
+        mode = "client";
+        listen.address = "127.0.0.1:8080";
+        listen.namespace = "readarr";
+        target.service = "sabnzbd";
+        target.port = 8080;
+      };
+      consul-readarr = {
+        mode = "client";
+        listen.socket = "/run/consul-checks/readarr.sock";
+        target.port = 8787;
+        service = "readarr";
+      };
+
+      readarr-audio = {
+        mode = "server";
+        listen.port = 8788;
+        target.port = 8788;
+        target.namespace = "readarr-audio";
+        allowIngress = true;
+        allowConsul = true;
+      };
+      readarr-audio-sabnzbd = {
+        mode = "client";
+        listen.address = "127.0.0.1:8080";
+        listen.namespace = "readarr-audio";
+        target.service = "sabnzbd";
+        target.port = 8080;
+      };
+      consul-readarr-audio = {
+        mode = "client";
+        listen.socket = "/run/consul-checks/readarr-audio.sock";
+        target.port = 8788;
+        service = "readarr-audio";
+      };
+    };
+
     services.consul.services = {
       sonarr = {
         port = 8989;
 
         metrics.enable = true;
-        metrics.port = config.services.prometheus.exporters.exportarr-sonarr.port;
+        metrics.port = 9708;
+        metrics.tls = true;
 
         checks.up = {
           http.path = "/";
+          http.socket = "/run/consul-checks/sonarr.sock";
           checkConfig = {
             failures_before_warning = 2;
             failures_before_critical = 6;
@@ -199,10 +342,12 @@ in
         port = 7878;
 
         metrics.enable = true;
-        metrics.port = config.services.prometheus.exporters.exportarr-radarr.port;
+        metrics.port = 9707;
+        metrics.tls = true;
 
         checks.up = {
           http.path = "/";
+          http.socket = "/run/consul-checks/radarr.sock";
           checkConfig = {
             failures_before_warning = 2;
             failures_before_critical = 6;
@@ -215,6 +360,7 @@ in
 
         checks.up = {
           http.path = "/";
+          http.socket = "/run/consul-checks/lidarr.sock";
           checkConfig = {
             failures_before_warning = 2;
             failures_before_critical = 6;
@@ -226,10 +372,12 @@ in
         port = 8787;
 
         metrics.enable = true;
-        metrics.port = config.services.prometheus.exporters.exportarr-readarr.port;
+        metrics.port = 9706;
+        metrics.tls = true;
 
         checks.up = {
           http.path = "/";
+          http.socket = "/run/consul-checks/readarr.sock";
           checkConfig = {
             failures_before_warning = 2;
             failures_before_critical = 6;
@@ -242,6 +390,7 @@ in
 
         checks.up = {
           http.path = "/";
+          http.socket = "/run/consul-checks/readarr-audio.sock";
           checkConfig = {
             failures_before_warning = 2;
             failures_before_critical = 6;
@@ -252,19 +401,34 @@ in
 
     ingress.virtualHosts = {
       tv = {
-        upstream.service.name = "sonarr";
+        upstream = {
+          service.name = "sonarr";
+          tls.enable = true;
+        };
       };
       movies = {
-        upstream.service.name = "radarr";
+        upstream = {
+          service.name = "radarr";
+          tls.enable = true;
+        };
       };
       albums = {
-        upstream.service.name = "lidarr";
+        upstream = {
+          service.name = "lidarr";
+          tls.enable = true;
+        };
       };
       books = {
-        upstream.service.name = "readarr";
+        upstream = {
+          service.name = "readarr";
+          tls.enable = true;
+        };
       };
       audiobooks = {
-        upstream.service.name = "readarr-audio";
+        upstream = {
+          service.name = "readarr-audio";
+          tls.enable = true;
+        };
       };
     };
 
