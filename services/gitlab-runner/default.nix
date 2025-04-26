@@ -34,6 +34,7 @@ in
         user = "nobody";
         group = "nogroup";
       }
+      "/var/lib/containers"
     ];
 
     boot.kernel.sysctl."net.ipv4.ip_forward" = true;
