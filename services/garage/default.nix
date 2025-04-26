@@ -12,6 +12,8 @@ let
     ;
 in
 {
+  imports = [ ./clients.nix ];
+
   options.mjm.garage = {
     enable = mkEnableOption "garage";
   };

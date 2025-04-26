@@ -103,8 +103,9 @@ in
     systemd.services.loki = {
       bindsTo = [ "netns-bridge@loki.service" ];
       serviceConfig.NetworkNamespacePath = "/run/netns/loki";
-      environment.AWS_CONTAINER_CREDENTIALS_RELATIVE_URI = "/creds";
     };
+
+    mjm.garage.clients.loki.services = [ "loki" ];
 
     mjm.spire.tunnels = {
       loki = {
@@ -119,23 +120,6 @@ in
         ];
         allowMetrics = true;
         allowConsul = true;
-      };
-      loki-s3 = {
-        mode = "client";
-        listen.port = 3902;
-        listen.namespace = "loki";
-        target.service = "s3.garage";
-        target.port = 3902;
-        target.namespace = "loki";
-        service = "garage";
-      };
-      loki-s3-creds = {
-        mode = "client";
-        listen.address = "169.254.170.2:80";
-        listen.namespace = "loki";
-        target.service = "spiffe-garage";
-        target.port = 3899;
-        target.namespace = "loki";
       };
       consul-loki = {
         mode = "client";

@@ -63,23 +63,7 @@ in
     mjm.networkd.macvlan.enable = true;
     environment.etc."resolv.conf".source = lib.mkForce "/run/systemd/resolve/resolv.conf";
 
-    mjm.spire.tunnels = {
-      backups-s3 = {
-        mode = "client";
-        listen.port = 3902;
-        listen.namespace = "backups";
-        target.service = "s3.garage";
-        target.port = 3902;
-        service = "garage";
-      };
-      backups-s3-creds = {
-        mode = "client";
-        listen.address = "169.254.170.2:80";
-        listen.namespace = "backups";
-        target.service = "spiffe-garage";
-        target.port = 3899;
-      };
-    };
+    mjm.garage.clients.backups = { };
 
     systemd.services = mapAttrs' (
       name: cfg:

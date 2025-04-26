@@ -48,8 +48,9 @@ in
       bindsTo = [ "netns-bridge@tempo.service" ];
       after = [ "netns-bridge@tempo.service" ];
       serviceConfig.NetworkNamespacePath = "/run/netns/tempo";
-      environment.AWS_CONTAINER_CREDENTIALS_RELATIVE_URI = "/creds";
     };
+
+    mjm.garage.clients.tempo.services = [ "tempo" ];
 
     mjm.spire.tunnels = {
       tempo = {
@@ -66,21 +67,6 @@ in
         target.port = 14317;
         target.namespace = "tempo";
         allowedServices = [ "alloy" ];
-      };
-      tempo-s3 = {
-        mode = "client";
-        listen.port = 3902;
-        listen.namespace = "tempo";
-        target.service = "s3.garage";
-        target.port = 3902;
-        service = "garage";
-      };
-      tempo-s3-creds = {
-        mode = "client";
-        listen.address = "169.254.170.2:80";
-        listen.namespace = "tempo";
-        target.service = "spiffe-garage";
-        target.port = 3899;
       };
       consul-tempo = {
         mode = "client";

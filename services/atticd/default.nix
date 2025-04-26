@@ -80,8 +80,9 @@ in
       bindsTo = [ "netns-bridge@attic.service" ];
       after = [ "netns-bridge@attic.service" ];
       serviceConfig.NetworkNamespacePath = "/run/netns/attic";
-      environment.AWS_CONTAINER_CREDENTIALS_RELATIVE_URI = "/creds";
     };
+
+    mjm.garage.clients.attic.services = [ "atticd" ];
 
     mjm.spire.tunnels = {
       attic = {
@@ -91,14 +92,6 @@ in
         target.namespace = "attic";
         allowIngress = true;
         allowConsul = true;
-      };
-      attic-s3-creds = {
-        mode = "client";
-        listen.address = "169.254.170.2:80";
-        listen.namespace = "attic";
-        target.service = "spiffe-garage";
-        target.port = 3899;
-        target.namespace = "attic";
       };
       consul-attic = {
         mode = "client";

@@ -243,6 +243,8 @@ in
       redirectUris = [ redirectUri ];
     };
 
+    mjm.garage.clients.gitlab = {};
+
     mjm.networkd.macvlan.enable = true;
 
     mjm.spire.tunnels = {
@@ -259,23 +261,6 @@ in
         target.namespace = "gitlab";
         allowIngress = true;
         allowConsul = true;
-      };
-      gitlab-s3 = {
-        mode = "client";
-        listen.port = 3902;
-        listen.namespace = "gitlab";
-        target.service = "s3.garage";
-        target.port = 3902;
-        target.namespace = "gitlab";
-        service = "garage";
-      };
-      gitlab-s3-creds = {
-        mode = "client";
-        listen.address = "169.254.170.2:80";
-        listen.namespace = "gitlab";
-        target.service = "spiffe-garage";
-        target.port = 3899;
-        target.namespace = "gitlab";
       };
       consul-gitlab-pages = {
         mode = "client";
