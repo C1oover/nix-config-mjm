@@ -44,6 +44,8 @@
     pkgs.ghostty.terminfo
   ];
 
+  boot.specialFileSystems."/run".options = [ "noswap" ];
+
   system.extraSystemBuilderCmds = ''
     ln -s ${pkgs.nvd-json}/bin/nvd-json $out/bin/nvd-json
   '';
