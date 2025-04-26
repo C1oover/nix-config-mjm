@@ -156,11 +156,11 @@ in
                     tls = {
                       ca = {
                         provider = "file";
-                        pem_files = [ "/var/cache/caddy/bundle.pem" ];
+                        pem_files = [ "/run/certs/caddy/bundle.pem" ];
                       };
                       server_name = "${upstream.service.name}.service.consul";
-                      client_certificate_file = "/var/cache/caddy/cert.pem";
-                      client_certificate_key_file = "/var/cache/caddy/key.pem";
+                      client_certificate_file = "/run/certs/caddy/cert.pem";
+                      client_certificate_key_file = "/run/certs/caddy/key.pem";
                     };
                   };
                   dynamic_upstreams =
