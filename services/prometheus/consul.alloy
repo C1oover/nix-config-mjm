@@ -1,0 +1,7 @@
+prometheus.exporter.consul "default" {
+}
+
+prometheus.scrape "consul" {
+  targets = prometheus.exporter.consul.default.targets
+  forward_to = [prometheus.remote_write.prod.receiver]
+}
