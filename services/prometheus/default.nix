@@ -82,6 +82,13 @@ in
           "prometheus"
         ];
       };
+      prometheus-consul = {
+        mode = "client";
+        listen.port = 8500;
+        listen.namespace = "prometheus";
+        target.port = 8501;
+        service = "consul-client";
+      };
       consul-prometheus = {
         mode = "client";
         listen.socket = "/run/consul-checks/prometheus.sock";
