@@ -25,6 +25,24 @@ in
     {
       mjm.consul.ipv4Address = mkDefault ''{{ . | include "name" "${config.mjm.networkd.primaryIface}" | include "type" "ipv4" | attr "address" }}'';
 
+      services.consul.extraConfig = {
+        ports.http = 8500;
+        ports.https = 8501;
+        ports.grpc_tls = 8503;
+        tls.defaults = {
+          ca_file = "/run/certs/consul/bundle.pem";
+          cert_file = "/run/certs/consul/cert.pem";
+          key_file = "/run/certs/consul/key.pem";
+          tls_min_version = "TLSv1_3";
+        };
+      };
+
+      mjm.spire.certs.consul = {
+        systemd.unit = "consul.service";
+        systemd.action = "reload";
+        user = "consul";
+      };
+
       systemd.services.consul.preStart = lib.mkForce (
         ''
           mkdir -m 0700 -p /var/lib/consul
@@ -100,27 +118,11 @@ in
           server = true;
           bootstrap_expect = 3;
 
-          ports.http = 8500;
-          ports.https = 8501;
-          ports.grpc_tls = 8503;
-          tls.defaults = {
-            ca_file = "/run/certs/consul/bundle.pem";
-            cert_file = "/run/certs/consul/cert.pem";
-            key_file = "/run/certs/consul/key.pem";
-            tls_min_version = "TLSv1_3";
-          };
-
           telemetry = {
             prometheus_retention_time = "1h";
             disable_hostname = true;
           };
         };
-      };
-
-      mjm.spire.certs.consul = {
-        systemd.unit = "consul.service";
-        systemd.action = "reload";
-        user = "consul";
       };
 
       networking.firewall.allowedUDPPorts = [ 8302 ];

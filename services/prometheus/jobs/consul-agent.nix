@@ -5,16 +5,23 @@
       consul_sd_configs = [
         {
           services = [ "consul" ];
-          server = "consul.service.consul:8500";
+          server = "localhost:8500";
         }
       ];
+      tls_config = {
+        ca_file = "/run/certs/prometheus/bundle.pem";
+        cert_file = "/run/certs/prometheus/cert.pem";
+        key_file = "/run/certs/prometheus/key.pem";
+        server_name = "server.dc1.consul";
+      };
       metrics_path = "/v1/agent/metrics";
       params.format = [ "prometheus" ];
+      scheme = "https";
       relabel_configs = [
         {
           source_labels = [ "__meta_consul_tagged_address_lan_ipv6" ];
           target_label = "__address__";
-          replacement = "[$1]:8500";
+          replacement = "[$1]:8501";
         }
         {
           source_labels = [ "__meta_consul_node" ];
@@ -23,4 +30,12 @@
       ];
     }
   ];
+
+  mjm.spire.tunnels.prometheus-consul = {
+    mode = "client";
+    listen.port = 8500;
+    listen.namespace = "prometheus";
+    target.port = 8501;
+    service = "consul-client";
+  };
 }
