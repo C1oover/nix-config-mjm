@@ -287,7 +287,7 @@ in
       backupPrepareCommand = ''
         ${pkgs.curl}/bin/curl \
           -X POST \
-          --unix-socket=/run/backup-home-assistant.sock \
+          --unix-socket /run/backup-home-assistant.sock \
           http://home-assistant.service.consul/api/services/backup/create \
           -H "Authorization: Bearer $(cat $CREDENTIALS_DIRECTORY/home-assistant_api_token)"
       '';
