@@ -5,11 +5,15 @@
   ...
 }:
 let
-  inherit (lib) mkIf;
+  inherit (lib) mkEnableOption mkIf;
   cfg = config.mjm.desktop;
 in
 {
-  config = mkIf cfg.enable {
+  options.mjm.desktop = {
+    plasma.enable = mkEnableOption "Plasma desktop environment";
+  };
+
+  config = mkIf (cfg.enable && cfg.plasma.enable) {
     services.displayManager.sddm.enable = true;
     services.displayManager.sddm.wayland.enable = true;
     services.desktopManager.plasma6.enable = true;

@@ -11,6 +11,7 @@
   networking.hostName = "uranus";
 
   mjm.desktop.enable = true;
+  mjm.desktop.plasma.enable = true;
   mjm.secureboot.enable = true;
 
   boot.kernelPackages = pkgs.linuxPackages_latest;

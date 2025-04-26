@@ -14,6 +14,7 @@
   networking.hostName = "persephone";
 
   mjm.desktop.enable = true;
+  mjm.desktop.cosmic.enable = true;
   mjm.secureboot.enable = true;
   mjm.state = {
     enablePreservation = true;

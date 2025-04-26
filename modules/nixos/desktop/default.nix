@@ -14,6 +14,7 @@ in
 
     ./boot.nix
     ./chrysalis.nix
+    ./cosmic.nix
     ./fonts.nix
     ./network.nix
     ./plasma.nix
