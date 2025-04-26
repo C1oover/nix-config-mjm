@@ -34,6 +34,10 @@ in
           cert_file = "/run/certs/consul/cert.pem";
           key_file = "/run/certs/consul/key.pem";
           tls_min_version = "TLSv1_3";
+          verify_server_hostname = true;
+          verify_outgoing = true;
+          # need to get talos using mTLS first
+          # verify_incoming = true;
         };
       };
 
