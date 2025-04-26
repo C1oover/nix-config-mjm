@@ -27,7 +27,6 @@
     ./prometheus
     ./remote-builder
     ./spire
-    ./tailscale
     ./vault
     ./vaultwarden
   ];
