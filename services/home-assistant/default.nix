@@ -22,7 +22,6 @@ in
     mjm.services.home-assistant = {
       vault = {
         enable = true;
-        useSpiffeIdentity = true;
       };
     };
     mjm.state.directories = [

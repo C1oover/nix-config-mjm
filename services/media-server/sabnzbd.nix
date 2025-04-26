@@ -8,7 +8,6 @@ in
     mjm.services.sabnzbd = {
       vault = {
         enable = true;
-        useSpiffeIdentity = true;
       };
     };
     mjm.state.directories = [

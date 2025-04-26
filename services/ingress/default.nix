@@ -33,7 +33,6 @@ in
     mjm.services.caddy = {
       vault = {
         enable = true;
-        useSpiffeIdentity = true;
       };
     };
     mjm.state.directories = [

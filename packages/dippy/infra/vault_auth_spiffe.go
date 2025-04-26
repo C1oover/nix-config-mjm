@@ -2,8 +2,6 @@ package infra
 
 import (
 	_ "embed"
-	"encoding/json"
-	"maps"
 
 	"github.com/pulumi/pulumi-vault/sdk/v6/go/vault"
 	"github.com/pulumi/pulumi-vault/sdk/v6/go/vault/identity"
@@ -22,9 +20,8 @@ var vaultBackupPolicy string
 
 func setUpAuthSPIFFE(
 	ctx *pulumi.Context,
-	services map[string]map[string]any,
-	policies map[string]string,
-	roles map[string]RoleInput,
+	services map[string]struct{},
+	roles map[string]struct{},
 ) (*jwt.AuthBackend, error) {
 	backend, err := jwt.NewAuthBackend(ctx, "spiffe", &jwt.AuthBackendArgs{
 		Path:             pulumi.String("spiffe"),
@@ -71,72 +68,23 @@ func setUpAuthSPIFFE(
 		return nil, err
 	}
 
-	svcs := map[string]*VaultService{}
-	for name, paths := range services {
+	for name := range services {
 		// TODO get this information from the Nix side
 		var extraPolicies []*vault.Policy
 		if name == "vault" {
 			extraPolicies = []*vault.Policy{vaultBackupPolicy}
 		}
 
-		s, err := newVaultService(ctx, name, &VaultServiceArgs{
+		if _, err := newVaultService(ctx, name, &VaultServiceArgs{
 			SPIFFEBackend: backend,
 			ServicePolicy: servicePolicy,
-			Paths:         pulumi.ToMap(paths),
 			ExtraPolicies: extraPolicies,
-		})
-		if err != nil {
-			return nil, err
-		}
-
-		svcs[name] = s
-	}
-
-	pols := map[string]*vault.Policy{}
-	for name, policy := range policies {
-		p, err := vault.NewPolicy(ctx, name, &vault.PolicyArgs{
-			Name:   pulumi.String(name),
-			Policy: pulumi.String(policy),
-		})
-		if err != nil {
-			return nil, err
-		}
-
-		pols[name] = p
-	}
-
-	for name, r := range roles {
-		var tokenPolicies pulumi.StringArray
-		for _, pname := range r.Policies {
-			p := pols[pname]
-			tokenPolicies = append(tokenPolicies, p.Name)
-		}
-		for _, sname := range r.Services {
-			s := svcs[sname]
-			tokenPolicies = append(tokenPolicies, s.PolicyName)
-		}
-
-		entity, err := identity.NewEntity(ctx, "host-"+name, &identity.EntityArgs{
-			Name:     pulumi.Sprintf("host: %s", name),
-			Policies: tokenPolicies,
-			Metadata: pulumi.StringMap{
-				"hostname": pulumi.String(name),
-				"domain":   pulumi.String("home.mattmoriarity.com"),
-				"fqdn":     pulumi.Sprintf("%s.home.mattmoriarity.com", name),
-			},
-		})
-		if err != nil {
-			return nil, err
-		}
-
-		if _, err := identity.NewEntityAlias(ctx, "spiffe-host-"+name, &identity.EntityAliasArgs{
-			Name:          pulumi.Sprintf("spiffe://home.mattmoriarity.com/%s/vault-secrets", name),
-			CanonicalId:   entity.ID(),
-			MountAccessor: backend.Accessor,
 		}); err != nil {
 			return nil, err
 		}
+	}
 
+	for name := range roles {
 		sshdEntity, err := identity.NewEntity(ctx, "host-sshd-"+name, &identity.EntityArgs{
 			Name:     pulumi.Sprintf("sshd: %s", name),
 			Policies: pulumi.StringArray{sshdPolicy.Name},
@@ -164,42 +112,17 @@ func setUpAuthSPIFFE(
 
 type VaultService struct {
 	pulumi.ResourceState
-
-	PolicyName pulumi.StringOutput
 }
 
 type VaultServiceArgs struct {
 	SPIFFEBackend *jwt.AuthBackend
 	ServicePolicy *vault.Policy
-	Paths         pulumi.MapInput
 	ExtraPolicies []*vault.Policy
 }
 
 func newVaultService(ctx *pulumi.Context, name string, args *VaultServiceArgs, opts ...pulumi.ResourceOption) (*VaultService, error) {
 	vs := &VaultService{}
 	if err := ctx.RegisterComponentResource("dippy:index/vault:Service", name, vs, opts...); err != nil {
-		return nil, err
-	}
-
-	policy := args.Paths.ToMapOutput().ApplyT(func(paths map[string]any) (string, error) {
-		paths = maps.Clone(paths)
-		paths["kv/data/prod/services/"+name] = map[string][]string{"capabilities": {"read"}}
-		paths["kv/data/prod/services/"+name+"/*"] = map[string][]string{"capabilities": {"read"}}
-		data := map[string]any{"path": paths}
-
-		b, err := json.Marshal(data)
-		if err != nil {
-			return "", err
-		}
-
-		return string(b), nil
-	}).(pulumi.StringOutput)
-
-	p, err := vault.NewPolicy(ctx, "service-"+name, &vault.PolicyArgs{
-		Name:   pulumi.Sprintf("service-%s", name),
-		Policy: policy,
-	}, pulumi.Parent(vs))
-	if err != nil {
 		return nil, err
 	}
 
@@ -227,9 +150,6 @@ func newVaultService(ctx *pulumi.Context, name string, args *VaultServiceArgs, o
 		return nil, err
 	}
 
-	ctx.RegisterResourceOutputs(vs, pulumi.Map{
-		"policyName": p.Name,
-	})
-	vs.PolicyName = p.Name
+	ctx.RegisterResourceOutputs(vs, pulumi.Map{})
 	return vs, nil
 }

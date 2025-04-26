@@ -26,7 +26,6 @@ in
     mjm.services.netbox = {
       vault = {
         enable = true;
-        useSpiffeIdentity = true;
       };
     };
     mjm.postgresql.enable = true;

@@ -42,7 +42,6 @@ in
       mjm.services.nut-client = {
         vault = {
           enable = true;
-          useSpiffeIdentity = true;
         };
       };
 
@@ -74,7 +73,6 @@ in
       mjm.services.nut = {
         vault = {
           enable = true;
-          useSpiffeIdentity = true;
         };
       };
 

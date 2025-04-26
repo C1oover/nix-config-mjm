@@ -20,7 +20,6 @@ in
     mjm.services.garage = {
       vault = {
         enable = true;
-        useSpiffeIdentity = true;
       };
     };
 

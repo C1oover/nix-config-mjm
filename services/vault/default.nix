@@ -41,7 +41,6 @@ in
     mjm.services.vault = {
       vault = {
         enable = true;
-        useSpiffeIdentity = true;
       };
     };
 

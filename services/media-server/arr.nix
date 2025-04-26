@@ -13,15 +13,12 @@ in
     mjm.services = {
       sonarr.vault = {
         enable = true;
-        useSpiffeIdentity = true;
       };
       radarr.vault = {
         enable = true;
-        useSpiffeIdentity = true;
       };
       readarr.vault = {
         enable = true;
-        useSpiffeIdentity = true;
       };
     };
     mjm.state.directories = [

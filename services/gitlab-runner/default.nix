@@ -26,7 +26,6 @@ in
     mjm.services.gitlab-runner = {
       vault = {
         enable = true;
-        useSpiffeIdentity = true;
       };
     };
     mjm.state.directories = [

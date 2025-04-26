@@ -17,7 +17,6 @@ in
     mjm.services.vaultwarden = {
       vault = {
         enable = true;
-        useSpiffeIdentity = true;
       };
     };
     mjm.state.services = [ "vaultwarden" ];

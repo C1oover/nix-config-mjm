@@ -22,7 +22,6 @@ in
     mjm.services.media-server = {
       vault = {
         enable = true;
-        useSpiffeIdentity = true;
       };
     };
 

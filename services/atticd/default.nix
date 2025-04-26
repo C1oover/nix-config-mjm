@@ -17,7 +17,6 @@ in
     mjm.services.atticd = {
       vault = {
         enable = true;
-        useSpiffeIdentity = true;
       };
       postgresql.enable = true;
     };

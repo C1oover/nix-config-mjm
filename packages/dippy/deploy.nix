@@ -124,25 +124,15 @@ let
             mergeAttrsList
             (mapAttrs (_: v: v.useIPv4Proxy))
           ];
+
+          # TODO these two should just be lists of names
           vaultServices = pipe allNodes [
             (map (n: n.config.vault.services))
             mergeAttrsList
-            (mapAttrs (_: p: p.paths))
+            (mapAttrs (_: _: { }))
           ];
-          vaultPolicies = pipe allNodes [
-            (map (n: n.config.vault.policies))
-            mergeAttrsList
-            (mapAttrs (_: p: builtins.toJSON { path = p.paths; }))
-          ];
-          vaultRoles = pipe nodes [
-            (filterAttrs (_: n: n.config.vault.policies != { } || n.config.vault.services != { }))
-            (mapAttrs (
-              _: n: {
-                policies = attrNames n.config.vault.policies;
-                services = attrNames n.config.vault.services;
-              }
-            ))
-          ];
+          vaultRoles = mapAttrs (_: _: { }) nodes;
+
           oidcClients = pipe allNodes [
             (map (n: n.config.mjm.authelia.oidcClients))
             mergeAttrsList

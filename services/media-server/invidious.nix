@@ -9,7 +9,6 @@ in
       postgresql.enable = true;
       vault = {
         enable = true;
-        useSpiffeIdentity = true;
       };
     };
     mjm.state.directories = [ "/var/lib/private/invidious" ];

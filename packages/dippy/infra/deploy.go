@@ -18,16 +18,10 @@ import (
 )
 
 type Input struct {
-	Vhosts        map[string]bool           `json:"vhosts"`
-	VaultServices map[string]map[string]any `json:"vaultServices"`
-	VaultPolicies map[string]string         `json:"vaultPolicies"`
-	VaultRoles    map[string]RoleInput      `json:"vaultRoles"`
-	OIDCClients   []string                  `json:"oidcClients"`
-}
-
-type RoleInput struct {
-	Policies []string `json:"policies"`
-	Services []string `json:"services"`
+	Vhosts        map[string]bool     `json:"vhosts"`
+	VaultServices map[string]struct{} `json:"vaultServices"`
+	VaultRoles    map[string]struct{} `json:"vaultRoles"`
+	OIDCClients   []string            `json:"oidcClients"`
 }
 
 func deploy(input *Input) func(*pulumi.Context) error {
@@ -49,7 +43,7 @@ func deploy(input *Input) func(*pulumi.Context) error {
 			return err
 		}
 
-		spiffe, err := setUpAuthSPIFFE(ctx, input.VaultServices, input.VaultPolicies, input.VaultRoles)
+		spiffe, err := setUpAuthSPIFFE(ctx, input.VaultServices, input.VaultRoles)
 		if err != nil {
 			return err
 		}

@@ -10,10 +10,6 @@ let
 in
 {
   config = mkIf (cfg.enable && cfg.enableSSHHostCert) {
-    vault.policies.common-host = {
-      paths."ssh-host-signer/sign/homelab-host".capabilities = [ "update" ];
-    };
-
     services.openssh.settings.HostCertificate = "/run/sshd-host-cert/cert";
 
     systemd.services.sshd-host-cert = {

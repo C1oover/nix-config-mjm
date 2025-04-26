@@ -20,7 +20,6 @@ in
     mjm.services.miniflux = {
       vault = {
         enable = true;
-        useSpiffeIdentity = true;
       };
     };
     mjm.postgresql.enable = true;

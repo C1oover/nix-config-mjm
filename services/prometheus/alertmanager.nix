@@ -14,7 +14,6 @@ in
     mjm.services.alertmanager = {
       vault = {
         enable = true;
-        useSpiffeIdentity = true;
       };
     };
 

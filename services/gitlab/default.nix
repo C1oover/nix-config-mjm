@@ -28,7 +28,6 @@ in
     mjm.services.gitlab = {
       vault = {
         enable = true;
-        useSpiffeIdentity = true;
       };
     };
     mjm.postgresql.enable = true;

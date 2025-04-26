@@ -8,7 +8,6 @@ in
     mjm.services.peertube = {
       vault = {
         enable = true;
-        useSpiffeIdentity = true;
       };
     };
     mjm.postgresql.enable = true;

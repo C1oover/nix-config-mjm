@@ -36,7 +36,6 @@ in
       };
       vault = {
         enable = true;
-        useSpiffeIdentity = true;
       };
     };
     mjm.state.services = [ "redis-authelia" ];
