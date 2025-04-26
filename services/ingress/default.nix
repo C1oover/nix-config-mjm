@@ -120,11 +120,11 @@ in
                     tls = {
                       ca = {
                         provider = "file";
-                        pem_files = [ "/var/cache/caddy/bundle.pem" ];
+                        pem_files = [ "/run/certs/caddy/bundle.pem" ];
                       };
                       server_name = "authelia.service.consul";
-                      client_certificate_file = "/var/cache/caddy/cert.pem";
-                      client_certificate_key_file = "/var/cache/caddy/key.pem";
+                      client_certificate_file = "/run/certs/caddy/cert.pem";
+                      client_certificate_key_file = "/run/certs/caddy/key.pem";
                     };
                   };
                   dynamic_upstreams = {
@@ -257,56 +257,19 @@ in
       };
     };
 
-    security.polkit.enable = true;
-    security.polkit.extraConfig = ''
-      polkit.addRule(function(action, subject) {
-        if (action.id === "org.freedesktop.systemd1.manage-units" &&
-            action.lookup("unit") === "caddy.service" &&
-            action.lookup("verb") === "reload-or-restart" &&
-            subject.user === "caddy") {
-          return polkit.Result.YES;
-        }
-
-        return polkit.Result.NOT_HANDLED;
-      });
-    '';
-
     mjm.spire.agent.enable = true;
-    systemd.services.caddy-certs =
-      let
-        configFile = pkgs.writeText "caddy-spiffe-helper.hcl" ''
-          agent_address = "${config.mjm.spire.agent.socketPath}"
-          cmd = "${pkgs.systemd}/bin/systemctl"
-          cmd_args = "reload-or-restart caddy"
-          cert_dir = "/var/cache/caddy"
-          daemon_mode = true
-          svid_file_name = "cert.pem"
-          svid_key_file_name = "key.pem"
-          svid_bundle_file_name = "bundle.pem"
-        '';
-      in
-      {
-        wantedBy = [
-          "multi-user.target"
-          "caddy.service"
-        ];
-        before = [ "caddy.service" ];
-        after = [ "spire-agent.service" ];
-        wants = [ "spire-agent.service" ];
-        serviceConfig = {
-          Type = "exec";
-          ExecStart = "${pkgs.spiffe-helper}/bin/spiffe-helper -config ${configFile}";
-          CacheDirectory = "caddy";
-          User = "caddy";
-          Group = "caddy";
-          Restart = "always";
-          RestartSec = "5s";
-        };
-      };
+    mjm.spire.certs.caddy = {
+      systemd.unit = "caddy.service";
+      systemd.action = "reload-or-restart";
+      user = "caddy";
+    };
 
-    systemd.services.caddy.serviceConfig = {
-      CacheDirectory = "caddy";
-      LoadCredential = [ "caddy_desec_api_token:/run/caddy-creds.sock" ];
+    systemd.services.caddy = {
+      bindsTo = [ "spiffe-certs@caddy.service" ];
+      after = [ "spiffe-certs@caddy.service" ];
+      serviceConfig = {
+        LoadCredential = [ "caddy_desec_api_token:/run/caddy-creds.sock" ];
+      };
     };
 
     ingress.virtualHosts = pipe nodes [

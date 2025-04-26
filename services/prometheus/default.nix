@@ -57,8 +57,14 @@ in
     };
 
     systemd.services.prometheus = {
-      bindsTo = [ "netns-bridge@prometheus.service" ];
-      after = [ "netns-bridge@prometheus.service" ];
+      bindsTo = [
+        "netns-bridge@prometheus.service"
+        "spiffe-certs@prometheus.service"
+      ];
+      after = [
+        "netns-bridge@prometheus.service"
+        "spiffe-certs@prometheus.service"
+      ];
       serviceConfig.NetworkNamespacePath = "/run/netns/prometheus";
     };
 
@@ -84,53 +90,12 @@ in
       };
     };
 
-    security.polkit.enable = true;
-    security.polkit.extraConfig = ''
-      polkit.addRule(function(action, subject) {
-        if (action.id === "org.freedesktop.systemd1.manage-units" &&
-            action.lookup("unit") === "prometheus.service" &&
-            action.lookup("verb") === "reload-or-restart" &&
-            subject.user === "prometheus") {
-          return polkit.Result.YES;
-        }
-
-        return polkit.Result.NOT_HANDLED;
-      });
-    '';
-
     mjm.spire.agent.enable = true;
-    systemd.services.prometheus-certs =
-      let
-        configFile = pkgs.writeText "prometheus-spiffe-helper.hcl" ''
-          agent_address = "${config.mjm.spire.agent.socketPath}"
-          cmd = "${pkgs.systemd}/bin/systemctl"
-          cmd_args = "reload-or-restart prometheus"
-          cert_dir = "/var/cache/prometheus"
-          daemon_mode = true
-          svid_file_name = "cert.pem"
-          svid_key_file_name = "key.pem"
-          svid_bundle_file_name = "bundle.pem"
-        '';
-      in
-      {
-        wantedBy = [
-          "multi-user.target"
-          "prometheus.service"
-        ];
-        before = [ "prometheus.service" ];
-        after = [ "spire-agent.service" ];
-        wants = [ "spire-agent.service" ];
-        serviceConfig = {
-          Type = "exec";
-          ExecStart = "${pkgs.spiffe-helper}/bin/spiffe-helper -config ${configFile}";
-          CacheDirectory = "prometheus";
-          User = "prometheus";
-          Group = "prometheus";
-          Restart = "always";
-          RestartSec = "5s";
-        };
-      };
-    systemd.services.prometheus.serviceConfig.CacheDirectory = "prometheus";
+    mjm.spire.certs.prometheus = {
+      systemd.unit = "prometheus.service";
+      systemd.action = "reload-or-restart";
+      user = "prometheus";
+    };
 
     services.consul.services.prometheus = {
       port = 9090;

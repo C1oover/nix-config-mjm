@@ -4,9 +4,9 @@
       job_name = "consul-services";
       consul_sd_configs = [ { server = "consul.service.consul:8500"; } ];
       tls_config = {
-        ca_file = "/var/cache/prometheus/bundle.pem";
-        cert_file = "/var/cache/prometheus/cert.pem";
-        key_file = "/var/cache/prometheus/key.pem";
+        ca_file = "/run/certs/prometheus/bundle.pem";
+        cert_file = "/run/certs/prometheus/cert.pem";
+        key_file = "/run/certs/prometheus/key.pem";
         # annoying, but we don't have IPs in the certs, so the server name check will fail
         insecure_skip_verify = true;
       };

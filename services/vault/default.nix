@@ -57,8 +57,8 @@ in
       enable = true;
       package = pkgs.vault-bin;
       address = "0.0.0.0:8200";
-      tlsCertFile = "/run/vault/cert.pem";
-      tlsKeyFile = "/run/vault/key.pem";
+      tlsCertFile = "/run/certs/vault/cert.pem";
+      tlsKeyFile = "/run/certs/vault/key.pem";
       storageBackend = "raft";
       storageConfig = ''
         node_id = "${cfg.nodeId}"
@@ -121,51 +121,15 @@ in
       }
     ];
 
-    security.polkit.enable = true;
-    security.polkit.extraConfig = ''
-      polkit.addRule(function(action, subject) {
-        if (action.id === "org.freedesktop.systemd1.manage-units" &&
-            action.lookup("unit") === "vault.service" &&
-            action.lookup("verb") === "reload" &&
-            subject.user === "vault") {
-          return polkit.Result.YES;
-        }
-
-        return polkit.Result.NOT_HANDLED;
-      });
-    '';
-
     mjm.spire.agent.enable = true;
-    systemd.services.vault-certs =
-      let
-        configFile = pkgs.writeText "vault-spiffe-helper.hcl" ''
-          agent_address = "${config.mjm.spire.agent.socketPath}"
-          cmd = "${pkgs.systemd}/bin/systemctl"
-          cmd_args = "reload vault"
-          cert_dir = "/run/vault"
-          daemon_mode = true
-          svid_file_name = "cert.pem"
-          svid_key_file_name = "key.pem"
-          svid_bundle_file_name = "bundle.pem"
-        '';
-      in
-      {
-        wantedBy = [ "multi-user.target" ];
-        after = [ "spire-agent.service" ];
-        wants = [ "spire-agent.service" ];
-        serviceConfig = {
-          Type = "exec";
-          ExecStart = "${pkgs.spiffe-helper}/bin/spiffe-helper -config ${configFile}";
-          RuntimeDirectory = "vault";
-          User = "vault";
-          Group = "vault";
-          Restart = "always";
-          RestartSec = "5s";
-        };
-      };
+    mjm.spire.certs.vault = {
+      systemd.unit = "vault.service";
+      systemd.action = "reload";
+      user = "vault";
+    };
     systemd.services.vault = {
-      bindsTo = [ "vault-certs.service" ];
-      after = [ "vault-certs.service" ];
+      bindsTo = [ "spiffe-certs@vault.service" ];
+      after = [ "spiffe-certs@vault.service" ];
       startLimitIntervalSec = lib.mkForce 0;
       serviceConfig.RestartSec = "5s";
     };
