@@ -104,18 +104,19 @@ in
 
   config = mkMerge [
     {
-      mjm.state.directories = [
-        # important for uids/gids to stay consistent
-        {
-          directory = "/var/lib/nixos";
-          inInitrd = true;
-        }
-        {
+      mjm.state.directories =
+        [
+          # important for uids/gids to stay consistent
+          {
+            directory = "/var/lib/nixos";
+            inInitrd = true;
+          }
+          "/var/lib/systemd"
+        ]
+        ++ optional (!config.mjm.minimal.enable) {
           directory = "/var/log";
           inInitrd = true;
-        }
-        "/var/lib/systemd"
-      ];
+        };
 
       mjm.state.files = [
         {
@@ -134,7 +135,7 @@ in
         "/etc/ssh/ssh_host_rsa_key.pub"
       ];
     }
-    {
+    (mkIf (!config.mjm.minimal.enable) {
       mjm.state.directories =
         let
           mkDirectory =
@@ -153,7 +154,7 @@ in
             // optionalAttrs (!isDynamic && group != null) { inherit group; };
         in
         map mkDirectory cfg.services;
-    }
+    })
     (mkIf cfg.enablePreservation {
       preservation = {
         enable = true;

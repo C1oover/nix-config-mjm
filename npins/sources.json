@@ -175,6 +175,19 @@
       "url": "https://api.github.com/repos/nix-community/lanzaboote/tarball/v0.4.2",
       "hash": "0xc1wawnb0297h5khxblmf9pd1fry950xkcm7mwlck19s2906h80"
     },
+    "microvm": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "astro",
+        "repo": "microvm.nix"
+      },
+      "branch": "main",
+      "submodules": false,
+      "revision": "ae53cb29425c3077d7b088bec5d2bd9275594db3",
+      "url": "https://github.com/astro/microvm.nix/archive/ae53cb29425c3077d7b088bec5d2bd9275594db3.tar.gz",
+      "hash": "0cxx3658971q0b28pkmv3ir4lxckjnnpvgg7qgab75zjnjxkzfc5"
+    },
     "nix-index-database": {
       "type": "Git",
       "repository": {

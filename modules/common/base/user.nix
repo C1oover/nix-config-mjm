@@ -6,6 +6,7 @@
 }:
 let
   inherit (lib)
+    mkIf
     mkOption
     optional
     pathExists
@@ -21,7 +22,7 @@ in
     default = "matt";
   };
 
-  config = {
+  config = mkIf (!config.mjm.minimal.enable) {
     home-manager.users.${username}.imports = [
       "${localModulesPath}/home-manager"
     ] ++ optional (pathExists machineSpecificConfig) machineSpecificConfig;

@@ -84,7 +84,13 @@ in
   };
 
   config = mkIf cfg.agent.enable {
-    mjm.state.services = [ "spire-agent" ];
+    mjm.state.directories = [
+      {
+        directory = "/var/lib/spire-agent";
+        user = "spire-agent";
+        group = "spire-agent";
+      }
+    ];
 
     users.users.spire-agent = {
       isSystemUser = true;

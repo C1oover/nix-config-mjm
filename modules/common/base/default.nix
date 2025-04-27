@@ -1,3 +1,7 @@
+{ lib, ... }:
+let
+  inherit (lib) mkEnableOption;
+in
 {
   imports = [
     ./home-manager.nix
@@ -6,5 +10,11 @@
     ./user.nix
   ];
 
-  programs.fish.enable = true;
+  options.mjm.minimal = {
+    enable = mkEnableOption "minimal settings for microvms";
+  };
+
+  config = {
+    programs.fish.enable = true;
+  };
 }

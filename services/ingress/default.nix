@@ -17,7 +17,16 @@ let
     ;
   cfg = config.ingress;
 
-  vhosts = cfg.virtualHosts;
+  getVhosts =
+    nodes:
+    pipe nodes [
+      attrValues
+      (map (node: if node.config ? config then node.config else node))
+      (filter (node: !node.config.mjm.ingress.enable))
+      (map (node: node.config.ingress.virtualHosts // getVhosts node.config.microvm.vms))
+      mergeAttrsList
+    ];
+  vhosts = getVhosts nodes // cfg.virtualHosts;
 in
 {
   imports = [
@@ -271,12 +280,5 @@ in
         LoadCredential = [ "caddy_desec_api_token:/run/caddy-creds.sock" ];
       };
     };
-
-    ingress.virtualHosts = pipe nodes [
-      attrValues
-      (filter (node: !node.config.mjm.ingress.enable))
-      (map (node: node.config.ingress.virtualHosts))
-      mergeAttrsList
-    ];
   };
 }

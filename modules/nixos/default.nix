@@ -4,6 +4,7 @@
 
     ../../services
 
+    ./profiles/microvm.nix
     ./profiles/qemu-vm.nix
     ./profiles/raspberry-pi
     ./profiles/vm-host.nix
