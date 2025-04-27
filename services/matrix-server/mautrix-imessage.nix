@@ -18,12 +18,12 @@ let
   configFormat = pkgs.formats.yaml { };
   configFile = configFormat.generate "mautrix-imessage-config.yaml" {
     homeserver = {
-      address = "https://conduit.service.consul:6167";
+      address = "http://localhost:6167";
       domain = "midna.dev";
       websocket_proxy = null;
     };
     appservice = {
-      hostname = "0.0.0.0";
+      hostname = "127.0.0.1";
       port = port;
       database = {
         type = "sqlite3-fk-wal";
@@ -101,6 +101,51 @@ in
   config = mkIf cfg.bridges.imessage.enable {
     nixpkgs.config.permittedInsecurePackages = [ "olm-3.2.16" ];
     environment.systemPackages = [ script ];
+
+    users.users.mautrix-imessage = {
+      uid = 590;
+      gid = 590;
+    };
+    users.groups.mautrix-imessage = {
+      gid = 590;
+    };
+    users.knownUsers = [ "mautrix-imessage" ];
+    users.knownGroups = [ "mautrix-imessage" ];
+
+    # These log files do need to be created and chown'd before the service can start.
+    # launchd is bad.
+
+    launchd.daemons.mautrix-imessage-tunnel = {
+      command = "${pkgs.ghostunnel}/bin/ghostunnel server --use-workload-api --listen=launchd:Listener --target=localhost:29400 --disable-authentication";
+      environment.SPIFFE_ENDPOINT_SOCKET = "unix:${config.mjm.spire.agent.socketPath}";
+      serviceConfig = {
+        StandardOutPath = "/Library/Logs/mautrix-imessage-tunnel.log";
+        StandardErrorPath = "/Library/Logs/mautrix-imessage-tunnel.log";
+        UserName = "mautrix-imessage";
+        GroupName = "mautrix-imessage";
+        Sockets.Listener = {
+          SockServiceName = "29401";
+          SockType = "stream";
+          SockFamily = "IPv4";
+        };
+      };
+    };
+    launchd.daemons.mautrix-imessage-conduit-tunnel = {
+      command = "${pkgs.ghostunnel}/bin/ghostunnel client --use-workload-api --listen=launchd:Listener --target=conduit.service.consul:6167 --verify-uri=spiffe://home.mattmoriarity.com/svc/conduit";
+      environment.SPIFFE_ENDPOINT_SOCKET = "unix:${config.mjm.spire.agent.socketPath}";
+      serviceConfig = {
+        StandardOutPath = "/Library/Logs/mautrix-imessage-conduit-tunnel.log";
+        StandardErrorPath = "/Library/Logs/mautrix-imessage-conduit-tunnel.log";
+        UserName = "mautrix-imessage";
+        GroupName = "mautrix-imessage";
+        Sockets.Listener = {
+          SockNodeName = "127.0.0.1";
+          SockServiceName = "6167";
+          SockType = "stream";
+          SockFamily = "IPv4";
+        };
+      };
+    };
 
     services.consul.services.mautrix-imessage = {
       inherit port;

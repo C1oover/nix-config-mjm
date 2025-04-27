@@ -71,10 +71,24 @@ in
       };
     };
 
-    mjm.spire.tunnels.conduwuit = {
-      mode = "server";
-      listen.port = 6167;
-      target.port = 6166;
+    mjm.spire.tunnels = {
+      conduwuit = {
+        mode = "server";
+        listen.port = 6167;
+        target.port = 6166;
+        allowIngress = true;
+        allowedServices = [ "mautrix-imessage" ];
+      };
+      conduit-mautrix-imessage = {
+        mode = "client";
+        listen.port = 29400;
+        # this tunnel needs to work without the mautrix-imessage consul service
+        # necessarily being healthy. on startup, the bridge will check
+        # that the homeserver can reach it by asking it to ping it, and this
+        # needs to work before the bridge will be considered healthy.
+        target.address = "talos.node.consul:29401";
+        service = "mautrix-imessage";
+      };
     };
 
     services.consul.services.conduit = {
