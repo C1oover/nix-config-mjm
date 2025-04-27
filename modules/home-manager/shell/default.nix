@@ -13,7 +13,6 @@ in
     ./fish.nix
     ./nushell.nix
     ./starship.nix
-    ./zsh.nix
   ];
 
   options.mjm.shell = {
