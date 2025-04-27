@@ -68,6 +68,19 @@
       "url": "https://github.com/girlbossceo/conduwuit/archive/d8311a5ff672fdc4729d956af5e3af8646b0670d.tar.gz",
       "hash": "1pg9m6pmzbvzipkajk2m52gf8vnzplwcm6imfgmpbb8lync8g375"
     },
+    "cosmic": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "lilyinstarlight",
+        "repo": "nixos-cosmic"
+      },
+      "branch": "main",
+      "submodules": false,
+      "revision": "48280c3737fee2db3a1226c297c86428417f552d",
+      "url": "https://github.com/lilyinstarlight/nixos-cosmic/archive/48280c3737fee2db3a1226c297c86428417f552d.tar.gz",
+      "hash": "0wr6k0x52ca2r16gz5kanmm5vl67kxl5cd45dhshrzznchz6hhd1"
+    },
     "darwin": {
       "type": "Git",
       "repository": {
