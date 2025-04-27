@@ -20,8 +20,7 @@ in
       enable = true;
     };
 
-    xdg.configFile."zellij/config.kdl".source = pkgs.substituteAll {
-      src = ./zellij.kdl;
+    xdg.configFile."zellij/config.kdl".source = pkgs.replaceVars ./zellij.kdl {
       copy_command = if pkgs.stdenv.isDarwin then "pbcopy" else "wl-copy";
     };
     xdg.configFile."zellij/layouts/default.kdl".source = ./default.kdl;
