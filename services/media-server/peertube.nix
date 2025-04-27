@@ -19,7 +19,11 @@ in
     ];
 
     ingress.virtualHosts.tube = {
-      upstream.service.name = "peertube";
+      upstream = {
+        service.name = "peertube";
+        tls.enable = true;
+      };
+
       enableAuthProxy = false;
     };
 
@@ -80,22 +84,29 @@ in
     services.nginx.virtualHosts."tube.midna.dev" = {
       serverName = "_";
       listen = [
-        {
-          addr = "0.0.0.0";
-          port = 9001;
-        }
-        {
-          addr = "[::]";
-          port = 9001;
-        }
+        { addr = "unix:/run/nginx/peertube.sock"; }
       ];
+    };
+
+    systemd.tmpfiles.settings."10-peertube" = {
+      "/run/nginx".d = {
+        user = "nginx";
+        mode = "0755";
+      };
+    };
+
+    mjm.spire.tunnels = {
+      peertube = {
+        mode = "server";
+        listen.port = 9001;
+        target.socket = "/run/nginx/peertube.sock";
+        allowIngress = true;
+      };
     };
 
     networking.firewall.allowedTCPPorts = [
       # rtmp for live streaming
       1935
-      # http
-      9001
     ];
 
     services.consul.services.peertube = {
