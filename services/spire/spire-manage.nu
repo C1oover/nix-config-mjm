@@ -12,21 +12,9 @@ const spiffe_prefix = $"spiffe://($trust_domain)"
 const svc_prefix = $"($spiffe_prefix)/svc"
 
 def spire-register [
-  --spiffe-id: string
-  --parent-id: string
-  --selector: string
-  --dns: list
+  entries: list = []
 ] {
-  let data = {
-    entries: [
-      {
-        spiffe_id: $spiffe_id
-        parent_id: $parent_id
-        selectors: [$selector]
-        dns_names: $dns
-      }
-    ]
-  }
+  let data = { entries: $entries }
 
   # $data | to json | print
   $data | to json | spire-server entry create -socketPath /run/spire-server/api.sock -data -
@@ -89,13 +77,46 @@ def "main register svc" [
     []
   }
 
-  spire-register --spiffe-id $spiffe_id --parent-id $parent_id --selector $selector --dns $dns
+  let entries = [
+    {
+      spiffe_id: $spiffe_id
+      parent_id: $parent_id
+      selectors: [$selector]
+      dns_names: $dns
+    }
+  ]
+  spire-register $entries
 }
 
 def "main register consul" [
   name: string
 ] {
   main register svc consul-agent --parent-service $name --tunnel $"consul-($name)"
+}
+
+def "main register node" [
+  name: string
+] {
+  let spiffe_id = $"($spiffe_prefix)/($name)"
+
+  let entries = [
+    {
+      spiffe_id: $"($spiffe_prefix)/generic-server"
+      parent_id: $spiffe_id
+      selectors: [{ type: "spiffe_id", value: $spiffe_id }]
+    }
+    {
+      spiffe_id: $"($spiffe_id)/sshd"
+      parent_id: $spiffe_id
+      selectors: [(selector make systemd sshd-host-cert.service)]
+    }
+    {
+      spiffe_id: $"($svc_prefix)/consul-client"
+      parent_id: $spiffe_id
+      selectors: [(selector make certs consul)]
+    }
+  ]
+  spire-register $entries
 }
 
 def main [] {}
