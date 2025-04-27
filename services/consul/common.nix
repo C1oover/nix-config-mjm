@@ -24,10 +24,16 @@ in
       type = types.str;
       default = ''{{ GetDefaultInterfaces | include "type" "ipv4" | attr "address" }}'';
     };
+
+    certsPath = mkOption {
+      type = types.path;
+      default = "/run/certs/consul";
+    };
   };
 
   config = mkIf cfg.enable (mkMerge [
     {
+
       services.consul = {
         enable = true;
 
@@ -45,7 +51,20 @@ in
           advertise_addr_ipv4 = cfg.ipv4Address;
           advertise_addr = cfg.ipv4Address;
 
+          ports.http = 8500;
+          ports.https = 8501;
           ports.grpc = 8502;
+          ports.grpc_tls = 8503;
+          tls.defaults = {
+            ca_file = "${cfg.certsPath}/bundle.pem";
+            cert_file = "${cfg.certsPath}/cert.pem";
+            key_file = "${cfg.certsPath}/key.pem";
+            tls_min_version = "TLSv1_3";
+            verify_server_hostname = true;
+            verify_outgoing = true;
+            # need to get talos using mTLS first
+            # verify_incoming = true;
+          };
 
           enable_local_script_checks = true;
 

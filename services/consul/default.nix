@@ -25,22 +25,6 @@ in
     {
       mjm.consul.ipv4Address = mkDefault ''{{ . | include "name" "${config.mjm.networkd.primaryIface}" | include "type" "ipv4" | attr "address" }}'';
 
-      services.consul.extraConfig = {
-        ports.http = 8500;
-        ports.https = 8501;
-        ports.grpc_tls = 8503;
-        tls.defaults = {
-          ca_file = "/run/certs/consul/bundle.pem";
-          cert_file = "/run/certs/consul/cert.pem";
-          key_file = "/run/certs/consul/key.pem";
-          tls_min_version = "TLSv1_3";
-          verify_server_hostname = true;
-          verify_outgoing = true;
-          # need to get talos using mTLS first
-          # verify_incoming = true;
-        };
-      };
-
       mjm.spire.certs.consul = {
         systemd.unit = "consul.service";
         systemd.action = "reload";
