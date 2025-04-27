@@ -5,12 +5,24 @@
   ...
 }:
 let
-  inherit (lib) mkIf;
-  cfg = config.mjm.media-server;
+  inherit (lib) mkEnableOption mkIf;
+  cfg = config.mjm.navidrome;
 in
 {
+  options.mjm.navidrome = {
+    enable = mkEnableOption "Navidrome";
+  };
+
   config = mkIf cfg.enable {
     mjm.state.directories = [ "/var/lib/navidrome" ];
+    microvm.shares = [
+      {
+        proto = "virtiofs";
+        tag = "music";
+        source = "/mnt/slow/media/music";
+        mountPoint = "/mnt/music";
+      }
+    ];
 
     ingress.virtualHosts.music = {
       upstream = {
@@ -26,7 +38,7 @@ in
         Address = "unix:/server.sock";
         UnixSocketPerm = "0666";
         BaseUrl = "https://music.midna.dev";
-        MusicFolder = "/videos/music";
+        MusicFolder = "/mnt/music";
         "Prometheus.Enabled" = true;
         ReverseProxyWhitelist = "@";
       };
@@ -34,14 +46,7 @@ in
 
     systemd.services.navidrome = {
       # navidrome won't start without the music folder existing
-      wants = [ "videos.mount" ];
-      after = [ "videos.mount" ];
-
-      serviceConfig = {
-        SupplementaryGroups = [ "media" ];
-        # without this, navidrome can't read the dns config, which prevents reaching listenbrainz to scrobble
-        BindReadOnlyPaths = [ "/run/systemd/resolve" ];
-      };
+      unitConfig.RequiresMountsFor = [ "/mnt/music" ];
     };
 
     mjm.spire.tunnels.navidrome = {
@@ -63,15 +68,16 @@ in
       };
     };
 
-    mjm.backups.media-server = {
-      paths = [ "/var/lib/navidrome" ];
-      exclude = [ "/var/lib/navidrome/cache" ];
-      backupPrepareCommand = ''
-        ${pkgs.sqlite}/bin/sqlite3 /var/lib/navidrome/navidrome.db ".backup '/var/lib/navidrome/navidrome-backup.db'"
-      '';
-      backupCleanupCommand = ''
-        rm /var/lib/navidrome/navidrome-backup.db
-      '';
-    };
+    # TODO navidrome will need vault set up for the password
+    # mjm.backups.navidrome = {
+    #   paths = [ "/var/lib/navidrome" ];
+    #   exclude = [ "/var/lib/navidrome/cache" ];
+    #   backupPrepareCommand = ''
+    #     ${pkgs.sqlite}/bin/sqlite3 /var/lib/navidrome/navidrome.db ".backup '/var/lib/navidrome/navidrome-backup.db'"
+    #   '';
+    #   backupCleanupCommand = ''
+    #     rm /var/lib/navidrome/navidrome-backup.db
+    #   '';
+    # };
   };
 }

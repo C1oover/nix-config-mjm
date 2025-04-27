@@ -20,6 +20,7 @@
     ./media-server
     ./miniflux
     ./nas
+    ./navidrome
     ./netbox
     ./nut
     ./paperless
