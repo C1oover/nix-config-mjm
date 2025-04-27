@@ -75,6 +75,12 @@ in
           };
           user = "uid=service,ou=people,dc=home,dc=mattmoriarity,dc=com";
         };
+        definitions = {
+          network.home = [
+            "10.0.0.0/8"
+            "${config.mjm.ipv6Prefix}::/64"
+          ];
+        };
         access_control = {
           default_policy = "two_factor";
           rules = import ./rules.nix;

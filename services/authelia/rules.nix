@@ -29,4 +29,11 @@
     resources = [ "^/rest/.*$" ];
     policy = "bypass";
   }
+  {
+    domain = "consul.midna.dev";
+    resources = [ "^/v1/health/node/.+$" ];
+    methods = [ "GET" ];
+    networks = [ "home" ];
+    policy = "bypass";
+  }
 ]

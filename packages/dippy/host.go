@@ -263,7 +263,7 @@ func (h *Host) WaitUntilHealthy(ctx context.Context) error {
 	time.Sleep(20 * time.Second)
 
 	cfg := consulapi.DefaultNonPooledConfig()
-	cfg.Address = "consul.service.consul:8500"
+	cfg.Address = "https://consul.midna.dev"
 
 	client, err := consulapi.NewClient(cfg)
 	if err != nil {
