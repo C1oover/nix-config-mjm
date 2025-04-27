@@ -33,7 +33,6 @@ in
 
   config = mkIf cfg.enable (mkMerge [
     {
-
       services.consul = {
         enable = true;
 
@@ -51,10 +50,14 @@ in
           advertise_addr_ipv4 = cfg.ipv4Address;
           advertise_addr = cfg.ipv4Address;
 
+          addresses = {
+            https = "0.0.0.0";
+            http = "127.0.0.1";
+          };
+
           ports.http = 8500;
           ports.https = 8501;
-          ports.grpc = 8502;
-          ports.grpc_tls = 8503;
+          ports.grpc_tls = -1;
           tls.defaults = {
             ca_file = "${cfg.certsPath}/bundle.pem";
             cert_file = "${cfg.certsPath}/cert.pem";
@@ -62,8 +65,7 @@ in
             tls_min_version = "TLSv1_3";
             verify_server_hostname = true;
             verify_outgoing = true;
-            # need to get talos using mTLS first
-            # verify_incoming = true;
+            verify_incoming = true;
           };
 
           enable_local_script_checks = true;
