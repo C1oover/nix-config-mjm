@@ -14,7 +14,11 @@ in
     mjm.state.directories = [ "/var/lib/private/invidious" ];
 
     ingress.virtualHosts.yt = {
-      upstream.service.name = "invidious";
+      upstream = {
+        service.name = "invidious";
+        tls.enable = true;
+      };
+
       enableAuthProxy = false;
       useIPv4Proxy = true;
     };
@@ -22,7 +26,8 @@ in
     services.invidious = {
       enable = true;
       domain = "yt.midna.dev";
-      address = "::";
+      address = "::1";
+      port = 3000;
       settings = {
         db.user = "invidious";
         external_port = 443;
@@ -34,16 +39,34 @@ in
     };
 
     systemd.services.invidious = {
+      networkNamespace = "invidious";
       serviceConfig.LoadCredential = [ "invidious_extra_settings:/run/invidious-creds.sock" ];
     };
+    systemd.services.invidious-sig-helper.networkNamespace = "invidious";
 
-    networking.firewall.allowedTCPPorts = [ config.services.invidious.port ];
+    mjm.spire.tunnels = {
+      invidious = {
+        mode = "server";
+        listen.port = 3000;
+        target.port = 3000;
+        target.namespace = "invidious";
+        allowIngress = true;
+        allowConsul = true;
+      };
+      consul-invidious = {
+        mode = "client";
+        listen.socket = "/run/consul-checks/invidious.sock";
+        target.port = 3000;
+        service = "invidious";
+      };
+    };
 
     services.consul.services.invidious = {
-      inherit (config.services.invidious) port;
+      port = 3000;
 
       checks.up = {
         http.path = "/";
+        http.socket = "/run/consul-checks/invidious.sock";
       };
     };
   };
