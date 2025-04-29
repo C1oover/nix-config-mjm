@@ -1,20 +1,20 @@
 
 def get-parents [
-  --mega (-m): string = "mega" # the revision of the megamerge
+  --mega (-m): string = "mega()" # the revision of the megamerge
 ]: nothing -> list {
   jj log --no-graph -r $'($mega)-' -T 'change_id ++ "\n"' | split row "\n"
 }
 
 # List the changes that make up the mega merge (the direct children of the merge)
 def "main list" [
-  --mega (-m): string = "mega" # the revision of the megamerge
+  --mega (-m): string = "mega()" # the revision of the megamerge
 ] {
   jj log --no-graph -r $'($mega)-'
 }
 
 # Logs the changes between trunk and the mega merge
 def "main log" [
-  --mega (-m): string = "mega" # the revision of the megamerge
+  --mega (-m): string = "mega()" # the revision of the megamerge
 ] {
   jj log -r $"fork_point\(trunk\() | ($mega))::($mega)"
 }
@@ -23,7 +23,7 @@ def "main log" [
 #
 # Also removes any changes that have been merged into trunk.
 def "main rebase" [
-  --mega (-m): string = "mega" # the revision of the megamerge
+  --mega (-m): string = "mega()" # the revision of the megamerge
 ] {
   jj rebase -b $mega -d 'trunk()'
   jj rebase -s $mega -d $"all:($mega)- ~ ::trunk\()"
@@ -33,7 +33,7 @@ def "main rebase" [
 #
 # Fetches remote git changes and then rebases.
 def "main up" [
-  --mega (-m): string = "mega" # the revision of the megamerge
+  --mega (-m): string = "mega()" # the revision of the megamerge
 ] {
   jj git fetch
   main rebase -m $mega
@@ -41,7 +41,7 @@ def "main up" [
 
 # Advance the branches in the megamerge to the latest change
 def "main advance" [
-  --mega (-m): string = "mega" # the revision of the megamerge
+  --mega (-m): string = "mega()" # the revision of the megamerge
 ] {
   get-parents -m $mega | each {|change_id|
     jj bookmark move --from $"heads\(trunk\()..($change_id) & bookmarks\())" --to $change_id
@@ -53,8 +53,8 @@ def "main advance" [
 # The revision will keep its existing parents but will be made a parent
 # of the megamerge.
 def "main add" [
-  revision: string = "@"       # the revision to add to the megamerge
-  --mega (-m): string = "mega" # the revision of the megamerge
+  revision: string = "@"         # the revision to add to the megamerge
+  --mega (-m): string = "mega()" # the revision of the megamerge
 ] {
   jj rebase -s $mega -d $'all:($mega)-' -d $revision
 }
@@ -64,8 +64,8 @@ def "main add" [
 # Inserts the revision between trunk and the megamerge. Don't use this
 # if you need to preserve the parents of the revision.
 def "main insert" [
-  revision: string = ""        # the revision(s) to add to the megamerge
-  --mega (-m): string = "mega" # the revision of the megamerge
+  revision: string = ""          # the revision(s) to add to the megamerge
+  --mega (-m): string = "mega()" # the revision of the megamerge
 ] {
   let revision = if ($revision | is-empty) {
     # this should grab everything from the working copy back to where it
@@ -80,7 +80,7 @@ def "main insert" [
 # Remove a revision from the megamerge
 def "main remove" [
   revision: string             # the revision to remove from the megamerge
-  --mega (-m): string = "mega" # the revision of the megamerge
+  --mega (-m): string = "mega()" # the revision of the megamerge
 ] {
   jj rebase -s $mega -d $'all:($mega)- ~ ($revision)'
 }
@@ -89,9 +89,9 @@ def "main remove" [
 #
 # This is doing an add and remove in a single operation.
 def "main replace" [
-  before: string               # the revision to remove from the megamerge
-  after: string                # the revision to add to the megamerge
-  --mega (-m): string = "mega" # the revision of the megamerge
+  before: string                 # the revision to remove from the megamerge
+  after: string                  # the revision to add to the megamerge
+  --mega (-m): string = "mega()" # the revision of the megamerge
 ] {
   jj rebase -s $mega -d $'all:($mega)- ~ ($before)' -d $after
 }

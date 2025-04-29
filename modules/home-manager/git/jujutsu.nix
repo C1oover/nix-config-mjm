@@ -117,6 +117,12 @@ in
           "long_log()" = "@ | trunk() | ancestors(reachable(@ | mine(), mutable()), 2)";
           "tip()" = "tip(@)";
           "tip(x)" = "heads(description(glob:'?*') & ::x)";
+          "mega()" = ''
+            coalesce(
+              bookmarks(exact:"mega"),
+              bookmarks(exact:"deploy/master"),
+            )
+          '';
         };
         revsets = {
           log = "@ | ancestors(reachable(@, mutable()), 2)";
