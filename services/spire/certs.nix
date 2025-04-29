@@ -7,7 +7,6 @@
 let
   inherit (lib)
     concatMapAttrsStringSep
-    concatStringsSep
     mapAttrs'
     mkMerge
     mkIf
@@ -33,13 +32,6 @@ in
               };
             };
 
-            cmd = mkOption {
-              type = types.path;
-            };
-            args = mkOption {
-              type = types.listOf types.str;
-              default = [ ];
-            };
             user = mkOption {
               type = types.str;
               default = "root";
@@ -52,11 +44,6 @@ in
           };
 
           config = mkIf (options.systemd.unit.isDefined && options.systemd.action.isDefined) {
-            cmd = "${pkgs.systemd}/bin/systemctl";
-            args = [
-              config.systemd.action
-              config.systemd.unit
-            ];
             polkitCheck = ''
               if (action.id === "org.freedesktop.systemd1.manage-units" &&
                   action.lookup("unit") === "${config.systemd.unit}" &&
@@ -78,12 +65,13 @@ in
         wants = [ "spire-agent.service" ];
 
         serviceConfig = {
-          Type = "exec";
+          Type = "notify";
           ExecStart = "${pkgs.spiffe-helper}/bin/spiffe-helper -config $CONFIG_FILE";
           RuntimeDirectory = "certs/%I";
           Restart = "always";
           RestartSec = "5s";
           DynamicUser = true;
+          NotifyAccess = "all";
 
           CapabilityBoundingSet = "";
           DevicePolicy = "closed";
@@ -120,13 +108,15 @@ in
 
     (mkIf (cfg.certs != { }) {
       systemd.services = mapAttrs' (
-        name:
-        {
-          cmd,
-          args,
-          user,
-          ...
-        }:
+        name: svc:
+        let
+          systemctl = "${pkgs.systemd}/bin/systemctl";
+          command = pkgs.writeShellScript "reload-certs-${name}" ''
+            set -x
+            ${systemctl} is-active ${svc.systemd.unit} && ${systemctl} ${svc.systemd.action} ${svc.systemd.unit}
+            ${pkgs.systemd}/bin/systemd-notify --ready
+          '';
+        in
         {
           name = "spiffe-certs@${name}";
           value = {
@@ -134,15 +124,14 @@ in
             wantedBy = [ "multi-user.target" ];
             environment.CONFIG_FILE = pkgs.writeText "${name}-spiffe-helper.hcl" ''
               agent_address = "${cfg.agent.socketPath}"
-              cmd = "${cmd}"
-              cmd_args = "${concatStringsSep " " args}"
+              cmd = "${command}"
               cert_dir = "/run/certs/${name}"
               daemon_mode = true
               svid_file_name = "cert.pem"
               svid_key_file_name = "key.pem"
               svid_bundle_file_name = "bundle.pem"
             '';
-            serviceConfig.User = user;
+            serviceConfig.User = svc.user;
           };
         }
       ) cfg.certs;
