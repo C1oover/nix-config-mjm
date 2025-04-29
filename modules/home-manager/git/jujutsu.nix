@@ -161,6 +161,15 @@ in
             "--to"
             "@"
           ];
+          gf = [
+            "git"
+            "fetch"
+          ];
+          gfa = [
+            "git"
+            "fetch"
+            "--all-remotes"
+          ];
           mega = mkAlias (getExe jm);
           p = [
             "git"
@@ -171,6 +180,13 @@ in
             "push"
             "--change"
             "tip()"
+          ];
+          pd = [
+            "git"
+            "push"
+            "--remote"
+            "deploy"
+            "--tracked"
           ];
           pb = mkFishAlias "jj-pb" ''
             jj bookmark move --from 'heads(::@ & bookmarks())' --to 'tip()'
