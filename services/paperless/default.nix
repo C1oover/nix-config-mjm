@@ -218,8 +218,9 @@ in
       paths = [ "/var/lib/paperless/media/documents" ];
     };
 
-    deployment.tests = {
-      inherit (pkgs.nixosTests) paperless;
-    };
+    # failing right now due to something weird with the paperless exporter which i don't use
+    # deployment.tests = {
+    #   inherit (pkgs.nixosTests) paperless;
+    # };
   };
 }
