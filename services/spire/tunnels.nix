@@ -58,9 +58,9 @@ let
         after = [
           "network.target"
           "${name}-tunnel.socket"
-        ] ++ optional (target.namespace != null) "netns-bridge@${target.namespace}.service";
+        ];
         requires = [ "${name}-tunnel.socket" ];
-        bindsTo = mkIf (target.namespace != null) [ "netns-bridge@${target.namespace}.service" ];
+        networkNamespace = mkIf (target.namespace != null) target.namespace;
 
         environment.SPIFFE_ENDPOINT_SOCKET = "unix:${cfg.agent.socketPath}";
 
@@ -89,7 +89,36 @@ let
           DynamicUser = true;
           Restart = "always";
           WatchdogSec = 1;
-          NetworkNamespacePath = mkIf (target.namespace != null) "/run/netns/${target.namespace}";
+
+          CapabilityBoundingSet = "";
+          DevicePolicy = "closed";
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          PrivateDevices = true;
+          PrivateIPC = true;
+          PrivateUsers = "identity";
+          ProtectClock = true;
+          ProtectControlGroups = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectProc = "invisible";
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+            "AF_UNIX"
+          ];
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          SystemCallArchitectures = "native";
+          SystemCallErrorNumber = "EPERM";
+          SystemCallFilter = [
+            "@system-service"
+            "~@resources @privileged"
+          ];
+          UMask = "0077";
         };
       };
     };
