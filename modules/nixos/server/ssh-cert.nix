@@ -39,6 +39,7 @@ in
       '';
       script = ''
         jwt="$(spire-agent api fetch jwt -audience $VAULT_ADDR -output json -socketPath ${config.mjm.spire.agent.socketPath} | jq -r '.[0].svids[0].svid')"
+        export VAULT_TOKEN=placeholder
         VAULT_TOKEN="$(vault write -field=token auth/spiffe/login role=spiffe jwt=$jwt)"
         export VAULT_TOKEN
 
@@ -50,7 +51,6 @@ in
           valid_principals=${config.networking.hostName}.home.mattmoriarity.com \
           >/run/sshd-host-cert/cert
 
-        chmod 0640 /run/sshd-host-cert/cert
         # important to not block here, as it seems that this restart, presumably because of the dependencies between
         # sshd.service and this unit, will block forever without --no-block
         systemctl --no-block try-restart sshd.service
@@ -66,6 +66,36 @@ in
         Restart = "on-failure";
         RestartSec = "5s";
         RuntimeDirectory = "sshd-host-cert";
+
+        CapabilityBoundingSet = "";
+        DevicePolicy = "closed";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        PrivateDevices = true;
+        PrivateIPC = true;
+        PrivateUsers = "identity";
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = "read-only";
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        SystemCallArchitectures = "native";
+        SystemCallErrorNumber = "EPERM";
+        SystemCallFilter = [
+          "@system-service"
+          "~@resources @privileged"
+        ];
+        UMask = "0027";
       };
     };
 
