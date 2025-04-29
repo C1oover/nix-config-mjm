@@ -14,8 +14,6 @@
     ./user.nix
   ];
 
-  nixpkgs.overlays = [ (import "${inputs.nixpkgs-firefox-darwin}/overlay.nix") ];
-
   nix.settings.trusted-users = [ "@admin" ];
 
   time.timeZone = "America/Denver";

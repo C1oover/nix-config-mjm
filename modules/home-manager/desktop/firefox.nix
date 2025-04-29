@@ -16,8 +16,5 @@ in
     (mkIf pkgs.stdenv.isLinux {
       programs.firefox.nativeMessagingHosts = [ pkgs.kdePackages.plasma-browser-integration ];
     })
-    (mkIf pkgs.stdenv.isDarwin {
-      mjm.firefox.package = pkgs.firefox-bin;
-    })
   ]);
 }
