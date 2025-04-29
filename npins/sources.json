@@ -227,19 +227,6 @@
       "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=4d2f3430c80de1746514252686b4e9404218c1b4",
       "hash": "13qvi5ap99axhib7pc724sgyrbppbam087vv4b462nw8qll9i44k"
     },
-    "nixpkgs-firefox-darwin": {
-      "type": "Git",
-      "repository": {
-        "type": "GitHub",
-        "owner": "bandithedoge",
-        "repo": "nixpkgs-firefox-darwin"
-      },
-      "branch": "main",
-      "submodules": false,
-      "revision": "9905535720ab7240b3c0a8940b022e42e0702bc4",
-      "url": "https://github.com/bandithedoge/nixpkgs-firefox-darwin/archive/9905535720ab7240b3c0a8940b022e42e0702bc4.tar.gz",
-      "hash": "1pmbld322v1znbidi1cav02z0a2p8j3nd3dirwdg2h9xx7cwhm2m"
-    },
     "preservation": {
       "type": "Git",
       "repository": {
