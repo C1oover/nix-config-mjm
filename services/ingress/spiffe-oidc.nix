@@ -46,6 +46,32 @@ in
         DynamicUser = true;
         Restart = "on-failure";
         RuntimeDirectory = "oidc-discovery-provider";
+
+        CapabilityBoundingSet = "";
+        DevicePolicy = "closed";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        PrivateDevices = true;
+        PrivateIPC = true;
+        PrivateUsers = "identity";
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        RestrictAddressFamilies = [ "AF_UNIX" ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        SystemCallArchitectures = "native";
+        SystemCallErrorNumber = "EPERM";
+        SystemCallFilter = [
+          "@system-service"
+          "~@resources @privileged"
+        ];
+        UMask = "0077";
       };
     };
   };
