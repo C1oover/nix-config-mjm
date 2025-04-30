@@ -67,7 +67,6 @@ in
     };
 
     systemd.services.netavark-dhcp-proxy = {
-      wantedBy = [ "default.target" ];
       requires = [ "netavark-dhcp-proxy.socket" ];
       after = [ "netavark-dhcp-proxy.socket" ];
       startLimitIntervalSec = 0;
