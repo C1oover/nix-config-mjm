@@ -5,7 +5,13 @@
   ...
 }:
 let
-  inherit (lib) mkEnableOption mkIf;
+  inherit (lib)
+    concatMapStrings
+    mkEnableOption
+    mkIf
+    pipe
+    unique
+    ;
 
   cfg = config.mjm.postgresql;
 in
@@ -33,6 +39,12 @@ in
     mjm.backups.postgresql =
       let
         pg = config.services.postgresql.package;
+        dumpDBs = pipe config.services.postgresql.ensureDatabases [
+          unique
+          (concatMapStrings (dbname: ''
+            ${pg}/bin/pg_dump --format=directory -j 4 -f ${dbname} ${dbname}
+          ''))
+        ];
       in
       {
         paths = [ "/tmp/pgbackup" ];
@@ -42,9 +54,7 @@ in
           mkdir /tmp/pgbackup
           cd /tmp/pgbackup
           ${pg}/bin/pg_dumpall --globals-only -f /tmp/pgbackup/globals.sql
-          ${lib.concatMapStrings (dbname: ''
-            ${pg}/bin/pg_dump --format=directory -j 4 -f ${dbname} ${dbname}
-          '') config.services.postgresql.ensureDatabases}
+          ${dumpDBs}
         '';
         backupCleanupCommand = ''
           rm -rf /tmp/pgbackup
