@@ -27,6 +27,7 @@
 
   mjm.profiles.vm-host.enable = true;
 
+  mjm.networkd.bridge.enable = true;
   mjm.nut = {
     enable = true;
     connectedUPSName = "or500";

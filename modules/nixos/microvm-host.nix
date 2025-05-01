@@ -9,9 +9,9 @@ in
   };
 
   config = mkIf cfg.enable {
-    systemd.network.networks."10-microvm" = {
+    systemd.network.networks."10-microvm" = mkIf config.mjm.networkd.bridge.enable {
       name = "vm-*";
-      networkConfig.Bridge = mkIf config.mjm.networkd.bridge.enable "vmbr0";
+      networkConfig.Bridge = "vmbr0";
     };
 
     microvm.host.enable = true;

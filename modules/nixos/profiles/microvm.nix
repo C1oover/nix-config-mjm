@@ -44,6 +44,18 @@ in
             id = "vm-${config.networking.hostName}";
             mac = cfg.macAddress;
           }
+          # use macvtap in the future (probably based on whether the host
+          # has macvlan enabled)
+          # to use this, the big guests on the same host need to not be using
+          # macvlan internally, since you can't layer macvlan in that way
+          #
+          # {
+          #   type = "macvtap";
+          #   id = "vm-${config.networking.hostName}";
+          #   macvtap.link = "lan0";
+          #   macvtap.mode = "bridge";
+          #   mac = cfg.macAddress;
+          # }
         ];
         shares =
           [

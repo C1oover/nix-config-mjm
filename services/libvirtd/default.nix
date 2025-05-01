@@ -37,7 +37,6 @@ in
       parallelShutdown = 3;
     };
 
-    mjm.networkd.bridge.enable = true;
     services.lldpd.enable = true;
 
     users.users.${config.mjm.username}.extraGroups = [ "libvirtd" ];

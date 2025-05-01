@@ -80,5 +80,9 @@
   mjm.server.enable = true;
   mjm.spire.agent.enable = true;
 
+  # switch to macvlan when possible, i.e. when no libvirtd VMs are using
+  # macvlan for namespacing
+  mjm.networkd.bridge.enable = true;
+
   system.stateVersion = "25.05";
 }
