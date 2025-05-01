@@ -70,6 +70,7 @@
   };
   mjm.microvm-host = {
     enable = true;
+    zfsPrefix = "fast";
   };
   mjm.nas.enable = true;
   mjm.nut = {
@@ -84,5 +85,6 @@
   # macvlan for namespacing
   mjm.networkd.bridge.enable = true;
 
+  nixpkgs.hostPlatform = "x86_64-linux";
   system.stateVersion = "25.05";
 }

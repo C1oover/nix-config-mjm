@@ -6,7 +6,6 @@
 }:
 let
   inherit (lib)
-    concatMapStringsSep
     mkDefault
     mkEnableOption
     mkIf
@@ -79,10 +78,6 @@ in
             source = tag;
             mountPoint = d.directory;
           }) config.mjm.state.directories;
-        # This doesn't work as expected, they need to be set up earlier
-        # preStart = concatMapStringsSep "\n" (d: ''
-        #   zfs create -p ${cfg.hostPool}/microvms/${config.networking.hostName}/${builtins.baseNameOf d.directory};
-        # '') config.mjm.state.directories;
       };
 
       environment.etc."machine-id".text = cfg.machineId;
