@@ -17,6 +17,7 @@
     ./desktop
     ./ingress.nix
     ./linkding.nix
+    ./microvm-host.nix
     ./secureboot.nix
     ./server
     ./services.nix

@@ -68,6 +68,9 @@
     enable = true;
     vmsDataset = "fast";
   };
+  mjm.microvm-host = {
+    enable = true;
+  };
   mjm.nas.enable = true;
   mjm.nut = {
     enable = true;
@@ -76,12 +79,6 @@
   mjm.remote-builder.enable = true;
   mjm.server.enable = true;
   mjm.spire.agent.enable = true;
-
-  systemd.network.networks."10-microvm" = {
-    name = "vm-*";
-    networkConfig.Bridge = "vmbr0";
-  };
-  microvm.host.enable = true;
 
   system.stateVersion = "25.05";
 }
