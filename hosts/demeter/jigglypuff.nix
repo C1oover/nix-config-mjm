@@ -1,26 +1,14 @@
-{ inputs, localModulesPath, ... }:
 {
   microvm.vms.jigglypuff = {
-    # TODO make this automatic
-    autostart = true;
-    specialArgs = {
-      inherit inputs localModulesPath;
-      nodes = { };
-    };
-
     config = {
-      imports = [ "${localModulesPath}/nixos" ];
+      mjm.navidrome.enable = true;
 
-      config = {
-        mjm.navidrome.enable = true;
-
-        mjm.profiles.microvm = {
-          enable = true;
-          macAddress = "02:59:AB:9A:5A:43";
-          machineId = "3828c078f418f0d05a2b511968127faf";
-        };
-        system.stateVersion = "25.05";
+      mjm.profiles.microvm = {
+        enable = true;
+        macAddress = "02:59:AB:9A:5A:43";
+        machineId = "3828c078f418f0d05a2b511968127faf";
       };
+      system.stateVersion = "25.05";
     };
   };
 }

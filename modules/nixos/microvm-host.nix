@@ -1,4 +1,10 @@
-{ lib, config, ... }:
+{
+  lib,
+  config,
+  inputs,
+  localModulesPath,
+  ...
+}:
 let
   inherit (lib)
     concatMapAttrs
@@ -6,6 +12,7 @@ let
     hasPrefix
     mapAttrs'
     mkBefore
+    mkDefault
     mkEnableOption
     mkIf
     mkOption
@@ -20,6 +27,25 @@ in
     zfsPrefix = mkOption {
       type = types.str;
     };
+  };
+
+  options.microvm.vms = mkOption {
+    type = types.attrsOf (
+      types.submodule {
+        config = {
+          autostart = mkDefault true;
+          specialArgs = {
+            inherit inputs localModulesPath;
+            # TODO decide how to do this properly
+            nodes = { };
+          };
+
+          config = {
+            imports = [ "${localModulesPath}/nixos" ];
+          };
+        };
+      }
+    );
   };
 
   config = mkIf cfg.enable {
