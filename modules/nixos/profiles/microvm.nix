@@ -53,6 +53,12 @@ in
               mountPoint = "/nix/.ro-store";
               proto = "virtiofs";
             }
+            {
+              tag = "journal";
+              source = "journal";
+              mountPoint = "/var/log/journal";
+              proto = "virtiofs";
+            }
           ]
           ++ map (d: rec {
             proto = "virtiofs";
@@ -75,6 +81,8 @@ in
       mjm.consul.enable = true;
       mjm.server.enable = true;
       mjm.spire.agent.enable = true;
+
+      environment.etc."alloy/journal.alloy".enable = false;
     })
   ];
 }
