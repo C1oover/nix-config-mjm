@@ -1,5 +1,6 @@
 {
   imports = [
+    ./blastoise.nix
     ./jigglypuff.nix
   ];
 

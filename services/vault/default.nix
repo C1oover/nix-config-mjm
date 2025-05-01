@@ -6,7 +6,6 @@
 }:
 let
   inherit (lib)
-    concatMapStrings
     mkEnableOption
     mkIf
     mkOption
@@ -28,7 +27,7 @@ in
       default = [
         "10.0.2.40"
         "10.0.2.42"
-        "10.0.2.43"
+        "10.0.150.9"
       ];
     };
   };
@@ -39,9 +38,7 @@ in
 
   config = mkIf cfg.enable {
     mjm.services.vault = {
-      vault = {
-        enable = true;
-      };
+      vault.enable = true;
     };
 
     ingress.virtualHosts.vault = {
@@ -62,11 +59,6 @@ in
       storageBackend = "raft";
       storageConfig = ''
         node_id = "${cfg.nodeId}"
-        ${concatMapStrings (n: ''
-          retry_join {
-            leader_api_addr = "https://${n}:8200"
-          }
-        '') cfg.nodes}
       '';
       listenerExtraConfig = ''
         tls_min_version = "tls13"

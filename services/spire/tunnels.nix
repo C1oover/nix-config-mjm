@@ -30,12 +30,12 @@ let
     {
       name = "${name}-tunnel";
       value = {
-        wantedBy = if listen.namespace != null then [ "network.target" ] else [ "sockets.target" ];
+        wantedBy = if listen.early then [ "network.target" ] else [ "sockets.target" ];
         partOf = [ "${name}-tunnel.service" ];
         bindsTo = mkIf (listen.namespace != null) [ "netns-bridge@${listen.namespace}.service" ];
         after = mkIf (listen.namespace != null) [ "netns-bridge@${listen.namespace}.service" ];
         startLimitIntervalSec = 0;
-        unitConfig = mkIf (listen.namespace != null) {
+        unitConfig = mkIf listen.early {
           DefaultDependencies = false;
         };
         socketConfig = {
@@ -156,6 +156,10 @@ in
               namespace = mkOption {
                 type = types.nullOr types.str;
                 default = null;
+              };
+              early = mkOption {
+                type = types.bool;
+                default = config.listen.namespace != null;
               };
             };
             target = {

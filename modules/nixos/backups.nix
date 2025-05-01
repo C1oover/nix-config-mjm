@@ -18,6 +18,8 @@ let
     optionalString
     types
     ;
+
+  useNamespace = !config.mjm.minimal.enable;
 in
 {
   options.mjm.backups = mkOption {
@@ -60,7 +62,7 @@ in
       wantedBy = [ "sockets.target" ];
     };
 
-    mjm.networkd.macvlan.enable = true;
+    mjm.networkd.macvlan.enable = mkIf useNamespace true;
     environment.etc."resolv.conf".source = lib.mkForce "/run/systemd/resolve/resolv.conf";
 
     mjm.garage.clients.backups = { };
@@ -115,11 +117,8 @@ in
         path = [ config.programs.ssh.package ];
         restartIfChanged = false;
         wants = [ "network-online.target" ];
-        bindsTo = [ "netns-bridge@backups.service" ];
-        after = [
-          "network-online.target"
-          "netns-bridge@backups.service"
-        ];
+        after = [ "network-online.target" ];
+        networkNamespace = mkIf useNamespace "backups";
         serviceConfig = {
           Type = "oneshot";
           ExecStart = [
@@ -142,7 +141,6 @@ in
           CacheDirectory = "restic-backups-${name}";
           CacheDirectoryMode = "0700";
           PrivateTmp = true;
-          NetworkNamespacePath = "/run/netns/backups";
           LoadCredential = [
             "backups_b2_key_id:/run/backups-creds.sock"
             "backups_b2_application_key:/run/backups-creds.sock"
@@ -202,13 +200,15 @@ in
           (lib.concatStringsSep "\n")
         ]}
 
-        systemctl start netns-bridge@backups.service
+        ${lib.optionalString useNamespace ''
+          systemctl start netns-bridge@backups.service
+        ''}
 
         export PATH=${config.systemd.services."restic-backups-${name}".environment.PATH}:$PATH
         exec ${pkgs.systemd}/bin/systemd-run \
           --service-type=oneshot \
           --wait -qt --collect \
-          -p NetworkNamespacePath=/run/netns/backups \
+          ${lib.optionalString useNamespace "-p NetworkNamespacePath=/run/netns/backups"} \
           -p LoadCredential=backups_b2_key_id:/run/backups-creds.sock \
           -p LoadCredential=backups_b2_application_key:/run/backups-creds.sock \
           -p LoadCredential=${name}_backup_password:/run/${name}-creds.sock \

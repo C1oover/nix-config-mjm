@@ -1,6 +1,12 @@
-{ lib, config, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 let
   inherit (lib)
+    attrNames
     attrValues
     flatten
     flip
@@ -8,6 +14,7 @@ let
     mapAttrs'
     mkIf
     mkOption
+    optionalAttrs
     pipe
     types
     ;
@@ -28,8 +35,8 @@ in
         {
           options = {
             namespace = mkOption {
-              type = types.str;
-              default = name;
+              type = types.nullOr types.str;
+              default = if config.mjm.minimal.enable then null else name;
             };
             services = mkOption {
               type = types.listOf types.str;
@@ -49,6 +56,7 @@ in
           mode = "client";
           listen.address = "169.254.170.2:80";
           listen.namespace = c.namespace;
+          listen.early = true;
           target.service = "spiffe-garage";
           target.port = 3899;
         };
@@ -67,8 +75,22 @@ in
         };
       }) cfg.clients;
 
-    systemd.services = flip genAttrs (_: {
-      environment.AWS_CONTAINER_CREDENTIALS_RELATIVE_URI = "/creds";
-    }) allServices;
+    systemd.services =
+      flip genAttrs (_: {
+        environment.AWS_CONTAINER_CREDENTIALS_RELATIVE_URI = "/creds";
+      }) allServices
+      // optionalAttrs config.mjm.minimal.enable {
+        "s3-creds-ip" = {
+          wantedBy = [ "multi-user.target" ];
+          after = [ "network.target" ];
+          before = map (name: "${name}-s3-creds-tunnel.socket") (attrNames cfg.clients);
+
+          serviceConfig = {
+            Type = "oneshot";
+            RemainAfterExit = true;
+            ExecStart = "${pkgs.iproute2}/bin/ip addr add 169.254.170.2/16 dev lo";
+          };
+        };
+      };
   };
 }
