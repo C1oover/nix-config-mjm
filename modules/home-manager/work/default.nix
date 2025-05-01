@@ -31,8 +31,7 @@ in
     home.packages = builtins.attrValues {
       inherit slab;
       inherit (pkgs)
-        # broken in nixpkgs due to needing a fork of go 1.22
-        # cloudflared
+        cloudflared
         google-cloud-sdk
         ;
     };
