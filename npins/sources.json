@@ -77,9 +77,9 @@
       },
       "branch": "main",
       "submodules": false,
-      "revision": "1d54ddac1e8db612bea4f279a0ea48ab35f420be",
-      "url": "https://github.com/lilyinstarlight/nixos-cosmic/archive/1d54ddac1e8db612bea4f279a0ea48ab35f420be.tar.gz",
-      "hash": "011y1vmpyyzq8qpay1krnj44f0pgskww0bpsbqdl9a1birbzx901"
+      "revision": "9fe1aa7b6a1043003b38f36626dd29b52247d720",
+      "url": "https://github.com/lilyinstarlight/nixos-cosmic/archive/9fe1aa7b6a1043003b38f36626dd29b52247d720.tar.gz",
+      "hash": "0lp8xqkwyyf9s43qb9l2d63glb4y72qq0b70x20ahhfvvflyjc5j"
     },
     "darwin": {
       "type": "Git",
@@ -142,9 +142,9 @@
       },
       "branch": "deploy/master",
       "submodules": false,
-      "revision": "3f1025676f7ecea5403b55afb060160033a6c238",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fhelix/repository/archive.tar.gz?sha=3f1025676f7ecea5403b55afb060160033a6c238",
-      "hash": "18z4gvw47d3y5sj46j400v062jk8lkks3slmmslgq27f77vbrb4f"
+      "revision": "17de54881f78345afb65706b67d471c7187eb6c2",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fhelix/repository/archive.tar.gz?sha=17de54881f78345afb65706b67d471c7187eb6c2",
+      "hash": "18n6m51n1wrgc33qp4pqffsx0g0zsh2a729lz5r2kqvcq1lxw0aa"
     },
     "home-manager": {
       "type": "Git",
@@ -155,9 +155,9 @@
       },
       "branch": "master",
       "submodules": false,
-      "revision": "d2b3e6c83d457aa0e7f9344c61c3fed32bad0f7e",
-      "url": "https://github.com/nix-community/home-manager/archive/d2b3e6c83d457aa0e7f9344c61c3fed32bad0f7e.tar.gz",
-      "hash": "184027f3aabk3vd3nhwhh86vniwx7q37r7j7ad0l4r4czd07hjpi"
+      "revision": "5f217e5a319f6c186283b530f8c975e66c028433",
+      "url": "https://github.com/nix-community/home-manager/archive/5f217e5a319f6c186283b530f8c975e66c028433.tar.gz",
+      "hash": "19g0i33cx6vr87l6af8w85b00cd1xbxbzpjbww8rj8mkyighzj52"
     },
     "lanzaboote": {
       "type": "GitRelease",
@@ -197,8 +197,8 @@
       },
       "branch": "main",
       "submodules": false,
-      "revision": "187524713d0d9b2d2c6f688b81835114d4c2a7c6",
-      "url": "https://github.com/nix-community/nix-index-database/archive/187524713d0d9b2d2c6f688b81835114d4c2a7c6.tar.gz",
+      "revision": "13ba07d54c6ccc5af30a501df669bf3fe3dd4db8",
+      "url": "https://github.com/nix-community/nix-index-database/archive/13ba07d54c6ccc5af30a501df669bf3fe3dd4db8.tar.gz",
       "hash": "14736a4d8gpwqgclnkjncpq0gm47ccjmyhd3cdfdvms9crsa47w9"
     },
     "nixos": {
@@ -223,9 +223,9 @@
       },
       "branch": "deploy/nixos-unstable-small",
       "submodules": false,
-      "revision": "26d735b9e8f853491f798cc6cbf38c3b220bafb4",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=26d735b9e8f853491f798cc6cbf38c3b220bafb4",
-      "hash": "1jhp68l4szgxcbzz69xpq1bs7fyjz4prxqvx3lcnf4pnprpgj9lh"
+      "revision": "6b0888f669afd1e5cf89df43eeda6f0985af09b4",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=6b0888f669afd1e5cf89df43eeda6f0985af09b4",
+      "hash": "0zbvklrh3hg3s3kf8xl8zs8myhw14k9kcvadijsx4cvayk7pm3iq"
     },
     "nixpkgs": {
       "type": "Git",
@@ -236,9 +236,9 @@
       },
       "branch": "deploy/nixpkgs-unstable",
       "submodules": false,
-      "revision": "603e438f46191ab916d6f8956c37c30f1854600b",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=603e438f46191ab916d6f8956c37c30f1854600b",
-      "hash": "0jqzncppwavbw9sqi9hrr0b3g0njscv5hhiiakq9fyyb3wzsyhpm"
+      "revision": "a911602a6e3b44ba36190ca04efc4b534405a2f6",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=a911602a6e3b44ba36190ca04efc4b534405a2f6",
+      "hash": "0xkcz4vka7wdvx07fxn1hq2ynaj9mszlp36jb0fx73xgmmf4z0qz"
     },
     "preservation": {
       "type": "Git",
@@ -262,9 +262,9 @@
       },
       "branch": "master",
       "submodules": false,
-      "revision": "0388c30f59e860307b2ef0ba93f38d2e525a153e",
-      "url": "https://gitlab.com/api/v4/projects/rycee%2Fnur-expressions/repository/archive.tar.gz?sha=0388c30f59e860307b2ef0ba93f38d2e525a153e",
-      "hash": "041spi986v7gzb45ad3nvy2zdna3swrv2vg1g66mgv1gijmnwzmx"
+      "revision": "debaa11dba5904b70a4e9db1d9c68ae9a6f82ebd",
+      "url": "https://gitlab.com/api/v4/projects/rycee%2Fnur-expressions/repository/archive.tar.gz?sha=debaa11dba5904b70a4e9db1d9c68ae9a6f82ebd",
+      "hash": "11q18vm58vin0kssckj3pnr492q5l6hrjcl5wd3vidm2cdfzzhmr"
     }
   },
   "version": 5
