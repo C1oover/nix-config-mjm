@@ -1,4 +1,8 @@
 {
+  imports = [
+    ./jigglypuff.nix
+  ];
+
   mjm.username = "mjm";
 
   networking.hostName = "demeter";
@@ -63,6 +67,9 @@
   mjm.libvirtd = {
     enable = true;
     vmsDataset = "fast";
+  };
+  mjm.microvm-host = {
+    enable = true;
   };
   mjm.nas.enable = true;
   mjm.nut = {

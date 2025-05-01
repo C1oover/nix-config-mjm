@@ -5,6 +5,8 @@ let
   inherit (lib)
     attrNames
     attrValues
+    concatMap
+    concatMapAttrs
     elem
     filter
     filterAttrs
@@ -116,9 +118,12 @@ let
       infra =
         let
           allNodes = attrValues nodes;
+          allNodesWithMicroVMs =
+            allNodes
+            ++ concatMap (n: attrValues (mapAttrs (_: vm: vm.config) n.config.microvm.vms)) allNodes;
         in
         {
-          vhosts = pipe allNodes [
+          vhosts = pipe allNodesWithMicroVMs [
             (filter (n: !n.config.mjm.ingress.enable))
             (map (n: n.config.ingress.virtualHosts))
             mergeAttrsList
@@ -126,14 +131,16 @@ let
           ];
 
           # TODO these two should just be lists of names
-          vaultServices = pipe allNodes [
+          vaultServices = pipe allNodesWithMicroVMs [
             (map (n: n.config.vault.services))
             mergeAttrsList
             (mapAttrs (_: _: { }))
           ];
-          vaultRoles = mapAttrs (_: _: { }) nodes;
+          vaultRoles = concatMapAttrs (
+            name: n: { ${name} = { }; } // mapAttrs (_: _: { }) n.config.microvm.vms
+          ) nodes;
 
-          oidcClients = pipe allNodes [
+          oidcClients = pipe allNodesWithMicroVMs [
             (map (n: n.config.mjm.authelia.oidcClients))
             mergeAttrsList
             attrNames

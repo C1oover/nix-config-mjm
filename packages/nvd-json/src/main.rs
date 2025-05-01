@@ -104,7 +104,7 @@ fn run_diff(left: &std::path::Path, right: &std::path::Path) -> Result<DiffResul
         version_changes: closure_pair.get_version_changes(),
         added_packages: closure_pair.get_added_packages(),
         removed_packages: closure_pair.get_removed_packages(),
-        reboot_packages: boot_pair.get_changes(["linux", "systemd"]),
+        reboot_packages: boot_pair.get_simple_changes(["linux", "systemd"]),
     })
 }
 
@@ -299,6 +299,18 @@ impl PackageSet {
         self.get_pname_versions(&pname)
             .map(|vs| vs.into_iter().map(|v| v.text).collect())
     }
+
+    fn get_simple_pname_version_strings(self: &Self, pname: &str) -> Option<Vec<String>> {
+        self.get_pname_versions(&pname).map(|vs| {
+            let mut strs = vs
+                .into_iter()
+                .filter_map(|v| v.text.split_once('-').map(|(v, _)| String::from(v)))
+                .collect::<Vec<_>>();
+            strs.sort();
+            strs.dedup();
+            strs
+        })
+    }
 }
 
 struct PackageSetPair<'a> {
@@ -360,6 +372,30 @@ impl<'a> PackageSetPair<'a> {
                 let pname = pname.as_ref();
                 let old_versions = self.left.get_pname_version_strings(&pname);
                 let new_versions = self.right.get_pname_version_strings(&pname);
+
+                if old_versions == new_versions {
+                    None
+                } else {
+                    Some(VersionChange {
+                        pname: pname.to_string(),
+                        old_versions,
+                        new_versions,
+                    })
+                }
+            })
+            .collect()
+    }
+
+    fn get_simple_changes(
+        &self,
+        pnames: impl IntoIterator<Item = impl AsRef<str>>,
+    ) -> Vec<VersionChange> {
+        pnames
+            .into_iter()
+            .filter_map(|pname| {
+                let pname = pname.as_ref();
+                let old_versions = self.left.get_simple_pname_version_strings(&pname);
+                let new_versions = self.right.get_simple_pname_version_strings(&pname);
 
                 if old_versions == new_versions {
                     None
@@ -502,7 +538,7 @@ fn run_reboot_check(path: &std::path::Path) -> Result<RebootCheckResult> {
     let new_closure = PackageSet::from_closure(&new_canonical)?;
 
     let closure_pair = PackageSetPair::new(&boot_closure, &new_closure);
-    let reboot_packages = closure_pair.get_changes(["linux", "systemd"]);
+    let reboot_packages = closure_pair.get_simple_changes(["linux", "systemd"]);
 
     Ok(RebootCheckResult {
         reboot_needed: !reboot_packages.is_empty(),

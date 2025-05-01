@@ -1,4 +1,5 @@
 {
+  config,
   inputs,
   pkgs,
   lib,
@@ -26,7 +27,7 @@ in
     ];
   };
 
-  nixpkgs = {
+  nixpkgs = mkIf (!config.mjm.minimal.enable) {
     config.allowUnfree = true;
     overlays = [
       (final: prev: {

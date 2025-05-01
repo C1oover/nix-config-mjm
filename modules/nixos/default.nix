@@ -4,6 +4,7 @@
 
     ../../services
 
+    ./profiles/microvm.nix
     ./profiles/qemu-vm.nix
     ./profiles/raspberry-pi
     ./profiles/vm-host.nix
@@ -16,6 +17,7 @@
     ./desktop
     ./ingress.nix
     ./linkding.nix
+    ./microvm-host.nix
     ./secureboot.nix
     ./server
     ./services.nix

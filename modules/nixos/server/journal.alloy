@@ -1,6 +1,7 @@
 loki.source.journal "read" {
   forward_to = [loki.write.endpoint.receiver]
   relabel_rules = loki.relabel.journal.rules
+  path = "/var/log/journal"
 }
 
 loki.relabel "journal" {
