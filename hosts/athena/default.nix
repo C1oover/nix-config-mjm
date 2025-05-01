@@ -14,6 +14,7 @@
     "secretive"
     "slab"
     "teleport-connect"
+    "zoom"
   ];
 
   homebrew.brews = [

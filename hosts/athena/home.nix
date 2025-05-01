@@ -21,10 +21,7 @@
     "Element"
     "Signal"
     "Mail"
-    {
-      app = "zoom.us";
-      package = pkgs.zoom-us;
-    }
+    "zoom.us"
     {
       app = "Slack";
       package = pkgs.slack;
