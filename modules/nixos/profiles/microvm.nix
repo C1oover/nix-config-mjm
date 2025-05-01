@@ -80,6 +80,7 @@ in
 
       mjm.consul.enable = true;
       mjm.server.enable = true;
+      mjm.server.enableGarbageCollection = false;
       mjm.spire.agent.enable = true;
 
       environment.etc."alloy/journal.alloy".enable = false;
