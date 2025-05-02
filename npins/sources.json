@@ -155,9 +155,9 @@
       },
       "branch": "master",
       "submodules": false,
-      "revision": "355a6b937d07a95cb0b753ef513bcaad09128dea",
-      "url": "https://github.com/nix-community/home-manager/archive/355a6b937d07a95cb0b753ef513bcaad09128dea.tar.gz",
-      "hash": "1vgy5b7rhxgpssamhby7rrr6lqc3accvg0wflv4vdv6g6s3svapc"
+      "revision": "1e8c62c651242fc685b10efc4a48ab777635fb7f",
+      "url": "https://github.com/nix-community/home-manager/archive/1e8c62c651242fc685b10efc4a48ab777635fb7f.tar.gz",
+      "hash": "1j9mncnhmd4d0841sgrk5j9ylr14gqx43inj10la9kg49wgviyqj"
     },
     "lanzaboote": {
       "type": "GitRelease",
@@ -184,9 +184,9 @@
       },
       "branch": "main",
       "submodules": false,
-      "revision": "ae53cb29425c3077d7b088bec5d2bd9275594db3",
-      "url": "https://github.com/astro/microvm.nix/archive/ae53cb29425c3077d7b088bec5d2bd9275594db3.tar.gz",
-      "hash": "0cxx3658971q0b28pkmv3ir4lxckjnnpvgg7qgab75zjnjxkzfc5"
+      "revision": "717cbf49d61e46ad68cb8dcc183b3bf33678e1c2",
+      "url": "https://github.com/astro/microvm.nix/archive/717cbf49d61e46ad68cb8dcc183b3bf33678e1c2.tar.gz",
+      "hash": "16198lmhjjwwbq02s7zff7bwch4fcjd0gr1fmh779jhfmna5a3f2"
     },
     "nix-index-database": {
       "type": "Git",
@@ -223,9 +223,9 @@
       },
       "branch": "deploy/nixos-unstable-small",
       "submodules": false,
-      "revision": "09f79faa1bdbd1319f50a04af701ccd3642ba21d",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=09f79faa1bdbd1319f50a04af701ccd3642ba21d",
-      "hash": "1vx2ppzfqczzvfliwj603jywhki2hp87z73i93hrgl1hmqxf1hz4"
+      "revision": "d1e2ef4d9401c766066d0794f5865e6ecfae672a",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=d1e2ef4d9401c766066d0794f5865e6ecfae672a",
+      "hash": "0gb3zyzhspspnrdqb9jw88y2x3vqlmvxiclavr18jgzlpwww1pcc"
     },
     "nixpkgs": {
       "type": "Git",
