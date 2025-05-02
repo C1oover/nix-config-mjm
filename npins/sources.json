@@ -210,9 +210,9 @@
       },
       "branch": "deploy/nixos-unstable",
       "submodules": false,
-      "revision": "9469ce2ab1e15591dfac73264ba2212875e010a7",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=9469ce2ab1e15591dfac73264ba2212875e010a7",
-      "hash": "1s4pjd605znlwah2qas1k0i7i3w8ii5vvgmlv4x64r4w22nskfi9"
+      "revision": "2faf9c2f47f3d2359732a07984e9ba24118fd0b4",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=2faf9c2f47f3d2359732a07984e9ba24118fd0b4",
+      "hash": "11vlvc7yhg732nvhcg62bfhfk0s5fy8vmz3w7xblhjsrmdylzgfd"
     },
     "nixos-small": {
       "type": "Git",
@@ -236,9 +236,9 @@
       },
       "branch": "deploy/nixpkgs-unstable",
       "submodules": false,
-      "revision": "a911602a6e3b44ba36190ca04efc4b534405a2f6",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=a911602a6e3b44ba36190ca04efc4b534405a2f6",
-      "hash": "0xkcz4vka7wdvx07fxn1hq2ynaj9mszlp36jb0fx73xgmmf4z0qz"
+      "revision": "2afe870f4782fe0fe9e382de73a44c01bd03fcf5",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=2afe870f4782fe0fe9e382de73a44c01bd03fcf5",
+      "hash": "01vgjwqkv132v5vy5mif0y40mbg19lblggpigzhdsy515jwh4ssr"
     },
     "preservation": {
       "type": "Git",
@@ -262,9 +262,9 @@
       },
       "branch": "master",
       "submodules": false,
-      "revision": "debaa11dba5904b70a4e9db1d9c68ae9a6f82ebd",
-      "url": "https://gitlab.com/api/v4/projects/rycee%2Fnur-expressions/repository/archive.tar.gz?sha=debaa11dba5904b70a4e9db1d9c68ae9a6f82ebd",
-      "hash": "11q18vm58vin0kssckj3pnr492q5l6hrjcl5wd3vidm2cdfzzhmr"
+      "revision": "47711ca43fc3f91fa566038cd2681812c6c3252d",
+      "url": "https://gitlab.com/api/v4/projects/rycee%2Fnur-expressions/repository/archive.tar.gz?sha=47711ca43fc3f91fa566038cd2681812c6c3252d",
+      "hash": "17kjss99yi7s7qm1a3ymxjayq8nkg3bhm07aql6d05bkd5g0zs12"
     }
   },
   "version": 5
