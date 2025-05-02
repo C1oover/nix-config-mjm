@@ -2,6 +2,7 @@
   imports = [
     ./blastoise.nix
     ./jigglypuff.nix
+    ./squirtle.nix
   ];
 
   mjm.username = "mjm";
