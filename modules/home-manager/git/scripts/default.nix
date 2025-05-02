@@ -16,7 +16,7 @@ resholve.mkDerivation {
   pname = "git-scripts";
   version = "0.0.1";
 
-  src = ./.;
+  src = lib.cleanSource ./.;
 
   installPhase = ''
     ${lib.concatMapStrings (script: ''

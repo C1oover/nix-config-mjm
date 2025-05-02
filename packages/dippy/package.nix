@@ -18,7 +18,7 @@ buildGoModule {
   pname = "dippy";
   version = "0.1.0";
 
-  src = ./.;
+  src = lib.cleanSource ./.;
 
   vendorHash = "sha256-RxJANmmScEKiiV5AW4QG0s2cX4RI1acUW/zkFhI9X1I=";
 
