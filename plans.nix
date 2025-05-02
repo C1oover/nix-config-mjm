@@ -1,7 +1,6 @@
 let
   hostNames = [
     "aion"
-    "alecto"
     "apollo"
     "arges"
     "artemis"
