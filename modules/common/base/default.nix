@@ -4,6 +4,7 @@ let
 in
 {
   imports = [
+    ./attic.nix
     ./home-manager.nix
     ./ipv6.nix
     ./nix.nix
