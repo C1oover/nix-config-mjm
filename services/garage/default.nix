@@ -20,9 +20,7 @@ in
 
   config = mkIf config.mjm.garage.enable {
     mjm.services.garage = {
-      vault = {
-        enable = true;
-      };
+      vault.enable = true;
     };
 
     services.garage = {
@@ -66,6 +64,16 @@ in
     };
 
     mjm.state.directories = [ "/var/lib/private/garage/meta" ];
+
+    microvm.volumes = [
+      {
+        image = "/var/lib/microvms/${config.networking.hostName}/data/garage-data.img";
+        label = "garage";
+        mountPoint = "/var/lib/private/garage/data";
+        size = 300 * 1024;
+        fsType = "xfs";
+      }
+    ];
 
     systemd.sockets.spiffe-garage = {
       wantedBy = [ "sockets.target" ];

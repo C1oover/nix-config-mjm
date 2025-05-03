@@ -12,11 +12,6 @@
     fsType = "vfat";
   };
 
-  fileSystems."/var/lib/private/garage/data" = {
-    device = "/dev/disk/by-partlabel/garage";
-    fsType = "xfs";
-  };
-
   swapDevices = [
     {
       device = "/nix/swap";
@@ -30,7 +25,6 @@
   mjm.profiles.qemu-vm.enable = true;
 
   mjm.consul.enable = true;
-  mjm.garage.enable = true;
   mjm.icloudpd.enable = true;
   mjm.media-server.enable = true;
   mjm.server.enable = true;

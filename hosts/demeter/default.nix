@@ -4,6 +4,7 @@
     ./jigglypuff.nix
     ./snorlax.nix
     ./squirtle.nix
+    ./wartortle.nix
   ];
 
   mjm.username = "mjm";
