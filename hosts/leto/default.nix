@@ -25,7 +25,6 @@
 
   mjm.profiles.qemu-vm.enable = true;
 
-  mjm.actual.enable = true;
   mjm.atticd.enable = true;
   mjm.atuin.enable = true;
   mjm.authelia.enable = true;

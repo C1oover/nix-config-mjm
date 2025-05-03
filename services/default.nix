@@ -1,6 +1,5 @@
 {
   imports = [
-    ./actual
     ./atticd
     ./atuin
     ./authelia
