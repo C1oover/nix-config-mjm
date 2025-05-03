@@ -12,8 +12,6 @@ let
   clientId = "Ck6UhnhOFIoo8jYitELDVI7Ys93kIJ6ZGcrLI6xr1YT9PWaIYUQEjc50iqgPSlCz";
 in
 {
-  imports = [ ./music-assistant.nix ];
-
   options.mjm.home-assistant = {
     enable = mkEnableOption "home assistant";
   };
@@ -62,7 +60,6 @@ in
         "lidarr"
         # not using yet, and it uses olm
         # "matrix"
-        "music_assistant"
         "nut"
         "openweathermap"
         "radarr"
