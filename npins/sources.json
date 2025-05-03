@@ -210,9 +210,9 @@
       },
       "branch": "deploy/nixos-unstable",
       "submodules": false,
-      "revision": "1f02949c7c2bb7a29e330f90f134e75ee637d6ac",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=1f02949c7c2bb7a29e330f90f134e75ee637d6ac",
-      "hash": "0d9nxycff6mya2p9fja25fb2bfkvla6ljklwlyxy04rcw2l7xxvf"
+      "revision": "7a7f28a5a36754c15bfb5e466776b7c085edfaa4",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=7a7f28a5a36754c15bfb5e466776b7c085edfaa4",
+      "hash": "0pyzimx5a8h34sr3146fk17jnh8kn9j41bd8m8nrhn5wpl98wqz6"
     },
     "nixos-small": {
       "type": "Git",
@@ -236,9 +236,9 @@
       },
       "branch": "deploy/nixpkgs-unstable",
       "submodules": false,
-      "revision": "ab86631bc7b3272b1e413c237f8c9edba61a0b5d",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=ab86631bc7b3272b1e413c237f8c9edba61a0b5d",
-      "hash": "16pghc5d6xa72nigdf4flz3ywc397s9j3jqfffq9vzzbk8vc7ml8"
+      "revision": "d1ce770577038a58a9c35c68e4a3432298369237",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=d1ce770577038a58a9c35c68e4a3432298369237",
+      "hash": "13hfdnv54dvsgp289kk2yq6ar01xva4qjrbkgj7rnw8gp88hkri3"
     },
     "preservation": {
       "type": "Git",
