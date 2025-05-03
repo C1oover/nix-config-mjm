@@ -8,7 +8,7 @@
 let
   inherit (lib) isStorePath mkIf;
   nix-index = import inputs.nix-index-database { inherit pkgs; };
-  addNixPath = isStorePath pkgs.path;
+  addNixPath = isStorePath pkgs.path && (!config.mjm.minimal.enable);
 in
 {
 
