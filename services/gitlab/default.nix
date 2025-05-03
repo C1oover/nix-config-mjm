@@ -5,12 +5,7 @@
   ...
 }:
 let
-  inherit (lib)
-    genAttrs
-    mkEnableOption
-    mkIf
-    mkMerge
-    ;
+  inherit (lib) mkEnableOption mkIf;
   cfg = config.mjm.gitlab;
 
   mkCred = name: "gitlab_${name}:${config.mjm.services.gitlab.vault.socketPath}";
@@ -26,9 +21,7 @@ in
 
   config = mkIf cfg.enable {
     mjm.services.gitlab = {
-      vault = {
-        enable = true;
-      };
+      vault.enable = true;
     };
     mjm.postgresql.enable = true;
     mjm.state.directories = [
@@ -36,8 +29,11 @@ in
         directory = config.services.gitlab.statePath;
         inherit (config.services.gitlab) user group;
       }
+      {
+        directory = "/var/lib/redis-gitlab";
+        inherit (config.services.gitlab) user group;
+      }
     ];
-    mjm.state.services = [ "redis-gitlab" ];
 
     ingress.virtualHosts = {
       git = {
@@ -215,26 +211,19 @@ in
       };
     };
 
-    systemd.services = mkMerge [
-      (genAttrs [ "gitlab-sidekiq" "gitlab-pages" "gitlab-workhorse" "gitlab" "gitlab-backup" ] (_: {
-        bindsTo = [ "netns-bridge@gitlab.service" ];
-        after = [ "netns-bridge@gitlab.service" ];
-        serviceConfig.NetworkNamespacePath = "/run/netns/gitlab";
-      }))
-      {
-        gitlab-config.serviceConfig.LoadCredential = map mkCred [
-          "secret_key_base"
-          "db_key_base"
-          "otp_key_base"
-          "openid_connect_signing_key"
-          "managed__oidc_client_secret"
-          "fastmail_password"
-        ];
-        gitlab-db-config.serviceConfig.LoadCredential = [
-          (mkCred "initial_root_password")
-        ];
-      }
-    ];
+    systemd.services = {
+      gitlab-config.serviceConfig.LoadCredential = map mkCred [
+        "secret_key_base"
+        "db_key_base"
+        "otp_key_base"
+        "openid_connect_signing_key"
+        "managed__oidc_client_secret"
+        "fastmail_password"
+      ];
+      gitlab-db-config.serviceConfig.LoadCredential = [
+        (mkCred "initial_root_password")
+      ];
+    };
 
     mjm.authelia.oidcClients.gitlab = {
       name = "GitLab";
@@ -243,9 +232,7 @@ in
       redirectUris = [ redirectUri ];
     };
 
-    mjm.garage.clients.gitlab = {};
-
-    mjm.networkd.macvlan.enable = true;
+    mjm.garage.clients.gitlab = { };
 
     mjm.spire.tunnels = {
       gitlab = {
@@ -256,21 +243,18 @@ in
       };
       gitlab-pages = {
         mode = "server";
-        listen.port = 8090;
+        listen.port = 8091;
         target.port = 8090;
-        target.namespace = "gitlab";
         allowIngress = true;
         allowConsul = true;
       };
       consul-gitlab-pages = {
         mode = "client";
         listen.socket = "/run/consul-checks/gitlab-pages.sock";
-        target.port = 8090;
+        target.port = 8091;
         service = "gitlab-pages";
       };
     };
-
-    networking.firewall.allowedTCPPorts = [ 80 ];
 
     services.consul.services = {
       gitlab = {
@@ -282,7 +266,7 @@ in
         };
       };
       gitlab-pages = {
-        port = 8090;
+        port = 8091;
 
         checks.up = {
           http.path = "/healthz";

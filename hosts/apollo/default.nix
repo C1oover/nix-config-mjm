@@ -1,4 +1,8 @@
 {
+  imports = [
+    ./dugtrio.nix
+  ];
+
   mjm.username = "mjm";
 
   networking.hostName = "apollo";
@@ -28,6 +32,10 @@
 
   mjm.profiles.vm-host.enable = true;
 
+  mjm.microvm-host = {
+    enable = true;
+    zfsPrefix = "rpool";
+  };
   mjm.networkd.bridge.enable = true;
   mjm.nut = {
     enable = true;

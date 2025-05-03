@@ -8,17 +8,39 @@ let
   inherit (lib)
     attrNames
     attrValues
+    elem
     flatten
     flip
     genAttrs
     mapAttrs'
+    length
     mkIf
     mkOption
     optionalAttrs
     pipe
+    removeAttrs
     types
     ;
   cfg = config.mjm.garage;
+
+  clients =
+    if config.mjm.minimal.enable then
+      (
+        let
+          names = attrNames cfg.clients;
+          clientCount = length names;
+        in
+        if clientCount > 2 then
+          builtins.throw "too many garage clients in a microvm"
+        else if clientCount == 2 && elem "backups" names then
+          # in this case, the other client is expected to have write access
+          # to the restic-backups bucket
+          removeAttrs cfg.clients [ "backups" ]
+        else
+          cfg.clients
+      )
+    else
+      cfg.clients;
 
   allServices = pipe cfg.clients [
     attrValues
@@ -60,7 +82,7 @@ in
           target.service = "spiffe-garage";
           target.port = 3899;
         };
-      }) cfg.clients
+      }) clients
       // mapAttrs' (name: c: {
         name = "${name}-s3";
         value = {
@@ -73,7 +95,7 @@ in
           # which is fine for hostname checks but it's not the name in the spiffe id
           service = "garage";
         };
-      }) cfg.clients;
+      }) clients;
 
     systemd.services =
       flip genAttrs (_: {
@@ -83,7 +105,7 @@ in
         "s3-creds-ip" = {
           wantedBy = [ "multi-user.target" ];
           after = [ "network.target" ];
-          before = map (name: "${name}-s3-creds-tunnel.socket") (attrNames cfg.clients);
+          before = map (name: "${name}-s3-creds-tunnel.socket") (attrNames clients);
 
           serviceConfig = {
             Type = "oneshot";

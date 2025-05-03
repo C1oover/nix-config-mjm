@@ -20,6 +20,10 @@ in
 
   options.mjm.profiles.microvm = {
     enable = mkEnableOption "MicroVM profile";
+    useHostStore = mkOption {
+      type = types.bool;
+      default = true;
+    };
     hostPool = mkOption {
       type = types.str;
     };
@@ -59,12 +63,6 @@ in
         shares =
           [
             {
-              tag = "ro-store";
-              source = "/nix/store";
-              mountPoint = "/nix/.ro-store";
-              proto = "virtiofs";
-            }
-            {
               tag = "journal";
               source = "journal";
               mountPoint = "/var/log/journal";
@@ -95,6 +93,16 @@ in
       # make sure these don't get enabled by something by mistake
       mjm.networkd.macvlan.enable = false;
       mjm.networkd.bridge.enable = false;
+    })
+    (mkIf (cfg.enable && cfg.useHostStore) {
+      microvm.shares = [
+        {
+          tag = "ro-store";
+          source = "/nix/store";
+          mountPoint = "/nix/.ro-store";
+          proto = "virtiofs";
+        }
+      ];
     })
   ];
 }
