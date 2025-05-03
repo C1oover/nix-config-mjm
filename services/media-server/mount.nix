@@ -10,6 +10,6 @@ in
       fsType = "virtiofs";
     };
 
-    users.groups.media = { };
+    users.groups.media.gid = 997;
   };
 }

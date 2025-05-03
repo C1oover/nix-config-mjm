@@ -2,6 +2,7 @@
   imports = [
     ./blastoise.nix
     ./jigglypuff.nix
+    ./snorlax.nix
     ./squirtle.nix
   ];
 

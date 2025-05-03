@@ -11,7 +11,6 @@ in
   imports = [
     ./arr.nix
     ./invidious.nix
-    ./jellyfin.nix
     ./mount.nix
     ./peertube.nix
     ./sabnzbd.nix

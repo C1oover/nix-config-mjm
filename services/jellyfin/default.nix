@@ -5,26 +5,55 @@
   ...
 }:
 let
-  inherit (lib) mkIf;
-  cfg = config.mjm.media-server;
+  inherit (lib) mkEnableOption mkIf;
+  cfg = config.mjm.jellyfin;
 in
 {
+  options.mjm.jellyfin = {
+    enable = mkEnableOption "Jellyfin";
+  };
+
   config = mkIf cfg.enable {
+    mjm.services.jellyfin = {
+      vault.enable = true;
+    };
     mjm.state.directories = [
       {
         directory = config.services.jellyfin.dataDir;
         inherit (config.services.jellyfin) user group;
       }
     ];
+    microvm.shares = [
+      {
+        proto = "virtiofs";
+        tag = "media";
+        source = "/mnt/slow/media";
+        mountPoint = "/videos";
+      }
+    ];
 
     ingress.virtualHosts.media = {
-      upstream.service.name = "jellyfin";
+      upstream = {
+        service.name = "jellyfin";
+        tls.enable = true;
+      };
       enableAuthProxy = false;
     };
 
     services.jellyfin = {
       enable = true;
+      # ideally, i would prefer to not expose plaintext HTTP, but I think some rokus
+      # might not work properly with IPv6 and so won't be able to use the ingress, so
+      # they need to access it this way
       openFirewall = true;
+    };
+
+    mjm.spire.tunnels = {
+      jellyfin = {
+        mode = "server";
+        listen.port = 8097;
+        target.port = 8096;
+      };
     };
 
     mjm.authelia.oidcClients.jellyfin = {
@@ -41,13 +70,15 @@ in
       tokenEndpointAuthMethod = "client_secret_post";
     };
 
+    users.groups.media.gid = 997;
     users.users.jellyfin.extraGroups = [ "media" ];
 
     services.consul.services.jellyfin = {
-      port = 8096;
+      port = 8097;
 
       checks.up = {
         http.path = "/health";
+        http.port = 8096;
         checkConfig = {
           failures_before_warning = 2;
           failures_before_critical = 6;
@@ -55,7 +86,7 @@ in
       };
     };
 
-    mjm.backups.media-server = {
+    mjm.backups.jellyfin = {
       paths = [ "/var/lib/jellyfin" ];
       exclude = [
         "/var/lib/jellyfin/log"

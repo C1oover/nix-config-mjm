@@ -13,6 +13,7 @@
     ./icloudpd
     ./ingress
     ./ipv4-proxy
+    ./jellyfin
     ./launchpad
     ./libvirtd
     ./linkding
