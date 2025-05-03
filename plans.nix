@@ -12,7 +12,6 @@ let
     "hypnos"
     "leto"
     "megaera"
-    "melinoe"
     "niobe"
     "persephone"
     "steropes"
