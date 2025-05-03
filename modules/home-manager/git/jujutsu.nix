@@ -115,6 +115,7 @@ in
         };
         revset-aliases = {
           "long_log()" = "@ | trunk() | ancestors(reachable(@ | mine(), mutable()), 2)";
+          "closest_bookmark(to)" = "heads(::to & bookmarks())";
           "tip()" = "tip(@)";
           "tip(x)" = "heads(description(glob:'?*') & ::x)";
           "mega()" = ''
@@ -189,13 +190,21 @@ in
             "--tracked"
           ];
           pb = mkFishAlias "jj-pb" ''
-            jj bookmark move --from 'heads(::@ & bookmarks())' --to 'tip()'
+            jj tug
             jj git push
             or jj undo
           '';
           pf = mkFishAlias "jj-pf" ''
             jj git push --branch (jj fb)
           '';
+          tug = [
+            "bookmark"
+            "move"
+            "--from"
+            "closest_bookmark(@-)"
+            "--to"
+            "tip()"
+          ];
           up = mkFishAlias "jj-up" ''
             jj git fetch
             jj rebase -d 'trunk()'
