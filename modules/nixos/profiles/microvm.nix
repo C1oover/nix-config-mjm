@@ -1,6 +1,7 @@
 {
   lib,
   config,
+  pkgs,
   inputs,
   ...
 }:
@@ -8,12 +9,30 @@ let
   inherit (lib)
     mkDefault
     mkEnableOption
+    mkForce
     mkIf
     mkMerge
     mkOption
     types
     ;
   cfg = config.mjm.profiles.microvm;
+
+  microvm-lib = import "${inputs.microvm}/lib" { inherit lib; };
+  defaultRunner = microvm-lib.buildRunner {
+    inherit pkgs;
+    inherit (config.system.build) toplevel;
+    microvmConfig = config.microvm // {
+      hypervisor = "cloud-hypervisor";
+      inherit (config.networking) hostName;
+    };
+  };
+  fixedRunner = defaultRunner.overrideAttrs (old: {
+    buildCommand =
+      old.buildCommand
+      + ''
+        sed -i -e "s/--fs /--fs 'socket=snix-store.sock,tag=snix-store' /" $out/bin/microvm-run
+      '';
+  });
 in
 {
   imports = [ "${inputs.microvm}/nixos-modules/microvm/options.nix" ];
@@ -76,6 +95,19 @@ in
             source = tag;
             mountPoint = d.directory;
           }) config.mjm.state.directories;
+        runner.cloud-hypervisor = mkForce fixedRunner;
+      };
+
+      # don't want to use microvm.shares for this, because (a) there's no host
+      # mountpoint, and (b) we don't want to start a normal virtiofsd for this
+      fileSystems."/nix/store" = lib.mkForce {
+        device = "snix-store";
+        fsType = "virtiofs";
+        neededForBoot = true;
+        options = [
+          "defaults"
+          "x-systemd.requires=systemd-modules-load.service"
+        ];
       };
 
       environment.etc."machine-id".text = cfg.machineId;

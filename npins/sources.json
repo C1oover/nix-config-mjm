@@ -265,6 +265,18 @@
       "revision": "a86910a48fc8d350f38dde9e7ad1fe1d9e5d6130",
       "url": "https://gitlab.com/api/v4/projects/rycee%2Fnur-expressions/repository/archive.tar.gz?sha=a86910a48fc8d350f38dde9e7ad1fe1d9e5d6130",
       "hash": "0z4palavps3g8s73ag7sgyji75ir5wsz8iakld641w5qxdislg2i"
+    },
+    "snix": {
+      "type": "Git",
+      "repository": {
+        "type": "Git",
+        "url": "https://git.snix.dev/snix/snix.git"
+      },
+      "branch": "canon",
+      "submodules": false,
+      "revision": "4b46d93bd321466a3dd036c72a0fcc5e5cb8c025",
+      "url": null,
+      "hash": "13b4x99sh5ypi06cbjj45s0hlfiz8pfcvjmci75avjrkw330y06d"
     }
   },
   "version": 5
