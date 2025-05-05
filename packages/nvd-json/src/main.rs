@@ -304,7 +304,16 @@ impl PackageSet {
         self.get_pname_versions(&pname).map(|vs| {
             let mut strs = vs
                 .into_iter()
-                .filter_map(|v| v.text.split_once('-').map(|(v, _)| String::from(v)))
+                .filter_map(|v| {
+                    if v.text.is_empty() {
+                        None
+                    } else {
+                        Some(match v.text.split_once('-') {
+                            None => v.text.clone(),
+                            Some((s, _)) => String::from(s),
+                        })
+                    }
+                })
                 .collect::<Vec<_>>();
             strs.sort();
             strs.dedup();
@@ -850,6 +859,64 @@ mod tests {
                 pname: String::from("drkonqi"),
                 old_versions: Some(vec![String::from("6.2.90")]),
                 new_versions: Some(vec![String::from("6.1.90")]),
+            },]
+        );
+
+        Ok(())
+    }
+
+    #[test]
+    fn package_set_pair_reboot_check() -> Result<()> {
+        use std::path::PathBuf;
+
+        let left_paths: Vec<PathBuf> = [
+            "/nix/store/0a79i6pyq37lychr3gigfz81rc9vcx5k-systemd",
+            "/nix/store/0dnf7dm4lj3vn3y5bf0ayzkd1nh9wpvd-systemd-257.3",
+            "/nix/store/0gd6844hyw16f3y5lmq1jxpx97gs5gci-util-linux-2.39.4-man",
+            "/nix/store/0i443ipqsm3bdm8a93a8q1a9zg85fi3f-dbus-1.14.10-man",
+            "/nix/store/0llmawy8y19db713vg8q89zjp6askr26-pipewire-1.2.3-doc",
+            "/nix/store/0n2hzviid7chmcvii5swqivz385h9gfz-kio-6.7.0",
+            "/nix/store/0qhkv2iqmd04s2xjiqalp4xbxv2ij0js-kwallet-pam-6.1.90",
+            "/nix/store/0vlsqfyqd7brjqxb5ghawldr076zlqka-qqc2-desktop-style-6.6.0",
+        ]
+        .into_iter()
+        .map(PathBuf::from)
+        .collect();
+
+        let right_paths: Vec<PathBuf> = [
+            "/nix/store/02mf752h7f5fn7989awzca4ygy94k7w7-xz-5.6.2-bin",
+            "/nix/store/03clq1961wa5g4dfdlr1qbwyi7p2rw99-ffmpegthumbs-24.08.1",
+            "/nix/store/0a79i6pyq37lychr3gigfz81rc9vcx5k-systemd",
+            "/nix/store/0dnf7dm4lj3vn3y5bf0ayzkd1nh9wpvd-systemd-257.5",
+            "/nix/store/0gd6844hyw16f3y5lmq1jxpx97gs5gci-util-linux-2.39.4-man",
+            "/nix/store/0i443ipqsm3bdm8a93a8q1a9zg85fi3f-dbus-1.14.10-man",
+            "/nix/store/0llmawy8y19db713vg8q89zjp6askr26-pipewire-1.2.3-doc",
+            "/nix/store/0n2hzviid7chmcvii5swqivz385h9gfz-kio-6.6.0",
+        ]
+        .into_iter()
+        .map(PathBuf::from)
+        .collect();
+
+        let left = PackageSet::from_store_paths(left_paths)?;
+        let right = PackageSet::from_store_paths(right_paths)?;
+
+        assert_eq!(
+            left.get_simple_pname_version_strings("systemd"),
+            Some(vec![String::from("257.3")])
+        );
+        assert_eq!(
+            right.get_simple_pname_version_strings("systemd"),
+            Some(vec![String::from("257.5")])
+        );
+
+        let pair = PackageSetPair::new(&left, &right);
+
+        assert_eq!(
+            pair.get_simple_changes(vec!["linux", "systemd"]),
+            vec![VersionChange {
+                pname: String::from("systemd"),
+                old_versions: Some(vec![String::from("257.3")]),
+                new_versions: Some(vec![String::from("257.5")]),
             },]
         );
 
