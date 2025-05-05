@@ -5,7 +5,6 @@ let
   inherit (lib)
     attrNames
     attrValues
-    concatMap
     concatMapAttrs
     elem
     filter
@@ -68,12 +67,15 @@ let
           };
       };
 
-      uncheckedNodes = mapAttrs (
+      uncheckedNodes = concatMapAttrs (
         name: value:
-        evalNode.nixos name [
-          { _module.check = false; }
-          value
-        ]
+        let
+          node = evalNode.nixos name [
+            { _module.check = false; }
+            value
+          ];
+        in
+        { ${name} = node; } // mapAttrs (_: vm: vm.config) node.config.microvm.vms
       ) plans.nixos.hosts;
       nodes = pipe plans.nixos.hosts [
         (filterAttrs (name: _value: if namesToInclude == [ ] then true else elem name namesToInclude))
@@ -117,10 +119,7 @@ let
 
       infra =
         let
-          allNodes = attrValues nodes;
-          allNodesWithMicroVMs =
-            allNodes
-            ++ concatMap (n: attrValues (mapAttrs (_: vm: vm.config) n.config.microvm.vms)) allNodes;
+          allNodesWithMicroVMs = attrValues uncheckedNodes;
         in
         {
           vhosts = pipe allNodesWithMicroVMs [

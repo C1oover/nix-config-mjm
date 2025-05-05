@@ -15,18 +15,15 @@ let
     optional
     pipe
     ;
-  cfg = config.ingress;
 
-  getVhosts =
-    nodes:
-    pipe nodes [
-      attrValues
-      (map (node: if node.config ? config then node.config else node))
-      (filter (node: !node.config.mjm.ingress.enable))
-      (map (node: node.config.ingress.virtualHosts // getVhosts node.config.microvm.vms))
-      mergeAttrsList
-    ];
-  vhosts = getVhosts nodes // cfg.virtualHosts;
+  cfg = config.mjm.ingress;
+
+  vhosts = pipe nodes [
+    attrValues
+    (filter (node: !node.config.mjm.ingress.enable))
+    (map (node: node.config.ingress.virtualHosts))
+    mergeAttrsList
+  ];
 in
 {
   imports = [
@@ -38,11 +35,9 @@ in
     enable = mkEnableOption "ingress";
   };
 
-  config = mkIf config.mjm.ingress.enable {
+  config = mkIf cfg.enable {
     mjm.services.caddy = {
-      vault = {
-        enable = true;
-      };
+      vault.enable = true;
     };
     mjm.state.directories = [
       {
