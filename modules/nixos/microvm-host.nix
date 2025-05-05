@@ -124,6 +124,7 @@ in
       };
 
       systemd.sockets.snix-store = {
+        wantedBy = [ "sockets.target" ];
         partOf = [ "snix-store.service" ];
         socketConfig = {
           ListenStream = "/run/vm-store.sock";
@@ -131,6 +132,8 @@ in
       };
 
       systemd.services."microvm-snix-store@" = {
+        after = [ "snix-store.socket" ];
+        wants = [ "snix-store.socket" ];
         before = [ "microvm@%i.service" ];
         partOf = [ "microvm@%i.service" ];
 
@@ -183,6 +186,8 @@ in
     {
       systemd.services = concatMapAttrs (name: vm: {
         "install-microvm-${name}" = {
+          wants = [ "snix-store.socket" ];
+          after = [ "snix-store.socket" ];
           path = [
             config.boot.zfs.package
             config.nix.package
