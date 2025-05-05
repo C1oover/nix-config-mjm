@@ -27,9 +27,11 @@ in
           sudo.disabled = mkForce true;
           nix_shell.heuristic = true;
 
-          format = mkForce "($nix_shell$container\${custom.jj}\${custom.jj_added}\${custom.jj_removed}\n)$cmd_duration$hostname$localip$shlvl$shell$env_var$jobs$sudo$username$character";
+          # format = mkForce "($nix_shell$container\${custom.jj}\${custom.jj_added}\${custom.jj_removed}\n)$cmd_duration$hostname$localip$shlvl$shell$env_var$jobs$sudo$username$character";
+          format = mkForce "$username$hostname$directory$cmd_duration$line_break$character";
         }
-        (importTOML ./jetpack.toml)
+        # (importTOML ./jetpack.toml)
+        (importTOML ./pure.toml)
       ];
     };
 
