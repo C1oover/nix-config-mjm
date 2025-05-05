@@ -142,9 +142,9 @@
       },
       "branch": "deploy/master",
       "submodules": false,
-      "revision": "3883b60849481b51aacb1a6ac0ffdc674fabbae7",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fhelix/repository/archive.tar.gz?sha=3883b60849481b51aacb1a6ac0ffdc674fabbae7",
-      "hash": "0zfgcr8yb36y093km23w7f8dg0dvb5blif715x53n62mjhsm8ymm"
+      "revision": "bd45a826efc51ec1923228cd17470f4538902e4b",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fhelix/repository/archive.tar.gz?sha=bd45a826efc51ec1923228cd17470f4538902e4b",
+      "hash": "01sp04izcin4p9572igs0l3pwafiv8fpkslxhyhlfsjr7r8609l9"
     },
     "home-manager": {
       "type": "Git",
@@ -236,9 +236,9 @@
       },
       "branch": "deploy/nixpkgs-unstable",
       "submodules": false,
-      "revision": "9afb88a385c7b706ed5b72c2c37abe131f6ea6dc",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=9afb88a385c7b706ed5b72c2c37abe131f6ea6dc",
-      "hash": "1r3mz6rm4cgk4rn7m72slgv09k74w9hygfz2cb3jmq4bmnzzvv8m"
+      "revision": "5d47284f05f4e6b0ae5055be18a5c7965503fe61",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=5d47284f05f4e6b0ae5055be18a5c7965503fe61",
+      "hash": "1isgx9mw309j1jkyx3d3nwn1wl7j6y1wk0d2403xjbsrimyj6nzr"
     },
     "preservation": {
       "type": "Git",
@@ -274,9 +274,9 @@
       },
       "branch": "canon",
       "submodules": false,
-      "revision": "c706826aa9f35f41385c43046f8277f9daf86f67",
+      "revision": "8903fbb9752edfee02499319ea61a6f291eff608",
       "url": null,
-      "hash": "1wfh2lplnsnycd1qign9ppj9kiw56h2nrmb0snapd3b601sd6sdc"
+      "hash": "0v6wa1rfakmflinmrya2g3vpyjqf85zb8qvcld357h93pgy8hqs2"
     }
   },
   "version": 5
