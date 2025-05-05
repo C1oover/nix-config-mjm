@@ -137,6 +137,8 @@ in
         before = [ "microvm@%i.service" ];
         partOf = [ "microvm@%i.service" ];
 
+        restartIfChanged = false;
+
         environment.OTEL_SERVICE_NAME = "snix-store-virtiofs";
         environment.OTEL_RESOURCE_ATTRIBUTES = "deployment.environment.name=prod,microvm.name=%i";
 
@@ -209,6 +211,14 @@ in
                 snix-store copy ${snixAddrArgs} -
             '')
           ];
+        };
+        "microvm-snix-store@${name}" = {
+          serviceConfig.X-RestartIfChanged = [
+            ""
+            vm.restartIfChanged
+          ];
+          path = lib.mkForce [ ];
+          overrideStrategy = "asDropin";
         };
       }) config.microvm.vms;
     }
