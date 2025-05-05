@@ -1,6 +1,7 @@
 {
   imports = [
     ./dugtrio.nix
+    ./primeape.nix
   ];
 
   mjm.username = "mjm";

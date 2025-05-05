@@ -33,7 +33,6 @@
 
   mjm.consul.enable = true;
   mjm.garage.enable = true;
-  mjm.matrix-server.enable = true;
   mjm.server.enable = true;
   mjm.state = {
     enablePreservation = true;
