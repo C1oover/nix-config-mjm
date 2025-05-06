@@ -142,9 +142,9 @@
       },
       "branch": "deploy/master",
       "submodules": false,
-      "revision": "bd45a826efc51ec1923228cd17470f4538902e4b",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fhelix/repository/archive.tar.gz?sha=bd45a826efc51ec1923228cd17470f4538902e4b",
-      "hash": "01sp04izcin4p9572igs0l3pwafiv8fpkslxhyhlfsjr7r8609l9"
+      "revision": "a2983762077e6bec5372c5e7aa7288bfcf73b5de",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fhelix/repository/archive.tar.gz?sha=a2983762077e6bec5372c5e7aa7288bfcf73b5de",
+      "hash": "1n0ix8rknhyqn9kr0kkma6gxwn4c8z5swag1cd9i67vhr771r1zz"
     },
     "home-manager": {
       "type": "Git",
