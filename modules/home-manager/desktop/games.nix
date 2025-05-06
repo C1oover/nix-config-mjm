@@ -18,7 +18,8 @@ in
   config = mkIf (cfg.enable && cfg.games.enable) {
     home.packages = attrValues {
       inherit (pkgs)
-        chiaki
+        # build currently broken https://hydra.nixos.org/build/296133688
+        # chiaki
         lutris
         wago
         xivlauncher
