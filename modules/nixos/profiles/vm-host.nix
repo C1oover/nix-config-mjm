@@ -40,5 +40,7 @@ in
     boot.kernelParams = [ "zfs.zfs_arc_max=7516192768" ];
     boot.zfs.extraPools = [ "slow" ];
     services.zfs.autoScrub.enable = true;
+
+    nixpkgs.hostPlatform = "x86_64-linux";
   };
 }
