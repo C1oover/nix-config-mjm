@@ -11,7 +11,6 @@ let
     "helios"
     "hypnos"
     "leto"
-    "megaera"
     "niobe"
     "persephone"
     "steropes"

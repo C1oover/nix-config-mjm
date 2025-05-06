@@ -1,7 +1,9 @@
 {
   imports = [
+    ./bulbasaur.nix
     ./dugtrio.nix
     ./primeape.nix
+    ./venusaur.nix
   ];
 
   mjm.username = "mjm";
