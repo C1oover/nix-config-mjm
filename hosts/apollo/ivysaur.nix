@@ -1,12 +1,12 @@
 {
-  microvm.vms.wartortle = {
+  microvm.vms.ivysaur = {
     config = {
       mjm.garage.enable = true;
 
       mjm.profiles.microvm = {
         enable = true;
-        macAddress = "02:BE:54:CC:AA:0E";
-        machineId = "ed7369a3621537d059dc9cf56816a42a";
+        macAddress = "02:EC:A8:B8:BE:AA";
+        machineId = "7b72ce48f261098da5741998681b7c58";
       };
 
       microvm.mem = 768;
