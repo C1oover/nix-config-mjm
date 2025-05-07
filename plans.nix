@@ -8,7 +8,6 @@ let
     "chaos"
     "demeter"
     "hades"
-    "helios"
     "hypnos"
     "leto"
     "niobe"
