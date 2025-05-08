@@ -21,5 +21,7 @@
   };
 
   # gitlab needs a while to start up because big ruby apps be slow
-  systemd.services."microvm@dugtrio".serviceConfig.TimeoutSec = lib.mkForce 1200;
+  systemd.services."microvm@dugtrio".serviceConfig.TimeoutStartSec = 1200;
+  systemd.services."microvm@dugtrio".serviceConfig.TimeoutStopSec = 150;
+  systemd.services."microvm@dugtrio".serviceConfig.TimeoutSec = lib.mkForce "";
 }
