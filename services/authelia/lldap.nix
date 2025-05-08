@@ -35,7 +35,14 @@ in
       };
     };
 
-    systemd.services.lldap.after = [ "postgresql.service" ];
+    systemd.services.lldap = {
+      startLimitIntervalSec = 0;
+      after = [ "postgresql.service" ];
+      serviceConfig = {
+        Restart = "always";
+        RestartSec = "15s";
+      };
+    };
 
     mjm.spire.tunnels.lldap = {
       mode = "server";
