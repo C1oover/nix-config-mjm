@@ -9,6 +9,7 @@ let
     concatMapStrings
     mkEnableOption
     mkIf
+    mkOverride
     pipe
     unique
     ;
@@ -33,7 +34,7 @@ in
 
     services.postgresql = {
       enable = true;
-      package = pkgs.postgresql_16;
+      package = mkOverride 900 pkgs.postgresql_16;
     };
 
     mjm.backups.postgresql =

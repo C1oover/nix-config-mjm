@@ -27,7 +27,6 @@
 
   mjm.atticd.enable = true;
   mjm.atuin.enable = true;
-  mjm.authelia.enable = true;
   mjm.consul.enable = true;
   mjm.garage.enable = true;
   mjm.grafana.enable = true;

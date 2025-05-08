@@ -6,7 +6,13 @@ in
 {
   config = mkIf cfg.enable {
     mjm.services.authelia.postgresql.databases = [ "lldap" ];
-    mjm.state.services = [ "lldap" ];
+    mjm.state.directories = [
+      {
+        directory = "/var/lib/private/lldap";
+        user = "nobody";
+        group = "nogroup";
+      }
+    ];
 
     ingress.virtualHosts.users = {
       upstream = {

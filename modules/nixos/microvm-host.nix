@@ -4,6 +4,7 @@
   pkgs,
   inputs,
   localModulesPath,
+  nodes,
   ...
 }:
 let
@@ -43,10 +44,8 @@ in
         config = {
           autostart = mkDefault true;
           specialArgs = {
-            inherit inputs localModulesPath;
+            inherit inputs localModulesPath nodes;
             hostConfig = config;
-            # TODO decide how to do this properly
-            nodes = { };
           };
 
           config = {

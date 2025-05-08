@@ -5,18 +5,31 @@
   ...
 }:
 let
-  inherit (lib) mkEnableOption mkIf;
+  inherit (lib)
+    attrValues
+    mapAttrs
+    mkEnableOption
+    mkIf
+    pipe
+    ;
   cfg = config.mjm.authelia;
 
-  keys = map (k: "authelia_${k}:${config.mjm.services.authelia.vault.socketPath}") [
-    "jwt_secret"
-    "hmac_secret"
-    "jwt_private_key"
-    "ldap_password"
-    "session_secret"
-    "smtp_password"
-    "storage_encryption_key"
+  secrets = {
+    AUTHELIA_AUTHENTICATION_BACKEND_LDAP_PASSWORD_FILE = "ldap_password";
+    AUTHELIA_IDENTITY_PROVIDERS_OIDC_HMAC_SECRET_FILE = "hmac_secret";
+    AUTHELIA_IDENTITY_PROVIDERS_OIDC_ISSUER_PRIVATE_KEY_FILE = "jwt_private_key";
+    AUTHELIA_IDENTITY_VALIDATION_RESET_PASSWORD_JWT_SECRET_FILE = "jwt_secret";
+    AUTHELIA_NOTIFIER_SMTP_PASSWORD_FILE = "smtp_password";
+    AUTHELIA_SESSION_SECRET_FILE = "session_secret";
+    AUTHELIA_STORAGE_ENCRYPTION_KEY_FILE = "storage_encryption_key";
+  };
+
+  credentialSocket = config.mjm.services.authelia.vault.socketPath;
+  credentials = pipe secrets [
+    attrValues
+    (map (key: "authelia_${key}:${credentialSocket}"))
   ];
+  secretEnvVars = mapAttrs (_: key: "%d/authelia_${key}") secrets;
 in
 {
   options.mjm.authelia = {
@@ -34,11 +47,15 @@ in
         enable = true;
         databases = [ "authelia-main" ];
       };
-      vault = {
-        enable = true;
-      };
+      vault.enable = true;
     };
-    mjm.state.services = [ "redis-authelia" ];
+    mjm.state.directories = [
+      {
+        directory = "/var/lib/redis-authelia";
+        user = "redis-authelia";
+        group = "redis-authelia";
+      }
+    ];
 
     services.authelia.instances.main = {
       enable = true;
@@ -106,15 +123,7 @@ in
         };
       };
       secrets.manual = true;
-      environmentVariables = {
-        AUTHELIA_AUTHENTICATION_BACKEND_LDAP_PASSWORD_FILE = "%d/authelia_ldap_password";
-        AUTHELIA_IDENTITY_PROVIDERS_OIDC_HMAC_SECRET_FILE = "%d/authelia_hmac_secret";
-        AUTHELIA_IDENTITY_PROVIDERS_OIDC_ISSUER_PRIVATE_KEY_FILE = "%d/authelia_jwt_private_key";
-        AUTHELIA_IDENTITY_VALIDATION_RESET_PASSWORD_JWT_SECRET_FILE = "%d/authelia_jwt_secret";
-        AUTHELIA_NOTIFIER_SMTP_PASSWORD_FILE = "%d/authelia_smtp_password";
-        AUTHELIA_SESSION_SECRET_FILE = "%d/authelia_session_secret";
-        AUTHELIA_STORAGE_ENCRYPTION_KEY_FILE = "%d/authelia_storage_encryption_key";
-      };
+      environmentVariables = secretEnvVars;
     };
 
     systemd.services.authelia-main = {
@@ -125,7 +134,7 @@ in
       ];
       serviceConfig = {
         SupplementaryGroups = [ config.services.redis.servers.authelia.user ];
-        LoadCredential = keys;
+        LoadCredential = credentials;
       };
     };
 

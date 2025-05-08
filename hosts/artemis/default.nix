@@ -1,4 +1,8 @@
 {
+  imports = [
+    ./onix.nix
+  ];
+
   mjm.username = "mjm";
 
   networking.hostName = "artemis";
@@ -27,6 +31,10 @@
 
   mjm.profiles.vm-host.enable = true;
 
+  mjm.microvm-host = {
+    enable = true;
+    zfsPrefix = "rpool";
+  };
   mjm.networkd.bridge.enable = true;
   mjm.nut = {
     enable = true;
