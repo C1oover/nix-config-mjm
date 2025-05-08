@@ -15,8 +15,6 @@ let
       "mac0"
     else
       builtins.throw "trying to use bridge name when no bridging virtual device is enabled";
-  bridgeParentName =
-    if cfg.secondaryLinkName == null then cfg.primaryLinkName else cfg.secondaryLinkName;
 in
 {
   options.mjm.networkd = {
@@ -39,9 +37,15 @@ in
       default = null;
     };
 
+    bridgeParentName = mkOption {
+      type = types.str;
+      default = if cfg.secondaryLinkName == null then cfg.primaryLinkName else cfg.secondaryLinkName;
+      readOnly = true;
+    };
+
     bridge.enable = mkOption {
       type = types.bool;
-      default = cfg.secondaryLinkName != null;
+      default = !cfg.macvlan.enable && cfg.secondaryLinkName != null;
     };
 
     macvlan.enable = mkOption {
@@ -67,7 +71,7 @@ in
       enable = true;
 
       networks."10-bridge-lan" = mkIf hasBridge {
-        name = bridgeParentName;
+        name = cfg.bridgeParentName;
         networkConfig.Bridge = mkIf cfg.bridge.enable "vmbr0";
         networkConfig.MACVLAN = mkIf cfg.macvlan.enable "mac0";
       };

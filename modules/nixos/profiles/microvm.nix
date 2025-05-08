@@ -1,6 +1,7 @@
 {
   lib,
   config,
+  hostConfig,
   pkgs,
   inputs,
   ...
@@ -61,23 +62,24 @@ in
         guest.enable = true;
         hypervisor = "cloud-hypervisor";
         interfaces = [
-          {
-            type = "tap";
-            id = "vm-${config.networking.hostName}";
-            mac = cfg.macAddress;
-          }
-          # use macvtap in the future (probably based on whether the host
-          # has macvlan enabled)
-          # to use this, the big guests on the same host need to not be using
-          # macvlan internally, since you can't layer macvlan in that way
-          #
-          # {
-          #   type = "macvtap";
-          #   id = "vm-${config.networking.hostName}";
-          #   macvtap.link = "lan0";
-          #   macvtap.mode = "bridge";
-          #   mac = cfg.macAddress;
-          # }
+          (
+            if hostConfig.mjm.networkd.bridge.enable then
+              {
+                type = "tap";
+                id = "vm-${config.networking.hostName}";
+                mac = cfg.macAddress;
+              }
+            else if hostConfig.mjm.networkd.macvlan.enable then
+              {
+                type = "macvtap";
+                id = "vm-${config.networking.hostName}";
+                macvtap.link = hostConfig.mjm.networkd.bridgeParentName;
+                macvtap.mode = "bridge";
+                mac = cfg.macAddress;
+              }
+            else
+              builtins.throw "bridge or macvlan network must be enabled on host"
+          )
         ];
         shares =
           [

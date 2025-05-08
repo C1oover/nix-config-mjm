@@ -71,6 +71,7 @@ let
   localModulesPath = toString ./modules;
   specialArgs = {
     inputs = sources;
+    hostConfig = null;
     inherit localModulesPath;
   };
 

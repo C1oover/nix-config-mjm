@@ -40,7 +40,7 @@
     enable = true;
     zfsPrefix = "rpool";
   };
-  mjm.networkd.bridge.enable = true;
+  mjm.networkd.macvlan.enable = true;
   mjm.nut = {
     enable = true;
     connectedUPSName = "smart500";

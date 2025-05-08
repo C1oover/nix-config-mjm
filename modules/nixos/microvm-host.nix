@@ -44,6 +44,7 @@ in
           autostart = mkDefault true;
           specialArgs = {
             inherit inputs localModulesPath;
+            hostConfig = config;
             # TODO decide how to do this properly
             nodes = { };
           };
