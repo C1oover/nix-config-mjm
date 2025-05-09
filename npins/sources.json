@@ -107,19 +107,6 @@
       "url": "https://github.com/numtide/devshell/archive/7c9e793ebe66bcba8292989a68c0419b737a22a0.tar.gz",
       "hash": "165601skgrlgvgr4h7hjbz80zp7zpn7z2c7qjh6bal8hmjmmlqwi"
     },
-    "firefox-csshacks": {
-      "type": "Git",
-      "repository": {
-        "type": "GitHub",
-        "owner": "MrOtherGuy",
-        "repo": "firefox-csshacks"
-      },
-      "branch": "master",
-      "submodules": false,
-      "revision": "c880ab119af62969cee51bf9043d354b90c015a1",
-      "url": "https://github.com/MrOtherGuy/firefox-csshacks/archive/c880ab119af62969cee51bf9043d354b90c015a1.tar.gz",
-      "hash": "14vxh6pwprrj25jg7y9gfvxx3ksb7ladc6cifkwjprkdircbdjs5"
-    },
     "hardware": {
       "type": "Git",
       "repository": {
