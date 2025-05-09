@@ -102,6 +102,52 @@ in
             }
           ];
         };
+        log-service = {
+          name = "Service Logs";
+          definedAliases = [ "@logs" ];
+          urls = [
+            {
+              template = "https://graphs.midna.dev/a/grafana-lokiexplore-app/explore/service/{searchTerms}/logs";
+              params = [
+                {
+                  name = "from";
+                  value = "now-1h";
+                }
+                {
+                  name = "to";
+                  value = "now";
+                }
+                {
+                  name = "var-filters";
+                  value = "service_name|=|{searchTerms}";
+                }
+              ];
+            }
+          ];
+        };
+        log-host = {
+          name = "Host Logs";
+          definedAliases = [ "@logh" ];
+          urls = [
+            {
+              template = "https://graphs.midna.dev/a/grafana-lokiexplore-app/explore/hostname/{searchTerms}/logs";
+              params = [
+                {
+                  name = "from";
+                  value = "now-1h";
+                }
+                {
+                  name = "to";
+                  value = "now";
+                }
+                {
+                  name = "var-filters";
+                  value = "hostname|=|{searchTerms}";
+                }
+              ];
+            }
+          ];
+        };
         nix-packages = mkSearchix {
           name = "Nix Packages";
           type = "packages";
