@@ -4,6 +4,7 @@
     ./dugtrio.nix
     ./ivysaur.nix
     ./primeape.nix
+    ./slowbro.nix
     ./venusaur.nix
   ];
 

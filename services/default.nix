@@ -28,6 +28,7 @@
     ./prometheus
     ./remote-builder
     ./spire
+    ./tempo
     ./vault
     ./vaultwarden
   ];

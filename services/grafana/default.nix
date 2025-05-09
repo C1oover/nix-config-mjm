@@ -16,7 +16,6 @@ in
 
   imports = [
     ./loki.nix
-    ./tempo.nix
   ];
 
   config = mkIf cfg.enable {

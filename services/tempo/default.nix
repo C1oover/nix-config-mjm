@@ -4,24 +4,30 @@
   ...
 }:
 let
-  inherit (lib) mkIf;
-  cfg = config.mjm.grafana;
+  inherit (lib) mkEnableOption mkIf;
+  cfg = config.mjm.tempo;
 in
 {
+  options.mjm.tempo = {
+    enable = mkEnableOption "Grafana Tempo";
+  };
+
   config = mkIf cfg.enable {
+    mjm.services.tempo = { };
+
     services.tempo = {
       enable = true;
       settings = {
         server = {
           http_listen_address = "127.0.0.1";
-          http_listen_port = 3200;
+          http_listen_port = 3300;
           grpc_listen_address = "127.0.0.1";
           grpc_listen_port = 3201;
         };
 
         distributor.receivers.otlp.protocols = {
           # used by alloy, goes through the tunnel for mTLS
-          grpc.endpoint = "127.0.0.1:14317";
+          grpc.endpoint = "127.0.0.1:16317";
           # used by launchpad in dev
           # TODO fix to be able to create a tunnel for it on the dev machine
           http.endpoint = "0.0.0.0:14318";
@@ -44,35 +50,21 @@ in
       };
     };
 
-    systemd.services.tempo = {
-      bindsTo = [ "netns-bridge@tempo.service" ];
-      after = [ "netns-bridge@tempo.service" ];
-      serviceConfig.NetworkNamespacePath = "/run/netns/tempo";
-    };
-
     mjm.garage.clients.tempo.services = [ "tempo" ];
 
     mjm.spire.tunnels = {
       tempo = {
         mode = "server";
         listen.port = 3200;
-        target.port = 3200;
-        target.namespace = "tempo";
+        target.port = 3300;
         allowedServices = [ "grafana" ];
         allowConsul = true;
       };
       tempo-grpc = {
         mode = "server";
         listen.port = 14317;
-        target.port = 14317;
-        target.namespace = "tempo";
+        target.port = 16317;
         allowedServices = [ "alloy" ];
-      };
-      consul-tempo = {
-        mode = "client";
-        listen.socket = "/run/consul-checks/tempo.sock";
-        target.port = 3200;
-        service = "tempo";
       };
     };
 
@@ -81,7 +73,7 @@ in
 
       checks.up = {
         http.path = "/ready";
-        http.socket = "/run/consul-checks/tempo.sock";
+        http.port = 3300;
       };
     };
   };
