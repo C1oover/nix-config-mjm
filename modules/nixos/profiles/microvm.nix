@@ -97,19 +97,6 @@ in
             source = tag;
             mountPoint = d.directory;
           }) config.mjm.state.directories;
-        runner.cloud-hypervisor = mkForce fixedRunner;
-      };
-
-      # don't want to use microvm.shares for this, because (a) there's no host
-      # mountpoint, and (b) we don't want to start a normal virtiofsd for this
-      fileSystems."/nix/store" = lib.mkForce {
-        device = "snix-store";
-        fsType = "virtiofs";
-        neededForBoot = true;
-        options = [
-          "defaults"
-          "x-systemd.requires=systemd-modules-load.service"
-        ];
       };
 
       environment.etc."machine-id".text = cfg.machineId;
@@ -127,6 +114,23 @@ in
       # make sure these don't get enabled by something by mistake
       mjm.networkd.macvlan.enable = false;
       mjm.networkd.bridge.enable = false;
+    })
+    (mkIf (cfg.enable && hostConfig.mjm.microvm-host.snixStore.enable) {
+      # don't want to use microvm.shares for this, because (a) there's no host
+      # mountpoint, and (b) we don't want to start a normal virtiofsd for this
+      fileSystems."/nix/store" = mkIf hostConfig.mjm.microvm-host.snixStore.enable (
+        lib.mkForce {
+          device = "snix-store";
+          fsType = "virtiofs";
+          neededForBoot = true;
+          options = [
+            "defaults"
+            "x-systemd.requires=systemd-modules-load.service"
+          ];
+        }
+      );
+
+      microvm.runner.cloud-hypervisor = mkForce fixedRunner;
     })
     (mkIf (cfg.enable && cfg.useHostStore) {
       microvm.shares = [

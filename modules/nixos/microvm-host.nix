@@ -21,6 +21,7 @@ let
     mkMerge
     mkOption
     mkOverride
+    optional
     optionalString
     types
     ;
@@ -36,6 +37,7 @@ in
     zfsPrefix = mkOption {
       type = types.str;
     };
+    snixStore.enable = mkEnableOption "using snix-store for nix store";
   };
 
   options.microvm.vms = mkOption {
@@ -76,9 +78,34 @@ in
         }
       ) config.microvm.vms;
 
-      # TODO probably remove eventually
-      environment.systemPackages = [ snix.store ];
-
+      systemd.services = concatMapAttrs (name: vm: {
+        "install-microvm-${name}" = {
+          wants = mkIf cfg.snixStore.enable [ "snix-store.socket" ];
+          after = mkIf cfg.snixStore.enable [ "snix-store.socket" ];
+          path = [
+            config.boot.zfs.package
+            config.nix.package
+            pkgs.jq
+          ] ++ optional cfg.snixStore.enable snix.store;
+          script = mkMerge [
+            (mkBefore (
+              concatMapStringsSep "\n" (
+                share:
+                optionalString (!(hasPrefix "/" share.source)) ''
+                  zfs create -p ${cfg.zfsPrefix}/microvms/${name}/${share.source}
+                ''
+              ) vm.config.config.microvm.shares
+            ))
+            (mkIf cfg.snixStore.enable (mkAfter ''
+              nix path-info --json --closure-size --recursive ./toplevel | \
+                jq -s '{closure: add}' | \
+                snix-store copy ${snixAddrArgs} -
+            ''))
+          ];
+        };
+      }) config.microvm.vms;
+    }
+    (mkIf cfg.snixStore.enable {
       systemd.services.snix-store = {
         after = [
           "network.target"
@@ -184,34 +211,9 @@ in
         requires = [ "microvm-snix-store@%i.service" ];
         serviceConfig.TimeoutSec = mkOverride 55 300;
       };
-    }
-    {
+    })
+    (mkIf cfg.snixStore.enable {
       systemd.services = concatMapAttrs (name: vm: {
-        "install-microvm-${name}" = {
-          wants = [ "snix-store.socket" ];
-          after = [ "snix-store.socket" ];
-          path = [
-            config.boot.zfs.package
-            config.nix.package
-            pkgs.jq
-            snix.store
-          ];
-          script = mkMerge [
-            (mkBefore (
-              concatMapStringsSep "\n" (
-                share:
-                optionalString (!(hasPrefix "/" share.source)) ''
-                  zfs create -p ${cfg.zfsPrefix}/microvms/${name}/${share.source}
-                ''
-              ) vm.config.config.microvm.shares
-            ))
-            (mkAfter ''
-              nix path-info --json --closure-size --recursive ./toplevel | \
-                jq -s '{closure: add}' | \
-                snix-store copy ${snixAddrArgs} -
-            '')
-          ];
-        };
         "microvm-snix-store@${name}" = {
           serviceConfig.X-RestartIfChanged = [
             ""
@@ -221,6 +223,6 @@ in
           overrideStrategy = "asDropin";
         };
       }) config.microvm.vms;
-    }
+    })
   ]);
 }
