@@ -9,7 +9,6 @@ let
   inherit (lib)
     mkEnableOption
     mkIf
-    mkPackageOption
     ;
   cfg = config.mjm.firefox;
 
@@ -25,7 +24,6 @@ in
 
   options.mjm.firefox = {
     enable = mkEnableOption "firefox";
-    package = mkPackageOption pkgs "firefox" { };
   };
 
   config = mkIf cfg.enable {
@@ -33,7 +31,6 @@ in
 
     programs.firefox = {
       enable = true;
-      package = cfg.package;
       arkenfox = {
         enable = true;
         version = "133.0";
