@@ -18,7 +18,10 @@ let
   addons = pkgs.callPackage ./addons { };
 in
 {
-  imports = [ arkenfox.hmModules.arkenfox ];
+  imports = [
+    arkenfox.hmModules.arkenfox
+    ./search.nix
+  ];
 
   options.mjm.firefox = {
     enable = mkEnableOption "firefox";
@@ -107,103 +110,6 @@ in
             sixindicator
             ;
         };
-        search.force = true;
-        search.default = "searxng";
-        search.engines =
-          let
-            mkSearchix =
-              {
-                name,
-                type ? "options",
-                project,
-                alias,
-              }:
-              {
-                inherit name;
-                urls = [
-                  {
-                    template = "https://searchix.alanpearce.eu/${type}/${project}/search";
-                    params = [
-                      {
-                        name = "query";
-                        value = "{searchTerms}";
-                      }
-                    ];
-                  }
-                ];
-                icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
-                definedAliases = [ "@${alias}" ];
-              };
-          in
-          {
-            searxng = {
-              name = "SearXNG";
-              urls = [
-                {
-                  template = "https://searx.org/search";
-                  params = [
-                    {
-                      name = "q";
-                      value = "{searchTerms}";
-                    }
-                  ];
-                }
-              ];
-            };
-            nix-packages = mkSearchix {
-              name = "Nix Packages";
-              type = "packages";
-              project = "nixpkgs";
-              alias = "np";
-            };
-            nixos-options = mkSearchix {
-              name = "NixOS Options";
-              project = "nixos";
-              alias = "no";
-            };
-            nix-darwin-options = mkSearchix {
-              name = "nix-darwin Options";
-              project = "darwin";
-              alias = "nd";
-            };
-            home-manager-options = mkSearchix {
-              name = "Home Manager Options";
-              project = "home-manager";
-              alias = "nh";
-            };
-            linkding = {
-              name = "Links";
-              urls = [
-                {
-                  template = "https://links.midna.dev/bookmarks";
-                  params = [
-                    {
-                      name = "q";
-                      value = "{searchTerms}";
-                    }
-                  ];
-                }
-              ];
-              definedAliases = [ "@l" ];
-            };
-            wowhead-classic = {
-              name = "WowHead Classic";
-              urls = [
-                {
-                  template = "https://www.wowhead.com/classic/search";
-                  params = [
-                    {
-                      name = "q";
-                      value = "{searchTerms}";
-                    }
-                  ];
-                }
-              ];
-              definedAliases = [ "@wh" ];
-            };
-            bing.metaData.hidden = true;
-            google.metaData.alias = "@g";
-          };
       };
     };
   };
