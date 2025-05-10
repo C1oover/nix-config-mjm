@@ -78,6 +78,7 @@ in
     ];
 
     systemd.services.spire-server = {
+      description = "SPIRE Server";
       wantedBy = [ "multi-user.target" ];
       after = [
         "network.target"

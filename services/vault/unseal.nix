@@ -32,6 +32,7 @@ in
 
   config = mkIf cfg.enable {
     systemd.services.vault-unseal = {
+      description = "Automatically Unseal Vault";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       preStart = ''

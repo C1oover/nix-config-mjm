@@ -103,6 +103,7 @@ in
       }) allServices
       // optionalAttrs config.mjm.minimal.enable {
         "s3-creds-ip" = {
+          description = "Set Up Local S3 Credentials IP Address";
           wantedBy = [ "multi-user.target" ];
           after = [ "network.target" ];
           before = map (name: "${name}-s3-creds-tunnel.socket") (attrNames clients);

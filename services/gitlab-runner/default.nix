@@ -155,6 +155,7 @@ in
     };
 
     systemd.services.remote-builder-key = {
+      description = "Install Nix Remote Builder Key";
       wantedBy = [ "multi-user.target" ];
       startLimitIntervalSec = 0;
       script = ''

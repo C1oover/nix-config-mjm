@@ -61,6 +61,7 @@ in
   config = mkIf cfg.agent.enable (mkMerge [
     {
       systemd.services."spiffe-certs@" = {
+        description = "SPIFFE Certificate Helper for '%i'";
         after = [ "spire-agent.service" ];
         wants = [ "spire-agent.service" ];
 

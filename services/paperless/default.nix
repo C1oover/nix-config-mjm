@@ -87,6 +87,7 @@ in
       })
       // {
         paperless-env = {
+          description = "Generate Paperless Environment File";
           wantedBy = [
             "paperless-scheduler.service"
             "paperless-task-queue.service"

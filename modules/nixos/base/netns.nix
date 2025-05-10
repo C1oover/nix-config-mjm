@@ -59,6 +59,7 @@ in
 
   config = {
     systemd.sockets.netavark-dhcp-proxy = {
+      description = "Netavark DHCP Proxy Socket";
       wantedBy = [ "sockets.target" ];
       socketConfig = {
         ListenStream = "%t/podman/nv-proxy.sock";
@@ -67,6 +68,7 @@ in
     };
 
     systemd.services.netavark-dhcp-proxy = {
+      description = "Netavark DHCP Proxy";
       requires = [ "netavark-dhcp-proxy.socket" ];
       after = [ "netavark-dhcp-proxy.socket" ];
       startLimitIntervalSec = 0;
@@ -78,6 +80,7 @@ in
     };
 
     systemd.services."netns-bridge@" = {
+      description = "Set Up Network Namespace '%i'";
       after = [ "network.target" ];
       path = with pkgs; [
         iproute2

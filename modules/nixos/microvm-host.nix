@@ -107,6 +107,7 @@ in
     }
     (mkIf cfg.snixStore.enable {
       systemd.services.snix-store = {
+        description = "Local Snix Store Daemon";
         after = [
           "network.target"
           "snix-store.socket"
@@ -151,6 +152,7 @@ in
       };
 
       systemd.sockets.snix-store = {
+        description = "Local Snix Store Socket";
         wantedBy = [ "sockets.target" ];
         partOf = [ "snix-store.service" ];
         socketConfig = {
@@ -159,6 +161,7 @@ in
       };
 
       systemd.services."microvm-snix-store@" = {
+        description = "Snix Store Virtiofs Daemon for '%i'";
         after = [ "snix-store.socket" ];
         wants = [ "snix-store.socket" ];
         before = [ "microvm@%i.service" ];

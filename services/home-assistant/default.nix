@@ -218,6 +218,7 @@ in
     };
 
     systemd.services.home-assistant-secrets = {
+      description = "Generate Home Assistant Secrets";
       wantedBy = [ "home-assistant.service" ];
       before = [ "home-assistant.service" ];
       path = [ pkgs.systemd ];

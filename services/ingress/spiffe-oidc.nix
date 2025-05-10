@@ -39,6 +39,7 @@ in
     ];
 
     systemd.services.oidc-discovery-provider = {
+      description = "SPIRE OIDC Discovery Provider";
       wantedBy = [ "multi-user.target" ];
       after = [ "spire-agent.service" ];
       serviceConfig = {

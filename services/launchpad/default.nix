@@ -52,12 +52,14 @@ in
     mjm.networkd.macvlan.enable = true;
 
     systemd.sockets.launchpad = {
+      description = "Launchpad Web Portal Socket";
       wantedBy = [ "sockets.target" ];
       partOf = [ "launchpad.service" ];
       socketConfig.ListenStream = "/run/launchpad.sock";
     };
 
     systemd.services.launchpad = {
+      description = "Launchpad Web Portal";
       wantedBy = [ "multi-user.target" ];
       after = [
         "network.target"
@@ -81,6 +83,7 @@ in
     };
 
     systemd.services.launchpad-reminders = {
+      description = "Send Launchpad Reminders";
       restartIfChanged = false;
       environment = serviceEnv;
 
@@ -99,6 +102,7 @@ in
     };
 
     systemd.timers.launchpad-reminders = {
+      description = "Send Launchpad Reminders";
       wantedBy = [ "timers.target" ];
       timerConfig = {
         OnCalendar = "*:0/5:10";
