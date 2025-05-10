@@ -13,11 +13,12 @@ import (
 
 // DeployPlan is a plan for how to do a phased rollout of deploys to a set of hosts.
 type DeployPlan struct {
-	Phases []DeployPhase
-	Hosts  []*Host
-	Tests  []nix.EvalJobResult
-	Infra  *infra.Input
-	cfg    *Config
+	Phases    []DeployPhase
+	Hosts     []*Host
+	Tests     []nix.EvalJobResult
+	Infra     *infra.Input
+	ForceGoal string
+	cfg       *Config
 }
 
 type planConfig struct {
@@ -44,9 +45,9 @@ func (p *DeployPlan) ContainsHost(name string) bool {
 // the host's phase, if any. The maximum number of active functions running at one
 // time is controlled by the -concurrency CLI flag. If any hosts return an error
 // from the function, the first one will be returned.
-func (p *DeployPlan) EachHost(ctx context.Context, f func(context.Context, *Host) error) error {
+func (p *DeployPlan) EachHost(ctx context.Context, limit int, f func(context.Context, *Host) error) error {
 	g, childCtx := errgroup.WithContext(ctx)
-	g.SetLimit(*concurrency)
+	g.SetLimit(limit)
 
 	for _, h := range p.Hosts {
 		g.Go(func() error {
@@ -106,7 +107,7 @@ func (p *DeployPlan) Deploy(ctx context.Context) error {
 	return nil
 }
 
-func (_ DeployPlan) deployPhaseHosts(ctx context.Context, name string, hosts []*Host) error {
+func (p *DeployPlan) deployPhaseHosts(ctx context.Context, name string, hosts []*Host) error {
 	if len(hosts) == 0 {
 		return nil
 	}
@@ -117,7 +118,7 @@ func (_ DeployPlan) deployPhaseHosts(ctx context.Context, name string, hosts []*
 
 	for _, h := range hosts {
 		s := sectionStart("Deploying "+h.Name, false)
-		if err := h.Deploy(ctx, *forceGoal); err != nil {
+		if err := h.Deploy(ctx, p.ForceGoal); err != nil {
 			return fmt.Errorf("deploying %s: %w", h.Name, err)
 		}
 		sectionEnd(s)

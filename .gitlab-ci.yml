@@ -12,7 +12,7 @@ build nixos hosts:
   needs: []
   resource_group: production/nixos
   script:
-    - nix run -f . dippy -- -concurrency=4 diff
+    - nix run -f . dippy -- diff -j4
 deploy nixos hosts:
   tags: [nix]
   rules:
@@ -24,7 +24,7 @@ deploy nixos hosts:
     deployment_tier: production
   resource_group: production/nixos
   script:
-    - nix run -f . dippy -- -concurrency=4 deploy
+    - nix run -f . dippy -- deploy -j4
 check for updates:
   tags: [nix]
   rules:

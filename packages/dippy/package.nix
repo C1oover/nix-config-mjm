@@ -20,7 +20,7 @@ buildGoModule {
 
   src = lib.cleanSource ./.;
 
-  vendorHash = "sha256-RxJANmmScEKiiV5AW4QG0s2cX4RI1acUW/zkFhI9X1I=";
+  vendorHash = "sha256-TxQWWu2euJp1Wf652ArzCtj4Rztw0b9AXOiygbn7eTs=";
 
   excludedPackages = [ "./sdks/desec" ];
 
