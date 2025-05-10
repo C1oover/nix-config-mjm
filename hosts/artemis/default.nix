@@ -1,5 +1,6 @@
 {
   imports = [
+    ./charmeleon.nix
     ./onix.nix
   ];
 
