@@ -76,12 +76,14 @@ in
     ];
 
     systemd.sockets.spiffe-garage = {
+      description = "SPIFFE Garage Credential Socket";
       wantedBy = [ "sockets.target" ];
       partOf = [ "spiffe-garage.service" ];
       socketConfig.ListenStream = "[::]:3899";
     };
 
     systemd.services.spiffe-garage = {
+      description = "SPIFFE Garage Credential Service";
       wantedBy = [ "multi-user.target" ];
       after = [
         "network.target"

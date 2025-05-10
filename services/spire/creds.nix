@@ -34,6 +34,7 @@ in
   config = mkIf cfg.agent.enable (mkMerge [
     {
       systemd.services."spiffe-creds@" = {
+        description = "SPIFFE Credentials Helper for '%i'";
         requires = [ "spiffe-creds@%i.socket" ];
         after = [
           "network.target"
@@ -89,6 +90,7 @@ in
       };
 
       systemd.sockets."spiffe-creds@" = {
+        description = "SPIFFE Credentials Helper Socket for '%i'";
         partOf = [ "spiffe-creds@%i.service" ];
         socketConfig = {
           ListenStream = "/run/%i-creds.sock";

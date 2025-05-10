@@ -99,6 +99,7 @@ in
     users.groups.spire-agent = { };
 
     systemd.services.spire-agent = {
+      description = "SPIRE Agent";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ] ++ optional cfg.server.enable "spire-server.service";
       wants = mkIf cfg.server.enable [ "spire-server.service" ];

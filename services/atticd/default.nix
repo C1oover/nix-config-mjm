@@ -51,6 +51,7 @@ in
     };
 
     systemd.services.atticd-env = {
+      description = "Generate Attic Server Environment File";
       wantedBy = [ "atticd.service" ];
       before = [ "atticd.service" ];
       path = [ pkgs.systemd ];

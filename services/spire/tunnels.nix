@@ -25,11 +25,12 @@ let
   mkSocket =
     name: tunnel:
     let
-      inherit (tunnel) listen;
+      inherit (tunnel) mode listen;
     in
     {
       name = "${name}-tunnel";
       value = {
+        description = "${if mode == "server" then "Server" else "Client"} Tunnel '${name}' Socket";
         wantedBy = if listen.early then [ "network.target" ] else [ "sockets.target" ];
         partOf = [ "${name}-tunnel.service" ];
         bindsTo = mkIf (listen.namespace != null) [ "netns-bridge@${listen.namespace}.service" ];
@@ -49,11 +50,12 @@ let
   mkService =
     name: tunnel:
     let
-      inherit (tunnel) target;
+      inherit (tunnel) mode target;
     in
     {
       name = "${name}-tunnel";
       value = {
+        description = "${if mode == "server" then "Server" else "Client"} Tunnel '${name}'";
         wantedBy = [ "multi-user.target" ];
         after = [
           "network.target"

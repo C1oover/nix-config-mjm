@@ -13,6 +13,7 @@ in
     services.openssh.settings.HostCertificate = "/run/sshd-host-cert/cert";
 
     systemd.services.sshd-host-cert = {
+      description = "Issue SSH Server Host Certificate";
       wantedBy = [ "multi-user.target" ];
       before = [ "sshd.service" ];
       after = [

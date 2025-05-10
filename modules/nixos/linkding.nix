@@ -176,6 +176,7 @@ in
     };
 
     systemd.sockets.linkding = {
+      description = "Linkding Bookmark Manager Socket";
       wantedBy = [ "sockets.target" ];
       socketConfig = {
         ListenStream = if cfg.socket != null then cfg.socket else "${cfg.address}:${toString cfg.port}";

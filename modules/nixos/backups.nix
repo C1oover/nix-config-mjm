@@ -110,6 +110,7 @@ in
           '';
       in
       nameValuePair "restic-backups-${name}" {
+        description = "Daily Restic Backup '${name}'";
         environment = {
           RESTIC_CACHE_DIR = "/var/cache/restic-backups-${name}";
           RESTIC_PASSWORD_FILE = "%d/${name}_backup_password";
@@ -153,6 +154,7 @@ in
     systemd.timers = mapAttrs' (
       name: cfg:
       nameValuePair "restic-backups-${name}" {
+        description = "Daily Restic Backup '${name}'";
         wantedBy = [ "timers.target" ];
         timerConfig = {
           OnCalendar = "daily";
