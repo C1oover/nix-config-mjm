@@ -13,11 +13,6 @@
     fsType = "vfat";
   };
 
-  fileSystems."/var/lib/private/garage/data" = {
-    device = "/dev/disk/by-partlabel/garage";
-    fsType = "xfs";
-  };
-
   swapDevices = [ { device = "/dev/disk/by-partlabel/swap"; } ];
 
   boot.loader.systemd-boot.enable = true;
@@ -28,7 +23,6 @@
   mjm.atticd.enable = true;
   mjm.atuin.enable = true;
   mjm.consul.enable = true;
-  mjm.garage.enable = true;
   mjm.grafana.enable = true;
   mjm.home-assistant.enable = true;
   mjm.launchpad.enable = true;
