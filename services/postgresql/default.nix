@@ -9,8 +9,10 @@ let
     concatMapStrings
     mkEnableOption
     mkIf
+    mkOption
     mkOverride
     pipe
+    types
     unique
     ;
 
@@ -19,6 +21,10 @@ in
 {
   options.mjm.postgresql = {
     enable = mkEnableOption "postgresql";
+    extraBackupDatabases = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+    };
   };
 
   config = mkIf cfg.enable {
@@ -40,7 +46,7 @@ in
     mjm.backups.postgresql =
       let
         pg = config.services.postgresql.package;
-        dumpDBs = pipe config.services.postgresql.ensureDatabases [
+        dumpDBs = pipe (config.services.postgresql.ensureDatabases ++ cfg.extraBackupDatabases) [
           unique
           (concatMapStrings (dbname: ''
             ${pg}/bin/pg_dump --format=directory -j 4 -f ${dbname} ${dbname}

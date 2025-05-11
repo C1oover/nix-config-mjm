@@ -23,7 +23,10 @@ in
     mjm.services.gitlab = {
       vault.enable = true;
     };
-    mjm.postgresql.enable = true;
+    mjm.postgresql = {
+      enable = true;
+      extraBackupDatabases = [ "gitlab" ];
+    };
     mjm.state.directories = [
       {
         directory = config.services.gitlab.statePath;
