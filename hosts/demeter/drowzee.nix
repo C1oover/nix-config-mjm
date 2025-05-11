@@ -3,8 +3,6 @@
     config = {
       mjm.alertmanager.enable = true;
 
-      mjm.spire.agent.joinToken = "c5d4d507-2a2e-4550-b020-af296fd320e4";
-
       mjm.profiles.microvm = {
         enable = true;
         macAddress = "02:B8:B4:DB:FD:1F";
