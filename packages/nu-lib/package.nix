@@ -1,5 +1,5 @@
 {
-  lib,
+  gitignore,
   stdenvNoCC,
 }:
 
@@ -7,7 +7,7 @@ stdenvNoCC.mkDerivation {
   name = "nu-lib";
   version = "0.1.0";
 
-  src = lib.cleanSource ./nu-lib;
+  src = gitignore.gitignoreSource ./nu-lib;
 
   installPhase = ''
     runHook preInstall

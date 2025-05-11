@@ -107,6 +107,19 @@
       "url": "https://github.com/numtide/devshell/archive/7c9e793ebe66bcba8292989a68c0419b737a22a0.tar.gz",
       "hash": "165601skgrlgvgr4h7hjbz80zp7zpn7z2c7qjh6bal8hmjmmlqwi"
     },
+    "gitignore": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "hercules-ci",
+        "repo": "gitignore.nix"
+      },
+      "branch": "master",
+      "submodules": false,
+      "revision": "637db329424fd7e46cf4185293b9cc8c88c95394",
+      "url": "https://github.com/hercules-ci/gitignore.nix/archive/637db329424fd7e46cf4185293b9cc8c88c95394.tar.gz",
+      "hash": "02wxkdpbhlm3yk5mhkhsp3kwakc16xpmsf2baw57nz1dg459qv8w"
+    },
     "hardware": {
       "type": "Git",
       "repository": {

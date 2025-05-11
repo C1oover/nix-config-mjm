@@ -1,5 +1,6 @@
 {
   lib,
+  gitignore,
   bash,
   resholve,
   coreutils,
@@ -16,7 +17,7 @@ resholve.mkDerivation {
   pname = "git-scripts";
   version = "0.0.1";
 
-  src = lib.cleanSource ./.;
+  src = gitignore.gitignoreSource ./.;
 
   installPhase = ''
     ${lib.concatMapStrings (script: ''

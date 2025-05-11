@@ -1,5 +1,6 @@
 {
   lib,
+  gitignore,
   buildGoModule,
   attic-client,
   makeWrapper,
@@ -18,7 +19,7 @@ buildGoModule {
   pname = "dippy";
   version = "0.1.0";
 
-  src = lib.cleanSource ./.;
+  src = gitignore.gitignoreSource ./.;
 
   vendorHash = "sha256-TxQWWu2euJp1Wf652ArzCtj4Rztw0b9AXOiygbn7eTs=";
 

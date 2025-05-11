@@ -1,5 +1,5 @@
 {
-  lib,
+  gitignore,
   buildGoModule,
   caddy,
 }:
@@ -8,7 +8,7 @@ buildGoModule rec {
   pname = "caddy";
   version = "2.9.1";
 
-  src = lib.cleanSource ./.;
+  src = gitignore.gitignoreSource ./.;
 
   vendorHash = "sha256-OU4CjqrOGWhGqsDfa8ALfS+/FvBq332M2A0ps/p8IKc=";
 
