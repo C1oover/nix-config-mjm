@@ -1,6 +1,8 @@
 {
   imports = [
+    ./charmander.nix
     ./charmeleon.nix
+    ./charizard.nix
     ./onix.nix
   ];
 

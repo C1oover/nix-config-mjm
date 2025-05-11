@@ -40,9 +40,9 @@ in
           auto_reload_config = true;
 
           retry_join = lib.mkDefault [
-            "megaera.home.mattmoriarity.com"
-            "tisiphone.home.mattmoriarity.com"
-            "alecto.home.mattmoriarity.com"
+            "bulbasaur.home.mattmoriarity.com"
+            "charmander.home.mattmoriarity.com"
+            "squirtle.home.mattmoriarity.com"
           ];
 
           client_addr = "0.0.0.0";

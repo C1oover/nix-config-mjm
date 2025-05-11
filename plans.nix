@@ -13,7 +13,6 @@ let
     "niobe"
     "persephone"
     "steropes"
-    "tisiphone"
     "uranus"
   ];
 

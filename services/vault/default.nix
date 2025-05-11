@@ -26,7 +26,7 @@ in
       type = types.listOf types.str;
       default = [
         "10.0.150.3"
-        "10.0.2.42"
+        "10.0.150.6"
         "10.0.150.9"
       ];
     };
