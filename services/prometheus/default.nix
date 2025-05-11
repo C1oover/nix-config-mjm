@@ -25,7 +25,6 @@ in
   };
 
   imports = [
-    ./alertmanager.nix
     ./blackbox.nix
     ./consul-exporter.nix
     ./jobs
@@ -54,6 +53,14 @@ in
         scrape_interval = "60s";
         evaluation_interval = "30s";
       };
+
+      alertmanagers = [
+        {
+          static_configs = [
+            { targets = [ "localhost:9093" ]; }
+          ];
+        }
+      ];
     };
 
     systemd.services.prometheus = {
@@ -81,6 +88,13 @@ in
           "grafana"
           "prometheus"
         ];
+      };
+      prometheus-alertmanager = {
+        mode = "client";
+        listen.port = 9093;
+        listen.namespace = "prometheus";
+        target.service = "alertmanager";
+        target.port = 9093;
       };
       prometheus-consul = {
         mode = "client";

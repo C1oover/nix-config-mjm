@@ -1,6 +1,7 @@
 {
   imports = [
     ./blastoise.nix
+    ./drowzee.nix
     ./jigglypuff.nix
     ./snorlax.nix
     ./squirtle.nix

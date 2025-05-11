@@ -1,5 +1,6 @@
 {
   imports = [
+    ./alertmanager
     ./atticd
     ./atuin
     ./authelia
