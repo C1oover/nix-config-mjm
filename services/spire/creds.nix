@@ -6,15 +6,54 @@
 }:
 let
   inherit (lib)
+    attrValues
+    concatMap
     concatStringsSep
+    map
     mapAttrs'
     mapAttrsToList
     mkMerge
     mkIf
     mkOption
+    pipe
+    replaceStrings
     types
     ;
   cfg = config.mjm.spire;
+
+  secretName = svc: path: "${svc}_${replaceStrings [ "/" ] [ "__" ] path}";
+
+  credServiceType = serviceName: types.attrsOf (credKeyType "${serviceName}.service");
+
+  credKeyType =
+    unit:
+    types.submodule (
+      {
+        name,
+        config,
+        options,
+        ...
+      }:
+      let
+        svcName = lib.last (lib.dropEnd 2 options.name.loc);
+      in
+      {
+        options = {
+          name = mkOption {
+            type = types.str;
+            default = secretName svcName name;
+          };
+          path = mkOption {
+            type = types.path;
+            default = "/run/credentials/${unit}/${config.name}";
+          };
+          loadCredential = mkOption {
+            type = types.str;
+            default = "${config.name}:/run/${svcName}-creds.sock";
+          };
+        };
+      }
+    );
 in
 {
   options.mjm.spire.creds = mkOption {
@@ -28,6 +67,28 @@ in
           };
         };
       }
+    );
+  };
+
+  options.systemd.services = mkOption {
+    type = types.attrsOf (
+      types.submodule (
+        { name, config, ... }:
+        {
+          options.credentials = mkOption {
+            default = { };
+            type = types.attrsOf (credServiceType name);
+          };
+
+          config = mkIf (config.credentials != { }) {
+            serviceConfig.LoadCredential = pipe config.credentials [
+              attrValues
+              (concatMap attrValues)
+              (map (x: x.loadCredential))
+            ];
+          };
+        }
+      )
     );
   };
 
