@@ -8,8 +8,7 @@ let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.mjm.gitlab;
 
-  mkCred = name: "gitlab_${name}:${config.mjm.services.gitlab.vault.socketPath}";
-  secretPath = svc: name: "/run/credentials/gitlab-${svc}.service/gitlab_${name}";
+  secretPath = svc: name: config.systemd.services."gitlab-${svc}".credentials.gitlab.${name}.path;
 
   clientId = "jVwrh7Lz6flakzaT6oLJJPAhRnyvLey0X33kVDVurMUAVPcfVPnrEt9XnBAoCE5r";
   redirectUri = "https://git.midna.dev/users/auth/openid_connect/callback";
@@ -105,6 +104,9 @@ in
         dbFile = secretPath "config" "db_key_base";
         otpFile = secretPath "config" "otp_key_base";
         jwsFile = secretPath "config" "openid_connect_signing_key";
+        activeRecordPrimaryKeyFile = secretPath "config" "active_record_primary_key";
+        activeRecordDeterministicKeyFile = secretPath "config" "active_record_deterministic_key";
+        activeRecordSaltFile = secretPath "config" "active_record_salt";
       };
       initialRootPasswordFile = secretPath "db-config" "initial_root_password";
       extraEnv.AWS_CONTAINER_CREDENTIALS_RELATIVE_URI = "/creds";
@@ -200,7 +202,7 @@ in
                 pkce = true;
                 client_options = {
                   identifier = clientId;
-                  secret._secret = secretPath "config" "managed__oidc_client_secret";
+                  secret._secret = secretPath "config" "managed/oidc_client_secret";
                   redirect_uri = redirectUri;
                   gitlab = {
                     groups_attribute = "groups";
@@ -215,17 +217,18 @@ in
     };
 
     systemd.services = {
-      gitlab-config.serviceConfig.LoadCredential = map mkCred [
-        "secret_key_base"
-        "db_key_base"
-        "otp_key_base"
-        "openid_connect_signing_key"
-        "managed__oidc_client_secret"
-        "fastmail_password"
-      ];
-      gitlab-db-config.serviceConfig.LoadCredential = [
-        (mkCred "initial_root_password")
-      ];
+      gitlab-config.credentials.gitlab = {
+        active_record_primary_key = { };
+        active_record_deterministic_key = { };
+        active_record_salt = { };
+        db_key_base = { };
+        fastmail_password = { };
+        openid_connect_signing_key = { };
+        otp_key_base = { };
+        secret_key_base = { };
+        "managed/oidc_client_secret" = { };
+      };
+      gitlab-db-config.credentials.gitlab.initial_root_password = { };
     };
 
     mjm.authelia.oidcClients.gitlab = {
