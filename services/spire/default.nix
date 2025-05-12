@@ -5,5 +5,6 @@
     ./creds.nix
     ./server.nix
     ./tunnels.nix
+    ./users.nix
   ];
 }

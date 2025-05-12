@@ -59,6 +59,9 @@ func setUpOIDC(ctx *pulumi.Context, clientNames []string, kvMount *vault.Mount) 
 	if _, err := newOIDCClientKVSecret(ctx, kvMount, "netbox-managed", "netbox", clients["netbox"].ClientSecret); err != nil {
 		return nil, err
 	}
+	if _, err := newOIDCClientKVSecret(ctx, kvMount, "spiffe-users-managed", "spiffe-users", clients["spiffe-users"].ClientSecret); err != nil {
+		return nil, err
+	}
 
 	return clients, nil
 }
