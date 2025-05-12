@@ -32,27 +32,34 @@ in
     directories = mkOption {
       type = types.listOf (
         types.coercedTo types.str (d: { directory = d; }) (
-          types.submodule {
-            options = {
-              directory = mkOption { type = types.str; };
-              user = mkOption {
-                type = types.nullOr types.str;
-                default = null;
+          types.submodule (
+            { config, ... }:
+            {
+              options = {
+                directory = mkOption { type = types.str; };
+                tag = mkOption {
+                  type = types.str;
+                  default = builtins.baseNameOf config.directory;
+                };
+                user = mkOption {
+                  type = types.nullOr types.str;
+                  default = null;
+                };
+                group = mkOption {
+                  type = types.nullOr types.str;
+                  default = null;
+                };
+                mode = mkOption {
+                  type = types.nullOr types.str;
+                  default = null;
+                };
+                inInitrd = mkOption {
+                  type = types.bool;
+                  default = false;
+                };
               };
-              group = mkOption {
-                type = types.nullOr types.str;
-                default = null;
-              };
-              mode = mkOption {
-                type = types.nullOr types.str;
-                default = null;
-              };
-              inInitrd = mkOption {
-                type = types.bool;
-                default = false;
-              };
-            };
-          }
+            }
+          )
         )
       );
       default = [ ];

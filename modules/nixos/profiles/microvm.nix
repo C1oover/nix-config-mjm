@@ -92,8 +92,7 @@ in
           ]
           ++ map (d: rec {
             proto = "virtiofs";
-            # TODO maybe make this an option, if needed to disambiguate
-            tag = builtins.baseNameOf d.directory;
+            inherit (d) tag;
             source = tag;
             mountPoint = d.directory;
           }) config.mjm.state.directories;

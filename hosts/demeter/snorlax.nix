@@ -8,7 +8,8 @@
         macAddress = "02:FA:BD:AD:41:EF";
         machineId = "33e7682a6196ddc0e17fcbc468157527";
       };
-      microvm.mem = 1536;
+      microvm.vcpu = 4;
+      microvm.mem = 2048;
       system.stateVersion = "25.05";
     };
   };

@@ -22,6 +22,13 @@ in
         directory = config.services.jellyfin.dataDir;
         inherit (config.services.jellyfin) user group;
       }
+      # while the cache dir doesn't exactly need to persist, it does need to be
+      # backed by disk and not ram
+      {
+        directory = config.services.jellyfin.cacheDir;
+        tag = "jellyfin-cache";
+        inherit (config.services.jellyfin) user group;
+      }
     ];
     microvm.shares = [
       {
