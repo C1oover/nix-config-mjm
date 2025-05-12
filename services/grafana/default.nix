@@ -14,16 +14,10 @@ in
     enable = mkEnableOption "grafana";
   };
 
-  imports = [
-    ./loki.nix
-  ];
-
   config = mkIf cfg.enable {
     mjm.services.grafana = {
       postgresql.enable = true;
-      vault = {
-        enable = true;
-      };
+      vault.enable = true;
     };
 
     ingress.virtualHosts.graphs = {

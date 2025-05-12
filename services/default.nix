@@ -17,6 +17,7 @@
     ./launchpad
     ./libvirtd
     ./linkding
+    ./loki
     ./matrix-server
     ./media-server
     ./miniflux

@@ -5,12 +5,16 @@
   ...
 }:
 let
-  inherit (lib) mkIf;
+  inherit (lib) mkEnableOption mkIf;
   inherit (config.services.loki) dataDir;
 
-  cfg = config.mjm.grafana;
+  cfg = config.mjm.loki;
 in
 {
+  options.mjm.loki = {
+    enable = mkEnableOption "Grafana Loki";
+  };
+
   config = mkIf cfg.enable {
     services.loki = {
       enable = true;
@@ -98,13 +102,6 @@ in
       };
     };
 
-    mjm.networkd.macvlan.enable = true;
-
-    systemd.services.loki = {
-      bindsTo = [ "netns-bridge@loki.service" ];
-      serviceConfig.NetworkNamespacePath = "/run/netns/loki";
-    };
-
     mjm.garage.clients.loki.services = [ "loki" ];
 
     mjm.spire.tunnels = {
@@ -112,7 +109,6 @@ in
         mode = "server";
         listen.port = 3103;
         target.port = 3100;
-        target.namespace = "loki";
         allowedServices = [
           "grafana"
           "promtail"
@@ -121,11 +117,11 @@ in
         allowMetrics = true;
         allowConsul = true;
       };
-      consul-loki = {
+      loki-alertmanager = {
         mode = "client";
-        listen.socket = "/run/consul-checks/loki.sock";
-        target.port = 3103;
-        service = "loki";
+        listen.port = 9093;
+        target.port = 9093;
+        target.service = "alertmanager";
       };
     };
 
@@ -136,7 +132,7 @@ in
 
       checks.up = {
         http.path = "/ready";
-        http.socket = "/run/consul-checks/loki.sock";
+        http.port = 3100;
       };
     };
 

@@ -81,6 +81,7 @@ in
         allowConsul = true;
         allowedServices = [
           "grafana"
+          "loki"
           "prometheus"
           "launchpad"
         ];
