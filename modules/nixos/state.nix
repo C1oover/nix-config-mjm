@@ -19,7 +19,7 @@ let
 
   cfg = config.mjm.state;
 
-  isValidForPreservation = _: v: v != null;
+  isValidForPreservation = k: v: k != "tag" && v != null;
 in
 {
   imports = [ "${inputs.preservation}/module.nix" ];
