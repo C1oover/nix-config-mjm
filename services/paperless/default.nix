@@ -137,6 +137,7 @@ in
                 ${socialConfig})
               echo "PAPERLESS_SOCIALACCOUNT_PROVIDERS=$social_providers" > /run/paperless-env/env
             '';
+          credentials.paperless."managed/oidc_client_secret" = { };
           serviceConfig = {
             Type = "oneshot";
             Restart = "on-failure";
@@ -147,9 +148,6 @@ in
             PrivateTmp = true;
             RuntimeDirectory = "paperless-env";
             RuntimeDirectoryMode = "0700";
-            LoadCredential = [
-              "paperless_managed__oidc_client_secret:/run/paperless-creds.sock"
-            ];
           };
         };
       };

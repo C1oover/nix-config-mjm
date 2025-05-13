@@ -59,6 +59,7 @@ in
       script = ''
         echo "ATTIC_SERVER_TOKEN_RS256_SECRET_BASE64=$(systemd-creds cat atticd_token_rs256_secret)" > /run/atticd-env/env
       '';
+      credentials.atticd.token_rs256_secret = { };
       serviceConfig = {
         Type = "oneshot";
         Restart = "on-failure";
@@ -69,9 +70,6 @@ in
         PrivateTmp = true;
         RuntimeDirectory = "atticd-env";
         RuntimeDirectoryMode = "0700";
-        LoadCredential = [
-          "atticd_token_rs256_secret:/run/atticd-creds.sock"
-        ];
       };
     };
 

@@ -67,9 +67,7 @@ in
     };
 
     systemd.services.alertmanager = {
-      serviceConfig.LoadCredential = [
-        "alertmanager_pagerduty_routing_key:/run/alertmanager-creds.sock"
-      ];
+      credentials.alertmanager.pagerduty_routing_key = { };
     };
 
     mjm.spire.tunnels = {

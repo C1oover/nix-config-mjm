@@ -271,9 +271,7 @@ in
     systemd.services.caddy = {
       bindsTo = [ "spiffe-certs@caddy.service" ];
       after = [ "spiffe-certs@caddy.service" ];
-      serviceConfig = {
-        LoadCredential = [ "caddy_desec_api_token:/run/caddy-creds.sock" ];
-      };
+      credentials.caddy.desec_api_token = { };
     };
   };
 }

@@ -40,7 +40,7 @@ in
 
     systemd.services.invidious = {
       networkNamespace = "invidious";
-      serviceConfig.LoadCredential = [ "invidious_extra_settings:/run/invidious-creds.sock" ];
+      credentials.invidious.extra_settings = { };
     };
     systemd.services.invidious-sig-helper.networkNamespace = "invidious";
 

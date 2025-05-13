@@ -107,11 +107,9 @@ in
       }
       (flip genAttrs
         (_: {
-          serviceConfig = {
-            LoadCredential = [
-              "netbox_secret_key:/run/netbox-creds.sock"
-              "netbox_managed__oidc_client_secret:/run/netbox-creds.sock"
-            ];
+          credentials.netbox = {
+            secret_key = { };
+            "managed/oidc_client_secret" = { };
           };
         })
         [

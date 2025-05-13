@@ -120,6 +120,11 @@ in
         wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
         networkNamespace = mkIf useNamespace "backups";
+        credentials = {
+          backups.b2_key_id = { };
+          backups.b2_application_key = { };
+          ${name}.backup_password = { };
+        };
         serviceConfig = {
           Type = "oneshot";
           ExecStart = [
@@ -142,11 +147,6 @@ in
           CacheDirectory = "restic-backups-${name}";
           CacheDirectoryMode = "0700";
           PrivateTmp = true;
-          LoadCredential = [
-            "backups_b2_key_id:/run/backups-creds.sock"
-            "backups_b2_application_key:/run/backups-creds.sock"
-            "${name}_backup_password:/run/${name}-creds.sock"
-          ];
         };
       }
     ) config.mjm.backups;

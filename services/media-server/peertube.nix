@@ -2,13 +2,13 @@
 let
   inherit (lib) mkIf;
   cfg = config.mjm.media-server;
+
+  secrets = config.systemd.services.peertube.credentials.peertube;
 in
 {
   config = mkIf cfg.enable {
     mjm.services.peertube = {
-      vault = {
-        enable = true;
-      };
+      vault.enable = true;
     };
     mjm.postgresql.enable = true;
     mjm.state.directories = [
@@ -39,8 +39,8 @@ in
       database.createLocally = true;
       redis.createLocally = true;
 
-      secrets.secretsFile = "/run/credentials/peertube.service/peertube_secret_key";
-      smtp.passwordFile = "/run/credentials/peertube.service/peertube_fastmail_password";
+      secrets.secretsFile = secrets.secret_key.path;
+      smtp.passwordFile = secrets.fastmail_password.path;
 
       dataDirs = [ "/videos/peertube" ];
 
@@ -67,10 +67,10 @@ in
     };
 
     systemd.services.peertube = {
-      serviceConfig.LoadCredential = [
-        "peertube_fastmail_password:/run/peertube-creds.sock"
-        "peertube_secret_key:/run/peertube-creds.sock"
-      ];
+      credentials.peertube = {
+        fastmail_password = { };
+        secret_key = { };
+      };
     };
 
     systemd.tmpfiles.settings."10-media-server" = {

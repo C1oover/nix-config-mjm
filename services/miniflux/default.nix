@@ -52,7 +52,7 @@ in
     };
 
     systemd.services.miniflux = {
-      serviceConfig.LoadCredential = [ "miniflux_managed__oidc_client_secret:/run/miniflux-creds.sock" ];
+      credentials.miniflux."managed/oidc_client_secret" = { };
       serviceConfig.RuntimeDirectoryMode = mkForce "0755";
     };
 

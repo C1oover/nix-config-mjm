@@ -54,13 +54,15 @@ in
       };
     };
 
-    systemd.services.garage.serviceConfig = {
-      StateDirectory = mkForce "garage/meta garage/data";
-      RuntimeDirectory = "garage";
-      LoadCredential = map (k: "garage_${k}:/run/garage-creds.sock") [
-        "rpc_secret"
-        "admin_token"
-      ];
+    systemd.services.garage = {
+      credentials.garage = {
+        rpc_secret = { };
+        admin_token = { };
+      };
+      serviceConfig = {
+        StateDirectory = mkForce "garage/meta garage/data";
+        RuntimeDirectory = "garage";
+      };
     };
 
     mjm.state.directories = [ "/var/lib/private/garage/meta" ];

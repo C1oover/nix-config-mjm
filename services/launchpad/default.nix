@@ -21,11 +21,11 @@ let
     LAUNCHPAD_ENABLE_PRETTY_OUTPUT = "false";
   };
 
-  keys = map (k: "launchpad_${k}:${config.mjm.services.launchpad.vault.socketPath}") [
-    "gitlab_token"
-    "paperless_token"
-    "reminders_topic"
-  ];
+  creds = {
+    gitlab_token = { };
+    paperless_token = { };
+    reminders_topic = { };
+  };
 in
 {
   options.mjm.launchpad = {
@@ -69,6 +69,7 @@ in
       requires = [ "launchpad.socket" ];
       bindsTo = [ "netns-bridge@launchpad.service" ];
       environment = serviceEnv;
+      credentials.launchpad = creds;
 
       serviceConfig = {
         Type = "exec";
@@ -78,7 +79,6 @@ in
         User = "launchpad";
         PrivateTmp = true;
         NetworkNamespacePath = "/run/netns/launchpad";
-        LoadCredential = keys;
       };
     };
 
@@ -86,6 +86,7 @@ in
       description = "Send Launchpad Reminders";
       restartIfChanged = false;
       environment = serviceEnv;
+      credentials.launchpad = creds;
 
       after = [
         "network.target"
@@ -97,7 +98,6 @@ in
         ExecStart = "${pkg}/bin/launchpad process-reminders";
         DynamicUser = true;
         User = "launchpad";
-        LoadCredential = keys;
       };
     };
 

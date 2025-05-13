@@ -149,9 +149,7 @@ in
     };
 
     systemd.services.gitlab-runner = {
-      serviceConfig.LoadCredential = [
-        "gitlab-runner_nix_docker_auth_token:/run/gitlab-runner-creds.sock"
-      ];
+      credentials.gitlab-runner.nix_docker_auth_token = { };
     };
 
     systemd.services.remote-builder-key = {
@@ -161,6 +159,7 @@ in
       script = ''
         cp "$CREDENTIALS_DIRECTORY/gitlab-runner_remote_builder_private_key" /run/remote-builder-key/key
       '';
+      credentials.gitlab-runner.remote_builder_private_key = { };
       serviceConfig = {
         Type = "oneshot";
         Restart = "on-failure";
@@ -171,9 +170,6 @@ in
         PrivateTmp = true;
         RuntimeDirectory = "remote-builder-key";
         RuntimeDirectoryMode = "0700";
-        LoadCredential = [
-          "gitlab-runner_remote_builder_private_key:/run/gitlab-runner-creds.sock"
-        ];
       };
     };
 

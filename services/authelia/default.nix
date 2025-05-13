@@ -6,11 +6,10 @@
 }:
 let
   inherit (lib)
-    attrValues
     mapAttrs
+    mapAttrs'
     mkEnableOption
     mkIf
-    pipe
     ;
   cfg = config.mjm.authelia;
 
@@ -24,11 +23,10 @@ let
     AUTHELIA_STORAGE_ENCRYPTION_KEY_FILE = "storage_encryption_key";
   };
 
-  credentialSocket = config.mjm.services.authelia.vault.socketPath;
-  credentials = pipe secrets [
-    attrValues
-    (map (key: "authelia_${key}:${credentialSocket}"))
-  ];
+  credentials = mapAttrs' (_: v: {
+    name = v;
+    value = { };
+  }) secrets;
   secretEnvVars = mapAttrs (_: key: "%d/authelia_${key}") secrets;
 in
 {
@@ -132,9 +130,9 @@ in
         "redis-authelia.service"
         "postgresql.service"
       ];
+      credentials.authelia = credentials;
       serviceConfig = {
         SupplementaryGroups = [ config.services.redis.servers.authelia.user ];
-        LoadCredential = credentials;
       };
     };
 

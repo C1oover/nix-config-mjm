@@ -232,6 +232,13 @@ in
         oidc_client_secret: $(systemd-creds cat home-assistant_managed__oidc_client_secret)
         EOF
       '';
+      credentials.home-assistant = {
+        latitude_home = { };
+        longitude_home = { };
+        fastmail_password = { };
+        paperless_token = { };
+        "managed/oidc_client_secret" = { };
+      };
       serviceConfig = {
         Type = "oneshot";
         Restart = "on-failure";
@@ -243,13 +250,6 @@ in
         PrivateTmp = true;
         RuntimeDirectory = "home-assistant-secrets";
         RuntimeDirectoryMode = "0700";
-        LoadCredential = [
-          "home-assistant_latitude_home:/run/home-assistant-creds.sock"
-          "home-assistant_longitude_home:/run/home-assistant-creds.sock"
-          "home-assistant_fastmail_password:/run/home-assistant-creds.sock"
-          "home-assistant_paperless_token:/run/home-assistant-creds.sock"
-          "home-assistant_managed__oidc_client_secret:/run/home-assistant-creds.sock"
-        ];
       };
     };
 
@@ -294,7 +294,7 @@ in
       '';
     };
     systemd.services.restic-backups-home-assistant = {
-      serviceConfig.LoadCredential = [ "home-assistant_api_token:/run/home-assistant-creds.sock" ];
+      credentials.home-assistant.api_token = { };
     };
 
     # these are too fragile i think

@@ -83,12 +83,8 @@ in
     mjm.networkd.macvlan.enable = true;
 
     systemd.services.grafana = {
-      bindsTo = [ "netns-bridge@grafana.service" ];
-      after = [ "netns-bridge@grafana.service" ];
-      serviceConfig = {
-        NetworkNamespacePath = "/run/netns/grafana";
-        LoadCredential = [ "grafana_managed__oidc_client_secret:/run/grafana-creds.sock" ];
-      };
+      networkNamespace = "grafana";
+      credentials.grafana."managed/oidc_client_secret" = { };
     };
 
     mjm.spire.tunnels = {
