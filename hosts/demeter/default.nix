@@ -3,6 +3,7 @@
     ./abra.nix
     ./blastoise.nix
     ./drowzee.nix
+    ./hypno.nix
     ./jigglypuff.nix
     ./jynx.nix
     ./snorlax.nix

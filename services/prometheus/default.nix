@@ -32,7 +32,13 @@ in
 
   config = mkIf cfg.enable {
     mjm.services.prometheus = { };
-    mjm.state.services = [ "prometheus" ];
+    mjm.state.directories = [
+      {
+        directory = "/var/lib/prometheus2";
+        user = "prometheus";
+        group = "prometheus";
+      }
+    ];
 
     ingress.virtualHosts.metrics = {
       upstream = {
@@ -44,7 +50,7 @@ in
     services.prometheus = {
       enable = true;
       listenAddress = "[::1]";
-      port = 9090;
+      port = 19090;
       checkConfig = "syntax-only";
       webExternalUrl = "https://metrics.midna.dev";
       extraFlags = [ "--web.enable-remote-write-receiver" ];
@@ -64,23 +70,15 @@ in
     };
 
     systemd.services.prometheus = {
-      bindsTo = [
-        "netns-bridge@prometheus.service"
-        "spiffe-certs@prometheus.service"
-      ];
-      after = [
-        "netns-bridge@prometheus.service"
-        "spiffe-certs@prometheus.service"
-      ];
-      serviceConfig.NetworkNamespacePath = "/run/netns/prometheus";
+      bindsTo = [ "spiffe-certs@prometheus.service" ];
+      after = [ "spiffe-certs@prometheus.service" ];
     };
 
     mjm.spire.tunnels = {
       prometheus = {
         mode = "server";
         listen.port = 9090;
-        target.port = 9090;
-        target.namespace = "prometheus";
+        target.port = 19090;
         allowIngress = true;
         allowConsul = true;
         allowedServices = [
@@ -92,26 +90,11 @@ in
       prometheus-alertmanager = {
         mode = "client";
         listen.port = 9093;
-        listen.namespace = "prometheus";
         target.service = "alertmanager";
         target.port = 9093;
       };
-      prometheus-consul = {
-        mode = "client";
-        listen.port = 8500;
-        listen.namespace = "prometheus";
-        target.port = 8501;
-        service = "consul-client";
-      };
-      consul-prometheus = {
-        mode = "client";
-        listen.socket = "/run/consul-checks/prometheus.sock";
-        target.port = 9090;
-        service = "prometheus";
-      };
     };
 
-    mjm.spire.agent.enable = true;
     mjm.spire.certs.prometheus = {
       systemd.unit = "prometheus.service";
       systemd.action = "reload-or-restart";
@@ -125,7 +108,7 @@ in
 
       checks.up = {
         http.path = "/-/ready";
-        http.socket = "/run/consul-checks/prometheus.sock";
+        http.port = 19090;
         intervalSeconds = 30;
       };
     };

@@ -29,7 +29,6 @@
   mjm.miniflux.enable = true;
   mjm.netbox.enable = true;
   mjm.paperless.enable = true;
-  mjm.prometheus.enable = true;
   mjm.server.enable = true;
   mjm.state = {
     enablePreservation = true;
