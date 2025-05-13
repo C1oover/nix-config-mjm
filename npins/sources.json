@@ -77,9 +77,9 @@
       },
       "branch": "main",
       "submodules": false,
-      "revision": "61aeee87e2fadd8e979acb69f5cd10012e99f444",
-      "url": "https://github.com/lilyinstarlight/nixos-cosmic/archive/61aeee87e2fadd8e979acb69f5cd10012e99f444.tar.gz",
-      "hash": "1sdjyr3pban3j5kv493avakh1ms04csayxyx3v3xrf9gdsh1rzqn"
+      "revision": "f430a256db90c7d6035f2d738e2e8acd5c633f16",
+      "url": "https://github.com/lilyinstarlight/nixos-cosmic/archive/f430a256db90c7d6035f2d738e2e8acd5c633f16.tar.gz",
+      "hash": "1pwsqxgd3ai3pf401blv7h8awx10c9kk3lj3lg65mf3fxgwql8b1"
     },
     "darwin": {
       "type": "Git",
@@ -129,9 +129,9 @@
       },
       "branch": "master",
       "submodules": false,
-      "revision": "3c5e12673265dfb0de3d9121420c0c2153bf21e0",
-      "url": "https://github.com/NixOS/nixos-hardware/archive/3c5e12673265dfb0de3d9121420c0c2153bf21e0.tar.gz",
-      "hash": "06fadvksf8hzr9sx86d00d88p3ilz6crkhiipfb01h3k48habzc5"
+      "revision": "d1d68fe8b00248caaa5b3bbe4984c12b47e0867d",
+      "url": "https://github.com/NixOS/nixos-hardware/archive/d1d68fe8b00248caaa5b3bbe4984c12b47e0867d.tar.gz",
+      "hash": "1v9gn4p6yi5d6n3q7m27ks15ycqs54g31rhn4wm5r8m65p8pdk3l"
     },
     "helix": {
       "type": "Git",
@@ -155,9 +155,9 @@
       },
       "branch": "master",
       "submodules": false,
-      "revision": "fb061f555f821fe4fb49f8f6f2a0cc3d5728bd52",
-      "url": "https://github.com/nix-community/home-manager/archive/fb061f555f821fe4fb49f8f6f2a0cc3d5728bd52.tar.gz",
-      "hash": "1sqr4nrx9lrk4jxidfbm8c0kikscky6mrvbdhijh07gdvzzhqfr0"
+      "revision": "535a541b429c1e89f0955c160df1d6d2bfeaf802",
+      "url": "https://github.com/nix-community/home-manager/archive/535a541b429c1e89f0955c160df1d6d2bfeaf802.tar.gz",
+      "hash": "04pkpr5b9ajvhfkq8mmrwdw037yamhblj6jzhiscl069kic53rwq"
     },
     "lanzaboote": {
       "type": "GitRelease",
@@ -210,8 +210,8 @@
       },
       "branch": "deploy/nixos-unstable",
       "submodules": false,
-      "revision": "12c27b4d1d4c65582a5b3ce16c4b7a3c49670962",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=12c27b4d1d4c65582a5b3ce16c4b7a3c49670962",
+      "revision": "3e17308a40fe20ea3ee7b1dfd858d598598efc03",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=3e17308a40fe20ea3ee7b1dfd858d598598efc03",
       "hash": "1cp79ay564gd7srpz8h2fz6gbj2f8aqif28gabakyhl0yqwi119k"
     },
     "nixos-small": {
@@ -274,9 +274,9 @@
       },
       "branch": "canon",
       "submodules": false,
-      "revision": "bb8c4e5c0db5f173b6bd9b160555a805957a39a7",
+      "revision": "e285cbe8cf88fcd9e718599791575c947f334995",
       "url": null,
-      "hash": "0fww102rixhak5ac94cik2v7xhg79jnm93ckwr8dvpb3k2jsfj3h"
+      "hash": "16dqmjm1q1p49yv42n1r4x5vn1q3vz61xls8qfri192w8q581diz"
     }
   },
   "version": 5
