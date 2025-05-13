@@ -80,10 +80,7 @@ in
       redirectUris = [ "https://graphs.midna.dev/login/generic_oauth" ];
     };
 
-    mjm.networkd.macvlan.enable = true;
-
     systemd.services.grafana = {
-      networkNamespace = "grafana";
       credentials.grafana."managed/oidc_client_secret" = { };
     };
 
@@ -98,28 +95,24 @@ in
       grafana-loki = {
         mode = "client";
         listen.port = 3100;
-        listen.namespace = "grafana";
         target.port = 3103;
         target.service = "loki";
       };
       grafana-tempo = {
         mode = "client";
         listen.port = 3200;
-        listen.namespace = "grafana";
         target.service = "tempo";
         target.port = 3200;
       };
       grafana-prometheus = {
         mode = "client";
         listen.port = 9090;
-        listen.namespace = "grafana";
         target.port = 9090;
         target.service = "prometheus";
       };
       grafana-alertmanager = {
         mode = "client";
         listen.port = 9093;
-        listen.namespace = "grafana";
         target.port = 9093;
         target.service = "alertmanager";
       };

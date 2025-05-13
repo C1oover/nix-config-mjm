@@ -1,5 +1,6 @@
 {
   imports = [
+    ./abra.nix
     ./blastoise.nix
     ./drowzee.nix
     ./jigglypuff.nix
