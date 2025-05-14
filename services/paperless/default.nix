@@ -6,7 +6,6 @@
 }:
 let
   inherit (lib)
-    genAttrs
     mkAfter
     mkEnableOption
     mkIf
@@ -26,9 +25,7 @@ in
   config = mkIf cfg.enable {
     mjm.services.paperless = {
       postgresql.enable = true;
-      vault = {
-        enable = true;
-      };
+      vault.enable = true;
     };
     mjm.state.directories = [
       {
@@ -51,12 +48,9 @@ in
     services.paperless = {
       enable = true;
       address = "::1";
-      port = 28981;
+      port = 38981;
+      database.createLocally = true;
       settings = {
-        PAPERLESS_DBHOST = "/run/postgresql";
-        PAPERLESS_DBPORT = "5432";
-        PAPERLESS_DBNAME = "paperless";
-        PAPERLESS_DBUSER = "paperless";
         PAPERLESS_URL = "https://paper.midna.dev";
         PAPERLESS_ALLOWED_HOSTS = "paperless.service.consul,localhost";
         PAPERLESS_OCR_USER_ARGS = {
@@ -78,107 +72,90 @@ in
       redirectUris = [ "https://paper.midna.dev/accounts/oidc/authelia/login/callback/" ];
     };
 
-    # the scheduler is left out of this: it already runs in a private network namespace
-    systemd.services =
-      genAttrs [ "paperless-task-queue" "paperless-consumer" "paperless-web" ] (name: {
-        bindsTo = [ "netns-bridge@paperless.service" ];
-        after = [ "netns-bridge@paperless.service" ];
-        serviceConfig.NetworkNamespacePath = "/run/netns/paperless";
-      })
-      // {
-        paperless-env = {
-          description = "Generate Paperless Environment File";
-          wantedBy = [
-            "paperless-scheduler.service"
-            "paperless-task-queue.service"
-            "paperless-web.service"
-            "paperless-consumer.service"
-          ];
-          before = [
-            "paperless-scheduler.service"
-            "paperless-task-queue.service"
-            "paperless-web.service"
-            "paperless-consumer.service"
-          ];
-          path = [
-            pkgs.systemd
-            pkgs.jq
-          ];
-          startLimitIntervalSec = 0;
-          script =
-            let
-              socialConfig = jsonFormat.generate "paperless-social.json" {
-                openid_connect = {
-                  SCOPE = [
-                    "openid"
-                    "profile"
-                    "email"
-                  ];
-                  OAUTH_PKCE_ENABLED = true;
-                  APPS = [
-                    {
-                      provider_id = "authelia";
-                      name = "Authelia";
-                      client_id = clientId;
-                      secret = "CLIENT_SECRET";
-                      settings = {
-                        server_url = "https://auth.midna.dev";
-                        token_auth_method = "client_secret_basic";
-                      };
-                    }
-                  ];
-                };
-              };
-            in
-            ''
-              social_providers=$(jq -c \
-                --rawfile secret $CREDENTIALS_DIRECTORY/paperless_managed__oidc_client_secret \
-                '.openid_connect.APPS[0].secret = $secret' \
-                ${socialConfig})
-              echo "PAPERLESS_SOCIALACCOUNT_PROVIDERS=$social_providers" > /run/paperless-env/env
-            '';
-          credentials.paperless."managed/oidc_client_secret" = { };
-          serviceConfig = {
-            Type = "oneshot";
-            Restart = "on-failure";
-            RestartSec = 5;
-            RemainAfterExit = true;
-            DynamicUser = true;
-            PrivateNetwork = true;
-            PrivateTmp = true;
-            RuntimeDirectory = "paperless-env";
-            RuntimeDirectoryMode = "0700";
+    systemd.services.paperless-env = {
+      description = "Generate Paperless Environment File";
+      wantedBy = [
+        "paperless-scheduler.service"
+        "paperless-task-queue.service"
+        "paperless-web.service"
+        "paperless-consumer.service"
+      ];
+      before = [
+        "paperless-scheduler.service"
+        "paperless-task-queue.service"
+        "paperless-web.service"
+        "paperless-consumer.service"
+      ];
+      path = [
+        pkgs.systemd
+        pkgs.jq
+      ];
+      startLimitIntervalSec = 0;
+      script =
+        let
+          socialConfig = jsonFormat.generate "paperless-social.json" {
+            openid_connect = {
+              SCOPE = [
+                "openid"
+                "profile"
+                "email"
+              ];
+              OAUTH_PKCE_ENABLED = true;
+              APPS = [
+                {
+                  provider_id = "authelia";
+                  name = "Authelia";
+                  client_id = clientId;
+                  secret = "CLIENT_SECRET";
+                  settings = {
+                    server_url = "https://auth.midna.dev";
+                    token_auth_method = "client_secret_basic";
+                  };
+                }
+              ];
+            };
           };
-        };
+        in
+        ''
+          social_providers=$(jq -c \
+            --rawfile secret $CREDENTIALS_DIRECTORY/paperless_managed__oidc_client_secret \
+            '.openid_connect.APPS[0].secret = $secret' \
+            ${socialConfig})
+          echo "PAPERLESS_SOCIALACCOUNT_PROVIDERS=$social_providers" > /run/paperless-env/env
+        '';
+      credentials.paperless."managed/oidc_client_secret" = { };
+      serviceConfig = {
+        Type = "oneshot";
+        Restart = "on-failure";
+        RestartSec = 5;
+        RemainAfterExit = true;
+        DynamicUser = true;
+        PrivateNetwork = true;
+        PrivateTmp = true;
+        RuntimeDirectory = "paperless-env";
+        RuntimeDirectoryMode = "0700";
       };
+    };
 
     mjm.spire.tunnels = {
       paperless = {
         mode = "server";
         listen.port = 28981;
-        target.port = 28981;
-        target.namespace = "paperless";
+        target.port = 38981;
         allowIngress = true;
-        allowConsul = true;
         allowedServices = [
           "home-assistant"
           "launchpad"
         ];
       };
-      consul-paperless = {
-        mode = "client";
-        listen.socket = "/run/consul-checks/paperless.sock";
-        target.port = 28981;
-        service = "paperless";
-      };
     };
 
     services.consul.services.paperless = {
-      inherit (config.services.paperless) port;
+      port = 28981;
 
       checks.up = {
         http.path = "/";
-        http.socket = "/run/consul-checks/paperless.sock";
+        http.port = 38981;
         intervalSeconds = 30;
       };
     };

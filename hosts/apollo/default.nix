@@ -5,6 +5,7 @@
     ./ivysaur.nix
     ./primeape.nix
     ./slowbro.nix
+    ./tangela.nix
     ./venusaur.nix
   ];
 
