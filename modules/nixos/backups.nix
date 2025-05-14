@@ -211,6 +211,7 @@ in
           --service-type=oneshot \
           --wait -qt --collect \
           ${lib.optionalString useNamespace "-p NetworkNamespacePath=/run/netns/backups"} \
+          -p User=${cfg.user} \
           -p LoadCredential=backups_b2_key_id:/run/backups-creds.sock \
           -p LoadCredential=backups_b2_application_key:/run/backups-creds.sock \
           -p LoadCredential=${name}_backup_password:/run/${name}-creds.sock \
