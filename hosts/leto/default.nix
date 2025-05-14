@@ -23,7 +23,6 @@
   mjm.atticd.enable = true;
   mjm.atuin.enable = true;
   mjm.consul.enable = true;
-  mjm.home-assistant.enable = true;
   mjm.launchpad.enable = true;
   mjm.linkding.enable = true;
   mjm.miniflux.enable = true;

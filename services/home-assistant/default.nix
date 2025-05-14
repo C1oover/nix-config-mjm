@@ -18,9 +18,7 @@ in
 
   config = mkIf cfg.enable {
     mjm.services.home-assistant = {
-      vault = {
-        enable = true;
-      };
+      vault.enable = true;
     };
     mjm.state.directories = [
       {
@@ -29,6 +27,17 @@ in
         group = "hass";
       }
     ];
+
+    # passthrough the zigbee adapter
+    microvm.devices = [
+      {
+        bus = "usb";
+        path = "vendorid=0x10c4,productid=0xea60";
+      }
+    ];
+    microvm.hypervisor = lib.mkForce "qemu";
+
+    environment.systemPackages = [ pkgs.usbutils ];
 
     ingress.virtualHosts.home = {
       upstream = {
@@ -41,7 +50,6 @@ in
 
     services.home-assistant = {
       enable = true;
-      openFirewall = true;
       extraComponents = [
         # Components required to complete the onboarding
         "esphome"
@@ -153,7 +161,7 @@ in
         prometheus = { };
         rest = [
           {
-            resource = "http://localhost:28982/api/documents/";
+            resource = "http://localhost:28981/api/documents/";
             params.tags__name__iexact = "inbox";
             headers.Authorization = "!secret paperless_authorization";
             sensor = [
@@ -178,28 +186,12 @@ in
         listen.port = 8123;
         target.port = 18123;
         allowIngress = true;
-        allowConsul = true;
-        allowedServices = [
-          "backups"
-        ];
       };
       home-assistant-paperless = {
         mode = "client";
-        listen.port = 28982;
+        listen.port = 28981;
         target.service = "paperless";
         target.port = 28981;
-      };
-      backup-home-assistant = {
-        mode = "client";
-        listen.socket = "/run/backup-home-assistant.sock";
-        target.port = 8123;
-        service = "home-assistant";
-      };
-      consul-home-assistant = {
-        mode = "client";
-        listen.socket = "/run/consul-checks/home-assistant.sock";
-        target.port = 8123;
-        service = "home-assistant";
       };
     };
 
@@ -274,7 +266,7 @@ in
 
       checks.up = {
         http.path = "/manifest.json";
-        http.socket = "/run/consul-checks/home-assistant.sock";
+        http.port = 18123;
       };
     };
 
@@ -285,8 +277,7 @@ in
       backupPrepareCommand = ''
         ${pkgs.curl}/bin/curl \
           -X POST \
-          --unix-socket /run/backup-home-assistant.sock \
-          http://home-assistant.service.consul/api/services/backup/create \
+          http://127.0.0.1:8123/api/services/backup/create \
           -H "Authorization: Bearer $(cat $CREDENTIALS_DIRECTORY/home-assistant_api_token)"
       '';
       backupCleanupCommand = ''
