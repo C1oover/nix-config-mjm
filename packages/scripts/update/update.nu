@@ -121,7 +121,7 @@ def "main ci update-pins" [] {
   let auto_merge = "nixos-small" not-in $outdated_channels
 
   print "latest nixpkgs doesn't match my version. updating pinned sources..."
-  let output = npins update | tee { print }
+  let output = npins update | tee -e { print }
   git config user.email "gitlab@mj.midna.dev"
   git config user.name "Pins Updater"
   git add npins/sources.json
