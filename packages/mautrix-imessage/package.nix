@@ -1,28 +1,10 @@
 {
-  lib,
   buildGoModule,
   fetchFromGitHub,
   pkg-config,
   olm,
   libheif,
 }:
-
-let
-  libheif' = libheif.overrideAttrs {
-    version = "1.19.5";
-    src = fetchFromGitHub {
-      owner = "strukturag";
-      repo = "libheif";
-      tag = "v1.19.5";
-      hash = "sha256-damlKiv5a1qxRr8YGK+WCrOwYet9PI3nHv7hnFErm0I=";
-    };
-  };
-
-  olm' = olm.overrideAttrs {
-    patches = [ ./list.patch ];
-    patchFlags = [ "-p0" ];
-  };
-in
 
 buildGoModule {
   name = "mautrix-imessage";
@@ -38,8 +20,8 @@ buildGoModule {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    libheif'
-    olm'
+    libheif
+    olm
   ];
 
   tags = [ "libheif" ];
