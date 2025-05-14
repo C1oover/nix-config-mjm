@@ -43,7 +43,6 @@
       }
     ];
   };
-  mjm.vaultwarden.enable = true;
 
   environment.etc."resolv.conf".source = lib.mkForce "/run/systemd/resolve/resolv.conf";
 

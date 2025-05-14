@@ -3,6 +3,7 @@
     ./charmander.nix
     ./charmeleon.nix
     ./charizard.nix
+    ./rhyhorn.nix
     ./onix.nix
   ];
 
