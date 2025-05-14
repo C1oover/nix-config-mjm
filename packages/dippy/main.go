@@ -30,8 +30,10 @@ type CLI struct {
 
 	ApplyLocal ApplyLocalCmd `cmd:"" help:"Apply config for the local host." group:"local_hosts"`
 
-	ApplyInfra ApplyInfraCmd `cmd:"" help:"Apply infrastructure changes with Pulumi." group:"infra"`
-	DiffInfra  DiffInfraCmd  `cmd:"" help:"Preview (but don't apply) infrastructure changes with Pulumi." group:"infra"`
+	Infra struct {
+		Apply ApplyInfraCmd `cmd:"" help:"Apply infrastructure changes with Pulumi."`
+		Diff  DiffInfraCmd  `cmd:"" help:"Preview (but don't apply) infrastructure changes with Pulumi."`
+	} `cmd:"" group:"infra"`
 }
 
 func main() {
