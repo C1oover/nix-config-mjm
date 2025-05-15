@@ -9,8 +9,6 @@ import (
 	"log/slog"
 	"net"
 	"net/http"
-	"os"
-	"path"
 	"strings"
 	"time"
 
@@ -22,14 +20,13 @@ import (
 	"github.com/spiffe/go-spiffe/v2/workloadapi"
 )
 
-func main() {
-	if err := run(); err != nil {
-		slog.Error("run server failed", "error", err)
-		os.Exit(1)
-	}
+type ServeCmd struct {
+	AdminToken      []byte `name:"admin-token-file" type:"filecontent" default:"${creds_dir}/garage_admin_token"`
+	GarageAdminAddr string `default:"127.0.0.1:3903"`
+	TrustDomain     string `default:"home.mattmoriarity.com"`
 }
 
-func run() error {
+func (c *ServeCmd) Run(ctx context.Context) error {
 	listeners, err := activation.Listeners()
 	if err != nil {
 		return fmt.Errorf("getting socket listeners: %w", err)
@@ -41,26 +38,20 @@ func run() error {
 	l := listeners[0]
 	defer l.Close()
 
-	ctx := context.Background()
 	source, err := workloadapi.NewX509Source(ctx)
 	if err != nil {
 		return fmt.Errorf("creating x509 source: %w", err)
 	}
 	defer source.Close()
 
-	adminTokenFile := path.Join(os.Getenv("CREDENTIALS_DIRECTORY"), "garage_admin_token")
-	b, err := os.ReadFile(adminTokenFile)
-	if err != nil {
-		return fmt.Errorf("reading admin token from %q: %w", adminTokenFile, err)
-	}
-	adminToken := strings.TrimSpace(string(b))
+	adminToken := strings.TrimSpace(string(c.AdminToken))
 	ctx = context.WithValue(ctx, garage.ContextAccessToken, adminToken)
 
 	gConfig := garage.NewConfiguration()
-	gConfig.Host = "127.0.0.1:3903"
+	gConfig.Host = c.GarageAdminAddr
 	g := garage.NewAPIClient(gConfig)
 
-	trustDomain := spiffeid.RequireTrustDomainFromString("home.mattmoriarity.com")
+	trustDomain := spiffeid.RequireTrustDomainFromString(c.TrustDomain)
 	tlsConfig := tlsconfig.MTLSServerConfig(source, source, tlsconfig.AuthorizeMemberOf(trustDomain))
 	tlsListen := tls.NewListener(l, tlsConfig)
 

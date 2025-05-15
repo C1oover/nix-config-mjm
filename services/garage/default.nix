@@ -95,13 +95,13 @@ in
       requires = [ "spiffe-garage.socket" ];
 
       environment.SPIFFE_ENDPOINT_SOCKET = "unix:${config.mjm.spire.agent.socketPath}";
+      credentials.garage.admin_token = { };
 
       serviceConfig = {
         Type = "notify-reload";
-        ExecStart = "${pkgs.spiffe-garage}/bin/spiffe-garage-srv";
+        ExecStart = "${pkgs.spiffe-tool}/bin/spiffe-garage";
         DynamicUser = true;
         Restart = "always";
-        LoadCredential = [ "garage_admin_token:/run/garage-creds.sock" ];
 
         CapabilityBoundingSet = "";
         DevicePolicy = "closed";
