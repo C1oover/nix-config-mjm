@@ -6,7 +6,6 @@ import (
 	"crypto/x509"
 	"encoding/json"
 	"fmt"
-	"log/slog"
 	"net"
 	"net/http"
 	"strings"
@@ -18,6 +17,10 @@ import (
 	"github.com/spiffe/go-spiffe/v2/spiffeid"
 	"github.com/spiffe/go-spiffe/v2/spiffetls/tlsconfig"
 	"github.com/spiffe/go-spiffe/v2/workloadapi"
+	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/codes"
+	"go.opentelemetry.io/otel/trace"
 )
 
 type ServeCmd struct {
@@ -71,35 +74,38 @@ type proxyHandler struct {
 
 func (h *proxyHandler) Handler() http.Handler {
 	m := http.NewServeMux()
-	m.HandleFunc("GET /healthz", h.checkHealth)
-	m.HandleFunc("/creds", h.getCreds)
-	return m
+	m.Handle("GET /healthz", otelhttp.WithRouteTag("GET /healthz", http.HandlerFunc(h.checkHealth)))
+	m.Handle("/creds", otelhttp.WithRouteTag("/creds", http.HandlerFunc(h.getCreds)))
+	return otelhttp.NewHandler(m, "Handler")
 }
 
 func (h *proxyHandler) getCreds(w http.ResponseWriter, r *http.Request) {
-	spiffeID, err := getSPIFFEIDFromCerts(r.TLS.PeerCertificates)
+	ctx := r.Context()
+	span := trace.SpanFromContext(ctx)
+
+	spiffeID, err := getSPIFFEIDFromCerts(ctx, r.TLS.PeerCertificates)
 	if err != nil {
-		slog.ErrorContext(r.Context(), "error getting spiffe id from request", "error", err)
-		w.WriteHeader(500)
-		fmt.Fprintf(w, "error getting spiffe id from request: %v", err)
+		span.RecordError(err)
+		span.SetStatus(codes.Error, err.Error())
+		http.Error(w, fmt.Sprintf("error getting spiffe id from request: %v", err), http.StatusInternalServerError)
 		return
 	}
 
-	slog.InfoContext(r.Context(), "received request", "spiffe_id", spiffeID)
+	span.SetAttributes(attribute.Stringer("spiffe.id", spiffeID))
 
 	// TODO make these expire or be short-lived in some way
-	keyInfo, err := h.getKeyForSPIFFEID(r.Context(), spiffeID)
+	keyInfo, err := h.getKeyForSPIFFEID(ctx, spiffeID)
 	if err != nil {
-		slog.ErrorContext(r.Context(), "error fetching key from garage", "error", err)
-		w.WriteHeader(500)
-		fmt.Fprintf(w, "error fetching key from garage: %v", err)
+		span.RecordError(err)
+		span.SetStatus(codes.Error, err.Error())
+		http.Error(w, fmt.Sprintf("error fetching key from garage: %v", err), http.StatusInternalServerError)
 		return
 	}
 
 	keyID := keyInfo.GetAccessKeyId()
 	secretKey := keyInfo.GetSecretAccessKey()
 
-	slog.InfoContext(r.Context(), "found matching garage key", "key_id", keyID)
+	span.SetAttributes(attribute.String("garage.key_id", keyID))
 
 	resp := struct {
 		Version         int
@@ -117,9 +123,9 @@ func (h *proxyHandler) getCreds(w http.ResponseWriter, r *http.Request) {
 
 	out, err := json.Marshal(resp)
 	if err != nil {
-		slog.ErrorContext(r.Context(), "error marshalling json response", "error", err)
-		w.WriteHeader(500)
-		fmt.Fprintf(w, "error marshalling json response: %v", err)
+		span.RecordError(err)
+		span.SetStatus(codes.Error, err.Error())
+		http.Error(w, fmt.Sprintf("error marshalling json response: %v", err), http.StatusInternalServerError)
 		return
 	}
 
@@ -127,41 +133,63 @@ func (h *proxyHandler) getCreds(w http.ResponseWriter, r *http.Request) {
 	w.Write(out)
 }
 
-func getSPIFFEIDFromCerts(certs []*x509.Certificate) (spiffeid.ID, error) {
+func getSPIFFEIDFromCerts(ctx context.Context, certs []*x509.Certificate) (spiffeid.ID, error) {
+	ctx, span := tracer.Start(ctx, "getSPIFFEIDFromCerts", trace.WithAttributes(attribute.Int("cert.count", len(certs))))
+	defer span.End()
+
 	if len(certs) == 0 {
-		return spiffeid.ID{}, fmt.Errorf("no certs in https request")
+		err := fmt.Errorf("no certs in https request")
+		span.RecordError(err)
+		span.SetStatus(codes.Error, err.Error())
+		return spiffeid.ID{}, err
 	}
 
 	cert := certs[0]
 	uris := cert.URIs
+	span.SetAttributes(attribute.Int("cert.uri.count", len(uris)))
 	if len(uris) != 1 {
-		return spiffeid.ID{}, fmt.Errorf("wrong number of uris in certificate, expected 1, got %d", len(uris))
+		err := fmt.Errorf("wrong number of uris in certificate, expected 1, got %d", len(uris))
+		span.RecordError(err)
+		span.SetStatus(codes.Error, err.Error())
+		return spiffeid.ID{}, err
 	}
 
 	uri := uris[0]
+	span.SetAttributes(attribute.Stringer("cert.uri", uri))
+
 	spiffeID, err := spiffeid.FromURI(uri)
 	if err != nil {
+		span.RecordError(err)
+		span.SetStatus(codes.Error, err.Error())
 		return spiffeid.ID{}, fmt.Errorf("uri %q found in certificate is not a valid spiffe id: %w", uri, err)
 	}
 
+	span.SetAttributes(attribute.Stringer("spiffe.id", spiffeID))
 	return spiffeID, nil
 }
 
 func (h *proxyHandler) getKeyForSPIFFEID(ctx context.Context, id spiffeid.ID) (*garage.KeyInfo, error) {
+	ctx, span := tracer.Start(ctx, "getKeyForSPIFFEID",
+		trace.WithAttributes(attribute.Stringer("spiffe.id", id)))
+	defer span.End()
+
 	keys, _, err := h.Garage.KeyApi.ListKeys(ctx).Execute()
 	if err != nil {
 		return nil, fmt.Errorf("fetching list of keys from garage: %w", err)
 	}
 
+	span.SetAttributes(attribute.Int("key.count", len(keys)))
+
 	idStr := id.String()
-	slog.InfoContext(ctx, "fetched keys from garage", "key_count", len(keys))
 	for _, k := range keys {
-		slog.DebugContext(ctx, "found candidate key", "id", k.GetId(), "name", k.GetName())
+		span.AddEvent("check candidate key", trace.WithAttributes(attribute.String("key.id", k.GetId()), attribute.String("key.name", k.GetName())))
 		if k.GetName() == idStr {
-			slog.InfoContext(ctx, "found desired key", "id", k.GetId(), "name", k.GetName())
+			span.SetAttributes(attribute.String("key.id", k.GetId()), attribute.String("key.name", k.GetName()))
 
 			key, _, err := h.Garage.KeyApi.GetKey(ctx).Id(k.GetId()).ShowSecretKey("true").Execute()
 			if err != nil {
+				span.RecordError(err)
+				span.SetStatus(codes.Error, err.Error())
 				return nil, fmt.Errorf("fetching key info for key id %q: %w", k.GetId(), err)
 			}
 

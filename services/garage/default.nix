@@ -94,7 +94,11 @@ in
       ];
       requires = [ "spiffe-garage.socket" ];
 
-      environment.SPIFFE_ENDPOINT_SOCKET = "unix:${config.mjm.spire.agent.socketPath}";
+      environment = {
+        SPIFFE_ENDPOINT_SOCKET = "unix:${config.mjm.spire.agent.socketPath}";
+        OTEL_EXPORTER_OTLP_ENDPOINT = "http://localhost:4318";
+        OTEL_RESOURCE_ATTRIBUTES = "deployment.environment.name=prod";
+      };
       credentials.garage.admin_token = { };
 
       serviceConfig = {

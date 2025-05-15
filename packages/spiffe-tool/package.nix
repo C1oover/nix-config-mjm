@@ -6,5 +6,5 @@ buildGoModule {
 
   src = gitignore.gitignoreSource ./.;
 
-  vendorHash = "sha256-5VPLfrR2DwYu7aHtbffenqMHvJa5LC+SZ5r20m7vwX0=";
+  vendorHash = "sha256-cdcJIFoR3AKQOwHnzqha7bA+BVNaQU1kJdLUy7HaFYg=";
 }
