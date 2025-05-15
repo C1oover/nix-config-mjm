@@ -1,6 +1,7 @@
 {
   imports = [
     ./abra.nix
+    ./arcanine.nix
     ./blastoise.nix
     ./drowzee.nix
     ./hypno.nix

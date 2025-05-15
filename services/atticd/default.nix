@@ -15,9 +15,7 @@ in
 
   config = mkIf cfg.enable {
     mjm.services.atticd = {
-      vault = {
-        enable = true;
-      };
+      vault.enable = true;
       postgresql.enable = true;
     };
 
@@ -34,7 +32,7 @@ in
     services.atticd = {
       enable = true;
       settings = {
-        listen = "[::1]:8100";
+        listen = "[::1]:18100";
         database.url = "postgresql:///atticd?host=/run/postgresql";
         storage = {
           type = "s3";
@@ -73,30 +71,14 @@ in
       };
     };
 
-    mjm.networkd.macvlan.enable = true;
-
-    systemd.services.atticd = {
-      bindsTo = [ "netns-bridge@attic.service" ];
-      after = [ "netns-bridge@attic.service" ];
-      serviceConfig.NetworkNamespacePath = "/run/netns/attic";
-    };
-
     mjm.garage.clients.attic.services = [ "atticd" ];
 
     mjm.spire.tunnels = {
       attic = {
         mode = "server";
         listen.port = 8100;
-        target.port = 8100;
-        target.namespace = "attic";
+        target.port = 18100;
         allowIngress = true;
-        allowConsul = true;
-      };
-      consul-attic = {
-        mode = "client";
-        listen.socket = "/run/consul-checks/atticd.sock";
-        target.port = 8100;
-        service = "atticd";
       };
     };
 
@@ -105,7 +87,7 @@ in
 
       checks.up = {
         http.path = "/";
-        http.socket = "/run/consul-checks/atticd.sock";
+        http.port = 18100;
       };
     };
 

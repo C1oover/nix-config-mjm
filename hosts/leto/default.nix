@@ -20,7 +20,6 @@
 
   mjm.profiles.qemu-vm.enable = true;
 
-  mjm.atticd.enable = true;
   mjm.atuin.enable = true;
   mjm.consul.enable = true;
   mjm.launchpad.enable = true;
