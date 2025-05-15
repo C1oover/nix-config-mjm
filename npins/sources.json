@@ -77,9 +77,9 @@
       },
       "branch": "main",
       "submodules": false,
-      "revision": "b9afbbf3055d46ec2983ce0cc0d59c544fdb746d",
-      "url": "https://github.com/lilyinstarlight/nixos-cosmic/archive/b9afbbf3055d46ec2983ce0cc0d59c544fdb746d.tar.gz",
-      "hash": "0w97fzxhclaz3v4x2z4sgmc8lsxn2741870y0icpz65qg2s4d8z5"
+      "revision": "3c989494b1968ca066f5893401c9cb8e2202a8f2",
+      "url": "https://github.com/lilyinstarlight/nixos-cosmic/archive/3c989494b1968ca066f5893401c9cb8e2202a8f2.tar.gz",
+      "hash": "1czlc7f06bickjax6l3rqf7v0z5i9hv4szg06a3w981fzbv58xwa"
     },
     "darwin": {
       "type": "Git",
@@ -236,9 +236,9 @@
       },
       "branch": "deploy/nixpkgs-unstable",
       "submodules": false,
-      "revision": "d917dfa05ebaf2f5e6b5473ce3afe5a7e4d5a982",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=d917dfa05ebaf2f5e6b5473ce3afe5a7e4d5a982",
-      "hash": "1y7r72xnp5jv4a74xdcbkdac04d6rjvgcnlnipfap1ldfi0si5q9"
+      "revision": "c6034314aec69ae27ef9b4de99ce24bca8aa0dc2",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=c6034314aec69ae27ef9b4de99ce24bca8aa0dc2",
+      "hash": "0r6l5kylsfjijr4axmisbvr5naspkb5mlv906b12q9dd4gjriq46"
     },
     "preservation": {
       "type": "Git",
@@ -274,9 +274,9 @@
       },
       "branch": "canon",
       "submodules": false,
-      "revision": "e285cbe8cf88fcd9e718599791575c947f334995",
+      "revision": "c9a77e5b58d2bba865546693840221bdd6c839b8",
       "url": null,
-      "hash": "16dqmjm1q1p49yv42n1r4x5vn1q3vz61xls8qfri192w8q581diz"
+      "hash": "0r7igs9pqi7dgl6xrkigi0i1vw1rv9ci68k9134naswycbcnq8w3"
     }
   },
   "version": 5
