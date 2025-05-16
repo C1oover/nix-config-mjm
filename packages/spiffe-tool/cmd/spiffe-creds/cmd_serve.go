@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/coreos/go-systemd/v22/activation"
+	"github.com/coreos/go-systemd/v22/daemon"
 	"github.com/hashicorp/vault/api"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
@@ -35,7 +36,6 @@ func (c *ServeCmd) Run(ctx context.Context) error {
 		return fmt.Errorf("incorrect number of listeners (expected 1, got %d)", len(listeners))
 	}
 	l := listeners[0]
-	defer l.Close()
 
 	ctx, stop := signal.NotifyContext(ctx, syscall.SIGINT, syscall.SIGTERM)
 	defer stop()
@@ -79,6 +79,8 @@ func (c *ServeCmd) Run(ctx context.Context) error {
 			}
 		}
 	}()
+
+	daemon.SdNotify(false, daemon.SdNotifyReady)
 
 	<-ctx.Done()
 	stop()
