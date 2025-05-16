@@ -103,6 +103,8 @@ in
         ];
 
         environment = {
+          OTEL_EXPORTER_OTLP_ENDPOINT = "http://localhost:4318";
+          OTEL_RESOURCE_ATTRIBUTES = "deployment.environment.name=prod";
           SPIFFE_ENDPOINT_SOCKET = "unix:${cfg.agent.socketPath}";
           VAULT_ADDR = "https://vault.service.consul:8200";
         };
