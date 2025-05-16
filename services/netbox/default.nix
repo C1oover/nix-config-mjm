@@ -164,7 +164,7 @@ in
     };
 
     deployment.tests = {
-      inherit (pkgs.nixosTests) netbox_4_1;
+      inherit (pkgs.nixosTests) netbox_4_2;
     };
   };
 }
