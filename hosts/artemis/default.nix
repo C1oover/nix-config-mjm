@@ -5,6 +5,7 @@
     ./charizard.nix
     ./mrmime.nix
     ./rhyhorn.nix
+    ./seadra.nix
     ./onix.nix
   ];
 

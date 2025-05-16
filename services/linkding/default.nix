@@ -16,7 +16,13 @@ in
     mjm.services.linkding = {
       postgresql.enable = true;
     };
-    mjm.state.services = [ "linkding" ];
+    mjm.state.directories = [
+      {
+        directory = "/var/lib/linkding";
+        user = "linkding";
+        group = "linkding";
+      }
+    ];
 
     ingress.virtualHosts.links = {
       upstream = {
@@ -30,7 +36,6 @@ in
       enable = true;
 
       socket = "/run/linkding/server.sock";
-      openFirewall = true;
 
       settings = {
         LD_SUPERUSER_NAME = "mjm";
