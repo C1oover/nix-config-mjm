@@ -1,0 +1,3 @@
+{
+  mjm.homelab.enableYubiKey = true;
+}

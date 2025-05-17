@@ -39,12 +39,23 @@ in
 
     enableTpm = mkOption {
       type = types.bool;
-      default = pkgs.stdenv.isLinux;
+      default = pkgs.stdenv.isLinux && !cfg.enableYubiKey;
+    };
+
+    enableYubiKey = mkOption {
+      type = types.bool;
+      default = false;
     };
 
     sshPublicKeyName = mkOption {
       type = types.str;
-      default = if cfg.enableTpm then "id_ecdsa.pub" else "id_ed25519.pub";
+      default =
+        if cfg.enableTpm then
+          "id_ecdsa.pub"
+        else if cfg.enableYubiKey then
+          "id_ed25519_sk.pub"
+        else
+          "id_ed25519.pub";
     };
 
     sshPublicKeyDir = mkOption {
