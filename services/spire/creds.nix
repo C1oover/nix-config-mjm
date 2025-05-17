@@ -111,9 +111,9 @@ in
           Type = "notify";
           ExecStart = concatStringsSep " " [
             "${pkgs.spiffe-tool}/bin/spiffe-creds"
+            "serve"
             "--path"
             "prod/services/%i"
-            "serve"
           ];
           DynamicUser = true;
 
