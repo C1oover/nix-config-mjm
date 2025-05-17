@@ -1,45 +1,37 @@
 {
-  networking.computerName = "Athena";
+  config,
+  lib,
+  inputs,
+  ...
+}:
+{
+  imports = [
+    ./hardware-configuration.nix
+    "${inputs.nixos-apple-silicon}/apple-silicon-support"
+  ];
+
+  mjm.username = "mjm";
+
   networking.hostName = "athena";
 
+  boot.loader.systemd-boot.enable = true;
+
   mjm.desktop.enable = true;
+  mjm.desktop.plasma.enable = true;
 
-  homebrew.casks = [
-    "cleanshot"
-    "loom"
-    "nikitabobko/tap/aerospace"
-    "notunes"
-    "orbstack"
-    "postico"
-    "secretive"
-    "slab"
-    "teleport-connect"
-    "zoom"
-  ];
+  # without this, it's gonna use llvmpipe and the performance will be just total ass
+  hardware.asahi.useExperimentalGPUDriver = true;
 
-  homebrew.brews = [
-    # openssl is needed for building erlang with asdf
-    "openssl@1.1"
-    "openssl@3"
+  services.openssh.enable = true;
 
-    # TODO switch this to install via nix once nixpkgs has 0.16+
-    "asdf"
-  ];
+  # erofs doesn't seem to be available here?
+  system.etc.overlay.enable = lib.mkForce false;
 
-  # networking.hosts =
-  #   let
-  #     slabDomains = [
-  #       "matt.slabdev.com"
-  #       "slabdev.com"
-  #       "api.slabdev.com"
-  #       "cdn.slabdev.com"
-  #     ];
-  #   in
-  #   {
-  #     "127.0.0.1" = slabDomains;
-  #     "::1" = slabDomains;
-  #   };
+  # this is a little sketch, but for the moment it seems like the least bad way to let
+  # this system build in CI. basically, if this firmware directory can't be found, it
+  # just won't be used, but the system will otherwise build fine.
+  hardware.asahi.extractPeripheralFirmware =
+    config.hardware.asahi.peripheralFirmwareDirectory != null;
 
-  system.stateVersion = 4;
-  nixpkgs.system = "aarch64-darwin";
+  system.stateVersion = "25.05";
 }

@@ -4,6 +4,7 @@ let
     "apollo"
     "arges"
     "artemis"
+    "athena"
     "brontes"
     "chaos"
     "demeter"
@@ -17,7 +18,6 @@ let
   ];
 
   darwinHostNames = [
-    "athena"
     "mars"
     "talos"
   ];
@@ -27,6 +27,7 @@ let
       meta = {
         nixpkgs = {
           default = "nixos-small";
+          athena = "nixos";
           persephone = "nixos";
           uranus = "nixos";
         };

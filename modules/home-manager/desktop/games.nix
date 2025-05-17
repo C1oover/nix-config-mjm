@@ -5,7 +5,12 @@
   ...
 }:
 let
-  inherit (lib) attrValues mkEnableOption mkIf;
+  inherit (lib)
+    attrValues
+    mkEnableOption
+    mkIf
+    optionals
+    ;
   cfg = config.mjm.desktop;
 in
 {
@@ -16,22 +21,24 @@ in
   };
 
   config = mkIf (cfg.enable && cfg.games.enable) {
-    home.packages = attrValues {
-      inherit (pkgs)
-        # build currently broken https://hydra.nixos.org/build/296133688
-        # chiaki
-        lutris
-        wago
-        xivlauncher
-        ;
-      inherit (pkgs.kdePackages)
-        kbreakout
-        kmahjongg
-        kmines
-        kpat
-        palapeli
-        ;
-    };
+    home.packages =
+      attrValues {
+        inherit (pkgs)
+          chiaki
+          ;
+        inherit (pkgs.kdePackages)
+          kbreakout
+          kmahjongg
+          kmines
+          kpat
+          palapeli
+          ;
+      }
+      ++ optionals pkgs.stdenv.isx86_64 [
+        pkgs.lutris
+        pkgs.wago
+        pkgs.xivlauncher
+      ];
 
     home.file.".xlcore/wine-runtimes/proton8-ge".source = pkgs.fetchzip {
       url = "https://github.com/rankynbass/wine-ge-xiv/releases/download/xiv-Proton8-26/unofficial-wine-xiv-Proton8-26-x86_64.tar.xz";
@@ -39,7 +46,7 @@ in
     };
 
     programs.obs-studio = {
-      enable = true;
+      enable = pkgs.stdenv.isx86_64;
       plugins = with pkgs.obs-studio-plugins; [
         obs-vkcapture
         obs-mute-filter

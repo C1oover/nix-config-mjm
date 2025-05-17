@@ -36,7 +36,7 @@ in
       enableUserSlices = true;
     };
 
-    programs.steam.enable = true;
+    programs.steam.enable = pkgs.stdenv.isx86_64;
     services.ratbagd.enable = true;
     hardware.bluetooth.enable = true;
 

@@ -214,6 +214,19 @@
       "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=6244247d06a1fff97a15f2a5deec4e322f835b1a",
       "hash": "1208dbwsr5kzc53pafbvwzmvdxknxzq2m05y00h5lkl1kydfpc25"
     },
+    "nixos-apple-silicon": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "tpwrules",
+        "repo": "nixos-apple-silicon"
+      },
+      "branch": "main",
+      "submodules": false,
+      "revision": "4829c0cee5887452eed32df61937bf20bc8032fe",
+      "url": "https://github.com/tpwrules/nixos-apple-silicon/archive/4829c0cee5887452eed32df61937bf20bc8032fe.tar.gz",
+      "hash": "130wqxwd887c53a13zhd4rzv14k5ik89012l3m6x3w3pi3silwqp"
+    },
     "nixos-small": {
       "type": "Git",
       "repository": {

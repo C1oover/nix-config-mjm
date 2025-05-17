@@ -18,7 +18,6 @@ in
       inherit (pkgs)
         bitwarden
         element-desktop
-        discord
         krita
         libreoffice-qt-fresh
         piper
