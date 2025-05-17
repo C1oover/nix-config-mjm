@@ -50,6 +50,8 @@ in
       };
     };
 
+    networking.firewall.allowedTCPPorts = [ 14318 ];
+
     mjm.garage.clients.tempo.services = [ "tempo" ];
 
     mjm.spire.tunnels = {
