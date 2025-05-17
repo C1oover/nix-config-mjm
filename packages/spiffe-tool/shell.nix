@@ -21,6 +21,7 @@ devshell.mkShell (
       inherit (pkgs)
         go
         gopls
+        systemfd
         ;
     };
 

@@ -110,10 +110,10 @@ in
         serviceConfig = {
           Type = "notify";
           ExecStart = concatStringsSep " " [
-            (lib.getExe pkgs.spire-secrets)
-            "-path"
+            "${pkgs.spiffe-tool}/bin/spiffe-creds"
+            "--path"
             "prod/services/%i"
-            "server"
+            "serve"
           ];
           DynamicUser = true;
 
@@ -168,7 +168,7 @@ in
           name = "spiffe-creds@${name}";
           value = {
             overrideStrategy = "asDropin";
-            environment.SECRET_ALIASES = concatStringsSep " " (mapAttrsToList (k: v: "${k}:${v}") aliases);
+            environment.SECRET_ALIASES = concatStringsSep " " (mapAttrsToList (k: v: "${k}=${v}") aliases);
           };
         }
       ) cfg.creds;
