@@ -8,7 +8,10 @@ import (
 	"fmt"
 	"net"
 	"net/http"
+	"os/signal"
 	"strings"
+	"sync/atomic"
+	"syscall"
 	"time"
 
 	"git.deuxfleurs.fr/garage-sdk/garage-admin-sdk-golang"
@@ -41,6 +44,9 @@ func (c *ServeCmd) Run(ctx context.Context) error {
 	l := listeners[0]
 	defer l.Close()
 
+	ctx, stop := signal.NotifyContext(ctx, syscall.SIGINT, syscall.SIGTERM)
+	defer stop()
+
 	source, err := workloadapi.NewX509Source(ctx)
 	if err != nil {
 		return fmt.Errorf("creating x509 source: %w", err)
@@ -48,7 +54,8 @@ func (c *ServeCmd) Run(ctx context.Context) error {
 	defer source.Close()
 
 	adminToken := strings.TrimSpace(string(c.AdminToken))
-	ctx = context.WithValue(ctx, garage.ContextAccessToken, adminToken)
+	rCtx, stopRequests := context.WithCancel(context.Background())
+	rCtx = context.WithValue(rCtx, garage.ContextAccessToken, adminToken)
 
 	gConfig := garage.NewConfiguration()
 	gConfig.Host = c.GarageAdminAddr
@@ -60,16 +67,37 @@ func (c *ServeCmd) Run(ctx context.Context) error {
 
 	h := &proxyHandler{Garage: g}
 
-	daemon.SdNotify(false, daemon.SdNotifyReady)
 	srv := &http.Server{
 		Handler:     h.Handler(),
-		BaseContext: func(_ net.Listener) context.Context { return ctx },
+		BaseContext: func(_ net.Listener) context.Context { return rCtx },
 	}
-	return srv.Serve(tlsListen)
+	go func() {
+		if err := srv.Serve(tlsListen); err != nil && err != http.ErrServerClosed {
+			panic(err)
+		}
+	}()
+
+	daemon.SdNotify(false, daemon.SdNotifyReady)
+	<-ctx.Done()
+	stop()
+	h.isShuttingDown.Store(true)
+
+	time.Sleep(5 * time.Second)
+	shutdownCtx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	defer cancel()
+
+	err = srv.Shutdown(shutdownCtx)
+	stopRequests()
+	if err != nil {
+		time.Sleep(5 * time.Second)
+	}
+
+	return nil
 }
 
 type proxyHandler struct {
-	Garage *garage.APIClient
+	Garage         *garage.APIClient
+	isShuttingDown atomic.Bool
 }
 
 func (h *proxyHandler) Handler() http.Handler {
@@ -200,7 +228,12 @@ func (h *proxyHandler) getKeyForSPIFFEID(ctx context.Context, id spiffeid.ID) (*
 	return nil, fmt.Errorf("no matching key found for spiffe id %q", idStr)
 }
 
-func (proxyHandler) checkHealth(w http.ResponseWriter, r *http.Request) {
+func (h *proxyHandler) checkHealth(w http.ResponseWriter, r *http.Request) {
+	if h.isShuttingDown.Load() {
+		http.Error(w, "Server is shutting down", http.StatusServiceUnavailable)
+		return
+	}
+
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprint(w, "OK")
 }
