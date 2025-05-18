@@ -5,7 +5,7 @@
   ...
 }:
 let
-  inherit (lib) mkIf mkOverride;
+  inherit (lib) mkIf mkMerge mkOverride;
   cfg = config.mjm.desktop;
 in
 {
@@ -50,6 +50,9 @@ in
       "/var/lib/fprint"
     ];
 
-    boot.binfmt.emulatedSystems = mkIf (pkgs.system == "x86_64-linux") [ "aarch64-linux" ];
+    boot.binfmt.emulatedSystems = mkMerge [
+      (mkIf (pkgs.system == "x86_64-linux") [ "aarch64-linux" ])
+      (mkIf (pkgs.system == "aarch64-linux") [ "x86_64-linux" ])
+    ];
   };
 }
