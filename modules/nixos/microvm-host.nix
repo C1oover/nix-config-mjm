@@ -104,6 +104,8 @@ in
           ];
         };
       }) config.microvm.vms;
+
+      deployment.tests = concatMapAttrs (_: vm: vm.config.config.deployment.tests) config.microvm.vms;
     }
     (mkIf cfg.snixStore.enable {
       systemd.services.snix-store = {
