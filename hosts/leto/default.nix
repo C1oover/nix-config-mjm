@@ -23,7 +23,6 @@
   mjm.atuin.enable = true;
   mjm.consul.enable = true;
   mjm.launchpad.enable = true;
-  mjm.netbox.enable = true;
   mjm.server.enable = true;
   mjm.state = {
     enablePreservation = true;

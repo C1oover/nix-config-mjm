@@ -8,6 +8,7 @@
     ./rhyhorn.nix
     ./seadra.nix
     ./staryu.nix
+    ./voltorb.nix
   ];
 
   mjm.username = "mjm";
