@@ -23,6 +23,7 @@
   hardware.asahi.useExperimentalGPUDriver = true;
 
   services.openssh.enable = true;
+  programs.ssh.startAgent = true;
 
   # erofs doesn't seem to be available here?
   system.etc.overlay.enable = lib.mkForce false;
