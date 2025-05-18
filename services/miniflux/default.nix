@@ -18,9 +18,7 @@ in
 
   config = mkIf cfg.enable {
     mjm.services.miniflux = {
-      vault = {
-        enable = true;
-      };
+      vault.enable = true;
     };
     mjm.postgresql.enable = true;
 

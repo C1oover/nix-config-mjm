@@ -1,12 +1,13 @@
 {
   imports = [
+    ./charizard.nix
     ./charmander.nix
     ./charmeleon.nix
-    ./charizard.nix
     ./mrmime.nix
+    ./onix.nix
     ./rhyhorn.nix
     ./seadra.nix
-    ./onix.nix
+    ./staryu.nix
   ];
 
   mjm.username = "mjm";
