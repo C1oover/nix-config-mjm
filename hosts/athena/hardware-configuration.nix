@@ -1,37 +1,58 @@
-{ config, lib, pkgs, modulesPath, ... }:
 {
-  imports =
-    [ (modulesPath + "/installer/scan/not-detected.nix")
-    ];
+  lib,
+  modulesPath,
+  ...
+}:
+{
+  imports = [
+    (modulesPath + "/installer/scan/not-detected.nix")
+  ];
 
-  boot.initrd.availableKernelModules = [ "usb_storage" "usbhid" "sdhci_pci" ];
+  boot.initrd.availableKernelModules = [
+    "usb_storage"
+    "usbhid"
+    "sdhci_pci"
+  ];
   boot.initrd.kernelModules = [ "dm-snapshot" ];
-  boot.kernelModules = [ ];
-  boot.extraModulePackages = [ ];
 
-  fileSystems."/" =
-    { device = "/dev/lvm/nixos";
-      fsType = "btrfs";
-      options = [ "subvol=root" ];
-    };
+  fileSystems."/" = {
+    device = "/dev/lvm/nixos";
+    fsType = "btrfs";
+    options = [
+      "subvol=root"
+      "compress=zstd"
+      "relatime"
+    ];
+  };
 
-  fileSystems."/nix" =
-    { device = "/dev/lvm/nixos";
-      fsType = "btrfs";
-      options = [ "subvol=nix" ];
-    };
+  fileSystems."/nix" = {
+    device = "/dev/lvm/nixos";
+    fsType = "btrfs";
+    options = [
+      "subvol=nix"
+      "compress=zstd"
+      "relatime"
+    ];
+  };
 
-  fileSystems."/home" =
-    { device = "/dev/lvm/nixos";
-      fsType = "btrfs";
-      options = [ "subvol=home" ];
-    };
+  fileSystems."/home" = {
+    device = "/dev/lvm/nixos";
+    fsType = "btrfs";
+    options = [
+      "subvol=home"
+      "compress=zstd"
+      "relatime"
+    ];
+  };
 
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/8184-1500";
-      fsType = "vfat";
-      options = [ "fmask=0022" "dmask=0022" ];
-    };
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-uuid/8184-1500";
+    fsType = "vfat";
+    options = [
+      "fmask=0022"
+      "dmask=0022"
+    ];
+  };
 
   swapDevices = [ ];
 
