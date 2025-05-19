@@ -210,9 +210,9 @@
       },
       "branch": "deploy/nixos-unstable",
       "submodules": false,
-      "revision": "f48fd6057f88562aabb44c9e9e799bfdf2e9fc63",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=f48fd6057f88562aabb44c9e9e799bfdf2e9fc63",
-      "hash": "1208dbwsr5kzc53pafbvwzmvdxknxzq2m05y00h5lkl1kydfpc25"
+      "revision": "6e70aa670b88e8731dc8600aacc1b21789762da4",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=6e70aa670b88e8731dc8600aacc1b21789762da4",
+      "hash": "1fbpvyccw5prrrjywqfycry4b2k5c7ga62vvgz5sqy21kap169hr"
     },
     "nixos-apple-silicon": {
       "type": "Git",
@@ -287,9 +287,9 @@
       },
       "branch": "canon",
       "submodules": false,
-      "revision": "8bb8400304493feb36a6ec13072fa031025e6bf8",
+      "revision": "2bbd06753baac4ce0e762d38b14cf43e5c55e459",
       "url": null,
-      "hash": "1z8vi6wa7vm95h3fkprcczr43h2jpmg7x3qi6nd0pz8y2mfc89n1"
+      "hash": "1d61wy6a3mra88bw9f3sa4328r23nap1gkld18crcfafr7gckbg0"
     }
   },
   "version": 5
