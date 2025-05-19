@@ -45,6 +45,7 @@ in
     };
 
     mjm.spire.tunnels.lldap = {
+      id = "lldap";
       mode = "server";
       listen.port = 17170;
       target.port = 27170;

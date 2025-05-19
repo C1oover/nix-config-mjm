@@ -139,6 +139,7 @@ in
     services.redis.servers.authelia.enable = true;
 
     mjm.spire.tunnels.authelia = {
+      id = "authelia";
       mode = "server";
       listen.port = 9091;
       target.port = 9191;

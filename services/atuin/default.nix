@@ -41,6 +41,7 @@ in
 
     mjm.spire.tunnels = {
       atuin = {
+        id = "atuin";
         mode = "server";
         listen.port = 8888;
         target.port = 8888;
@@ -49,12 +50,15 @@ in
         allowConsul = true;
       };
       consul-atuin = {
+        id = "consul-agent";
         mode = "client";
         listen.socket = "/run/consul-checks/atuin.sock";
         target.port = 8888;
         service = "atuin";
       };
     };
+
+    mjm.services.consul-agent = { };
 
     services.consul.services.atuin = {
       inherit (config.services.atuin) port;

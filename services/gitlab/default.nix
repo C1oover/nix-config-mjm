@@ -22,6 +22,7 @@ in
     mjm.services.gitlab = {
       vault.enable = true;
     };
+    mjm.services.gitlab-pages = { };
     mjm.postgresql = {
       enable = true;
       extraBackupDatabases = [ "gitlab" ];
@@ -242,23 +243,19 @@ in
 
     mjm.spire.tunnels = {
       gitlab = {
+        id = "gitlab";
         mode = "server";
         listen.port = 8443;
         target.socket = "/run/gitlab/gitlab-workhorse.socket";
         allowIngress = true;
       };
       gitlab-pages = {
+        id = "gitlab-pages";
         mode = "server";
         listen.port = 8091;
         target.port = 8090;
         allowIngress = true;
         allowConsul = true;
-      };
-      consul-gitlab-pages = {
-        mode = "client";
-        listen.socket = "/run/consul-checks/gitlab-pages.sock";
-        target.port = 8091;
-        service = "gitlab-pages";
       };
     };
 
@@ -276,7 +273,7 @@ in
 
         checks.up = {
           http.path = "/healthz";
-          http.socket = "/run/consul-checks/gitlab-pages.sock";
+          http.port = 8090;
         };
       };
     };

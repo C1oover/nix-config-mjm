@@ -50,6 +50,7 @@ in
     };
 
     mjm.spire.tunnels.navidrome = {
+      id = "navidrome";
       mode = "server";
       listen.port = 4533;
       target.socket = "/run/navidrome/server.sock";

@@ -124,6 +124,20 @@ let
         };
       };
     };
+
+  mkEntry = name: tunnel: {
+    name = "tunnel-${name}";
+    value = {
+      spiffe_id = "spiffe://${config.mjm.spire.agent.trustDomain}/svc/${tunnel.id}";
+      selectors = [
+        {
+          type = "systemd";
+          value = "id:${name}-tunnel.service";
+        }
+      ];
+      dns_names = mkIf (tunnel.mode == "server") [ "${tunnel.id}.service.consul" ];
+    };
+  };
 in
 {
   options.mjm.spire.tunnels = mkOption {
@@ -133,6 +147,9 @@ in
         { config, ... }:
         {
           options = {
+            id = mkOption {
+              type = types.str;
+            };
             mode = mkOption {
               type = types.enum [
                 "client"
@@ -251,5 +268,6 @@ in
       (filter (t: t.openFirewall))
       (map (t: t.listen.port))
     ];
+    mjm.spire.entries = mapAttrs' mkEntry cfg.tunnels;
   };
 }

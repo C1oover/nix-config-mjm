@@ -8,9 +8,9 @@ let
     attrNames
     attrValues
     concatMap
-    filter
     filterAttrs
     listToAttrs
+    mapAttrs'
     mkEnableOption
     mkIf
     mkMerge
@@ -21,13 +21,10 @@ let
     ;
 
   cfg = config.mjm.services;
-  osConfig = config;
+  trustDomain = config.mjm.spire.agent.trustDomain;
 
   serviceType =
     { name, ... }:
-    let
-      svcName = name;
-    in
     {
       options = {
         name = mkOption {
@@ -66,7 +63,17 @@ in
 
   config = mkMerge [
 
-    { deployment.tags = map (s: "svc-${s}") (attrNames cfg); }
+    {
+      deployment.tags = map (s: "svc-${s}") (attrNames cfg);
+
+      mjm.spire.entries = mapAttrs' (
+        s: _:
+        nameValuePair "service-${s}-${config.networking.hostName}" {
+          spiffe_id = "spiffe://${trustDomain}/svc/${s}";
+          parent_id = "spiffe://${trustDomain}/${config.networking.hostName}";
+        }
+      ) cfg;
+    }
 
     (mkIf (postgresServices != [ ]) {
       mjm.postgresql.enable = true;
@@ -92,6 +99,22 @@ in
           nameValuePair "spiffe-creds@${name}" {
             overrideStrategy = "asDropin";
             wantedBy = [ "sockets.target" ];
+          }
+        ))
+        listToAttrs
+      ];
+
+      mjm.spire.entries = pipe vaultServices [
+        (map (
+          { name, ... }:
+          nameValuePair "spiffe-creds-${name}" {
+            spiffe_id = "spiffe://${trustDomain}/svc/${name}";
+            selectors = [
+              {
+                type = "systemd";
+                value = "id:spiffe-creds@${name}.service";
+              }
+            ];
           }
         ))
         listToAttrs

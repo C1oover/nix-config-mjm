@@ -97,6 +97,7 @@ in
 
     mjm.spire.tunnels = {
       peertube = {
+        id = "peertube";
         mode = "server";
         listen.port = 9001;
         target.socket = "/run/nginx/peertube.sock";

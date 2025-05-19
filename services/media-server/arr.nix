@@ -189,6 +189,7 @@ in
 
     mjm.spire.tunnels = {
       sonarr = {
+        id = "sonarr";
         mode = "server";
         listen.port = 8989;
         target.port = 8989;
@@ -197,6 +198,7 @@ in
         allowConsul = true;
       };
       sonarr-metrics = {
+        id = "sonarr";
         mode = "server";
         listen.port = 9708;
         target.port = 9708;
@@ -204,6 +206,7 @@ in
         allowMetrics = true;
       };
       sonarr-sabnzbd = {
+        id = "sonarr";
         mode = "client";
         listen.address = "127.0.0.1:8080";
         listen.namespace = "sonarr";
@@ -211,6 +214,7 @@ in
         target.port = 8080;
       };
       consul-sonarr = {
+        id = "consul-agent";
         mode = "client";
         listen.socket = "/run/consul-checks/sonarr.sock";
         target.port = 8989;
@@ -218,6 +222,7 @@ in
       };
 
       radarr = {
+        id = "radarr";
         mode = "server";
         listen.port = 7878;
         target.port = 7878;
@@ -226,6 +231,7 @@ in
         allowConsul = true;
       };
       radarr-metrics = {
+        id = "radarr";
         mode = "server";
         listen.port = 9707;
         target.port = 9708;
@@ -233,6 +239,7 @@ in
         allowMetrics = true;
       };
       radarr-sabnzbd = {
+        id = "radarr";
         mode = "client";
         listen.address = "127.0.0.1:8080";
         listen.namespace = "radarr";
@@ -240,6 +247,7 @@ in
         target.port = 8080;
       };
       consul-radarr = {
+        id = "consul-agent";
         mode = "client";
         listen.socket = "/run/consul-checks/radarr.sock";
         target.port = 7878;
@@ -247,6 +255,7 @@ in
       };
 
       lidarr = {
+        id = "lidarr";
         mode = "server";
         listen.port = 8686;
         target.port = 8686;
@@ -255,6 +264,7 @@ in
         allowConsul = true;
       };
       lidarr-sabnzbd = {
+        id = "lidarr";
         mode = "client";
         listen.address = "127.0.0.1:8080";
         listen.namespace = "lidarr";
@@ -262,6 +272,7 @@ in
         target.port = 8080;
       };
       consul-lidarr = {
+        id = "consul-agent";
         mode = "client";
         listen.socket = "/run/consul-checks/lidarr.sock";
         target.port = 8686;
@@ -269,6 +280,7 @@ in
       };
 
       readarr = {
+        id = "readarr";
         mode = "server";
         listen.port = 8787;
         target.port = 8787;
@@ -277,6 +289,7 @@ in
         allowConsul = true;
       };
       readarr-metrics = {
+        id = "readarr";
         mode = "server";
         listen.port = 9706;
         target.port = 9708;
@@ -284,6 +297,7 @@ in
         allowMetrics = true;
       };
       readarr-sabnzbd = {
+        id = "readarr";
         mode = "client";
         listen.address = "127.0.0.1:8080";
         listen.namespace = "readarr";
@@ -291,6 +305,7 @@ in
         target.port = 8080;
       };
       consul-readarr = {
+        id = "consul-agent";
         mode = "client";
         listen.socket = "/run/consul-checks/readarr.sock";
         target.port = 8787;
@@ -298,6 +313,7 @@ in
       };
 
       readarr-audio = {
+        id = "readarr-audio";
         mode = "server";
         listen.port = 8788;
         target.port = 8788;
@@ -306,6 +322,7 @@ in
         allowConsul = true;
       };
       readarr-audio-sabnzbd = {
+        id = "readarr-audio";
         mode = "client";
         listen.address = "127.0.0.1:8080";
         listen.namespace = "readarr-audio";
@@ -313,12 +330,15 @@ in
         target.port = 8080;
       };
       consul-readarr-audio = {
+        id = "consul-agent";
         mode = "client";
         listen.socket = "/run/consul-checks/readarr-audio.sock";
         target.port = 8788;
         service = "readarr-audio";
       };
     };
+
+    mjm.services.consul-agent = { };
 
     services.consul.services = {
       sonarr = {
