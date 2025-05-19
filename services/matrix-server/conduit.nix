@@ -73,6 +73,7 @@ in
 
     mjm.spire.tunnels = {
       conduwuit = {
+        id = "conduit";
         mode = "server";
         listen.port = 6167;
         target.port = 6166;
@@ -80,6 +81,7 @@ in
         allowedServices = [ "mautrix-imessage" ];
       };
       conduit-mautrix-imessage = {
+        id = "conduit";
         mode = "client";
         listen.port = 29400;
         # this tunnel needs to work without the mautrix-imessage consul service

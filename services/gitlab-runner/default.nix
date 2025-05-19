@@ -16,6 +16,8 @@ let
     ;
   cfg = config.mjm.gitlab-runner;
   nix = config.nix.package;
+
+  trustDomain = config.mjm.spire.agent.trustDomain;
 in
 {
   options.mjm.gitlab-runner = {
@@ -40,6 +42,16 @@ in
     boot.kernel.sysctl."net.ipv4.ip_forward" = true;
 
     mjm.spire.agent.enable = true;
+    mjm.spire.entries."repo-nix-config-${config.networking.hostName}" = {
+      spiffe_id = "spiffe://${trustDomain}/ci/repo/nix-config";
+      parent_id = "spiffe://${trustDomain}/${config.networking.hostName}";
+      selectors = [
+        {
+          type = "docker";
+          value = "label:com.gitlab.gitlab-runner.project.id:30";
+        }
+      ];
+    };
 
     virtualisation.podman = {
       enable = true;

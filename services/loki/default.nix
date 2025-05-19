@@ -106,6 +106,7 @@ in
 
     mjm.spire.tunnels = {
       loki = {
+        id = "loki";
         mode = "server";
         listen.port = 3103;
         target.port = 3100;
@@ -118,6 +119,7 @@ in
         allowConsul = true;
       };
       loki-alertmanager = {
+        id = "loki";
         mode = "client";
         listen.port = 9093;
         target.port = 9093;

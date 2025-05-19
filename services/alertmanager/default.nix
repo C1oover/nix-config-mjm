@@ -72,6 +72,7 @@ in
 
     mjm.spire.tunnels = {
       alertmanager = {
+        id = "alertmanager";
         mode = "server";
         listen.port = 9093;
         target.port = 19093;

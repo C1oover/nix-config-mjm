@@ -2,11 +2,27 @@
   config,
   lib,
   pkgs,
+  nodes,
   ...
 }:
 let
-  inherit (lib) mkEnableOption mkIf;
+  inherit (lib)
+    attrValues
+    mergeAttrsList
+    mkEnableOption
+    mkIf
+    pipe
+    ;
   cfg = config.mjm.spire;
+
+  entriesJson = pipe nodes [
+    attrValues
+    (map (node: node.config.mjm.spire.entries))
+    mergeAttrsList
+    attrValues
+    (jsonFormat.generate "spire-entries.json")
+  ];
+  jsonFormat = pkgs.formats.json { };
 
   configFile = pkgs.writeText "spire.hcl" ''
     server {
@@ -62,13 +78,14 @@ in
   };
 
   config = mkIf cfg.server.enable {
+    environment.etc."spire-entries.json".source = entriesJson;
+
     mjm.services.spire = {
       postgresql = {
         enable = true;
         databases = [ "spire-server" ];
       };
     };
-    # mjm.state.services = [ "spire-server" ];
     mjm.state.directories = [
       {
         directory = "/var/lib/private/spire-server";
@@ -133,6 +150,51 @@ in
       };
     };
 
+    systemd.services.spire-provision = {
+      description = "Provision SPIRE Registration Entries";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "spire-server.service" ];
+      requires = [ "spire-server.service" ];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        ExecStart = "${pkgs.spiffe-tool}/bin/spire-provision ${entriesJson}";
+        DynamicUser = true;
+        User = "spire-server";
+
+        CapabilityBoundingSet = "";
+        DevicePolicy = "closed";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        PrivateDevices = true;
+        PrivateIPC = true;
+        PrivateUsers = "identity";
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "strict";
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        SystemCallArchitectures = "native";
+        SystemCallErrorNumber = "EPERM";
+        SystemCallFilter = [
+          "@system-service"
+          "~@resources @privileged"
+        ];
+        UMask = "0027";
+      };
+    };
+
     networking.firewall.allowedTCPPorts = [
       8081
       8082
@@ -157,6 +219,8 @@ in
         ${pkgs.spire-server}/bin/spire-server "$@" -socketPath /run/spire-server/api.sock
       '')
       (pkgs.writeNuBin "spire-manage" ./spire-manage.nu)
+
+      pkgs.spiffe-tool
     ];
   };
 }

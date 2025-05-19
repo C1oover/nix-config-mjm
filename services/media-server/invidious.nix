@@ -46,6 +46,7 @@ in
 
     mjm.spire.tunnels = {
       invidious = {
+        id = "invidious";
         mode = "server";
         listen.port = 3000;
         target.port = 3000;
@@ -54,12 +55,15 @@ in
         allowConsul = true;
       };
       consul-invidious = {
+        id = "consul-agent";
         mode = "client";
         listen.socket = "/run/consul-checks/invidious.sock";
         target.port = 3000;
         service = "invidious";
       };
     };
+
+    mjm.services.consul-agent = { };
 
     services.consul.services.invidious = {
       port = 3000;

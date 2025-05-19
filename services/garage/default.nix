@@ -152,12 +152,14 @@ in
     };
 
     mjm.spire.tunnels.garage-s3 = {
+      id = "garage";
       mode = "server";
       listen.port = 3902;
       target.socket = "/run/garage/s3.sock";
       # don't bother with identifying the client, since they need to provide creds
       # anyway, which spiffe-garage will handle.
     };
+    mjm.spire.entries.tunnel-garage-s3.dns_names = [ "s3.garage.service.consul" ];
 
     environment.systemPackages = builtins.attrValues {
       inherit (pkgs.callPackages ./scripts.nix { garage = config.services.garage.package; }) g;

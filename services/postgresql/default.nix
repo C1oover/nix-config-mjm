@@ -17,6 +17,7 @@ let
     ;
 
   cfg = config.mjm.postgresql;
+  trustDomain = config.mjm.spire.agent.trustDomain;
 in
 {
   options.mjm.postgresql = {
@@ -68,10 +69,26 @@ in
         '';
       };
 
+    # can't use mjm.services, as it introduces an infinite recursion, so doing this manually
     vault.services.postgresql = { };
     systemd.sockets."spiffe-creds@postgresql" = {
       overrideStrategy = "asDropin";
       wantedBy = [ "sockets.target" ];
+    };
+    mjm.spire.entries = {
+      "postgresql-${config.networking.hostName}" = {
+        spiffe_id = "spiffe://${trustDomain}/svc/postgresql";
+        parent_id = "spiffe://${trustDomain}/${config.networking.hostName}";
+      };
+      spiffe-creds-postgresql = {
+        spiffe_id = "spiffe://${trustDomain}/svc/postgresql";
+        selectors = [
+          {
+            type = "systemd";
+            value = "id:spiffe-creds@postgresql.service";
+          }
+        ];
+      };
     };
 
     deployment.tests = mkIf pkgs.stdenv.isx86_64 {

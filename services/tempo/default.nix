@@ -56,6 +56,7 @@ in
 
     mjm.spire.tunnels = {
       tempo = {
+        id = "tempo";
         mode = "server";
         listen.port = 3200;
         target.port = 3300;
@@ -63,6 +64,7 @@ in
         allowConsul = true;
       };
       tempo-grpc = {
+        id = "tempo";
         mode = "server";
         listen.port = 14317;
         target.port = 16317;

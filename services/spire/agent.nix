@@ -17,7 +17,7 @@ let
 
   configFile = pkgs.writeText "agent.hcl" ''
     agent {
-      trust_domain = "home.mattmoriarity.com"
+      trust_domain = "${cfg.agent.trustDomain}"
       data_dir = "/var/lib/spire-agent"
       socket_path = "${cfg.agent.socketPath}"
       ${optionalString (cfg.agent.joinToken != null) ''join_token = "${cfg.agent.joinToken}"''}
@@ -65,6 +65,11 @@ in
 {
   options.mjm.spire.agent = {
     enable = mkEnableOption "SPIRE agent";
+
+    trustDomain = mkOption {
+      type = types.str;
+      default = "home.mattmoriarity.com";
+    };
 
     serverAddress = mkOption {
       type = types.str;
@@ -174,5 +179,27 @@ in
         ${pkgs.spire-agent}/bin/spire-agent "$@" -socketPath ${cfg.agent.socketPath}
       '')
     ];
+
+    mjm.spire.entries =
+      let
+        inherit (cfg.agent) trustDomain;
+      in
+      {
+        "generic-server-${config.networking.hostName}" = {
+          spiffe_id = "spiffe://${trustDomain}/generic-server";
+          parent_id = "spiffe://${trustDomain}/${config.networking.hostName}";
+        };
+        # maybe move to the host-cert module
+        "sshd-host-cert-${config.networking.hostName}" = {
+          spiffe_id = "spiffe://${trustDomain}/${config.networking.hostName}/sshd";
+          parent_id = "spiffe://${trustDomain}/${config.networking.hostName}";
+          selectors = [
+            {
+              type = "systemd";
+              value = "id:sshd-host-cert.service";
+            }
+          ];
+        };
+      };
   };
 }

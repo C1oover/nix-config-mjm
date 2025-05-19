@@ -57,6 +57,7 @@ in
 
     mjm.spire.tunnels = {
       jellyfin = {
+        id = "jellyfin";
         mode = "server";
         listen.port = 8097;
         target.port = 8096;

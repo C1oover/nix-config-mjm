@@ -182,12 +182,14 @@ in
 
     mjm.spire.tunnels = {
       home-assistant = {
+        id = "home-assistant";
         mode = "server";
         listen.port = 8123;
         target.port = 18123;
         allowIngress = true;
       };
       home-assistant-paperless = {
+        id = "home-assistant";
         mode = "client";
         listen.port = 28981;
         target.service = "paperless";

@@ -111,12 +111,14 @@ in
 
     mjm.spire.tunnels = {
       launchpad = {
+        id = "launchpad";
         mode = "server";
         listen.port = 4100;
         target.socket = "/run/launchpad.sock";
         allowIngress = true;
       };
       launchpad-alloy = {
+        id = "launchpad";
         mode = "client";
         listen.port = 4318;
         listen.namespace = "launchpad";
@@ -124,6 +126,7 @@ in
         service = "alloy";
       };
       launchpad-alertmanager = {
+        id = "launchpad";
         mode = "client";
         listen.port = 9093;
         listen.namespace = "launchpad";
@@ -131,6 +134,7 @@ in
         target.port = 9093;
       };
       launchpad-paperless = {
+        id = "launchpad";
         mode = "client";
         listen.port = 28981;
         listen.namespace = "launchpad";

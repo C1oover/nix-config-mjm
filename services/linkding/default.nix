@@ -54,6 +54,7 @@ in
 
     mjm.spire.tunnels = {
       linkding = {
+        id = "linkding";
         mode = "server";
         listen.port = 7090;
         target.socket = "/run/linkding/server.sock";

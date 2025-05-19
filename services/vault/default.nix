@@ -126,6 +126,22 @@ in
       serviceConfig.RestartSec = "5s";
     };
 
+    mjm.spire.entries = {
+      spiffe-certs-vault.dns_names = [
+        "vault.service.consul"
+        "active.vault.service.consul"
+      ];
+      restic-backups-vault = {
+        spiffe_id = "spiffe://${config.mjm.spire.agent.trustDomain}/svc/vault";
+        selectors = [
+          {
+            type = "systemd";
+            value = "id:restic-backups-vault.service";
+          }
+        ];
+      };
+    };
+
     mjm.backups.vault = {
       paths = [ "/tmp/vault.snap" ];
       backupPrepareCommand = ''

@@ -20,6 +20,7 @@ let
     ;
 
   useNamespace = !config.mjm.minimal.enable;
+  trustDomain = config.mjm.spire.agent.trustDomain;
 in
 {
   options.mjm.backups = mkOption {
@@ -56,16 +57,32 @@ in
   };
 
   config = mkIf (config.mjm.backups != { }) {
+    mjm.networkd.macvlan.enable = mkIf useNamespace true;
+    environment.etc."resolv.conf".source = lib.mkForce "/run/systemd/resolve/resolv.conf";
+
+    mjm.garage.clients.backups = { };
+
+    # can't use mjm.services, as it introduces an infinite recursion, so doing this manually
+    mjm.spire.entries = {
+      "backups-${config.networking.hostName}" = {
+        spiffe_id = "spiffe://${trustDomain}/svc/backups";
+        parent_id = "spiffe://${trustDomain}/${config.networking.hostName}";
+      };
+      spiffe-creds-backups = {
+        spiffe_id = "spiffe://${trustDomain}/svc/backups";
+        selectors = [
+          {
+            type = "systemd";
+            value = "id:spiffe-creds@backups.service";
+          }
+        ];
+      };
+    };
     vault.services.backups = { };
     systemd.sockets."spiffe-creds@backups" = {
       overrideStrategy = "asDropin";
       wantedBy = [ "sockets.target" ];
     };
-
-    mjm.networkd.macvlan.enable = mkIf useNamespace true;
-    environment.etc."resolv.conf".source = lib.mkForce "/run/systemd/resolve/resolv.conf";
-
-    mjm.garage.clients.backups = { };
 
     systemd.services = mapAttrs' (
       name: cfg:

@@ -7,6 +7,7 @@
 let
   inherit (lib) mkIf;
   cfg = config.mjm.ingress;
+  trustDomain = config.mjm.spire.agent.trustDomain;
 
   pkg = pkgs.spire.overrideAttrs (old: {
     subPackages = old.subPackages ++ [ "support/oidc-discovery-provider" ];
@@ -24,6 +25,8 @@ let
 in
 {
   config = mkIf cfg.enable {
+    mjm.services.oidc-discovery-provider = { };
+
     services.caddy.settings.apps.http.servers.default.routes = [
       {
         match = [ { host = [ "spiffe.midna.dev" ]; } ];
@@ -73,6 +76,18 @@ in
           "~@resources @privileged"
         ];
         UMask = "0077";
+      };
+    };
+
+    mjm.spire.entries = {
+      oidc-discovery-provider = {
+        spiffe_id = "spiffe://${trustDomain}/svc/oidc-discovery-provider";
+        selectors = [
+          {
+            type = "systemd";
+            value = "oidc-discovery-provider.service";
+          }
+        ];
       };
     };
   };

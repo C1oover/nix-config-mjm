@@ -13,6 +13,7 @@ let
     ;
 
   cfg = config.mjm.consul;
+  trustDomain = config.mjm.spire.agent.trustDomain;
 in
 {
   imports = [ ./common.nix ];
@@ -26,6 +27,9 @@ in
       mjm.consul.ipv4Address = mkDefault ''{{ . | include "name" "${config.mjm.networkd.primaryIface}" | include "type" "ipv4" | attr "address" }}'';
 
       mjm.spire.certs.consul = {
+        # this entry creates the certs service for the servers too, but those will get
+        # their cert from an entry
+        id = "consul-client";
         systemd.unit = "consul.service";
         systemd.action = "reload";
         user = "consul";
@@ -92,8 +96,28 @@ in
       ];
     }
 
+    (mkIf (!cfg.server.enable) {
+      mjm.services.consul-client = { };
+    })
+
     (mkIf cfg.server.enable {
       mjm.services.consul = { };
+
+      mjm.spire.entries."consul-server-${config.networking.hostName}" = {
+        spiffe_id = "spiffe://${trustDomain}/svc/consul";
+        parent_id = "spiffe://${trustDomain}/${config.networking.hostName}";
+        selectors = [
+          {
+            type = "systemd";
+            value = "id:spiffe-certs@consul.service";
+          }
+        ];
+        dns_names = [
+          "server.dc1.consul"
+          "${config.networking.hostName}.server.dc1.consul"
+          "consul.service.consul"
+        ];
+      };
 
       ingress.virtualHosts.consul = {
         upstream = {
