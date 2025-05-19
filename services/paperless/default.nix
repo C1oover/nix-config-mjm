@@ -139,6 +139,7 @@ in
 
     mjm.spire.tunnels = {
       paperless = {
+        id = "paperless";
         mode = "server";
         listen.port = 28981;
         target.port = 38981;

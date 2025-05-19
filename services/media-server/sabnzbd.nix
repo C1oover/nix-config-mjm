@@ -35,6 +35,7 @@ in
 
     mjm.spire.tunnels = {
       sabnzbd = {
+        id = "sabnzbd";
         mode = "server";
         listen.port = 8080;
         target.port = 8080;
@@ -50,6 +51,7 @@ in
         ];
       };
       sabnzbd-metrics = {
+        id = "sabnzbd";
         mode = "server";
         listen.port = config.services.prometheus.exporters.sabnzbd.port;
         target.port = config.services.prometheus.exporters.sabnzbd.port;
@@ -57,12 +59,15 @@ in
         allowMetrics = true;
       };
       consul-sabnzbd = {
+        id = "consul-agent";
         mode = "client";
         listen.socket = "/run/consul-checks/sabnzbd.sock";
         target.port = 8080;
         service = "sabnzbd";
       };
     };
+
+    mjm.services.consul-agent = { };
 
     systemd.tmpfiles.settings."10-media-server" = {
       "/videos/downloads" = {

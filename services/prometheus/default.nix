@@ -76,6 +76,7 @@ in
 
     mjm.spire.tunnels = {
       prometheus = {
+        id = "prometheus";
         mode = "server";
         listen.port = 9090;
         target.port = 19090;
@@ -88,6 +89,7 @@ in
         ];
       };
       prometheus-alertmanager = {
+        id = "prometheus";
         mode = "client";
         listen.port = 9093;
         target.service = "alertmanager";

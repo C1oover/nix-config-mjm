@@ -14,6 +14,7 @@ let
     genAttrs
     mapAttrs'
     length
+    mkDefault
     mkIf
     mkOption
     optionalAttrs
@@ -75,6 +76,7 @@ in
       mapAttrs' (name: c: {
         name = "${name}-s3-creds";
         value = {
+          id = mkDefault name;
           mode = "client";
           listen.address = "169.254.170.2:80";
           listen.namespace = c.namespace;
@@ -86,6 +88,7 @@ in
       // mapAttrs' (name: c: {
         name = "${name}-s3";
         value = {
+          id = mkDefault name;
           mode = "client";
           listen.port = 3902;
           listen.namespace = c.namespace;

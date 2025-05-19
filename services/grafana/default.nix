@@ -86,6 +86,7 @@ in
 
     mjm.spire.tunnels = {
       grafana = {
+        id = "grafana";
         mode = "server";
         listen.port = 3000;
         target.socket = "/run/grafana/server.sock";
@@ -93,24 +94,28 @@ in
         allowMetrics = true;
       };
       grafana-loki = {
+        id = "grafana";
         mode = "client";
         listen.port = 3100;
         target.port = 3103;
         target.service = "loki";
       };
       grafana-tempo = {
+        id = "grafana";
         mode = "client";
         listen.port = 3200;
         target.service = "tempo";
         target.port = 3200;
       };
       grafana-prometheus = {
+        id = "grafana";
         mode = "client";
         listen.port = 9090;
         target.port = 9090;
         target.service = "prometheus";
       };
       grafana-alertmanager = {
+        id = "grafana";
         mode = "client";
         listen.port = 9093;
         target.port = 9093;

@@ -45,6 +45,7 @@ in
 
     mjm.spire.tunnels = {
       vaultwarden = {
+        id = "vaultwarden";
         mode = "server";
         listen.port = 8222;
         target.port = 8221;

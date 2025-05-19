@@ -16,23 +16,27 @@ in
 
     mjm.spire.tunnels = {
       alloy-otlphttp = {
+        id = "alloy";
         mode = "server";
         listen.socket = "/run/alloy-otlphttp.sock";
         target.port = 4318;
       };
       alloy-loki = {
+        id = "alloy";
         mode = "client";
         listen.port = 13101;
         target.service = "loki";
         target.port = 3103;
       };
       alloy-prometheus = {
+        id = "alloy";
         mode = "client";
         listen.port = 13102;
         target.service = "prometheus";
         target.port = 9090;
       };
       alloy-tempo = {
+        id = "alloy";
         mode = "client";
         listen.port = 15317;
         target.service = "tempo";

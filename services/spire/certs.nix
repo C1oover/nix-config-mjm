@@ -11,6 +11,7 @@ let
     mkMerge
     mkIf
     mkOption
+    nameValuePair
     types
     ;
   cfg = config.mjm.spire;
@@ -20,9 +21,18 @@ in
     default = { };
     type = types.attrsOf (
       types.submodule (
-        { options, config, ... }:
+        {
+          name,
+          options,
+          config,
+          ...
+        }:
         {
           options = {
+            id = mkOption {
+              type = types.str;
+              default = name;
+            };
             systemd = {
               unit = mkOption {
                 type = types.str;
@@ -134,6 +144,19 @@ in
             '';
             serviceConfig.User = svc.user;
           };
+        }
+      ) cfg.certs;
+
+      mjm.spire.entries = mapAttrs' (
+        name: svc:
+        nameValuePair "spiffe-certs-${name}" {
+          spiffe_id = "spiffe://${config.mjm.spire.agent.trustDomain}/svc/${svc.id}";
+          selectors = [
+            {
+              type = "systemd";
+              value = "id:spiffe-certs@${name}.service";
+            }
+          ];
         }
       ) cfg.certs;
 

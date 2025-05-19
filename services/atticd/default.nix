@@ -71,10 +71,11 @@ in
       };
     };
 
-    mjm.garage.clients.attic.services = [ "atticd" ];
+    mjm.garage.clients.atticd.services = [ "atticd" ];
 
     mjm.spire.tunnels = {
-      attic = {
+      atticd = {
+        id = "atticd";
         mode = "server";
         listen.port = 8100;
         target.port = 18100;
