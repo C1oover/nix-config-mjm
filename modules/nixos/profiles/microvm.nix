@@ -109,6 +109,7 @@ in
       mjm.spire.agent.enable = true;
 
       environment.etc."alloy/journal.alloy".enable = false;
+      system.etc.overlay.enable = false;
 
       # make sure these don't get enabled by something by mistake
       mjm.networkd.macvlan.enable = false;
