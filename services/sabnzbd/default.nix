@@ -1,19 +1,29 @@
 { config, lib, ... }:
 let
-  inherit (lib) mkIf;
-  cfg = config.mjm.media-server;
+  inherit (lib) mkEnableOption mkIf;
+  cfg = config.mjm.sabnzbd;
 in
 {
+  options.mjm.sabnzbd = {
+    enable = mkEnableOption "sabnzbd";
+  };
+
   config = mkIf cfg.enable {
     mjm.services.sabnzbd = {
-      vault = {
-        enable = true;
-      };
+      vault.enable = true;
     };
     mjm.state.directories = [
       {
         directory = "/var/lib/sabnzbd";
         inherit (config.services.sabnzbd) user group;
+      }
+    ];
+    microvm.shares = [
+      {
+        proto = "virtiofs";
+        tag = "media";
+        source = "/mnt/slow/media";
+        mountPoint = "/videos";
       }
     ];
 
@@ -29,19 +39,16 @@ in
     };
 
     services.sabnzbd.enable = true;
-    systemd.services.sabnzbd.networkNamespace = "sabnzbd";
-
+    users.groups.media.gid = 997;
     users.users.sabnzbd.extraGroups = [ "media" ];
 
     mjm.spire.tunnels = {
       sabnzbd = {
         id = "sabnzbd";
         mode = "server";
-        listen.port = 8080;
+        listen.port = 28080;
         target.port = 8080;
-        target.namespace = "sabnzbd";
         allowIngress = true;
-        allowConsul = true;
         allowedServices = [
           "radarr"
           "sonarr"
@@ -53,23 +60,15 @@ in
       sabnzbd-metrics = {
         id = "sabnzbd";
         mode = "server";
-        listen.port = config.services.prometheus.exporters.sabnzbd.port;
+        listen.port = 19387;
         target.port = config.services.prometheus.exporters.sabnzbd.port;
-        target.namespace = "sabnzbd";
         allowMetrics = true;
-      };
-      consul-sabnzbd = {
-        id = "consul-agent";
-        mode = "client";
-        listen.socket = "/run/consul-checks/sabnzbd.sock";
-        target.port = 8080;
-        service = "sabnzbd";
       };
     };
 
     mjm.services.consul-agent = { };
 
-    systemd.tmpfiles.settings."10-media-server" = {
+    systemd.tmpfiles.settings."10-sabnzbd" = {
       "/videos/downloads" = {
         d = {
           user = "sabnzbd";
@@ -101,18 +100,17 @@ in
         }
       ];
     };
-    systemd.services.prometheus-sabnzbd-exporter.networkNamespace = "sabnzbd";
 
     services.consul.services.sabnzbd = {
-      port = 8080;
+      port = 28080;
 
       metrics.enable = true;
-      metrics.port = config.services.prometheus.exporters.sabnzbd.port;
+      metrics.port = 19387;
       metrics.tls = true;
 
       checks.up = {
         http.path = "/";
-        http.socket = "/run/consul-checks/sabnzbd.sock";
+        http.port = 8080;
         checkConfig = {
           failures_before_warning = 2;
           failures_before_critical = 6;
@@ -120,9 +118,10 @@ in
       };
     };
 
-    mjm.backups.media-server.paths = [
-      "/var/lib/sabnzbd/admin"
-      "/var/lib/sabnzbd/sabnzbd.ini"
-    ];
+    # TODO backup sabnzbd content in its own backup repo
+    # mjm.backups.media-server.paths = [
+    #   "/var/lib/sabnzbd/admin"
+    #   "/var/lib/sabnzbd/sabnzbd.ini"
+    # ];
   };
 }

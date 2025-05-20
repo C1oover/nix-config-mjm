@@ -211,7 +211,7 @@ in
         listen.address = "127.0.0.1:8080";
         listen.namespace = "sonarr";
         target.service = "sabnzbd";
-        target.port = 8080;
+        target.port = 28080;
       };
       consul-sonarr = {
         id = "consul-agent";
@@ -244,7 +244,7 @@ in
         listen.address = "127.0.0.1:8080";
         listen.namespace = "radarr";
         target.service = "sabnzbd";
-        target.port = 8080;
+        target.port = 28080;
       };
       consul-radarr = {
         id = "consul-agent";
@@ -269,7 +269,7 @@ in
         listen.address = "127.0.0.1:8080";
         listen.namespace = "lidarr";
         target.service = "sabnzbd";
-        target.port = 8080;
+        target.port = 28080;
       };
       consul-lidarr = {
         id = "consul-agent";
@@ -302,7 +302,7 @@ in
         listen.address = "127.0.0.1:8080";
         listen.namespace = "readarr";
         target.service = "sabnzbd";
-        target.port = 8080;
+        target.port = 28080;
       };
       consul-readarr = {
         id = "consul-agent";
@@ -327,7 +327,7 @@ in
         listen.address = "127.0.0.1:8080";
         listen.namespace = "readarr-audio";
         target.service = "sabnzbd";
-        target.port = 8080;
+        target.port = 28080;
       };
       consul-readarr-audio = {
         id = "consul-agent";

@@ -29,6 +29,7 @@
     ./postgresql
     ./prometheus
     ./remote-builder
+    ./sabnzbd
     ./spire
     ./tempo
     ./vault

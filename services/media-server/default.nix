@@ -13,14 +13,11 @@ in
     ./invidious.nix
     ./mount.nix
     ./peertube.nix
-    ./sabnzbd.nix
   ];
 
   config = mkIf cfg.enable {
     mjm.services.media-server = {
-      vault = {
-        enable = true;
-      };
+      vault.enable = true;
     };
 
     mjm.backups.media-server.repositoryName = "mediaserver";

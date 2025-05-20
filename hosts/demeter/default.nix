@@ -4,6 +4,7 @@
     ./arcanine.nix
     ./blastoise.nix
     ./drowzee.nix
+    ./eevee.nix
     ./hypno.nix
     ./jigglypuff.nix
     ./jynx.nix
