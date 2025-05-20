@@ -18,12 +18,8 @@
       microvm.mem = 8192;
       microvm.vcpu = 4;
       microvm.storeDiskType = "squashfs";
+      microvm.hypervisor = lib.mkForce "qemu";
       system.stateVersion = "25.05";
     };
   };
-
-  # gitlab needs a while to start up because big ruby apps be slow
-  systemd.services."microvm@dugtrio".serviceConfig.TimeoutStartSec = 1200;
-  systemd.services."microvm@dugtrio".serviceConfig.TimeoutStopSec = 150;
-  systemd.services."microvm@dugtrio".serviceConfig.TimeoutSec = lib.mkForce "";
 }
