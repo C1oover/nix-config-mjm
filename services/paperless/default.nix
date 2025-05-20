@@ -163,24 +163,25 @@ in
 
     users.users.paperless.openssh.authorizedKeys.keys = [ scannerPublicKey ];
 
-    services.openssh.settings.KexAlgorithms = [
-      "sntrup761x25519-sha512@openssh.com"
-      "curve25519-sha256"
-      "curve25519-sha256@libssh.org"
-      "diffie-hellman-group-exchange-sha256"
-      # this is the extra one added for compatibility with old SSH client
-      "diffie-hellman-group14-sha1"
+    services.openssh.hostKeys = [
+      # this one is kept persistent, because the scanner needs to keep its public key, and i have
+      # absolutely no expectation that it would support a cert authority
+      {
+        bits = 4096;
+        path = "${config.services.paperless.dataDir}/ssh_host_rsa_key";
+        type = "rsa";
+      }
+      # this one is ephemeral, regenerated on each reboot
+      {
+        path = "/etc/ssh/ssh_host_ed25519_key";
+        type = "ed25519";
+      }
     ];
-    services.openssh.settings.Macs = [
-      "hmac-sha2-512-etm@openssh.com"
-      "hmac-sha2-256-etm@openssh.com"
-      "umac-128-etm@openssh.com"
-      "hmac-sha2-512"
-      "hmac-sha2-256"
-      "umac-128@openssh.com"
-      # this is the extra one added for compatibility with old SSH client
-      "hmac-sha1-96"
-    ];
+
+    # the scanner has an old-ass ssh client and won't work without these
+    services.openssh.settings.KexAlgorithms = lib.mkOptionDefault [ "diffie-hellman-group14-sha1" ];
+    services.openssh.settings.Macs = lib.mkOptionDefault [ "hmac-sha1-96" ];
+
     # use mkAfter so the Match doesn't include other stuff
     services.openssh.extraConfig = mkAfter ''
       HostKeyAlgorithms +ssh-rsa
