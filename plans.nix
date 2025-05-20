@@ -10,7 +10,6 @@ let
     "demeter"
     "hades"
     "hypnos"
-    "leto"
     "niobe"
     "persephone"
     "steropes"
