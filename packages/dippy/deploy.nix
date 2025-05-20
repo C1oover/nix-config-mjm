@@ -168,6 +168,7 @@ let
       hosts = nodes // darwinNodes;
       nixosHosts = nodes;
       darwinHosts = darwinNodes;
+      vms = concatMapAttrs (_: n: mapAttrs (_: vm: vm.config) n.config.microvm.vms) nodes;
     };
 in
 evalPlan
