@@ -44,7 +44,7 @@ in
     };
 
     services.consul.services.atuin = {
-      inherit (config.services.atuin) port;
+      port = 8888;
 
       checks.up = {
         http.path = "/";
