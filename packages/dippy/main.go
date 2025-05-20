@@ -79,7 +79,7 @@ func main() {
 	}
 }
 
-func (cli *CLI) EvalNodes(ctx context.Context, cfg *Config, hostnames []string) (*DeployPlan, error) {
+func (cli *CLI) EvalNodes(ctx context.Context, cfg *Config, hostnames []string, tests bool) (*DeployPlan, error) {
 	if hostnames == nil {
 		hostnames = []string{}
 	}
@@ -91,11 +91,15 @@ func (cli *CLI) EvalNodes(ctx context.Context, cfg *Config, hostnames []string) 
 	}
 
 	namesToInclude := fmt.Sprintf("builtins.fromJSON %q", string(hostnamesBytes))
+	args := map[string]string{
+		"namesToInclude": namesToInclude,
+	}
+	if !tests {
+		args["withTests"] = "false"
+	}
 	paths, err := cfg.Nix.EvalJobs(ctx, nix.EvalJobsOptions{
-		Path: cli.Plans,
-		Args: map[string]string{
-			"namesToInclude": namesToInclude,
-		},
+		Path:    cli.Plans,
+		Args:    args,
 		Workers: cli.Concurrency,
 	})
 	if err != nil {
@@ -107,6 +111,7 @@ func (cli *CLI) EvalNodes(ctx context.Context, cfg *Config, hostnames []string) 
 	var testResults []nix.EvalJobResult
 	resultsByAttrs := map[string]nix.EvalJobResult{}
 	for _, r := range paths {
+		slog.DebugContext(ctx, "got eval result", "attr", r.Attr)
 		if r.Error != "" {
 			errorAttrs = append(errorAttrs, r.Attr)
 		} else if r.Attr == "configJson" {

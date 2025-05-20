@@ -16,7 +16,7 @@ func (c *RebootCmd) Run(ctx context.Context, cli *CLI) error {
 	}
 	defer cfg.Cleanup()
 
-	plan, err := cli.EvalNodes(ctx, &cfg, []string{c.Host})
+	plan, err := cli.EvalNodes(ctx, &cfg, []string{c.Host}, false)
 	if err != nil {
 		return fmt.Errorf("evaluating nodes: %w", err)
 	}

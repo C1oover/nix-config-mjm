@@ -29,7 +29,7 @@ func (c *DeployCmd) Run(ctx context.Context, cli *CLI) error {
 	defer cfg.Cleanup()
 
 	s := sectionStart("Evaluating hosts and tests", true)
-	plan, err := cli.EvalNodes(ctx, &cfg, c.Hosts)
+	plan, err := cli.EvalNodes(ctx, &cfg, c.Hosts, c.Tests)
 	if err != nil {
 		return fmt.Errorf("evaluating nodes: %w", err)
 	}

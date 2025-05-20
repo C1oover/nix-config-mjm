@@ -22,6 +22,7 @@ let
     {
       plan ? "default",
       namesToInclude ? [ ],
+      withTests ? true,
     }:
     let
       allPkgs = lib.mapAttrs (_name: path: import path { }) sources;
@@ -154,12 +155,16 @@ let
         (mapAttrs (_: v: v.config.system.build.toplevel))
         recurseIntoAttrs
       ];
-      tests = pipe nodes [
-        attrValues
-        (map (v: v.config.deployment.tests))
-        mergeAttrsList
-        recurseIntoAttrs
-      ];
+      tests =
+        if withTests then
+          pipe nodes [
+            attrValues
+            (map (v: v.config.deployment.tests))
+            mergeAttrsList
+            recurseIntoAttrs
+          ]
+        else
+          { };
       hosts = nodes // darwinNodes;
       nixosHosts = nodes;
       darwinHosts = darwinNodes;
