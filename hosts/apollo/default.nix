@@ -3,6 +3,7 @@
     ./bulbasaur.nix
     ./dugtrio.nix
     ./ivysaur.nix
+    ./lapras.nix
     ./primeape.nix
     ./slowbro.nix
     ./tangela.nix

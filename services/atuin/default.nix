@@ -15,6 +15,7 @@ in
 
   config = mkIf cfg.enable {
     mjm.services.atuin = { };
+    mjm.postgresql.enable = true;
 
     ingress.virtualHosts.atuin = {
       upstream = {
@@ -28,15 +29,7 @@ in
     services.atuin = {
       enable = true;
       host = "::1";
-      port = 8888;
-    };
-
-    systemd.services.atuin = {
-      bindsTo = [ "netns-bridge@atuin.service" ];
-      after = [ "netns-bridge@atuin.service" ];
-      serviceConfig = {
-        NetworkNamespacePath = "/run/netns/atuin";
-      };
+      port = 18888;
     };
 
     mjm.spire.tunnels = {
@@ -44,28 +37,18 @@ in
         id = "atuin";
         mode = "server";
         listen.port = 8888;
-        target.port = 8888;
-        target.namespace = "atuin";
+        target.port = 18888;
         allowIngress = true;
         allowConsul = true;
       };
-      consul-atuin = {
-        id = "consul-agent";
-        mode = "client";
-        listen.socket = "/run/consul-checks/atuin.sock";
-        target.port = 8888;
-        service = "atuin";
-      };
     };
-
-    mjm.services.consul-agent = { };
 
     services.consul.services.atuin = {
       inherit (config.services.atuin) port;
 
       checks.up = {
         http.path = "/";
-        http.socket = "/run/consul-checks/atuin.sock";
+        http.port = 18888;
       };
     };
 
