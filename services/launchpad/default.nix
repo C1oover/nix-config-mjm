@@ -35,9 +35,7 @@ in
   config = mkIf cfg.enable {
     mjm.services.launchpad = {
       postgresql.enable = true;
-      vault = {
-        enable = true;
-      };
+      vault.enable = true;
     };
 
     ingress.virtualHosts.launch = {
@@ -48,8 +46,6 @@ in
 
       useIPv4Proxy = true;
     };
-
-    mjm.networkd.macvlan.enable = true;
 
     systemd.sockets.launchpad = {
       description = "Launchpad Web Portal Socket";
@@ -67,7 +63,6 @@ in
         "launchpad.socket"
       ];
       requires = [ "launchpad.socket" ];
-      bindsTo = [ "netns-bridge@launchpad.service" ];
       environment = serviceEnv;
       credentials.launchpad = creds;
 
@@ -76,9 +71,7 @@ in
         ExecStart = "${pkg}/bin/launchpad serve";
         Restart = "always";
         DynamicUser = true;
-        User = "launchpad";
         PrivateTmp = true;
-        NetworkNamespacePath = "/run/netns/launchpad";
       };
     };
 
@@ -117,19 +110,10 @@ in
         target.socket = "/run/launchpad.sock";
         allowIngress = true;
       };
-      launchpad-alloy = {
-        id = "launchpad";
-        mode = "client";
-        listen.port = 4318;
-        listen.namespace = "launchpad";
-        target.socket = "/run/alloy-otlphttp.sock";
-        service = "alloy";
-      };
       launchpad-alertmanager = {
         id = "launchpad";
         mode = "client";
         listen.port = 9093;
-        listen.namespace = "launchpad";
         target.service = "alertmanager";
         target.port = 9093;
       };
@@ -137,7 +121,6 @@ in
         id = "launchpad";
         mode = "client";
         listen.port = 28981;
-        listen.namespace = "launchpad";
         target.service = "paperless";
         target.port = 28981;
       };

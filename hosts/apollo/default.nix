@@ -2,6 +2,7 @@
   imports = [
     ./bulbasaur.nix
     ./dugtrio.nix
+    ./goldeen.nix
     ./ivysaur.nix
     ./lapras.nix
     ./primeape.nix

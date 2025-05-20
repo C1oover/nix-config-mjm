@@ -21,7 +21,6 @@
   mjm.profiles.qemu-vm.enable = true;
 
   mjm.consul.enable = true;
-  mjm.launchpad.enable = true;
   mjm.server.enable = true;
   mjm.state = {
     enablePreservation = true;
