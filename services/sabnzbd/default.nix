@@ -66,8 +66,6 @@ in
       };
     };
 
-    mjm.services.consul-agent = { };
-
     systemd.tmpfiles.settings."10-sabnzbd" = {
       "/videos/downloads" = {
         d = {

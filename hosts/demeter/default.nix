@@ -5,6 +5,7 @@
     ./blastoise.nix
     ./drowzee.nix
     ./eevee.nix
+    ./flareon.nix
     ./hypno.nix
     ./jigglypuff.nix
     ./jynx.nix

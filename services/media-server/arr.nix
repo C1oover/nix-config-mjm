@@ -11,9 +11,6 @@ in
 {
   config = mkIf cfg.enable {
     mjm.services = {
-      sonarr.vault = {
-        enable = true;
-      };
       radarr.vault = {
         enable = true;
       };
@@ -22,10 +19,6 @@ in
       };
     };
     mjm.state.directories = [
-      {
-        directory = config.services.sonarr.dataDir;
-        inherit (config.services.sonarr) user group;
-      }
       {
         directory = config.services.radarr.dataDir;
         inherit (config.services.radarr) user group;
@@ -44,13 +37,6 @@ in
         group = "readarr";
       }
     ];
-
-    services.sonarr = {
-      enable = true;
-      settings.server.bindaddress = "localhost";
-    };
-    systemd.services.sonarr.networkNamespace = "sonarr";
-    users.users.sonarr.extraGroups = [ "media" ];
 
     services.radarr = {
       enable = true;
@@ -94,17 +80,6 @@ in
     };
 
     systemd.tmpfiles.settings."10-media-server" = {
-      "/videos/shows" = {
-        d = {
-          user = "sonarr";
-          group = "media";
-        };
-        Z = {
-          user = "sonarr";
-          group = "media";
-          mode = "~0775";
-        };
-      };
       "/videos/movies" = {
         d = {
           user = "radarr";
@@ -152,12 +127,6 @@ in
     };
 
     services.prometheus.exporters = {
-      exportarr-sonarr = {
-        enable = true;
-        listenAddress = "::1";
-        apiKeyFile = "/run/sonarr-creds.sock";
-        url = "http://127.0.0.1:8989";
-      };
       exportarr-radarr = {
         enable = true;
         listenAddress = "::1";
@@ -171,14 +140,10 @@ in
         url = "http://127.0.0.1:8787";
       };
     };
-    systemd.services.prometheus-exportarr-sonarr-exporter.networkNamespace = "sonarr";
     systemd.services.prometheus-exportarr-radarr-exporter.networkNamespace = "radarr";
     systemd.services.prometheus-exportarr-readarr-exporter.networkNamespace = "readarr";
 
     mjm.spire.creds = {
-      sonarr.aliases = {
-        "prometheus-exportarr-sonarr-exporter.service/api-key" = "sonarr/api_key";
-      };
       radarr.aliases = {
         "prometheus-exportarr-radarr-exporter.service/api-key" = "radarr/api_key";
       };
@@ -188,39 +153,6 @@ in
     };
 
     mjm.spire.tunnels = {
-      sonarr = {
-        id = "sonarr";
-        mode = "server";
-        listen.port = 8989;
-        target.port = 8989;
-        target.namespace = "sonarr";
-        allowIngress = true;
-        allowConsul = true;
-      };
-      sonarr-metrics = {
-        id = "sonarr";
-        mode = "server";
-        listen.port = 9708;
-        target.port = 9708;
-        target.namespace = "sonarr";
-        allowMetrics = true;
-      };
-      sonarr-sabnzbd = {
-        id = "sonarr";
-        mode = "client";
-        listen.address = "127.0.0.1:8080";
-        listen.namespace = "sonarr";
-        target.service = "sabnzbd";
-        target.port = 28080;
-      };
-      consul-sonarr = {
-        id = "consul-agent";
-        mode = "client";
-        listen.socket = "/run/consul-checks/sonarr.sock";
-        target.port = 8989;
-        service = "sonarr";
-      };
-
       radarr = {
         id = "radarr";
         mode = "server";
@@ -341,23 +273,6 @@ in
     mjm.services.consul-agent = { };
 
     services.consul.services = {
-      sonarr = {
-        port = 8989;
-
-        metrics.enable = true;
-        metrics.port = 9708;
-        metrics.tls = true;
-
-        checks.up = {
-          http.path = "/";
-          http.socket = "/run/consul-checks/sonarr.sock";
-          checkConfig = {
-            failures_before_warning = 2;
-            failures_before_critical = 6;
-          };
-        };
-      };
-
       radarr = {
         port = 7878;
 
@@ -420,12 +335,6 @@ in
     };
 
     ingress.virtualHosts = {
-      tv = {
-        upstream = {
-          service.name = "sonarr";
-          tls.enable = true;
-        };
-      };
       movies = {
         upstream = {
           service.name = "radarr";
@@ -458,22 +367,18 @@ in
     # TODO add lidarr
     mjm.backups.media-server = {
       paths = [
-        "/var/lib/sonarr/.config/NzbDrone"
         "/var/lib/radarr/.config/Radarr"
         "/var/lib/readarr"
       ];
       exclude = [
-        "/var/lib/sonarr/.config/NzbDrone/logs"
         "/var/lib/radarr/.config/Radarr/logs"
         "/var/lib/readarr/logs"
       ];
       backupPrepareCommand = ''
-        ${pkgs.sqlite}/bin/sqlite3 /var/lib/sonarr/.config/NzbDrone/sonarr.db ".backup '/var/lib/sonarr/.config/NzbDrone/sonarr-backup.db'"
         ${pkgs.sqlite}/bin/sqlite3 /var/lib/radarr/.config/Radarr/radarr.db ".backup '/var/lib/radarr/.config/Radarr/radarr-backup.db'"
         ${pkgs.sqlite}/bin/sqlite3 /var/lib/readarr/readarr.db ".backup '/var/lib/readarr/readarr-backup.db'"
       '';
       backupCleanupCommand = ''
-        rm /var/lib/sonarr/.config/NzbDrone/sonarr-backup.db
         rm /var/lib/radarr/.config/Radarr/radarr-backup.db
         rm /var/lib/readarr/readarr-backup.db
       '';

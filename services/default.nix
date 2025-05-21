@@ -30,6 +30,7 @@
     ./prometheus
     ./remote-builder
     ./sabnzbd
+    ./sonarr
     ./spire
     ./tempo
     ./vault
