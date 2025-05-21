@@ -8,8 +8,6 @@ import (
 	"os"
 	"os/exec"
 	"path"
-	"runtime"
-	"strconv"
 	"strings"
 	"time"
 
@@ -21,7 +19,7 @@ import (
 
 type CLI struct {
 	Plans       string     `short:"f" help:"File to evaluate for deploy plans." type:"path" default:"plans.nix"`
-	Concurrency int        `short:"j" help:"Number of nodes to evaluate concurrently." default:"${num_cpu}"`
+	Concurrency int        `short:"j" help:"Number of nodes to evaluate concurrently." env:"DIPPY_EVAL_CONCURRENCY" default:"2"`
 	LogLevel    slog.Level `help:"Minimum log level to output." enum:"DEBUG,INFO,WARN,ERROR" default:"INFO"`
 
 	Deploy DeployCmd `cmd:"" help:"Deploy one or more hosts." group:"remote_hosts"`
@@ -49,7 +47,6 @@ func main() {
 		ciFalse = "false"
 	}
 	c := kong.Parse(&cli, kong.BindTo(ctx, (*context.Context)(nil)), kong.Vars{
-		"num_cpu":  strconv.Itoa(runtime.NumCPU()),
 		"ci_true":  ciTrue,
 		"ci_false": ciFalse,
 	}, kong.ExplicitGroups([]kong.Group{
