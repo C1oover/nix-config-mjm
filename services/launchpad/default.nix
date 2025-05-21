@@ -47,6 +47,12 @@ in
       useIPv4Proxy = true;
     };
 
+    users.users.launchpad = {
+      isSystemUser = true;
+      group = "launchpad";
+    };
+    users.groups.launchpad = { };
+
     systemd.sockets.launchpad = {
       description = "Launchpad Web Portal Socket";
       wantedBy = [ "sockets.target" ];
