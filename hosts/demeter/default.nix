@@ -11,6 +11,7 @@
     ./jynx.nix
     ./snorlax.nix
     ./squirtle.nix
+    ./vaporeon.nix
     ./wartortle.nix
   ];
 

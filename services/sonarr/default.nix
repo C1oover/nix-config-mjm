@@ -49,13 +49,11 @@ in
       };
     };
 
-    services.prometheus.exporters = {
-      exportarr-sonarr = {
-        enable = true;
-        listenAddress = "::1";
-        apiKeyFile = "/run/sonarr-creds.sock";
-        url = "http://127.0.0.1:8989";
-      };
+    services.prometheus.exporters.exportarr-sonarr = {
+      enable = true;
+      listenAddress = "::1";
+      apiKeyFile = "/run/sonarr-creds.sock";
+      url = "http://127.0.0.1:8989";
     };
 
     mjm.spire.creds = {

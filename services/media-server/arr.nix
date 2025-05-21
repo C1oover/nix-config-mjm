@@ -11,18 +11,11 @@ in
 {
   config = mkIf cfg.enable {
     mjm.services = {
-      radarr.vault = {
-        enable = true;
-      };
       readarr.vault = {
         enable = true;
       };
     };
     mjm.state.directories = [
-      {
-        directory = config.services.radarr.dataDir;
-        inherit (config.services.radarr) user group;
-      }
       {
         directory = config.services.lidarr.dataDir;
         inherit (config.services.lidarr) user group;
@@ -37,13 +30,6 @@ in
         group = "readarr";
       }
     ];
-
-    services.radarr = {
-      enable = true;
-      settings.server.bindaddress = "localhost";
-    };
-    systemd.services.radarr.networkNamespace = "radarr";
-    users.users.radarr.extraGroups = [ "media" ];
 
     services.lidarr = {
       enable = true;
@@ -80,17 +66,6 @@ in
     };
 
     systemd.tmpfiles.settings."10-media-server" = {
-      "/videos/movies" = {
-        d = {
-          user = "radarr";
-          group = "media";
-        };
-        Z = {
-          user = "radarr";
-          group = "media";
-          mode = "~0775";
-        };
-      };
       "/videos/music" = {
         d = {
           user = "lidarr";
@@ -127,12 +102,6 @@ in
     };
 
     services.prometheus.exporters = {
-      exportarr-radarr = {
-        enable = true;
-        listenAddress = "::1";
-        apiKeyFile = "/run/radarr-creds.sock";
-        url = "http://127.0.0.1:7878";
-      };
       exportarr-readarr = {
         enable = true;
         listenAddress = "::1";
@@ -140,52 +109,15 @@ in
         url = "http://127.0.0.1:8787";
       };
     };
-    systemd.services.prometheus-exportarr-radarr-exporter.networkNamespace = "radarr";
     systemd.services.prometheus-exportarr-readarr-exporter.networkNamespace = "readarr";
 
     mjm.spire.creds = {
-      radarr.aliases = {
-        "prometheus-exportarr-radarr-exporter.service/api-key" = "radarr/api_key";
-      };
       readarr.aliases = {
         "prometheus-exportarr-readarr-exporter.service/api-key" = "readarr/api_key";
       };
     };
 
     mjm.spire.tunnels = {
-      radarr = {
-        id = "radarr";
-        mode = "server";
-        listen.port = 7878;
-        target.port = 7878;
-        target.namespace = "radarr";
-        allowIngress = true;
-        allowConsul = true;
-      };
-      radarr-metrics = {
-        id = "radarr";
-        mode = "server";
-        listen.port = 9707;
-        target.port = 9708;
-        target.namespace = "radarr";
-        allowMetrics = true;
-      };
-      radarr-sabnzbd = {
-        id = "radarr";
-        mode = "client";
-        listen.address = "127.0.0.1:8080";
-        listen.namespace = "radarr";
-        target.service = "sabnzbd";
-        target.port = 28080;
-      };
-      consul-radarr = {
-        id = "consul-agent";
-        mode = "client";
-        listen.socket = "/run/consul-checks/radarr.sock";
-        target.port = 7878;
-        service = "radarr";
-      };
-
       lidarr = {
         id = "lidarr";
         mode = "server";
@@ -273,23 +205,6 @@ in
     mjm.services.consul-agent = { };
 
     services.consul.services = {
-      radarr = {
-        port = 7878;
-
-        metrics.enable = true;
-        metrics.port = 9707;
-        metrics.tls = true;
-
-        checks.up = {
-          http.path = "/";
-          http.socket = "/run/consul-checks/radarr.sock";
-          checkConfig = {
-            failures_before_warning = 2;
-            failures_before_critical = 6;
-          };
-        };
-      };
-
       lidarr = {
         port = 8686;
 
@@ -335,12 +250,6 @@ in
     };
 
     ingress.virtualHosts = {
-      movies = {
-        upstream = {
-          service.name = "radarr";
-          tls.enable = true;
-        };
-      };
       albums = {
         upstream = {
           service.name = "lidarr";
@@ -361,25 +270,18 @@ in
       };
     };
 
-    # ffprobe
-    systemd.services.radarr.path = [ pkgs.ffmpeg ];
-
     # TODO add lidarr
     mjm.backups.media-server = {
       paths = [
-        "/var/lib/radarr/.config/Radarr"
         "/var/lib/readarr"
       ];
       exclude = [
-        "/var/lib/radarr/.config/Radarr/logs"
         "/var/lib/readarr/logs"
       ];
       backupPrepareCommand = ''
-        ${pkgs.sqlite}/bin/sqlite3 /var/lib/radarr/.config/Radarr/radarr.db ".backup '/var/lib/radarr/.config/Radarr/radarr-backup.db'"
         ${pkgs.sqlite}/bin/sqlite3 /var/lib/readarr/readarr.db ".backup '/var/lib/readarr/readarr-backup.db'"
       '';
       backupCleanupCommand = ''
-        rm /var/lib/radarr/.config/Radarr/radarr-backup.db
         rm /var/lib/readarr/readarr-backup.db
       '';
     };

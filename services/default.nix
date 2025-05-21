@@ -28,6 +28,7 @@
     ./paperless
     ./postgresql
     ./prometheus
+    ./radarr
     ./remote-builder
     ./sabnzbd
     ./sonarr

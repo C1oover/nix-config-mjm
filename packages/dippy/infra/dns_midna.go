@@ -100,10 +100,7 @@ func setUpMidnaDev(ctx *pulumi.Context, vhosts map[string]bool) error {
 		}
 		args.Records = pulumi.ToStringArray([]string{cname})
 
-		if _, err := desec.NewRrset(ctx,
-			fmt.Sprintf("%s.midna.dev", name), args,
-			pulumi.Import(pulumi.ID(fmt.Sprintf("midna.dev/%s/CNAME", name))),
-		); err != nil {
+		if _, err := desec.NewRrset(ctx, fmt.Sprintf("%s.midna.dev", name), args); err != nil {
 			return err
 		}
 	}
