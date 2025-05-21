@@ -19,6 +19,9 @@
   mjm.desktop.enable = true;
   mjm.desktop.plasma.enable = true;
 
+  # it's pretty easy to blow up the ram on this thing with the default max-jobs
+  nix.settings.max-jobs = 4;
+
   # without this, it's gonna use llvmpipe and the performance will be just total ass
   hardware.asahi.useExperimentalGPUDriver = true;
 
