@@ -113,6 +113,7 @@ in
           pkgs.writeShellScript "backup-exec-start" ''
             ${mkPreamble repo location}
 
+            ${resticCmd} unlock
             ${resticCmd} backup ${excludeFlags} --files-from=${includePaths}
             ${resticCmd} forget --prune --keep-weekly 4 --keep-daily 7
             ${resticCmd} check
@@ -136,6 +137,8 @@ in
         restartIfChanged = false;
         wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
+        startLimitBurst = 4;
+        startLimitIntervalSec = 600;
         networkNamespace = mkIf useNamespace "backups";
         credentials = {
           backups.b2_key_id = { };
@@ -164,6 +167,8 @@ in
           CacheDirectory = "restic-backups-${name}";
           CacheDirectoryMode = "0700";
           PrivateTmp = true;
+          Restart = "on-failure";
+          RestartSec = "2m";
         };
       }
     ) config.mjm.backups;
