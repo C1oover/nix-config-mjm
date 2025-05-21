@@ -161,6 +161,8 @@ in
         ExecStart = "${pkgs.spiffe-tool}/bin/spire-provision ${entriesJson}";
         DynamicUser = true;
         User = "spire-server";
+        Restart = "on-failure";
+        RestartSec = 5;
 
         CapabilityBoundingSet = "";
         DevicePolicy = "closed";

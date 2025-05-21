@@ -11,7 +11,6 @@ let
     concatStringsSep
     mkAfter
     mkEnableOption
-    mkForce
     mkIf
     ;
   cfg = config.mjm.gitlab-runner;
@@ -26,9 +25,7 @@ in
 
   config = mkIf cfg.enable {
     mjm.services.gitlab-runner = {
-      vault = {
-        enable = true;
-      };
+      vault.enable = true;
     };
     mjm.state.directories = [
       {
@@ -196,12 +193,6 @@ in
         IdentityFile /run/remote-builder-key/key
     '';
 
-    # force nixos tests to use a remote builder
-    nix.settings.system-features = mkForce [
-      "benchmark"
-      "big-parallel"
-    ];
-
     nix.distributedBuilds = true;
     nix.buildMachines =
       let
@@ -235,7 +226,6 @@ in
           mandatoryFeatures = [ ];
           publicHostKey = "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSUxEbjh6cDFkL3M1T29HZ0FxdEgxNEtFVHZCRU1IOXBERWY2YzJ5amNkWXMgcm9vdEBuaW9iZQo=";
         }
-        (mkVmTestBuilder "hades" // { maxJobs = 1; })
       ]
       ++ (map mkVmTestBuilder [
         "apollo"
