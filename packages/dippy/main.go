@@ -108,7 +108,6 @@ func (cli *CLI) EvalNodes(ctx context.Context, cfg *Config, hostnames []string, 
 	var testResults []nix.EvalJobResult
 	resultsByAttrs := map[string]nix.EvalJobResult{}
 	for _, r := range paths {
-		slog.DebugContext(ctx, "got eval result", "attr", r.Attr)
 		if r.Error != "" {
 			errorAttrs = append(errorAttrs, r.Attr)
 		} else if r.Attr == "configJson" {
