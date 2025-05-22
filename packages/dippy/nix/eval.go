@@ -1,6 +1,7 @@
 package nix
 
 import (
+	"bufio"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -8,7 +9,6 @@ import (
 	"os"
 	"os/exec"
 	"strconv"
-	"strings"
 )
 
 func (_ Real) EvalJobs(ctx context.Context, opts EvalJobsOptions) ([]EvalJobResult, error) {
@@ -29,29 +29,44 @@ func (_ Real) EvalJobs(ctx context.Context, opts EvalJobsOptions) ([]EvalJobResu
 	slog.DebugContext(ctx, "running nix-eval-jobs", "args", args)
 	cmd := exec.CommandContext(ctx, "nix-eval-jobs", args...)
 	cmd.Stderr = os.Stderr
-	output, err := cmd.Output()
+
+	output, err := cmd.StdoutPipe()
 	if err != nil {
-		return nil, fmt.Errorf("running nix-eval-jobs: %w", err)
+		return nil, fmt.Errorf("creating stdout pipe: %w", err)
 	}
 
-	lines := strings.Split(string(output), "\n")
+	if err := cmd.Start(); err != nil {
+		return nil, fmt.Errorf("starting nix-eval-jobs: %w", err)
+	}
+
+	s := bufio.NewScanner(output)
 	var results []EvalJobResult
-	for _, l := range lines {
-		if l == "" {
+	for s.Scan() {
+		if len(s.Bytes()) == 0 {
 			continue
 		}
 		var result EvalJobResult
-		if err := json.Unmarshal([]byte(l), &result); err != nil {
+		if err := json.Unmarshal(s.Bytes(), &result); err != nil {
 			return nil, fmt.Errorf("parsing eval result as json: %w", err)
 		}
+
+		slog.DebugContext(ctx, "eval result", "attr", result.Attr, "error", result.Error, "drv_path", result.DrvPath, "out_path", result.OutPath())
 		results = append(results, result)
+	}
+
+	if s.Err() != nil {
+		return nil, fmt.Errorf("scanning nix-eval-jobs output: %w", s.Err())
+	}
+
+	if err := cmd.Wait(); err != nil {
+		return nil, fmt.Errorf("running nix-eval-jobs: %w", err)
 	}
 
 	slog.DebugContext(ctx, "finished nix-eval-jobs", "result_count", len(results))
 	return results, nil
 }
 
-func (_ Real) EvalJSON(ctx context.Context, dst interface{}, opts EvalOptions) error {
+func (_ Real) EvalJSON(ctx context.Context, dst any, opts EvalOptions) error {
 	args := []string{"eval", "--impure", "--json"}
 	if opts.Expr != "" {
 		args = append(args, "--expr", opts.Expr)
