@@ -279,7 +279,7 @@ in
       backupPrepareCommand = ''
         ${pkgs.curl}/bin/curl \
           -X POST \
-          http://127.0.0.1:8123/api/services/backup/create \
+          http://127.0.0.1:18123/api/services/backup/create \
           -H "Authorization: Bearer $(cat $CREDENTIALS_DIRECTORY/home-assistant_api_token)"
       '';
       backupCleanupCommand = ''
