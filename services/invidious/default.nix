@@ -1,17 +1,25 @@
 { config, lib, ... }:
 let
-  inherit (lib) mkIf;
-  cfg = config.mjm.media-server;
+  inherit (lib) mkEnableOption mkIf;
+  cfg = config.mjm.invidious;
 in
 {
+  options.mjm.invidious = {
+    enable = mkEnableOption "Invidious";
+  };
+
   config = mkIf cfg.enable {
     mjm.services.invidious = {
       postgresql.enable = true;
-      vault = {
-        enable = true;
-      };
+      vault.enable = true;
     };
-    mjm.state.directories = [ "/var/lib/private/invidious" ];
+    mjm.state.directories = [
+      {
+        directory = "/var/lib/private/invidious";
+        user = "nobody";
+        group = "nobody";
+      }
+    ];
 
     ingress.virtualHosts.yt = {
       upstream = {
@@ -39,38 +47,25 @@ in
     };
 
     systemd.services.invidious = {
-      networkNamespace = "invidious";
       credentials.invidious.extra_settings = { };
     };
-    systemd.services.invidious-sig-helper.networkNamespace = "invidious";
 
     mjm.spire.tunnels = {
       invidious = {
         id = "invidious";
         mode = "server";
-        listen.port = 3000;
+        listen.port = 13000;
         target.port = 3000;
-        target.namespace = "invidious";
         allowIngress = true;
-        allowConsul = true;
-      };
-      consul-invidious = {
-        id = "consul-agent";
-        mode = "client";
-        listen.socket = "/run/consul-checks/invidious.sock";
-        target.port = 3000;
-        service = "invidious";
       };
     };
 
-    mjm.services.consul-agent = { };
-
     services.consul.services.invidious = {
-      port = 3000;
+      port = 13000;
 
       checks.up = {
         http.path = "/";
-        http.socket = "/run/consul-checks/invidious.sock";
+        http.port = 3000;
       };
     };
   };

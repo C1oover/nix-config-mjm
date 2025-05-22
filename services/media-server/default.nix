@@ -8,7 +8,6 @@ in
   };
 
   imports = [
-    ./invidious.nix
     ./mount.nix
     ./peertube.nix
   ];

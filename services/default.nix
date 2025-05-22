@@ -12,6 +12,7 @@
     ./home-assistant
     ./icloudpd
     ./ingress
+    ./invidious
     ./ipv4-proxy
     ./jellyfin
     ./launchpad

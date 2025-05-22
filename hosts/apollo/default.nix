@@ -5,6 +5,7 @@
     ./goldeen.nix
     ./ivysaur.nix
     ./lapras.nix
+    ./meowth.nix
     ./primeape.nix
     ./slowbro.nix
     ./tangela.nix
