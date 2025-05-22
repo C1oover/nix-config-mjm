@@ -5,6 +5,7 @@
     ./blastoise.nix
     ./drowzee.nix
     ./eevee.nix
+    ./espeon.nix
     ./flareon.nix
     ./hypno.nix
     ./jigglypuff.nix
@@ -12,6 +13,7 @@
     ./jynx.nix
     ./snorlax.nix
     ./squirtle.nix
+    ./umbreon.nix
     ./vaporeon.nix
     ./wartortle.nix
   ];

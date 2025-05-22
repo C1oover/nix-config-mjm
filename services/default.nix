@@ -30,6 +30,7 @@
     ./postgresql
     ./prometheus
     ./radarr
+    ./readarr
     ./remote-builder
     ./sabnzbd
     ./sonarr

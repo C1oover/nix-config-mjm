@@ -1,7 +1,6 @@
-{ config, lib, ... }:
+{ lib, ... }:
 let
-  inherit (lib) mkEnableOption mkIf;
-  cfg = config.mjm.media-server;
+  inherit (lib) mkEnableOption;
 in
 {
   options.mjm.media-server = {
@@ -9,17 +8,8 @@ in
   };
 
   imports = [
-    ./arr.nix
     ./invidious.nix
     ./mount.nix
     ./peertube.nix
   ];
-
-  config = mkIf cfg.enable {
-    mjm.services.media-server = {
-      vault.enable = true;
-    };
-
-    mjm.backups.media-server.repositoryName = "mediaserver";
-  };
 }
