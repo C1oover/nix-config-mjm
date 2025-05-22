@@ -1,4 +1,8 @@
 {
+  # hades is the one running the deploy, so we don't want to reboot in
+  # the middle of the job.
+  deployment.rebootAutomatically = false;
+
   mjm.username = "mjm";
 
   networking.hostName = "hades";
@@ -24,9 +28,11 @@
 
   boot.loader.systemd-boot.enable = true;
 
+  nix.settings.max-jobs = 6;
+
   mjm.profiles.vm-host.enable = true;
 
-  mjm.networkd.bridge.enable = true;
+  mjm.gitlab-runner.enable = true;
   mjm.nut = {
     enable = true;
     connectedUPSName = "or500";

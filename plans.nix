@@ -9,7 +9,6 @@ let
     "chaos"
     "demeter"
     "hades"
-    "hypnos"
     "niobe"
     "persephone"
     "steropes"
