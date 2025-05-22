@@ -8,6 +8,7 @@
     ./flareon.nix
     ./hypno.nix
     ./jigglypuff.nix
+    ./jolteon.nix
     ./jynx.nix
     ./snorlax.nix
     ./squirtle.nix

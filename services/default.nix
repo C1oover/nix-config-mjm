@@ -16,6 +16,7 @@
     ./jellyfin
     ./launchpad
     ./libvirtd
+    ./lidarr
     ./linkding
     ./loki
     ./matrix-server

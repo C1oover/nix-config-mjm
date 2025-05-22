@@ -17,10 +17,6 @@ in
     };
     mjm.state.directories = [
       {
-        directory = config.services.lidarr.dataDir;
-        inherit (config.services.lidarr) user group;
-      }
-      {
         directory = config.services.readarr.dataDir;
         inherit (config.services.readarr) user group;
       }
@@ -30,13 +26,6 @@ in
         group = "readarr";
       }
     ];
-
-    services.lidarr = {
-      enable = true;
-      settings.server.bindaddress = "localhost";
-    };
-    systemd.services.lidarr.networkNamespace = "lidarr";
-    users.users.lidarr.extraGroups = [ "media" ];
 
     services.readarr = {
       enable = true;
@@ -66,17 +55,6 @@ in
     };
 
     systemd.tmpfiles.settings."10-media-server" = {
-      "/videos/music" = {
-        d = {
-          user = "lidarr";
-          group = "media";
-        };
-        Z = {
-          user = "lidarr";
-          group = "media";
-          mode = "~0775";
-        };
-      };
       "/videos/books" = {
         d = {
           user = "readarr";
@@ -118,31 +96,6 @@ in
     };
 
     mjm.spire.tunnels = {
-      lidarr = {
-        id = "lidarr";
-        mode = "server";
-        listen.port = 8686;
-        target.port = 8686;
-        target.namespace = "lidarr";
-        allowIngress = true;
-        allowConsul = true;
-      };
-      lidarr-sabnzbd = {
-        id = "lidarr";
-        mode = "client";
-        listen.address = "127.0.0.1:8080";
-        listen.namespace = "lidarr";
-        target.service = "sabnzbd";
-        target.port = 28080;
-      };
-      consul-lidarr = {
-        id = "consul-agent";
-        mode = "client";
-        listen.socket = "/run/consul-checks/lidarr.sock";
-        target.port = 8686;
-        service = "lidarr";
-      };
-
       readarr = {
         id = "readarr";
         mode = "server";
@@ -205,19 +158,6 @@ in
     mjm.services.consul-agent = { };
 
     services.consul.services = {
-      lidarr = {
-        port = 8686;
-
-        checks.up = {
-          http.path = "/";
-          http.socket = "/run/consul-checks/lidarr.sock";
-          checkConfig = {
-            failures_before_warning = 2;
-            failures_before_critical = 6;
-          };
-        };
-      };
-
       readarr = {
         port = 8787;
 
@@ -250,12 +190,6 @@ in
     };
 
     ingress.virtualHosts = {
-      albums = {
-        upstream = {
-          service.name = "lidarr";
-          tls.enable = true;
-        };
-      };
       books = {
         upstream = {
           service.name = "readarr";
