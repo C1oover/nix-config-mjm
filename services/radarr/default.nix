@@ -118,16 +118,15 @@ in
     # ffprobe
     systemd.services.radarr.path = [ pkgs.ffmpeg ];
 
-    # TODO backup radarr content in its own backup repo
-    # mjm.backups.radarr = {
-    #   paths = [ "/var/lib/radarr/.config/Radarr" ];
-    #   exclude = [ "/var/lib/radarr/.config/Radarr/logs" ];
-    #   backupPrepareCommand = ''
-    #     ${pkgs.sqlite}/bin/sqlite3 /var/lib/radarr/.config/Radarr/radarr.db ".backup '/var/lib/radarr/.config/Radarr/radarr-backup.db'"
-    #   '';
-    #   backupCleanupCommand = ''
-    #     rm /var/lib/radarr/.config/Radarr/radarr-backup.db
-    #   '';
-    # };
+    mjm.backups.radarr = {
+      paths = [ "/var/lib/radarr/.config/Radarr" ];
+      exclude = [ "/var/lib/radarr/.config/Radarr/logs" ];
+      backupPrepareCommand = ''
+        ${pkgs.sqlite}/bin/sqlite3 /var/lib/radarr/.config/Radarr/radarr.db ".backup '/var/lib/radarr/.config/Radarr/radarr-backup.db'"
+      '';
+      backupCleanupCommand = ''
+        rm /var/lib/radarr/.config/Radarr/radarr-backup.db
+      '';
+    };
   };
 }

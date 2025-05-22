@@ -14,6 +14,9 @@ in
   };
 
   config = mkIf cfg.enable {
+    mjm.services.navidrome = {
+      vault.enable = true;
+    };
     mjm.state.directories = [ "/var/lib/navidrome" ];
     microvm.shares = [
       {
@@ -69,16 +72,15 @@ in
       };
     };
 
-    # TODO navidrome will need vault set up for the password
-    # mjm.backups.navidrome = {
-    #   paths = [ "/var/lib/navidrome" ];
-    #   exclude = [ "/var/lib/navidrome/cache" ];
-    #   backupPrepareCommand = ''
-    #     ${pkgs.sqlite}/bin/sqlite3 /var/lib/navidrome/navidrome.db ".backup '/var/lib/navidrome/navidrome-backup.db'"
-    #   '';
-    #   backupCleanupCommand = ''
-    #     rm /var/lib/navidrome/navidrome-backup.db
-    #   '';
-    # };
+    mjm.backups.navidrome = {
+      paths = [ "/var/lib/navidrome" ];
+      exclude = [ "/var/lib/navidrome/cache" ];
+      backupPrepareCommand = ''
+        ${pkgs.sqlite}/bin/sqlite3 /var/lib/navidrome/navidrome.db ".backup '/var/lib/navidrome/navidrome-backup.db'"
+      '';
+      backupCleanupCommand = ''
+        rm /var/lib/navidrome/navidrome-backup.db
+      '';
+    };
   };
 }

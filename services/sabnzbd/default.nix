@@ -116,10 +116,11 @@ in
       };
     };
 
-    # TODO backup sabnzbd content in its own backup repo
-    # mjm.backups.media-server.paths = [
-    #   "/var/lib/sabnzbd/admin"
-    #   "/var/lib/sabnzbd/sabnzbd.ini"
-    # ];
+    mjm.backups.sabnzbd = {
+      paths = [
+        "/var/lib/sabnzbd/admin"
+        "/var/lib/sabnzbd/sabnzbd.ini"
+      ];
+    };
   };
 }

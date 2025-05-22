@@ -1,4 +1,9 @@
-{ lib, config, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 let
   inherit (lib) mkEnableOption mkIf;
   cfg = config.mjm.sonarr;
@@ -110,16 +115,15 @@ in
       };
     };
 
-    # TODO backup sonarr content in its own backup repo
-    # mjm.backups.sonarr = {
-    #   paths = [ "/var/lib/sonarr/.config/NzbDrone" ];
-    #   exclude = [ "/var/lib/sonarr/.config/NzbDrone/logs" ];
-    #   backupPrepareCommand = ''
-    #     ${pkgs.sqlite}/bin/sqlite3 /var/lib/sonarr/.config/NzbDrone/sonarr.db ".backup '/var/lib/sonarr/.config/NzbDrone/sonarr-backup.db'"
-    #   '';
-    #   backupCleanupCommand = ''
-    #     rm /var/lib/sonarr/.config/NzbDrone/sonarr-backup.db
-    #   '';
-    # };
+    mjm.backups.sonarr = {
+      paths = [ "/var/lib/sonarr/.config/NzbDrone" ];
+      exclude = [ "/var/lib/sonarr/.config/NzbDrone/logs" ];
+      backupPrepareCommand = ''
+        ${pkgs.sqlite}/bin/sqlite3 /var/lib/sonarr/.config/NzbDrone/sonarr.db ".backup '/var/lib/sonarr/.config/NzbDrone/sonarr-backup.db'"
+      '';
+      backupCleanupCommand = ''
+        rm /var/lib/sonarr/.config/NzbDrone/sonarr-backup.db
+      '';
+    };
   };
 }
