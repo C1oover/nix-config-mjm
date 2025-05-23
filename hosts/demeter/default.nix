@@ -12,6 +12,7 @@
     ./jolteon.nix
     ./jynx.nix
     ./snorlax.nix
+    ./spinarak.nix
     ./squirtle.nix
     ./umbreon.nix
     ./vaporeon.nix

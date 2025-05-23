@@ -21,13 +21,13 @@
     ./linkding
     ./loki
     ./matrix-server
-    ./media-server
     ./miniflux
     ./nas
     ./navidrome
     ./netbox
     ./nut
     ./paperless
+    ./peertube
     ./postgresql
     ./prometheus
     ./radarr

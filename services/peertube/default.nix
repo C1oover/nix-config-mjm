@@ -1,20 +1,35 @@
 { config, lib, ... }:
 let
-  inherit (lib) mkIf;
-  cfg = config.mjm.media-server;
+  inherit (lib) mkEnableOption mkIf;
+  cfg = config.mjm.peertube;
 
   secrets = config.systemd.services.peertube.credentials.peertube;
 in
 {
+  options.mjm.peertube = {
+    enable = mkEnableOption "PeerTube";
+  };
+
   config = mkIf cfg.enable {
     mjm.services.peertube = {
       vault.enable = true;
     };
-    mjm.postgresql.enable = true;
+    mjm.postgresql = {
+      enable = true;
+      extraBackupDatabases = [ "peertube" ];
+    };
     mjm.state.directories = [
       {
         directory = "/var/lib/peertube";
         inherit (config.services.peertube) user group;
+      }
+    ];
+    microvm.shares = [
+      {
+        proto = "virtiofs";
+        tag = "media";
+        source = "/mnt/slow/media";
+        mountPoint = "/videos";
       }
     ];
 
@@ -67,13 +82,14 @@ in
     };
 
     systemd.services.peertube = {
+      serviceConfig.SystemCallFilter = [ "fchown" ];
       credentials.peertube = {
         fastmail_password = { };
         secret_key = { };
       };
     };
 
-    systemd.tmpfiles.settings."10-media-server" = {
+    systemd.tmpfiles.settings."10-peertube" = {
       "/videos/peertube".d = {
         user = "peertube";
         group = "media";
@@ -84,23 +100,21 @@ in
     services.nginx.virtualHosts."tube.midna.dev" = {
       serverName = "_";
       listen = [
-        { addr = "unix:/run/nginx/peertube.sock"; }
+        {
+          addr = "127.0.0.1";
+          port = 9002;
+        }
       ];
     };
 
-    systemd.tmpfiles.settings."10-peertube" = {
-      "/run/nginx".d = {
-        user = "nginx";
-        mode = "0755";
-      };
-    };
+    systemd.services.nginx.serviceConfig.RuntimeDirectoryMode = lib.mkForce "0755";
 
     mjm.spire.tunnels = {
       peertube = {
         id = "peertube";
         mode = "server";
         listen.port = 9001;
-        target.socket = "/run/nginx/peertube.sock";
+        target.port = 9002;
         allowIngress = true;
       };
     };
