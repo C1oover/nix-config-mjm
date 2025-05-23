@@ -179,14 +179,14 @@
       "type": "Git",
       "repository": {
         "type": "GitHub",
-        "owner": "astro",
+        "owner": "mjm",
         "repo": "microvm.nix"
       },
-      "branch": "main",
+      "branch": "push-yuwprytnzssr",
       "submodules": false,
-      "revision": "1d261ced5ea10b000d30932d5ec41a68063b9e8e",
-      "url": "https://github.com/astro/microvm.nix/archive/1d261ced5ea10b000d30932d5ec41a68063b9e8e.tar.gz",
-      "hash": "0y89jm6769p2jj52yjrw0w4638lpbh4yk3950i26p6i8z9gwkas1"
+      "revision": "6d860b435fb8d9141df92e921c86b24894f3681a",
+      "url": "https://github.com/mjm/microvm.nix/archive/6d860b435fb8d9141df92e921c86b24894f3681a.tar.gz",
+      "hash": "000l4lic6y7ca02mj945p6s9lqrfljal11ls6zjqhij7xqd4n8g5"
     },
     "nix-index-database": {
       "type": "Git",
