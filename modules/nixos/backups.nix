@@ -7,8 +7,10 @@
 }:
 let
   inherit (lib)
+    attrValues
     concatStringsSep
     getExe
+    mapAttrs
     mapAttrs'
     mapAttrsToList
     mkIf
@@ -16,6 +18,7 @@ let
     nameValuePair
     optional
     optionalString
+    pipe
     types
     ;
 
@@ -83,6 +86,16 @@ in
       overrideStrategy = "asDropin";
       wantedBy = [ "sockets.target" ];
     };
+
+    mjm.state.directories = pipe config.mjm.backups [
+      (mapAttrs (
+        name: cfg: {
+          directory = "/var/cache/restic-backups-${name}";
+          user = cfg.user;
+        }
+      ))
+      attrValues
+    ];
 
     systemd.services = mapAttrs' (
       name: cfg:
