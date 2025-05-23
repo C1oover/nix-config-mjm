@@ -15,9 +15,12 @@ import (
 	"github.com/spiffe/go-spiffe/v2/workloadapi"
 )
 
+func useSPIFFE() bool {
+	return os.Getenv("SPIFFE_ENDPOINT_SOCKET") != ""
+}
+
 func newVaultClient(ctx context.Context) (*api.Client, error) {
-	spiffeSocket := os.Getenv("SPIFFE_ENDPOINT_SOCKET")
-	if spiffeSocket == "" {
+	if !useSPIFFE() {
 		// if no spiffe socket, assume this is called from somewhere where the
 		// vault cli is being used, and try to read the token it stores
 		homeDir, err := os.UserHomeDir()
@@ -41,13 +44,11 @@ func newVaultClient(ctx context.Context) (*api.Client, error) {
 		if err != nil {
 			return nil, fmt.Errorf("creating workload api client: %w", err)
 		}
-		defer wc.Close()
 
 		source, err := workloadapi.NewX509Source(ctx, workloadapi.WithClient(wc))
 		if err != nil {
 			return nil, fmt.Errorf("creating x509 source: %w", err)
 		}
-		defer source.Close()
 
 		serverID := spiffeid.RequireFromString("spiffe://home.mattmoriarity.com/svc/vault")
 
@@ -60,9 +61,16 @@ func newVaultClient(ctx context.Context) (*api.Client, error) {
 			return nil, fmt.Errorf("creating vault client: %w", err)
 		}
 
+		updateVaultToken(ctx, c)
+		return c, err
+	}
+}
+
+func updateVaultToken(ctx context.Context, c *api.Client) error {
+	if useSPIFFE() {
 		jwtSource, err := workloadapi.NewJWTSource(ctx)
 		if err != nil {
-			return nil, fmt.Errorf("creating jwt source: %w", err)
+			return fmt.Errorf("creating jwt source: %w", err)
 		}
 		defer jwtSource.Close()
 
@@ -70,7 +78,7 @@ func newVaultClient(ctx context.Context) (*api.Client, error) {
 			Audience: os.Getenv("VAULT_ADDR"),
 		})
 		if err != nil {
-			return nil, fmt.Errorf("fetching jwt svid: %w", err)
+			return fmt.Errorf("fetching jwt svid: %w", err)
 		}
 
 		req := map[string]any{
@@ -79,10 +87,12 @@ func newVaultClient(ctx context.Context) (*api.Client, error) {
 		}
 		resp, err := c.Logical().WriteWithContext(ctx, "auth/spiffe/login", req)
 		if err != nil {
-			return nil, fmt.Errorf("authorizing vault with jwt token: %w", err)
+			return fmt.Errorf("authorizing vault with jwt token: %w", err)
 		}
 
 		c.SetToken(resp.Auth.ClientToken)
-		return c, err
+		return err
 	}
+
+	return nil
 }

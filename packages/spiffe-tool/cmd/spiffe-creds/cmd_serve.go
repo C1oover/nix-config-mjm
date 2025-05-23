@@ -45,6 +45,18 @@ func (c *ServeCmd) Run(ctx context.Context) error {
 		return fmt.Errorf("creating vault client: %w", err)
 	}
 
+	go func() {
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			case <-time.After(3 * time.Minute):
+				slog.InfoContext(ctx, "getting new vault token")
+				updateVaultToken(ctx, c.vault)
+			}
+		}
+	}()
+
 	connCh := make(chan net.Conn, 1)
 	go func() {
 		for {
@@ -69,8 +81,8 @@ func (c *ServeCmd) Run(ctx context.Context) error {
 			select {
 			case conn := <-connCh:
 				go c.handleConn(ctx, conn)
-			case <-time.After(15 * time.Second):
-				slog.InfoContext(ctx, "no new connections for a bit, exiting")
+			case <-time.After(10 * time.Minute):
+				slog.InfoContext(ctx, "no new connections for a while, exiting")
 				stop()
 				return
 			case <-ctx.Done():
