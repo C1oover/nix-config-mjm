@@ -16,7 +16,6 @@ in
 
     ../../common/base
 
-    ./netns.nix
     ./networkd.nix
     ./user.nix
   ];

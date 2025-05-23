@@ -53,21 +53,15 @@ in
   options.mjm.garage.clients = mkOption {
     default = { };
     type = types.attrsOf (
-      types.submodule (
-        { name, ... }:
-        {
-          options = {
-            namespace = mkOption {
-              type = types.nullOr types.str;
-              default = if config.mjm.minimal.enable then null else name;
-            };
-            services = mkOption {
-              type = types.listOf types.str;
-              default = [ ];
-            };
+      types.submodule {
+        options = {
+          services = mkOption {
+            type = types.listOf types.str;
+            default = [ ];
           };
-        }
-      )
+        };
+      }
+
     );
   };
 
@@ -79,7 +73,6 @@ in
           id = mkDefault name;
           mode = "client";
           listen.address = "169.254.170.2:80";
-          listen.namespace = c.namespace;
           listen.early = true;
           target.service = "spiffe-garage";
           target.port = 3899;
@@ -91,7 +84,6 @@ in
           id = mkDefault name;
           mode = "client";
           listen.port = 3902;
-          listen.namespace = c.namespace;
           target.service = "s3.garage";
           target.port = 3902;
           # you're gonna think you can remove this, but then it will use s3.garage

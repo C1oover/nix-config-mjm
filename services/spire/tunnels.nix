@@ -33,8 +33,6 @@ let
         description = "${if mode == "server" then "Server" else "Client"} Tunnel '${name}' Socket";
         wantedBy = if listen.early then [ "network.target" ] else [ "sockets.target" ];
         partOf = [ "${name}-tunnel.service" ];
-        bindsTo = mkIf (listen.namespace != null) [ "netns-bridge@${listen.namespace}.service" ];
-        after = mkIf (listen.namespace != null) [ "netns-bridge@${listen.namespace}.service" ];
         startLimitIntervalSec = 0;
         unitConfig = mkIf listen.early {
           DefaultDependencies = false;
@@ -42,7 +40,6 @@ let
         socketConfig = {
           FileDescriptorName = "ghostunnel";
           ListenStream = tunnel.listen.address;
-          NetworkNamespacePath = mkIf (listen.namespace != null) "/run/netns/${listen.namespace}";
         };
       };
     };
@@ -62,7 +59,6 @@ let
           "${name}-tunnel.socket"
         ];
         requires = [ "${name}-tunnel.socket" ];
-        networkNamespace = mkIf (target.namespace != null) target.namespace;
 
         environment.SPIFFE_ENDPOINT_SOCKET = "unix:${cfg.agent.socketPath}";
 
@@ -156,10 +152,6 @@ in
                 "server"
               ];
             };
-            namespace = mkOption {
-              type = types.nullOr types.str;
-              default = null;
-            };
             listen = {
               port = mkOption {
                 type = types.nullOr types.port;
@@ -172,13 +164,9 @@ in
               address = mkOption {
                 type = types.str;
               };
-              namespace = mkOption {
-                type = types.nullOr types.str;
-                default = null;
-              };
               early = mkOption {
                 type = types.bool;
-                default = config.listen.namespace != null;
+                default = false;
               };
             };
             target = {
@@ -201,14 +189,10 @@ in
               address = mkOption {
                 type = types.str;
               };
-              namespace = mkOption {
-                type = types.nullOr types.str;
-                default = null;
-              };
             };
             openFirewall = mkOption {
               type = types.bool;
-              default = config.listen.port != null && config.listen.namespace == null;
+              default = config.listen.port != null;
             };
             allowedServices = mkOption {
               type = types.listOf types.str;

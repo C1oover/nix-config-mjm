@@ -22,7 +22,6 @@ let
     types
     ;
 
-  useNamespace = !config.mjm.minimal.enable;
   trustDomain = config.mjm.spire.agent.trustDomain;
 in
 {
@@ -60,7 +59,6 @@ in
   };
 
   config = mkIf (config.mjm.backups != { }) {
-    mjm.networkd.macvlan.enable = mkIf useNamespace true;
     environment.etc."resolv.conf".source = lib.mkForce "/run/systemd/resolve/resolv.conf";
 
     mjm.garage.clients.backups = { };
@@ -152,7 +150,6 @@ in
         after = [ "network-online.target" ];
         startLimitBurst = 4;
         startLimitIntervalSec = 600;
-        networkNamespace = mkIf useNamespace "backups";
         credentials = {
           backups.b2_key_id = { };
           backups.b2_application_key = { };
@@ -237,15 +234,10 @@ in
           (lib.concatStringsSep "\n")
         ]}
 
-        ${lib.optionalString useNamespace ''
-          systemctl start netns-bridge@backups.service
-        ''}
-
         export PATH=${config.systemd.services."restic-backups-${name}".environment.PATH}:$PATH
         exec ${pkgs.systemd}/bin/systemd-run \
           --service-type=oneshot \
           --wait -qt --collect \
-          ${lib.optionalString useNamespace "-p NetworkNamespacePath=/run/netns/backups"} \
           -p User=${cfg.user} \
           -p LoadCredential=backups_b2_key_id:/run/backups-creds.sock \
           -p LoadCredential=backups_b2_application_key:/run/backups-creds.sock \
