@@ -6,7 +6,6 @@ let
     "artemis"
     "athena"
     "brontes"
-    "chaos"
     "demeter"
     "hades"
     "niobe"

@@ -16,12 +16,21 @@ in
 
   config = mkIf cfg.enable {
     mjm.services.icloudpd = { };
-    mjm.state.services = [ "icloudpd" ];
-
-    fileSystems."/videos" = {
-      device = "media";
-      fsType = "virtiofs";
-    };
+    mjm.state.directories = [
+      {
+        directory = "/var/lib/private/icloudpd";
+        user = "nobody";
+        group = "nogroup";
+      }
+    ];
+    microvm.shares = [
+      {
+        proto = "virtiofs";
+        tag = "media";
+        source = "/mnt/slow/media/photos";
+        mountPoint = "/mnt/photos";
+      }
+    ];
 
     systemd.services.icloudpd = {
       description = "iCloud Photo Downloader";
@@ -37,7 +46,7 @@ in
         ExecStart = utils.escapeSystemdExecArgs [
           (lib.getExe pkgs.icloudpd)
           "--directory"
-          "/videos/photos"
+          "/mnt/photos"
           "--username"
           "mmoriarity@me.com"
           "--watch-with-interval"
@@ -47,8 +56,9 @@ in
         ];
         StateDirectory = "icloudpd";
         DynamicUser = true;
-        ReadWritePaths = [ "/videos/photos" ];
+        ReadWritePaths = [ "/mnt/photos" ];
       };
+      unitConfig.RequiresMountsFor = [ "/mnt/photos" ];
     };
 
     environment.systemPackages = [
@@ -58,7 +68,7 @@ in
           -p Environment=HOME=/var/lib/icloudpd \
           -p StateDirectory=icloudpd \
           -p DynamicUser=true \
-          -p ReadWritePaths=/videos/photos \
+          -p ReadWritePaths=/mnt/photos \
           --wait \
           -qt \
           --collect \

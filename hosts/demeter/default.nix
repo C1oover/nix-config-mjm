@@ -2,6 +2,7 @@
   imports = [
     ./abra.nix
     ./arcanine.nix
+    ./bellossom.nix
     ./blastoise.nix
     ./drowzee.nix
     ./eevee.nix
