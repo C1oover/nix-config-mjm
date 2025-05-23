@@ -18,6 +18,11 @@ in
     mjm.services.icloudpd = { };
     mjm.state.services = [ "icloudpd" ];
 
+    fileSystems."/videos" = {
+      device = "media";
+      fsType = "virtiofs";
+    };
+
     systemd.services.icloudpd = {
       description = "iCloud Photo Downloader";
       wantedBy = [ "multi-user.target" ];
