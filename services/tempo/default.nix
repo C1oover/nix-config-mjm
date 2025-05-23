@@ -61,7 +61,6 @@ in
         listen.port = 3200;
         target.port = 3300;
         allowedServices = [ "grafana" ];
-        allowConsul = true;
       };
       tempo-grpc = {
         id = "tempo";

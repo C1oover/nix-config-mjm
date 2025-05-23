@@ -77,7 +77,6 @@ in
         listen.port = 9093;
         target.port = 19093;
         allowIngress = true;
-        allowConsul = true;
         allowedServices = [
           "grafana"
           "loki"

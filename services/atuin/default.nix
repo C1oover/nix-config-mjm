@@ -39,7 +39,6 @@ in
         listen.port = 8888;
         target.port = 18888;
         allowIngress = true;
-        allowConsul = true;
       };
     };
 

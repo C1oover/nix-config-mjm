@@ -255,7 +255,6 @@ in
         listen.port = 8091;
         target.port = 8090;
         allowIngress = true;
-        allowConsul = true;
       };
     };
 

@@ -116,7 +116,6 @@ in
           "alloy"
         ];
         allowMetrics = true;
-        allowConsul = true;
       };
       loki-alertmanager = {
         id = "loki";

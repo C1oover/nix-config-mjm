@@ -206,10 +206,6 @@ in
               type = types.bool;
               default = false;
             };
-            allowConsul = mkOption {
-              type = types.bool;
-              default = false;
-            };
             service = mkOption {
               type = types.str;
             };
@@ -233,7 +229,6 @@ in
             allowedServices = mkMerge [
               (mkIf config.allowIngress [ "caddy" ])
               (mkIf config.allowMetrics [ "prometheus" ])
-              (mkIf config.allowConsul [ "consul-agent" ])
             ];
 
             service = mkIf (config.target.service != null) (mkDefault config.target.service);

@@ -81,7 +81,6 @@ in
         listen.port = 9090;
         target.port = 19090;
         allowIngress = true;
-        allowConsul = true;
         allowedServices = [
           "alloy"
           "grafana"
