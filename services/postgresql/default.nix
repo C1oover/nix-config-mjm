@@ -55,17 +55,21 @@ in
         ];
       in
       {
-        paths = [ "/tmp/pgbackup" ];
+        paths = [ "/var/lib/postgresql/backup" ];
         user = "postgres";
         backupPrepareCommand = ''
           set -x
-          mkdir /tmp/pgbackup
-          cd /tmp/pgbackup
-          ${pg}/bin/pg_dumpall --globals-only -f /tmp/pgbackup/globals.sql
+
+          # in case the cleanup didn't happen for some reason
+          rm -rf /var/lib/postgresql/backup
+          mkdir -p /var/lib/postgresql/backup
+          cd /var/lib/postgresql/backup
+
+          ${pg}/bin/pg_dumpall --globals-only -f globals.sql
           ${dumpDBs}
         '';
         backupCleanupCommand = ''
-          rm -rf /tmp/pgbackup
+          rm -rf /var/lib/postgresql/backup
         '';
       };
 
