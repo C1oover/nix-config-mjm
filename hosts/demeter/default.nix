@@ -81,15 +81,15 @@
   ];
 
   mjm.consul.enable = true;
-  mjm.libvirtd = {
-    enable = true;
-    vmsDataset = "fast";
-  };
   mjm.microvm-host = {
     enable = true;
     zfsPrefix = "fast";
   };
   mjm.nas.enable = true;
+  mjm.networkd = {
+    secondaryLinkName = "lan1";
+    macvlan.enable = true;
+  };
   mjm.nut = {
     enable = true;
     connectedUPSName = "smart500";
@@ -97,10 +97,6 @@
   mjm.remote-builder.enable = true;
   mjm.server.enable = true;
   mjm.spire.agent.enable = true;
-
-  # switch to macvlan when possible, i.e. when no libvirtd VMs are using
-  # macvlan for namespacing
-  mjm.networkd.bridge.enable = true;
 
   nixpkgs.hostPlatform = "x86_64-linux";
   system.stateVersion = "25.05";

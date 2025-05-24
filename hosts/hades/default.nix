@@ -17,6 +17,24 @@
   ];
   boot.kernelModules = [ "kvm-intel" ];
 
+  fileSystems."/" = {
+    device = "rpool/nixos/root";
+    fsType = "zfs";
+    options = [ "zfsutil" ];
+  };
+
+  fileSystems."/nix" = {
+    device = "rpool/nixos/nix";
+    fsType = "zfs";
+    options = [ "zfsutil" ];
+  };
+
+  fileSystems."/home" = {
+    device = "rpool/nixos/home";
+    fsType = "zfs";
+    options = [ "zfsutil" ];
+  };
+
   fileSystems."/boot" = {
     device = "/dev/disk/by-partuuid/bfe9ead3-4309-4518-81eb-3d60406927a1";
     fsType = "vfat";
@@ -30,13 +48,17 @@
 
   nix.settings.max-jobs = 6;
 
-  mjm.profiles.vm-host.enable = true;
-
+  mjm.consul.enable = true;
   mjm.gitlab-runner.enable = true;
   mjm.nut = {
     enable = true;
     connectedUPSName = "or500";
   };
+  mjm.server.enable = true;
+  mjm.spire.agent.enable = true;
+  boot.kernelParams = [ "zfs.zfs_arc_max=7516192768" ];
+  boot.zfs.extraPools = [ "slow" ];
+  services.zfs.autoScrub.enable = true;
 
   system.stateVersion = "25.05";
 }
