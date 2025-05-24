@@ -96,7 +96,7 @@ in
       flip genAttrs (_: {
         environment.AWS_CONTAINER_CREDENTIALS_RELATIVE_URI = "/creds";
       }) allServices
-      // optionalAttrs config.mjm.minimal.enable {
+      // {
         "s3-creds-ip" = {
           description = "Set Up Local S3 Credentials IP Address";
           wantedBy = [ "multi-user.target" ];
