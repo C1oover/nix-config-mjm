@@ -14,6 +14,12 @@ let
     ;
   cfg = config.mjm.spire;
 
+  # bump purego dependency to fix build
+  pkg = pkgs.spire.overrideAttrs {
+    vendorHash = "sha256-1g8DSeKS4/D5fUuZlD7Mdmd/BizHMhi3YxHHbfTW4ZI=";
+    patches = [ ./fix-darwin.patch ];
+  };
+
   dataDir = "/Library/Application Support/SPIRE";
 
   configFile = pkgs.writeText "agent.hcl" ''
@@ -78,7 +84,7 @@ in
 
   config = mkIf cfg.agent.enable {
     launchd.daemons.spire-agent = {
-      command = "${pkgs.spire-agent}/bin/spire-agent run -config ${configFile}";
+      command = "${pkg}/bin/spire-agent run -config ${configFile}";
       serviceConfig = {
         RunAtLoad = true;
         KeepAlive = true;
@@ -104,10 +110,10 @@ in
     };
 
     environment.systemPackages = [
-      pkgs.spire-agent
+      pkg
       (pkgs.writeShellScriptBin ",spire" ''
         set -o errexit
-        ${pkgs.spire-agent}/bin/spire-agent "$@" -socketPath ${cfg.agent.socketPath}
+        ${pkg}/bin/spire-agent "$@" -socketPath ${cfg.agent.socketPath}
       '')
     ];
   };
