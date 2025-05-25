@@ -1,9 +1,12 @@
 {
   lib,
+  config,
   ...
 }:
 let
   inherit (lib) mkOption types;
+
+  trustDomain = config.mjm.spire.agent.trustDomain;
 
   entryType = types.submodule (
     { config, ... }:
@@ -45,5 +48,32 @@ in
   options.mjm.spire.entries = mkOption {
     default = [ ];
     type = types.attrsOf entryType;
+  };
+
+  config = {
+    # hardcode some entries for the single mac server
+    mjm.spire.entries = {
+      talos-consul = {
+        spiffe_id = "spiffe://${trustDomain}/svc/consul-client";
+        parent_id = "spiffe://${trustDomain}/talos";
+        selectors = [
+          {
+            type = "unix";
+            value = "user:consul";
+          }
+        ];
+      };
+      talos-mautrix-imessage = {
+        spiffe_id = "spiffe://${trustDomain}/svc/mautrix-imessage";
+        parent_id = "spiffe://${trustDomain}/talos";
+        selectors = [
+          {
+            type = "unix";
+            value = "user:mautrix-imessage";
+          }
+        ];
+        dns_names = [ "mautrix-imessage.service.consul" ];
+      };
+    };
   };
 }

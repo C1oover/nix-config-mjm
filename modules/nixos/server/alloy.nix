@@ -5,6 +5,7 @@ let
 in
 {
   config = mkIf (cfg.enable && cfg.enableAlloy) {
+    mjm.services.alloy = { };
     services.alloy = {
       enable = true;
     };

@@ -17,7 +17,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    mjm.services.matrix-server = { };
+    mjm.services.conduit = { };
     mjm.state.directories = [
       {
         directory = "/var/lib/private/conduwuit";

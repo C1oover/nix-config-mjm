@@ -47,7 +47,7 @@ in
   };
 
   config = mkIf (cfg.enable && cfg.bridges.slack.enable) {
-    mjm.services.matrix-server.postgresql = {
+    mjm.services.conduit.postgresql = {
       enable = true;
       databases = [ "mautrix-slack" ];
     };

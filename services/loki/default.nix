@@ -16,6 +16,8 @@ in
   };
 
   config = mkIf cfg.enable {
+    mjm.services.loki = { };
+
     services.loki = {
       enable = true;
       configuration = {

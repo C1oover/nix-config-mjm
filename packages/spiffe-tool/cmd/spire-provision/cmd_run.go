@@ -138,9 +138,7 @@ func (c *RunCmd) Run(ctx context.Context) error {
 
 		fmt.Println("removed:")
 		for _, e := range r.Removed {
-			if !strings.HasPrefix(e.GetParentId().GetPath(), "/spire/agent/join_token/") {
-				fmt.Println(e)
-			}
+			fmt.Println(e)
 		}
 
 		fmt.Println("unchanged:")
@@ -184,7 +182,9 @@ func diffEntries(before, after []*types.Entry) diffResult {
 			x, moreBefore = nextBefore()
 			y, moreAfter = nextAfter()
 		} else if result < 0 {
-			r.Removed = append(r.Removed, x)
+			if !strings.HasPrefix(x.GetParentId().GetPath(), "/spire/agent/join_token/") {
+				r.Removed = append(r.Removed, x)
+			}
 			x, moreBefore = nextBefore()
 		} else {
 			r.Added = append(r.Added, y)

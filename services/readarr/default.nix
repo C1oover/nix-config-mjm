@@ -88,21 +88,21 @@ in
     };
 
     mjm.spire.tunnels = {
-      readarr = {
+      "readarr${cfg.suffix}" = {
         id = "readarr${cfg.suffix}";
         mode = "server";
         listen.port = 18787;
         target.port = 8787;
         allowIngress = true;
       };
-      readarr-metrics = {
+      "readarr${cfg.suffix}-metrics" = {
         id = "readarr${cfg.suffix}";
         mode = "server";
         listen.port = 19706;
         target.port = 9708;
         allowMetrics = true;
       };
-      readarr-sabnzbd = {
+      "readarr${cfg.suffix}-sabnzbd" = {
         id = "readarr${cfg.suffix}";
         mode = "client";
         listen.address = "127.0.0.1:8080";

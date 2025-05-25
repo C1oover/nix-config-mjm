@@ -49,7 +49,7 @@ in
   };
 
   config = mkIf (cfg.enable && cfg.bridges.discord.enable) {
-    mjm.services.matrix-server.postgresql = {
+    mjm.services.conduit.postgresql = {
       enable = true;
       databases = [ "mautrix-discord" ];
     };

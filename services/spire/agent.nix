@@ -179,27 +179,5 @@ in
         ${pkgs.spire-agent}/bin/spire-agent "$@" -socketPath ${cfg.agent.socketPath}
       '')
     ];
-
-    mjm.spire.entries =
-      let
-        inherit (cfg.agent) trustDomain;
-      in
-      {
-        "generic-server-${config.networking.hostName}" = {
-          spiffe_id = "spiffe://${trustDomain}/generic-server";
-          parent_id = "spiffe://${trustDomain}/${config.networking.hostName}";
-        };
-        # maybe move to the host-cert module
-        "sshd-host-cert-${config.networking.hostName}" = {
-          spiffe_id = "spiffe://${trustDomain}/${config.networking.hostName}/sshd";
-          parent_id = "spiffe://${trustDomain}/${config.networking.hostName}";
-          selectors = [
-            {
-              type = "systemd";
-              value = "id:sshd-host-cert.service";
-            }
-          ];
-        };
-      };
   };
 }

@@ -2,6 +2,8 @@
 let
   inherit (lib) mkIf;
   cfg = config.mjm.authelia;
+
+  trustDomain = config.mjm.spire.agent.trustDomain;
 in
 {
   config = mkIf cfg.enable {
@@ -60,6 +62,11 @@ in
         http.port = 27170;
         intervalSeconds = 30;
       };
+    };
+
+    mjm.spire.entries.authelia-lldap = {
+      spiffe_id = "spiffe://${trustDomain}/svc/lldap";
+      parent_id = "spiffe://${trustDomain}/svc/authelia";
     };
   };
 }

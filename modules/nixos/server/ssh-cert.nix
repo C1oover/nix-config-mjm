@@ -120,5 +120,23 @@ in
         intervalSeconds = 30;
       };
     };
+
+    mjm.spire.entries =
+      let
+        inherit (config.mjm.spire.agent) trustDomain;
+      in
+      {
+        # maybe move to the host-cert module
+        "sshd-host-cert-${config.networking.hostName}" = {
+          spiffe_id = "spiffe://${trustDomain}/${config.networking.hostName}/sshd";
+          parent_id = "spiffe://${trustDomain}/${config.networking.hostName}";
+          selectors = [
+            {
+              type = "systemd";
+              value = "id:sshd-host-cert.service";
+            }
+          ];
+        };
+      };
   };
 }

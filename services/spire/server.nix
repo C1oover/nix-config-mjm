@@ -220,7 +220,6 @@ in
         set -o errexit
         ${pkgs.spire-server}/bin/spire-server "$@" -socketPath /run/spire-server/api.sock
       '')
-      (pkgs.writeNuBin "spire-manage" ./spire-manage.nu)
 
       pkgs.spiffe-tool
     ];
