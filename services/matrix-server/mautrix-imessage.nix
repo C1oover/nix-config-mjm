@@ -112,40 +112,58 @@ in
     users.knownUsers = [ "mautrix-imessage" ];
     users.knownGroups = [ "mautrix-imessage" ];
 
-    # These log files do need to be created and chown'd before the service can start.
-    # launchd is bad.
+    # can start the bridge, including tunnels, by running:
+    #   zellij --layout /etc/mautrix-imessage.kdl
+    environment.etc."mautrix-imessage.kdl".text = ''
+      layout {
+        tab name="nix-config" cwd="/Users/${config.mjm.username}/src/nix-config" {
+      		pane size=1 borderless=true {
+      			plugin location="zellij:tab-bar"
+      		}
 
-    launchd.daemons.mautrix-imessage-tunnel = {
-      command = "${pkgs.ghostunnel}/bin/ghostunnel server --use-workload-api --listen=launchd:Listener --target=localhost:29400 --disable-authentication";
-      environment.SPIFFE_ENDPOINT_SOCKET = "unix:${config.mjm.spire.agent.socketPath}";
-      serviceConfig = {
-        StandardOutPath = "/Library/Logs/mautrix-imessage-tunnel.log";
-        StandardErrorPath = "/Library/Logs/mautrix-imessage-tunnel.log";
-        UserName = "mautrix-imessage";
-        GroupName = "mautrix-imessage";
-        Sockets.Listener = {
-          SockServiceName = "29401";
-          SockType = "stream";
-          SockFamily = "IPv4";
-        };
-      };
-    };
-    launchd.daemons.mautrix-imessage-conduit-tunnel = {
-      command = "${pkgs.ghostunnel}/bin/ghostunnel client --use-workload-api --listen=launchd:Listener --target=conduit.service.consul:6167 --verify-uri=spiffe://home.mattmoriarity.com/svc/conduit";
-      environment.SPIFFE_ENDPOINT_SOCKET = "unix:${config.mjm.spire.agent.socketPath}";
-      serviceConfig = {
-        StandardOutPath = "/Library/Logs/mautrix-imessage-conduit-tunnel.log";
-        StandardErrorPath = "/Library/Logs/mautrix-imessage-conduit-tunnel.log";
-        UserName = "mautrix-imessage";
-        GroupName = "mautrix-imessage";
-        Sockets.Listener = {
-          SockNodeName = "127.0.0.1";
-          SockServiceName = "6167";
-          SockType = "stream";
-          SockFamily = "IPv4";
-        };
-      };
-    };
+      		pane
+
+      		pane size=1 borderless=true {
+      			plugin location="zellij:status-bar"
+      		}
+        }
+
+        tab name="mautrix-imessage" {
+      		pane size=1 borderless=true {
+      			plugin location="zellij:tab-bar"
+      		}
+
+      		pane {
+      		  command "run-mautrix-imessage"
+      		}
+
+      		pane size=1 borderless=true {
+      			plugin location="zellij:status-bar"
+      		}
+        }
+
+        tab name="tunnels" {
+      		pane size=1 borderless=true {
+      			plugin location="zellij:tab-bar"
+      		}
+
+      		pane split_direction="vertical" {
+      		  pane {
+        		  command "sudo"
+        		  args "-u" "mautrix-imessage" "${pkgs.ghostunnel}/bin/ghostunnel" "server" "--use-workload-api-addr=unix:${config.mjm.spire.agent.socketPath}" "--listen=:29401" "--target=localhost:29400" "--allow-uri=spiffe://home.mattmoriarity.com/svc/conduit"
+      		  }
+      		  pane {
+      		    command "sudo"
+      		    args "-u" "mautrix-imessage" "${pkgs.ghostunnel}/bin/ghostunnel" "client" "--use-workload-api-addr=unix:${config.mjm.spire.agent.socketPath}" "--listen=127.0.0.1:6167" "--target=conduit.service.consul:6167" "--verify-uri=spiffe://home.mattmoriarity.com/svc/conduit"
+      		  }
+      		}
+
+      		pane size=1 borderless=true {
+      			plugin location="zellij:status-bar"
+      		}
+        }
+      }
+    '';
 
     services.consul.services.mautrix-imessage = {
       inherit port;
