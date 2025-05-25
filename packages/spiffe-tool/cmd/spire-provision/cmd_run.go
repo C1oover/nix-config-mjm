@@ -101,17 +101,28 @@ func (c *RunCmd) Run(ctx context.Context) error {
 		}
 		slog.Info("updated entries", "count", count)
 
-		// var ids []string
-		// for _, e := range r.Removed {
-		// 	ids = append(ids, e.GetId())
-		// }
+		var ids []string
+		for _, e := range r.Removed {
+			ids = append(ids, e.GetId())
+		}
 
-		// _, err = entryClient.BatchDeleteEntry(ctx, &entryv1.BatchDeleteEntryRequest{
-		// 	Ids: ids,
-		// })
-		// if err != nil {
-		// 	return fmt.Errorf("batch deleting entries: %w", err)
-		// }
+		deleteRes, err := entryClient.BatchDeleteEntry(ctx, &entryv1.BatchDeleteEntryRequest{
+			Ids: ids,
+		})
+		if err != nil {
+			return fmt.Errorf("batch deleting entries: %w", err)
+		}
+
+		count = 0
+		for _, res := range deleteRes.GetResults() {
+			code := codes.Code(res.GetStatus().GetCode())
+			if code == codes.OK {
+				count++
+			} else {
+				slog.Warn("failed to delete entry", "id", res.GetId(), "code", code, "msg", res.GetStatus().GetMessage())
+			}
+		}
+		slog.Info("deleted entries", "count", count)
 	} else {
 		defer c.EntriesPath.Close()
 		entriesRaw, err := io.ReadAll(c.EntriesPath)
