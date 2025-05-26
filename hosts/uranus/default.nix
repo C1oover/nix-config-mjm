@@ -23,5 +23,10 @@
 
   services.hardware.bolt.enable = true;
 
+  nix.settings = {
+    max-jobs = 4;
+    cores = 8;
+  };
+
   system.stateVersion = "24.05";
 }
