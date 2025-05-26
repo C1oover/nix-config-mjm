@@ -25,6 +25,8 @@ devshell.mkShell (
       inherit (pkgs)
         nixfmt-rfc-style
         vault-bin
+        go
+        gopls
         ;
     };
 

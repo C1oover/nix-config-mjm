@@ -1,0 +1,9 @@
+diff --git a/arch/x86/configs/x86_64_defconfig b/arch/x86/configs/x86_64_defconfig
+index 61e25f6209..4dd1062dbc 100644
+--- a/arch/x86/configs/x86_64_defconfig
++++ b/arch/x86/configs/x86_64_defconfig
+@@ -277,3 +277,4 @@
+ CONFIG_EARLY_PRINTK_DBGP=y
+ CONFIG_DEBUG_BOOT_PARAMS=y
+ CONFIG_DEBUG_ENTRY=y
++CONFIG_LIBNVDIMM=y
