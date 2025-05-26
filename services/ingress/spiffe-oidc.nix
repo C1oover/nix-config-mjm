@@ -85,7 +85,7 @@ in
         selectors = [
           {
             type = "systemd";
-            value = "oidc-discovery-provider.service";
+            value = "id:oidc-discovery-provider.service";
           }
         ];
       };
