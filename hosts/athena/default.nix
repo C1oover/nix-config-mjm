@@ -23,7 +23,7 @@
   nix.settings.max-jobs = 4;
 
   # without this, it's gonna use llvmpipe and the performance will be just total ass
-  hardware.asahi.useExperimentalGPUDriver = true;
+  hardware.asahi.withRust = true;
 
   services.openssh.enable = true;
   programs.ssh.startAgent = true;
