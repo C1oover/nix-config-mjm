@@ -31,9 +31,7 @@ let
       jwt_issuer = "https://spire.midna.dev"
       socket_path = "/run/spire-server/api.sock"
 
-      # one hour is a bit too unforgiving for these for me,
-      # since i'm using join tokens which can't just reattest
-      agent_ttl = "6h"
+      agent_ttl = "48h"
     }
 
     telemetry {
