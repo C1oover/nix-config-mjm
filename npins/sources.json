@@ -249,9 +249,9 @@
       },
       "branch": "deploy/nixpkgs-unstable",
       "submodules": false,
-      "revision": "091f57e964735435a1ff69f891ce8e1a96046d48",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=091f57e964735435a1ff69f891ce8e1a96046d48",
-      "hash": "17g25r5nr2jfv46fql3rg3qq063z94wzhwjn07wwm97gn6q3a8jk"
+      "revision": "a7e5e7c8db406b856d2570f2f9fd1f0c13ff4111",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=a7e5e7c8db406b856d2570f2f9fd1f0c13ff4111",
+      "hash": "1ma4nvq22kxjxsmbfr1hmga0i34z8yjv7qvkk68ckrdfxn5av00z"
     },
     "preservation": {
       "type": "Git",
