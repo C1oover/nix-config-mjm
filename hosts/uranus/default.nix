@@ -17,7 +17,7 @@
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   networking.networkmanager.enable = false;
-  mjm.networkd.bridge.enable = true;
+  mjm.networkd.macvlan.enable = true;
 
   services.openssh.enable = true;
 
