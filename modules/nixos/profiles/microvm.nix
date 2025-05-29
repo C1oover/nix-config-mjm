@@ -63,13 +63,7 @@ in
         hypervisor = "cloud-hypervisor";
         interfaces = [
           (
-            if hostConfig.mjm.networkd.bridge.enable then
-              {
-                type = "tap";
-                id = "vm-${config.networking.hostName}";
-                mac = cfg.macAddress;
-              }
-            else if hostConfig.mjm.networkd.macvlan.enable then
+            if hostConfig.mjm.networkd.macvlan.enable then
               {
                 type = "macvtap";
                 id = "vm-${config.networking.hostName}";
@@ -78,7 +72,7 @@ in
                 mac = cfg.macAddress;
               }
             else
-              builtins.throw "bridge or macvlan network must be enabled on host"
+              builtins.throw "macvlan network must be enabled on host"
           )
         ];
         shares =
@@ -111,9 +105,8 @@ in
       environment.etc."alloy/journal.alloy".enable = false;
       system.etc.overlay.enable = false;
 
-      # make sure these don't get enabled by something by mistake
+      # make sure this doesn't get enabled by something by mistake
       mjm.networkd.macvlan.enable = false;
-      mjm.networkd.bridge.enable = false;
     })
     (mkIf (cfg.enable && hostConfig.mjm.microvm-host.snixStore.enable) {
       # don't want to use microvm.shares for this, because (a) there's no host

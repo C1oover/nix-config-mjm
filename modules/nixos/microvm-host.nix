@@ -60,11 +60,6 @@ in
 
   config = mkIf cfg.enable (mkMerge [
     {
-      systemd.network.networks."10-microvm" = mkIf config.mjm.networkd.bridge.enable {
-        name = "vm-*";
-        networkConfig.Bridge = "vmbr0";
-      };
-
       microvm.host.enable = true;
 
       systemd.tmpfiles.settings."10-microvms" = mapAttrs' (

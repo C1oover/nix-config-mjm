@@ -6,15 +6,6 @@ let
     types
     ;
   cfg = config.mjm.networkd;
-
-  hasBridge = cfg.bridge.enable || cfg.macvlan.enable;
-  bridgeName =
-    if cfg.bridge.enable then
-      "vmbr0"
-    else if cfg.macvlan.enable then
-      "mac0"
-    else
-      builtins.throw "trying to use bridge name when no bridging virtual device is enabled";
 in
 {
   options.mjm.networkd = {
@@ -43,11 +34,6 @@ in
       readOnly = true;
     };
 
-    bridge.enable = mkOption {
-      type = types.bool;
-      default = !cfg.macvlan.enable && cfg.secondaryLinkName != null;
-    };
-
     macvlan.enable = mkOption {
       type = types.bool;
       default = false;
@@ -60,8 +46,6 @@ in
     mjm.networkd.primaryIface =
       if cfg.secondaryLinkName != null then
         cfg.primaryLinkName
-      else if cfg.bridge.enable then
-        "vmbr0"
       else if cfg.macvlan.enable then
         "mac0"
       else
@@ -70,14 +54,8 @@ in
     systemd.network = {
       enable = true;
 
-      networks."10-bridge-lan" = mkIf hasBridge {
-        name = cfg.bridgeParentName;
-        networkConfig.Bridge = mkIf cfg.bridge.enable "vmbr0";
-        networkConfig.MACVLAN = mkIf cfg.macvlan.enable "mac0";
-      };
-
       networks."10-primary-lan" = {
-        name = if cfg.secondaryLinkName == null && hasBridge then bridgeName else cfg.primaryLinkName;
+        name = cfg.primaryIface;
         networkConfig = {
           DHCP = "ipv4";
           IPv6AcceptRA = true;
@@ -91,23 +69,24 @@ in
         };
       };
 
-      networks."10-secondary-lan" = mkIf (cfg.secondaryLinkName != null && hasBridge) {
-        name = bridgeName;
-      };
-
-      netdevs.vmbr0 = mkIf cfg.bridge.enable {
+      # if using macvlan without a secondary link, we need to create a macvlan device
+      # to use as the primary interface, otherwise communication with other devices on
+      # the macvlan bridge will not be able to communicate with the host.
+      netdevs.mac0 = mkIf (cfg.primaryIface != cfg.primaryLinkName) {
         netdevConfig = {
-          Name = "vmbr0";
-          Kind = "bridge";
-        };
-      };
-
-      netdevs.mac0 = mkIf cfg.macvlan.enable {
-        netdevConfig = {
-          Name = "mac0";
+          Name = cfg.primaryIface;
           Kind = "macvlan";
         };
         macvlanConfig.Mode = "bridge";
+      };
+
+      networks."10-bridge-lan" = mkIf cfg.macvlan.enable {
+        name = cfg.bridgeParentName;
+        networkConfig = {
+          MACVLAN = mkIf (cfg.primaryIface != cfg.primaryLinkName) cfg.primaryIface;
+          IPv6AcceptRA = false;
+          LinkLocalAddressing = false;
+        };
       };
 
       links = {
