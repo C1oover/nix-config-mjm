@@ -77,9 +77,9 @@
       },
       "branch": "main",
       "submodules": false,
-      "revision": "c4d2bbbe3675a47c1e24b88f61f54b2eb3cece9d",
-      "url": "https://github.com/lilyinstarlight/nixos-cosmic/archive/c4d2bbbe3675a47c1e24b88f61f54b2eb3cece9d.tar.gz",
-      "hash": "01fvbs91lns0cqn25dz4d3ic9frlxjvndb61bgv4h1d00w56j976"
+      "revision": "94439de52596becbccecfaec3d18dd0de51cc38e",
+      "url": "https://github.com/lilyinstarlight/nixos-cosmic/archive/94439de52596becbccecfaec3d18dd0de51cc38e.tar.gz",
+      "hash": "0znacw99df3by3i171qr4rvxqp9xh4cmqj65ds9ck2pfdqh499hl"
     },
     "darwin": {
       "type": "Git",
@@ -155,9 +155,9 @@
       },
       "branch": "master",
       "submodules": false,
-      "revision": "d23d20f55d49d8818ac1f1b2783671e8a6725022",
-      "url": "https://github.com/nix-community/home-manager/archive/d23d20f55d49d8818ac1f1b2783671e8a6725022.tar.gz",
-      "hash": "1h32x8cyhjnz8jhnijs2xh98xmg1q2rrl9gmlj1l3sd8bjr9v929"
+      "revision": "02077149e2921014511dac2729ae6dadb4ec50e2",
+      "url": "https://github.com/nix-community/home-manager/archive/02077149e2921014511dac2729ae6dadb4ec50e2.tar.gz",
+      "hash": "1zqvh1r93jfc5kpy3pi6plv1dmv992zdmc8g1nnnaszb6cvy43wr"
     },
     "lanzaboote": {
       "type": "GitRelease",
@@ -210,9 +210,9 @@
       },
       "branch": "deploy/nixos-unstable",
       "submodules": false,
-      "revision": "80959c679fda88b71a26ef1563926cf514c1f670",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=80959c679fda88b71a26ef1563926cf514c1f670",
-      "hash": "17gf7l9ym4linjbz8ycs20gqwndjhlnz5f7cac5kj5r0xprpc39x"
+      "revision": "89bb9af4a2495af60916d6636b95c5c2b4188680",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=89bb9af4a2495af60916d6636b95c5c2b4188680",
+      "hash": "144nfffqi7950q4dicdfnvyabca3nz1mf3dd7jnma7270grvrzzg"
     },
     "nixos-apple-silicon": {
       "type": "Git",
@@ -236,9 +236,9 @@
       },
       "branch": "deploy/nixos-unstable-small",
       "submodules": false,
-      "revision": "c413fa6b7856767813e4f2a66f226c44bb82f758",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=c413fa6b7856767813e4f2a66f226c44bb82f758",
-      "hash": "0m9wznlk1fynl09dmlh1warzmg1rxz8psbz1z5j8r3sg7cxh699g"
+      "revision": "678b308e3622ac8a1e950559c3d64d982bd36563",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=678b308e3622ac8a1e950559c3d64d982bd36563",
+      "hash": "1srz8yxcky1cf9k3r2b5k54ra4h2fab0cqd054amlhzklk6r9pf2"
     },
     "nixpkgs": {
       "type": "Git",
@@ -249,9 +249,9 @@
       },
       "branch": "deploy/nixpkgs-unstable",
       "submodules": false,
-      "revision": "2155971e02ca59d2a0f78d235bb7ff8336552775",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=2155971e02ca59d2a0f78d235bb7ff8336552775",
-      "hash": "121xnbm5pvz1z25l31nzjjmcff1rvjk30zj77a5skc2qfjykfyyi"
+      "revision": "26242d880ac68b1d95d8659fbaaf2f54b63cf8b4",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=26242d880ac68b1d95d8659fbaaf2f54b63cf8b4",
+      "hash": "1inzf00swg8dmw21d2if0n32wzbbib4f8z1p4jrcycfbhabpxd8c"
     },
     "preservation": {
       "type": "Git",
@@ -275,9 +275,9 @@
       },
       "branch": "master",
       "submodules": false,
-      "revision": "0497d706cb79a3eef1f35dbc45419850c0e01bf1",
-      "url": "https://gitlab.com/api/v4/projects/rycee%2Fnur-expressions/repository/archive.tar.gz?sha=0497d706cb79a3eef1f35dbc45419850c0e01bf1",
-      "hash": "0y3hcav4clgm86hdgam0103d4l7630rky41xqnxf0ps625vp275g"
+      "revision": "f9801a86d6603260940890c36650275090d1dceb",
+      "url": "https://gitlab.com/api/v4/projects/rycee%2Fnur-expressions/repository/archive.tar.gz?sha=f9801a86d6603260940890c36650275090d1dceb",
+      "hash": "0vwhr4h4aw25l9znyr6d2ps9q3dfb9742g684d094260b1478sx6"
     },
     "snix": {
       "type": "Git",
@@ -287,9 +287,9 @@
       },
       "branch": "canon",
       "submodules": false,
-      "revision": "2bbd06753baac4ce0e762d38b14cf43e5c55e459",
+      "revision": "5b41ae66ebd30663cb21946e1da3220a00934950",
       "url": null,
-      "hash": "1d61wy6a3mra88bw9f3sa4328r23nap1gkld18crcfafr7gckbg0"
+      "hash": "0fc24vanlczzgdmv11bijf7q88w0z0h5zyapyqbkl8ilxzybj7m1"
     }
   },
   "version": 5
