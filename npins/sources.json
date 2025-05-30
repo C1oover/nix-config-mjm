@@ -155,9 +155,9 @@
       },
       "branch": "master",
       "submodules": false,
-      "revision": "4e9efaa68b0be7e19127dad4f0506a9b89e28ef4",
-      "url": "https://github.com/nix-community/home-manager/archive/4e9efaa68b0be7e19127dad4f0506a9b89e28ef4.tar.gz",
-      "hash": "1jkw6sqb3i7ag1jalwwfkwya30dkg9821hcvvnndzdaw07mmlkax"
+      "revision": "d3a3aee558979d9b0dde1c0814d8f9f96884aeed",
+      "url": "https://github.com/nix-community/home-manager/archive/d3a3aee558979d9b0dde1c0814d8f9f96884aeed.tar.gz",
+      "hash": "0zajpmx2wfqncxdv1zz3s3bnqs4fiycb1m39ian6jj06s882vhnq"
     },
     "lanzaboote": {
       "type": "GitRelease",
@@ -210,9 +210,9 @@
       },
       "branch": "deploy/nixos-unstable",
       "submodules": false,
-      "revision": "9c0b96a8af3783d261803d3d77dc54a932d25188",
-      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=9c0b96a8af3783d261803d3d77dc54a932d25188",
-      "hash": "0ysajhxw62garmzd2f60d0g81g3014lg2bkin1v2llrdlqrp0m8v"
+      "revision": "ce4fca9bd3c11a0278a441d34289586ad99c5488",
+      "url": "https://git.midna.dev/api/v4/projects/mjm%2Fnixpkgs/repository/archive.tar.gz?sha=ce4fca9bd3c11a0278a441d34289586ad99c5488",
+      "hash": "1vzm6dmybp67r9alhm7y3gmiln8bc172hppc2vn4nn13jcaqw44q"
     },
     "nixos-apple-silicon": {
       "type": "Git",
