@@ -11,12 +11,12 @@ let
     mkOption
     types
     ;
-  cfg = config.mjm.readarr;
+  cfg = config.cloover.readarr;
 
   dataDir = "/var/lib/readarr";
 in
 {
-  options.mjm.readarr = {
+  options.cloover.readarr = {
     enable = mkEnableOption "Readarr";
 
     suffix = mkOption {
@@ -34,10 +34,10 @@ in
   };
 
   config = mkIf cfg.enable {
-    mjm.services."readarr${cfg.suffix}" = {
+    cloover.services."readarr${cfg.suffix}" = {
       vault.enable = true;
     };
-    mjm.state.directories = [
+    cloover.state.directories = [
       {
         directory = dataDir;
         inherit (config.services.readarr) user group;
@@ -81,13 +81,13 @@ in
       url = "http://127.0.0.1:8787";
     };
 
-    mjm.spire.creds = {
+    cloover.spire.creds = {
       "readarr${cfg.suffix}".aliases = {
         "prometheus-exportarr-readarr-exporter.service/api-key" = "readarr${cfg.suffix}/api_key";
       };
     };
 
-    mjm.spire.tunnels = {
+    cloover.spire.tunnels = {
       "readarr${cfg.suffix}" = {
         id = "readarr${cfg.suffix}";
         mode = "server";
@@ -135,7 +135,7 @@ in
       };
     };
 
-    mjm.backups."readarr${cfg.suffix}" = {
+    cloover.backups."readarr${cfg.suffix}" = {
       paths = [ dataDir ];
       exclude = [ "${dataDir}/logs" ];
       backupPrepareCommand = ''

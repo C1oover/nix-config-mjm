@@ -7,7 +7,7 @@
 let
   inherit (lib) mkEnableOption mkIf;
 
-  cfg = config.mjm.launchpad;
+  cfg = config.cloover.launchpad;
   pkg = pkgs.launchpad;
 
   serviceEnv = {
@@ -28,12 +28,12 @@ let
   };
 in
 {
-  options.mjm.launchpad = {
+  options.cloover.launchpad = {
     enable = mkEnableOption "launchpad web app";
   };
 
   config = mkIf cfg.enable {
-    mjm.services.launchpad = {
+    cloover.services.launchpad = {
       postgresql.enable = true;
       vault.enable = true;
     };
@@ -108,7 +108,7 @@ in
       };
     };
 
-    mjm.spire.tunnels = {
+    cloover.spire.tunnels = {
       launchpad = {
         id = "launchpad";
         mode = "server";

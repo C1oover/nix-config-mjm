@@ -27,7 +27,7 @@ in
       nix.channel.enable = true;
       nix.settings.trusted-users = [
         "root"
-        config.mjm.username
+        config.cloover.username
       ];
 
       boot.initrd.systemd.enable = true;
@@ -49,7 +49,7 @@ in
         pkgs.ghostty.terminfo
       ];
     }
-    (mkIf (!config.mjm.minimal.enable) {
+    (mkIf (!config.cloover.minimal.enable) {
       zramSwap.enable = true;
       system.extraSystemBuilderCmds = ''
         ln -s ${pkgs.nvd-json}/bin/nvd-json $out/bin/nvd-json

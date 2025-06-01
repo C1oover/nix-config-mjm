@@ -6,18 +6,18 @@
 }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.mjm.navidrome;
+  cfg = config.cloover.navidrome;
 in
 {
-  options.mjm.navidrome = {
+  options.cloover.navidrome = {
     enable = mkEnableOption "Navidrome";
   };
 
   config = mkIf cfg.enable {
-    mjm.services.navidrome = {
+    cloover.services.navidrome = {
       vault.enable = true;
     };
-    mjm.state.directories = [ "/var/lib/navidrome" ];
+    cloover.state.directories = [ "/var/lib/navidrome" ];
     microvm.shares = [
       {
         proto = "virtiofs";
@@ -52,7 +52,7 @@ in
       unitConfig.RequiresMountsFor = [ "/mnt/music" ];
     };
 
-    mjm.spire.tunnels.navidrome = {
+    cloover.spire.tunnels.navidrome = {
       id = "navidrome";
       mode = "server";
       listen.port = 4533;
@@ -72,7 +72,7 @@ in
       };
     };
 
-    mjm.backups.navidrome = {
+    cloover.backups.navidrome = {
       paths = [ "/var/lib/navidrome" ];
       exclude = [ "/var/lib/navidrome/cache" ];
       backupPrepareCommand = ''

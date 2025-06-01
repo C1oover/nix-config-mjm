@@ -17,14 +17,14 @@ let
     types
     ;
 
-  cfg = config.mjm.state;
+  cfg = config.cloover.state;
 
   isValidForPreservation = k: v: k != "tag" && v != null;
 in
 {
   imports = [ "${inputs.preservation}/module.nix" ];
 
-  options.mjm.state = {
+  options.cloover.state = {
     enablePreservation = mkEnableOption "preservation";
 
     persistDir = mkOption { type = types.path; };
@@ -111,7 +111,7 @@ in
 
   config = mkMerge [
     {
-      mjm.state.directories =
+      cloover.state.directories =
         [
           # important for uids/gids to stay consistent
           {
@@ -120,12 +120,12 @@ in
           }
           "/var/lib/systemd"
         ]
-        ++ optional (!config.mjm.minimal.enable) {
+        ++ optional (!config.cloover.minimal.enable) {
           directory = "/var/log";
           inInitrd = true;
         };
 
-      mjm.state.files = [
+      cloover.state.files = [
         {
           file = "/etc/machine-id";
           inInitrd = true;
@@ -142,8 +142,8 @@ in
         "/etc/ssh/ssh_host_rsa_key.pub"
       ];
     }
-    (mkIf (!config.mjm.minimal.enable) {
-      mjm.state.directories =
+    (mkIf (!config.cloover.minimal.enable) {
+      cloover.state.directories =
         let
           mkDirectory =
             svcName:
@@ -170,20 +170,20 @@ in
           files = map (filterAttrs isValidForPreservation) cfg.files;
 
           # TODO abstract this
-          users.${config.mjm.username}.directories = mkIf (!any (d: d.directory == "/home") cfg.directories) [
+          users.${config.cloover.username}.directories = mkIf (!any (d: d.directory == "/home") cfg.directories) [
             ".local/share/atuin"
           ];
         };
       };
 
       systemd.tmpfiles.settings.preservation = {
-        "/home/${config.mjm.username}/.local".d = {
-          user = config.mjm.username;
+        "/home/${config.cloover.username}/.local".d = {
+          user = config.cloover.username;
           group = "users";
           mode = "0755";
         };
-        "/home/${config.mjm.username}/.local/share".d = {
-          user = config.mjm.username;
+        "/home/${config.cloover.username}/.local/share".d = {
+          user = config.cloover.username;
           group = "users";
           mode = "0755";
         };

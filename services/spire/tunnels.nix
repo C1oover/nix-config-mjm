@@ -20,7 +20,7 @@ let
     pipe
     types
     ;
-  cfg = config.mjm.spire;
+  cfg = config.cloover.spire;
 
   mkSocket =
     name: tunnel:
@@ -124,7 +124,7 @@ let
   mkEntry = name: tunnel: {
     name = "tunnel-${name}";
     value = {
-      spiffe_id = "spiffe://${config.mjm.spire.agent.trustDomain}/svc/${tunnel.id}";
+      spiffe_id = "spiffe://${config.cloover.spire.agent.trustDomain}/svc/${tunnel.id}";
       selectors = [
         {
           type = "systemd";
@@ -136,7 +136,7 @@ let
   };
 in
 {
-  options.mjm.spire.tunnels = mkOption {
+  options.cloover.spire.tunnels = mkOption {
     default = { };
     type = types.attrsOf (
       types.submodule (
@@ -239,7 +239,7 @@ in
   };
 
   config = mkIf (cfg.tunnels != { }) {
-    mjm.spire.agent.enable = true;
+    cloover.spire.agent.enable = true;
     systemd.services = mapAttrs' mkService cfg.tunnels;
     systemd.sockets = mapAttrs' mkSocket cfg.tunnels;
     networking.firewall.allowedTCPPorts = pipe cfg.tunnels [
@@ -247,6 +247,6 @@ in
       (filter (t: t.openFirewall))
       (map (t: t.listen.port))
     ];
-    mjm.spire.entries = mapAttrs' mkEntry cfg.tunnels;
+    cloover.spire.entries = mapAttrs' mkEntry cfg.tunnels;
   };
 }

@@ -8,7 +8,7 @@ in
     ./node-exporter.nix
   ];
 
-  options.mjm.server = {
+  options.cloover.server = {
     enable = mkEnableOption "server setup";
   };
 }

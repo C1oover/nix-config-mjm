@@ -5,10 +5,10 @@
 }:
 let
   inherit (lib) mkIf mkEnableOption;
-  cfg = config.mjm.terminal;
+  cfg = config.cloover.terminal;
 in
 {
-  options.mjm.terminal.alacritty = {
+  options.cloover.terminal.alacritty = {
     enable = mkEnableOption "alacritty";
   };
 

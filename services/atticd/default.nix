@@ -6,15 +6,15 @@
 }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.mjm.atticd;
+  cfg = config.cloover.atticd;
 in
 {
-  options.mjm.atticd = {
+  options.cloover.atticd = {
     enable = mkEnableOption "atticd";
   };
 
   config = mkIf cfg.enable {
-    mjm.services.atticd = {
+    cloover.services.atticd = {
       vault.enable = true;
       postgresql.enable = true;
     };
@@ -71,9 +71,9 @@ in
       };
     };
 
-    mjm.garage.clients.atticd.services = [ "atticd" ];
+    cloover.garage.clients.atticd.services = [ "atticd" ];
 
-    mjm.spire.tunnels = {
+    cloover.spire.tunnels = {
       atticd = {
         id = "atticd";
         mode = "server";

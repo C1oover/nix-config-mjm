@@ -16,7 +16,7 @@ let
     mkOption
     types
     ;
-  cfg = config.mjm.profiles.microvm;
+  cfg = config.cloover.profiles.microvm;
 
   microvm-lib = import "${inputs.microvm}/lib" { inherit lib; };
   defaultRunner = microvm-lib.buildRunner {
@@ -38,7 +38,7 @@ in
 {
   imports = [ "${inputs.microvm}/nixos-modules/microvm/options.nix" ];
 
-  options.mjm.profiles.microvm = {
+  options.cloover.profiles.microvm = {
     enable = mkEnableOption "MicroVM profile";
     useHostStore = mkOption {
       type = types.bool;
@@ -63,11 +63,11 @@ in
         hypervisor = "cloud-hypervisor";
         interfaces = [
           (
-            if hostConfig.mjm.networkd.macvlan.enable then
+            if hostConfig.cloover.networkd.macvlan.enable then
               {
                 type = "macvtap";
                 id = "vm-${config.networking.hostName}";
-                macvtap.link = hostConfig.mjm.networkd.bridgeParentName;
+                macvtap.link = hostConfig.cloover.networkd.bridgeParentName;
                 macvtap.mode = "bridge";
                 mac = cfg.macAddress;
               }
@@ -89,29 +89,29 @@ in
             inherit (d) tag;
             source = tag;
             mountPoint = d.directory;
-          }) config.mjm.state.directories;
+          }) config.cloover.state.directories;
       };
 
       environment.etc."machine-id".text = cfg.machineId;
 
-      mjm.username = "mjm";
-      mjm.minimal.enable = true;
+      cloover.username = "mjm";
+      cloover.minimal.enable = true;
 
-      mjm.consul.enable = true;
-      mjm.server.enable = true;
-      mjm.server.enableGarbageCollection = false;
-      mjm.spire.agent.enable = true;
+      cloover.consul.enable = true;
+      cloover.server.enable = true;
+      cloover.server.enableGarbageCollection = false;
+      cloover.spire.agent.enable = true;
 
       environment.etc."alloy/journal.alloy".enable = false;
       system.etc.overlay.enable = false;
 
       # make sure this doesn't get enabled by something by mistake
-      mjm.networkd.macvlan.enable = false;
+      cloover.networkd.macvlan.enable = false;
     })
-    (mkIf (cfg.enable && hostConfig.mjm.microvm-host.snixStore.enable) {
+    (mkIf (cfg.enable && hostConfig.cloover.microvm-host.snixStore.enable) {
       # don't want to use microvm.shares for this, because (a) there's no host
       # mountpoint, and (b) we don't want to start a normal virtiofsd for this
-      fileSystems."/nix/store" = mkIf hostConfig.mjm.microvm-host.snixStore.enable (
+      fileSystems."/nix/store" = mkIf hostConfig.cloover.microvm-host.snixStore.enable (
         lib.mkForce {
           device = "snix-store";
           fsType = "virtiofs";

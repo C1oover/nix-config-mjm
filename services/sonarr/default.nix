@@ -6,18 +6,18 @@
 }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.mjm.sonarr;
+  cfg = config.cloover.sonarr;
 in
 {
-  options.mjm.sonarr = {
+  options.cloover.sonarr = {
     enable = mkEnableOption "Sonarr";
   };
 
   config = mkIf cfg.enable {
-    mjm.services.sonarr = {
+    cloover.services.sonarr = {
       vault.enable = true;
     };
-    mjm.state.directories = [
+    cloover.state.directories = [
       {
         directory = config.services.sonarr.dataDir;
         inherit (config.services.sonarr) user group;
@@ -61,13 +61,13 @@ in
       url = "http://127.0.0.1:8989";
     };
 
-    mjm.spire.creds = {
+    cloover.spire.creds = {
       sonarr.aliases = {
         "prometheus-exportarr-sonarr-exporter.service/api-key" = "sonarr/api_key";
       };
     };
 
-    mjm.spire.tunnels = {
+    cloover.spire.tunnels = {
       sonarr = {
         id = "sonarr";
         mode = "server";
@@ -115,7 +115,7 @@ in
       };
     };
 
-    mjm.backups.sonarr = {
+    cloover.backups.sonarr = {
       paths = [ "/var/lib/sonarr/.config/NzbDrone" ];
       exclude = [ "/var/lib/sonarr/.config/NzbDrone/logs" ];
       backupPrepareCommand = ''

@@ -6,14 +6,14 @@
 }:
 let
   inherit (lib) getExe mkEnableOption mkIf;
-  cfg = config.mjm.aerospace;
+  cfg = config.cloover.aerospace;
 
   tomlFormat = pkgs.formats.toml { };
 
   aero = pkgs.writeNuBin ",aero" ./aero.nu;
 in
 {
-  options.mjm.aerospace = {
+  options.cloover.aerospace = {
     enable = mkEnableOption "AeroSpace";
   };
 

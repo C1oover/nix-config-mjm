@@ -6,10 +6,10 @@
 }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.mjm.desktop;
+  cfg = config.cloover.desktop;
 in
 {
-  options.mjm.desktop.controku = {
+  options.cloover.desktop.controku = {
     enable = mkEnableOption "controku" // {
       default = pkgs.stdenv.isLinux;
     };

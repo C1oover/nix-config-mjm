@@ -13,7 +13,7 @@ let
     optional
     types
     ;
-  cfg = config.mjm.git;
+  cfg = config.cloover.git;
 
   jm = pkgs.writeNuBin "jj-mega" ./scripts/jm.nu;
 
@@ -26,17 +26,17 @@ let
   mkFishAlias = name: text: mkAlias (pkgs.writers.writeFish name text);
 in
 {
-  options.mjm.git = {
+  options.cloover.git = {
     enableWatchman = mkEnableOption "watchman for jujutsu" // {
       default = true;
     };
 
     enableMeld = mkEnableOption "meld for jujutsu" // {
-      default = config.mjm.desktop.enable;
+      default = config.cloover.desktop.enable;
     };
 
     enableKaleidoscope = mkEnableOption "Kaleidoscope merge tool" // {
-      default = pkgs.stdenv.isDarwin && config.mjm.desktop.enable;
+      default = pkgs.stdenv.isDarwin && config.cloover.desktop.enable;
     };
 
     mergeTool = mkOption {

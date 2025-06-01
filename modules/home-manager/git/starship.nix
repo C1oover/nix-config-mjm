@@ -6,7 +6,7 @@
 }:
 let
   inherit (lib) mkIf;
-  cfg = config.mjm.git;
+  cfg = config.cloover.git;
 in
 {
   config = mkIf (cfg.enable && cfg.desktop.enable) {

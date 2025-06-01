@@ -10,7 +10,7 @@ in
     ./zellij.nix
   ];
 
-  options.mjm.terminal = {
+  options.cloover.terminal = {
     enable = mkEnableOption "terminal";
 
     font = {

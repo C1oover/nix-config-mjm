@@ -1,10 +1,10 @@
 { config, lib, ... }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.mjm.nas;
+  cfg = config.cloover.nas;
 in
 {
-  options.mjm.nas = {
+  options.cloover.nas = {
     enable = mkEnableOption "NAS";
   };
 

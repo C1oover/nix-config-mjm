@@ -12,7 +12,7 @@ let
     mkOption
     types
     ;
-  cfg = config.mjm.helix;
+  cfg = config.cloover.helix;
 
   helix = pkgs.callPackage inputs.helix { };
   tomlFormat = pkgs.formats.toml { };
@@ -40,7 +40,7 @@ let
   helixLanguages = tomlFormat.generate "helix-languages.toml" cfg.languages;
 in
 {
-  options.mjm.helix = {
+  options.cloover.helix = {
     enable = mkEnableOption "Helix";
 
     extraPackages = mkOption {
@@ -64,7 +64,7 @@ in
     home.packages = [ wrappedHelix ];
     home.sessionVariables.EDITOR = "hx";
 
-    mjm.helix.extraPackages = with pkgs; [
+    cloover.helix.extraPackages = with pkgs; [
       elixir-ls
       marksman
       nil
@@ -80,7 +80,7 @@ in
       nodePackages.yaml-language-server
     ];
 
-    mjm.helix.settings = {
+    cloover.helix.settings = {
       theme = "catppuccin_${config.catppuccin.flavor}";
       editor = {
         auto-save.focus-lost = true;
@@ -114,7 +114,7 @@ in
       };
     };
 
-    mjm.helix.languages = {
+    cloover.helix.languages = {
       language-server = {
         bash-language-server = {
           config.bashIde.backgroundAnalysisMaxFiles = 0;

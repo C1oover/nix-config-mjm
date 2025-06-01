@@ -8,15 +8,15 @@ let
   inherit (lib) mkEnableOption mkIf;
   inherit (config.services.loki) dataDir;
 
-  cfg = config.mjm.loki;
+  cfg = config.cloover.loki;
 in
 {
-  options.mjm.loki = {
+  options.cloover.loki = {
     enable = mkEnableOption "Grafana Loki";
   };
 
   config = mkIf cfg.enable {
-    mjm.services.loki = { };
+    cloover.services.loki = { };
 
     services.loki = {
       enable = true;
@@ -104,9 +104,9 @@ in
       };
     };
 
-    mjm.garage.clients.loki.services = [ "loki" ];
+    cloover.garage.clients.loki.services = [ "loki" ];
 
-    mjm.spire.tunnels = {
+    cloover.spire.tunnels = {
       loki = {
         id = "loki";
         mode = "server";

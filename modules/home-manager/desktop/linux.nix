@@ -6,13 +6,13 @@
 }:
 let
   inherit (lib) attrValues mkDefault mkIf;
-  cfg = config.mjm.desktop;
+  cfg = config.cloover.desktop;
 in
 {
   config = mkIf (cfg.enable && pkgs.stdenv.isLinux) {
-    # mjm.emacs.enable = mkDefault true;
-    mjm.email.enable = mkDefault true;
-    mjm.syncthing.enable = mkDefault true;
+    # cloover.emacs.enable = mkDefault true;
+    cloover.email.enable = mkDefault true;
+    cloover.syncthing.enable = mkDefault true;
 
     home.packages = attrValues {
       inherit (pkgs)

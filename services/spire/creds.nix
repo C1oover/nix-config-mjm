@@ -19,7 +19,7 @@ let
     replaceStrings
     types
     ;
-  cfg = config.mjm.spire;
+  cfg = config.cloover.spire;
 
   secretName = svc: path: "${svc}_${replaceStrings [ "/" ] [ "__" ] path}";
 
@@ -56,7 +56,7 @@ let
     );
 in
 {
-  options.mjm.spire.creds = mkOption {
+  options.cloover.spire.creds = mkOption {
     default = { };
     type = types.attrsOf (
       types.submodule {

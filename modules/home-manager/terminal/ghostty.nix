@@ -9,10 +9,10 @@ let
     mkIf
     mkEnableOption
     ;
-  cfg = config.mjm.terminal;
+  cfg = config.cloover.terminal;
 in
 {
-  options.mjm.terminal.ghostty = {
+  options.cloover.terminal.ghostty = {
     enable = mkEnableOption "Ghostty" // {
       default = true;
     };

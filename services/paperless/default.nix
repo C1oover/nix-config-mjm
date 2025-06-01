@@ -10,7 +10,7 @@ let
     mkEnableOption
     mkIf
     ;
-  cfg = config.mjm.paperless;
+  cfg = config.cloover.paperless;
   jsonFormat = pkgs.formats.json { };
 
   scannerPublicKey = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC1NXtzg50EbpzudswkjUkxllahH+F54h6MnDoXarftqlHc26M46M5IPQeRpn5F4BLGWs94UNFyod4d7KNhRYXxh2G+gsJcDTREdUR7eKu5CfaFnB2sge8VJM8KwxbURXHlxNF2xha0lIg8HdfSIznogAGqcUYahTJAUdKB1A4UJ9DzHp1Mrlrk3o04TvokRmS18kPM39nstneqHRVC1TPf83QV3tAYBz2iayifH714KTcItflUe5IqDUhBfNURhOnhG0szfK2qtykdg+7/wu0Ah3HOlbfLybx2eAA048kyBiFpllFIGqoO0hN8w7wmMuQ6okxs3tssz7W+dGi5HDob root@BR5CF370C29B2A";
@@ -18,16 +18,16 @@ let
   clientId = "LijoxTI8E2n5IeFZcFxrQcC94ENIqkzXzhh93LpKGMBCQzMDnmsQ3c6zWXjUXJe3";
 in
 {
-  options.mjm.paperless = {
+  options.cloover.paperless = {
     enable = mkEnableOption "paperless";
   };
 
   config = mkIf cfg.enable {
-    mjm.services.paperless = {
+    cloover.services.paperless = {
       postgresql.enable = true;
       vault.enable = true;
     };
-    mjm.state.directories = [
+    cloover.state.directories = [
       {
         directory = config.services.paperless.dataDir;
         inherit (config.services.paperless) user;
@@ -64,7 +64,7 @@ in
       environmentFile = "/run/paperless-env/env";
     };
 
-    mjm.authelia.oidcClients.paperless = {
+    cloover.authelia.oidcClients.paperless = {
       name = "Paperless";
       inherit clientId;
       clientSecret = "$argon2id$v=19$m=65536,t=3,p=4$0Rg1T9HOd4EWIf6LrHDCDQ$95ihO+jnuTMLsSJrstHTJx12SUpZmExHUYpAeqtdheg";
@@ -137,7 +137,7 @@ in
       };
     };
 
-    mjm.spire.tunnels = {
+    cloover.spire.tunnels = {
       paperless = {
         id = "paperless";
         mode = "server";
@@ -192,7 +192,7 @@ in
           ForceCommand internal-sftp -u 0077 -d /var/lib/paperless/consume
     '';
 
-    mjm.backups.paperless = {
+    cloover.backups.paperless = {
       paths = [ "/var/lib/paperless/media/documents" ];
     };
 

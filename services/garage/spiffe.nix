@@ -6,13 +6,13 @@
 }:
 let
   inherit (lib) mkIf;
-  cfg = config.mjm.garage;
+  cfg = config.cloover.garage;
 
-  trustDomain = config.mjm.spire.agent.trustDomain;
+  trustDomain = config.cloover.spire.agent.trustDomain;
 in
 {
   config = mkIf cfg.enable {
-    mjm.services.spiffe-garage = { };
+    cloover.services.spiffe-garage = { };
 
     systemd.sockets.spiffe-garage = {
       description = "SPIFFE Garage Credential Socket";
@@ -32,7 +32,7 @@ in
       requires = [ "spiffe-garage.socket" ];
 
       environment = {
-        SPIFFE_ENDPOINT_SOCKET = "unix:${config.mjm.spire.agent.socketPath}";
+        SPIFFE_ENDPOINT_SOCKET = "unix:${config.cloover.spire.agent.socketPath}";
         OTEL_EXPORTER_OTLP_ENDPOINT = "http://localhost:4318";
         OTEL_RESOURCE_ATTRIBUTES = "deployment.environment.name=prod";
       };
@@ -84,7 +84,7 @@ in
       # TODO health check
     };
 
-    mjm.spire.entries.spiffe-garage = {
+    cloover.spire.entries.spiffe-garage = {
       spiffe_id = "spiffe://${trustDomain}/svc/spiffe-garage";
       selectors = [
         {

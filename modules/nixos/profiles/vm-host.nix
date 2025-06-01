@@ -4,10 +4,10 @@ let
     mkEnableOption
     mkIf
     ;
-  cfg = config.mjm.profiles.vm-host;
+  cfg = config.cloover.profiles.vm-host;
 in
 {
-  options.mjm.profiles.vm-host = {
+  options.cloover.profiles.vm-host = {
     enable = mkEnableOption "profile for a host running VMs";
   };
 
@@ -30,12 +30,12 @@ in
       options = [ "zfsutil" ];
     };
 
-    mjm.consul.enable = true;
-    mjm.libvirtd.enable = true;
-    mjm.networkd.secondaryLinkName = "lan1";
-    mjm.remote-builder.enable = true;
-    mjm.server.enable = true;
-    mjm.spire.agent.enable = true;
+    cloover.consul.enable = true;
+    cloover.libvirtd.enable = true;
+    cloover.networkd.secondaryLinkName = "lan1";
+    cloover.remote-builder.enable = true;
+    cloover.server.enable = true;
+    cloover.spire.agent.enable = true;
 
     boot.kernelParams = [ "zfs.zfs_arc_max=7516192768" ];
     boot.zfs.extraPools = [ "slow" ];

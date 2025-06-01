@@ -9,12 +9,12 @@ let
     mkEnableOption
     mkIf
     ;
-  cfg = config.mjm.libvirtd;
+  cfg = config.cloover.libvirtd;
 in
 {
   imports = [ ./backups.nix ];
 
-  options.mjm.libvirtd = {
+  options.cloover.libvirtd = {
     enable = mkEnableOption "libvirtd";
   };
 
@@ -39,7 +39,7 @@ in
 
     services.lldpd.enable = true;
 
-    users.users.${config.mjm.username}.extraGroups = [ "libvirtd" ];
+    users.users.${config.cloover.username}.extraGroups = [ "libvirtd" ];
 
     hardware.ksm.enable = true;
 

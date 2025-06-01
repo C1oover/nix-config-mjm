@@ -7,14 +7,14 @@
 }:
 let
   inherit (lib) mkDefault mkEnableOption mkIf;
-  cfg = config.mjm.secureboot;
+  cfg = config.cloover.secureboot;
 in
 {
   imports = [
     (import inputs.lanzaboote).nixosModules.lanzaboote
   ];
 
-  options.mjm.secureboot = {
+  options.cloover.secureboot = {
     enable = mkEnableOption "SecureBoot with Lanzaboote";
   };
 
@@ -25,6 +25,6 @@ in
       enable = true;
       pkiBundle = mkDefault "/etc/secureboot";
     };
-    mjm.state.directories = [ config.boot.lanzaboote.pkiBundle ];
+    cloover.state.directories = [ config.boot.lanzaboote.pkiBundle ];
   };
 }

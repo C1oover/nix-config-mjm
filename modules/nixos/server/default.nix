@@ -9,7 +9,7 @@ in
     ./ssh-cert.nix
   ];
 
-  options.mjm.server = {
+  options.cloover.server = {
     enable = mkEnableOption "server setup";
 
     enableGarbageCollection = mkOption {

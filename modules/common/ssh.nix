@@ -18,7 +18,7 @@ let
     pipe
     types
     ;
-  cfg = config.mjm.ssh;
+  cfg = config.cloover.ssh;
 
   sshTrustedKeys = builtins.fetchurl {
     url = "https://vault.midna.dev/v1/ssh-client-signer/public_key";
@@ -32,13 +32,13 @@ let
   groupedNodes = pipe nodes [
     attrValues
     (filter (
-      n: n.config.deployment.targetHost != null && n.config.deployment.targetUser != config.mjm.username
+      n: n.config.deployment.targetHost != null && n.config.deployment.targetUser != config.cloover.username
     ))
     (groupBy (n: n.config.deployment.targetUser))
   ];
 in
 {
-  options.mjm.ssh = {
+  options.cloover.ssh = {
     enable = mkEnableOption "SSH config" // {
       default = true;
     };

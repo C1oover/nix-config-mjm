@@ -36,11 +36,11 @@ let
         { name = "main"; }
         {
           name = "vault";
-          includeIf = _name: config: config.mjm.vault.enable;
+          includeIf = _name: config: config.cloover.vault.enable;
         }
         {
           name = "ingress";
-          includeIf = _name: config: config.mjm.ingress.enable;
+          includeIf = _name: config: config.cloover.ingress.enable;
         }
       ];
     };

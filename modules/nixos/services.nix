@@ -20,8 +20,8 @@ let
     types
     ;
 
-  cfg = config.mjm.services;
-  trustDomain = config.mjm.spire.agent.trustDomain;
+  cfg = config.cloover.services;
+  trustDomain = config.cloover.spire.agent.trustDomain;
 
   serviceType =
     { name, ... }:
@@ -56,7 +56,7 @@ let
   vaultServices = attrValues (filterAttrs (_: s: s.vault.enable) cfg);
 in
 {
-  options.mjm.services = mkOption {
+  options.cloover.services = mkOption {
     default = { };
     type = types.attrsOf (types.submodule serviceType);
   };
@@ -66,7 +66,7 @@ in
     {
       deployment.tags = map (s: "svc-${s}") (attrNames cfg);
 
-      mjm.spire.entries = mapAttrs' (
+      cloover.spire.entries = mapAttrs' (
         s: _:
         nameValuePair "service-${s}-${config.networking.hostName}" {
           spiffe_id = "spiffe://${trustDomain}/svc/${s}";
@@ -76,7 +76,7 @@ in
     }
 
     (mkIf (postgresServices != [ ]) {
-      mjm.postgresql.enable = true;
+      cloover.postgresql.enable = true;
 
       services.postgresql = {
         ensureDatabases = concatMap (s: s.postgresql.databases) postgresServices;
@@ -104,7 +104,7 @@ in
         listToAttrs
       ];
 
-      mjm.spire.entries = pipe vaultServices [
+      cloover.spire.entries = pipe vaultServices [
         (map (
           { name, ... }:
           nameValuePair "spiffe-creds-${name}" {

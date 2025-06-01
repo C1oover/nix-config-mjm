@@ -11,10 +11,10 @@ let
     mkIf
     optionals
     ;
-  cfg = config.mjm.desktop;
+  cfg = config.cloover.desktop;
 in
 {
-  options.mjm.desktop.games = {
+  options.cloover.desktop.games = {
     enable = mkEnableOption "games" // {
       default = pkgs.stdenv.isLinux;
     };

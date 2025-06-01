@@ -1,6 +1,6 @@
 { lib, config, ... }:
 {
-  mjm.authelia.oidcClients = {
+  cloover.authelia.oidcClients = {
     spiffe-users = {
       name = "SPIFFE Users";
       clientId = "m4RNNya9wJOCANGmxhQdA43EhjyZhwpXdQTo4SiBib7lXiaRrPgaJlvwo75vbhDG";

@@ -124,7 +124,7 @@ let
         in
         {
           vhosts = pipe allNodesWithMicroVMs [
-            (filter (n: !n.config.mjm.ingress.enable))
+            (filter (n: !n.config.cloover.ingress.enable))
             (map (n: n.config.ingress.virtualHosts))
             mergeAttrsList
             (mapAttrs (_: v: v.useIPv4Proxy))
@@ -141,7 +141,7 @@ let
           ) nodes;
 
           oidcClients = pipe allNodesWithMicroVMs [
-            (map (n: n.config.mjm.authelia.oidcClients))
+            (map (n: n.config.cloover.authelia.oidcClients))
             mergeAttrsList
             attrNames
           ];

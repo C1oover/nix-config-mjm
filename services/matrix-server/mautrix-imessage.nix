@@ -12,7 +12,7 @@ let
     types
     ;
 
-  cfg = config.mjm.matrix-server;
+  cfg = config.cloover.matrix-server;
   pkg = pkgs.mautrix-imessage;
 
   configFormat = pkgs.formats.yaml { };
@@ -42,7 +42,7 @@ let
       unix_socket = "mautrix-imessage.sock";
     };
     bridge = {
-      user = "@mjm:midna.dev";
+      user = "@cloover:midna.dev";
       username_template = "imessage_{{.}}";
       displayname_template = "{{.}} (iMessage)";
       personal_filtering_spaces = true;
@@ -86,11 +86,11 @@ let
   port = 29400;
 in
 {
-  options.mjm.matrix-server.bridges.imessage = {
+  options.cloover.matrix-server.bridges.imessage = {
     enable = mkEnableOption "iMessage bridge";
     dataPath = mkOption {
       type = types.path;
-      default = "/Users/mjm/Library/Application Support/mautrix-imessage";
+      default = "/Users/cloover/Library/Application Support/mautrix-imessage";
     };
     barcelonaMautrixPath = mkOption {
       type = types.path;
@@ -116,7 +116,7 @@ in
     #   zellij --layout /etc/mautrix-imessage.kdl
     environment.etc."mautrix-imessage.kdl".text = ''
       layout {
-        tab name="nix-config" cwd="/Users/${config.mjm.username}/src/nix-config" {
+        tab name="nix-config" cwd="/Users/${config.cloover.username}/src/nix-config" {
       		pane size=1 borderless=true {
       			plugin location="zellij:tab-bar"
       		}
@@ -150,11 +150,11 @@ in
       		pane split_direction="vertical" {
       		  pane {
         		  command "sudo"
-        		  args "-u" "mautrix-imessage" "${pkgs.ghostunnel}/bin/ghostunnel" "server" "--use-workload-api-addr=unix:${config.mjm.spire.agent.socketPath}" "--listen=:29401" "--target=localhost:29400" "--allow-uri=spiffe://home.mattmoriarity.com/svc/conduit"
+        		  args "-u" "mautrix-imessage" "${pkgs.ghostunnel}/bin/ghostunnel" "server" "--use-workload-api-addr=unix:${config.cloover.spire.agent.socketPath}" "--listen=:29401" "--target=localhost:29400" "--allow-uri=spiffe://home.mattmoriarity.com/svc/conduit"
       		  }
       		  pane {
       		    command "sudo"
-      		    args "-u" "mautrix-imessage" "${pkgs.ghostunnel}/bin/ghostunnel" "client" "--use-workload-api-addr=unix:${config.mjm.spire.agent.socketPath}" "--listen=127.0.0.1:6167" "--target=conduit.service.consul:6167" "--verify-uri=spiffe://home.mattmoriarity.com/svc/conduit"
+      		    args "-u" "mautrix-imessage" "${pkgs.ghostunnel}/bin/ghostunnel" "client" "--use-workload-api-addr=unix:${config.cloover.spire.agent.socketPath}" "--listen=127.0.0.1:6167" "--target=conduit.service.consul:6167" "--verify-uri=spiffe://home.mattmoriarity.com/svc/conduit"
       		  }
       		}
 

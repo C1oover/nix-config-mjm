@@ -6,8 +6,8 @@
 }:
 let
   inherit (lib) mkIf;
-  cfg = config.mjm.ingress;
-  trustDomain = config.mjm.spire.agent.trustDomain;
+  cfg = config.cloover.ingress;
+  trustDomain = config.cloover.spire.agent.trustDomain;
 
   pkg = pkgs.spire.overrideAttrs (old: {
     subPackages = old.subPackages ++ [ "support/oidc-discovery-provider" ];
@@ -18,14 +18,14 @@ let
     listen_socket_path = "/run/oidc-discovery-provider/server.sock"
 
     workload_api {
-      socket_path = "${config.mjm.spire.agent.socketPath}"
+      socket_path = "${config.cloover.spire.agent.socketPath}"
       trust_domain = "home.mattmoriarity.com"
     }
   '';
 in
 {
   config = mkIf cfg.enable {
-    mjm.services.oidc-discovery-provider = { };
+    cloover.services.oidc-discovery-provider = { };
 
     services.caddy.settings.apps.http.servers.default.routes = [
       {
@@ -79,7 +79,7 @@ in
       };
     };
 
-    mjm.spire.entries = {
+    cloover.spire.entries = {
       oidc-discovery-provider = {
         spiffe_id = "spiffe://${trustDomain}/svc/oidc-discovery-provider";
         selectors = [

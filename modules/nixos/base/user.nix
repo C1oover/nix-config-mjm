@@ -1,6 +1,6 @@
 { config, pkgs, ... }:
 let
-  username = config.mjm.username;
+  username = config.cloover.username;
 in
 {
   users.users.${username} = {

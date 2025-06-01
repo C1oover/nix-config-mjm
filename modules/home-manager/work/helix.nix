@@ -6,7 +6,7 @@
 }:
 let
   inherit (lib) mkIf;
-  cfg = config.mjm.work;
+  cfg = config.cloover.work;
 
   yamlFormat = pkgs.formats.yaml { };
   tomlFormat = pkgs.formats.toml { };
@@ -17,7 +17,7 @@ in
     # if it's not in the path, elixir-ls might just not work
     home.packages = with pkgs; [ cmake ];
 
-    mjm.helix =
+    cloover.helix =
       let
         efmConfig = yamlFormat.generate "efm-config.yml" {
           version = 2;

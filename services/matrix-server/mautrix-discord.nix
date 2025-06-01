@@ -7,7 +7,7 @@
 let
   inherit (lib) mkEnableOption mkIf;
 
-  cfg = config.mjm.matrix-server;
+  cfg = config.cloover.matrix-server;
 
   configFormat = pkgs.formats.yaml { };
   configFile = configFormat.generate "mautrix-discord-config.yaml" {
@@ -32,7 +32,7 @@ let
       backfill.enable = true;
       permissions = {
         "midna.dev" = "user";
-        "@mjm:midna.dev" = "admin";
+        "@cloover:midna.dev" = "admin";
       };
     };
   };
@@ -42,18 +42,18 @@ let
   port = 29334;
 in
 {
-  options.mjm.matrix-server.bridges.discord = {
+  options.cloover.matrix-server.bridges.discord = {
     enable = mkEnableOption "discord bridge" // {
       default = true;
     };
   };
 
   config = mkIf (cfg.enable && cfg.bridges.discord.enable) {
-    mjm.services.conduit.postgresql = {
+    cloover.services.conduit.postgresql = {
       enable = true;
       databases = [ "mautrix-discord" ];
     };
-    mjm.state.directories = [
+    cloover.state.directories = [
       {
         directory = "/var/lib/mautrix-discord";
         user = "mautrix-discord";

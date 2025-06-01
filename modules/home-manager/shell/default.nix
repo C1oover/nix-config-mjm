@@ -6,7 +6,7 @@
 }:
 let
   inherit (lib) mkEnableOption mkIf mkMerge;
-  cfg = config.mjm.shell;
+  cfg = config.cloover.shell;
 in
 {
   imports = [
@@ -15,7 +15,7 @@ in
     ./starship.nix
   ];
 
-  options.mjm.shell = {
+  options.cloover.shell = {
     enable = mkEnableOption "shell config";
     desktop.enable = mkEnableOption "tools only needed on workstations";
   };

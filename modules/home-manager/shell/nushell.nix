@@ -7,7 +7,7 @@
 }:
 let
   inherit (lib) mkBefore mkIf;
-  cfg = config.mjm.shell;
+  cfg = config.cloover.shell;
 in
 {
   config = mkIf (cfg.enable && osConfig.programs.nushell.enable) {

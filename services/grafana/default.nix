@@ -6,16 +6,16 @@
 }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.mjm.grafana;
+  cfg = config.cloover.grafana;
   clientId = "7BReUARtsRcF6ypjiA4DcJ3E6fJNjzwheH5Tj1HCLoqfXCQSLHxZJHQ7bAV9U0aU";
 in
 {
-  options.mjm.grafana = {
+  options.cloover.grafana = {
     enable = mkEnableOption "grafana";
   };
 
   config = mkIf cfg.enable {
-    mjm.services.grafana = {
+    cloover.services.grafana = {
       postgresql.enable = true;
       vault.enable = true;
     };
@@ -72,7 +72,7 @@ in
       };
     };
 
-    mjm.authelia.oidcClients.grafana = {
+    cloover.authelia.oidcClients.grafana = {
       name = "Grafana";
       inherit clientId;
       clientSecret = "$argon2id$v=19$m=65536,t=3,p=4$LExwz3BrD2Cu5o1ur61RIw$W4kCJsEG+VuCxeEOI689IEMoiE2r5G2Nwrc+q4fHU0c";
@@ -84,7 +84,7 @@ in
       credentials.grafana."managed/oidc_client_secret" = { };
     };
 
-    mjm.spire.tunnels = {
+    cloover.spire.tunnels = {
       grafana = {
         id = "grafana";
         mode = "server";

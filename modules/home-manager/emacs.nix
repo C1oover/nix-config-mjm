@@ -6,10 +6,10 @@
 }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.mjm.emacs;
+  cfg = config.cloover.emacs;
 in
 {
-  options.mjm.emacs = {
+  options.cloover.emacs = {
     enable = mkEnableOption "emacs";
   };
 

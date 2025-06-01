@@ -11,10 +11,10 @@ let
     mkOption
     types
     ;
-  cfg = config.mjm.vault;
+  cfg = config.cloover.vault;
 in
 {
-  options.mjm.vault = {
+  options.cloover.vault = {
     enable = mkEnableOption "vault server";
 
     nodeId = mkOption {
@@ -37,7 +37,7 @@ in
   ];
 
   config = mkIf cfg.enable {
-    mjm.services.vault = {
+    cloover.services.vault = {
       vault.enable = true;
     };
 
@@ -93,7 +93,7 @@ in
       8201
     ];
 
-    mjm.authelia.oidcClients.vault = {
+    cloover.authelia.oidcClients.vault = {
       name = "Hashicorp Vault";
       clientId = "3oGSHETQNzAa2Hd7CGaBAk08lskEJMKnR7YgMXMgWgqCsl9cWOuWzh2VT5LBu9fA";
       clientSecret = "$argon2id$v=19$m=65536,t=3,p=4$QSmbERaC2fvE2IJnxScj2w$7TC9He52pllowLCVODoYOc8E1xS6cNrDSwyxvhqZdug";
@@ -104,7 +104,7 @@ in
       ];
     };
 
-    mjm.state.directories = [
+    cloover.state.directories = [
       {
         directory = config.services.vault.storagePath;
         user = "vault";
@@ -113,8 +113,8 @@ in
       }
     ];
 
-    mjm.spire.agent.enable = true;
-    mjm.spire.certs.vault = {
+    cloover.spire.agent.enable = true;
+    cloover.spire.certs.vault = {
       systemd.unit = "vault.service";
       systemd.action = "reload";
       user = "vault";
@@ -126,13 +126,13 @@ in
       serviceConfig.RestartSec = "5s";
     };
 
-    mjm.spire.entries = {
+    cloover.spire.entries = {
       spiffe-certs-vault.dns_names = [
         "vault.service.consul"
         "active.vault.service.consul"
       ];
       restic-backups-vault = {
-        spiffe_id = "spiffe://${config.mjm.spire.agent.trustDomain}/svc/vault";
+        spiffe_id = "spiffe://${config.cloover.spire.agent.trustDomain}/svc/vault";
         selectors = [
           {
             type = "systemd";
@@ -142,7 +142,7 @@ in
       };
     };
 
-    mjm.backups.vault = {
+    cloover.backups.vault = {
       paths = [ "/tmp/vault.snap" ];
       backupPrepareCommand = ''
         export PATH=${
@@ -153,13 +153,13 @@ in
           ]
         }:$PATH
 
-        spire-agent api fetch -socketPath ${config.mjm.spire.agent.socketPath} -write /run/restic-backups-vault
+        spire-agent api fetch -socketPath ${config.cloover.spire.agent.socketPath} -write /run/restic-backups-vault
 
         export VAULT_CACERT=/run/restic-backups-vault/bundle.0.pem
         export VAULT_ADDR=https://${config.networking.hostName}.node.consul:8200
         export VAULT_TLS_SERVER_NAME=vault.service.consul
 
-        jwt="$(spire-agent api fetch jwt -audience https://vault.service.consul:8200 -output json -socketPath ${config.mjm.spire.agent.socketPath} | jq -r '.[0].svids[0].svid')"
+        jwt="$(spire-agent api fetch jwt -audience https://vault.service.consul:8200 -output json -socketPath ${config.cloover.spire.agent.socketPath} | jq -r '.[0].svids[0].svid')"
         VAULT_TOKEN="$(vault write -field=token auth/spiffe/login role=spiffe jwt=$jwt)"
         export VAULT_TOKEN
 

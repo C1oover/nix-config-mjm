@@ -1,14 +1,14 @@
 { config, lib, ... }:
 let
   inherit (lib) mkIf;
-  cfg = config.mjm.authelia;
+  cfg = config.cloover.authelia;
 
-  trustDomain = config.mjm.spire.agent.trustDomain;
+  trustDomain = config.cloover.spire.agent.trustDomain;
 in
 {
   config = mkIf cfg.enable {
-    mjm.services.authelia.postgresql.databases = [ "lldap" ];
-    mjm.state.directories = [
+    cloover.services.authelia.postgresql.databases = [ "lldap" ];
+    cloover.state.directories = [
       {
         directory = "/var/lib/private/lldap";
         user = "nobody";
@@ -46,7 +46,7 @@ in
       };
     };
 
-    mjm.spire.tunnels.lldap = {
+    cloover.spire.tunnels.lldap = {
       id = "lldap";
       mode = "server";
       listen.port = 17170;
@@ -64,7 +64,7 @@ in
       };
     };
 
-    mjm.spire.entries.authelia-lldap = {
+    cloover.spire.entries.authelia-lldap = {
       spiffe_id = "spiffe://${trustDomain}/svc/lldap";
       parent_id = "spiffe://${trustDomain}/svc/authelia";
     };

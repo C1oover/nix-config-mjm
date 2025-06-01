@@ -1,19 +1,19 @@
 { config, lib, ... }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.mjm.invidious;
+  cfg = config.cloover.invidious;
 in
 {
-  options.mjm.invidious = {
+  options.cloover.invidious = {
     enable = mkEnableOption "Invidious";
   };
 
   config = mkIf cfg.enable {
-    mjm.services.invidious = {
+    cloover.services.invidious = {
       postgresql.enable = true;
       vault.enable = true;
     };
-    mjm.state.directories = [
+    cloover.state.directories = [
       {
         directory = "/var/lib/private/invidious";
         user = "nobody";
@@ -50,7 +50,7 @@ in
       credentials.invidious.extra_settings = { };
     };
 
-    mjm.spire.tunnels = {
+    cloover.spire.tunnels = {
       invidious = {
         id = "invidious";
         mode = "server";

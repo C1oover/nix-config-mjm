@@ -6,18 +6,18 @@
 }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.mjm.jellyfin;
+  cfg = config.cloover.jellyfin;
 in
 {
-  options.mjm.jellyfin = {
+  options.cloover.jellyfin = {
     enable = mkEnableOption "Jellyfin";
   };
 
   config = mkIf cfg.enable {
-    mjm.services.jellyfin = {
+    cloover.services.jellyfin = {
       vault.enable = true;
     };
-    mjm.state.directories = [
+    cloover.state.directories = [
       {
         directory = config.services.jellyfin.dataDir;
         inherit (config.services.jellyfin) user group;
@@ -55,7 +55,7 @@ in
       openFirewall = true;
     };
 
-    mjm.spire.tunnels = {
+    cloover.spire.tunnels = {
       jellyfin = {
         id = "jellyfin";
         mode = "server";
@@ -64,7 +64,7 @@ in
       };
     };
 
-    mjm.authelia.oidcClients.jellyfin = {
+    cloover.authelia.oidcClients.jellyfin = {
       name = "Jellyfin";
       clientId = "3n3vR0P8cJuVbgXK3TVYWSG7joDrITANJ2YzjU3wdg8PMeSPd6U7ZBOuQp4X9cf8";
       clientSecret = "$argon2id$v=19$m=65536,t=3,p=4$lBl0VCuHURqxh1quwbEoWQ$4g4sGOcrvljimFwENZiOwinCcRZDgVl+bh1nE3T93Tg";
@@ -94,7 +94,7 @@ in
       };
     };
 
-    mjm.backups.jellyfin = {
+    cloover.backups.jellyfin = {
       paths = [ "/var/lib/jellyfin" ];
       exclude = [
         "/var/lib/jellyfin/log"

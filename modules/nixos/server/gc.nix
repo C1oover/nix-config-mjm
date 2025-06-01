@@ -1,7 +1,7 @@
 { config, lib, ... }:
 let
   inherit (lib) mkIf;
-  cfg = config.mjm.server;
+  cfg = config.cloover.server;
 in
 {
   config = mkIf (cfg.enable && cfg.enableGarbageCollection) {

@@ -13,21 +13,21 @@ let
     mkIf
     mkMerge
     ;
-  cfg = config.mjm.netbox;
+  cfg = config.cloover.netbox;
 
   clientId = "puow6sn22OE8UBLQT0RPYavisozbEY6Kn4y5a4vpgEHEykETK902zILI0cew4guQ";
 in
 {
-  options.mjm.netbox = {
+  options.cloover.netbox = {
     enable = mkEnableOption "netbox";
   };
 
   config = mkIf cfg.enable {
-    mjm.services.netbox = {
+    cloover.services.netbox = {
       vault.enable = true;
     };
-    mjm.postgresql.enable = true;
-    mjm.state.directories = [
+    cloover.postgresql.enable = true;
+    cloover.state.directories = [
       {
         directory = config.services.netbox.dataDir;
         user = "netbox";
@@ -53,7 +53,7 @@ in
           "netbox.midna.dev"
           "netbox.service.consul"
           "10.0.2.41"
-          "[${config.mjm.ipv6Prefix}:acf4:f0ff:feb0:3126]"
+          "[${config.cloover.ipv6Prefix}:acf4:f0ff:feb0:3126]"
         ];
         CORS_ORIGIN_ALLOW_ALL = false;
         CORS_ORIGIN_WHITELIST = [ "https://netbox.midna.dev" ];
@@ -87,7 +87,7 @@ in
       '';
     };
 
-    mjm.authelia.oidcClients.netbox = {
+    cloover.authelia.oidcClients.netbox = {
       name = "NetBox";
       inherit clientId;
       clientSecret = "$argon2id$v=19$m=65536,t=3,p=4$gwBe7ee4a2veQ2L5xyOUEw$Z08vF2YogFlhWPnuWsNg82Z4qm7ijKshLVYugEei3CU";
@@ -143,7 +143,7 @@ in
       };
     };
 
-    mjm.spire.tunnels = {
+    cloover.spire.tunnels = {
       netbox = {
         id = "netbox";
         mode = "server";

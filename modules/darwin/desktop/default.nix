@@ -5,7 +5,7 @@
 }:
 let
   inherit (lib) mkIf;
-  cfg = config.mjm.desktop;
+  cfg = config.cloover.desktop;
 in
 {
   imports = [ ../../common/desktop.nix ];
@@ -13,7 +13,7 @@ in
   config = mkIf cfg.enable {
     homebrew = {
       enable = true;
-      user = config.mjm.username;
+      user = config.cloover.username;
       casks = [
         "1password"
         "alfred"

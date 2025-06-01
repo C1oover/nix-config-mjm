@@ -5,7 +5,7 @@
 }:
 let
   inherit (lib) mkIf;
-  cfg = config.mjm.shell;
+  cfg = config.cloover.shell;
 in
 {
   config = mkIf cfg.enable {

@@ -5,7 +5,7 @@
 }:
 let
   inherit (lib) mkDefault mkIf;
-  cfg = config.mjm.desktop;
+  cfg = config.cloover.desktop;
 in
 {
   config = mkIf cfg.enable {
@@ -17,7 +17,7 @@ in
     };
     systemd.services.NetworkManager-wait-online.enable = false;
 
-    mjm.state.directories = mkIf config.networking.networkmanager.enable [
+    cloover.state.directories = mkIf config.networking.networkmanager.enable [
       "/etc/NetworkManager/system-connections"
       "/var/lib/NetworkManager"
       "/var/lib/iwd"

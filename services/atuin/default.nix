@@ -6,16 +6,16 @@
 }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.mjm.atuin;
+  cfg = config.cloover.atuin;
 in
 {
-  options.mjm.atuin = {
+  options.cloover.atuin = {
     enable = mkEnableOption "atuin";
   };
 
   config = mkIf cfg.enable {
-    mjm.services.atuin = { };
-    mjm.postgresql.enable = true;
+    cloover.services.atuin = { };
+    cloover.postgresql.enable = true;
 
     ingress.virtualHosts.atuin = {
       upstream = {
@@ -32,7 +32,7 @@ in
       port = 18888;
     };
 
-    mjm.spire.tunnels = {
+    cloover.spire.tunnels = {
       atuin = {
         id = "atuin";
         mode = "server";

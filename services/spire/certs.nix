@@ -14,10 +14,10 @@ let
     nameValuePair
     types
     ;
-  cfg = config.mjm.spire;
+  cfg = config.cloover.spire;
 in
 {
-  options.mjm.spire.certs = mkOption {
+  options.cloover.spire.certs = mkOption {
     default = { };
     type = types.attrsOf (
       types.submodule (
@@ -147,10 +147,10 @@ in
         }
       ) cfg.certs;
 
-      mjm.spire.entries = mapAttrs' (
+      cloover.spire.entries = mapAttrs' (
         name: svc:
         nameValuePair "spiffe-certs-${name}" {
-          spiffe_id = "spiffe://${config.mjm.spire.agent.trustDomain}/svc/${svc.id}";
+          spiffe_id = "spiffe://${config.cloover.spire.agent.trustDomain}/svc/${svc.id}";
           selectors = [
             {
               type = "systemd";

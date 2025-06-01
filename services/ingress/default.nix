@@ -16,11 +16,11 @@ let
     pipe
     ;
 
-  cfg = config.mjm.ingress;
+  cfg = config.cloover.ingress;
 
   vhosts = pipe nodes [
     attrValues
-    (filter (node: !node.config.mjm.ingress.enable))
+    (filter (node: !node.config.cloover.ingress.enable))
     (map (node: node.config.ingress.virtualHosts))
     mergeAttrsList
   ];
@@ -31,15 +31,15 @@ in
     ./spiffe-oidc.nix
   ];
 
-  options.mjm.ingress = {
+  options.cloover.ingress = {
     enable = mkEnableOption "ingress";
   };
 
   config = mkIf cfg.enable {
-    mjm.services.caddy = {
+    cloover.services.caddy = {
       vault.enable = true;
     };
-    mjm.state.directories = [
+    cloover.state.directories = [
       {
         directory = "/var/lib/caddy";
         inherit (config.services.caddy) user group;
@@ -261,8 +261,8 @@ in
       };
     };
 
-    mjm.spire.agent.enable = true;
-    mjm.spire.certs.caddy = {
+    cloover.spire.agent.enable = true;
+    cloover.spire.certs.caddy = {
       systemd.unit = "caddy.service";
       systemd.action = "reload-or-restart";
       user = "caddy";

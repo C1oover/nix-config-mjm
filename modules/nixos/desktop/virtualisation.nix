@@ -5,7 +5,7 @@
 }:
 let
   inherit (lib) mkIf;
-  cfg = config.mjm.desktop;
+  cfg = config.cloover.desktop;
 in
 {
   config = mkIf cfg.enable {
@@ -17,7 +17,7 @@ in
       };
     };
     programs.virt-manager.enable = true;
-    mjm.state.directories = [ "/var/lib/libvirt" ];
+    cloover.state.directories = [ "/var/lib/libvirt" ];
 
     virtualisation.podman = {
       enable = true;
@@ -28,7 +28,7 @@ in
       };
     };
 
-    users.users.${config.mjm.username}.extraGroups = [
+    users.users.${config.cloover.username}.extraGroups = [
       "libvirtd"
       "podman"
     ];

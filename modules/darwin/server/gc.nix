@@ -1,10 +1,10 @@
 { config, lib, ... }:
 let
   inherit (lib) mkIf mkOption types;
-  cfg = config.mjm.server;
+  cfg = config.cloover.server;
 in
 {
-  options.mjm.server.enableGarbageCollection = mkOption {
+  options.cloover.server.enableGarbageCollection = mkOption {
     type = types.bool;
     default = true;
     description = "Whether to enable automatic nightly garbage collection";

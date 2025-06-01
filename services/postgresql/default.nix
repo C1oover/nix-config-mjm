@@ -16,11 +16,11 @@ let
     unique
     ;
 
-  cfg = config.mjm.postgresql;
-  trustDomain = config.mjm.spire.agent.trustDomain;
+  cfg = config.cloover.postgresql;
+  trustDomain = config.cloover.spire.agent.trustDomain;
 in
 {
-  options.mjm.postgresql = {
+  options.cloover.postgresql = {
     enable = mkEnableOption "postgresql";
     extraBackupDatabases = mkOption {
       type = types.listOf types.str;
@@ -30,7 +30,7 @@ in
 
   config = mkIf cfg.enable {
     deployment.tags = [ "svc-postgresql" ];
-    mjm.state.directories = [
+    cloover.state.directories = [
       {
         directory = "/var/lib/postgresql";
         user = "postgres";
@@ -44,7 +44,7 @@ in
       package = mkOverride 900 pkgs.postgresql_16;
     };
 
-    mjm.backups.postgresql =
+    cloover.backups.postgresql =
       let
         pg = config.services.postgresql.package;
         dumpDBs = pipe (config.services.postgresql.ensureDatabases ++ cfg.extraBackupDatabases) [
@@ -73,13 +73,13 @@ in
         '';
       };
 
-    # can't use mjm.services, as it introduces an infinite recursion, so doing this manually
+    # can't use cloover.services, as it introduces an infinite recursion, so doing this manually
     vault.services.postgresql = { };
     systemd.sockets."spiffe-creds@postgresql" = {
       overrideStrategy = "asDropin";
       wantedBy = [ "sockets.target" ];
     };
-    mjm.spire.entries = {
+    cloover.spire.entries = {
       "postgresql-${config.networking.hostName}" = {
         spiffe_id = "spiffe://${trustDomain}/svc/postgresql";
         parent_id = "spiffe://${trustDomain}/${config.networking.hostName}";

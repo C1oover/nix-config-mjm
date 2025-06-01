@@ -12,7 +12,7 @@ let
     mkIf
     mkMerge
     ;
-  cfg = config.mjm.git;
+  cfg = config.cloover.git;
 
   git-scripts = pkgs.callPackage ./scripts { };
 in
@@ -22,7 +22,7 @@ in
     ./starship.nix
   ];
 
-  options.mjm.git = {
+  options.cloover.git = {
     enable = mkEnableOption "Git configuration";
     desktop.enable = mkEnableOption "tools and config only needed for workstations";
   };

@@ -12,7 +12,7 @@ let
     mkOption
     types
     ;
-  cfg = config.mjm.homelab;
+  cfg = config.cloover.homelab;
   envVars = {
     CONSUL_HTTP_ADDR = "http://consul.service.consul:8500";
     VAULT_ADDR = "https://vault.midna.dev";
@@ -20,7 +20,7 @@ let
 
   updateCert = pkgs.writeShellScript "update-ssh-cert" ''
     export VAULT_ADDR="${envVars.VAULT_ADDR}"
-    cert=$(${lib.getExe pkgs.vault} write -field=signed_key ssh-client-signer/sign/homelab-client public_key=@${cfg.sshPublicKeyPath} valid_principals=matt,mjm)
+    cert=$(${lib.getExe pkgs.vault} write -field=signed_key ssh-client-signer/sign/homelab-client public_key=@${cfg.sshPublicKeyPath} valid_principals=matt,cloover)
     if [ $? -eq 0 ]; then
       echo $cert > ${cfg.sshCertPath}
     fi
@@ -29,7 +29,7 @@ let
   isHardwareKey = cfg.enableTpm || cfg.enableSecretive;
 in
 {
-  options.mjm.homelab = {
+  options.cloover.homelab = {
     enable = mkEnableOption "homelab client tools";
 
     enableSecretive = mkOption {

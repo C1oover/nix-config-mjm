@@ -1,18 +1,18 @@
 { config, lib, ... }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.mjm.sabnzbd;
+  cfg = config.cloover.sabnzbd;
 in
 {
-  options.mjm.sabnzbd = {
+  options.cloover.sabnzbd = {
     enable = mkEnableOption "sabnzbd";
   };
 
   config = mkIf cfg.enable {
-    mjm.services.sabnzbd = {
+    cloover.services.sabnzbd = {
       vault.enable = true;
     };
-    mjm.state.directories = [
+    cloover.state.directories = [
       {
         directory = "/var/lib/sabnzbd";
         inherit (config.services.sabnzbd) user group;
@@ -27,7 +27,7 @@ in
       }
     ];
 
-    mjm.spire.creds.sabnzbd.aliases = {
+    cloover.spire.creds.sabnzbd.aliases = {
       "prometheus-sabnzbd-exporter.service/apikey-0" = "sabnzbd/api_key";
     };
 
@@ -42,7 +42,7 @@ in
     users.groups.media.gid = 997;
     users.users.sabnzbd.extraGroups = [ "media" ];
 
-    mjm.spire.tunnels = {
+    cloover.spire.tunnels = {
       sabnzbd = {
         id = "sabnzbd";
         mode = "server";
@@ -116,7 +116,7 @@ in
       };
     };
 
-    mjm.backups.sabnzbd = {
+    cloover.backups.sabnzbd = {
       paths = [
         "/var/lib/sabnzbd/admin"
         "/var/lib/sabnzbd/sabnzbd.ini"

@@ -11,7 +11,7 @@ let
     mkEnableOption
     mkIf
     ;
-  cfg = config.mjm.authelia;
+  cfg = config.cloover.authelia;
 
   secrets = {
     AUTHELIA_AUTHENTICATION_BACKEND_LDAP_PASSWORD_FILE = "ldap_password";
@@ -30,7 +30,7 @@ let
   secretEnvVars = mapAttrs (_: key: "%d/authelia_${key}") secrets;
 in
 {
-  options.mjm.authelia = {
+  options.cloover.authelia = {
     enable = mkEnableOption "authelia";
   };
 
@@ -40,14 +40,14 @@ in
   ];
 
   config = mkIf cfg.enable {
-    mjm.services.authelia = {
+    cloover.services.authelia = {
       postgresql = {
         enable = true;
         databases = [ "authelia-main" ];
       };
       vault.enable = true;
     };
-    mjm.state.directories = [
+    cloover.state.directories = [
       {
         directory = "/var/lib/redis-authelia";
         user = "redis-authelia";
@@ -93,7 +93,7 @@ in
         definitions = {
           network.home = [
             "10.0.0.0/8"
-            "${config.mjm.ipv6Prefix}::/64"
+            "${config.cloover.ipv6Prefix}::/64"
           ];
         };
         access_control = {
@@ -138,7 +138,7 @@ in
 
     services.redis.servers.authelia.enable = true;
 
-    mjm.spire.tunnels.authelia = {
+    cloover.spire.tunnels.authelia = {
       id = "authelia";
       mode = "server";
       listen.port = 9091;

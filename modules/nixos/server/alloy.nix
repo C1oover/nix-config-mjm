@@ -1,11 +1,11 @@
 { config, lib, ... }:
 let
   inherit (lib) mkIf;
-  cfg = config.mjm.server;
+  cfg = config.cloover.server;
 in
 {
   config = mkIf (cfg.enable && cfg.enableAlloy) {
-    mjm.services.alloy = { };
+    cloover.services.alloy = { };
     services.alloy = {
       enable = true;
     };
@@ -15,7 +15,7 @@ in
     environment.etc."alloy/prometheus.alloy".source = ./prometheus.alloy;
     environment.etc."alloy/otel.alloy".source = ./otel.alloy;
 
-    mjm.spire.tunnels = {
+    cloover.spire.tunnels = {
       alloy-otlphttp = {
         id = "alloy";
         mode = "server";

@@ -12,21 +12,21 @@ let
     mkMerge
     ;
 
-  cfg = config.mjm.consul;
-  trustDomain = config.mjm.spire.agent.trustDomain;
+  cfg = config.cloover.consul;
+  trustDomain = config.cloover.spire.agent.trustDomain;
 in
 {
   imports = [ ./common.nix ];
 
-  options.mjm.consul = {
+  options.cloover.consul = {
     server.enable = mkEnableOption "consul server";
   };
 
   config = mkIf cfg.enable (mkMerge [
     {
-      mjm.consul.ipv4Address = mkDefault ''{{ . | include "name" "${config.mjm.networkd.primaryIface}" | include "type" "ipv4" | attr "address" }}'';
+      cloover.consul.ipv4Address = mkDefault ''{{ . | include "name" "${config.cloover.networkd.primaryIface}" | include "type" "ipv4" | attr "address" }}'';
 
-      mjm.spire.certs.consul = {
+      cloover.spire.certs.consul = {
         # this entry creates the certs service for the servers too, but those will get
         # their cert from an entry
         id = "consul-client";
@@ -47,7 +47,7 @@ in
 
             # Determine interface addresses
             getAddrOnce () {
-              ip -6 addr show dev ${config.mjm.networkd.primaryIface} scope global primary mngtmpaddr \
+              ip -6 addr show dev ${config.cloover.networkd.primaryIface} scope global primary mngtmpaddr \
                 | awk -F '[ /\t]*' '/inet/ {print $3}' | head -n 1
             }
             getAddr () {
@@ -97,13 +97,13 @@ in
     }
 
     (mkIf (!cfg.server.enable) {
-      mjm.services.consul-client = { };
+      cloover.services.consul-client = { };
     })
 
     (mkIf cfg.server.enable {
-      mjm.services.consul = { };
+      cloover.services.consul = { };
 
-      mjm.spire.entries."consul-server-${config.networking.hostName}" = {
+      cloover.spire.entries."consul-server-${config.networking.hostName}" = {
         spiffe_id = "spiffe://${trustDomain}/svc/consul";
         parent_id = "spiffe://${trustDomain}/${config.networking.hostName}";
         selectors = [
@@ -150,7 +150,7 @@ in
         iptables -t nat -A PREROUTING -p tcp --dport 53 -j REDIRECT --to-ports 8600
       '';
 
-      mjm.state.directories = [
+      cloover.state.directories = [
         {
           directory = "/var/lib/consul";
           user = "consul";

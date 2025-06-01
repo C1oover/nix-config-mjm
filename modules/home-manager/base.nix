@@ -8,8 +8,8 @@ let
   inherit (lib) attrValues mkDefault;
 in
 {
-  mjm.git.enable = mkDefault true;
-  mjm.shell.enable = mkDefault true;
+  cloover.git.enable = mkDefault true;
+  cloover.shell.enable = mkDefault true;
 
   home.stateVersion = mkDefault "22.11";
 

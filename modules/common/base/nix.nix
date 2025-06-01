@@ -8,7 +8,7 @@
 let
   inherit (lib) isStorePath mkIf;
   nix-index = import inputs.nix-index-database { inherit pkgs; };
-  addNixPath = isStorePath pkgs.path && (!config.mjm.minimal.enable);
+  addNixPath = isStorePath pkgs.path && (!config.cloover.minimal.enable);
 in
 {
 
@@ -27,7 +27,7 @@ in
     ];
   };
 
-  nixpkgs = mkIf (!config.mjm.minimal.enable) {
+  nixpkgs = mkIf (!config.cloover.minimal.enable) {
     config.allowUnfree = true;
     overlays = [
       (final: prev: {

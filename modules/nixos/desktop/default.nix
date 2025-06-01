@@ -6,7 +6,7 @@
 }:
 let
   inherit (lib) mkIf mkMerge mkOverride;
-  cfg = config.mjm.desktop;
+  cfg = config.cloover.desktop;
 in
 {
   imports = [
@@ -46,7 +46,7 @@ in
       ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="3496", ATTRS{idProduct}=="0006", ATTR{power/wakeup}="enabled"
     '';
 
-    mjm.state.directories = mkIf config.services.fprintd.enable [
+    cloover.state.directories = mkIf config.services.fprintd.enable [
       "/var/lib/fprint"
     ];
 

@@ -10,7 +10,7 @@ let
     mkEnableOption
     mkIf
     ;
-  cfg = config.mjm.firefox;
+  cfg = config.cloover.firefox;
 
   arkenfox = import inputs.arkenfox;
 
@@ -22,7 +22,7 @@ in
     ./search.nix
   ];
 
-  options.mjm.firefox = {
+  options.cloover.firefox = {
     enable = mkEnableOption "firefox";
   };
 

@@ -5,10 +5,10 @@ let
     mkOption
     types
     ;
-  cfg = config.mjm.networkd;
+  cfg = config.cloover.networkd;
 in
 {
-  options.mjm.networkd = {
+  options.cloover.networkd = {
     enable = mkOption {
       type = types.bool;
       default = !config.networking.networkmanager.enable;
@@ -43,7 +43,7 @@ in
   config = mkIf cfg.enable {
     networking.useDHCP = false;
 
-    mjm.networkd.primaryIface =
+    cloover.networkd.primaryIface =
       if cfg.secondaryLinkName != null then
         cfg.primaryLinkName
       else if cfg.macvlan.enable then

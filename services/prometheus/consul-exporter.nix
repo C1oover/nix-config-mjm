@@ -1,7 +1,7 @@
 { config, lib, ... }:
 let
   inherit (lib) mkIf;
-  cfg = config.mjm.prometheus;
+  cfg = config.cloover.prometheus;
 in
 {
   config = mkIf cfg.enable {

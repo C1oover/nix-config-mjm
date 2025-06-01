@@ -13,21 +13,21 @@ let
     mkEnableOption
     mkIf
     ;
-  cfg = config.mjm.gitlab-runner;
+  cfg = config.cloover.gitlab-runner;
   nix = config.nix.package;
 
-  trustDomain = config.mjm.spire.agent.trustDomain;
+  trustDomain = config.cloover.spire.agent.trustDomain;
 in
 {
-  options.mjm.gitlab-runner = {
+  options.cloover.gitlab-runner = {
     enable = mkEnableOption "GitLab CI runner";
   };
 
   config = mkIf cfg.enable {
-    mjm.services.gitlab-runner = {
+    cloover.services.gitlab-runner = {
       vault.enable = true;
     };
-    mjm.state.directories = [
+    cloover.state.directories = [
       {
         directory = "/var/lib/private/gitlab-runner";
         user = "nobody";
@@ -38,8 +38,8 @@ in
 
     boot.kernel.sysctl."net.ipv4.ip_forward" = true;
 
-    mjm.spire.agent.enable = true;
-    mjm.spire.entries."repo-nix-config-${config.networking.hostName}" = {
+    cloover.spire.agent.enable = true;
+    cloover.spire.entries."repo-nix-config-${config.networking.hostName}" = {
       spiffe_id = "spiffe://${trustDomain}/ci/repo/nix-config";
       parent_id = "spiffe://${trustDomain}/${config.networking.hostName}";
       selectors = [

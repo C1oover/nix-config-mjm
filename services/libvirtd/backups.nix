@@ -5,10 +5,10 @@
 }:
 let
   inherit (lib) mkIf mkOption types;
-  cfg = config.mjm.libvirtd;
+  cfg = config.cloover.libvirtd;
 in
 {
-  options.mjm.libvirtd.vmsDataset = mkOption {
+  options.cloover.libvirtd.vmsDataset = mkOption {
     type = types.str;
     default = "rpool/data";
   };

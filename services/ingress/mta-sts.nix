@@ -6,7 +6,7 @@
 }:
 let
   inherit (lib) mkIf;
-  cfg = config.mjm.ingress;
+  cfg = config.cloover.ingress;
 in
 {
   config = mkIf cfg.enable {

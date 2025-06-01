@@ -14,7 +14,7 @@ let
     replaceStrings
     types
     ;
-  cfg = config.mjm.vault;
+  cfg = config.cloover.vault;
 
   pkg = pkgs.vault-unseal;
 
@@ -23,7 +23,7 @@ let
   };
 in
 {
-  options.mjm.vault = {
+  options.cloover.vault = {
     encryptedUnsealTokens = mkOption {
       type = types.listOf types.str;
       default = [ ];

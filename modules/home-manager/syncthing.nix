@@ -6,10 +6,10 @@
 }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.mjm.syncthing;
+  cfg = config.cloover.syncthing;
 in
 {
-  options.mjm.syncthing = {
+  options.cloover.syncthing = {
     enable = mkEnableOption "kitty";
   };
 

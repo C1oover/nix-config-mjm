@@ -13,16 +13,16 @@ let
     types
     ;
 
-  username = config.mjm.username;
+  username = config.cloover.username;
   machineSpecificConfig = ../../../hosts/${config.networking.hostName}/home.nix;
 in
 {
-  options.mjm.username = mkOption {
+  options.cloover.username = mkOption {
     type = types.str;
     default = "matt";
   };
 
-  config = mkIf (!config.mjm.minimal.enable) {
+  config = mkIf (!config.cloover.minimal.enable) {
     home-manager.users.${username}.imports = [
       "${localModulesPath}/home-manager"
     ] ++ optional (pathExists machineSpecificConfig) machineSpecificConfig;

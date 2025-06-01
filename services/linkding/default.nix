@@ -5,18 +5,18 @@
 }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.mjm.linkding;
+  cfg = config.cloover.linkding;
 in
 {
-  options.mjm.linkding = {
+  options.cloover.linkding = {
     enable = mkEnableOption "linkding";
   };
 
   config = mkIf cfg.enable {
-    mjm.services.linkding = {
+    cloover.services.linkding = {
       postgresql.enable = true;
     };
-    mjm.state.directories = [
+    cloover.state.directories = [
       {
         directory = "/var/lib/linkding";
         user = "linkding";
@@ -38,7 +38,7 @@ in
       socket = "/run/linkding/server.sock";
 
       settings = {
-        LD_SUPERUSER_NAME = "mjm";
+        LD_SUPERUSER_NAME = "cloover";
         LD_ENABLE_AUTH_PROXY = "True";
         LD_AUTH_PROXY_USERNAME_HEADER = "HTTP_REMOTE_USER";
         LD_AUTH_PROXY_LOGOUT_URL = "https://auth.midna.dev/logout";
@@ -52,7 +52,7 @@ in
 
     systemd.services.linkding.after = [ "postgresql.service" ];
 
-    mjm.spire.tunnels = {
+    cloover.spire.tunnels = {
       linkding = {
         id = "linkding";
         mode = "server";

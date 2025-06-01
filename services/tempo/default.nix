@@ -5,15 +5,15 @@
 }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.mjm.tempo;
+  cfg = config.cloover.tempo;
 in
 {
-  options.mjm.tempo = {
+  options.cloover.tempo = {
     enable = mkEnableOption "Grafana Tempo";
   };
 
   config = mkIf cfg.enable {
-    mjm.services.tempo = { };
+    cloover.services.tempo = { };
 
     services.tempo = {
       enable = true;
@@ -52,9 +52,9 @@ in
 
     networking.firewall.allowedTCPPorts = [ 14318 ];
 
-    mjm.garage.clients.tempo.services = [ "tempo" ];
+    cloover.garage.clients.tempo.services = [ "tempo" ];
 
-    mjm.spire.tunnels = {
+    cloover.spire.tunnels = {
       tempo = {
         id = "tempo";
         mode = "server";

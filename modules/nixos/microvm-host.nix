@@ -25,14 +25,14 @@ let
     optionalString
     types
     ;
-  cfg = config.mjm.microvm-host;
+  cfg = config.cloover.microvm-host;
 
   snix = (import inputs.snix { localSystem = pkgs.system; }).snix;
   snixAddr = "grpc+unix:///run/vm-store.sock";
   snixAddrArgs = "--blob-service-addr ${snixAddr} --directory-service-addr ${snixAddr} --path-info-service-addr ${snixAddr}";
 in
 {
-  options.mjm.microvm-host = {
+  options.cloover.microvm-host = {
     enable = mkEnableOption "MicroVM host";
     zfsPrefix = mkOption {
       type = types.str;
@@ -65,7 +65,7 @@ in
       systemd.tmpfiles.settings."10-microvms" = mapAttrs' (
         name: vm:
         let
-          machineId = vm.config.config.mjm.profiles.microvm.machineId;
+          machineId = vm.config.config.cloover.profiles.microvm.machineId;
         in
         {
           name = "/var/log/journal/${machineId}";

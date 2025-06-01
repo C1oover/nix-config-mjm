@@ -8,17 +8,17 @@
 let
   inherit (lib) mkEnableOption mkIf;
 
-  cfg = config.mjm.matrix-server;
+  cfg = config.cloover.matrix-server;
   pkg = (import inputs.conduit).packages.${pkgs.system}.default;
 in
 {
-  options.mjm.matrix-server = {
+  options.cloover.matrix-server = {
     enable = mkEnableOption "matrix server";
   };
 
   config = mkIf cfg.enable {
-    mjm.services.conduit = { };
-    mjm.state.directories = [
+    cloover.services.conduit = { };
+    cloover.state.directories = [
       {
         directory = "/var/lib/private/conduwuit";
         user = "nobody";
@@ -71,7 +71,7 @@ in
       };
     };
 
-    mjm.spire.tunnels = {
+    cloover.spire.tunnels = {
       conduwuit = {
         id = "conduit";
         mode = "server";

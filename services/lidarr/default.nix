@@ -6,20 +6,20 @@
 }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.mjm.lidarr;
+  cfg = config.cloover.lidarr;
 
   inherit (config.services.lidarr) dataDir;
 in
 {
-  options.mjm.lidarr = {
+  options.cloover.lidarr = {
     enable = mkEnableOption "Lidarr";
   };
 
   config = mkIf cfg.enable {
-    mjm.services.lidarr = {
+    cloover.services.lidarr = {
       vault.enable = true;
     };
-    mjm.state.directories = [
+    cloover.state.directories = [
       {
         directory = dataDir;
         inherit (config.services.lidarr) user group;
@@ -63,13 +63,13 @@ in
       url = "http://127.0.0.1:8686";
     };
 
-    mjm.spire.creds = {
+    cloover.spire.creds = {
       lidarr.aliases = {
         "prometheus-exportarr-lidarr-exporter.service/api-key" = "lidarr/api_key";
       };
     };
 
-    mjm.spire.tunnels = {
+    cloover.spire.tunnels = {
       lidarr = {
         id = "lidarr";
         mode = "server";
@@ -106,7 +106,7 @@ in
       };
     };
 
-    mjm.backups.lidarr = {
+    cloover.backups.lidarr = {
       paths = [ dataDir ];
       exclude = [ "${dataDir}/logs" ];
       backupPrepareCommand = ''

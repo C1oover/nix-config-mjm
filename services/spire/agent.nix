@@ -13,7 +13,7 @@ let
     optionalString
     types
     ;
-  cfg = config.mjm.spire;
+  cfg = config.cloover.spire;
 
   configFile = pkgs.writeText "agent.hcl" ''
     agent {
@@ -63,7 +63,7 @@ let
   '';
 in
 {
-  options.mjm.spire.agent = {
+  options.cloover.spire.agent = {
     enable = mkEnableOption "SPIRE agent";
 
     trustDomain = mkOption {
@@ -89,7 +89,7 @@ in
   };
 
   config = mkIf cfg.agent.enable {
-    mjm.state.directories = [
+    cloover.state.directories = [
       {
         directory = "/var/lib/spire-agent";
         user = "spire-agent";

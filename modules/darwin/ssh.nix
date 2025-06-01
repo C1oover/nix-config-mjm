@@ -1,7 +1,7 @@
 { config, lib, ... }:
 let
   inherit (lib) mkIf;
-  cfg = config.mjm.ssh;
+  cfg = config.cloover.ssh;
 in
 {
   imports = [ ../common/ssh.nix ];

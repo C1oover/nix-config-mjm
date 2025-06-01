@@ -1,10 +1,10 @@
 { lib, config, ... }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.mjm.email;
+  cfg = config.cloover.email;
 in
 {
-  options.mjm.email = {
+  options.cloover.email = {
     enable = mkEnableOption "email account config";
   };
 
@@ -15,7 +15,7 @@ in
       address = "matt@mattmoriarity.com";
       aliases = [
         "mj@midna.dev"
-        "mjm@midna.dev"
+        "cloover@midna.dev"
       ];
       realName = "Matt Moriarity";
 

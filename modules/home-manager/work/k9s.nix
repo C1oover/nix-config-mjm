@@ -1,7 +1,7 @@
 { lib, config, ... }:
 let
   inherit (lib) mkIf;
-  cfg = config.mjm.work;
+  cfg = config.cloover.work;
 in
 {
   config = mkIf cfg.enable {

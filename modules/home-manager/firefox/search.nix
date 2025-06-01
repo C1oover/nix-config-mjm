@@ -6,7 +6,7 @@
 }:
 let
   inherit (lib) mkIf;
-  cfg = config.mjm.firefox;
+  cfg = config.cloover.firefox;
 
   mkSearchix =
     {

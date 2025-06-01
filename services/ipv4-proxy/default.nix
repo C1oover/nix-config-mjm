@@ -6,15 +6,15 @@
 }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.mjm.ipv4-proxy;
+  cfg = config.cloover.ipv4-proxy;
 in
 {
-  options.mjm.ipv4-proxy = {
+  options.cloover.ipv4-proxy = {
     enable = mkEnableOption "IPv4 proxy";
   };
 
   config = mkIf cfg.enable {
-    mjm.services.ipv4-proxy = { };
+    cloover.services.ipv4-proxy = { };
 
     services.haproxy = {
       enable = true;
@@ -34,12 +34,12 @@ in
         backend http_nodes
           mode tcp
           balance roundrobin
-          server persephone [${config.mjm.ipv6Prefix}:dea6:32ff:fed5:d840]:80 check
+          server persephone [${config.cloover.ipv6Prefix}:dea6:32ff:fed5:d840]:80 check
 
         backend https_nodes
           mode tcp
           balance roundrobin
-          server persephone [${config.mjm.ipv6Prefix}:dea6:32ff:fed5:d840]:443 check
+          server persephone [${config.cloover.ipv6Prefix}:dea6:32ff:fed5:d840]:443 check
       '';
     };
 

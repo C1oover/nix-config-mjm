@@ -22,10 +22,10 @@ let
     types
     ;
 
-  trustDomain = config.mjm.spire.agent.trustDomain;
+  trustDomain = config.cloover.spire.agent.trustDomain;
 in
 {
-  options.mjm.backups = mkOption {
+  options.cloover.backups = mkOption {
     default = { };
     type = types.attrsOf (
       types.submodule (
@@ -58,13 +58,13 @@ in
     );
   };
 
-  config = mkIf (config.mjm.backups != { }) {
+  config = mkIf (config.cloover.backups != { }) {
     environment.etc."resolv.conf".source = lib.mkForce "/run/systemd/resolve/resolv.conf";
 
-    mjm.garage.clients.backups = { };
+    cloover.garage.clients.backups = { };
 
-    # can't use mjm.services, as it introduces an infinite recursion, so doing this manually
-    mjm.spire.entries = {
+    # can't use cloover.services, as it introduces an infinite recursion, so doing this manually
+    cloover.spire.entries = {
       "backups-${config.networking.hostName}" = {
         spiffe_id = "spiffe://${trustDomain}/svc/backups";
         parent_id = "spiffe://${trustDomain}/${config.networking.hostName}";
@@ -85,7 +85,7 @@ in
       wantedBy = [ "sockets.target" ];
     };
 
-    mjm.state.directories = pipe config.mjm.backups [
+    cloover.state.directories = pipe config.cloover.backups [
       (mapAttrs (
         name: cfg: {
           directory = "/var/cache/restic-backups-${name}";
@@ -104,7 +104,7 @@ in
         ) "--exclude-file=${pkgs.writeText "exclude-patterns" (concatStringsSep "\n" cfg.exclude)}";
         includePaths = pkgs.writeText "include-patterns" (concatStringsSep "\n" cfg.paths);
         onsiteRepository = "s3:http://localhost:3902/restic-backups/${cfg.repositoryName}";
-        offsiteRepository = "s3:s3.us-west-001.backblazeb2.com/mjm-restic-backups/${cfg.repositoryName}";
+        offsiteRepository = "s3:s3.us-west-001.backblazeb2.com/cloover-restic-backups/${cfg.repositoryName}";
         mkPreamble = repo: location: ''
           set -e
           set -o pipefail
@@ -181,7 +181,7 @@ in
           RestartSec = "2m";
         };
       }
-    ) config.mjm.backups;
+    ) config.cloover.backups;
 
     systemd.timers = mapAttrs' (
       name: cfg:
@@ -193,14 +193,14 @@ in
           RandomizedDelaySec = "2h";
         };
       }
-    ) config.mjm.backups;
+    ) config.cloover.backups;
 
     environment.systemPackages = mapAttrsToList (
       name: cfg:
       let
         resticCmd = getExe pkgs.restic;
         onsiteRepository = "s3:http://localhost:3902/restic-backups/${cfg.repositoryName}";
-        offsiteRepository = "s3:s3.us-west-001.backblazeb2.com/mjm-restic-backups/${cfg.repositoryName}";
+        offsiteRepository = "s3:s3.us-west-001.backblazeb2.com/cloover-restic-backups/${cfg.repositoryName}";
 
         innerScript = pkgs.writeShellScript "restic-${name}-inner" ''
           if [ "$BACKUP_KIND" = onsite ]; then
@@ -246,6 +246,6 @@ in
           -E RESTIC_REPOSITORY -E RESTIC_CACHE_DIR -E PATH \
            ${innerScript} "$@"
       ''
-    ) config.mjm.backups;
+    ) config.cloover.backups;
   };
 }

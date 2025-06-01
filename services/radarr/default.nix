@@ -6,18 +6,18 @@
 }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.mjm.radarr;
+  cfg = config.cloover.radarr;
 in
 {
-  options.mjm.radarr = {
+  options.cloover.radarr = {
     enable = mkEnableOption "Radarr";
   };
 
   config = mkIf cfg.enable {
-    mjm.services.radarr = {
+    cloover.services.radarr = {
       vault.enable = true;
     };
-    mjm.state.directories = [
+    cloover.state.directories = [
       {
         directory = config.services.radarr.dataDir;
         inherit (config.services.radarr) user group;
@@ -61,13 +61,13 @@ in
       url = "http://127.0.0.1:7878";
     };
 
-    mjm.spire.creds = {
+    cloover.spire.creds = {
       radarr.aliases = {
         "prometheus-exportarr-radarr-exporter.service/api-key" = "radarr/api_key";
       };
     };
 
-    mjm.spire.tunnels = {
+    cloover.spire.tunnels = {
       radarr = {
         id = "radarr";
         mode = "server";
@@ -118,7 +118,7 @@ in
     # ffprobe
     systemd.services.radarr.path = [ pkgs.ffmpeg ];
 
-    mjm.backups.radarr = {
+    cloover.backups.radarr = {
       paths = [ "/var/lib/radarr/.config/Radarr" ];
       exclude = [ "/var/lib/radarr/.config/Radarr/logs" ];
       backupPrepareCommand = ''

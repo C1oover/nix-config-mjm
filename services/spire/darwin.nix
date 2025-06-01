@@ -12,7 +12,7 @@ let
     optionalString
     types
     ;
-  cfg = config.mjm.spire;
+  cfg = config.cloover.spire;
 
   # bump purego dependency to fix build
   pkg = pkgs.spire.overrideAttrs {
@@ -62,7 +62,7 @@ let
   '';
 in
 {
-  options.mjm.spire.agent = {
+  options.cloover.spire.agent = {
     enable = mkEnableOption "SPIRE agent";
 
     serverAddress = mkOption {

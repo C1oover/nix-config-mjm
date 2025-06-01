@@ -13,7 +13,7 @@ let
     mkOption
     types
     ;
-  cfg = config.mjm.desktop;
+  cfg = config.cloover.desktop;
 in
 {
   imports = [
@@ -25,19 +25,19 @@ in
     ./kdeconfig.nix
   ];
 
-  options.mjm.desktop = {
+  options.cloover.desktop = {
     enable = mkOption {
       type = types.bool;
-      default = osConfig.mjm.desktop.enable or false;
+      default = osConfig.cloover.desktop.enable or false;
     };
   };
 
   config = mkIf cfg.enable {
-    mjm.git.desktop.enable = mkDefault true;
-    mjm.helix.enable = mkDefault true;
-    mjm.homelab.enable = mkDefault true;
-    mjm.shell.desktop.enable = mkDefault true;
-    mjm.terminal.enable = mkDefault true;
+    cloover.git.desktop.enable = mkDefault true;
+    cloover.helix.enable = mkDefault true;
+    cloover.homelab.enable = mkDefault true;
+    cloover.shell.desktop.enable = mkDefault true;
+    cloover.terminal.enable = mkDefault true;
 
     # Many of these aren't really desktop-related necessarily, but they _are_
     # tools I don't really need preinstalled on server machines.

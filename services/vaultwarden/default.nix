@@ -6,18 +6,18 @@
 }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.mjm.vaultwarden;
+  cfg = config.cloover.vaultwarden;
 in
 {
-  options.mjm.vaultwarden = {
+  options.cloover.vaultwarden = {
     enable = mkEnableOption "vaultwarden";
   };
 
   config = mkIf cfg.enable {
-    mjm.services.vaultwarden = {
+    cloover.services.vaultwarden = {
       vault.enable = true;
     };
-    mjm.state.directories = [
+    cloover.state.directories = [
       {
         directory = "/var/lib/vaultwarden";
         user = "vaultwarden";
@@ -43,7 +43,7 @@ in
       };
     };
 
-    mjm.spire.tunnels = {
+    cloover.spire.tunnels = {
       vaultwarden = {
         id = "vaultwarden";
         mode = "server";
@@ -62,7 +62,7 @@ in
       };
     };
 
-    mjm.backups.vaultwarden = {
+    cloover.backups.vaultwarden = {
       paths = [
         "/var/lib/vaultwarden"
       ];

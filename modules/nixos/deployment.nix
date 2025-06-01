@@ -67,7 +67,7 @@ in
   config = {
     deployment = {
       targetHost = mkDefault "${config.networking.hostName}.home.mattmoriarity.com";
-      targetUser = config.mjm.username;
+      targetUser = config.cloover.username;
     };
   };
 }

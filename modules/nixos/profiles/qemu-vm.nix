@@ -1,10 +1,10 @@
 { config, lib, ... }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.mjm.profiles.qemu-vm;
+  cfg = config.cloover.profiles.qemu-vm;
 in
 {
-  options.mjm.profiles.qemu-vm = {
+  options.cloover.profiles.qemu-vm = {
     enable = mkEnableOption "QEMU VM support";
   };
 

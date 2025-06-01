@@ -6,7 +6,7 @@
 }:
 let
   inherit (lib) getExe mkEnableOption mkIf;
-  cfg = config.mjm.work;
+  cfg = config.cloover.work;
 
   slab = pkgs.writers.writeNuBin ",slab" (
     pkgs.replaceVars ./slab.nu {
@@ -21,7 +21,7 @@ in
     ./k9s.nix
   ];
 
-  options.mjm.work = {
+  options.cloover.work = {
     enable = mkEnableOption "work-specific configs";
   };
 

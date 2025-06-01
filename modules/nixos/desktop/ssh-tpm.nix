@@ -6,7 +6,7 @@
 }:
 let
   inherit (lib) mkIf;
-  cfg = config.mjm.desktop;
+  cfg = config.cloover.desktop;
 
   askPasswordWrapper = pkgs.writeScript "ssh-askpass-wrapper" ''
     #! ${pkgs.runtimeShell} -e
@@ -21,7 +21,7 @@ in
     programs.ssh.enableAskPassword = true;
     security.tpm2.enable = true;
 
-    users.users.${config.mjm.username}.extraGroups = [ config.security.tpm2.tssGroup ];
+    users.users.${config.cloover.username}.extraGroups = [ config.security.tpm2.tssGroup ];
 
     systemd.user.sockets.ssh-tpm-agent = {
       wantedBy = [ "sockets.target" ];

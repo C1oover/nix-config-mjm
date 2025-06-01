@@ -17,12 +17,12 @@ in
     ./spiffe.nix
   ];
 
-  options.mjm.garage = {
+  options.cloover.garage = {
     enable = mkEnableOption "garage";
   };
 
-  config = mkIf config.mjm.garage.enable {
-    mjm.services.garage = {
+  config = mkIf config.cloover.garage.enable {
+    cloover.services.garage = {
       vault.enable = true;
     };
 
@@ -68,7 +68,7 @@ in
       };
     };
 
-    mjm.state.directories = [ "/var/lib/private/garage/meta" ];
+    cloover.state.directories = [ "/var/lib/private/garage/meta" ];
 
     microvm.volumes = [
       {
@@ -92,7 +92,7 @@ in
       useIPv4Proxy = true;
     };
 
-    mjm.spire.tunnels.garage-s3 = {
+    cloover.spire.tunnels.garage-s3 = {
       id = "garage";
       mode = "server";
       listen.port = 3902;
@@ -100,7 +100,7 @@ in
       # don't bother with identifying the client, since they need to provide creds
       # anyway, which spiffe-garage will handle.
     };
-    mjm.spire.entries.tunnel-garage-s3.dns_names = [ "s3.garage.service.consul" ];
+    cloover.spire.entries.tunnel-garage-s3.dns_names = [ "s3.garage.service.consul" ];
 
     environment.systemPackages = builtins.attrValues {
       inherit (pkgs.callPackages ./scripts.nix { garage = config.services.garage.package; }) g;

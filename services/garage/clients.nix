@@ -22,10 +22,10 @@ let
     removeAttrs
     types
     ;
-  cfg = config.mjm.garage;
+  cfg = config.cloover.garage;
 
   clients =
-    if config.mjm.minimal.enable then
+    if config.cloover.minimal.enable then
       (
         let
           names = attrNames cfg.clients;
@@ -50,7 +50,7 @@ let
   ];
 in
 {
-  options.mjm.garage.clients = mkOption {
+  options.cloover.garage.clients = mkOption {
     default = { };
     type = types.attrsOf (
       types.submodule {
@@ -66,7 +66,7 @@ in
   };
 
   config = mkIf (cfg.clients != { }) {
-    mjm.spire.tunnels =
+    cloover.spire.tunnels =
       mapAttrs' (name: c: {
         name = "${name}-s3-creds";
         value = {

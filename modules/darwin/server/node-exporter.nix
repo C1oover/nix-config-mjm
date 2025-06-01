@@ -9,10 +9,10 @@ let
     mkOption
     types
     ;
-  cfg = config.mjm.server;
+  cfg = config.cloover.server;
 in
 {
-  options.mjm.server.enableNodeExporter = mkOption {
+  options.cloover.server.enableNodeExporter = mkOption {
     type = types.bool;
     default = true;
     description = "Whether to enable the Prometheus node-exporter";

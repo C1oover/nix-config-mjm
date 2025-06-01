@@ -6,21 +6,21 @@
 }:
 let
   inherit (lib) mkEnableOption mkForce mkIf;
-  cfg = config.mjm.miniflux;
+  cfg = config.cloover.miniflux;
 
   clientId = "4dVtVDFB6wqBTqqE1hJzVe2shJDaMiEH3wY9BjN9IQ44lrnFmcxiOwzdBDHmk3zB";
   redirectUri = "https://feeds.midna.dev/oauth2/oidc/callback";
 in
 {
-  options.mjm.miniflux = {
+  options.cloover.miniflux = {
     enable = mkEnableOption "miniflux";
   };
 
   config = mkIf cfg.enable {
-    mjm.services.miniflux = {
+    cloover.services.miniflux = {
       vault.enable = true;
     };
-    mjm.postgresql.enable = true;
+    cloover.postgresql.enable = true;
 
     ingress.virtualHosts.feeds = {
       upstream = {
@@ -38,7 +38,7 @@ in
         LISTEN_ADDR = "/run/miniflux/server.sock";
         BASE_URL = "https://feeds.midna.dev/";
         METRICS_COLLECTOR = 1;
-        METRICS_ALLOWED_NETWORKS = "127.0.0.1/8,10.0.0.0/16,${config.mjm.ipv6Prefix}::/64";
+        METRICS_ALLOWED_NETWORKS = "127.0.0.1/8,10.0.0.0/16,${config.cloover.ipv6Prefix}::/64";
         CREATE_ADMIN = mkForce 0;
         OAUTH2_PROVIDER = "oidc";
         OAUTH2_CLIENT_ID = clientId;
@@ -54,7 +54,7 @@ in
       serviceConfig.RuntimeDirectoryMode = mkForce "0755";
     };
 
-    mjm.authelia.oidcClients.miniflux = {
+    cloover.authelia.oidcClients.miniflux = {
       name = "Miniflux";
       inherit clientId;
       clientSecret = "$argon2id$v=19$m=65536,t=3,p=4$F6tAZnVxae+QgvGjCC6GhQ$tVXggATlvY5qpsMut62Ap5B8RcRPi4HPZwrfz02uJ7Q";
@@ -62,7 +62,7 @@ in
       redirectUris = [ redirectUri ];
     };
 
-    mjm.spire.tunnels = {
+    cloover.spire.tunnels = {
       miniflux = {
         id = "miniflux";
         mode = "server";

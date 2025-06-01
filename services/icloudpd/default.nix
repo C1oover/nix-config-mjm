@@ -7,16 +7,16 @@
 }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.mjm.icloudpd;
+  cfg = config.cloover.icloudpd;
 in
 {
-  options.mjm.icloudpd = {
+  options.cloover.icloudpd = {
     enable = mkEnableOption "iCloud photos downloader";
   };
 
   config = mkIf cfg.enable {
-    mjm.services.icloudpd = { };
-    mjm.state.directories = [
+    cloover.services.icloudpd = { };
+    cloover.state.directories = [
       {
         directory = "/var/lib/private/icloudpd";
         user = "nobody";

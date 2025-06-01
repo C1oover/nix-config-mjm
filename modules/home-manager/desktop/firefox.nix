@@ -6,12 +6,12 @@
 }:
 let
   inherit (lib) mkDefault mkIf mkMerge;
-  cfg = config.mjm.desktop;
+  cfg = config.cloover.desktop;
 in
 {
   config = mkIf cfg.enable (mkMerge [
     {
-      mjm.firefox.enable = mkDefault true;
+      cloover.firefox.enable = mkDefault true;
     }
     (mkIf pkgs.stdenv.isLinux {
       programs.firefox.nativeMessagingHosts = [ pkgs.kdePackages.plasma-browser-integration ];

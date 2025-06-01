@@ -11,7 +11,7 @@ in
     ./user.nix
   ];
 
-  options.mjm.minimal = {
+  options.cloover.minimal = {
     enable = mkEnableOption "minimal settings for microvms";
   };
 

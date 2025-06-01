@@ -15,10 +15,10 @@ let
     pipe
     types
     ;
-  cfg = config.mjm.authelia;
+  cfg = config.cloover.authelia;
   clients = pipe nodes [
     attrValues
-    (map (n: n.config.mjm.authelia.oidcClients))
+    (map (n: n.config.cloover.authelia.oidcClients))
     mergeAttrsList
     attrValues
     (map (c: c.clientConfig))
@@ -26,7 +26,7 @@ let
   yamlFormat = pkgs.formats.yaml { };
 in
 {
-  options.mjm.authelia.oidcClients = mkOption {
+  options.cloover.authelia.oidcClients = mkOption {
     default = { };
     type = types.attrsOf (
       types.submodule (

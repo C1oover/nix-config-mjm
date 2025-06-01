@@ -6,7 +6,7 @@
 }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.mjm.gitlab;
+  cfg = config.cloover.gitlab;
 
   secretPath = svc: name: config.systemd.services."gitlab-${svc}".credentials.gitlab.${name}.path;
 
@@ -14,20 +14,20 @@ let
   redirectUri = "https://git.midna.dev/users/auth/openid_connect/callback";
 in
 {
-  options.mjm.gitlab = {
+  options.cloover.gitlab = {
     enable = mkEnableOption "GitLab";
   };
 
   config = mkIf cfg.enable {
-    mjm.services.gitlab = {
+    cloover.services.gitlab = {
       vault.enable = true;
     };
-    mjm.services.gitlab-pages = { };
-    mjm.postgresql = {
+    cloover.services.gitlab-pages = { };
+    cloover.postgresql = {
       enable = true;
       extraBackupDatabases = [ "gitlab" ];
     };
-    mjm.state.directories = [
+    cloover.state.directories = [
       {
         directory = config.services.gitlab.statePath;
         inherit (config.services.gitlab) user group;
@@ -143,8 +143,8 @@ in
           trusted_proxies = [
             "10.0.0.3"
             "10.0.0.4"
-            "${config.mjm.ipv6Prefix}:dea6:32ff:fed5:d840"
-            "${config.mjm.ipv6Prefix}:dea6:32ff:fe96:bc05"
+            "${config.cloover.ipv6Prefix}:dea6:32ff:fed5:d840"
+            "${config.cloover.ipv6Prefix}:dea6:32ff:fe96:bc05"
           ];
           email_from = "gitlab@matt.mattmoriarity.com";
           email_display_name = "GitLab (midna.dev)";
@@ -232,16 +232,16 @@ in
       gitlab-db-config.credentials.gitlab.initial_root_password = { };
     };
 
-    mjm.authelia.oidcClients.gitlab = {
+    cloover.authelia.oidcClients.gitlab = {
       name = "GitLab";
       inherit clientId;
       clientSecret = "$argon2id$v=19$m=65536,t=3,p=4$TSJDgCxch+ahWCQ0KNi51Q$K40y7dODVjPjV//jVemSSL8n2FuQqEm8Mwo8sqLNTXw";
       redirectUris = [ redirectUri ];
     };
 
-    mjm.garage.clients.gitlab = { };
+    cloover.garage.clients.gitlab = { };
 
-    mjm.spire.tunnels = {
+    cloover.spire.tunnels = {
       gitlab = {
         id = "gitlab";
         mode = "server";

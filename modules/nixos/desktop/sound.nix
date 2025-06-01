@@ -5,7 +5,7 @@
 }:
 let
   inherit (lib) mkIf;
-  cfg = config.mjm.desktop;
+  cfg = config.cloover.desktop;
 in
 {
   config = mkIf cfg.enable {
@@ -19,7 +19,7 @@ in
       ];
     };
 
-    users.users.${config.mjm.username}.extraGroups = [ "pipewire" ];
+    users.users.${config.cloover.username}.extraGroups = [ "pipewire" ];
 
     # airplay requires this
     networking.firewall.allowedUDPPorts = [

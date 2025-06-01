@@ -6,10 +6,10 @@
 }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.mjm.desktop;
+  cfg = config.cloover.desktop;
 in
 {
-  options.mjm.desktop = {
+  options.cloover.desktop = {
     enable = mkEnableOption "desktop environment";
   };
 

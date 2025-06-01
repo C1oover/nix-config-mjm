@@ -8,7 +8,7 @@ let
     mkOption
     types
     ;
-  cfg = config.mjm.nut;
+  cfg = config.cloover.nut;
 
   upsNames = [
     "or500"
@@ -16,7 +16,7 @@ let
   ];
 in
 {
-  options.mjm.nut = {
+  options.cloover.nut = {
     enable = mkEnableOption "NUT";
 
     mode = mkOption {
@@ -39,7 +39,7 @@ in
 
   config = mkIf cfg.enable (mkMerge [
     {
-      mjm.services.nut-client = {
+      cloover.services.nut-client = {
         vault = {
           enable = true;
         };
@@ -62,7 +62,7 @@ in
         };
       };
 
-      mjm.spire.creds.nut-client = {
+      cloover.spire.creds.nut-client = {
         aliases = {
           "upsmon.service/upsmon_password_${cfg.connectedUPSName}" = "nut-client/secondary_password";
         };
@@ -70,7 +70,7 @@ in
     })
 
     (mkIf (cfg.mode == "server") {
-      mjm.services.nut = {
+      cloover.services.nut = {
         vault = {
           enable = true;
         };
@@ -120,7 +120,7 @@ in
         });
       };
 
-      mjm.spire.creds = {
+      cloover.spire.creds = {
         nut.aliases = {
           "upsmon.service/upsmon_password_or500" = "nut/primary_password";
           "upsmon.service/upsmon_password_smart500" = "nut/primary_password";

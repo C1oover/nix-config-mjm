@@ -10,7 +10,7 @@ let
     mkIf
     mkMerge
     ;
-  cfg = config.mjm.shell;
+  cfg = config.cloover.shell;
 in
 {
   config = mkIf cfg.enable {

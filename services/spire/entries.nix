@@ -6,7 +6,7 @@
 let
   inherit (lib) mkOption types;
 
-  trustDomain = config.mjm.spire.agent.trustDomain;
+  trustDomain = config.cloover.spire.agent.trustDomain;
 
   entryType = types.submodule (
     { config, ... }:
@@ -45,12 +45,12 @@ let
   };
 in
 {
-  options.mjm.spire.entries = mkOption {
+  options.cloover.spire.entries = mkOption {
     default = [ ];
     type = types.attrsOf entryType;
   };
 
   config = {
-    mjm.spire.entries = { };
+    cloover.spire.entries = { };
   };
 }

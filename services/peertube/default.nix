@@ -1,24 +1,24 @@
 { config, lib, ... }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.mjm.peertube;
+  cfg = config.cloover.peertube;
 
   secrets = config.systemd.services.peertube.credentials.peertube;
 in
 {
-  options.mjm.peertube = {
+  options.cloover.peertube = {
     enable = mkEnableOption "PeerTube";
   };
 
   config = mkIf cfg.enable {
-    mjm.services.peertube = {
+    cloover.services.peertube = {
       vault.enable = true;
     };
-    mjm.postgresql = {
+    cloover.postgresql = {
       enable = true;
       extraBackupDatabases = [ "peertube" ];
     };
-    mjm.state.directories = [
+    cloover.state.directories = [
       {
         directory = "/var/lib/peertube";
         inherit (config.services.peertube) user group;
@@ -74,7 +74,7 @@ in
       };
     };
 
-    mjm.authelia.oidcClients.peertube = {
+    cloover.authelia.oidcClients.peertube = {
       name = "PeerTube";
       clientId = "peertube";
       clientSecret = "$pbkdf2-sha512$310000$i/oOcdThnanFjq1JqrACMg$IUGcZqmZZtGOwjfYT1O1ZiMVk634D73XX9qgmwYDtJW3HVcNDRwU9JcX2pJp4WchFkx2iwArh8DWfbU.2xLYiw";
@@ -109,7 +109,7 @@ in
 
     systemd.services.nginx.serviceConfig.RuntimeDirectoryMode = lib.mkForce "0755";
 
-    mjm.spire.tunnels = {
+    cloover.spire.tunnels = {
       peertube = {
         id = "peertube";
         mode = "server";

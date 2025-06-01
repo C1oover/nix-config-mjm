@@ -7,20 +7,20 @@
 }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.mjm.home-assistant;
+  cfg = config.cloover.home-assistant;
 
   clientId = "Ck6UhnhOFIoo8jYitELDVI7Ys93kIJ6ZGcrLI6xr1YT9PWaIYUQEjc50iqgPSlCz";
 in
 {
-  options.mjm.home-assistant = {
+  options.cloover.home-assistant = {
     enable = mkEnableOption "home assistant";
   };
 
   config = mkIf cfg.enable {
-    mjm.services.home-assistant = {
+    cloover.services.home-assistant = {
       vault.enable = true;
     };
-    mjm.state.directories = [
+    cloover.state.directories = [
       {
         directory = config.services.home-assistant.configDir;
         user = "hass";
@@ -180,7 +180,7 @@ in
       ];
     };
 
-    mjm.spire.tunnels = {
+    cloover.spire.tunnels = {
       home-assistant = {
         id = "home-assistant";
         mode = "server";
@@ -197,7 +197,7 @@ in
       };
     };
 
-    mjm.authelia.oidcClients.hass = {
+    cloover.authelia.oidcClients.hass = {
       name = "Home Assistant";
       inherit clientId;
       clientSecret = "$argon2id$v=19$m=65536,t=3,p=4$0IiDX4VOL96OzjoCAdNnZg$iyajs99yFezP4fPw4nH5vnqfOoN04jkN7eVZhNPPweM";
@@ -274,7 +274,7 @@ in
 
     services.avahi.enable = true;
 
-    mjm.backups.home-assistant = {
+    cloover.backups.home-assistant = {
       paths = [ "/var/lib/hass/backups" ];
       backupPrepareCommand = ''
         ${pkgs.curl}/bin/curl \

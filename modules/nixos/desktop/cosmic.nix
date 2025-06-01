@@ -6,7 +6,7 @@
 }:
 let
   inherit (lib) mkEnableOption mkIf mkMerge;
-  cfg = config.mjm.desktop;
+  cfg = config.cloover.desktop;
 
   nixos-cosmic =
     (import
@@ -34,7 +34,7 @@ in
     nixos-cosmic.nixosModules.default
   ];
 
-  options.mjm.desktop = {
+  options.cloover.desktop = {
     cosmic = {
       enable = mkEnableOption "COSMIC desktop environment";
     };

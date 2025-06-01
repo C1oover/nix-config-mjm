@@ -7,15 +7,15 @@
 let
   inherit (lib) mkEnableOption mkIf;
 
-  cfg = config.mjm.alertmanager;
+  cfg = config.cloover.alertmanager;
 in
 {
-  options.mjm.alertmanager = {
+  options.cloover.alertmanager = {
     enable = mkEnableOption "Alertmanager";
   };
 
   config = mkIf cfg.enable {
-    mjm.services.alertmanager = {
+    cloover.services.alertmanager = {
       vault.enable = true;
     };
 
@@ -70,7 +70,7 @@ in
       credentials.alertmanager.pagerduty_routing_key = { };
     };
 
-    mjm.spire.tunnels = {
+    cloover.spire.tunnels = {
       alertmanager = {
         id = "alertmanager";
         mode = "server";

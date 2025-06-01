@@ -13,11 +13,11 @@ let
     mkIf
     pipe
     ;
-  cfg = config.mjm.spire;
+  cfg = config.cloover.spire;
 
   entriesJson = pipe nodes [
     attrValues
-    (map (node: node.config.mjm.spire.entries))
+    (map (node: node.config.cloover.spire.entries))
     mergeAttrsList
     attrValues
     (jsonFormat.generate "spire-entries.json")
@@ -71,20 +71,20 @@ let
   '';
 in
 {
-  options.mjm.spire.server = {
+  options.cloover.spire.server = {
     enable = mkEnableOption "SPIRE server";
   };
 
   config = mkIf cfg.server.enable {
     environment.etc."spire-entries.json".source = entriesJson;
 
-    mjm.services.spire = {
+    cloover.services.spire = {
       postgresql = {
         enable = true;
         databases = [ "spire-server" ];
       };
     };
-    mjm.state.directories = [
+    cloover.state.directories = [
       {
         directory = "/var/lib/private/spire-server";
         user = "nobody";

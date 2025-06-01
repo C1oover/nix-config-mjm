@@ -12,10 +12,10 @@ let
     types
     ;
 
-  cfg = config.mjm.prometheus;
+  cfg = config.cloover.prometheus;
 in
 {
-  options.mjm.prometheus = {
+  options.cloover.prometheus = {
     enable = mkEnableOption "prometheus";
 
     dnsServers = mkOption {
@@ -31,8 +31,8 @@ in
   ];
 
   config = mkIf cfg.enable {
-    mjm.services.prometheus = { };
-    mjm.state.directories = [
+    cloover.services.prometheus = { };
+    cloover.state.directories = [
       {
         directory = "/var/lib/prometheus2";
         user = "prometheus";
@@ -74,7 +74,7 @@ in
       after = [ "spiffe-certs@prometheus.service" ];
     };
 
-    mjm.spire.tunnels = {
+    cloover.spire.tunnels = {
       prometheus = {
         id = "prometheus";
         mode = "server";
@@ -96,7 +96,7 @@ in
       };
     };
 
-    mjm.spire.certs.prometheus = {
+    cloover.spire.certs.prometheus = {
       systemd.unit = "prometheus.service";
       systemd.action = "reload-or-restart";
       user = "prometheus";

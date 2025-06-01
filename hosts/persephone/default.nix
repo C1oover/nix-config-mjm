@@ -13,10 +13,10 @@
 
   networking.hostName = "persephone";
 
-  mjm.desktop.enable = true;
-  mjm.desktop.cosmic.enable = true;
-  mjm.secureboot.enable = true;
-  mjm.state = {
+  cloover.desktop.enable = true;
+  cloover.desktop.cosmic.enable = true;
+  cloover.secureboot.enable = true;
+  cloover.state = {
     enablePreservation = true;
     persistDir = "/persist";
     tmpfsRoot = {

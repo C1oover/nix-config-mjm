@@ -1,10 +1,10 @@
 { lib, config, ... }:
 let
   inherit (lib) mkDefault mkEnableOption mkIf;
-  cfg = config.mjm.userborn;
+  cfg = config.cloover.userborn;
 in
 {
-  options.mjm.userborn = {
+  options.cloover.userborn = {
     enable = mkEnableOption "userborn" // {
       default = true;
     };

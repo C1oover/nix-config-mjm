@@ -6,10 +6,10 @@
 }:
 let
   inherit (lib) mkIf;
-  cfg = config.mjm.consul;
+  cfg = config.cloover.consul;
 
   certsConfig = pkgs.writeText "consul-spiffe-helper.hcl" ''
-    agent_address = "${config.mjm.spire.agent.socketPath}"
+    agent_address = "${config.cloover.spire.agent.socketPath}"
     cmd = "killall"
     cmd_args = "-HUP consul"
     cert_dir = "${cfg.certsPath}"
@@ -23,7 +23,7 @@ in
   imports = [ ./common.nix ];
 
   config = mkIf cfg.enable {
-    mjm.consul.certsPath = "/var/lib/consul";
+    cloover.consul.certsPath = "/var/lib/consul";
     
     services.consul.extraConfig.bind_addr = "0.0.0.0";
 

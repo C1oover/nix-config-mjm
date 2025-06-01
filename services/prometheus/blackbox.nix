@@ -6,7 +6,7 @@
 }:
 let
   inherit (lib) mkIf;
-  cfg = config.mjm.prometheus;
+  cfg = config.cloover.prometheus;
 
   jsonFormat = pkgs.formats.json { };
   dnsServers = jsonFormat.generate "dns-servers.json" [

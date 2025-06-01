@@ -6,10 +6,10 @@
 }:
 let
   inherit (lib) mkEnableOption mkIf;
-  cfg = config.mjm.terminal;
+  cfg = config.cloover.terminal;
 in
 {
-  options.mjm.terminal.zellij = {
+  options.cloover.terminal.zellij = {
     enable = mkEnableOption "zellij" // {
       default = true;
     };

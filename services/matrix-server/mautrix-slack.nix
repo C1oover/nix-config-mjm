@@ -7,7 +7,7 @@
 let
   inherit (lib) mkEnableOption mkIf;
 
-  cfg = config.mjm.matrix-server;
+  cfg = config.cloover.matrix-server;
   pkg = pkgs.mautrix-slack;
 
   configFormat = pkgs.formats.yaml { };
@@ -30,7 +30,7 @@ let
     };
     bridge.permissions = {
       "midna.dev" = "user";
-      "@mjm:midna.dev" = "admin";
+      "@cloover:midna.dev" = "admin";
     };
     backfill.enabled = true;
   };
@@ -40,18 +40,18 @@ let
   port = 29335;
 in
 {
-  options.mjm.matrix-server.bridges.slack = {
+  options.cloover.matrix-server.bridges.slack = {
     enable = mkEnableOption "slack bridge" // {
       default = true;
     };
   };
 
   config = mkIf (cfg.enable && cfg.bridges.slack.enable) {
-    mjm.services.conduit.postgresql = {
+    cloover.services.conduit.postgresql = {
       enable = true;
       databases = [ "mautrix-slack" ];
     };
-    mjm.state.directories = [
+    cloover.state.directories = [
       {
         directory = "/var/lib/mautrix-slack";
         user = "mautrix-slack";

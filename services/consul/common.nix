@@ -9,10 +9,10 @@ let
     types
     ;
 
-  cfg = config.mjm.consul;
+  cfg = config.cloover.consul;
 in
 {
-  options.mjm.consul = {
+  options.cloover.consul = {
     enable = mkEnableOption "consul agent";
 
     tailscaleIp = mkOption {

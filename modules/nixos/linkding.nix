@@ -50,7 +50,7 @@ let
   '';
 in
 {
-  meta.maintainers = with maintainers; [ mjm ];
+  meta.maintainers = with maintainers; [ cloover ];
 
   options.services.linkding = {
     enable = mkOption {

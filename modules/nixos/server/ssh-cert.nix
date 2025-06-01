@@ -6,7 +6,7 @@
 }:
 let
   inherit (lib) mkIf;
-  cfg = config.mjm.server;
+  cfg = config.cloover.server;
 in
 {
   config = mkIf (cfg.enable && cfg.enableSSHHostCert) {
@@ -32,14 +32,14 @@ in
       preStart = ''
         # wait a bit for the spire-agent socket to be available
         for ((i=0; i<5; i++)); do
-          [ -S ${config.mjm.spire.agent.socketPath} ] && break
+          [ -S ${config.cloover.spire.agent.socketPath} ] && break
           sleep 2
         done
 
-        spire-agent api fetch -socketPath ${config.mjm.spire.agent.socketPath} -write /run/sshd-host-cert
+        spire-agent api fetch -socketPath ${config.cloover.spire.agent.socketPath} -write /run/sshd-host-cert
       '';
       script = ''
-        jwt="$(spire-agent api fetch jwt -audience $VAULT_ADDR -output json -socketPath ${config.mjm.spire.agent.socketPath} | jq -r '.[0].svids[0].svid')"
+        jwt="$(spire-agent api fetch jwt -audience $VAULT_ADDR -output json -socketPath ${config.cloover.spire.agent.socketPath} | jq -r '.[0].svids[0].svid')"
         export VAULT_TOKEN=placeholder
         VAULT_TOKEN="$(vault write -field=token auth/spiffe/login role=spiffe jwt=$jwt)"
         export VAULT_TOKEN
@@ -121,9 +121,9 @@ in
       };
     };
 
-    mjm.spire.entries =
+    cloover.spire.entries =
       let
-        inherit (config.mjm.spire.agent) trustDomain;
+        inherit (config.cloover.spire.agent) trustDomain;
       in
       {
         # maybe move to the host-cert module
