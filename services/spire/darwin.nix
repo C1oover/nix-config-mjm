@@ -67,7 +67,7 @@ in
 
     serverAddress = mkOption {
       type = types.str;
-      default = "arges.home.mattmoriarity.com";
+      default = "persephone.home.mattmoriarity.com";
     };
 
     joinToken = mkOption {

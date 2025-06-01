@@ -1,32 +1,16 @@
 let
   hostNames = [
-    "aion"
-    "apollo"
-    "arges"
-    "artemis"
-    "athena"
-    "brontes"
-    "demeter"
-    "hades"
-    "niobe"
     "persephone"
-    "steropes"
-    "uranus"
   ];
 
-  darwinHostNames = [
-    "mars"
-    "talos"
-  ];
+  darwinHostNames = [ ];
 
   plans = {
     nixos = {
       meta = {
         nixpkgs = {
           default = "nixos-small";
-          athena = "nixos";
           persephone = "nixos";
-          uranus = "nixos";
         };
 
         inherit specialArgs;

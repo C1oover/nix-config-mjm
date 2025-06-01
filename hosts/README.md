@@ -9,24 +9,6 @@ The `home.nix` is [automatically imported](../modules/common/base/user.nix#L27) 
 
 - Workstations
   - [persephone](persephone/): 13th gen Intel Framework 13 laptop
-  - [uranus](uranus/): Desktop/gaming PC built in 2022
-  - [athena](athena/): Work 16-inch MacBook Pro M2
-- VM hosts, running on assorted Dell OptiPlex SFF machines I bought on craigslist
-  - [artemis](artemis/)
-  - [apollo](apollo/)
-  - [hades](hades/)
-- libvirt VMs, running on the above VM hosts
-  - [megaera](megaera/), [tisiphone](tisiphone/), [alecto](alecto/): 3 node Consul and Vault cluster
-  - [leto](leto/): Runs majority of my self-hosted services
-  - [chaos](chaos/): Media server
-  - [helio](helios/): Matrix homeserver and various bridges
-  - [melinoe](melinoe/): GitLab server
-  - [hypnos](hypnos/): GitLab CI runner
-- Raspberry Pi 4B's
-  - [arges](arges/): NUT server, remote builder for aarch64 in CI
-  - [brontes](brontes/), [steropes](steropes/): Ingress reverse proxy with Caddy for all self-hosted services
-- VPS
-  - [aion](aion/): a super barebones Hetzner VM that serves as a public IPv4 proxy to brontes and steropes
 
 ## Deploying changes
 

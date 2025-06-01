@@ -63,37 +63,12 @@ in
         publicKeyFile = "${sshHostCA}";
         certAuthority = true;
       };
-      aion = {
-        hostNames = [
-          "aion"
-          "5.78.46.61"
-        ];
-        publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDUWju/ZTNyivso/yzx6RFE/9D50qTiWVXDvITrkyEVh";
-      };
-      niobe = {
-        hostNames = [
-          "niobe"
-          "152.53.116.186"
-        ];
-        publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILDn8zp1d/s5OoGgAqtH14KETvBEMH9pDEf6c2yjcdYs";
-      };
     };
 
     programs.ssh.extraConfig =
       ''
         CanonicalizeHostname yes
         CanonicalDomains home.mattmoriarity.com
-
-        Host aion
-          Hostname 5.78.46.61
-
-        Host niobe
-          Hostname 152.53.116.186
-
-        # Logic below only covers NixOS nodes, not nix-darwin
-        # TODO fix when dippy exposes darwin nodes
-        Host talos.home.mattmoriarity.com
-          User mjm
 
       ''
       + concatMapAttrsStringSep "\n\n" (user: nodes: ''

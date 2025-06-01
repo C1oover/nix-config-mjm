@@ -34,14 +34,12 @@ in
         backend http_nodes
           mode tcp
           balance roundrobin
-          server brontes [${config.mjm.ipv6Prefix}:dea6:32ff:fed5:d840]:80 check
-          server steropes [${config.mjm.ipv6Prefix}:dea6:32ff:fe96:bc05]:80 check
+          server persephone [${config.mjm.ipv6Prefix}:dea6:32ff:fed5:d840]:80 check
 
         backend https_nodes
           mode tcp
           balance roundrobin
-          server brontes [${config.mjm.ipv6Prefix}:dea6:32ff:fed5:d840]:443 check
-          server steropes [${config.mjm.ipv6Prefix}:dea6:32ff:fe96:bc05]:443 check
+          server persephone [${config.mjm.ipv6Prefix}:dea6:32ff:fed5:d840]:443 check
       '';
     };
 

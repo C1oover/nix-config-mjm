@@ -194,43 +194,6 @@ in
     '';
 
     nix.distributedBuilds = true;
-    nix.buildMachines =
-      let
-        mkVmTestBuilder = name: {
-          hostName = "${name}.home.mattmoriarity.com";
-          system = "x86_64-linux";
-          protocol = "ssh-ng";
-          maxJobs = 2;
-          speedFactor = 1;
-          supportedFeatures = [
-            "kvm"
-            "nixos-test"
-          ];
-          mandatoryFeatures = [ "nixos-test" ];
-        };
-      in
-      [
-        {
-          # niobe
-          hostName = "152.53.116.186";
-          sshUser = "mjm";
-          system = "aarch64-linux";
-          protocol = "ssh-ng";
-          maxJobs = 6;
-          speedFactor = 2;
-          supportedFeatures = [
-            "nixos-test"
-            "benchmark"
-            "big-parallel"
-          ];
-          mandatoryFeatures = [ ];
-          publicHostKey = "c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSUxEbjh6cDFkL3M1T29HZ0FxdEgxNEtFVHZCRU1IOXBERWY2YzJ5amNkWXMgcm9vdEBuaW9iZQo=";
-        }
-      ]
-      ++ (map mkVmTestBuilder [
-        "apollo"
-        "artemis"
-        "demeter"
-      ]);
+    nix.buildMachines = [ ];
   };
 }

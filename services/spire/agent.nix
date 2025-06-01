@@ -73,7 +73,7 @@ in
 
     serverAddress = mkOption {
       type = types.str;
-      default = if cfg.server.enable then "127.0.0.1" else "arges.home.mattmoriarity.com";
+      default = if cfg.server.enable then "127.0.0.1" else "persephone.home.mattmoriarity.com";
     };
 
     joinToken = mkOption {

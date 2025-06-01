@@ -88,7 +88,7 @@ in
         # necessarily being healthy. on startup, the bridge will check
         # that the homeserver can reach it by asking it to ping it, and this
         # needs to work before the bridge will be considered healthy.
-        target.address = "talos.node.consul:29401";
+        target.address = "persephone.node.consul:29401";
         service = "mautrix-imessage";
       };
     };
